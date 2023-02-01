@@ -5,9 +5,7 @@ import UnocssPlugin from '@unocss/vite';
 export default defineConfig({
     plugins: [
         solidPlugin(),
-        UnocssPlugin({
-            // your config or in uno.config.ts
-        }),
+        UnocssPlugin(),
     ],
     server: {
         port: 3000,
