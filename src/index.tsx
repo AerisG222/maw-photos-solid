@@ -1,8 +1,16 @@
 import '@unocss/reset/tailwind.css'
 import '../global.css'
-import "uno.css";
-import { render } from "solid-js/web";
+import 'uno.css';
 
-import App from "./App";
+import { render } from 'solid-js/web';
+import { Router } from '@solidjs/router';
 
-render(() => <App />, document.getElementById("root") as HTMLElement);
+import App from './App';
+
+render(() =>
+        <Router>
+            <App />
+        </Router>
+    ,
+    document.getElementById('root')
+);
