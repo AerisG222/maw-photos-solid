@@ -1,26 +1,15 @@
-import { Route, Routes } from '@solidjs/router';
 import type { Component } from "solid-js";
+import { useRoutes } from '@solidjs/router';
 
 import PrimaryNav from './components/PrimaryNav';
-import About from './pages/About';
-import Home from './pages/Home';
-import Random from './pages/Random';
-import Search from './pages/Search';
-import Settings from './pages/Settings';
-import Stats from './pages/Stats';
+import { appRoutes } from './routes';
 
 const App: Component = () => {
+    const Routes = useRoutes(appRoutes);
+
     return <>
         <PrimaryNav></PrimaryNav>
-
-        <Routes>
-            <Route path="/" component={Home} />
-            <Route path="/search" component={Search} />
-            <Route path="/random" component={Random} />
-            <Route path="/stats" component={Stats} />
-            <Route path="/about" component={About} />
-            <Route path="/settings" component={Settings} />
-        </Routes>
+        <Routes />
     </>
 };
 
