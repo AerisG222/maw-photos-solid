@@ -4,7 +4,12 @@ import { presetIcons } from '@unocss/preset-icons';
 
 export default defineConfig({
     presets: [
-        presetIcons(),
+        presetIcons({
+            extraProperties: {
+                'display': 'inline-block',
+                'vertical-align': 'middle',
+            }
+        }),
         presetMini()
     ],
     safelist: [
