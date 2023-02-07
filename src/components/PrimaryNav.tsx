@@ -3,15 +3,15 @@ import { home, search, random, stats, about, settings } from '../routes';
 import PrimaryNavLink from './PrimaryNavLink';
 
 const PrimaryNav: Component = () => {
-    return <ul>
-            <li><PrimaryNavLink icon={home.icon} name={home.name} url={home.path} /></li>
-            <li><PrimaryNavLink icon={search.icon} name={search.name} url={search.path} /></li>
-            <li><PrimaryNavLink icon={random.icon} name={random.name} url={random.path} /></li>
-            <li><PrimaryNavLink icon={stats.icon} name={stats.name} url={stats.path} /></li>
+    return <div class="flex flex-col">
+        <PrimaryNavLink icon={home.icon} name={home.name} url={home.path} />
+        <PrimaryNavLink icon={search.icon} name={search.name} url={search.path} />
+        <PrimaryNavLink icon={random.icon} name={random.name} url={random.path} />
+        <PrimaryNavLink icon={stats.icon} name={stats.name} url={stats.path} />
 
-            <li><PrimaryNavLink icon={about.icon} name={about.name} url={about.path} /></li>
-            <li><PrimaryNavLink icon={settings.icon} name={settings.name} url={settings.path} /></li>
-        </ul>;
+        <PrimaryNavLink icon={about.icon} name={about.name} url={about.path} />
+        <PrimaryNavLink icon={settings.icon} name={settings.name} url={settings.path} />
+    </div>;
 };
 
 export default PrimaryNav;
