@@ -34,7 +34,7 @@ export const stats = {
 }
 
 export const about = {
-    icon: "i-ic-outline-info",
+    icon: "i-ic-round-help-outline",
     name: "About",
     path: "/about",
     component: About

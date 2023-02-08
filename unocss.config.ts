@@ -17,7 +17,7 @@ export default defineConfig({
         "i-ic-round-search",
         "i-ic-round-shuffle",
         "i-ic-round-bar-chart",
-        "i-ic-outline-info",
+        "i-ic-round-help-outline",
         "i-ic-baseline-settings",
     ]
 });
