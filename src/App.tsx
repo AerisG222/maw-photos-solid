@@ -8,7 +8,9 @@ const App: Component = () => {
     const Routes = useRoutes(appRoutes);
 
     return (
-        <div class="grid grid-rows-[100vh] grid-cols-[max-content_auto]">
+        <div class="grid
+                    grid-rows-[max-content_auto] grid-cols-[100vw]
+                    md:grid-rows-[100vh] md:grid-cols-[max-content_auto]">
             <PrimaryNav></PrimaryNav>
             <Routes />
         </div>

@@ -4,7 +4,7 @@ import PrimaryNavLink from "./PrimaryNavLink";
 
 const PrimaryNav: Component = () => {
     return (
-        <div class="flex flex-col">
+        <div class="flex md:flex-col">
             <PrimaryNavLink
                 icon={home.icon}
                 name={home.name}
