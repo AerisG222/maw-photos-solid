@@ -26,7 +26,7 @@ const PrimaryNav: Component = () => {
                 url={stats.path}
             />
 
-            <span class="flex-grow"></span>
+            <span class="flex-grow" />
 
             <PrimaryNavLink
                 icon={about.icon}

@@ -11,7 +11,7 @@ const App: Component = () => {
         <div class="grid
                     grid-rows-[max-content_auto] grid-cols-[100vw]
                     md:grid-rows-[100vh] md:grid-cols-[max-content_auto]">
-            <PrimaryNav></PrimaryNav>
+            <PrimaryNav />
             <Routes />
         </div>
     );
