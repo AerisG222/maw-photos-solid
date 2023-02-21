@@ -10,8 +10,10 @@ const Home: Component = () => {
                     md:grid-rows-[100vh] md:grid-cols-[max-content_auto]"
         >
             <HomeToolbar />
-            <h1>Home</h1>
-            <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
+            <div>
+                <h1>Home</h1>
+                <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
+            </div>
         </div>
     );
 };
