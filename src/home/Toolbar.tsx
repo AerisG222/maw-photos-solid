@@ -1,5 +1,8 @@
 import { Component } from 'solid-js'
+import ToolbarDivider from '../components/ToolbarDivider';
 import ToolbarLink from '../components/ToolbarLink';
+import GridToolbar from './GridToolbar';
+import ListToolbar from './ListToolbar';
 
 const Toolbar: Component = () => {
     return (
@@ -7,8 +10,18 @@ const Toolbar: Component = () => {
             <ToolbarLink
                 icon="i-ic-outline-apps"
                 name="Grid View"
-                url="/xyz"
+                url="/grid"
             />
+            <ToolbarLink
+                icon="i-ic-round-format-list-bulleted"
+                name="List View"
+                url="/list"
+            />
+
+            <ToolbarDivider />
+            <GridToolbar />
+            <ToolbarDivider />
+            <ListToolbar />
         </div>
     );
 };
