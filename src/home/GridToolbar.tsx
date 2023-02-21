@@ -1,23 +1,35 @@
 import { Component } from 'solid-js';
-import ToolbarLink from '../components/ToolbarLink';
+import ToolbarButton from '../components/ToolbarButton';
 
 const GridToolbar: Component = () => {
+    const onToggleTitles = () => {
+        console.log("titles");
+    };
+
+    const onToggleThumbnailSize = () => {
+        console.log("thumbnail");
+    }
+
+    const onToggleMargins = () => {
+        console.log("margins");
+    }
+
     return (
         <>
-            <ToolbarLink
+            <ToolbarButton
                 icon="i-ic-round-title"
                 name="Show / Hide Category Titles"
-                url="/xxx"
+                clickHandler={onToggleTitles}
             />
-            <ToolbarLink
+            <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle Grid Thumbnail Size"
-                url="/xxx"
+                clickHandler={onToggleThumbnailSize}
             />
-            <ToolbarLink
+            <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
                 name="Toggle Category Margins"
-                url="/xxx"
+                clickHandler={onToggleMargins}
             />
         </>
     );

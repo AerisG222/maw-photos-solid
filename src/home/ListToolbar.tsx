@@ -1,18 +1,26 @@
 import { Component } from 'solid-js';
-import ToolbarLink from '../components/ToolbarLink';
+import ToolbarButton from '../components/ToolbarButton';
 
 const ListToolbar: Component = () => {
+    const onToggleThumbnail = () => {
+        console.log("thumbnail");
+    }
+
+    const onToggleMargins = () => {
+        console.log("margins");
+    }
+
     return (
         <>
-            <ToolbarLink
+            <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle List Thumbnail Size"
-                url="/xxx"
+                clickHandler={onToggleThumbnail}
             />
-            <ToolbarLink
+            <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
                 name="Toggle Category Margins"
-                url="/xxx"
+                clickHandler={onToggleMargins}
             />
         </>
     );
