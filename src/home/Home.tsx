@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import HomeToolbar from "./Toolbar";
+import Toolbar from "./Toolbar";
 
 const Home: Component = () => {
     return (
@@ -9,7 +9,7 @@ const Home: Component = () => {
                     grid-rows-[max-content_auto] grid-cols-[100vw]
                     md:grid-rows-[100vh] md:grid-cols-[max-content_auto]"
         >
-            <HomeToolbar />
+            <Toolbar />
             <div>
                 <h1>Home</h1>
                 <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
