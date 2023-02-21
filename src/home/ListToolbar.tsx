@@ -1,5 +1,5 @@
 import { Component } from 'solid-js';
-import ToolbarButton from '../components/ToolbarButton';
+import ToolbarButton from '../components/toolbar/ToolbarButton';
 
 const ListToolbar: Component = () => {
     const onToggleThumbnail = () => {

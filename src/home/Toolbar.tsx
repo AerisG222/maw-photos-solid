@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
-import ToolbarDivider from '../components/ToolbarDivider';
-import ToolbarLink from '../components/ToolbarLink';
+import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import ToolbarLink from '../components/toolbar/ToolbarLink';
 import GridToolbar from './GridToolbar';
 import ListToolbar from './ListToolbar';
 
