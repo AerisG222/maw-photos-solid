@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import HomeToolbar from "../components/HomeToolbar";
+import HomeToolbar from "./Toolbar";
 
 const Home: Component = () => {
     return (

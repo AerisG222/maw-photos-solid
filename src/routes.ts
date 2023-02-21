@@ -1,9 +1,9 @@
-import About from './pages/About';
-import Home from './pages/Home';
-import Random from './pages/Random';
-import Search from './pages/Search';
-import Settings from './pages/Settings';
-import Stats from './pages/Stats';
+import About from './about/About';
+import Home from './home/Home';
+import Random from './random/Random';
+import Search from './search/Search';
+import Settings from './settings/Settings';
+import Stats from './stats/Stats';
 
 export const home = {
     icon: "i-ic-round-home",

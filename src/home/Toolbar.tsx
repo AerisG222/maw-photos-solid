@@ -1,7 +1,7 @@
 import { Component } from 'solid-js'
-import ToolbarLink from './ToolbarLink';
+import ToolbarLink from '../components/ToolbarLink';
 
-const HomeToolbar: Component = () => {
+const Toolbar: Component = () => {
     return (
         <div class="flex md:flex-col">
             <ToolbarLink
@@ -13,4 +13,4 @@ const HomeToolbar: Component = () => {
     );
 };
 
-export default HomeToolbar;
+export default Toolbar;
