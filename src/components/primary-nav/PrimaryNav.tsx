@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { home, search, random, stats, about, settings } from "../routes";
+import { home, search, random, stats, about, settings } from "../../routes";
 import PrimaryNavLink from "./PrimaryNavLink";
 
 const PrimaryNav: Component = () => {

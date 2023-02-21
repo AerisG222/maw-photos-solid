@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
 import { useRoutes } from "@solidjs/router";
 
-import PrimaryNav from "./components/PrimaryNav";
+import PrimaryNav from "./components/primary-nav/PrimaryNav";
 import { appRoutes } from "./routes";
 
 const App: Component = () => {
