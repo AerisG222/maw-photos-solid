@@ -1,5 +1,6 @@
 import About from './about/About';
 import Home from './home/Home';
+import PhotoCategories from './photo-categories/PhotoCategories';
 import Random from './random/Random';
 import Search from './search/Search';
 import Settings from './settings/Settings';
@@ -53,5 +54,11 @@ export const appRoutes = [
     random,
     stats,
     about,
-    settings
+
+    // dummy routes for now to simplify building out ui
+    settings,
+    {
+        path: '/photo-categories',
+        component: PhotoCategories
+    }
 ];
