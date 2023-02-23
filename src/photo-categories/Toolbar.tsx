@@ -1,6 +1,7 @@
 import { Component } from 'solid-js'
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
+import DetailToolbar from './DetailToolbar';
 import GridToolbar from './GridToolbar';
 
 const Toolbar: Component = () => {
@@ -34,6 +35,8 @@ const Toolbar: Component = () => {
 
             <ToolbarDivider />
             <GridToolbar />
+            <ToolbarDivider />
+            <DetailToolbar />
         </div>
     );
 };
