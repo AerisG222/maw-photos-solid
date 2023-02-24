@@ -1,11 +1,12 @@
 import { Component } from 'solid-js'
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
 import GridToolbar from './GridToolbar';
 
 const Toolbar: Component = () => {
     return (
-        <div class="flex md:flex-col">
+        <ToolbarLayout>
             <ToolbarLink
                 icon="i-ic-outline-apps"
                 name="Grid View"
@@ -34,7 +35,7 @@ const Toolbar: Component = () => {
 
             <ToolbarDivider />
             <GridToolbar />
-        </div>
+        </ToolbarLayout>
     );
 };
 
