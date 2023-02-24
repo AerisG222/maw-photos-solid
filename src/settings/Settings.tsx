@@ -1,7 +1,15 @@
 import { Component } from "solid-js";
+import ContentLayout from '../components/layout/ContentLayout';
 
 const Settings: Component = () => {
-    return <h1>Settings</h1>;
+    return (
+        <ContentLayout>
+            <span>x</span>
+            <div>
+                <h1>Settings</h1>
+            </div>
+        </ContentLayout>
+    );
 };
 
 export default Settings;
