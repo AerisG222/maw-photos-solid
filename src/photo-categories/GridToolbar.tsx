@@ -1,7 +1,12 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
+import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 
 const GridToolbar: Component = () => {
+    const onToggleSlideshow = () => {
+        console.log("slideshow");
+    }
+
     const onToggleBreadcrumbs = () => {
         console.log("titles");
     };
@@ -16,6 +21,14 @@ const GridToolbar: Component = () => {
 
     return (
         <>
+            <ToolbarButton
+                icon="i-ic-round-play-arrow"
+                name="Start / Stop Slideshow"
+                clickHandler={onToggleSlideshow}
+            />
+
+            <ToolbarDivider />
+
             <ToolbarButton
                 icon="i-ic-round-title"
                 name="Show / Hide Category Breadcrumbs"
