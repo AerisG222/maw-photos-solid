@@ -2,8 +2,8 @@ import { Component } from 'solid-js'
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
-import GridToolbar from './GridToolbar';
-import ListToolbar from './ListToolbar';
+import GridToolbar from './ToolbarGrid';
+import ListToolbar from './ToolbarList';
 
 const Toolbar: Component = () => {
     return (
