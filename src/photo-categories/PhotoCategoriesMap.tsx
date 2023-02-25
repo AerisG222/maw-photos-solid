@@ -3,7 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
 
-const PhotoCategories: Component = () => {
+const PhotoCategoriesMap: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
@@ -17,4 +17,4 @@ const PhotoCategories: Component = () => {
     );
 };
 
-export default PhotoCategories;
+export default PhotoCategoriesMap;

@@ -3,7 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 
-const PhotoCategories: Component = () => {
+const PhotoCategoriesFullscreen: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
@@ -17,4 +17,4 @@ const PhotoCategories: Component = () => {
     );
 };
 
-export default PhotoCategories;
+export default PhotoCategoriesFullscreen;

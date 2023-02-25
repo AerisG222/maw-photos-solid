@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
 
-const PhotoCategories: Component = () => {
+const PhotoCategoriesBulkEdit: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
@@ -13,4 +13,4 @@ const PhotoCategories: Component = () => {
     );
 };
 
-export default PhotoCategories;
+export default PhotoCategoriesBulkEdit;
