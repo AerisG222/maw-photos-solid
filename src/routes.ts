@@ -10,6 +10,7 @@ import Random from './random/Random';
 import Search from './search/Search';
 import Settings from './settings/Settings';
 import Stats from './stats/Stats';
+import VideoCategories from './video-categories/VideoCategories';
 
 export const home = {
     icon: "i-ic-round-home",
@@ -89,5 +90,10 @@ export const appRoutes = [
     {
         path: '/photo-categories/bulk-edit',
         component: PhotoCategoriesBulkEdit
+    },
+
+    {
+        path: '/video-categories',
+        component: VideoCategories
     }
 ];
