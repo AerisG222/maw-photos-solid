@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import GridToolbar from './GridToolbar';
+import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
 
 const PhotoCategories: Component = () => {

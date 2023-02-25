@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import FullscreenToolbar from './FullscreenToolbar';
+import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 
 const PhotoCategories: Component = () => {
