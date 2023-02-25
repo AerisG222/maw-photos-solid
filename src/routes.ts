@@ -8,6 +8,8 @@ import PhotoCategoriesGrid from './photo-categories/PhotoCategoriesGrid';
 import PhotoCategoriesMap from './photo-categories/PhotoCategoriesMap';
 import Random from './random/Random';
 import Search from './search/Search';
+import SearchGrid from './search/SearchGrid';
+import SearchList from './search/SearchList';
 import Settings from './settings/Settings';
 import Stats from './stats/Stats';
 import VideoCategories from './video-categories/VideoCategories';
@@ -95,5 +97,14 @@ export const appRoutes = [
     {
         path: '/video-categories',
         component: VideoCategories
+    },
+
+    {
+        path: '/search/grid',
+        component: SearchGrid
+    },
+    {
+        path: '/search/list',
+        component: SearchList
     }
 ];
