@@ -14,6 +14,12 @@ import Search from './search/Search';
 import SearchGrid from './search/SearchGrid';
 import SearchList from './search/SearchList';
 import Settings from './settings/Settings';
+import SettingsApplication from './settings/SettingsApplication';
+import SettingsCategories from './settings/SettingsCategories';
+import SettingsPhotos from './settings/SettingsPhotos';
+import SettingsRandom from './settings/SettingsRandom';
+import SettingsSearch from './settings/SettingsSearch';
+import SettingsVideos from './settings/SettingsVideos';
 import Stats from './stats/Stats';
 import StatsCombined from './stats/StatsCombined';
 import StatsPhotos from './stats/StatsPhotos';
@@ -138,5 +144,30 @@ export const appRoutes = [
     {
         path: '/stats/combined',
         component: StatsCombined
+    },
+
+    {
+        path: '/settings/application',
+        component: SettingsApplication
+    },
+    {
+        path: '/settings/categories',
+        component: SettingsCategories
+    },
+    {
+        path: '/settings/photos',
+        component: SettingsPhotos
+    },
+    {
+        path: '/settings/videos',
+        component: SettingsVideos
+    },
+    {
+        path: '/settings/search',
+        component: SettingsSearch
+    },
+    {
+        path: '/settings/random',
+        component: SettingsRandom
     }
 ];

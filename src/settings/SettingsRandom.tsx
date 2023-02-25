@@ -2,15 +2,15 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 
-const Settings: Component = () => {
+const SettingsRandom: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings</h1>
+                <h1>Settings Random</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default Settings;
+export default SettingsRandom;
