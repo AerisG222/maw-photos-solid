@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 
-const Stats: Component = () => {
+const StatsCombined: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
@@ -13,4 +13,4 @@ const Stats: Component = () => {
     );
 };
 
-export default Stats;
+export default StatsCombined;
