@@ -1,11 +1,11 @@
-import { Component } from 'solid-js'
+import { ParentComponent, Show } from 'solid-js'
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
-import DetailToolbar from './DetailToolbar';
-import GridToolbar from './GridToolbar';
 
-const Toolbar: Component = () => {
+const Toolbar: ParentComponent = (props) => {
+    const c = () => props.children;
+
     return (
         <ToolbarLayout>
             <ToolbarLink
@@ -34,10 +34,10 @@ const Toolbar: Component = () => {
                 url="bulk-edit"
             />
 
-            <ToolbarDivider />
-            <GridToolbar />
-            <ToolbarDivider />
-            <DetailToolbar />
+            <Show when={!!c()}>
+                <ToolbarDivider />
+                {c()}
+            </Show>
         </ToolbarLayout>
     );
 };

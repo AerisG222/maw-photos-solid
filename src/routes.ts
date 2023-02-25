@@ -1,6 +1,11 @@
 import About from './about/About';
 import Home from './home/Home';
 import PhotoCategories from './photo-categories/PhotoCategories';
+import PhotoCategoriesBulkEdit from './photo-categories/PhotoCategoriesBulkEdit';
+import PhotoCategoriesDetail from './photo-categories/PhotoCategoriesDetail';
+import PhotoCategoriesFullscreen from './photo-categories/PhotoCategoriesFullscreen';
+import PhotoCategoriesGrid from './photo-categories/PhotoCategoriesGrid';
+import PhotoCategoriesMap from './photo-categories/PhotoCategoriesMap';
 import Random from './random/Random';
 import Search from './search/Search';
 import Settings from './settings/Settings';
@@ -60,5 +65,29 @@ export const appRoutes = [
     {
         path: '/photo-categories',
         component: PhotoCategories
+    },
+    settings,
+    {
+        path: '/photo-categories/grid',
+        component: PhotoCategoriesGrid
+    },
+    settings,
+    {
+        path: '/photo-categories/detail',
+        component: PhotoCategoriesDetail
+    },
+    settings,
+    {
+        path: '/photo-categories/fullscreen',
+        component: PhotoCategoriesFullscreen
+    },
+    settings,
+    {
+        path: '/photo-categories/map',
+        component: PhotoCategoriesMap
+    },
+    {
+        path: '/photo-categories/bulk-edit',
+        component: PhotoCategoriesBulkEdit
     }
 ];
