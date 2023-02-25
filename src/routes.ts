@@ -7,6 +7,9 @@ import PhotoCategoriesFullscreen from './photo-categories/PhotoCategoriesFullscr
 import PhotoCategoriesGrid from './photo-categories/PhotoCategoriesGrid';
 import PhotoCategoriesMap from './photo-categories/PhotoCategoriesMap';
 import Random from './random/Random';
+import RandomDetail from './random/RandomDetail';
+import RandomFullscreen from './random/RandomFullscreen';
+import RandomGrid from './random/RandomGrid';
 import Search from './search/Search';
 import SearchGrid from './search/SearchGrid';
 import SearchList from './search/SearchList';
@@ -106,5 +109,18 @@ export const appRoutes = [
     {
         path: '/search/list',
         component: SearchList
+    },
+
+    {
+        path: '/random/grid',
+        component: RandomGrid
+    },
+    {
+        path: '/random/detail',
+        component: RandomDetail
+    },
+    {
+        path: '/random/Fullscreen',
+        component: RandomFullscreen
     }
 ];
