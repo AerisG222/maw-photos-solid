@@ -3,7 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import DetailToolbar from '../random/ToolbarDetail';
 import Toolbar from "../random/Toolbar";
 
-const PhotoCategories: Component = () => {
+const RandomDetail: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
@@ -17,4 +17,4 @@ const PhotoCategories: Component = () => {
     );
 };
 
-export default PhotoCategories;
+export default RandomDetail;
