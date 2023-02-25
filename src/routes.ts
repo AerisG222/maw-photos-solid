@@ -15,6 +15,9 @@ import SearchGrid from './search/SearchGrid';
 import SearchList from './search/SearchList';
 import Settings from './settings/Settings';
 import Stats from './stats/Stats';
+import StatsCombined from './stats/StatsCombined';
+import StatsPhotos from './stats/StatsPhotos';
+import StatsVideos from './stats/StatsVideos';
 import VideoCategories from './video-categories/VideoCategories';
 
 export const home = {
@@ -122,5 +125,18 @@ export const appRoutes = [
     {
         path: '/random/Fullscreen',
         component: RandomFullscreen
+    },
+
+    {
+        path: '/stats/photos',
+        component: StatsPhotos
+    },
+    {
+        path: '/stats/videos',
+        component: StatsVideos
+    },
+    {
+        path: '/stats/combined',
+        component: StatsCombined
     }
 ];
