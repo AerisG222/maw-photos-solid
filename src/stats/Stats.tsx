@@ -1,15 +1,15 @@
+import { useLocation, useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
-import ContentLayout from '../components/layout/ContentLayout';
 
 const Stats: Component = () => {
-    return (
-        <ContentLayout>
-            <span>x</span>
-            <div>
-                <h1>Stats</h1>
-            </div>
-        </ContentLayout>
-    );
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // todo: get default view
+
+    navigate(`${location.pathname}/photos`);
+
+    return <></>
 };
 
 export default Stats;
