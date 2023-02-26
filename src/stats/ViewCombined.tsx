@@ -1,20 +1,16 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
-import ListToolbar from './ToolbarList';
 
-const SearchList: Component = () => {
+const ViewCombined: Component = () => {
     return (
         <ContentLayout>
-            <Toolbar>
-                <ListToolbar />
-            </Toolbar>
-
+            <Toolbar />
             <div>
-                <h1>Search List</h1>
+                <h1>Stats Combined</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default SearchList;
+export default ViewCombined;

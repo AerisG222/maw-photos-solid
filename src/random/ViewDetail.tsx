@@ -1,20 +1,20 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import FullscreenToolbar from './ToolbarFullscreen';
+import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
 
-const PhotoCategoriesFullscreen: Component = () => {
+const ViewDetail: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
-                <FullscreenToolbar />
+                <DetailToolbar />
             </Toolbar>
 
             <div>
-                <h1>Photo Categories Fullscreen</h1>
+                <h1>Random Detail</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default PhotoCategoriesFullscreen;
+export default ViewDetail;

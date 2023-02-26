@@ -1,20 +1,20 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import GridToolbar from './ToolbarGrid';
+import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
 
-const RandomGrid: Component = () => {
+const ViewMap: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
-                <GridToolbar />
+                <MapToolbar />
             </Toolbar>
 
             <div>
-                <h1>Random Grid</h1>
+                <h1>Photo Categories Map</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default RandomGrid;
+export default ViewMap;

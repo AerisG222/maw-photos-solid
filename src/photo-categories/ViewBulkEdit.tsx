@@ -1,16 +1,16 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
+import Toolbar from "./Toolbar";
 
-const StatsCombined: Component = () => {
+const ViewBulkEdit: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Stats Combined</h1>
+                <h1>Photo Categories Bulk Edit</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default StatsCombined;
+export default ViewBulkEdit;

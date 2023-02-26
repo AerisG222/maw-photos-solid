@@ -2,15 +2,15 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 
-const StatsVideos: Component = () => {
+const ViewSearch: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Stats Videos</h1>
+                <h1>Settings Search</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default StatsVideos;
+export default ViewSearch;

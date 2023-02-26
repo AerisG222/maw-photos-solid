@@ -2,15 +2,15 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 
-const SettingsApplication: Component = () => {
+const ViewPhotos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Application</h1>
+                <h1>Stats Photos</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default SettingsApplication;
+export default ViewPhotos;

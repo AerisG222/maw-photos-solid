@@ -1,20 +1,20 @@
 import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
-import GridToolbar from './ToolbarGrid';
+import DetailToolbar from './ToolbarDetail';
+import Toolbar from "./Toolbar";
 
-const SearchGrid: Component = () => {
+const ViewDetail: Component = () => {
     return (
         <ContentLayout>
             <Toolbar>
-                <GridToolbar />
+                <DetailToolbar />
             </Toolbar>
 
             <div>
-                <h1>Search Grid</h1>
+                <h1>Photo Categories Detail</h1>
             </div>
         </ContentLayout>
     );
 };
 
-export default SearchGrid;
+export default ViewDetail;
