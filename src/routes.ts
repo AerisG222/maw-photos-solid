@@ -76,29 +76,25 @@ export const appRoutes = [
     random,
     stats,
     about,
+    settings,
 
     // dummy routes for now to simplify building out ui
-    settings,
     {
         path: '/photo-categories',
         component: PhotoCategories
     },
-    settings,
     {
         path: '/photo-categories/grid',
         component: PhotoCategoriesGrid
     },
-    settings,
     {
         path: '/photo-categories/detail',
         component: PhotoCategoriesDetail
     },
-    settings,
     {
         path: '/photo-categories/fullscreen',
         component: PhotoCategoriesFullscreen
     },
-    settings,
     {
         path: '/photo-categories/map',
         component: PhotoCategoriesMap
