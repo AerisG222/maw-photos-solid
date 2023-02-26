@@ -52,6 +52,15 @@ export const appRoutes = [
 
     // dummy routes for now to simplify building out ui
     {
+        path: '/grid',
+        component: lazy(() => import('./home/ViewGrid'))
+    },
+    {
+        path: '/list',
+        component: lazy(() => import('./home/ViewList'))
+    },
+
+    {
         path: '/photo-categories',
         component: lazy(() => import('./photo-categories/PhotoCategories'))
     },
