@@ -1,73 +1,45 @@
 import { lazy } from "solid-js";
 
-const About = lazy(() => import('./about/About'));
-const Home = lazy(() => import('./home/Home'));
-const PhotoCategories = lazy(() => import('./photo-categories/PhotoCategories'));
-const PhotoCategoriesBulkEdit = lazy(() => import('./photo-categories/PhotoCategoriesBulkEdit'));
-const PhotoCategoriesDetail = lazy(() => import('./photo-categories/PhotoCategoriesDetail'));
-const PhotoCategoriesFullscreen = lazy(() => import('./photo-categories/PhotoCategoriesFullscreen'));
-const PhotoCategoriesGrid = lazy(() => import('./photo-categories/PhotoCategoriesGrid'));
-const PhotoCategoriesMap = lazy(() => import('./photo-categories/PhotoCategoriesMap'));
-const Random = lazy(() => import('./random/Random'));
-const RandomDetail = lazy(() => import('./random/RandomDetail'));
-const RandomFullscreen = lazy(() => import('./random/RandomFullscreen'));
-const RandomGrid = lazy(() => import('./random/RandomGrid'));
-const Search = lazy(() => import('./search/Search'));
-const SearchGrid = lazy(() => import('./search/SearchGrid'));
-const SearchList = lazy(() => import('./search/SearchList'));
-const Settings = lazy(() => import('./settings/Settings'));
-const SettingsApplication = lazy(() => import('./settings/SettingsApplication'));
-const SettingsCategories = lazy(() => import('./settings/SettingsCategories'));
-const SettingsPhotos = lazy(() => import('./settings/SettingsPhotos'));
-const SettingsRandom = lazy(() => import('./settings/SettingsRandom'));
-const SettingsSearch = lazy(() => import('./settings/SettingsSearch'));
-const SettingsVideos = lazy(() => import('./settings/SettingsVideos'));
-const Stats = lazy(() => import('./stats/Stats'));
-const StatsCombined = lazy(() => import('./stats/StatsCombined'));
-const StatsPhotos = lazy(() => import('./stats/StatsPhotos'));
-const StatsVideos = lazy(() => import('./stats/StatsVideos'));
-const VideoCategories = lazy(() => import('./video-categories/VideoCategories'));
-
 export const home = {
     icon: "i-ic-round-home",
     name: "Home",
     path: "/",
-    component: Home
+    component: lazy(() => import('./home/Home'))
 }
 
 export const search = {
     icon: "i-ic-round-search",
     name: "Search",
     path: "/search",
-    component: Search
+    component: lazy(() => import('./search/Search'))
 }
 
 export const random = {
     icon: "i-ic-round-shuffle",
     name: "Random",
     path: "/random",
-    component: Random
+    component: lazy(() => import('./random/Random'))
 }
 
 export const stats = {
     icon: "i-ic-round-bar-chart",
     name: "Statistics",
     path: "/stats",
-    component: Stats
+    component: lazy(() => import('./stats/Stats'))
 }
 
 export const about = {
     icon: "i-ic-round-help-outline",
     name: "About",
     path: "/about",
-    component: About
+    component: lazy(() => import('./about/About'))
 }
 
 export const settings = {
     icon: "i-ic-baseline-settings",
     name: "Settings",
     path: "/settings",
-    component: Settings
+    component: lazy(() => import('./settings/Settings'))
 }
 
 export const appRoutes = [
@@ -81,91 +53,91 @@ export const appRoutes = [
     // dummy routes for now to simplify building out ui
     {
         path: '/photo-categories',
-        component: PhotoCategories
+        component: lazy(() => import('./photo-categories/PhotoCategories'))
     },
     {
         path: '/photo-categories/grid',
-        component: PhotoCategoriesGrid
+        component: lazy(() => import('./photo-categories/PhotoCategoriesGrid'))
     },
     {
         path: '/photo-categories/detail',
-        component: PhotoCategoriesDetail
+        component: lazy(() => import('./photo-categories/PhotoCategoriesDetail'))
     },
     {
         path: '/photo-categories/fullscreen',
-        component: PhotoCategoriesFullscreen
+        component: lazy(() => import('./photo-categories/PhotoCategoriesFullscreen'))
     },
     {
         path: '/photo-categories/map',
-        component: PhotoCategoriesMap
+        component: lazy(() => import('./photo-categories/PhotoCategoriesMap'))
     },
     {
         path: '/photo-categories/bulk-edit',
-        component: PhotoCategoriesBulkEdit
+        component: lazy(() => import('./photo-categories/PhotoCategoriesBulkEdit'))
     },
 
     {
         path: '/video-categories',
-        component: VideoCategories
+        component: lazy(() => import('./video-categories/VideoCategories'))
     },
 
     {
         path: '/search/grid',
-        component: SearchGrid
+        component: lazy(() => import('./search/SearchGrid'))
     },
     {
         path: '/search/list',
-        component: SearchList
+        component: lazy(() => import('./search/SearchList'))
     },
 
     {
         path: '/random/grid',
-        component: RandomGrid
+        component: lazy(() => import('./random/RandomGrid'))
     },
     {
         path: '/random/detail',
-        component: RandomDetail
+        component: lazy(() => import('./random/RandomDetail'))
     },
     {
         path: '/random/Fullscreen',
-        component: RandomFullscreen
+        component: lazy(() => import('./random/RandomFullscreen'))
     },
 
     {
         path: '/stats/photos',
-        component: StatsPhotos
+        component: lazy(() => import('./stats/StatsPhotos'))
     },
     {
         path: '/stats/videos',
-        component: StatsVideos
+        component: lazy(() => import('./stats/StatsVideos'))
     },
     {
         path: '/stats/combined',
-        component: StatsCombined
+        component: lazy(() => import('./stats/StatsCombined'))
     },
 
     {
         path: '/settings/application',
-        component: SettingsApplication
+        component: lazy(() => import('./settings/SettingsApplication'))
     },
     {
         path: '/settings/categories',
-        component: SettingsCategories
+        component: lazy(() => import('./settings/SettingsCategories'))
     },
     {
         path: '/settings/photos',
-        component: SettingsPhotos
+        component: lazy(() => import('./settings/SettingsPhotos'))
     },
     {
         path: '/settings/videos',
-        component: SettingsVideos
+        component: lazy(() => import('./settings/SettingsVideos'))
     },
     {
         path: '/settings/search',
-        component: SettingsSearch
+        component: lazy(() => import('./settings/SettingsSearch'))
     },
     {
         path: '/settings/random',
-        component: SettingsRandom
+        component: lazy(() => import('./settings/SettingsRandom'))
     }
 ];
