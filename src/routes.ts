@@ -43,110 +43,144 @@ export const settings = {
 }
 
 export const appRoutes = [
-    home,
-    search,
-    random,
-    stats,
-    about,
-    settings,
+    {
+        path: '/',
+        children: [
+            home,
+            {
+                path: '/grid',
+                component: lazy(() => import('./home/ViewGrid'))
+            },
+            {
+                path: '/list',
+                component: lazy(() => import('./home/ViewList'))
+            },
 
-    // dummy routes for now to simplify building out ui
-    {
-        path: '/grid',
-        component: lazy(() => import('./home/ViewGrid'))
-    },
-    {
-        path: '/list',
-        component: lazy(() => import('./home/ViewList'))
-    },
+            {
+                path: '/photo-categories',
+                children: [
+                    {
+                        path: '/',
+                        component: lazy(() => import('./photo-categories/PhotoCategories'))
+                    },
+                    {
+                        path: '/grid',
+                        component: lazy(() => import('./photo-categories/ViewGrid'))
+                    },
+                    {
+                        path: '/detail',
+                        component: lazy(() => import('./photo-categories/ViewDetail'))
+                    },
+                    {
+                        path: '/fullscreen',
+                        component: lazy(() => import('./photo-categories/ViewFullscreen'))
+                    },
+                    {
+                        path: '/map',
+                        component: lazy(() => import('./photo-categories/ViewMap'))
+                    },
+                    {
+                        path: '/bulk-edit',
+                        component: lazy(() => import('./photo-categories/ViewBulkEdit'))
+                    },
+                ]
+            },
 
-    {
-        path: '/photo-categories',
-        component: lazy(() => import('./photo-categories/PhotoCategories'))
-    },
-    {
-        path: '/photo-categories/grid',
-        component: lazy(() => import('./photo-categories/ViewGrid'))
-    },
-    {
-        path: '/photo-categories/detail',
-        component: lazy(() => import('./photo-categories/ViewDetail'))
-    },
-    {
-        path: '/photo-categories/fullscreen',
-        component: lazy(() => import('./photo-categories/ViewFullscreen'))
-    },
-    {
-        path: '/photo-categories/map',
-        component: lazy(() => import('./photo-categories/ViewMap'))
-    },
-    {
-        path: '/photo-categories/bulk-edit',
-        component: lazy(() => import('./photo-categories/ViewBulkEdit'))
-    },
-
-    {
-        path: '/video-categories',
-        component: lazy(() => import('./video-categories/VideoCategories'))
-    },
-
-    {
-        path: '/search/grid',
-        component: lazy(() => import('./search/ViewGrid'))
-    },
-    {
-        path: '/search/list',
-        component: lazy(() => import('./search/ViewList'))
+            {
+                path: '/video-categories',
+                component: lazy(() => import('./video-categories/VideoCategories'))
+            }
+        ]
     },
 
     {
-        path: '/random/grid',
-        component: lazy(() => import('./random/ViewGrid'))
-    },
-    {
-        path: '/random/detail',
-        component: lazy(() => import('./random/ViewDetail'))
-    },
-    {
-        path: '/random/Fullscreen',
-        component: lazy(() => import('./random/ViewFullscreen'))
-    },
-
-    {
-        path: '/stats/photos',
-        component: lazy(() => import('./stats/ViewPhotos'))
-    },
-    {
-        path: '/stats/videos',
-        component: lazy(() => import('./stats/ViewVideos'))
-    },
-    {
-        path: '/stats/combined',
-        component: lazy(() => import('./stats/ViewCombined'))
+        path: '/search',
+        children: [
+            search,
+            {
+                path: '/grid',
+                component: lazy(() => import('./search/ViewGrid'))
+            },
+            {
+                path: '/list',
+                component: lazy(() => import('./search/ViewList'))
+            }
+        ]
     },
 
     {
-        path: '/settings/application',
-        component: lazy(() => import('./settings/ViewApplication'))
+        path: '/random',
+        children: [
+            random,
+            {
+                path: '/grid',
+                component: lazy(() => import('./random/ViewGrid'))
+            },
+            {
+                path: '/detail',
+                component: lazy(() => import('./random/ViewDetail'))
+            },
+            {
+                path: '/Fullscreen',
+                component: lazy(() => import('./random/ViewFullscreen'))
+            }
+        ],
     },
+
     {
-        path: '/settings/categories',
-        component: lazy(() => import('./settings/ViewCategories'))
+        path: '/stats',
+        children: [
+            stats,
+            {
+                path: '/photos',
+                component: lazy(() => import('./stats/ViewPhotos'))
+            },
+            {
+                path: '/videos',
+                component: lazy(() => import('./stats/ViewVideos'))
+            },
+            {
+                path: '/combined',
+                component: lazy(() => import('./stats/ViewCombined'))
+            }
+        ]
     },
+
     {
-        path: '/settings/photos',
-        component: lazy(() => import('./settings/ViewPhotos'))
+        path: '/about',
+        children: [
+            about
+        ]
     },
+
     {
-        path: '/settings/videos',
-        component: lazy(() => import('./settings/ViewVideos'))
-    },
-    {
-        path: '/settings/search',
-        component: lazy(() => import('./settings/ViewSearch'))
-    },
-    {
-        path: '/settings/random',
-        component: lazy(() => import('./settings/ViewRandom'))
+        path: '/settings',
+        children: [
+            settings,
+            {
+                path: '/application',
+                component: lazy(() => import('./settings/ViewApplication'))
+            },
+            {
+                path: '/categories',
+                component: lazy(() => import('./settings/ViewCategories'))
+            },
+            {
+                path: '/photos',
+                component: lazy(() => import('./settings/ViewPhotos'))
+            },
+            {
+                path: '/videos',
+                component: lazy(() => import('./settings/ViewVideos'))
+            },
+            {
+                path: '/search',
+                component: lazy(() => import('./settings/ViewSearch'))
+            },
+            {
+                path: '/random',
+                component: lazy(() => import('./settings/ViewRandom'))
+            }
+        ]
     }
 ];
