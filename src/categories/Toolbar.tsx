@@ -1,4 +1,5 @@
 import { ParentComponent, Show } from 'solid-js'
+import { categoriesGrid, categoriesList } from '../routes';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
@@ -8,16 +9,8 @@ const Toolbar: ParentComponent = (props) => {
 
     return (
         <ToolbarLayout>
-            <ToolbarLink
-                icon="i-ic-outline-apps"
-                name="Grid View"
-                url="/grid"
-            />
-            <ToolbarLink
-                icon="i-ic-round-format-list-bulleted"
-                name="List View"
-                url="/list"
-            />
+            <ToolbarLink route={categoriesGrid} />
+            <ToolbarLink route={categoriesList} />
 
             <Show when={!!c()}>
                 <ToolbarDivider />

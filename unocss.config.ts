@@ -1,6 +1,7 @@
 import { defineConfig } from '@unocss/vite';
 import { presetMini } from '@unocss/preset-mini';
 import { presetIcons } from '@unocss/preset-icons';
+import { appRoutes } from './src/routes';
 
 export default defineConfig({
     presets: [
@@ -13,11 +14,6 @@ export default defineConfig({
         presetMini()
     ],
     safelist: [
-        "i-ic-round-home",
-        "i-ic-round-search",
-        "i-ic-round-shuffle",
-        "i-ic-round-bar-chart",
-        "i-ic-round-help-outline",
-        "i-ic-baseline-settings",
+        ...new Set(appRoutes.filter(r => !!r.icon).map(r => r.icon))
     ]
 });
