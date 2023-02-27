@@ -1,7 +1,7 @@
 import { categoriesRoutes } from './categories/_routes';
 import { aboutRoutes } from './about/_routes';
-import { categoriesPhotosRoutes } from './photo-categories/_routes';
-import { categoriesVideosRoutes } from './video-categories/_routes';
+import { categoriesPhotosRoutes } from './categories-photos/_routes';
+import { categoriesVideosRoutes } from './categories-videos/_routes';
 import { randomRoutes } from './random/_routes';
 import { searchRoutes } from './search/_routes';
 import { statsRoutes } from './stats/_routes';

@@ -11,14 +11,14 @@ export const search: AppRouteDefinition = {
 export const searchGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${search}/grid`,
+    path: `${search.path}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const searchList: AppRouteDefinition = {
     icon: "i-ic-round-format-list-bulleted",
     name: "List View",
-    path: `${search}/list`,
+    path: `${search.path}/list`,
     component: lazy(() => import('./ViewList'))
 }
 

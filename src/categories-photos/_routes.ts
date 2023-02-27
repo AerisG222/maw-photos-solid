@@ -12,35 +12,35 @@ export const categoriesPhotos: AppRouteDefinition = {
 export const categoriesPhotosGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${categoriesPhotos}/grid`,
+    path: `${categoriesPhotos.path}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const categoriesPhotosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    path: `${categoriesPhotos}/detail`,
+    path: `${categoriesPhotos.path}/detail`,
     component: lazy(() => import('./ViewDetail'))
 }
 
 export const categoriesPhotosFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    path: `${categoriesPhotos}/fullscreen`,
+    path: `${categoriesPhotos.path}/fullscreen`,
     component: lazy(() => import('./ViewFullscreen'))
 }
 
 export const categoriesPhotosMap: AppRouteDefinition = {
     icon: "i-ic-round-map",
     name: "Map View",
-    path: `${categoriesPhotos}/map`,
+    path: `${categoriesPhotos.path}/map`,
     component: lazy(() => import('./ViewMap'))
 }
 
 export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     icon: "i-ic-round-collections",
     name: "Bulk Edit View",
-    path: `${categoriesPhotos}/bulk-edit`,
+    path: `${categoriesPhotos.path}/bulk-edit`,
     component: lazy(() => import('./ViewBulkEdit'))
 }
 

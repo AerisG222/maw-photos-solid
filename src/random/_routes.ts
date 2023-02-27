@@ -11,21 +11,21 @@ export const random: AppRouteDefinition = {
 export const randomGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${random}/grid`,
+    path: `${random.path}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const randomDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    path: `${random}/detail`,
+    path: `${random.path}/detail`,
     component: lazy(() => import('./ViewDetail'))
 }
 
 export const randomFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    path: `${random}/fullscreen`,
+    path: `${random.path}/fullscreen`,
     component: lazy(() => import('./ViewFullscreen'))
 }
 
