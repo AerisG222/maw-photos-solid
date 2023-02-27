@@ -2,7 +2,7 @@ import { ParentComponent, Show } from 'solid-js'
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
-import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from '../routes';
+import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
 
 const Toolbar: ParentComponent = (props) => {
     const c = () => props.children;

@@ -1,5 +1,5 @@
 import { ParentComponent, Show } from 'solid-js'
-import { categoriesGrid, categoriesList } from '../routes';
+import { categoriesGrid, categoriesList } from './_routes';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
