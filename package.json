@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@solidjs/router": "^0.7.0",
+        "oidc-client-ts": "^2.2.1",
         "solid-js": "^1.6.11"
     }
 }

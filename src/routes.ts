@@ -1,3 +1,4 @@
+import { loginRoutes } from './auth/_routes';
 import { categoriesRoutes } from './categories/_routes';
 import { aboutRoutes } from './about/_routes';
 import { categoriesPhotosRoutes } from './categories-photos/_routes';
@@ -8,6 +9,7 @@ import { statsRoutes } from './stats/_routes';
 import { settingsRoutes } from './settings/_routes';
 
 export const appRoutes = [
+    ...loginRoutes,
     ...categoriesRoutes,
     ...categoriesPhotosRoutes,
     ...categoriesVideosRoutes,

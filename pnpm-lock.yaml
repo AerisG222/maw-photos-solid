@@ -10,6 +10,7 @@ specifiers:
   '@unocss/vite': ^0.50.1
   eslint: ^8.34.0
   eslint-plugin-solid: ^0.10.0
+  oidc-client-ts: ^2.2.1
   solid-js: ^1.6.11
   typescript: ^4.9.5
   vite: ^4.1.4
@@ -17,6 +18,7 @@ specifiers:
 
 dependencies:
   '@solidjs/router': 0.7.0_solid-js@1.6.11
+  oidc-client-ts: 2.2.1
   solid-js: 1.6.11
 
 devDependencies:
@@ -1089,6 +1091,10 @@ packages:
       which: 2.0.2
     dev: true
 
+  /crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
+
   /css-tree/2.3.1:
     resolution: {integrity: sha512-6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
@@ -1908,6 +1914,10 @@ packages:
       object.assign: 4.1.4
     dev: true
 
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+    dev: false
+
   /kebab-case/1.0.2:
     resolution: {integrity: sha512-7n6wXq4gNgBELfDCpzKc+mRrZFs7D+wgfF5WRFLNAr4DA/qtr9Js8uOAVAfHhuLMfAcQ0pRKqbpjx+TcJVdE1Q==}
     dev: true
@@ -2068,6 +2078,14 @@ packages:
       node-fetch-native: 1.0.2
       ufo: 1.1.0
     dev: true
+
+  /oidc-client-ts/2.2.1:
+    resolution: {integrity: sha512-g/W+DsUVeHZ8A7xUSTeK4bI6BNs9ROtMiiOOo+0M6IiTHxueJ757GD8e/8nPBL+k/o6bkfM5mWg4cZcSI8Iosw==}
+    engines: {node: '>=12.13.0'}
+    dependencies:
+      crypto-js: 4.1.1
+      jwt-decode: 3.1.2
+    dev: false
 
   /once/1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
