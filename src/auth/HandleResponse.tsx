@@ -5,7 +5,7 @@ const HandleResponse: Component = () => {
     completeAuth();
 
     return (
-        <h1>HandleResponse</h1>
+        <></>
     );
 };
 

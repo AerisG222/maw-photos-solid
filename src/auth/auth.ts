@@ -13,28 +13,25 @@ const authSettings: UserManagerSettings = {
 Log.setLogger(console);
 
 const mgr = new UserManager(authSettings);
+setUser(await mgr.getUser());
 
 export async function initiateAuth() {
-    try
-    {
+    try {
         const u = await mgr.signinPopup();
 
         console.log("successfully completed authentication via popup");
+        mgr.startSilentRenew();
         setUser(u);
-    }
-    catch(err)
-    {
+    } catch(err) {
         console.error(err);
     }
 }
 
 export async function completeAuth() {
-    try
-    {
+    try {
         await mgr.signinCallback();
         console.log("successfully completed authentication");
-    }
-    catch(err) {
+    } catch(err) {
         console.error(err);
     }
 }

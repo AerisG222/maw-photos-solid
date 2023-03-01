@@ -1,12 +1,20 @@
+import { useNavigate } from '@solidjs/router';
 import { Component, createEffect } from "solid-js";
 import { initiateAuth, user } from './auth';
 
 const Login: Component = () => {
-    createEffect(() => {
-        console.log(user());
-    });
+    const navigate = useNavigate();
 
-    initiateAuth();
+    createEffect(() => {
+        const u = user();
+
+        if(!!u && !u.expired) {
+            console.log('user already logged in!');
+            navigate('/');
+        } else {
+            initiateAuth();
+        }
+    });
 
     return (
         <h1>Login</h1>
