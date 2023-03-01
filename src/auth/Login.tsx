@@ -1,6 +1,6 @@
 import { useNavigate } from '@solidjs/router';
 import { Component, createEffect } from "solid-js";
-import { initiateAuth, user } from './auth';
+import { initiateAuthInline, initiateAuthPopup, user } from './auth';
 
 const Login: Component = () => {
     const navigate = useNavigate();
@@ -12,12 +12,30 @@ const Login: Component = () => {
             console.log('user already logged in!');
             navigate('/');
         } else {
-            initiateAuth();
+            initiateAuthPopup();
         }
     });
 
     return (
-        <h1>Login</h1>
+        <div class="text-center">
+            <img src="/android-chrome-192x192.png" class="inline mt-12 mb-8" />
+
+            <p>Welcome to photos.mikeandwan.us</p>
+
+            <p>
+                Please login via the popup window (and make sure the popup was not
+                blocked).
+            </p>
+
+            <p>Otherwise, please click the button below to initiate the login.</p>
+
+            <button
+                type="submit"
+                onClick={async () => await initiateAuthInline()}
+            >
+                <span class="i-ic-round-security" /> Login
+            </button>
+        </div>
     );
 };
 
