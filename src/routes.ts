@@ -7,6 +7,7 @@ import { randomRoutes } from './random/_routes';
 import { searchRoutes } from './search/_routes';
 import { statsRoutes } from './stats/_routes';
 import { settingsRoutes } from './settings/_routes';
+import { redirectRoutes } from './redirect/_routes';
 
 export const appRoutes = [
     ...loginRoutes,
@@ -17,5 +18,6 @@ export const appRoutes = [
     ...randomRoutes,
     ...statsRoutes,
     ...aboutRoutes,
-    ...settingsRoutes
+    ...settingsRoutes,
+    ...redirectRoutes
 ];
