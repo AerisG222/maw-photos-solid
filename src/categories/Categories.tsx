@@ -1,8 +1,11 @@
 import { Component } from "solid-js";
+import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
 
 const Categories: Component = () => {
+    authGuard();
+
     return (
         <ContentLayout>
             <Toolbar />

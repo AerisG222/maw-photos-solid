@@ -2,8 +2,11 @@ import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
+import { authGuard } from '../auth/auth';
 
 const ViewFullscreen: Component = () => {
+    authGuard();
+
     return (
         <ContentLayout>
             <Toolbar>
