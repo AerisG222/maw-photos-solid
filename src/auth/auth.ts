@@ -4,10 +4,9 @@ import { Log, User, UserManager, UserManagerSettings } from 'oidc-client-ts';
 export const [user, setUser] = createSignal(undefined as User|undefined);
 
 const authSettings: UserManagerSettings = {
-    authority: 'https://dev.auth.mikeandwan.us:5001',
-    client_id: 'maw-photos-solid',
-    //redirect_uri: 'http://dev.photos.mikeandwan.us:3000/login/handle-response'
-    redirect_uri: 'http://localhost:3000/login/handle-response'
+    authority: import.meta.env.VITE_AUTH_AUTHORITY,
+    client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
+    redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI
 }
 
 Log.setLogger(console);
