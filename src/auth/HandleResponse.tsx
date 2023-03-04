@@ -1,6 +1,6 @@
 import { useNavigate } from '@solidjs/router';
 import { Component, createEffect } from "solid-js";
-import { completeAuth, user } from './auth';
+import { completeAuth, isLoggedIn } from './auth';
 
 const HandleResponse: Component = () => {
     const navigate = useNavigate();
@@ -9,9 +9,7 @@ const HandleResponse: Component = () => {
 
     // todo: can we centralize this between here and login?
     createEffect(() => {
-        const u = user();
-
-        if(!!u && !u.expired) {
+        if(isLoggedIn()) {
             navigate('/');
         } else {
             console.log('not logged in');

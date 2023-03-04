@@ -1,4 +1,5 @@
-import { createSignal } from 'solid-js';
+import { createSignal, onMount } from 'solid-js';
+import { useNavigate } from '@solidjs/router';
 import { Log, User, UserManager, UserManagerSettings } from 'oidc-client-ts';
 
 export const [user, setUser] = createSignal(undefined as User|undefined);
@@ -47,4 +48,21 @@ export async function completeAuth() {
     } catch(err) {
         console.error(err);
     }
+}
+
+export function isLoggedIn() {
+    const u = user();
+
+    return !!u && !u.expired;
+}
+
+// https://github.com/solidjs/solid-router/issues/75#issuecomment-1256848390
+export const authGuard = () => {
+    const navigate = useNavigate();
+
+    onMount(() => {
+        if(!isLoggedIn()) {
+            navigate("/login", { replace: true})
+        }
+    });
 }
