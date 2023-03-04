@@ -1,19 +1,16 @@
+import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
-import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from "./Toolbar";
+import { categoriesPhotosGrid } from './_routes';
 
 const PhotoCategories: Component = () => {
     authGuard();
 
-    return (
-        <ContentLayout>
-            <Toolbar />
-            <div>
-                <h1>Photo Categories</h1>
-            </div>
-        </ContentLayout>
-    );
+    const navigate = useNavigate();
+
+    navigate(categoriesPhotosGrid.path);
+
+    return (<></>);
 };
 
 export default PhotoCategories;

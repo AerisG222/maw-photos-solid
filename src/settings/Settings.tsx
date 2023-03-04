@@ -1,16 +1,13 @@
+import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
-import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
+import { settingsApplication } from './_routes';
 
 const Settings: Component = () => {
-    return (
-        <ContentLayout>
-            <Toolbar />
-            <div>
-                <h1>Settings</h1>
-            </div>
-        </ContentLayout>
-    );
+    const navigate = useNavigate();
+
+    navigate(settingsApplication.path);
+
+    return (<></>);
 };
 
 export default Settings;

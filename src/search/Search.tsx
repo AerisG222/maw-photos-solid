@@ -1,18 +1,16 @@
+import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
-import ContentLayout from '../components/layout/ContentLayout';
+import { searchGrid } from './_routes';
 
 const Search: Component = () => {
     authGuard();
 
-    return (
-        <ContentLayout>
-            <span>x</span>
-            <div>
-                <h1>Search</h1>
-            </div>
-        </ContentLayout>
-    );
+    const navigate = useNavigate();
+
+    navigate(searchGrid.path);
+
+    return (<></>);
 };
 
 export default Search;
