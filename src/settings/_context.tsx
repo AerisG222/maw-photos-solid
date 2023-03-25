@@ -5,7 +5,7 @@ export type AppSettingsState = {
     readonly theme: string;
 };
 
-export type AppSettingsValue = [
+export type AppSettingsContextValue = [
     state: AppSettingsState,
     actions: {
         setTheme: (theme: string) => void;
@@ -16,7 +16,7 @@ const defaultState: AppSettingsState = {
     theme: 'dark'
 };
 
-const AppSettingsContext = createContext<AppSettingsValue>([
+const AppSettingsContext = createContext<AppSettingsContextValue>([
     defaultState,
     {
         setTheme: () => undefined
@@ -26,7 +26,9 @@ const AppSettingsContext = createContext<AppSettingsValue>([
 export const AppSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultState);
 
-    const setTheme = (theme: string) => setState({theme: theme});
+    const setTheme = (theme: string) => {
+        setState({theme: theme});
+    };
 
     return (
         <AppSettingsContext.Provider value={[state, { setTheme }]}>
@@ -35,4 +37,4 @@ export const AppSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export function useAppSettings() { return useContext(AppSettingsContext); }
+export const useAppSettings = () => useContext(AppSettingsContext);

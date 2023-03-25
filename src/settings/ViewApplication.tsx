@@ -1,15 +1,13 @@
 import { Component, onCleanup } from "solid-js";
-import { produce } from 'solid-js/store';
-import { appSettings, setAppSettings } from './_context';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
+import { useAppSettings } from './_context';
 
 const ViewApplication: Component = () => {
+    const [appSettings, { setTheme }] = useAppSettings();
+
     const i = setInterval(() => {
-        setAppSettings(produce(s => {
-            s.theme = Math.random().toString();
-            //setAppSettings("theme", Math.random().toString());
-        }));
+        setTheme(Math.random().toString());
     }, 5000);
 
     onCleanup(() => clearInterval(i));
