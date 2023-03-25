@@ -7,7 +7,11 @@ const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();
 
     const i = setInterval(() => {
-        setTheme(Math.random().toString());
+        if(appSettings.theme === 'dark') {
+            setTheme('light');
+        } else {
+            setTheme('dark');
+        }
     }, 5000);
 
     onCleanup(() => clearInterval(i));
