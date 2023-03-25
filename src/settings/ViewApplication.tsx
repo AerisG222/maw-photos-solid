@@ -1,6 +1,6 @@
 import { Component, onCleanup } from "solid-js";
 import { produce } from 'solid-js/store';
-import { appSettings, setAppSettings } from './_store';
+import { appSettings, setAppSettings } from './_context';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 
