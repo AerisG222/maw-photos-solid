@@ -1,9 +1,18 @@
 import { defineConfig } from '@unocss/vite';
+import type { Theme } from '@unocss/preset-mini';
 import { presetMini } from '@unocss/preset-mini';
 import { presetIcons } from '@unocss/preset-icons';
+import presetTheme from 'unocss-preset-theme';
+
 import { appRoutes } from './src/routes';
 
-export default defineConfig({
+export default defineConfig<Theme>({
+    theme: {
+        colors: {
+            'bg': '#fff',
+            'text': '#333'
+        }
+    },
     presets: [
         presetIcons({
             extraProperties: {
@@ -11,7 +20,17 @@ export default defineConfig({
                 'vertical-align': 'middle',
             }
         }),
-        presetMini()
+        presetMini(),
+        presetTheme<Theme>({
+            theme: {
+                dark: {
+                    colors: {
+                        'bg': '#222',
+                        'text': '#ccc'
+                    }
+                }
+            }
+        })
     ],
     safelist: [
         ...new Set(appRoutes.filter(r => !!r.icon).map(r => r.icon))
