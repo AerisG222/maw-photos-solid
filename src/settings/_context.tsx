@@ -1,9 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
-
-export type AppSettingsState = {
-    readonly theme: string;
-};
+import { AppSettingsState, defaultAppSettings, loadAppSettings } from '../models/Settings';
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,
@@ -12,19 +9,15 @@ export type AppSettingsContextValue = [
     }
 ];
 
-const defaultState: AppSettingsState = {
-    theme: 'dark'
-};
-
 const AppSettingsContext = createContext<AppSettingsContextValue>([
-    defaultState,
+    defaultAppSettings,
     {
         setTheme: () => undefined
     }
 ]);
 
 export const AppSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(defaultState);
+    const [state, setState] = createStore(loadAppSettings());
 
     const setTheme = (theme: string) => {
         setState({theme: theme});
