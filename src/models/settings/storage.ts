@@ -38,3 +38,11 @@ export function loadJson<T>(key: string, def: T): T {
 
     return def;
 }
+
+export function saveJson<T>(key: string, value: T): void {
+    if(!value) {
+        localStorage.removeItem(key);
+    } else {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+}

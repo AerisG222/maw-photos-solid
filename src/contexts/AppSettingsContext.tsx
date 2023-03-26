@@ -1,6 +1,8 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
-import { AppSettingsState, defaultAppSettings, loadAppSettings } from '../models/settings';
+
+import { KEY_SETTINGS_APP, loadJson, saveJson } from '../models/settings/storage';
+import { AppSettingsState, defaultAppSettings } from '../models/settings';
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,
@@ -21,6 +23,7 @@ export const AppSettingsProvider: ParentComponent = (props) => {
 
     const setTheme = (theme: string) => {
         setState({theme: theme});
+        saveAppSettings(state);
     };
 
     return (
@@ -31,3 +34,11 @@ export const AppSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useAppSettings = () => useContext(AppSettingsContext);
+
+function loadAppSettings() {
+    return loadJson(KEY_SETTINGS_APP, defaultAppSettings);
+}
+
+function saveAppSettings(state: AppSettingsState) {
+    saveJson(KEY_SETTINGS_APP, state);
+}
