@@ -5,14 +5,14 @@ import { render } from 'solid-js/web';
 import { Router } from '@solidjs/router';
 
 import App from './App';
-import { AppSettingsProvider } from './settings/_context';
+import { AllSettingsProvider } from './contexts/AllSettingsProvider';
 
 render(() =>
-        <AppSettingsProvider>
+        <AllSettingsProvider>
         <Router>
             <App />
         </Router>
-        </AppSettingsProvider>
+        </AllSettingsProvider>
     ,
     document.getElementById('root')
 );

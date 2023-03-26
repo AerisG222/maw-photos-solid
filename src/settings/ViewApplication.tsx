@@ -1,7 +1,7 @@
 import { Component, onCleanup } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
-import { useAppSettings } from './_context';
+import { useAppSettings } from '../contexts/AppSettingsContext';
 
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();

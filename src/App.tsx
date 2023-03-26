@@ -3,7 +3,7 @@ import { useRoutes } from "@solidjs/router";
 
 import PrimaryNav from "./components/primary-nav/PrimaryNav";
 import { appRoutes } from "./routes";
-import { useAppSettings } from './settings/_context';
+import { useAppSettings } from './contexts/AppSettingsContext';
 
 const App: Component = () => {
     const Routes = useRoutes(appRoutes);
