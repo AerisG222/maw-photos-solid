@@ -7,7 +7,7 @@ const ViewRandom: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Random</h1>
+                <h1 class="head1">Settings - Random</h1>
             </div>
         </ContentLayout>
     );

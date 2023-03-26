@@ -7,7 +7,7 @@ const ViewPhotos: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Photos</h1>
+                <h1 class="head1">Settings - Photos</h1>
             </div>
         </ContentLayout>
     );

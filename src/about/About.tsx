@@ -5,7 +5,7 @@ const About: Component = () => {
     return (
         <ContentLayoutNoToolbar>
             <div>
-                <h1>About</h1>
+                <h1 class="head1">About</h1>
             </div>
         </ContentLayoutNoToolbar>
     );

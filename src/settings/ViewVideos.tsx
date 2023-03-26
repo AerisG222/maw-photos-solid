@@ -7,7 +7,7 @@ const ViewVideos: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Videos</h1>
+                <h1 class="head1">Settings - Videos</h1>
             </div>
         </ContentLayout>
     );

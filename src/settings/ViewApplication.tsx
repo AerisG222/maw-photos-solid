@@ -20,7 +20,7 @@ const ViewApplication: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Application</h1>
+                <h1 class="head1">Settings - Application</h1>
                 <p>{appSettings.theme}</p>
             </div>
         </ContentLayout>

@@ -7,7 +7,7 @@ const ViewCategories: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Categories</h1>
+                <h1 class="head1">Settings - Categories</h1>
             </div>
         </ContentLayout>
     );

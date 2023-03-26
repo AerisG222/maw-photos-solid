@@ -34,5 +34,10 @@ export default defineConfig<Theme>({
     ],
     safelist: [
         ...new Set(appRoutes.filter(r => !!r.icon).map(r => r.icon))
+    ],
+    shortcuts: [
+        {
+            head1: 'font-bold text-xl'
+        }
     ]
 });

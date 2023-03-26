@@ -7,7 +7,7 @@ const ViewSearch: Component = () => {
         <ContentLayout>
             <Toolbar />
             <div>
-                <h1>Settings Search</h1>
+                <h1 class="head1">Settings - Search</h1>
             </div>
         </ContentLayout>
     );
