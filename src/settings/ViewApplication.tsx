@@ -18,7 +18,8 @@ const ViewApplication: Component = () => {
                 <h1 class="head1">Settings - Application</h1>
                 <div class="border-1 border-solid border-gray border-rounded-1 p-1 max-w-350px">
                     <h2 class="head2">General</h2>
-                    <select onChange={onChangeTheme} value={appSettings.theme}>
+                    <label class="font-bold mr-2" for="theme">Theme</label>
+                    <select name="theme" onChange={onChangeTheme} value={appSettings.theme}>
                         <option value="dark">Dark</option>
                         <option value="light">Light</option>
                     </select>
