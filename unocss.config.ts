@@ -37,7 +37,8 @@ export default defineConfig<Theme>({
     ],
     shortcuts: [
         {
-            head1: 'font-bold text-xl'
+            head1: 'font-bold text-xl mb-3',
+            head2: 'font-bold text-lg mb-3'
         }
     ]
 });
