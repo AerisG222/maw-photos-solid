@@ -2,8 +2,9 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { Margin } from '../models/margin';
-import { SearchListViewSettingsState, defaultSearchListViewSettings, loadSearchListViewSettings } from '../models/settings';
+import { SearchListViewSettingsState, defaultSearchListViewSettings } from '../models/settings';
 import { ThumbnailSize } from '../models/thumbnail-size';
+import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from './_storage';
 
 export type SearchListViewSettingsContextValue = [
     state: SearchListViewSettingsState,
@@ -22,14 +23,14 @@ const SearchListViewSettingsContext = createContext<SearchListViewSettingsContex
 ]);
 
 export const SearchListSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadSearchListViewSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => {
-        setState({margin: margin});
-    };
+    const setMargin = (margin: Margin) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
 
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => {
-        setState({thumbnailSize: thumbnailSize});
+    const updateState = (update: Partial<SearchListViewSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -40,3 +41,11 @@ export const SearchListSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useSearchListViewSettings = () => useContext(SearchListViewSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings);
+}
+
+function saveState(state: SearchListViewSettingsState) {
+    saveJson(KEY_SETTINGS_SEARCH_VIEW_LIST, state);
+}

@@ -2,7 +2,8 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { MapType } from '../models/map-type';
-import { RandomInfoPanelSettingsState, defaultRandomInfoPanelSettings, loadRandomInfoPanelSettings } from '../models/settings';
+import { RandomInfoPanelSettingsState, defaultRandomInfoPanelSettings } from '../models/settings';
+import { KEY_SETTINGS_RANDOM_INFO_PANEL, loadJson, saveJson } from './_storage';
 
 export type RandomInfoPanelSettingsContextValue = [
     state: RandomInfoPanelSettingsState,
@@ -39,50 +40,23 @@ const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsCont
 ]);
 
 export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadRandomInfoPanelSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setShowRatings = (showRatings: boolean) => {
-        setState({showRatings: showRatings});
-    }
+    const setShowRatings = (showRatings: boolean) => updateState({showRatings: showRatings});
+    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => updateState({showCategoryTeaserChooser: showCategoryTeaserChooser});
+    const setShowComments = (showComments: boolean) => updateState({showComments: showComments});
+    const setShowExif = (showExif: boolean) => updateState({showExif: showExif});
+    const setShowEffects = (showEffects: boolean) => updateState({showEffects: showEffects});
+    const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
+    const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
+    const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
+    const setExpandedState = (expandedState: boolean) => updateState({expandedState: expandedState});
+    const setMinimapZoom = (minimapZoom: number) => updateState({minimapZoom: minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapType) => updateState({minimapMapType: minimapMapType});
 
-    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => {
-        setState({showCategoryTeaserChooser: showCategoryTeaserChooser});
-    }
-
-    const setShowComments = (showComments: boolean) => {
-        setState({showComments: showComments});
-    }
-
-    const setShowExif = (showExif: boolean) => {
-        setState({showExif: showExif});
-    }
-
-    const setShowEffects = (showEffects: boolean) => {
-        setState({showEffects: showEffects});
-    }
-
-    const setShowMetadataEditor = (showMetadataEditor: boolean) => {
-        setState({showMetadataEditor: showMetadataEditor});
-    }
-
-    const setShowHistogram = (showHistogram: boolean) => {
-        setState({showHistogram: showHistogram});
-    }
-
-    const setShowMinimap = (showMinimap: boolean) => {
-        setState({showMinimap: showMinimap});
-    }
-
-    const setExpandedState = (expandedState: boolean) => {
-        setState({expandedState: expandedState});
-    }
-
-    const setMinimapZoom = (minimapZoom: number) => {
-        setState({minimapZoom: minimapZoom});
-    }
-
-    const setMinimapMapType = (minimapMapType: MapType) => {
-        setState({minimapMapType: minimapMapType});
+    const updateState = (update: Partial<RandomInfoPanelSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -105,3 +79,11 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useRandomInfoPanelSettings = () => useContext(RandomInfoPanelSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_RANDOM_INFO_PANEL, defaultRandomInfoPanelSettings);
+}
+
+function saveState(state: RandomInfoPanelSettingsState) {
+    saveJson(KEY_SETTINGS_RANDOM_INFO_PANEL, state);
+}

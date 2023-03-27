@@ -1,5 +1,4 @@
 import { ThumbnailSize } from '../thumbnail-size';
-import { KEY_SETTINGS_PHOTO_VIEW_DETAIL, loadJson } from './storage';
 
 export type PhotoDetailViewSettingsState = {
     showBreadcrumbs: boolean;
@@ -12,7 +11,3 @@ export const defaultPhotoDetailViewSettings: PhotoDetailViewSettingsState = {
     thumbnailSize: ThumbnailSize.default,
     showPhotoList: true,
 };
-
-export function loadPhotoDetailViewSettings() {
-    return loadJson(KEY_SETTINGS_PHOTO_VIEW_DETAIL, defaultPhotoDetailViewSettings);
-}

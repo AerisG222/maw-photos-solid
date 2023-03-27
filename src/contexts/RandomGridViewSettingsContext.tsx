@@ -2,8 +2,9 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { Margin } from '../models/margin';
-import { RandomGridViewSettingsState, defaultRandomGridViewSettings, loadRandomGridViewSettings } from '../models/settings';
+import { RandomGridViewSettingsState, defaultRandomGridViewSettings } from '../models/settings';
 import { ThumbnailSize } from '../models/thumbnail-size';
+import { KEY_SETTINGS_RANDOM_VIEW_GRID, loadJson, saveJson } from './_storage';
 
 export type RandomGridViewSettingsContextValue = [
     state: RandomGridViewSettingsState,
@@ -24,18 +25,15 @@ const RandomGridViewSettingsContext = createContext<RandomGridViewSettingsContex
 ]);
 
 export const RandomGridSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadRandomGridViewSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => {
-        setState({margin: margin});
-    };
+    const setMargin = (margin: Margin) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
+    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
 
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => {
-        setState({thumbnailSize: thumbnailSize});
-    }
-
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => {
-        setState({showBreadcrumbs: showBreadcrumbs});
+    const updateState = (update: Partial<RandomGridViewSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -46,3 +44,11 @@ export const RandomGridSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useRandomGridViewSettings = () => useContext(RandomGridViewSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_RANDOM_VIEW_GRID, defaultRandomGridViewSettings);
+}
+
+function saveState(state: RandomGridViewSettingsState) {
+    saveJson(KEY_SETTINGS_RANDOM_VIEW_GRID, state);
+}

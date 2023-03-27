@@ -2,7 +2,8 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { CategoryTypeFilter } from '../models/category-type-filter';
-import { CategoryFilterSettingsState, defaultCategoryFilterSettings, loadCategoryFilterSettings } from '../models/settings';
+import { CategoryFilterSettingsState, defaultCategoryFilterSettings } from '../models/settings';
+import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from './_storage';
 
 export type CategoryFilterSettingsContextValue = [
     state: CategoryFilterSettingsState,
@@ -23,18 +24,15 @@ const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContex
 ]);
 
 export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadCategoryFilterSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setTypeFilter = (typeFilter: CategoryTypeFilter) => {
-        setState({typeFilter: typeFilter});
-    }
+    const setTypeFilter = (typeFilter: CategoryTypeFilter) => updateState({typeFilter: typeFilter});
+    const setYearFilter = (yearFilter: string | number) => updateState({yearFilter: yearFilter});
+    const setMissingGpsFilter = (missingGpsFilter: boolean) => updateState({missingGpsFilter: missingGpsFilter});
 
-    const setYearFilter = (yearFilter: string | number) => {
-        setState({yearFilter: yearFilter});
-    }
-
-    const setMissingGpsFilter = (missingGpsFilter: boolean) => {
-        setState({missingGpsFilter: missingGpsFilter});
+    const updateState = (update: Partial<CategoryFilterSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -45,3 +43,11 @@ export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useCategoryFilterSettings = () => useContext(CategoryFilterSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings);
+}
+
+function saveState(state: CategoryFilterSettingsState) {
+    saveJson(KEY_SETTINGS_CATEGORY_FILTER, state);
+}

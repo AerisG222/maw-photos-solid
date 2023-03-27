@@ -1,5 +1,4 @@
 import { CategoryTypeFilter } from '../category-type-filter';
-import { KEY_SETTINGS_CATEGORY_FILTER, loadJson } from './storage';
 
 export type CategoryFilterSettingsState = {
     readonly typeFilter: CategoryTypeFilter;
@@ -12,7 +11,3 @@ export const defaultCategoryFilterSettings: CategoryFilterSettingsState = {
     yearFilter: 'all',
     missingGpsFilter: false,
 };
-
-export function loadCategoryFilterSettings() {
-    return loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings);
-}

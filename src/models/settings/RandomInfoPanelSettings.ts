@@ -1,5 +1,4 @@
 import { MapType } from '../map-type';
-import { KEY_SETTINGS_RANDOM_INFO_PANEL, loadJson } from './storage';
 
 export type RandomInfoPanelSettingsState = {
     showRatings: boolean;
@@ -28,7 +27,3 @@ export const defaultRandomInfoPanelSettings: RandomInfoPanelSettingsState = {
     minimapMapType: MapType.roadmap,
     minimapZoom: 10,
 };
-
-export function loadRandomInfoPanelSettings() {
-    return loadJson(KEY_SETTINGS_RANDOM_INFO_PANEL, defaultRandomInfoPanelSettings);
-}

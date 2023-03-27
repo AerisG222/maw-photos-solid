@@ -1,6 +1,5 @@
 import { Margin } from '../margin';
 import { ThumbnailSize } from '../thumbnail-size';
-import { KEY_SETTINGS_SEARCH_VIEW_GRID, loadJson } from './storage';
 
 export type SearchGridViewSettingsState = {
     margin: Margin;
@@ -15,7 +14,3 @@ export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     showYears: true,
     thumbnailSize: ThumbnailSize.default,
 };
-
-export function loadSearchGridViewSettings() {
-    return loadJson(KEY_SETTINGS_SEARCH_VIEW_GRID, defaultSearchGridViewSettings);
-}

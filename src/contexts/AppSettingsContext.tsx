@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { KEY_SETTINGS_APP, loadJson, saveJson } from '../models/settings/storage';
+import { KEY_SETTINGS_APP, loadJson, saveJson } from './_storage';
 import { AppSettingsState, defaultAppSettings } from '../models/settings';
 
 export type AppSettingsContextValue = [
@@ -19,11 +19,11 @@ const AppSettingsContext = createContext<AppSettingsContextValue>([
 ]);
 
 export const AppSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadAppSettings());
+    const [state, setState] = createStore(loadState());
 
     const setTheme = (theme: string) => {
         setState({theme: theme});
-        saveAppSettings(state);
+        saveState(state);
     };
 
     return (
@@ -35,10 +35,10 @@ export const AppSettingsProvider: ParentComponent = (props) => {
 
 export const useAppSettings = () => useContext(AppSettingsContext);
 
-function loadAppSettings() {
+function loadState() {
     return loadJson(KEY_SETTINGS_APP, defaultAppSettings);
 }
 
-function saveAppSettings(state: AppSettingsState) {
+function saveState(state: AppSettingsState) {
     saveJson(KEY_SETTINGS_APP, state);
 }

@@ -1,8 +1,9 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { RandomDetailViewSettingsState, defaultRandomDetailViewSettings, loadRandomDetailViewSettings } from '../models/settings';
+import { RandomDetailViewSettingsState, defaultRandomDetailViewSettings } from '../models/settings';
 import { ThumbnailSize } from '../models/thumbnail-size';
+import { KEY_SETTINGS_RANDOM_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type RandomDetailViewSettingsContextValue = [
     state: RandomDetailViewSettingsState,
@@ -23,18 +24,15 @@ const RandomDetailViewSettingsContext = createContext<RandomDetailViewSettingsCo
 ]);
 
 export const RandomDetailSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadRandomDetailViewSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => {
-        setState({showBreadcrumbs: showBreadcrumbs});
-    };
+    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
+    const setShowPhotoList = (showPhotoList: boolean) => updateState({showPhotoList: showPhotoList});
 
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => {
-        setState({thumbnailSize: thumbnailSize});
-    }
-
-    const setShowPhotoList = (showPhotoList: boolean) => {
-        setState({showPhotoList: showPhotoList});
+    const updateState = (update: Partial<RandomDetailViewSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -45,3 +43,11 @@ export const RandomDetailSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useRandomDetailViewSettings = () => useContext(RandomDetailViewSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_RANDOM_VIEW_DETAIL, defaultRandomDetailViewSettings);
+}
+
+function saveState(state: RandomDetailViewSettingsState) {
+    saveJson(KEY_SETTINGS_RANDOM_VIEW_DETAIL, state);
+}

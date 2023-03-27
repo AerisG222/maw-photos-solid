@@ -1,5 +1,4 @@
 import { ThumbnailSize } from '../thumbnail-size';
-import { KEY_SETTINGS_RANDOM_VIEW_DETAIL, loadJson } from './storage';
 
 export type RandomDetailViewSettingsState = {
     showBreadcrumbs: boolean;
@@ -12,7 +11,3 @@ export const defaultRandomDetailViewSettings: RandomDetailViewSettingsState = {
     thumbnailSize: ThumbnailSize.default,
     showPhotoList: true,
 };
-
-export function loadRandomDetailViewSettings() {
-    return loadJson(KEY_SETTINGS_RANDOM_VIEW_DETAIL, defaultRandomDetailViewSettings);
-}

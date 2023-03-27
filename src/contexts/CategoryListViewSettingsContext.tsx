@@ -2,8 +2,9 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { Margin } from '../models/margin';
-import { CategoryListViewSettingsState, defaultCategoryListViewSettings, loadCategoryListViewSettings } from '../models/settings';
+import { CategoryListViewSettingsState, defaultCategoryListViewSettings } from '../models/settings';
 import { ThumbnailSize } from '../models/thumbnail-size';
+import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson,saveJson } from './_storage';
 
 export type CategoryListViewSettingsContextValue = [
     state: CategoryListViewSettingsState,
@@ -22,14 +23,14 @@ const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsCo
 ]);
 
 export const CategoryListSettingsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore(loadCategoryListViewSettings());
+    const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => {
-        setState({margin: margin});
-    };
+    const setMargin = (margin: Margin) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
 
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => {
-        setState({thumbnailSize: thumbnailSize});
+    const updateState = (update: Partial<CategoryListViewSettingsState>) => {
+        setState(update);
+        saveState(state);
     }
 
     return (
@@ -40,3 +41,11 @@ export const CategoryListSettingsProvider: ParentComponent = (props) => {
 }
 
 export const useCategoryListViewSettings = () => useContext(CategoryListViewSettingsContext);
+
+function loadState() {
+    return loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings);
+}
+
+function saveState(state: CategoryListViewSettingsState) {
+    saveJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, state);
+}

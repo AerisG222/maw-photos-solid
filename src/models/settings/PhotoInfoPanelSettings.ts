@@ -1,5 +1,4 @@
 import { MapType } from '../map-type';
-import { KEY_SETTINGS_PHOTO_INFO_PANEL, loadJson } from './storage';
 
 export type PhotoInfoPanelSettingsState = {
     showRatings: boolean;
@@ -28,7 +27,3 @@ export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
     minimapMapType: MapType.roadmap,
     minimapZoom: 10,
 };
-
-export function loadPhotoInfoPanelSettings() {
-    return loadJson(KEY_SETTINGS_PHOTO_INFO_PANEL, defaultPhotoInfoPanelSettings);
-}
