@@ -1,7 +1,9 @@
+import { Theme } from '../theme';
+
 export type AppSettingsState = {
-    readonly theme: string;
+    readonly theme: Theme;
 };
 
 export const defaultAppSettings: AppSettingsState = {
-    theme: 'dark'
+    theme: Theme.dark
 };

@@ -1,7 +1,10 @@
-import { Component } from "solid-js";
+import { Component, For } from "solid-js";
+
+import { useAppSettings } from '../contexts/AppSettingsContext';
+import { allThemeDetails } from '../models/theme';
+
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
-import { useAppSettings } from '../contexts/AppSettingsContext';
 
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();
@@ -20,8 +23,9 @@ const ViewApplication: Component = () => {
                     <h2 class="head2">General</h2>
                     <label class="font-bold mr-2" for="theme">Theme</label>
                     <select name="theme" onChange={onChangeTheme} value={appSettings.theme}>
-                        <option value="dark">Dark</option>
-                        <option value="light">Light</option>
+                        <For each={allThemeDetails}>{ (theme) =>
+                            <option value={theme.theme}>{theme.name}</option>
+                        }</For>
                     </select>
                 </div>
             </div>
