@@ -38,7 +38,8 @@ export default defineConfig<Theme>({
     shortcuts: [
         {
             head1: 'font-bold text-xl mb-3',
-            head2: 'font-bold text-lg mb-3'
+            head2: 'font-bold text-lg mb-3',
+            settingsPanel: 'border-1 border-solid border-gray border-rounded-1 p-1 min-w-300px max-w-500px'
         }
     ]
 });

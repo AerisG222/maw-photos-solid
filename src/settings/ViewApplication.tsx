@@ -17,9 +17,10 @@ const ViewApplication: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
+            <div class="overflow-y-auto pb-8">
                 <h1 class="head1">Settings - Application</h1>
-                <div class="border-1 border-solid border-gray border-rounded-1 p-1 max-w-350px">
+
+                <div class="settingsPanel">
                     <h2 class="head2">General</h2>
                     <label class="font-bold mr-2" for="theme">Theme</label>
                     <select name="theme" onChange={onChangeTheme} value={appSettings.theme}>
