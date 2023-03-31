@@ -85,6 +85,10 @@ const ViewPhotos: Component = () => {
                                 <label for="showExifPanel">Show EXIF Panel</label>
                             </div>
                             <div>
+                                <input type="checkbox" name="showHistogramPanel" class="mr-2" />
+                                <label for="showEffectsPanel">Show Histogram Panel</label>
+                            </div>
+                            <div>
                                 <input type="checkbox" name="showEffectsPanel" class="mr-2" />
                                 <label for="showEffectsPanel">Show Effects Panel</label>
                             </div>
@@ -98,7 +102,7 @@ const ViewPhotos: Component = () => {
                             </div>
                             <div>
                                 <input type="checkbox" name="showTeaserPanel" class="mr-2" />
-                                <label for="showTeaserPanel">Show Category Teaser Panel</label>
+                                <label for="showTeaserPanel">Show Category Teaser Chooser Panel</label>
                             </div>
                         </div>
 
@@ -107,7 +111,7 @@ const ViewPhotos: Component = () => {
                             <For each={allMapTypes}>{(type, i) =>
                                 <>
                                     <div>
-                                        <input type="radio" name="detailThumb" value={type.value} class="mr-2" />
+                                        <input type="radio" name="detailMapType" value={type.value} class="mr-2" />
                                         <label>{type.name}</label>
                                     </div>
                                 </>
@@ -162,13 +166,14 @@ const ViewPhotos: Component = () => {
 
                         <h3 class="mt-4">Map Type</h3>
                         <div>
-                            <select name="mapMapType">
-                                <For each={allMapTypes}>{(type, i) =>
-                                    <>
-                                        <option value={type.value} class="mr-2">{type.name}</option>
-                                    </>
-                                }</For>
-                            </select>
+                            <For each={allMapTypes}>{(type, i) =>
+                                <>
+                                    <div>
+                                        <input type="radio" name="mapMapType" value={type.value} class="mr-2" />
+                                        <label>{type.name}</label>
+                                    </div>
+                                </>
+                            }</For>
                         </div>
 
                         <h3 class="mt-4">Map Zoom Level</h3>
