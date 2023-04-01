@@ -27,7 +27,7 @@ export const RandomDetailSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSizeId: thumbnailSize});
     const setShowPhotoList = (showPhotoList: boolean) => updateState({showPhotoList: showPhotoList});
 
     const updateState = (update: Partial<RandomDetailViewSettingsState>) => {

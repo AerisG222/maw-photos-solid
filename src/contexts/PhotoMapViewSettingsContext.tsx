@@ -24,8 +24,8 @@ const PhotoMapViewSettingsContext = createContext<PhotoMapViewSettingsContextVal
 export const PhotoMapSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMapType = (mapType: MapType) => updateState({mapType: mapType});
-    const setZoom = (zoom: number) => updateState({zoom: zoom});
+    const setMapType = (mapType: MapType) => updateState({mapTypeId: mapType});
+    const setZoom = (zoom: number) => updateState({zoomId: zoom});
 
     const updateState = (update: Partial<PhotoMapViewSettingsState>) => {
         setState(update);

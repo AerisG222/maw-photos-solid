@@ -1,14 +1,14 @@
-import { Margin } from '../margin';
-import { ThumbnailSize } from '../thumbnail-size';
+import { MarginIdType, defaultMarginId } from '../margin';
+import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
 
 export type PhotoGridViewSettingsState = {
-    margin: Margin;
+    marginId: MarginIdType;
     showBreadcrumbs: boolean;
-    thumbnailSize: ThumbnailSize;
+    thumbnailSizeId: ThumbnailSizeIdType;
 };
 
 export const defaultPhotoGridViewSettings: PhotoGridViewSettingsState = {
-    margin: Margin.dense,
+    marginId: defaultMarginId,
     showBreadcrumbs: true,
-    thumbnailSize: ThumbnailSize.default,
+    thumbnailSizeId: defaultThumbnailSizeId,
 };

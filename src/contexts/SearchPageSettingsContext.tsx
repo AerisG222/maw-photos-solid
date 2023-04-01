@@ -23,7 +23,7 @@ export const SearchPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
     const setViewMode = (viewMode: CategoryViewMode) => {
-        setState({viewMode: viewMode});
+        setState({viewModeId: viewMode});
         saveState(state);
     };
 

@@ -1,23 +1,13 @@
-import { ValueDescriptor } from './value-descriptor';
+import { KeyValuePair } from './key-value-pair';
 
-export enum MapType {
-    roadmap = 'roadmap',
-    hybrid = 'hybrid',
-    satellite = 'satellite',
-    terrain = 'terrain',
-}
+export type MapTypeIdType = string;
+export type MapType = KeyValuePair<MapTypeIdType>;
 
-export const allMapTypes: ValueDescriptor<MapType>[] = [
-    { value: MapType.roadmap, name: 'Roadmap' },
-    { value: MapType.hybrid, name: 'Hybrid' },
-    { value: MapType.satellite, name: 'Satellite' },
-    { value: MapType.terrain, name: 'Terrain' },
+export const allMapTypes: MapType[] = [
+    { id: 'roadmap',   name: 'Roadmap' },
+    { id: 'hybrid',    name: 'Hybrid' },
+    { id: 'satellite', name: 'Satellite' },
+    { id: 'terrain',   name: 'Terrain' },
 ];
 
-export const toMapType = (val?: string | null): MapType | undefined => {
-    if (!val) {
-        return undefined;
-    }
-
-    return MapType[val as keyof typeof MapType];
-};
+export const defaultMapTypeId: MapTypeIdType = 'satellite';

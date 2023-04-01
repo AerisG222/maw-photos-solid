@@ -1,21 +1,11 @@
-import { ValueDescriptor } from './value-descriptor';
+import { KeyValuePair } from './key-value-pair';
 
-export enum CategoryViewMode {
-    grid = 'grid',
-    list = 'list',
-}
+export type CategoryViewModeIdType = string;
+export type CategoryViewMode = KeyValuePair<CategoryViewModeIdType>;
 
-export const allCategoryViewModes: ValueDescriptor<CategoryViewMode>[] = [
-    { value: CategoryViewMode.grid, name: 'Grid' },
-    { value: CategoryViewMode.list, name: 'List' },
+export const allCategoryViewModes: CategoryViewMode[] = [
+    { id: 'grid', name: 'Grid' },
+    { id: 'list', name: 'List' },
 ];
 
-export const toCategoryViewMode = (
-    val?: string | null
-): CategoryViewMode | undefined => {
-    if (!val) {
-        return undefined;
-    }
-
-    return CategoryViewMode[val as keyof typeof CategoryViewMode];
-};
+export const defaultCategoryViewModeId: CategoryViewModeIdType = 'grid';

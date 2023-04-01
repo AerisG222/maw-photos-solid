@@ -27,7 +27,7 @@ const RandomGridViewSettingsContext = createContext<RandomGridViewSettingsContex
 export const RandomGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => updateState({margin: margin});
+    const setMargin = (margin: Margin) => updateState({marginId: margin});
     const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
 

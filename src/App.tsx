@@ -10,7 +10,7 @@ const App: Component = () => {
     const [appSettings] = useAppSettings();
 
     return (
-        <div data-theme={appSettings.theme}
+        <div data-theme={appSettings.themeId}
              class="grid
                   grid-rows-[max-content_auto] grid-cols-[100vw]
                   md:grid-rows-[100vh] md:grid-cols-[max-content_auto]">

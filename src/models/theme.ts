@@ -1,7 +1,7 @@
-export interface Theme {
-    id: string,
-    name: string,
-}
+import { KeyValuePair } from './key-value-pair';
+
+export type ThemeIdType = string;
+export type Theme = KeyValuePair<ThemeIdType>;
 
 export const allThemes: Theme[] = [
     { id: 'dark',      name: 'Dark' },
@@ -24,3 +24,5 @@ export const allThemes: Theme[] = [
     { id: 'coffee',    name: 'Coffee' },
     { id: 'winter',    name: 'Winter' },
 ];
+
+export const defaultThemeId: ThemeIdType = "dark";

@@ -1,4 +1,5 @@
-import { MapType } from '../map-type';
+import { MapTypeIdType, defaultMapTypeId } from '../map-type';
+import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
 
 export type VideoInfoPanelSettingsState = {
     showRatings: boolean;
@@ -7,8 +8,8 @@ export type VideoInfoPanelSettingsState = {
     showMetadataEditor: boolean;
     showMinimap: boolean;
     expandedState: boolean;
-    minimapZoom: number;
-    minimapMapType: MapType;
+    minimapMapTypeId: MapTypeIdType;
+    minimapZoomId: MapZoomLevelIdType;
 };
 
 export const defaultVideoInfoPanelSettings: VideoInfoPanelSettingsState = {
@@ -18,6 +19,6 @@ export const defaultVideoInfoPanelSettings: VideoInfoPanelSettingsState = {
     showMetadataEditor: false,
     showMinimap: false,
     expandedState: false,
-    minimapMapType: MapType.roadmap,
-    minimapZoom: 10,
+    minimapMapTypeId: defaultMapTypeId,
+    minimapZoomId: defaultMapZoomLevelId,
 };

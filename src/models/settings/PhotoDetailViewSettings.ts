@@ -1,13 +1,13 @@
-import { ThumbnailSize } from '../thumbnail-size';
+import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
 
 export type PhotoDetailViewSettingsState = {
     showBreadcrumbs: boolean;
-    thumbnailSize: ThumbnailSize;
+    thumbnailSizeId: ThumbnailSizeIdType;
     showPhotoList: boolean;
 };
 
 export const defaultPhotoDetailViewSettings: PhotoDetailViewSettingsState = {
     showBreadcrumbs: true,
-    thumbnailSize: ThumbnailSize.default,
+    thumbnailSizeId: defaultThumbnailSizeId,
     showPhotoList: true,
 };

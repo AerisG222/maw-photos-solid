@@ -1,11 +1,12 @@
-import { MapType } from '../map-type';
+import { MapTypeIdType, defaultMapTypeId } from '../map-type';
+import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
 
 export type PhotoMapViewSettingsState = {
-    mapType: MapType;
-    zoom: number;
+    mapTypeId: MapTypeIdType;
+    zoomId: MapZoomLevelIdType;
 };
 
 export const defaultPhotoMapViewSettings: PhotoMapViewSettingsState = {
-    mapType: MapType.roadmap,
-    zoom: 10,
+    mapTypeId: defaultMapTypeId,
+    zoomId: defaultMapZoomLevelId,
 };

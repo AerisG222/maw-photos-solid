@@ -20,9 +20,10 @@ const ViewCategories: Component = () => {
                         <h3>Type Filter</h3>
                         <For each={allCategoryTypeFilters}>{(type, i) =>
                             <>
-                                <div>
-                                    <input type="radio" name="typeFilter" value={type.value} class="mr-2" />
-                                    <label>{type.name}</label>
+                                <div class="form-control">
+                                    <label class="label cursor-pointer">{type.name}
+                                        <input type="radio" name="typeFilter" value={type.value} class="radio" />
+                                    </label>
                                 </div>
                             </>
                         }</For>

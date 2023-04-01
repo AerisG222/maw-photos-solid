@@ -1,11 +1,11 @@
-import { PhotoViewMode } from '../photo-view-mode';
+import { PhotoViewModeIdType, defaultPhotoViewModeId } from '../photo-view-mode';
 
 export type RandomPageSettingsState = {
-    readonly viewMode: PhotoViewMode;
+    readonly viewModeId: PhotoViewModeIdType;
     readonly slideshowDisplayDurationSeconds: number;
 };
 
 export const defaultRandomPageSettings: RandomPageSettingsState = {
-    viewMode: PhotoViewMode.grid,
+    viewModeId: defaultPhotoViewModeId,
     slideshowDisplayDurationSeconds: 2,
 };

@@ -51,8 +51,8 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
     const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
     const setExpandedState = (expandedState: boolean) => updateState({expandedState: expandedState});
-    const setMinimapZoom = (minimapZoom: number) => updateState({minimapZoom: minimapZoom});
-    const setMinimapMapType = (minimapMapType: MapType) => updateState({minimapMapType: minimapMapType});
+    const setMinimapZoom = (minimapZoom: number) => updateState({minimapZoomId: minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapType) => updateState({minimapMapTypeId: minimapMapType});
 
     const updateState = (update: Partial<PhotoInfoPanelSettingsState>) => {
         setState(update);

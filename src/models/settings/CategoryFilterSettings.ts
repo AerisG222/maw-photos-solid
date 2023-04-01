@@ -1,13 +1,13 @@
-import { CategoryTypeFilter } from '../category-type-filter';
+import { CategoryTypeFilterIdType, defaultCategoryTypeFilterId } from '../category-type-filter';
 
 export type CategoryFilterSettingsState = {
-    readonly typeFilter: CategoryTypeFilter;
+    readonly typeFilterId: CategoryTypeFilterIdType;
     readonly yearFilter: string | number;
     readonly missingGpsFilter: boolean;
 };
 
 export const defaultCategoryFilterSettings: CategoryFilterSettingsState = {
-    typeFilter: CategoryTypeFilter.all,
+    typeFilterId: defaultCategoryTypeFilterId,
     yearFilter: 'all',
     missingGpsFilter: false,
 };

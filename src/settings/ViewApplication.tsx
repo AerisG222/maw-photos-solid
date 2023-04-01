@@ -8,6 +8,7 @@ import MainContent from '../components/layout/MainContent';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
+import Select from './components/Select';
 
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();
@@ -23,16 +24,7 @@ const ViewApplication: Component = () => {
             <MainContent title="Settings - Application">
                 <PanelContainer>
                     <Panel title="General">
-                        <div class="form-control max-w-16rem">
-                            <label class="label">
-                                <span class="label-text">Theme</span>
-                            </label>
-                            <select name="theme" class="select select-sm select-bordered min-w-12rem" onChange={onChangeTheme} value={appSettings.theme}>
-                                <For each={allThemes}>{ (theme) =>
-                                    <option value={theme.id}>{theme.name}</option>
-                                }</For>
-                            </select>
-                        </div>
+                        <Select title="Theme" itemArray={allThemes} selectedValue={appSettings.themeId} onChange={onChangeTheme} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

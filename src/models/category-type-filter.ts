@@ -1,23 +1,12 @@
-import { ValueDescriptor } from './value-descriptor';
+import { KeyValuePair } from './key-value-pair';
 
-export enum CategoryTypeFilter {
-    all = 'all',
-    photos = 'photos',
-    videos = 'videos',
-}
+export type CategoryTypeFilterIdType = string;
+export type CategoryTypeFilter = KeyValuePair<CategoryTypeFilterIdType>;
 
-export const allCategoryTypeFilters: ValueDescriptor<CategoryTypeFilter>[] = [
-    { value: CategoryTypeFilter.all, name: 'Photos and Videos' },
-    { value: CategoryTypeFilter.photos, name: 'Photos' },
-    { value: CategoryTypeFilter.videos, name: 'Videos' },
+export const allCategoryTypeFilters: CategoryTypeFilter[] = [
+    { id: 'all',    name: 'Photos and Videos' },
+    { id: 'photos', name: 'Photos' },
+    { id: 'videos', name: 'Videos' },
 ];
 
-export const toCategoryTypeFilter = (
-    val?: string | null
-): CategoryTypeFilter | undefined => {
-    if (!val) {
-        return undefined;
-    }
-
-    return CategoryTypeFilter[val as keyof typeof CategoryTypeFilter];
-};
+export const defaultCategoryTypeFilterId: CategoryTypeFilterIdType = 'all';

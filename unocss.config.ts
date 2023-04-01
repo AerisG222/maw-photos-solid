@@ -17,7 +17,7 @@ export default defineConfig<Theme>({
         }),
         presetMini(),
         presetDaisy({
-            themes: allThemes
+            themes: allThemes.map(x => x.id)
         })
     ],
     safelist: [

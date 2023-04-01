@@ -24,7 +24,7 @@ const PhotoPageSettingsContext = createContext<PhotoPageSettingsContextValue>([
 export const PhotoPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setViewMode = (viewMode: PhotoViewMode) => updateState({viewMode: viewMode});
+    const setViewMode = (viewMode: PhotoViewMode) => updateState({viewModeId: viewMode});
     const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) => updateState({slideshowDisplayDurationSeconds: slideshowDisplayDurationSeconds});
 
     const updateState = (update: Partial<PhotoPageSettingsState>) => {

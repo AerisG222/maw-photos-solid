@@ -1,4 +1,5 @@
-import { MapType } from '../map-type';
+import { MapTypeIdType, defaultMapTypeId } from '../map-type';
+import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
 
 export type PhotoInfoPanelSettingsState = {
     showRatings: boolean;
@@ -10,8 +11,8 @@ export type PhotoInfoPanelSettingsState = {
     showHistogram: boolean;
     showMinimap: boolean;
     expandedState: boolean;
-    minimapZoom: number;
-    minimapMapType: MapType;
+    minimapZoomId: MapZoomLevelIdType;
+    minimapMapTypeId: MapTypeIdType;
 };
 
 export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
@@ -24,6 +25,6 @@ export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
     showMetadataEditor: false,
     showMinimap: false,
     expandedState: false,
-    minimapMapType: MapType.roadmap,
-    minimapZoom: 10,
+    minimapMapTypeId: defaultMapTypeId,
+    minimapZoomId: defaultMapZoomLevelId,
 };

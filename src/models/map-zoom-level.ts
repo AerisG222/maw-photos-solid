@@ -1,31 +1,31 @@
-export class MapZoomLevel {
-    constructor(public value: number, public name: string) {
-        this.value = value;
-        this.name = name;
-    }
-}
+import { KeyValuePair } from './key-value-pair';
 
-export const allMapZoomLevels = [
-    new MapZoomLevel(1, '1 - World'),
-    new MapZoomLevel(2, '2'),
-    new MapZoomLevel(3, '3'),
-    new MapZoomLevel(4, '4'),
-    new MapZoomLevel(5, '5 - Landmass/continent'),
-    new MapZoomLevel(6, '6'),
-    new MapZoomLevel(7, '7'),
-    new MapZoomLevel(8, '8'),
-    new MapZoomLevel(9, '9'),
-    new MapZoomLevel(10, '10 - City'),
-    new MapZoomLevel(11, '11'),
-    new MapZoomLevel(12, '12'),
-    new MapZoomLevel(13, '13'),
-    new MapZoomLevel(14, '14'),
-    new MapZoomLevel(15, '15 - Streets'),
-    new MapZoomLevel(16, '16'),
-    new MapZoomLevel(17, '17'),
-    new MapZoomLevel(18, '18'),
-    new MapZoomLevel(19, '19'),
-    new MapZoomLevel(20, '20 - Buildings'),
-    new MapZoomLevel(21, '21'),
-    new MapZoomLevel(22, '22'),
+export type MapZoomLevelIdType = number;
+export type MapZoomLevel = KeyValuePair<MapZoomLevelIdType>;
+
+export const allMapZoomLevels: MapZoomLevel[] = [
+    { id: 1,  name: '1 - World' },
+    { id: 2,  name: '2' },
+    { id: 3,  name: '3' },
+    { id: 4,  name: '4' },
+    { id: 5,  name: '5 - Landmass/continent' },
+    { id: 6,  name: '6' },
+    { id: 7,  name: '7' },
+    { id: 8,  name: '8' },
+    { id: 9,  name: '9' },
+    { id: 10, name: '10 - City' },
+    { id: 11, name: '11' },
+    { id: 12, name: '12' },
+    { id: 13, name: '13' },
+    { id: 14, name: '14' },
+    { id: 15, name: '15 - Streets' },
+    { id: 16, name: '16' },
+    { id: 17, name: '17' },
+    { id: 18, name: '18' },
+    { id: 19, name: '19' },
+    { id: 20, name: '20 - Buildings' },
+    { id: 21, name: '21' },
+    { id: 22, name: '22' },
 ];
+
+export const defaultMapZoomLevelId: MapZoomLevelIdType = 10;
