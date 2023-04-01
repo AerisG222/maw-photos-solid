@@ -6,6 +6,7 @@ import { allVideoSizes } from '../models/video-size';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
+import Panel from './components/Panel';
 
 const ViewVideos: Component = () => {
     return (
@@ -15,9 +16,7 @@ const ViewVideos: Component = () => {
                 <h1 class="head1">Settings - Videos</h1>
 
                 <div class="flex flex-wrap flex-gap4">
-                    <div class="settingsPanel">
-                        <h2 class="head2">Video Page</h2>
-
+                    <Panel title="Video Page">
                         <h3 class="mt-4">Video Size</h3>
                         <For each={allVideoSizes}>{(mode, i) =>
                             <>
@@ -96,7 +95,7 @@ const ViewVideos: Component = () => {
                                 }</For>
                             </select>
                         </div>
-                    </div>
+                    </Panel>
                 </div>
             </div>
         </ContentLayout>

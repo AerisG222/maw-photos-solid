@@ -6,6 +6,7 @@ import { allCategoryViewModes } from '../models/category-view-mode';
 import { allMargins } from '../models/margin';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
+import Panel from './components/Panel';
 
 const ViewCategories: Component = () => {
     return (
@@ -15,9 +16,7 @@ const ViewCategories: Component = () => {
                 <h1 class="head1">Settings - Categories</h1>
 
                 <div class="flex flex-wrap flex-gap4">
-                    <div class="settingsPanel">
-                        <h2 class="head2">Category Page</h2>
-
+                    <Panel title="Category Page">
                         <h3>Type Filter</h3>
                         <For each={allCategoryTypeFilters}>{(type, i) =>
                             <>
@@ -37,11 +36,9 @@ const ViewCategories: Component = () => {
                                 </div>
                             </>
                         }</For>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Grid View</h2>
-
+                    <Panel title="Grid View">
                         <h3>Show Titles</h3>
                         <div>
                             <input type="checkbox" name="showTitles" />
@@ -70,11 +67,9 @@ const ViewCategories: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">List View</h2>
-
+                    <Panel title="List View">
                         <h3 class="mt-4">Margins</h3>
                         <div>
                             <For each={allMargins}>{(margin, i) =>
@@ -98,7 +93,7 @@ const ViewCategories: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
                 </div>
             </div>
         </ContentLayout>

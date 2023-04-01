@@ -5,6 +5,7 @@ import Toolbar from './Toolbar';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
 import { allCategoryViewModes } from '../models/category-view-mode';
+import Panel from './components/Panel';
 
 const ViewSearch: Component = () => {
     return (
@@ -14,7 +15,7 @@ const ViewSearch: Component = () => {
                 <h1 class="head1">Settings - Search</h1>
 
                 <div class="flex flex-wrap flex-gap4">
-                    <div class="settingsPanel">
+                    <Panel title="Search Page">
                         <h2 class="head2">Search Page</h2>
 
                         <h3 class="mt-4">View Mode</h3>
@@ -26,11 +27,9 @@ const ViewSearch: Component = () => {
                                 </div>
                             </>
                         }</For>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Grid View</h2>
-
+                    <Panel title="Grid View">
                         <h3 class="mt-4">Show Category Titles</h3>
                         <input type="checkbox" name="gridShowTitles" />
 
@@ -60,11 +59,9 @@ const ViewSearch: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">List View</h2>
-
+                    <Panel title="List View">
                         <h3 class="mt-4">Margins</h3>
                         <div>
                             <For each={allMargins}>{(margin, i) =>
@@ -88,7 +85,7 @@ const ViewSearch: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
                 </div>
             </div>
         </ContentLayout>

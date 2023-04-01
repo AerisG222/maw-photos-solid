@@ -6,6 +6,7 @@ import { allMargins } from '../models/margin';
 import { allPhotoViewModes } from '../models/photo-view-mode';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
+import Panel from './components/Panel';
 
 const ViewPhotos: Component = () => {
     return (
@@ -15,9 +16,7 @@ const ViewPhotos: Component = () => {
                 <h1 class="head1">Settings - Photos</h1>
 
                 <div class="flex flex-wrap flex-gap4">
-                    <div class="settingsPanel">
-                        <h2 class="head2">Photo Category Page</h2>
-
+                    <Panel title="Photo Category Page">
                         <h3 class="mt-4">View</h3>
                         <For each={allPhotoViewModes}>{(mode, i) =>
                             <>
@@ -43,11 +42,9 @@ const ViewPhotos: Component = () => {
                             <option value="45">45</option>
                             <option value="60">60</option>
                         </select>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Detail View</h2>
-
+                    <Panel title="Detail View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" name="detailShowBreadcrumbs" />
 
@@ -128,11 +125,9 @@ const ViewPhotos: Component = () => {
                                 }</For>
                             </select>
                         </div>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Grid View</h2>
-
+                    <Panel title="Grid View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" name="gridShowBreadcrumbs" />
 
@@ -159,11 +154,9 @@ const ViewPhotos: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Map View</h2>
-
+                    <Panel title="Map View">
                         <h3 class="mt-4">Map Type</h3>
                         <div>
                             <For each={allMapTypes}>{(type, i) =>
@@ -186,7 +179,7 @@ const ViewPhotos: Component = () => {
                                 }</For>
                             </select>
                         </div>
-                    </div>
+                    </Panel>
                 </div>
             </div>
         </ContentLayout>

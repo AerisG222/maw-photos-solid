@@ -7,6 +7,7 @@ import { allMapZoomLevels } from '../models/map-zoom-level';
 import { allMapTypes } from '../models/map-type';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
+import Panel from './components/Panel';
 
 const ViewRandom: Component = () => {
     return (
@@ -16,9 +17,7 @@ const ViewRandom: Component = () => {
                 <h1 class="head1">Settings - Random</h1>
 
                 <div class="flex flex-wrap flex-gap4">
-                    <div class="settingsPanel">
-                        <h2 class="head2">Random Page</h2>
-
+                    <Panel title="Random Page">
                         <h3 class="mt-4">View Mode</h3>
                         <For each={allRandomViewModes}>{(mode, i) =>
                             <>
@@ -44,11 +43,9 @@ const ViewRandom: Component = () => {
                             <option value="45">45</option>
                             <option value="60">60</option>
                         </select>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Detail View</h2>
-
+                    <Panel title="Detail View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" name="detailShowBreadcrumbs" />
 
@@ -129,11 +126,9 @@ const ViewRandom: Component = () => {
                                 }</For>
                             </select>
                         </div>
-                    </div>
+                    </Panel>
 
-                    <div class="settingsPanel">
-                        <h2 class="head2">Grid View</h2>
-
+                    <Panel title="GridView">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" name="gridShowBreadcrumbs" />
 
@@ -160,7 +155,7 @@ const ViewRandom: Component = () => {
                                 </>
                             }</For>
                         </div>
-                    </div>
+                    </Panel>
                 </div>
             </div>
         </ContentLayout>
