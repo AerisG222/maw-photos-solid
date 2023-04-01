@@ -3,6 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 import { authGuard } from '../auth/auth';
+import MainContent from '../components/layout/MainContent';
 
 const ViewFullscreen: Component = () => {
     authGuard();
@@ -13,9 +14,9 @@ const ViewFullscreen: Component = () => {
                 <FullscreenToolbar />
             </Toolbar>
 
-            <div>
-                <h1>Random Fullscreen</h1>
-            </div>
+            <MainContent title="Random Fullscreen">
+
+            </MainContent>
         </ContentLayout>
     );
 };

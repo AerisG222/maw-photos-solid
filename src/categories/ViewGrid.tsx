@@ -3,6 +3,7 @@ import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
+import MainContent from '../components/layout/MainContent';
 
 const GridView: Component = () => {
     authGuard();
@@ -13,10 +14,9 @@ const GridView: Component = () => {
                 <GridToolbar />
             </Toolbar>
 
-            <div>
-                <h1>Categories - Grid</h1>
+            <MainContent title="Categories - Grid">
                 <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

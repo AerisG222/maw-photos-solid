@@ -7,14 +7,13 @@ import { allPhotoViewModes } from '../models/photo-view-mode';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
 
 const ViewPhotos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div class="overflow-y-auto pb-8">
-                <h1 class="head1">Settings - Photos</h1>
-
+            <MainContent title="Settings - Photos">
                 <div class="flex flex-wrap flex-gap4">
                     <Panel title="Photo Category Page">
                         <h3 class="mt-4">View</h3>
@@ -181,7 +180,7 @@ const ViewPhotos: Component = () => {
                         </div>
                     </Panel>
                 </div>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

@@ -7,14 +7,13 @@ import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
 import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
 
 const ViewVideos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
-                <h1 class="head1">Settings - Videos</h1>
-
+            <MainContent title="Settings - Videos">
                 <div class="flex flex-wrap flex-gap4">
                     <Panel title="Video Page">
                         <h3 class="mt-4">Video Size</h3>
@@ -97,7 +96,7 @@ const ViewVideos: Component = () => {
                         </div>
                     </Panel>
                 </div>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

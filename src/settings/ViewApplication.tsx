@@ -4,6 +4,7 @@ import { useAppSettings } from '../contexts/AppSettingsContext';
 import { allThemeDetails } from '../models/theme';
 
 import ContentLayout from '../components/layout/ContentLayout';
+import MainContent from '../components/layout/MainContent';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 
@@ -18,9 +19,7 @@ const ViewApplication: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div class="overflow-y-auto pb-8">
-                <h1 class="head1">Settings - Application</h1>
-
+            <MainContent title="Settings - Application">
                 <Panel title="General">
                     <label class="font-bold mr-2" for="theme">Theme</label>
                     <select name="theme" onChange={onChangeTheme} value={appSettings.theme}>
@@ -29,7 +28,7 @@ const ViewApplication: Component = () => {
                         }</For>
                     </select>
                 </Panel>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

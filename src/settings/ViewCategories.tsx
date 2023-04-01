@@ -7,14 +7,13 @@ import { allMargins } from '../models/margin';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
 
 const ViewCategories: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div class="overflow-y-auto pb-8">
-                <h1 class="head1">Settings - Categories</h1>
-
+            <MainContent title="Settings - Categories">
                 <div class="flex flex-wrap flex-gap4">
                     <Panel title="Category Page">
                         <h3>Type Filter</h3>
@@ -95,7 +94,7 @@ const ViewCategories: Component = () => {
                         </div>
                     </Panel>
                 </div>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

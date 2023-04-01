@@ -8,14 +8,13 @@ import { allMapTypes } from '../models/map-type';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
 import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
 
 const ViewRandom: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
-                <h1 class="head1">Settings - Random</h1>
-
+            <MainContent title="Settings - Random">
                 <div class="flex flex-wrap flex-gap4">
                     <Panel title="Random Page">
                         <h3 class="mt-4">View Mode</h3>
@@ -157,7 +156,7 @@ const ViewRandom: Component = () => {
                         </div>
                     </Panel>
                 </div>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

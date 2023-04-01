@@ -3,6 +3,7 @@ import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 import ListToolbar from './ToolbarList';
+import MainContent from '../components/layout/MainContent';
 
 const ViewList: Component = () => {
     authGuard();
@@ -13,9 +14,9 @@ const ViewList: Component = () => {
                 <ListToolbar />
             </Toolbar>
 
-            <div>
-                <h1>Search List</h1>
-            </div>
+            <MainContent title="Search List">
+
+            </MainContent>
         </ContentLayout>
     );
 };

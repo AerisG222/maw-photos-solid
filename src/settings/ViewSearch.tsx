@@ -6,14 +6,13 @@ import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
 import { allCategoryViewModes } from '../models/category-view-mode';
 import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
 
 const ViewSearch: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
-                <h1 class="head1">Settings - Search</h1>
-
+            <MainContent title="Settings - Search">
                 <div class="flex flex-wrap flex-gap4">
                     <Panel title="Search Page">
                         <h2 class="head2">Search Page</h2>
@@ -87,7 +86,7 @@ const ViewSearch: Component = () => {
                         </div>
                     </Panel>
                 </div>
-            </div>
+            </MainContent>
         </ContentLayout>
     );
 };

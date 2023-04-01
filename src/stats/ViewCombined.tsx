@@ -2,6 +2,7 @@ import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
+import MainContent from '../components/layout/MainContent';
 
 const ViewCombined: Component = () => {
     authGuard();
@@ -9,9 +10,9 @@ const ViewCombined: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
-                <h1>Stats Combined</h1>
-            </div>
+            <MainContent title="Stats Combined">
+
+            </MainContent>
         </ContentLayout>
     );
 };

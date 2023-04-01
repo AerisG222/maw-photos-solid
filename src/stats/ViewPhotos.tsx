@@ -2,6 +2,7 @@ import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
+import MainContent from '../components/layout/MainContent';
 
 const ViewPhotos: Component = () => {
     authGuard();
@@ -9,9 +10,9 @@ const ViewPhotos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
-            <div>
-                <h1>Stats Photos</h1>
-            </div>
+            <MainContent title="Stats Photos">
+
+            </MainContent>
         </ContentLayout>
     );
 };

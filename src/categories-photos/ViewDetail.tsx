@@ -3,6 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
 import { authGuard } from '../auth/auth';
+import MainContent from '../components/layout/MainContent';
 
 const ViewDetail: Component = () => {
     authGuard();
@@ -13,9 +14,9 @@ const ViewDetail: Component = () => {
                 <DetailToolbar />
             </Toolbar>
 
-            <div>
-                <h1>Photo Categories Detail</h1>
-            </div>
+            <MainContent title="Photo Categories Detail">
+
+            </MainContent>
         </ContentLayout>
     );
 };

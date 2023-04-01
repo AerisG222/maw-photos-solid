@@ -1,12 +1,13 @@
 import { Component } from "solid-js";
 import ContentLayoutNoToolbar from '../components/layout/ContentLayoutNoToolbar';
+import MainContent from '../components/layout/MainContent';
 
 const About: Component = () => {
     return (
         <ContentLayoutNoToolbar>
-            <div>
-                <h1 class="head1">About</h1>
-            </div>
+            <MainContent title="About">
+
+            </MainContent>
         </ContentLayoutNoToolbar>
     );
 };

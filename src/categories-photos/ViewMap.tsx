@@ -3,6 +3,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
 import { authGuard } from '../auth/auth';
+import MainContent from '../components/layout/MainContent';
 
 const ViewMap: Component = () => {
     authGuard();
@@ -13,9 +14,9 @@ const ViewMap: Component = () => {
                 <MapToolbar />
             </Toolbar>
 
-            <div>
-                <h1>Photo Categories Map</h1>
-            </div>
+            <MainContent title="Photo Categories Map">
+
+            </MainContent>
         </ContentLayout>
     );
 };
