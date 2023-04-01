@@ -7,13 +7,14 @@ import { allMargins } from '../models/margin';
 import { allCategoryViewModes } from '../models/category-view-mode';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 
 const ViewSearch: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Search">
-                <div class="flex flex-wrap flex-gap4">
+                <PanelContainer>
                     <Panel title="Search Page">
                         <h2 class="head2">Search Page</h2>
 
@@ -85,7 +86,7 @@ const ViewSearch: Component = () => {
                             }</For>
                         </div>
                     </Panel>
-                </div>
+                </PanelContainer>
             </MainContent>
         </ContentLayout>
     );

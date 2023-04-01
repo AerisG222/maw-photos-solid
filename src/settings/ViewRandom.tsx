@@ -9,13 +9,14 @@ import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 
 const ViewRandom: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Random">
-                <div class="flex flex-wrap flex-gap4">
+                <PanelContainer>
                     <Panel title="Random Page">
                         <h3 class="mt-4">View Mode</h3>
                         <For each={allRandomViewModes}>{(mode, i) =>
@@ -155,7 +156,7 @@ const ViewRandom: Component = () => {
                             }</For>
                         </div>
                     </Panel>
-                </div>
+                </PanelContainer>
             </MainContent>
         </ContentLayout>
     );

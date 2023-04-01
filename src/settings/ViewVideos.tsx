@@ -8,13 +8,14 @@ import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 
 const ViewVideos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Videos">
-                <div class="flex flex-wrap flex-gap4">
+                <PanelContainer>
                     <Panel title="Video Page">
                         <h3 class="mt-4">Video Size</h3>
                         <For each={allVideoSizes}>{(mode, i) =>
@@ -95,7 +96,7 @@ const ViewVideos: Component = () => {
                             </select>
                         </div>
                     </Panel>
-                </div>
+                </PanelContainer>
             </MainContent>
         </ContentLayout>
     );

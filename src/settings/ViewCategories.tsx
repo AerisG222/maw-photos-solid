@@ -8,13 +8,14 @@ import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 
 const ViewCategories: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Categories">
-                <div class="flex flex-wrap flex-gap4">
+                <PanelContainer>
                     <Panel title="Category Page">
                         <h3>Type Filter</h3>
                         <For each={allCategoryTypeFilters}>{(type, i) =>
@@ -93,7 +94,7 @@ const ViewCategories: Component = () => {
                             }</For>
                         </div>
                     </Panel>
-                </div>
+                </PanelContainer>
             </MainContent>
         </ContentLayout>
     );

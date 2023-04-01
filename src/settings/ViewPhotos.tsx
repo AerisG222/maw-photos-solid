@@ -8,13 +8,14 @@ import { allThumbnailSizes } from '../models/thumbnail-size';
 import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 
 const ViewPhotos: Component = () => {
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Photos">
-                <div class="flex flex-wrap flex-gap4">
+                <PanelContainer>
                     <Panel title="Photo Category Page">
                         <h3 class="mt-4">View</h3>
                         <For each={allPhotoViewModes}>{(mode, i) =>
@@ -179,7 +180,7 @@ const ViewPhotos: Component = () => {
                             </select>
                         </div>
                     </Panel>
-                </div>
+                </PanelContainer>
             </MainContent>
         </ContentLayout>
     );
