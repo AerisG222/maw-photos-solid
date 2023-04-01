@@ -2,18 +2,12 @@ import { defineConfig } from '@unocss/vite';
 import type { Theme } from '@unocss/preset-mini';
 import { presetMini } from '@unocss/preset-mini';
 import { presetIcons } from '@unocss/preset-icons';
-import presetTheme from 'unocss-preset-theme';
 import { presetDaisy } from 'unocss-preset-daisy';
 
 import { appRoutes } from './src/routes';
+import { allThemes } from './src/models/theme';
 
 export default defineConfig<Theme>({
-    theme: {
-        colors: {
-            'bg': '#fff',
-            'text': '#333'
-        }
-    },
     presets: [
         presetIcons({
             extraProperties: {
@@ -22,16 +16,8 @@ export default defineConfig<Theme>({
             }
         }),
         presetMini(),
-        presetDaisy(),
-        presetTheme<Theme>({
-            theme: {
-                dark: {
-                    colors: {
-                        'bg': '#222',
-                        'text': '#ccc'
-                    }
-                }
-            }
+        presetDaisy({
+            themes: allThemes
         })
     ],
     safelist: [

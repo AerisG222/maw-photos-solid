@@ -10,8 +10,8 @@ const App: Component = () => {
     const [appSettings] = useAppSettings();
 
     return (
-        <div classList={{ [appSettings.theme]: true }}
-             class="bg-bg text-text grid
+        <div data-theme={appSettings.theme}
+             class="grid
                   grid-rows-[max-content_auto] grid-cols-[100vw]
                   md:grid-rows-[100vh] md:grid-cols-[max-content_auto]">
             <PrimaryNav />

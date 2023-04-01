@@ -1,7 +1,7 @@
 import { Component, For } from "solid-js";
 
 import { useAppSettings } from '../contexts/AppSettingsContext';
-import { allThemeDetails } from '../models/theme';
+import { allThemes } from '../models/theme';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';
@@ -23,12 +23,16 @@ const ViewApplication: Component = () => {
             <MainContent title="Settings - Application">
                 <PanelContainer>
                     <Panel title="General">
-                        <label class="font-bold mr-2" for="theme">Theme</label>
-                        <select name="theme" onChange={onChangeTheme} value={appSettings.theme}>
-                            <For each={allThemeDetails}>{ (theme) =>
-                                <option value={theme.theme}>{theme.name}</option>
-                            }</For>
-                        </select>
+                        <div class="form-control max-w-16rem">
+                            <label class="label">
+                                <span class="label-text">Theme</span>
+                            </label>
+                            <select name="theme" class="select select-sm select-bordered min-w-12rem" onChange={onChangeTheme} value={appSettings.theme}>
+                                <For each={allThemes}>{ (theme) =>
+                                    <option value={theme}>{theme}</option>
+                                }</For>
+                            </select>
+                        </div>
                     </Panel>
                 </PanelContainer>
             </MainContent>
