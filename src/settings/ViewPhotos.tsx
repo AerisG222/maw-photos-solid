@@ -46,10 +46,10 @@ const ViewPhotos: Component = () => {
 
                     <Panel title="Detail View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" name="detailShowBreadcrumbs" />
+                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" />
 
                         <h3 class="mt-4">Show Photo List</h3>
-                        <input type="checkbox" name="detailShowPhotoList" />
+                        <input type="checkbox" class="toggle" name="detailShowPhotoList" />
 
                         <h3 class="mt-4">Thumbnail Size</h3>
                         <div>
@@ -129,7 +129,7 @@ const ViewPhotos: Component = () => {
 
                     <Panel title="Grid View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" name="gridShowBreadcrumbs" />
+                        <input type="checkbox" class="toggle" name="gridShowBreadcrumbs" />
 
                         <h3 class="mt-4">Margins</h3>
                         <div>

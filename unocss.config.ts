@@ -3,6 +3,7 @@ import type { Theme } from '@unocss/preset-mini';
 import { presetMini } from '@unocss/preset-mini';
 import { presetIcons } from '@unocss/preset-icons';
 import presetTheme from 'unocss-preset-theme';
+import { presetDaisy } from 'unocss-preset-daisy';
 
 import { appRoutes } from './src/routes';
 
@@ -21,6 +22,7 @@ export default defineConfig<Theme>({
             }
         }),
         presetMini(),
+        presetDaisy(),
         presetTheme<Theme>({
             theme: {
                 dark: {

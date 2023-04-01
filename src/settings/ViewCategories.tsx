@@ -41,7 +41,7 @@ const ViewCategories: Component = () => {
                     <Panel title="Grid View">
                         <h3>Show Titles</h3>
                         <div>
-                            <input type="checkbox" name="showTitles" />
+                            <input type="checkbox" class="toggle" name="showTitles" />
                         </div>
 
                         <h3 class="mt-4">Margins</h3>

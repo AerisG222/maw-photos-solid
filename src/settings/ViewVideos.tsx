@@ -28,10 +28,10 @@ const ViewVideos: Component = () => {
                         }</For>
 
                         <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" name="detailShowBreadcrumbs" />
+                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" />
 
                         <h3 class="mt-4">Show Video List</h3>
-                        <input type="checkbox" name="detailShowPhotoList" />
+                        <input type="checkbox" class="toggle" name="detailShowPhotoList" />
 
                         <h3 class="mt-4">Thumbnail Size</h3>
                         <div>
