@@ -29,7 +29,7 @@ const ViewApplication: Component = () => {
                             </label>
                             <select name="theme" class="select select-sm select-bordered min-w-12rem" onChange={onChangeTheme} value={appSettings.theme}>
                                 <For each={allThemes}>{ (theme) =>
-                                    <option value={theme}>{theme}</option>
+                                    <option value={theme.id}>{theme.name}</option>
                                 }</For>
                             </select>
                         </div>
