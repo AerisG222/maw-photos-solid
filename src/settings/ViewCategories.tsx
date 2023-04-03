@@ -9,24 +9,24 @@ import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
+import RadioGroup from './components/RadioGroup';
+import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
 
 const ViewCategories: Component = () => {
+    const [filterSettings, { setTypeFilter, setYearFilter, setMissingGpsFilter }] = useCategoryFilterSettings();
+
+    const onChangeFilterType = (evt: Event) => {
+        evt.preventDefault();
+        setTypeFilter(evt.currentTarget.value);
+    }
+
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Categories">
                 <PanelContainer>
                     <Panel title="Category Page">
-                        <h3>Type Filter</h3>
-                        <For each={allCategoryTypeFilters}>{(type, i) =>
-                            <>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer">{type.name}
-                                        <input type="radio" name="typeFilter" value={type.value} class="radio" />
-                                    </label>
-                                </div>
-                            </>
-                        }</For>
+                        <RadioGroup title="Type Filter" itemArray={allCategoryTypeFilters} selectedValue={filterSettings.typeFilterId} onChange={onChangeFilterType} />
 
                         <h3 class="mt-4">View</h3>
                         <For each={allCategoryViewModes}>{(mode, i) =>
