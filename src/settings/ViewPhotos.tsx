@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, For, useContext } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
@@ -9,8 +9,44 @@ import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
+import Select from './components/Select';
+import { allSlideshowDurations } from '../models/slideshow-duration';
+import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoInfoPanelSettings } from '../contexts/PhotoInfoPanelSettingsContext';
+import { usePhotoMapViewSettings } from '../contexts/PhotoMapViewSettingsContext';
 
 const ViewPhotos: Component = () => {
+    const [photoPageSettings, { setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
+    const [photoMapPageSettings, {setMapType, setZoom}] = usePhotoMapViewSettings();
+    const [photoInfoPanelSettings, {
+        setShowRatings,
+        setShowCategoryTeaserChooser,
+        setShowComments,
+        setShowExif,
+        setShowEffects,
+        setShowMetadataEditor,
+        setShowHistogram,
+        setShowMinimap,
+        setExpandedState,
+        setMinimapZoom,
+        setMinimapMapType
+    }] = usePhotoInfoPanelSettings();
+
+    const onChangeSlideshowDuration = (evt: Event) => {
+        evt.preventDefault();
+        setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
+    };
+
+    const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
+        evt.preventDefault();
+        setMinimapZoom(evt.currentTarget.value);
+    };
+
+    const onChangeMapPageZoomLevel = (evt: Event) => {
+        evt.preventDefault();
+        setZoom(parseInt(evt.currentTarget.value));
+    }
+
     return (
         <ContentLayout>
             <Toolbar />
@@ -27,21 +63,7 @@ const ViewPhotos: Component = () => {
                             </>
                         }</For>
 
-                        <h3 class="mt-4">Slideshow Display Duration</h3>
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                            <option value="60">60</option>
-                        </select>
+                        <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={photoPageSettings.slideshowDisplayDurationSeconds} onChange={onChangeSlideshowDuration} />
                     </Panel>
 
                     <Panel title="Detail View">
@@ -115,16 +137,7 @@ const ViewPhotos: Component = () => {
                             }</For>
                         </div>
 
-                        <h3 class="mt-4">Map Zoom Level</h3>
-                        <div>
-                            <select name="detailMapZoomLevel">
-                                <For each={allMapZoomLevels}>{(zoom, i) =>
-                                    <>
-                                        <option value={zoom.value} class="mr-2">{zoom.name}</option>
-                                    </>
-                                }</For>
-                            </select>
-                        </div>
+                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={photoInfoPanelSettings.minimapZoomId} onChange={onChangeDetailMiniMapZoomLevel} />
                     </Panel>
 
                     <Panel title="Grid View">
@@ -169,16 +182,7 @@ const ViewPhotos: Component = () => {
                             }</For>
                         </div>
 
-                        <h3 class="mt-4">Map Zoom Level</h3>
-                        <div>
-                            <select name="mapMapZoomLevel">
-                                <For each={allMapZoomLevels}>{(zoom, i) =>
-                                    <>
-                                        <option value={zoom.value} class="mr-2">{zoom.name}</option>
-                                    </>
-                                }</For>
-                            </select>
-                        </div>
+                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={photoMapPageSettings.zoomId} onChange={onChangeMapPageZoomLevel} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

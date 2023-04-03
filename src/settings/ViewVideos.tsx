@@ -9,8 +9,26 @@ import { allMapZoomLevels } from '../models/map-zoom-level';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
+import Select from './components/Select';
+import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
 
 const ViewVideos: Component = () => {
+    const [videoInfoPanelSettings, {
+        setShowRatings,
+        setShowCategoryTeaserChooser,
+        setShowComments,
+        setShowMetadataEditor,
+        setShowMinimap,
+        setExpandedState,
+        setMinimapZoom,
+        setMinimapMapType
+    }] = useVideoInfoPanelSettings();
+
+    const onChangeMinimapZoom = (evt: Event) => {
+        evt.preventDefault();
+        setMinimapZoom(evt.currentTarget.value);
+    };
+
     return (
         <ContentLayout>
             <Toolbar />
@@ -85,16 +103,7 @@ const ViewVideos: Component = () => {
                             }</For>
                         </div>
 
-                        <h3 class="mt-4">Minimap Zoom Level</h3>
-                        <div>
-                            <select name="detailMapZoomLevel">
-                                <For each={allMapZoomLevels}>{(zoom, i) =>
-                                    <>
-                                        <option value={zoom.value} class="mr-2">{zoom.name}</option>
-                                    </>
-                                }</For>
-                            </select>
-                        </div>
+                        <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={videoInfoPanelSettings.minimapZoomId} onChange={onChangeMinimapZoom} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

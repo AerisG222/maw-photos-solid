@@ -10,8 +10,37 @@ import { allMargins } from '../models/margin';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
+import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
+import { allSlideshowDurations } from '../models/slideshow-duration';
+import Select from './components/Select';
+import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
 
 const ViewRandom: Component = () => {
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettings();
+    const [infoPanelSettings, {
+        setShowRatings,
+        setShowCategoryTeaserChooser,
+        setShowComments,
+        setShowExif,
+        setShowEffects,
+        setShowMetadataEditor,
+        setShowHistogram,
+        setShowMinimap,
+        setExpandedState,
+        setMinimapZoom,
+        setMinimapMapType
+    }] = useRandomInfoPanelSettings();
+
+    const onChangeSlideshowDuration = (evt: Event) => {
+        evt.preventDefault();
+        setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
+    };
+
+    const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
+        evt.preventDefault();
+        setMinimapZoom(evt.currentTarget.value);
+    };
+
     return (
         <ContentLayout>
             <Toolbar />
@@ -28,21 +57,7 @@ const ViewRandom: Component = () => {
                             </>
                         }</For>
 
-                        <h3 class="mt-4">Slideshow Display Duration</h3>
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                            <option value="60">60</option>
-                        </select>
+                        <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={pageSettings.slideshowDisplayDurationSeconds} onChange={onChangeSlideshowDuration} />
                     </Panel>
 
                     <Panel title="Detail View">
@@ -116,16 +131,7 @@ const ViewRandom: Component = () => {
                             }</For>
                         </div>
 
-                        <h3 class="mt-4">Map Zoom Level</h3>
-                        <div>
-                            <select name="detailMapZoomLevel">
-                                <For each={allMapZoomLevels}>{(zoom, i) =>
-                                    <>
-                                        <option value={zoom.value} class="mr-2">{zoom.name}</option>
-                                    </>
-                                }</For>
-                            </select>
-                        </div>
+                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoomId} onChange={onChangeDetailMiniMapZoomLevel} />
                     </Panel>
 
                     <Panel title="GridView">
