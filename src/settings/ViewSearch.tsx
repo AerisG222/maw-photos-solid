@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
@@ -8,83 +8,64 @@ import { allCategoryViewModes } from '../models/category-view-mode';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
+import { useSearchPageSettings } from '../contexts/SearchPageSettingsContext';
+import { useSearchGridViewSettings } from '../contexts/SearchGridViewSettingsContext';
+import { useSearchListViewSettings } from '../contexts/SearchListViewSettingsContext';
+import RadioGroup from './components/RadioGroup';
 
 const ViewSearch: Component = () => {
+    const [pageSettings, { setViewMode }] = useSearchPageSettings();
+    const [gridSettings, { setShowTitles, setShowYear, setMargins: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useSearchGridViewSettings();
+    const [listSettings, { setMargins: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
+
+    const onChangePageViewMode = (evt: Event) => {
+        evt.preventDefault();
+        setViewMode(evt.currentTarget.value);
+    }
+
+    const onChangeGridMargin = (evt: Event) => {
+        evt.preventDefault();
+        setGridMargin(evt.currentTarget.value);
+    }
+
+    const onChangeGridThumbnail = (evt: Event) => {
+        evt.preventDefault();
+        setGridThumbnailSize(evt.currentTarget.value);
+    }
+
+    const onChangeListMargin = (evt: Event) => {
+        evt.preventDefault();
+        setListMargin(evt.currentTarget.value);
+    }
+
+    const onChangeListThumbnail = (evt: Event) => {
+        evt.preventDefault();
+        setListThumbnailSize(evt.currentTarget.value);
+    }
+
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Search">
                 <PanelContainer>
                     <Panel title="Search Page">
-                        <h2 class="head2">Search Page</h2>
-
-                        <h3 class="mt-4">View Mode</h3>
-                        <For each={allCategoryViewModes}>{(mode, i) =>
-                            <>
-                                <div>
-                                    <input type="radio" name="viewMode" value={mode.value} class="mr-2" />
-                                    <label>{mode.name}</label>
-                                </div>
-                            </>
-                        }</For>
+                        <RadioGroup title="View Mode" groupName='pageViewMode' itemArray={allCategoryViewModes} selectedValue={pageSettings.viewModeId} onChange={onChangePageViewMode} />
                     </Panel>
 
                     <Panel title="Grid View">
                         <h3 class="mt-4">Show Category Titles</h3>
-                        <input type="checkbox" name="gridShowTitles" />
+                        <input type="checkbox" class="toggle" name="gridShowTitles" />
 
                         <h3 class="mt-4">Show Category Years</h3>
-                        <input type="checkbox" name="detailShowYears" />
+                        <input type="checkbox" class="toggle" name="detailShowYears" />
 
-                        <h3 class="mt-4">Margins</h3>
-                        <div>
-                            <For each={allMargins}>{(margin, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridMargin" value={margin.value} class="mr-2" />
-                                        <label>{margin.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
+                        <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>
 
                     <Panel title="List View">
-                        <h3 class="mt-4">Margins</h3>
-                        <div>
-                            <For each={allMargins}>{(margin, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="listMargin" value={margin.value} class="mr-2" />
-                                        <label>{margin.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="listThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Margins" groupName='listMargin' itemArray={allMargins} selectedValue={listSettings.marginId} onChange={onChangeListMargin} />
+                        <RadioGroup title="Thumbnail Size" groupName='listThumbnails' itemArray={allThumbnailSizes} selectedValue={listSettings.thumbnailSizeId} onChange={onChangeListThumbnail} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

@@ -1,4 +1,4 @@
-import { Component, For, useContext } from "solid-js";
+import { Component } from "solid-js";
 import ContentLayout from '../components/layout/ContentLayout';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
@@ -14,11 +14,16 @@ import { allSlideshowDurations } from '../models/slideshow-duration';
 import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
 import { usePhotoInfoPanelSettings } from '../contexts/PhotoInfoPanelSettingsContext';
 import { usePhotoMapViewSettings } from '../contexts/PhotoMapViewSettingsContext';
+import RadioGroup from './components/RadioGroup';
+import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoDetailViewSettings } from '../contexts/PhotoDetailViewSettingsContext';
 
 const ViewPhotos: Component = () => {
-    const [photoPageSettings, { setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
-    const [photoMapPageSettings, {setMapType, setZoom}] = usePhotoMapViewSettings();
-    const [photoInfoPanelSettings, {
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
+    const [detailSettings, { setThumbnailSize: setDetailThumbnailSize }] = usePhotoDetailViewSettings();
+    const [gridSettings, { setMargin: setGridMargin, setShowBreadcrumbs: setGridBreadcrumbs, setThumbnailSize: setGridThumbnails }] = usePhotoGridViewSettings();
+    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettings();
+    const [infoPanelSettings, {
         setShowRatings,
         setShowCategoryTeaserChooser,
         setShowComments,
@@ -29,22 +34,52 @@ const ViewPhotos: Component = () => {
         setShowMinimap,
         setExpandedState,
         setMinimapZoom,
-        setMinimapMapType
+        setMinimapMapType: setInfoPanelMapType
     }] = usePhotoInfoPanelSettings();
+
+    const onPageViewChange = (evt: Event) => {
+        evt.preventDefault();
+        setViewMode(evt.currentTarget.value);
+    }
 
     const onChangeSlideshowDuration = (evt: Event) => {
         evt.preventDefault();
         setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
     };
 
+    const onChangeDetailThumbnailSize = (evt: Event) => {
+        evt.preventDefault();
+        setDetailThumbnailSize(evt.currentTarget.value);
+    }
+
     const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
         evt.preventDefault();
         setMinimapZoom(evt.currentTarget.value);
     };
 
+    const onChangeInfoPanelMapType = (evt: Event) => {
+        evt.preventDefault();
+        setInfoPanelMapType(evt.currentTarget.value);
+    }
+
     const onChangeMapPageZoomLevel = (evt: Event) => {
         evt.preventDefault();
-        setZoom(parseInt(evt.currentTarget.value));
+        setMapZoom(parseInt(evt.currentTarget.value));
+    }
+
+    const onChangeGridMargin = (evt: Event) => {
+        evt.preventDefault();
+        setGridMargin(evt.currentTarget.value);
+    }
+
+    const onChangeGridThumbnail = (evt: Event) => {
+        evt.preventDefault();
+        setGridThumbnails(evt.currentTarget.value);
+    }
+
+    const onChangeMapMapType = (evt: Event) => {
+        evt.preventDefault();
+        setMapMapType(evt.currentTarget.value);
     }
 
     return (
@@ -53,17 +88,8 @@ const ViewPhotos: Component = () => {
             <MainContent title="Settings - Photos">
                 <PanelContainer>
                     <Panel title="Photo Category Page">
-                        <h3 class="mt-4">View</h3>
-                        <For each={allPhotoViewModes}>{(mode, i) =>
-                            <>
-                                <div>
-                                    <input type="radio" name="viewMode" value={mode.value} class="mr-2" />
-                                    <label>{mode.name}</label>
-                                </div>
-                            </>
-                        }</For>
-
-                        <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={photoPageSettings.slideshowDisplayDurationSeconds} onChange={onChangeSlideshowDuration} />
+                        <RadioGroup title="View" groupName='pageView' itemArray={allPhotoViewModes} selectedValue={pageSettings.viewModeId} onChange={onPageViewChange} />
+                        <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={pageSettings.slideshowDisplayDurationSeconds} onChange={onChangeSlideshowDuration} />
                     </Panel>
 
                     <Panel title="Detail View">
@@ -73,17 +99,7 @@ const ViewPhotos: Component = () => {
                         <h3 class="mt-4">Show Photo List</h3>
                         <input type="checkbox" class="toggle" name="detailShowPhotoList" />
 
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>
                         <div>
@@ -125,64 +141,21 @@ const ViewPhotos: Component = () => {
                             </div>
                         </div>
 
-                        <h3 class="mt-4">Map Type</h3>
-                        <div>
-                            <For each={allMapTypes}>{(type, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailMapType" value={type.value} class="mr-2" />
-                                        <label>{type.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={photoInfoPanelSettings.minimapZoomId} onChange={onChangeDetailMiniMapZoomLevel} />
+                        <RadioGroup title="Map Type" groupName='detailMapType' itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapTypeId} onChange={onChangeInfoPanelMapType} />
+                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoomId} onChange={onChangeDetailMiniMapZoomLevel} />
                     </Panel>
 
                     <Panel title="Grid View">
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" class="toggle" name="gridShowBreadcrumbs" />
 
-                        <h3 class="mt-4">Margins</h3>
-                        <div>
-                            <For each={allMargins}>{(margin, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridMargin" value={margin.value} class="mr-2" />
-                                        <label>{margin.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
+                        <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>
 
                     <Panel title="Map View">
-                        <h3 class="mt-4">Map Type</h3>
-                        <div>
-                            <For each={allMapTypes}>{(type, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="mapMapType" value={type.value} class="mr-2" />
-                                        <label>{type.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={photoMapPageSettings.zoomId} onChange={onChangeMapPageZoomLevel} />
+                        <RadioGroup title="Map Type" groupName='mapMapType' itemArray={allMapTypes} selectedValue={mapSettings.mapTypeId} onChange={onChangeMapMapType} />
+                        <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={mapSettings.zoomId} onChange={onChangeMapPageZoomLevel} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

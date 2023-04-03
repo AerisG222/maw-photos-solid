@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
@@ -14,9 +14,14 @@ import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
 import { allSlideshowDurations } from '../models/slideshow-duration';
 import Select from './components/Select';
 import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
+import RadioGroup from './components/RadioGroup';
+import { useRandomDetailViewSettings } from '../contexts/RandomDetailViewSettingsContext';
+import { useRandomGridViewSettings } from '../contexts/RandomGridViewSettingsContext';
 
 const ViewRandom: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettings();
+    const [detailSettings, { setThumbnailSize: setDetailThumbnailSize }] = useRandomDetailViewSettings();
+    const [gridSettings, { setThumbnailSize: setGridThumbnailSize, setMargin: setGridMargin }] = useRandomGridViewSettings();
     const [infoPanelSettings, {
         setShowRatings,
         setShowCategoryTeaserChooser,
@@ -31,15 +36,40 @@ const ViewRandom: Component = () => {
         setMinimapMapType
     }] = useRandomInfoPanelSettings();
 
+    const onChangeViewMode = (evt:Event) => {
+        evt.preventDefault();
+        setViewMode(evt.currentTarget.value);
+    }
+
     const onChangeSlideshowDuration = (evt: Event) => {
         evt.preventDefault();
         setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
     };
 
+    const onChangeDetailThumbnail = (evt: Event) => {
+        evt.preventDefault();
+        setDetailThumbnailSize(evt.currentTarget.value);
+    }
+
+    const onChangeDetailMapType = (evt: Event) => {
+        evt.preventDefault();
+        setMinimapMapType(evt.currentTarget.value);
+    }
+
     const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
         evt.preventDefault();
         setMinimapZoom(evt.currentTarget.value);
     };
+
+    const onChangeGridMargin = (evt: Event) => {
+        evt.preventDefault();
+        setGridMargin(evt.currentTarget.value);
+    }
+
+    const onChangeGridThumbnail = (evt: Event) => {
+        evt.preventDefault();
+        setGridThumbnailSize(evt.currentTarget.value);
+    }
 
     return (
         <ContentLayout>
@@ -47,16 +77,7 @@ const ViewRandom: Component = () => {
             <MainContent title="Settings - Random">
                 <PanelContainer>
                     <Panel title="Random Page">
-                        <h3 class="mt-4">View Mode</h3>
-                        <For each={allRandomViewModes}>{(mode, i) =>
-                            <>
-                                <div>
-                                    <input type="radio" name="viewMode" value={mode.value} class="mr-2" />
-                                    <label>{mode.name}</label>
-                                </div>
-                            </>
-                        }</For>
-
+                        <RadioGroup title="View Mode" groupName='pageViewMode' itemArray={allRandomViewModes} selectedValue={pageSettings.viewModeId} onChange={onChangeViewMode} />
                         <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={pageSettings.slideshowDisplayDurationSeconds} onChange={onChangeSlideshowDuration} />
                     </Panel>
 
@@ -67,17 +88,7 @@ const ViewRandom: Component = () => {
                         <h3 class="mt-4">Show Photo List</h3>
                         <input type="checkbox" class="toggle" name="detailShowPhotoList" />
 
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnail} />
 
                         <h3 class="mt-4">Info Panel</h3>
                         <div>
@@ -119,18 +130,7 @@ const ViewRandom: Component = () => {
                             </div>
                         </div>
 
-                        <h3 class="mt-4">Map Type</h3>
-                        <div>
-                            <For each={allMapTypes}>{(type, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailMapType" value={type.value} class="mr-2" />
-                                        <label>{type.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
+                        <RadioGroup title="Map Type" groupName='detailMapType' itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapTypeId} onChange={onChangeDetailMapType} />
                         <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoomId} onChange={onChangeDetailMiniMapZoomLevel} />
                     </Panel>
 
@@ -138,29 +138,8 @@ const ViewRandom: Component = () => {
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" class="toggle" name="gridShowBreadcrumbs" />
 
-                        <h3 class="mt-4">Margins</h3>
-                        <div>
-                            <For each={allMargins}>{(margin, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridMargin" value={margin.value} class="mr-2" />
-                                        <label>{margin.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="gridThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
+                        <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

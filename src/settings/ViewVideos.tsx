@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
@@ -11,8 +11,16 @@ import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
 import Select from './components/Select';
 import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
+import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
+import RadioGroup from './components/RadioGroup';
 
 const ViewVideos: Component = () => {
+    const [detailSettings, {
+        setShowBreadcrumbs: setDetailShowBreadcrumbs,
+        setThumbnailSize: setDetailThumbnailSize,
+        setShowVideoList: setDetailShowVideoList,
+        setVideoSize: setDetailVideoSize
+    }] = useVideoDetailViewSettings();
     const [videoInfoPanelSettings, {
         setShowRatings,
         setShowCategoryTeaserChooser,
@@ -23,6 +31,21 @@ const ViewVideos: Component = () => {
         setMinimapZoom,
         setMinimapMapType
     }] = useVideoInfoPanelSettings();
+
+    const onChangeDetailVideoSize = (evt: Event) => {
+        evt.preventDefault();
+        setDetailVideoSize(evt.currentTarget.value);
+    }
+
+    const onChangeDetailThumbnailSize = (evt: Event) => {
+        evt.preventDefault();
+        setDetailThumbnailSize(evt.currentTarget.value);
+    }
+
+    const onChangeInfoPanelMapType = (evt: Event) => {
+        evt.preventDefault();
+        setMinimapMapType(evt.currentTarget.value);
+    }
 
     const onChangeMinimapZoom = (evt: Event) => {
         evt.preventDefault();
@@ -35,15 +58,7 @@ const ViewVideos: Component = () => {
             <MainContent title="Settings - Videos">
                 <PanelContainer>
                     <Panel title="Video Page">
-                        <h3 class="mt-4">Video Size</h3>
-                        <For each={allVideoSizes}>{(mode, i) =>
-                            <>
-                                <div>
-                                    <input type="radio" name="viewMode" value={mode.value} class="mr-2" />
-                                    <label>{mode.name}</label>
-                                </div>
-                            </>
-                        }</For>
+                        <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSizeId} onChange={onChangeDetailVideoSize} />
 
                         <h3 class="mt-4">Show Breadcrumbs</h3>
                         <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" />
@@ -51,17 +66,7 @@ const ViewVideos: Component = () => {
                         <h3 class="mt-4">Show Video List</h3>
                         <input type="checkbox" class="toggle" name="detailShowPhotoList" />
 
-                        <h3 class="mt-4">Thumbnail Size</h3>
-                        <div>
-                            <For each={allThumbnailSizes}>{(size, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailThumb" value={size.value} class="mr-2" />
-                                        <label>{size.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
+                        <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>
                         <div>
@@ -91,18 +96,7 @@ const ViewVideos: Component = () => {
                             </div>
                         </div>
 
-                        <h3 class="mt-4">Minimap Type</h3>
-                        <div>
-                            <For each={allMapTypes}>{(type, i) =>
-                                <>
-                                    <div>
-                                        <input type="radio" name="detailMapType" value={type.value} class="mr-2" />
-                                        <label>{type.name}</label>
-                                    </div>
-                                </>
-                            }</For>
-                        </div>
-
+                        <RadioGroup title="Minimap Type" groupName="detailMinimapType" itemArray={allMapTypes} selectedValue={videoInfoPanelSettings.minimapMapTypeId} onChange={onChangeInfoPanelMapType} />
                         <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={videoInfoPanelSettings.minimapZoomId} onChange={onChangeMinimapZoom} />
                     </Panel>
                 </PanelContainer>
