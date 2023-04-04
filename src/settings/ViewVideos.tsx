@@ -36,6 +36,8 @@ const ViewVideos: Component = () => {
     // detail
     const onChangeDetailVideoSize = (evt: Event) => setDetailVideoSize(evt.currentTarget.value);
     const onChangeDetailThumbnailSize = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
+    const onChangeDetailShowBreadcrumbs = (evt: Event) => setDetailShowBreadcrumbs(evt.currentTarget.value);
+    const onChangeDetailShowVideoList = (evt: Event) => setDetailShowVideoList(evt.currentTarget.value);
 
     // infopanel
     const onExpandInfoPanelChange = (evt: Event) => setExpandInfoPanel(evt.currentTarget.checked);
@@ -56,10 +58,10 @@ const ViewVideos: Component = () => {
                         <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSizeId} onChange={onChangeDetailVideoSize} />
 
                         <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" />
+                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" onChange={onChangeDetailShowBreadcrumbs} />
 
                         <h3 class="mt-4">Show Video List</h3>
-                        <input type="checkbox" class="toggle" name="detailShowPhotoList" />
+                        <input type="checkbox" class="toggle" name="detailShowPhotoList" onChange={onChangeDetailShowVideoList} />
 
                         <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
