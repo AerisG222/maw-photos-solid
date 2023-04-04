@@ -16,13 +16,15 @@ import Toolbar from './Toolbar';
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettings();
-    const [gridSettings, { setShowTitles, setShowYear, setMargins: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useSearchGridViewSettings();
-    const [listSettings, { setMargins: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
+    const [gridSettings, { setShowTitles, setShowYears, setMargin: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useSearchGridViewSettings();
+    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
 
     // page
     const onChangePageViewMode = (evt: Event) => setViewMode(evt.currentTarget.value);
 
     // grid
+    const onChangeGridShowTitles = (evt: Event) => setShowTitles(evt.currentTarget.value);
+    const onChangeGridShowYears = (evt: Event) => setShowYears(evt.currentTarget.value);
     const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
     const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
@@ -41,10 +43,10 @@ const ViewSearch: Component = () => {
 
                     <Panel title="Grid View">
                         <h3 class="mt-4">Show Category Titles</h3>
-                        <input type="checkbox" class="toggle" name="gridShowTitles" />
+                        <input type="checkbox" class="toggle" name="gridShowTitles" onChange={onChangeGridShowTitles} />
 
                         <h3 class="mt-4">Show Category Years</h3>
-                        <input type="checkbox" class="toggle" name="detailShowYears" />
+                        <input type="checkbox" class="toggle" name="detailShowYears" onChange={onChangeGridShowYears} />
 
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
