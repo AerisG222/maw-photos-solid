@@ -1,17 +1,18 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
-import { allThumbnailSizes } from '../models/thumbnail-size';
-import { allMargins } from '../models/margin';
-import { allCategoryViewModes } from '../models/category-view-mode';
-import Panel from './components/Panel';
-import MainContent from '../components/layout/MainContent';
-import PanelContainer from './components/PanelContainer';
 import { useSearchPageSettings } from '../contexts/SearchPageSettingsContext';
 import { useSearchGridViewSettings } from '../contexts/SearchGridViewSettingsContext';
 import { useSearchListViewSettings } from '../contexts/SearchListViewSettingsContext';
+import { allThumbnailSizes } from '../models/thumbnail-size';
+import { allMargins } from '../models/margin';
+import { allCategoryViewModes } from '../models/category-view-mode';
+
+import ContentLayout from '../components/layout/ContentLayout';
+import Panel from './components/Panel';
+import MainContent from '../components/layout/MainContent';
+import PanelContainer from './components/PanelContainer';
 import RadioGroup from './components/RadioGroup';
+import Toolbar from './Toolbar';
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettings();

@@ -1,23 +1,25 @@
 import { Component } from "solid-js";
-import ContentLayout from '../components/layout/ContentLayout';
+
+import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoDetailViewSettings } from '../contexts/PhotoDetailViewSettingsContext';
+import { usePhotoInfoPanelSettings } from '../contexts/PhotoInfoPanelSettingsContext';
+import { usePhotoMapViewSettings } from '../contexts/PhotoMapViewSettingsContext';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
 import { allMargins } from '../models/margin';
 import { allPhotoViewModes } from '../models/photo-view-mode';
 import { allThumbnailSizes } from '../models/thumbnail-size';
-import Toolbar from './Toolbar';
+import { allSlideshowDurations } from '../models/slideshow-duration';
+
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
+import ContentLayout from '../components/layout/ContentLayout';
 import PanelContainer from './components/PanelContainer';
 import Select from './components/Select';
-import { allSlideshowDurations } from '../models/slideshow-duration';
-import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
-import { usePhotoInfoPanelSettings } from '../contexts/PhotoInfoPanelSettingsContext';
-import { usePhotoMapViewSettings } from '../contexts/PhotoMapViewSettingsContext';
 import RadioGroup from './components/RadioGroup';
-import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
-import { usePhotoDetailViewSettings } from '../contexts/PhotoDetailViewSettingsContext';
 import Checkbox from './components/Checkbox';
+import Toolbar from './Toolbar';
 
 const ViewPhotos: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();

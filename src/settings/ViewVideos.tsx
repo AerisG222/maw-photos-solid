@@ -1,19 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
+import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
+import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
 import { allVideoSizes } from '../models/video-size';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMapTypes } from '../models/map-type';
 import { allMapZoomLevels } from '../models/map-zoom-level';
+
+import ContentLayout from '../components/layout/ContentLayout';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
 import Select from './components/Select';
-import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
-import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
 import RadioGroup from './components/RadioGroup';
 import Checkbox from './components/Checkbox';
+import Toolbar from './Toolbar';
 
 const ViewVideos: Component = () => {
     const [detailSettings, {

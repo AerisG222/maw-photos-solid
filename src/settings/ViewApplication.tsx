@@ -5,10 +5,10 @@ import { allThemes } from '../models/theme';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';
-import Toolbar from './Toolbar';
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
 import Select from './components/Select';
+import Toolbar from './Toolbar';
 
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();

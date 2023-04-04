@@ -1,19 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
-import { allCategoryTypeFilters } from '../models/category-type-filter';
-import { allCategoryViewModes } from '../models/category-view-mode';
-import { allMargins } from '../models/margin';
-import { allThumbnailSizes } from '../models/thumbnail-size';
-import Toolbar from './Toolbar';
-import Panel from './components/Panel';
-import MainContent from '../components/layout/MainContent';
-import PanelContainer from './components/PanelContainer';
-import RadioGroup from './components/RadioGroup';
 import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
 import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
 import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 import { useCategoryListViewSettings } from '../contexts/CategoryListViewSettingsContext';
+import { allCategoryTypeFilters } from '../models/category-type-filter';
+import { allCategoryViewModes } from '../models/category-view-mode';
+import { allMargins } from '../models/margin';
+import { allThumbnailSizes } from '../models/thumbnail-size';
+
+import ContentLayout from '../components/layout/ContentLayout';
+import MainContent from '../components/layout/MainContent';
+import Panel from './components/Panel';
+import PanelContainer from './components/PanelContainer';
+import RadioGroup from './components/RadioGroup';
+import Toolbar from './Toolbar';
 
 const ViewCategories: Component = () => {
     const [filterSettings, { setTypeFilter }] = useCategoryFilterSettings();

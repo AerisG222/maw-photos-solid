@@ -1,5 +1,6 @@
 import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
+
 import { settingsApplication } from './_routes';
 
 const Settings: Component = () => {

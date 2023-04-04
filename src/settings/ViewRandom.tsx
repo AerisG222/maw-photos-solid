@@ -1,23 +1,24 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
-import Toolbar from './Toolbar';
+import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
+import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
+import { useRandomDetailViewSettings } from '../contexts/RandomDetailViewSettingsContext';
+import { useRandomGridViewSettings } from '../contexts/RandomGridViewSettingsContext';
 import { allRandomViewModes } from '../models/photo-view-mode';
 import { allMapZoomLevels } from '../models/map-zoom-level';
 import { allMapTypes } from '../models/map-type';
 import { allThumbnailSizes } from '../models/thumbnail-size';
 import { allMargins } from '../models/margin';
+import { allSlideshowDurations } from '../models/slideshow-duration';
+
+import ContentLayout from '../components/layout/ContentLayout';
 import Panel from './components/Panel';
 import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
-import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
-import { allSlideshowDurations } from '../models/slideshow-duration';
 import Select from './components/Select';
-import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
 import RadioGroup from './components/RadioGroup';
-import { useRandomDetailViewSettings } from '../contexts/RandomDetailViewSettingsContext';
-import { useRandomGridViewSettings } from '../contexts/RandomGridViewSettingsContext';
 import Checkbox from './components/Checkbox';
+import Toolbar from './Toolbar';
 
 const ViewRandom: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettings();
