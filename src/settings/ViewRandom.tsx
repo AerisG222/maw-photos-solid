@@ -19,11 +19,12 @@ import Select from './components/Select';
 import RadioGroup from './components/RadioGroup';
 import Checkbox from './components/Checkbox';
 import Toolbar from './Toolbar';
+import Toggle from './components/Toggle';
 
 const ViewRandom: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettings();
-    const [detailSettings, { setThumbnailSize: setDetailThumbnailSize }] = useRandomDetailViewSettings();
-    const [gridSettings, { setThumbnailSize: setGridThumbnailSize, setMargin: setGridMargin }] = useRandomGridViewSettings();
+    const [detailSettings, { setShowBreadcrumbs: setDetailShowBreadcrumbs, setShowPhotoList: setDetailShowPhotoList, setThumbnailSize: setDetailThumbnailSize }] = useRandomDetailViewSettings();
+    const [gridSettings, { setShowBreadcrumbs: setGridShowBreadcrumbs, setThumbnailSize: setGridThumbnailSize, setMargin: setGridMargin }] = useRandomGridViewSettings();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -43,10 +44,13 @@ const ViewRandom: Component = () => {
     const onChangeSlideshowDuration = (evt: Event) => setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
 
     // grid
+    const onChangeGridShowBreadcrumbs = (evt: Event) => setGridShowBreadcrumbs(evt.currentTarget.value);
     const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
     const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
     // detail
+    const onChangeDetailShowBreadcrumbs = (evt: Event) => setDetailShowBreadcrumbs(evt.currentTarget.value);
+    const onChangeDetailShowPhotoList = (evt: Event) => setDetailShowPhotoList(evt.currentTarget.value);
     const onChangeDetailThumbnail = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
     const onChangeDetailMapType = (evt: Event) => setMinimapMapType(evt.currentTarget.value);
     const onChangeDetailMiniMapZoomLevel = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
@@ -73,12 +77,8 @@ const ViewRandom: Component = () => {
                     </Panel>
 
                     <Panel title="Detail View">
-                        <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" />
-
-                        <h3 class="mt-4">Show Photo List</h3>
-                        <input type="checkbox" class="toggle" name="detailShowPhotoList" />
-
+                        <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={onChangeDetailShowBreadcrumbs} />
+                        <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={onChangeDetailShowPhotoList} />
                         <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnail} />
 
                         <h3 class="mt-4">Info Panel</h3>
@@ -99,9 +99,7 @@ const ViewRandom: Component = () => {
                     </Panel>
 
                     <Panel title="GridView">
-                        <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="gridShowBreadcrumbs" />
-
+                        <Toggle title="Show Breadcrumbs" name="gridShowBreadcrumbs" isSelected={gridSettings.showBreadcrumbs} onChange={onChangeGridShowBreadcrumbs} />
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>

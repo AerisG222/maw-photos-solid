@@ -20,6 +20,7 @@ import Select from './components/Select';
 import RadioGroup from './components/RadioGroup';
 import Checkbox from './components/Checkbox';
 import Toolbar from './Toolbar';
+import Toggle from './components/Toggle';
 
 const ViewPhotos: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
@@ -82,12 +83,8 @@ const ViewPhotos: Component = () => {
                     </Panel>
 
                     <Panel title="Detail View">
-                        <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" onChange={onChangeDetailShowBreadcrumbs} />
-
-                        <h3 class="mt-4">Show Photo List</h3>
-                        <input type="checkbox" class="toggle" name="detailShowPhotoList" onChange={onChangeDetailShowPhotoList} />
-
+                        <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={onChangeDetailShowBreadcrumbs} />
+                        <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={onChangeDetailShowPhotoList} />
                         <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>
@@ -108,9 +105,7 @@ const ViewPhotos: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="gridShowBreadcrumbs" onChange={onChangeGridShowBreadcrumbs} />
-
+                        <Toggle title="Show Breadcrumbs" name="gridShowBreadcrumbs" isSelected={gridSettings.showBreadcrumbs} onChange={onChangeGridShowBreadcrumbs} />
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>

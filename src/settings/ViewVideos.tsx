@@ -15,6 +15,7 @@ import Select from './components/Select';
 import RadioGroup from './components/RadioGroup';
 import Checkbox from './components/Checkbox';
 import Toolbar from './Toolbar';
+import Toggle from './components/Toggle';
 
 const ViewVideos: Component = () => {
     const [detailSettings, {
@@ -57,13 +58,8 @@ const ViewVideos: Component = () => {
                 <PanelContainer>
                     <Panel title="Video Page">
                         <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSizeId} onChange={onChangeDetailVideoSize} />
-
-                        <h3 class="mt-4">Show Breadcrumbs</h3>
-                        <input type="checkbox" class="toggle" name="detailShowBreadcrumbs" onChange={onChangeDetailShowBreadcrumbs} />
-
-                        <h3 class="mt-4">Show Video List</h3>
-                        <input type="checkbox" class="toggle" name="detailShowPhotoList" onChange={onChangeDetailShowVideoList} />
-
+                        <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={onChangeDetailShowBreadcrumbs} />
+                        <Toggle title="Show Video List" name="detailShowPhotoList" isSelected={detailSettings.showVideoList} onChange={onChangeDetailShowVideoList} />
                         <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>

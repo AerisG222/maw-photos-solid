@@ -13,6 +13,7 @@ import MainContent from '../components/layout/MainContent';
 import PanelContainer from './components/PanelContainer';
 import RadioGroup from './components/RadioGroup';
 import Toolbar from './Toolbar';
+import Toggle from './components/Toggle';
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettings();
@@ -42,12 +43,8 @@ const ViewSearch: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <h3 class="mt-4">Show Category Titles</h3>
-                        <input type="checkbox" class="toggle" name="gridShowTitles" onChange={onChangeGridShowTitles} />
-
-                        <h3 class="mt-4">Show Category Years</h3>
-                        <input type="checkbox" class="toggle" name="detailShowYears" onChange={onChangeGridShowYears} />
-
+                        <Toggle title="Show Category Titles" name="gridShowTitles" isSelected={gridSettings.showTitles} onChange={onChangeGridShowTitles} />
+                        <Toggle title="Show Category Years" name="detailShowYears" isSelected={gridSettings.showYears} onChange={onChangeGridShowYears} />
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>

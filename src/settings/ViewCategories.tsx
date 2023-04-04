@@ -15,6 +15,7 @@ import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
 import RadioGroup from './components/RadioGroup';
 import Toolbar from './Toolbar';
+import Toggle from './components/Toggle';
 
 const ViewCategories: Component = () => {
     const [filterSettings, { setTypeFilter }] = useCategoryFilterSettings();
@@ -46,11 +47,7 @@ const ViewCategories: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <h3>Show Titles</h3>
-                        <div>
-                            <input type="checkbox" class="toggle" name="gridTitles" onChange={evt => onChangeGridShowTitles(evt)} checked={gridSettings.showTitles} />
-                        </div>
-
+                        <Toggle title="Show Titles" name="gridTitles" isSelected={gridSettings.showTitles} onChange={onChangeGridShowTitles} />
                         <RadioGroup title="Margins" groupName="gridMargins" itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName="gridThumbnails" itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnailSize} />
                     </Panel>
