@@ -2,6 +2,7 @@ import { MapTypeIdType, defaultMapTypeId } from '../map-type';
 import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
 
 export type RandomInfoPanelSettingsState = {
+    expandInfoPanel: boolean;
     showRatings: boolean;
     showCategoryTeaserChooser: boolean;
     showComments: boolean;
@@ -10,12 +11,12 @@ export type RandomInfoPanelSettingsState = {
     showMetadataEditor: boolean;
     showHistogram: boolean;
     showMinimap: boolean;
-    expandedState: boolean;
     minimapMapTypeId: MapTypeIdType;
     minimapZoomId: MapZoomLevelIdType;
 };
 
 export const defaultRandomInfoPanelSettings: RandomInfoPanelSettingsState = {
+    expandInfoPanel: false,
     showRatings: true,
     showCategoryTeaserChooser: false,
     showComments: true,
@@ -24,7 +25,6 @@ export const defaultRandomInfoPanelSettings: RandomInfoPanelSettingsState = {
     showHistogram: false,
     showMetadataEditor: false,
     showMinimap: false,
-    expandedState: false,
     minimapMapTypeId: defaultMapTypeId,
     minimapZoomId: defaultMapZoomLevelId,
 };

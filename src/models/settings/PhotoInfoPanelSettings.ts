@@ -2,6 +2,7 @@ import { MapTypeIdType, defaultMapTypeId } from '../map-type';
 import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
 
 export type PhotoInfoPanelSettingsState = {
+    expandInfoPanel: boolean;
     showRatings: boolean;
     showCategoryTeaserChooser: boolean;
     showComments: boolean;
@@ -10,12 +11,12 @@ export type PhotoInfoPanelSettingsState = {
     showMetadataEditor: boolean;
     showHistogram: boolean;
     showMinimap: boolean;
-    expandedState: boolean;
     minimapZoomId: MapZoomLevelIdType;
     minimapMapTypeId: MapTypeIdType;
 };
 
 export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
+    expandInfoPanel: false,
     showRatings: true,
     showCategoryTeaserChooser: false,
     showComments: true,
@@ -24,7 +25,6 @@ export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
     showHistogram: false,
     showMetadataEditor: false,
     showMinimap: false,
-    expandedState: false,
     minimapMapTypeId: defaultMapTypeId,
     minimapZoomId: defaultMapZoomLevelId,
 };

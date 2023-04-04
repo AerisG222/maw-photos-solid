@@ -13,6 +13,7 @@ import Select from './components/Select';
 import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
 import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
 import RadioGroup from './components/RadioGroup';
+import Checkbox from './components/Checkbox';
 
 const ViewVideos: Component = () => {
     const [detailSettings, {
@@ -21,13 +22,13 @@ const ViewVideos: Component = () => {
         setShowVideoList: setDetailShowVideoList,
         setVideoSize: setDetailVideoSize
     }] = useVideoDetailViewSettings();
-    const [videoInfoPanelSettings, {
+    const [infoPanelSettings, {
+        setExpandInfoPanel,
         setShowRatings,
         setShowCategoryTeaserChooser,
         setShowComments,
         setShowMetadataEditor,
         setShowMinimap,
-        setExpandedState,
         setMinimapZoom,
         setMinimapMapType
     }] = useVideoInfoPanelSettings();
@@ -52,6 +53,13 @@ const ViewVideos: Component = () => {
         setMinimapZoom(evt.currentTarget.value);
     };
 
+    const onExpandInfoPanelChange = (evt: Event) => setExpandInfoPanel(evt.currentTarget.checked);
+    const onChangeShowRatingsPanel = (evt: Event) => setShowRatings(evt.currentTarget.checked);
+    const onChangeShowCommentsPanel = (evt: Event) => setShowComments(evt.currentTarget.checked);
+    const onChangeShowMinimapPanel = (evt: Event) => setShowMinimap(evt.currentTarget.checked);
+    const onChangeShowMetadataEditorPanel = (evt: Event) => setShowMetadataEditor(evt.currentTarget.checked);
+    const onChangeShowCategoryTeaserChooserPanel = (evt: Event) => setShowCategoryTeaserChooser(evt.currentTarget.checked);
+
     return (
         <ContentLayout>
             <Toolbar />
@@ -70,34 +78,16 @@ const ViewVideos: Component = () => {
 
                         <h3 class="mt-4">Info Panel</h3>
                         <div>
-                            <div>
-                                <input type="checkbox" name="showInfoPanel" class="mr-2" />
-                                <label for="showInfoPanel">Show Info Panel</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="showRatingsPanel" class="mr-2" />
-                                <label for="showRatingsPanel">Show Ratings Panel</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="showCommentsPanel" class="mr-2" />
-                                <label for="showCommentsPanel">Show Comments Panel</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="showMiniMapPanel" class="mr-2" />
-                                <label for="showMiniMapPanel">Show Mini-map Panel</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="showMetadataEditorPanel" class="mr-2" />
-                                <label for="showMetadataEditorPanel">Show Metadata Editor Panel</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" name="showTeaserPanel" class="mr-2" />
-                                <label for="showTeaserPanel">Show Category Teaser Chooser Panel</label>
-                            </div>
+                            <Checkbox title="Show Info Panel" name="showInfoPanel" isSelected={infoPanelSettings.expandInfoPanel} onChange={onExpandInfoPanelChange} />
+                            <Checkbox title="Show Ratings Panel" name="showRatingsPanel" isSelected={infoPanelSettings.showRatings} onChange={onChangeShowRatingsPanel} />
+                            <Checkbox title="Show Comments Panel" name="showCommentsPanel" isSelected={infoPanelSettings.showComments} onChange={onChangeShowCommentsPanel} />
+                            <Checkbox title="Show Mini-map Panel" name="showMiniMapPanel" isSelected={infoPanelSettings.showMinimap} onChange={onChangeShowMinimapPanel} />
+                            <Checkbox title="Show Metadata Editor Panel" name="showMetadataEditorPanel" isSelected={infoPanelSettings.showMetadataEditor} onChange={onChangeShowMetadataEditorPanel} />
+                            <Checkbox title="Show Category Teaser Chooser Panel" name="showCategoryTeaserChooserPanel" isSelected={infoPanelSettings.showCategoryTeaserChooser} onChange={onChangeShowCategoryTeaserChooserPanel} />
                         </div>
 
-                        <RadioGroup title="Minimap Type" groupName="detailMinimapType" itemArray={allMapTypes} selectedValue={videoInfoPanelSettings.minimapMapTypeId} onChange={onChangeInfoPanelMapType} />
-                        <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={videoInfoPanelSettings.minimapZoomId} onChange={onChangeMinimapZoom} />
+                        <RadioGroup title="Minimap Type" groupName="detailMinimapType" itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapTypeId} onChange={onChangeInfoPanelMapType} />
+                        <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoomId} onChange={onChangeMinimapZoom} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

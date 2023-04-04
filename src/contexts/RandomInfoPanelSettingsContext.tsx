@@ -1,13 +1,15 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapType } from '../models/map-type';
+import { MapTypeIdType } from '../models/map-type';
 import { RandomInfoPanelSettingsState, defaultRandomInfoPanelSettings } from '../models/settings';
 import { KEY_SETTINGS_RANDOM_INFO_PANEL, loadJson, saveJson } from './_storage';
+import { MapZoomLevelIdType } from '../models/map-zoom-level';
 
 export type RandomInfoPanelSettingsContextValue = [
     state: RandomInfoPanelSettingsState,
     actions: {
+        setExpandInfoPanel: (expandInfoPanel: boolean) => void;
         setShowRatings: (showRatings: boolean) => void;
         setShowCategoryTeaserChooser: (showCategoryTeaserChooser: boolean) => void;
         setShowComments: (showComments: boolean) => void;
@@ -16,15 +18,15 @@ export type RandomInfoPanelSettingsContextValue = [
         setShowMetadataEditor: (showMetadataEditor: boolean) => void;
         setShowHistogram: (showHistogram: boolean) => void;
         setShowMinimap: (showMinimap: boolean) => void;
-        setExpandedState: (showExpandedState: boolean) => void;
-        setMinimapZoom: (minimapZoom: number) => void;
-        setMinimapMapType: (minimapMapType: MapType) => void;
+        setMinimapZoom: (minimapZoomId: MapZoomLevelIdType) => void;
+        setMinimapMapType: (minimapMapTypeId: MapTypeIdType) => void;
     }
 ];
 
 const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsContextValue>([
     defaultRandomInfoPanelSettings,
     {
+        setExpandInfoPanel: () => undefined,
         setShowRatings: () => undefined,
         setShowCategoryTeaserChooser: () => undefined,
         setShowComments: () => undefined,
@@ -33,7 +35,6 @@ const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsCont
         setShowMetadataEditor: () => undefined,
         setShowHistogram: () => undefined,
         setShowMinimap: () => undefined,
-        setExpandedState: () => undefined,
         setMinimapZoom: () => undefined,
         setMinimapMapType: () => undefined,
     }
@@ -42,6 +43,7 @@ const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsCont
 export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
+    const setExpandInfoPanel = (expandedInfoPanel: boolean) => updateState({expandInfoPanel: expandedInfoPanel});
     const setShowRatings = (showRatings: boolean) => updateState({showRatings: showRatings});
     const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => updateState({showCategoryTeaserChooser: showCategoryTeaserChooser});
     const setShowComments = (showComments: boolean) => updateState({showComments: showComments});
@@ -50,9 +52,8 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
     const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
     const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
-    const setExpandedState = (expandedState: boolean) => updateState({expandedState: expandedState});
-    const setMinimapZoom = (minimapZoom: number) => updateState({minimapZoom: minimapZoom});
-    const setMinimapMapType = (minimapMapType: MapType) => updateState({minimapMapType: minimapMapType});
+    const setMinimapZoom = (minimapZoomId: MapZoomLevelIdType) => updateState({minimapZoomId: minimapZoomId});
+    const setMinimapMapType = (minimapMapTypeId: MapTypeIdType) => updateState({minimapMapTypeId: minimapMapTypeId});
 
     const updateState = (update: Partial<RandomInfoPanelSettingsState>) => {
         setState(update);
@@ -61,6 +62,7 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
 
     return (
         <RandomInfoPanelSettingsContext.Provider value={[state, {
+            setExpandInfoPanel,
             setShowRatings,
             setShowCategoryTeaserChooser,
             setShowComments,
@@ -69,7 +71,6 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
             setShowMetadataEditor,
             setShowHistogram,
             setShowMinimap,
-            setExpandedState,
             setMinimapZoom,
             setMinimapMapType
         }]}>
