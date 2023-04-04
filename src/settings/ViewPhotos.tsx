@@ -38,51 +38,19 @@ const ViewPhotos: Component = () => {
         setMinimapMapType: setInfoPanelMapType
     }] = usePhotoInfoPanelSettings();
 
-    const onPageViewChange = (evt: Event) => {
-        evt.preventDefault();
-        setViewMode(evt.currentTarget.value);
-    }
+    // page
+    const onPageViewChange = (evt: Event) => setViewMode(evt.currentTarget.value);
+    const onChangeSlideshowDuration = (evt: Event) => setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
 
-    const onChangeSlideshowDuration = (evt: Event) => {
-        evt.preventDefault();
-        setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
-    };
+    // grid
+    const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
+    const onChangeGridThumbnail = (evt: Event) => setGridThumbnails(evt.currentTarget.value);
 
-    const onChangeDetailThumbnailSize = (evt: Event) => {
-        evt.preventDefault();
-        setDetailThumbnailSize(evt.currentTarget.value);
-    }
+    // detail
+    const onChangeDetailThumbnailSize = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
+    const onChangeDetailMiniMapZoomLevel = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
 
-    const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
-        evt.preventDefault();
-        setMinimapZoom(evt.currentTarget.value);
-    };
-
-    const onChangeInfoPanelMapType = (evt: Event) => {
-        evt.preventDefault();
-        setInfoPanelMapType(evt.currentTarget.value);
-    }
-
-    const onChangeMapPageZoomLevel = (evt: Event) => {
-        evt.preventDefault();
-        setMapZoom(parseInt(evt.currentTarget.value));
-    }
-
-    const onChangeGridMargin = (evt: Event) => {
-        evt.preventDefault();
-        setGridMargin(evt.currentTarget.value);
-    }
-
-    const onChangeGridThumbnail = (evt: Event) => {
-        evt.preventDefault();
-        setGridThumbnails(evt.currentTarget.value);
-    }
-
-    const onChangeMapMapType = (evt: Event) => {
-        evt.preventDefault();
-        setMapMapType(evt.currentTarget.value);
-    }
-
+    // infopanel
     const onExpandInfoPanelChange = (evt: Event) => setExpandInfoPanel(evt.currentTarget.checked);
     const onChangeShowRatingsPanel = (evt: Event) => setShowRatings(evt.currentTarget.checked);
     const onChangeShowCommentsPanel = (evt: Event) => setShowComments(evt.currentTarget.checked);
@@ -92,6 +60,11 @@ const ViewPhotos: Component = () => {
     const onChangeShowMinimapPanel = (evt: Event) => setShowMinimap(evt.currentTarget.checked);
     const onChangeShowMetadataEditorPanel = (evt: Event) => setShowMetadataEditor(evt.currentTarget.checked);
     const onChangeShowCategoryTeaserChooserPanel = (evt: Event) => setShowCategoryTeaserChooser(evt.currentTarget.checked);
+    const onChangeInfoPanelMapType = (evt: Event) => setInfoPanelMapType(evt.currentTarget.value);
+
+    // map
+    const onChangeMapPageZoomLevel = (evt: Event) => setMapZoom(parseInt(evt.currentTarget.value));
+    const onChangeMapMapType = (evt: Event) => setMapMapType(evt.currentTarget.value);
 
     return (
         <ContentLayout>

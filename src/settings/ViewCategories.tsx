@@ -21,40 +21,18 @@ const ViewCategories: Component = () => {
     const [gridSettings, { setShowTitles, setMargin: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useCategoryGridViewSettings();
     const [listSettings, { setMargin: setListMargin , setThumbnailSize: setListThumbnailSize }] = useCategoryListViewSettings()
 
-    const onChangePageFilterType = (evt: Event) => {
-        evt.preventDefault();
-        setTypeFilter(evt.currentTarget.value);
-    }
+    // page
+    const onChangePageFilterType = (evt: Event) => setTypeFilter(evt.currentTarget.value);
+    const onChangePageViewMode = (evt: Event) => setViewMode(evt.currentTarget.value);
 
-    const onChangePageViewMode = (evt: Event) => {
-        evt.preventDefault();
-        setViewMode(evt.currentTarget.value);
-    }
+    // grid
+    const onChangeGridShowTitles = (evt: Event) => setShowTitles(evt.currentTarget.value);
+    const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
+    const onChangeGridThumbnailSize = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
-    const onChangeGridShowTitles = (evt: Event) => {
-        evt.preventDefault();
-        setShowTitles(evt.currentTarget.value);
-    }
-
-    const onChangeGridMargin = (evt: Event) => {
-        evt.preventDefault();
-        setGridMargin(evt.currentTarget.value);
-    }
-
-    const onChangeGridThumbnailSize = (evt: Event) => {
-        evt.preventDefault();
-        setGridThumbnailSize(evt.currentTarget.value);
-    }
-
-    const onChangeListMargin = (evt: Event) => {
-        evt.preventDefault();
-        setListMargin(evt.currentTarget.value);
-    }
-
-    const onChangeListThumbnailSize = (evt: Event) => {
-        evt.preventDefault();
-        setListThumbnailSize(evt.currentTarget.value);
-    }
+    // list
+    const onChangeListMargin = (evt: Event) => setListMargin(evt.currentTarget.value);
+    const onChangeListThumbnailSize = (evt: Event) => setListThumbnailSize(evt.currentTarget.value);
 
     return (
         <ContentLayout>

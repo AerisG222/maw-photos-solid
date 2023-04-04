@@ -18,30 +18,16 @@ const ViewSearch: Component = () => {
     const [gridSettings, { setShowTitles, setShowYear, setMargins: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useSearchGridViewSettings();
     const [listSettings, { setMargins: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
 
-    const onChangePageViewMode = (evt: Event) => {
-        evt.preventDefault();
-        setViewMode(evt.currentTarget.value);
-    }
+    // page
+    const onChangePageViewMode = (evt: Event) => setViewMode(evt.currentTarget.value);
 
-    const onChangeGridMargin = (evt: Event) => {
-        evt.preventDefault();
-        setGridMargin(evt.currentTarget.value);
-    }
+    // grid
+    const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
+    const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
-    const onChangeGridThumbnail = (evt: Event) => {
-        evt.preventDefault();
-        setGridThumbnailSize(evt.currentTarget.value);
-    }
-
-    const onChangeListMargin = (evt: Event) => {
-        evt.preventDefault();
-        setListMargin(evt.currentTarget.value);
-    }
-
-    const onChangeListThumbnail = (evt: Event) => {
-        evt.preventDefault();
-        setListThumbnailSize(evt.currentTarget.value);
-    }
+    // list
+    const onChangeListMargin = (evt: Event) => setListMargin(evt.currentTarget.value);
+    const onChangeListThumbnail = (evt: Event) => setListThumbnailSize(evt.currentTarget.value);
 
     return (
         <ContentLayout>

@@ -37,41 +37,20 @@ const ViewRandom: Component = () => {
         setMinimapMapType
     }] = useRandomInfoPanelSettings();
 
-    const onChangeViewMode = (evt:Event) => {
-        evt.preventDefault();
-        setViewMode(evt.currentTarget.value);
-    }
+    // page
+    const onChangeViewMode = (evt:Event) => setViewMode(evt.currentTarget.value);
+    const onChangeSlideshowDuration = (evt: Event) => setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
 
-    const onChangeSlideshowDuration = (evt: Event) => {
-        evt.preventDefault();
-        setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
-    };
+    // grid
+    const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
+    const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
-    const onChangeDetailThumbnail = (evt: Event) => {
-        evt.preventDefault();
-        setDetailThumbnailSize(evt.currentTarget.value);
-    }
+    // detail
+    const onChangeDetailThumbnail = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
+    const onChangeDetailMapType = (evt: Event) => setMinimapMapType(evt.currentTarget.value);
+    const onChangeDetailMiniMapZoomLevel = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
 
-    const onChangeDetailMapType = (evt: Event) => {
-        evt.preventDefault();
-        setMinimapMapType(evt.currentTarget.value);
-    }
-
-    const onChangeDetailMiniMapZoomLevel = (evt: Event) => {
-        evt.preventDefault();
-        setMinimapZoom(evt.currentTarget.value);
-    };
-
-    const onChangeGridMargin = (evt: Event) => {
-        evt.preventDefault();
-        setGridMargin(evt.currentTarget.value);
-    }
-
-    const onChangeGridThumbnail = (evt: Event) => {
-        evt.preventDefault();
-        setGridThumbnailSize(evt.currentTarget.value);
-    }
-
+    // infopanel
     const onExpandInfoPanelChange = (evt: Event) => setExpandInfoPanel(evt.currentTarget.checked);
     const onChangeShowRatingsPanel = (evt: Event) => setShowRatings(evt.currentTarget.checked);
     const onChangeShowCommentsPanel = (evt: Event) => setShowComments(evt.currentTarget.checked);

@@ -33,32 +33,19 @@ const ViewVideos: Component = () => {
         setMinimapMapType
     }] = useVideoInfoPanelSettings();
 
-    const onChangeDetailVideoSize = (evt: Event) => {
-        evt.preventDefault();
-        setDetailVideoSize(evt.currentTarget.value);
-    }
+    // detail
+    const onChangeDetailVideoSize = (evt: Event) => setDetailVideoSize(evt.currentTarget.value);
+    const onChangeDetailThumbnailSize = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
 
-    const onChangeDetailThumbnailSize = (evt: Event) => {
-        evt.preventDefault();
-        setDetailThumbnailSize(evt.currentTarget.value);
-    }
-
-    const onChangeInfoPanelMapType = (evt: Event) => {
-        evt.preventDefault();
-        setMinimapMapType(evt.currentTarget.value);
-    }
-
-    const onChangeMinimapZoom = (evt: Event) => {
-        evt.preventDefault();
-        setMinimapZoom(evt.currentTarget.value);
-    };
-
+    // infopanel
     const onExpandInfoPanelChange = (evt: Event) => setExpandInfoPanel(evt.currentTarget.checked);
     const onChangeShowRatingsPanel = (evt: Event) => setShowRatings(evt.currentTarget.checked);
     const onChangeShowCommentsPanel = (evt: Event) => setShowComments(evt.currentTarget.checked);
-    const onChangeShowMinimapPanel = (evt: Event) => setShowMinimap(evt.currentTarget.checked);
     const onChangeShowMetadataEditorPanel = (evt: Event) => setShowMetadataEditor(evt.currentTarget.checked);
     const onChangeShowCategoryTeaserChooserPanel = (evt: Event) => setShowCategoryTeaserChooser(evt.currentTarget.checked);
+    const onChangeShowMinimapPanel = (evt: Event) => setShowMinimap(evt.currentTarget.checked);
+    const onChangeInfoPanelMapType = (evt: Event) => setMinimapMapType(evt.currentTarget.value);
+    const onChangeMinimapZoom = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
 
     return (
         <ContentLayout>

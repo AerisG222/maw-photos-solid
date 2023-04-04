@@ -13,10 +13,7 @@ import Select from './components/Select';
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();
 
-    const onChangeTheme = (evt: Event) => {
-        evt.preventDefault();
-        setTheme(evt.currentTarget.value);
-    }
+    const onChangeTheme = (evt: Event) => setTheme(evt.currentTarget.value);
 
     return (
         <ContentLayout>
