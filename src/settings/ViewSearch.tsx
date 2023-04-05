@@ -17,15 +17,18 @@ import Toggle from './components/Toggle';
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettings();
-    const [gridSettings, { setShowTitles, setShowYears, setMargin: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useSearchGridViewSettings();
     const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
+    const [gridSettings, {
+        setShowTitles: setGridShowTitles,
+        setShowYears: setGridShowYears,
+        setMargin: setGridMargin,
+        setThumbnailSize: setGridThumbnailSize
+    }] = useSearchGridViewSettings();
 
     // page
     const onChangePageViewMode = (evt: Event) => setViewMode(evt.currentTarget.value);
 
     // grid
-    const onChangeGridShowTitles = (evt: Event) => setShowTitles(evt.currentTarget.value);
-    const onChangeGridShowYears = (evt: Event) => setShowYears(evt.currentTarget.value);
     const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
     const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
@@ -43,8 +46,8 @@ const ViewSearch: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <Toggle title="Show Category Titles" name="gridShowTitles" isSelected={gridSettings.showTitles} onChange={onChangeGridShowTitles} />
-                        <Toggle title="Show Category Years" name="detailShowYears" isSelected={gridSettings.showYears} onChange={onChangeGridShowYears} />
+                        <Toggle title="Show Category Titles" name="gridShowTitles" isSelected={gridSettings.showTitles} onChange={setGridShowTitles} />
+                        <Toggle title="Show Category Years" name="gridShowYears" isSelected={gridSettings.showYears} onChange={setGridShowYears} />
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>

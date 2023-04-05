@@ -24,9 +24,17 @@ import Toggle from './components/Toggle';
 
 const ViewPhotos: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
-    const [detailSettings, { setShowBreadcrumbs: setDetailShowBreadcrumbs, setShowPhotoList: setDetailShowPhotoList, setThumbnailSize: setDetailThumbnailSize }] = usePhotoDetailViewSettings();
-    const [gridSettings, { setMargin: setGridMargin, setShowBreadcrumbs: setGridBreadcrumbs, setThumbnailSize: setGridThumbnails }] = usePhotoGridViewSettings();
     const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettings();
+    const [detailSettings, {
+        setShowBreadcrumbs: setDetailShowBreadcrumbs,
+        setShowPhotoList: setDetailShowPhotoList,
+        setThumbnailSize: setDetailThumbnailSize
+    }] = usePhotoDetailViewSettings();
+    const [gridSettings, {
+        setMargin: setGridMargin,
+        setShowBreadcrumbs: setGridShowBreadcrumbs,
+        setThumbnailSize: setGridThumbnailSize
+    }] = usePhotoGridViewSettings();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -46,13 +54,10 @@ const ViewPhotos: Component = () => {
     const onChangeSlideshowDuration = (evt: Event) => setSlideshowDisplayDurationSeconds(evt.currentTarget.value);
 
     // grid
-    const onChangeGridShowBreadcrumbs = (evt: Event) => setGridBreadcrumbs(evt.currentTarget.value);
     const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
-    const onChangeGridThumbnail = (evt: Event) => setGridThumbnails(evt.currentTarget.value);
+    const onChangeGridThumbnail = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
     // detail
-    const onChangeDetailShowBreadcrumbs = (evt: Event) => setDetailShowBreadcrumbs(evt.currentTarget.value);
-    const onChangeDetailShowPhotoList = (evt: Event) => setDetailShowPhotoList(evt.currentTarget.value);
     const onChangeDetailThumbnailSize = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
     const onChangeDetailMiniMapZoomLevel = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
 
@@ -83,8 +88,8 @@ const ViewPhotos: Component = () => {
                     </Panel>
 
                     <Panel title="Detail View">
-                        <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={onChangeDetailShowBreadcrumbs} />
-                        <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={onChangeDetailShowPhotoList} />
+                        <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={setDetailShowBreadcrumbs} />
+                        <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={setDetailShowPhotoList} />
                         <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>
@@ -105,7 +110,7 @@ const ViewPhotos: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <Toggle title="Show Breadcrumbs" name="gridShowBreadcrumbs" isSelected={gridSettings.showBreadcrumbs} onChange={onChangeGridShowBreadcrumbs} />
+                        <Toggle title="Show Breadcrumbs" name="gridShowBreadcrumbs" isSelected={gridSettings.showBreadcrumbs} onChange={setGridShowBreadcrumbs} />
                         <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnail} />
                     </Panel>

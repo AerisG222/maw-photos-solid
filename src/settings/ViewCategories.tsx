@@ -20,15 +20,21 @@ import Toggle from './components/Toggle';
 const ViewCategories: Component = () => {
     const [filterSettings, { setTypeFilter }] = useCategoryFilterSettings();
     const [pageSettings, { setViewMode }] = useCategoryPageSettings();
-    const [gridSettings, { setShowTitles, setMargin: setGridMargin, setThumbnailSize: setGridThumbnailSize }] = useCategoryGridViewSettings();
-    const [listSettings, { setMargin: setListMargin , setThumbnailSize: setListThumbnailSize }] = useCategoryListViewSettings()
+    const [gridSettings, {
+        setShowTitles: setGridShowTitles,
+        setMargin: setGridMargin,
+        setThumbnailSize: setGridThumbnailSize
+    }] = useCategoryGridViewSettings();
+    const [listSettings, {
+        setMargin: setListMargin,
+        setThumbnailSize: setListThumbnailSize
+    }] = useCategoryListViewSettings()
 
     // page
     const onChangePageFilterType = (evt: Event) => setTypeFilter(evt.currentTarget.value);
     const onChangePageViewMode = (evt: Event) => setViewMode(evt.currentTarget.value);
 
     // grid
-    const onChangeGridShowTitles = (evt: Event) => setShowTitles(evt.currentTarget.value);
     const onChangeGridMargin = (evt: Event) => setGridMargin(evt.currentTarget.value);
     const onChangeGridThumbnailSize = (evt: Event) => setGridThumbnailSize(evt.currentTarget.value);
 
@@ -47,7 +53,7 @@ const ViewCategories: Component = () => {
                     </Panel>
 
                     <Panel title="Grid View">
-                        <Toggle title="Show Titles" name="gridTitles" isSelected={gridSettings.showTitles} onChange={onChangeGridShowTitles} />
+                        <Toggle title="Show Titles" name="gridTitles" isSelected={gridSettings.showTitles} onChange={setGridShowTitles} />
                         <RadioGroup title="Margins" groupName="gridMargins" itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={onChangeGridMargin} />
                         <RadioGroup title="Thumbnail Size" groupName="gridThumbnails" itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSizeId} onChange={onChangeGridThumbnailSize} />
                     </Panel>
