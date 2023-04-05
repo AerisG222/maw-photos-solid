@@ -9,7 +9,7 @@ import PrimaryNavLink from "./PrimaryNavLink";
 
 const PrimaryNav: Component = () => {
     return (
-        <div class="flex md:flex-col">
+        <div class="flex md:flex-col bg-secondary-content:12 border-r-1 border-r-primary:50%">
             <PrimaryNavLink route={categories} />
             <PrimaryNavLink route={search} />
             <PrimaryNavLink route={random} />
