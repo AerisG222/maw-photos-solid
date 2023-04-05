@@ -21,7 +21,7 @@ const ToolbarButton: Component<Props> = (props) => {
             title={props.name}
             onClick={[handleClick, null]}
         >
-            <span class={`text-7 ${props.icon}`} />
+            <span class={`text-6 ${props.icon}`} />
         </button>
     );
 };
