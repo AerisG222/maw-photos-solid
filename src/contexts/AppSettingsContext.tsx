@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 
 import { KEY_SETTINGS_APP, loadJson, saveJson } from './_storage';
 import { AppSettingsState, defaultAppSettings } from '../models/settings';
-import { ThemeIdType } from '../models/theme';
+import { ThemeIdType } from '../models/Theme';
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,

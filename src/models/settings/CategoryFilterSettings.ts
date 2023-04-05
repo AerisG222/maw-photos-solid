@@ -1,4 +1,4 @@
-import { CategoryTypeFilterIdType, defaultCategoryTypeFilter } from '../category-type-filter';
+import { CategoryTypeFilterIdType, defaultCategoryTypeFilter } from '../CategoryTypeFilter';
 
 export type CategoryFilterSettingsState = {
     readonly typeFilter: CategoryTypeFilterIdType;

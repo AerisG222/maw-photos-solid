@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { CategoryViewModeIdType } from '../models/category-view-mode';
+import { CategoryViewModeIdType } from '../models/CategoryViewMode';
 import { CategoryPageSettingsState, defaultCategoryPageSettings } from '../models/settings';
 import { KEY_SETTINGS_CATEGORY_PAGE, loadJson, saveJson } from './_storage';
 

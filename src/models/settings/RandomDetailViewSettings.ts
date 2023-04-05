@@ -1,4 +1,4 @@
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
 
 export type RandomDetailViewSettingsState = {
     showBreadcrumbs: boolean;

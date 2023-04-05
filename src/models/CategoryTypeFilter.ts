@@ -1,4 +1,4 @@
-import { KeyValuePair } from './key-value-pair';
+import { KeyValuePair } from './KeyValuePair';
 
 export type CategoryTypeFilterIdType = string;
 export type CategoryTypeFilter = KeyValuePair<CategoryTypeFilterIdType>;

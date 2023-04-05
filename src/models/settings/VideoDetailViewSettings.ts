@@ -1,5 +1,5 @@
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
-import { VideoSizeIdType, defaultVideoSize } from '../video-size';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { VideoSizeIdType, defaultVideoSize } from '../VideoSize';
 
 export type VideoDetailViewSettingsState = {
     showBreadcrumbs: boolean;

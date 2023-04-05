@@ -1,10 +1,10 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapTypeIdType } from '../models/map-type';
+import { MapTypeIdType } from '../models/MapType';
 import { RandomInfoPanelSettingsState, defaultRandomInfoPanelSettings } from '../models/settings';
 import { KEY_SETTINGS_RANDOM_INFO_PANEL, loadJson, saveJson } from './_storage';
-import { MapZoomLevelIdType } from '../models/map-zoom-level';
+import { MapZoomLevelIdType } from '../models/MapZoomLevel';
 
 export type RandomInfoPanelSettingsContextValue = [
     state: RandomInfoPanelSettingsState,

@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { PhotoViewModeIdType } from '../models/photo-view-mode';
+import { PhotoViewModeIdType } from '../models/PhotoViewMode';
 import { PhotoPageSettingsState, defaultPhotoPageSettings } from '../models/settings';
 import { KEY_SETTINGS_PHOTO_PAGE, loadJson, saveJson } from './_storage';
 

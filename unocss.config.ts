@@ -5,7 +5,7 @@ import { presetIcons } from '@unocss/preset-icons';
 import { presetDaisy } from 'unocss-preset-daisy';
 
 import { appRoutes } from './src/routes';
-import { allThemes } from './src/models/theme';
+import { allThemes } from './src/models/Theme';
 
 export default defineConfig<Theme>({
     presets: [

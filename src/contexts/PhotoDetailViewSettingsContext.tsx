@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { PhotoDetailViewSettingsState, defaultPhotoDetailViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/thumbnail-size';
+import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
 import { KEY_SETTINGS_PHOTO_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type PhotoDetailViewSettingsContextValue = [

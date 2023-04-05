@@ -1,4 +1,4 @@
-import { ThemeIdType, defaultTheme } from '../theme';
+import { ThemeIdType, defaultTheme } from '../Theme';
 
 export type AppSettingsState = {
     readonly theme: ThemeIdType;

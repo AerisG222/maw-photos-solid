@@ -1,4 +1,4 @@
-import { CategoryViewModeIdType, defaultCategoryViewMode } from '../category-view-mode';
+import { CategoryViewModeIdType, defaultCategoryViewMode } from '../CategoryViewMode';
 
 export type CategoryPageSettingsState = {
     readonly viewMode: CategoryViewModeIdType;

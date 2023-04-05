@@ -2,10 +2,10 @@ import { Component } from "solid-js";
 
 import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
 import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
-import { allVideoSizes } from '../models/video-size';
-import { allThumbnailSizes } from '../models/thumbnail-size';
-import { allMapTypes } from '../models/map-type';
-import { allMapZoomLevels } from '../models/map-zoom-level';
+import { allVideoSizes } from '../models/VideoSize';
+import { allThumbnailSizes } from '../models/ThumbnailSize';
+import { allMapTypes } from '../models/MapType';
+import { allMapZoomLevels } from '../models/MapZoomLevel';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Panel from './components/Panel';

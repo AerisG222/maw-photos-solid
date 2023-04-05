@@ -1,5 +1,5 @@
-import { MapTypeIdType, defaultMapType } from '../map-type';
-import { MapZoomLevelIdType, defaultMapZoomLevel } from '../map-zoom-level';
+import { MapTypeIdType, defaultMapType } from '../MapType';
+import { MapZoomLevelIdType, defaultMapZoomLevel } from '../MapZoomLevel';
 
 export type VideoInfoPanelSettingsState = {
     expandInfoPanel: boolean;

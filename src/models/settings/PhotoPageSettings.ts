@@ -1,4 +1,4 @@
-import { PhotoViewModeIdType, defaultPhotoViewMode } from '../photo-view-mode';
+import { PhotoViewModeIdType, defaultPhotoViewMode } from '../PhotoViewMode';
 
 export type PhotoPageSettingsState = {
     readonly viewMode: PhotoViewModeIdType;

@@ -1,9 +1,9 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MarginIdType } from '../models/margin';
+import { MarginIdType } from '../models/Margin';
 import { CategoryListViewSettingsState, defaultCategoryListViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/thumbnail-size';
+import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
 import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson,saveJson } from './_storage';
 
 export type CategoryListViewSettingsContextValue = [

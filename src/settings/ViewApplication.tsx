@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 
 import { useAppSettings } from '../contexts/AppSettingsContext';
-import { allThemes } from '../models/theme';
+import { allThemes } from '../models/Theme';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';

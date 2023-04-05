@@ -1,9 +1,9 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MarginIdType } from '../models/margin';
+import { MarginIdType } from '../models/Margin';
 import { SearchListViewSettingsState, defaultSearchListViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/thumbnail-size';
+import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
 import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from './_storage';
 
 export type SearchListViewSettingsContextValue = [

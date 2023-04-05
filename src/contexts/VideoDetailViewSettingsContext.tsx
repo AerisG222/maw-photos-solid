@@ -2,8 +2,8 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { VideoDetailViewSettingsState, defaultVideoDetailViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/thumbnail-size';
-import { VideoSizeIdType } from '../models/video-size';
+import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
+import { VideoSizeIdType } from '../models/VideoSize';
 import { KEY_SETTINGS_VIDEO_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type VideoDetailViewSettingsContextValue = [

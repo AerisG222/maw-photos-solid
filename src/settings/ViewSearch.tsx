@@ -3,9 +3,9 @@ import { Component } from "solid-js";
 import { useSearchPageSettings } from '../contexts/SearchPageSettingsContext';
 import { useSearchGridViewSettings } from '../contexts/SearchGridViewSettingsContext';
 import { useSearchListViewSettings } from '../contexts/SearchListViewSettingsContext';
-import { allThumbnailSizes } from '../models/thumbnail-size';
-import { allMargins } from '../models/margin';
-import { allCategoryViewModes } from '../models/category-view-mode';
+import { allThumbnailSizes } from '../models/ThumbnailSize';
+import { allMargins } from '../models/Margin';
+import { allCategoryViewModes } from '../models/CategoryViewMode';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Panel from './components/Panel';

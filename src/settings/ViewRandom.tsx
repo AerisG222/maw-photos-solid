@@ -4,12 +4,12 @@ import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
 import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
 import { useRandomDetailViewSettings } from '../contexts/RandomDetailViewSettingsContext';
 import { useRandomGridViewSettings } from '../contexts/RandomGridViewSettingsContext';
-import { allRandomViewModes } from '../models/photo-view-mode';
-import { allMapZoomLevels } from '../models/map-zoom-level';
-import { allMapTypes } from '../models/map-type';
-import { allThumbnailSizes } from '../models/thumbnail-size';
-import { allMargins } from '../models/margin';
-import { allSlideshowDurations } from '../models/slideshow-duration';
+import { allRandomViewModes } from '../models/PhotoViewMode';
+import { allMapZoomLevels } from '../models/MapZoomLevel';
+import { allMapTypes } from '../models/MapType';
+import { allThumbnailSizes } from '../models/ThumbnailSize';
+import { allMargins } from '../models/Margin';
+import { allSlideshowDurations } from '../models/SlideshowDuration';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import Panel from './components/Panel';

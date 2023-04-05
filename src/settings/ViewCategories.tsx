@@ -4,10 +4,10 @@ import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsCon
 import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
 import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 import { useCategoryListViewSettings } from '../contexts/CategoryListViewSettingsContext';
-import { allCategoryTypeFilters } from '../models/category-type-filter';
-import { allCategoryViewModes } from '../models/category-view-mode';
-import { allMargins } from '../models/margin';
-import { allThumbnailSizes } from '../models/thumbnail-size';
+import { allCategoryTypeFilters } from '../models/CategoryTypeFilter';
+import { allCategoryViewModes } from '../models/CategoryViewMode';
+import { allMargins } from '../models/Margin';
+import { allThumbnailSizes } from '../models/ThumbnailSize';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';

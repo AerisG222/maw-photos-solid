@@ -1,5 +1,5 @@
-import { MarginIdType, defaultMargin } from '../margin';
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
+import { MarginIdType, defaultMargin } from '../Margin';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
 
 export type PhotoGridViewSettingsState = {
     margin: MarginIdType;
