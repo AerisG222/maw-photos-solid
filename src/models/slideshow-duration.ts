@@ -18,4 +18,4 @@ export const allSlideshowDurations: SlideshowDuration[] = [
     { id: 60, name: "60" },
 ];
 
-export const defaultSlideshowDurationId: SlideshowDurationIdType = 2;
+export const defaultSlideshowDuration: SlideshowDurationIdType = 2;

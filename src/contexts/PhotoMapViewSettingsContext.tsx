@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapType } from '../models/map-type';
+import { MapTypeIdType } from '../models/map-type';
 import { PhotoMapViewSettingsState, defaultPhotoMapViewSettings } from '../models/settings';
 import { KEY_SETTINGS_PHOTO_VIEW_MAP, loadJson, saveJson } from './_storage';
 import { MapZoomLevelIdType } from '../models/map-zoom-level';
@@ -9,7 +9,7 @@ import { MapZoomLevelIdType } from '../models/map-zoom-level';
 export type PhotoMapViewSettingsContextValue = [
     state: PhotoMapViewSettingsState,
     actions: {
-        setMapType: (mapType: MapType) => void;
+        setMapType: (mapType: MapTypeIdType) => void;
         setZoom: (zoom: MapZoomLevelIdType) => void;
     }
 ];
@@ -25,8 +25,8 @@ const PhotoMapViewSettingsContext = createContext<PhotoMapViewSettingsContextVal
 export const PhotoMapSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMapType = (mapType: MapType) => updateState({mapTypeId: mapType});
-    const setZoom = (zoom: MapZoomLevelIdType) => updateState({zoomId: zoom});
+    const setMapType = (mapType: MapTypeIdType) => updateState({mapType: mapType});
+    const setZoom = (zoom: MapZoomLevelIdType) => updateState({zoom: zoom});
 
     const updateState = (update: Partial<PhotoMapViewSettingsState>) => {
         setState(update);

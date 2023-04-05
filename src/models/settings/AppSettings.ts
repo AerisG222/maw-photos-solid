@@ -1,9 +1,9 @@
-import { ThemeIdType, defaultThemeId } from '../theme';
+import { ThemeIdType, defaultTheme } from '../theme';
 
 export type AppSettingsState = {
-    readonly themeId: ThemeIdType;
+    readonly theme: ThemeIdType;
 };
 
 export const defaultAppSettings: AppSettingsState = {
-    themeId: defaultThemeId
+    theme: defaultTheme
 };

@@ -8,4 +8,4 @@ export const allCategoryViewModes: CategoryViewMode[] = [
     { id: 'list', name: 'List' },
 ];
 
-export const defaultCategoryViewModeId: CategoryViewModeIdType = 'grid';
+export const defaultCategoryViewMode: CategoryViewModeIdType = 'grid';

@@ -10,4 +10,4 @@ export const allMargins: Margin[] = [
     { id: 'cozy',    name: 'Cozy' },
 ];
 
-export const defaultMarginId: MarginIdType = "compact";
+export const defaultMargin: MarginIdType = "compact";

@@ -10,4 +10,4 @@ export const allThumbnailSizes: ThumbnailSize[] = [
     { id: "tiny",      name: 'Tiny' },
 ];
 
-export const defaultThumbnailSizeId: ThumbnailSizeIdType = 'default';
+export const defaultThumbnailSize: ThumbnailSizeIdType = 'default';

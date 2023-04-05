@@ -13,15 +13,13 @@ import Toolbar from './Toolbar';
 const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettings();
 
-    const onChangeTheme = (evt: Event) => setTheme(evt.currentTarget.value);
-
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Application">
                 <PanelContainer>
                     <Panel title="General">
-                        <Select title="Theme" itemArray={allThemes} selectedValue={appSettings.themeId} onChange={onChangeTheme} />
+                        <Select title="Theme" itemArray={allThemes} selectedValue={appSettings.theme} onChange={setTheme} />
                     </Panel>
                 </PanelContainer>
             </MainContent>

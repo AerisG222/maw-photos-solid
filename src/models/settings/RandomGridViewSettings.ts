@@ -1,14 +1,14 @@
-import { MarginIdType, defaultMarginId } from '../margin';
-import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
+import { MarginIdType, defaultMargin } from '../margin';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
 
 export type RandomGridViewSettingsState = {
     marginId: MarginIdType;
     showBreadcrumbs: boolean;
-    thumbnailSizeId: ThumbnailSizeIdType;
+    thumbnailSize: ThumbnailSizeIdType;
 };
 
 export const defaultRandomGridViewSettings: RandomGridViewSettingsState = {
-    marginId: defaultMarginId,
+    marginId: defaultMargin,
     showBreadcrumbs: true,
-    thumbnailSizeId: defaultThumbnailSizeId,
+    thumbnailSize: defaultThumbnailSize,
 };

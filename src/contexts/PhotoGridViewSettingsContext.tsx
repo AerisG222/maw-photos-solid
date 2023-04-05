@@ -1,16 +1,16 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { Margin } from '../models/margin';
+import { MarginIdType } from '../models/margin';
 import { PhotoGridViewSettingsState, defaultPhotoGridViewSettings } from '../models/settings';
-import { ThumbnailSize } from '../models/thumbnail-size';
+import { ThumbnailSizeIdType } from '../models/thumbnail-size';
 import { KEY_SETTINGS_PHOTO_VIEW_GRID, loadJson, saveJson } from './_storage';
 
 export type PhotoGridViewSettingsContextValue = [
     state: PhotoGridViewSettingsState,
     actions: {
-        setMargin: (margin: Margin) => void;
-        setThumbnailSize: (thumbnailSize: ThumbnailSize) => void;
+        setMargin: (margin: MarginIdType) => void;
+        setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
     }
 ];
@@ -27,8 +27,8 @@ const PhotoGridViewSettingsContext = createContext<PhotoGridViewSettingsContextV
 export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => updateState({marginId: margin});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
+    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
 
     const updateState = (update: Partial<PhotoGridViewSettingsState>) => {

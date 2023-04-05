@@ -15,8 +15,8 @@ export type VideoInfoPanelSettingsContextValue = [
         setShowComments: (showComments: boolean) => void;
         setShowMetadataEditor: (showMetadataEditor: boolean) => void;
         setShowMinimap: (showMinimap: boolean) => void;
-        setMinimapZoom: (minimapZoomId: MapZoomLevelIdType) => void;
-        setMinimapMapType: (minimapMapTypeId: MapTypeIdType) => void;
+        setMinimapZoom: (minimapZoom: MapZoomLevelIdType) => void;
+        setMinimapMapType: (minimapMapType: MapTypeIdType) => void;
     }
 ];
 
@@ -43,8 +43,8 @@ export const VideoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const setShowComments = (showComments: boolean) => updateState({showComments: showComments});
     const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
     const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
-    const setMinimapZoom = (minimapZoomId: MapZoomLevelIdType) => updateState({minimapZoomId: minimapZoomId});
-    const setMinimapMapType = (minimapMapTypeId: MapTypeIdType) => updateState({minimapMapTypeId: minimapMapTypeId});
+    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom: minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType: minimapMapType});
 
     const updateState = (update: Partial<VideoInfoPanelSettingsState>) => {
         setState(update);

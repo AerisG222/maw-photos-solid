@@ -1,14 +1,14 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { PhotoViewMode } from '../models/photo-view-mode';
+import { PhotoViewMode, PhotoViewModeIdType } from '../models/photo-view-mode';
 import { RandomPageSettingsState, defaultRandomPageSettings } from '../models/settings';
 import { KEY_SETTINGS_RANDOM_PAGE, loadJson, saveJson } from './_storage';
 
 export type RandomPageSettingsContextValue = [
     state: RandomPageSettingsState,
     actions: {
-        setViewMode: (viewMode: PhotoViewMode) => void;
+        setViewMode: (viewMode: PhotoViewModeIdType) => void;
         setSlideshowDisplayDurationSeconds: (slideshowDurationSeconds: number) => void;
     }
 ];
@@ -24,7 +24,7 @@ const RandomPageSettingsContext = createContext<RandomPageSettingsContextValue>(
 export const RandomPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setViewMode = (viewMode: PhotoViewMode) => updateState({viewMode: viewMode});
+    const setViewMode = (viewMode: PhotoViewModeIdType) => updateState({viewMode: viewMode});
     const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) => updateState({slideshowDisplayDurationSeconds: slideshowDisplayDurationSeconds});
 
     const updateState = (update: Partial<RandomPageSettingsState>) => {

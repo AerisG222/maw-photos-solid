@@ -8,4 +8,4 @@ export const allVideoSizes: VideoSize[] = [
     { id: 'large', name: 'Large' },
 ];
 
-export const defaultVideoSizeId: VideoSizeIdType = 'large';
+export const defaultVideoSize: VideoSizeIdType = 'large';

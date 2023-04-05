@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapType, MapTypeIdType } from '../models/map-type';
+import { MapTypeIdType } from '../models/map-type';
 import { PhotoInfoPanelSettingsState, defaultPhotoInfoPanelSettings } from '../models/settings';
 import { KEY_SETTINGS_PHOTO_INFO_PANEL, loadJson, saveJson } from './_storage';
 import { MapZoomLevelIdType } from '../models/map-zoom-level';
@@ -52,8 +52,8 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
     const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
     const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
-    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoomId: minimapZoom});
-    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapTypeId: minimapMapType});
+    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom: minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType: minimapMapType});
 
     const updateState = (update: Partial<PhotoInfoPanelSettingsState>) => {
         setState(update);

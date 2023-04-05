@@ -25,4 +25,4 @@ export const allThemes: Theme[] = [
     { id: 'winter',    name: 'Winter' },
 ];
 
-export const defaultThemeId: ThemeIdType = "dark";
+export const defaultTheme: ThemeIdType = "dark";

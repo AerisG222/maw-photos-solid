@@ -1,12 +1,12 @@
-import { MarginIdType, defaultMarginId } from '../margin';
-import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
+import { MarginIdType, defaultMargin } from '../margin';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
 
 export type CategoryListViewSettingsState = {
-    readonly marginId: MarginIdType;
-    readonly thumbnailSizeId: ThumbnailSizeIdType;
+    readonly margin: MarginIdType;
+    readonly thumbnailSize: ThumbnailSizeIdType;
 };
 
 export const defaultCategoryListViewSettings: CategoryListViewSettingsState = {
-    marginId: defaultMarginId,
-    thumbnailSizeId: defaultThumbnailSizeId,
+    margin: defaultMargin,
+    thumbnailSize: defaultThumbnailSize,
 };

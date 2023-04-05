@@ -6,17 +6,17 @@ export type Props<T> = {
     groupName: string,
     itemArray: KeyValuePair<T>[],
     selectedValue: T,
-    onChange: (evt: Event) => void
+    onChange: (value: string) => void
 };
 
 const RadioGroup: Component<Props<string|number>> = (props) => {
     return(
         <>
             <h3>{props.title}</h3>
-            <For each={props.itemArray}>{(item, i) =>
+            <For each={props.itemArray}>{ item =>
                 <div class="form-control">
                     <label class="label cursor-pointer justify-start">
-                        <input type="radio" name={props.groupName} value={item.id} checked={item.id === props.selectedValue} class="radio mr-3" onChange={evt => props.onChange(evt)} />
+                        <input type="radio" name={props.groupName} value={item.id} checked={item.id === props.selectedValue} class="radio mr-3" onChange={evt => props.onChange(evt.currentTarget.value)} />
                         <span class="label-text">{item.name}</span>
                     </label>
                 </div>

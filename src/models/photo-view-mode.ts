@@ -17,5 +17,5 @@ export const allRandomViewModes: PhotoViewMode[] = [
     { id: 'grid',       name: 'Grid' },
 ];
 
-export const defaultPhotoViewModeId: PhotoViewModeIdType = "grid";
-export const defaultRandomViewModeId: PhotoViewModeIdType = "grid";
+export const defaultPhotoViewMode: PhotoViewModeIdType = "grid";
+export const defaultRandomViewMode: PhotoViewModeIdType = "grid";

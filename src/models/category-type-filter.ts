@@ -9,4 +9,4 @@ export const allCategoryTypeFilters: CategoryTypeFilter[] = [
     { id: 'videos', name: 'Videos' },
 ];
 
-export const defaultCategoryTypeFilterId: CategoryTypeFilterIdType = 'all';
+export const defaultCategoryTypeFilter: CategoryTypeFilterIdType = 'all';

@@ -28,4 +28,4 @@ export const allMapZoomLevels: MapZoomLevel[] = [
     { id: 22, name: '22' },
 ];
 
-export const defaultMapZoomLevelId: MapZoomLevelIdType = 10;
+export const defaultMapZoomLevel: MapZoomLevelIdType = 10;

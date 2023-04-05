@@ -1,16 +1,16 @@
-import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
-import { VideoSizeIdType, defaultVideoSizeId } from '../video-size';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
+import { VideoSizeIdType, defaultVideoSize } from '../video-size';
 
 export type VideoDetailViewSettingsState = {
     showBreadcrumbs: boolean;
-    thumbnailSizeId: ThumbnailSizeIdType;
+    thumbnailSize: ThumbnailSizeIdType;
     showVideoList: boolean;
-    videoSizeId: VideoSizeIdType;
+    videoSize: VideoSizeIdType;
 };
 
 export const defaultVideoDetailViewSettings: VideoDetailViewSettingsState = {
     showBreadcrumbs: true,
-    thumbnailSizeId: defaultThumbnailSizeId,
+    thumbnailSize: defaultThumbnailSize,
     showVideoList: true,
-    videoSizeId: defaultVideoSizeId,
+    videoSize: defaultVideoSize,
 };

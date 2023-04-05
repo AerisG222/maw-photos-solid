@@ -1,5 +1,5 @@
-import { MapTypeIdType, defaultMapTypeId } from '../map-type';
-import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
+import { MapTypeIdType, defaultMapType } from '../map-type';
+import { MapZoomLevelIdType, defaultMapZoomLevel } from '../map-zoom-level';
 
 export type RandomInfoPanelSettingsState = {
     expandInfoPanel: boolean;
@@ -11,8 +11,8 @@ export type RandomInfoPanelSettingsState = {
     showMetadataEditor: boolean;
     showHistogram: boolean;
     showMinimap: boolean;
-    minimapMapTypeId: MapTypeIdType;
-    minimapZoomId: MapZoomLevelIdType;
+    minimapMapType: MapTypeIdType;
+    minimapZoom: MapZoomLevelIdType;
 };
 
 export const defaultRandomInfoPanelSettings: RandomInfoPanelSettingsState = {
@@ -25,6 +25,6 @@ export const defaultRandomInfoPanelSettings: RandomInfoPanelSettingsState = {
     showHistogram: false,
     showMetadataEditor: false,
     showMinimap: false,
-    minimapMapTypeId: defaultMapTypeId,
-    minimapZoomId: defaultMapZoomLevelId,
+    minimapMapType: defaultMapType,
+    minimapZoom: defaultMapZoomLevel,
 };

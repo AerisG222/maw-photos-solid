@@ -10,4 +10,4 @@ export const allMapTypes: MapType[] = [
     { id: 'terrain',   name: 'Terrain' },
 ];
 
-export const defaultMapTypeId: MapTypeIdType = 'satellite';
+export const defaultMapType: MapTypeIdType = 'satellite';

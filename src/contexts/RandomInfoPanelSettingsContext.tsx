@@ -52,8 +52,8 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
     const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
     const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
-    const setMinimapZoom = (minimapZoomId: MapZoomLevelIdType) => updateState({minimapZoomId: minimapZoomId});
-    const setMinimapMapType = (minimapMapTypeId: MapTypeIdType) => updateState({minimapMapTypeId: minimapMapTypeId});
+    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom: minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType: minimapMapType});
 
     const updateState = (update: Partial<RandomInfoPanelSettingsState>) => {
         setState(update);

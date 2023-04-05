@@ -9,8 +9,8 @@ import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from './_storage';
 export type SearchListViewSettingsContextValue = [
     state: SearchListViewSettingsState,
     actions: {
-        setMargin: (marginId: MarginIdType) => void;
-        setThumbnailSize: (thumbnailSizeId: ThumbnailSizeIdType) => void;
+        setMargin: (margin: MarginIdType) => void;
+        setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
     }
 ];
 
@@ -25,8 +25,8 @@ const SearchListViewSettingsContext = createContext<SearchListViewSettingsContex
 export const SearchListSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (marginId: MarginIdType) => updateState({marginId: marginId});
-    const setThumbnailSize = (thumbnailSizeId: ThumbnailSizeIdType) => updateState({thumbnailSizeId: thumbnailSizeId});
+    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
 
     const updateState = (update: Partial<SearchListViewSettingsState>) => {
         setState(update);

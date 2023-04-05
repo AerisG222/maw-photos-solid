@@ -1,16 +1,16 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { Margin } from '../models/margin';
+import { MarginIdType } from '../models/margin';
 import { CategoryListViewSettingsState, defaultCategoryListViewSettings } from '../models/settings';
-import { ThumbnailSize } from '../models/thumbnail-size';
+import { ThumbnailSizeIdType } from '../models/thumbnail-size';
 import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson,saveJson } from './_storage';
 
 export type CategoryListViewSettingsContextValue = [
     state: CategoryListViewSettingsState,
     actions: {
-        setMargin: (margin: Margin) => void;
-        setThumbnailSize: (thumbnailSize: ThumbnailSize) => void;
+        setMargin: (margin: MarginIdType) => void;
+        setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
     }
 ];
 
@@ -25,8 +25,8 @@ const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsCo
 export const CategoryListSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: Margin) => updateState({margin: margin});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSize) => updateState({thumbnailSize: thumbnailSize});
+    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
 
     const updateState = (update: Partial<CategoryListViewSettingsState>) => {
         setState(update);

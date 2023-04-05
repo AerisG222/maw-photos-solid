@@ -8,7 +8,7 @@ import { ThemeIdType } from '../models/theme';
 export type AppSettingsContextValue = [
     state: AppSettingsState,
     actions: {
-        setTheme: (themeId: string) => void;
+        setTheme: (theme: string) => void;
     }
 ];
 
@@ -22,8 +22,8 @@ const AppSettingsContext = createContext<AppSettingsContextValue>([
 export const AppSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setTheme = (themeID: ThemeIdType) => {
-        setState({themeId: themeID});
+    const setTheme = (theme: ThemeIdType) => {
+        setState({theme: theme});
         saveState(state);
     };
 

@@ -1,14 +1,14 @@
-import { MarginIdType, defaultMarginId } from '../margin';
-import { ThumbnailSizeIdType, defaultThumbnailSizeId } from '../thumbnail-size';
+import { MarginIdType, defaultMargin } from '../margin';
+import { ThumbnailSizeIdType, defaultThumbnailSize } from '../thumbnail-size';
 
 export type CategoryGridViewSettingsState = {
-    readonly marginId: MarginIdType;
+    readonly margin: MarginIdType;
     readonly showTitles: boolean;
-    readonly thumbnailSizeId: ThumbnailSizeIdType;
+    readonly thumbnailSize: ThumbnailSizeIdType;
 };
 
 export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
-    marginId: defaultMarginId,
+    margin: defaultMargin,
     showTitles: true,
-    thumbnailSizeId: defaultThumbnailSizeId,
+    thumbnailSize: defaultThumbnailSize,
 };

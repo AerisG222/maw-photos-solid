@@ -1,12 +1,12 @@
-import { MapTypeIdType, defaultMapTypeId } from '../map-type';
-import { MapZoomLevelIdType, defaultMapZoomLevelId } from '../map-zoom-level';
+import { MapTypeIdType, defaultMapType } from '../map-type';
+import { MapZoomLevelIdType, defaultMapZoomLevel } from '../map-zoom-level';
 
 export type PhotoMapViewSettingsState = {
-    mapTypeId: MapTypeIdType;
-    zoomId: MapZoomLevelIdType;
+    mapType: MapTypeIdType;
+    zoom: MapZoomLevelIdType;
 };
 
 export const defaultPhotoMapViewSettings: PhotoMapViewSettingsState = {
-    mapTypeId: defaultMapTypeId,
-    zoomId: defaultMapZoomLevelId,
+    mapType: defaultMapType,
+    zoom: defaultMapZoomLevel,
 };

@@ -1,9 +1,9 @@
-import { CategoryViewModeIdType, defaultCategoryViewModeId } from '../category-view-mode';
+import { CategoryViewModeIdType, defaultCategoryViewMode } from '../category-view-mode';
 
 export type SearchPageSettingsState = {
-    readonly viewModeId: CategoryViewModeIdType;
+    readonly viewMode: CategoryViewModeIdType;
 };
 
 export const defaultSearchPageSettings: SearchPageSettingsState = {
-    viewModeId: defaultCategoryViewModeId,
+    viewMode: defaultCategoryViewMode,
 };

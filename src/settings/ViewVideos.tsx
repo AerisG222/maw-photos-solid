@@ -35,24 +35,16 @@ const ViewVideos: Component = () => {
         setMinimapMapType
     }] = useVideoInfoPanelSettings();
 
-    // detail
-    const onChangeDetailVideoSize = (evt: Event) => setDetailVideoSize(evt.currentTarget.value);
-    const onChangeDetailThumbnailSize = (evt: Event) => setDetailThumbnailSize(evt.currentTarget.value);
-
-    // infopanel
-    const onChangeInfoPanelMapType = (evt: Event) => setMinimapMapType(evt.currentTarget.value);
-    const onChangeMinimapZoom = (evt: Event) => setMinimapZoom(evt.currentTarget.value);
-
     return (
         <ContentLayout>
             <Toolbar />
             <MainContent title="Settings - Videos">
                 <PanelContainer>
                     <Panel title="Video Page">
-                        <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSizeId} onChange={onChangeDetailVideoSize} />
+                        <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSize} onChange={setDetailVideoSize} />
                         <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={setDetailShowBreadcrumbs} />
                         <Toggle title="Show Video List" name="detailShowPhotoList" isSelected={detailSettings.showVideoList} onChange={setDetailShowVideoList} />
-                        <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSizeId} onChange={onChangeDetailThumbnailSize} />
+                        <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />
 
                         <h3 class="mt-4">Info Panel</h3>
                         <div>
@@ -64,8 +56,8 @@ const ViewVideos: Component = () => {
                             <Checkbox title="Show Category Teaser Chooser Panel" name="showCategoryTeaserChooserPanel" isSelected={infoPanelSettings.showCategoryTeaserChooser} onChange={setShowCategoryTeaserChooser} />
                         </div>
 
-                        <RadioGroup title="Minimap Type" groupName="detailMinimapType" itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapTypeId} onChange={onChangeInfoPanelMapType} />
-                        <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoomId} onChange={onChangeMinimapZoom} />
+                        <RadioGroup title="Minimap Type" groupName="detailMinimapType" itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapType} onChange={setMinimapMapType} />
+                        <Select title="Minimap Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoom} onChange={val => setMinimapZoom(parseInt(val))} />
                     </Panel>
                 </PanelContainer>
             </MainContent>
