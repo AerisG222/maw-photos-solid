@@ -25,8 +25,8 @@ export default defineConfig<Theme>({
     ],
     shortcuts: [
         {
-            head1: 'font-bold text-xl mb-3',
-            head2: 'font-bold text-lg mb-3',
+            head1: 'font-bold text-xl mb-3 color-primary',
+            head2: 'font-bold text-lg mb-3 color-primary',
         }
     ]
 });
