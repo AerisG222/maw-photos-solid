@@ -1,14 +1,17 @@
 import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
+
 import { authGuard } from '../auth/auth';
-import { categoriesPhotosGrid } from './_routes';
+import { getPathForViewMode } from './_routes';
+import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
 
 const PhotoCategories: Component = () => {
     authGuard();
 
+    const [settings] = usePhotoPageSettings();
     const navigate = useNavigate();
 
-    navigate(categoriesPhotosGrid.path);
+    navigate(getPathForViewMode(settings.viewMode));
 
     return (<></>);
 };

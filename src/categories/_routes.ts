@@ -1,5 +1,6 @@
 import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
+import { equalsIgnoreCase } from '../models/Utils';
 
 export const categories: AppRouteDefinition = {
     icon: "i-ic-round-home",
@@ -27,3 +28,16 @@ export const categoriesRoutes = [
     categoriesGrid,
     categoriesList
 ];
+
+// todo (for all areas): try to consolidate view mode settings with the routes above
+export const getPathForViewMode = (mode: string): string => {
+    if(equalsIgnoreCase('grid', mode)) {
+        return categoriesGrid.path;
+    }
+
+    if(equalsIgnoreCase('list', mode)) {
+        return categoriesList.path;
+    }
+
+    return categoriesGrid.path;
+}

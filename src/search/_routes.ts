@@ -1,5 +1,6 @@
 import { lazy } from 'solid-js'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
+import { equalsIgnoreCase } from '../models/Utils'
 
 export const search: AppRouteDefinition = {
     icon: "i-ic-round-search",
@@ -27,3 +28,15 @@ export const searchRoutes = [
     searchGrid,
     searchList
 ];
+
+export const getPathForViewMode = (mode: string): string => {
+    if(equalsIgnoreCase('grid', mode)) {
+        return searchGrid.path;
+    }
+
+    if(equalsIgnoreCase('list', mode)) {
+        return searchList.path;
+    }
+
+    return searchGrid.path;
+}

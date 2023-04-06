@@ -1,6 +1,7 @@
 import { lazy } from 'solid-js'
 import { categories } from '../categories/_routes'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
+import { equalsIgnoreCase } from '../models/Utils'
 
 export const categoriesPhotos: AppRouteDefinition = {
     icon: undefined as string,
@@ -52,3 +53,27 @@ export const categoriesPhotosRoutes = [
     categoriesPhotosMap,
     categoriesPhotosBulkEdit
 ];
+
+export const getPathForViewMode = (mode: string): string => {
+    if(equalsIgnoreCase('grid', mode)) {
+        return categoriesPhotosGrid.path;
+    }
+
+    if(equalsIgnoreCase('detail', mode)) {
+        return categoriesPhotosDetail.path;
+    }
+
+    if(equalsIgnoreCase('fullscreen', mode)) {
+        return categoriesPhotosFullscreen.path;
+    }
+
+    if(equalsIgnoreCase('map', mode)) {
+        return categoriesPhotosMap.path;
+    }
+
+    if(equalsIgnoreCase('bulkEdit', mode)) {
+        return categoriesPhotosBulkEdit.path;
+    }
+
+    return categoriesPhotosGrid.path;
+}

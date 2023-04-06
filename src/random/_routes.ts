@@ -1,5 +1,6 @@
 import { lazy } from 'solid-js'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
+import { equalsIgnoreCase } from '../models/Utils'
 
 export const random: AppRouteDefinition = {
     icon: "i-ic-round-shuffle",
@@ -35,3 +36,19 @@ export const randomRoutes = [
     randomDetail,
     randomFullscreen
 ];
+
+export const getPathForViewMode = (mode: string): string => {
+    if(equalsIgnoreCase('grid', mode)) {
+        return randomGrid.path;
+    }
+
+    if(equalsIgnoreCase('detail', mode)) {
+        return randomDetail.path;
+    }
+
+    if(equalsIgnoreCase('fullscreen', mode)) {
+        return randomFullscreen.path;
+    }
+
+    return randomGrid.path;
+}

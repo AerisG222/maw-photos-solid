@@ -1,14 +1,16 @@
 import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
-import { randomGrid } from './_routes';
+import { getPathForViewMode } from './_routes';
+import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
 
 const Random: Component = () => {
     authGuard();
 
+    const [settings] = useRandomPageSettings();
     const navigate = useNavigate();
 
-    navigate(randomGrid.path);
+    navigate(getPathForViewMode(settings.viewMode));
 
     return (<></>);
 };
