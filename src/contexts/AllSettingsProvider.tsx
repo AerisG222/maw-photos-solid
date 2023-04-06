@@ -17,6 +17,7 @@ import { SearchListSettingsProvider } from './SearchListViewSettingsContext';
 import { SearchPageSettingsProvider } from './SearchPageSettingsContext';
 import { VideoDetailSettingsProvider } from './VideoDetailViewSettingsContext';
 import { VideoInfoPanelSettingsProvider } from './VideoInfoPanelSettingsContext';
+import { RandomPageSettingsProvider } from './RandomPageSettingsContext';
 
 export const AllSettingsProvider: ParentComponent = (props) => {
     return (
@@ -30,6 +31,7 @@ export const AllSettingsProvider: ParentComponent = (props) => {
         <PhotoInfoPanelSettingsProvider>
         <PhotoMapSettingsProvider>
         <PhotoPageSettingsProvider>
+        <RandomPageSettingsProvider>
         <RandomDetailSettingsProvider>
         <RandomGridSettingsProvider>
         <SearchGridSettingsProvider>
@@ -45,6 +47,7 @@ export const AllSettingsProvider: ParentComponent = (props) => {
         </SearchGridSettingsProvider>
         </RandomGridSettingsProvider>
         </RandomDetailSettingsProvider>
+        </RandomPageSettingsProvider>
         </PhotoPageSettingsProvider>
         </PhotoMapSettingsProvider>
         </PhotoInfoPanelSettingsProvider>
