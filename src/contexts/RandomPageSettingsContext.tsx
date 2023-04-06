@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { PhotoViewMode, PhotoViewModeIdType } from '../models/PhotoViewMode';
+import { PhotoViewModeIdType } from '../models/PhotoViewMode';
 import { RandomPageSettingsState, defaultRandomPageSettings } from '../models/settings';
 import { KEY_SETTINGS_RANDOM_PAGE, loadJson, saveJson } from './_storage';
 
