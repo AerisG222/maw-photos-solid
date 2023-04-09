@@ -1,11 +1,12 @@
 import { createQuery } from '@tanstack/solid-query';
 import { accessToken } from '../auth/auth';
+import { PhotoCategory } from '../models/api/PhotoCategory';
+import { ApiCollection } from '../models/api/ApiCollection';
 
 export const getPhotoCategories = () => {
-    return createQuery(
+    return createQuery<ApiCollection<PhotoCategory>>(
         () => ["photo_categories"],
         () => queryMawApi('photo-categories'),
-
     );
 }
 
