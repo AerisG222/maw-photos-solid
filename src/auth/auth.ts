@@ -3,11 +3,13 @@ import { useNavigate } from '@solidjs/router';
 import { Log, User, UserManager, UserManagerSettings } from 'oidc-client-ts';
 
 export const [user, setUser] = createSignal(undefined as User|undefined);
+export const accessToken = () => user()?.access_token;
 
 const authSettings: UserManagerSettings = {
     authority: import.meta.env.VITE_AUTH_AUTHORITY,
     client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
-    redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI
+    redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI,
+    scope: "maw_api"
 }
 
 Log.setLogger(console);
