@@ -16,7 +16,7 @@ const ToolbarButton: Component<Props> = (props) => {
 
     return (
         <button
-            class="px-3 py-1 hover:text-red-7 hover:bg-red-1"
+            class="px-3 py-1 hover:bg-accent hover:color-accentContent"
             classList={{"rotate-90": props.rotate90}}
             title={props.name}
             onClick={[handleClick, null]}

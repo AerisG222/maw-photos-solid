@@ -1,9 +1,13 @@
 import { Component } from 'solid-js';
+
 import ToolbarButton from '../components/toolbar/ToolbarButton';
+import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 
 const GridToolbar: Component = () => {
+    const [settings, { setShowTitles }] = useCategoryGridViewSettings();
+
     const onToggleTitles = () => {
-        console.log("titles");
+        setShowTitles(!settings.showTitles);
     };
 
     const onToggleThumbnailSize = () => {
