@@ -2,7 +2,7 @@ import { Component } from 'solid-js';
 
 const ToolbarDivider: Component = () => {
     return (
-        <hr class="my-3" />
+        <div class="divider px-1" />
     );
 };
 
