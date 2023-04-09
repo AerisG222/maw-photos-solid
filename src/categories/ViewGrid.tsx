@@ -1,4 +1,4 @@
-import { Component, Suspense } from "solid-js";
+import { Component, For, Suspense } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { getPhotoCategories } from '../api/api';
@@ -7,6 +7,7 @@ import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
+import YearGrid from './components/YearGrid';
 
 const GridView: Component = () => {
     authGuard();
@@ -15,7 +16,8 @@ const GridView: Component = () => {
 
     const photoCategories = () => photoCategoriesQuery?.data;
     const photoCategoriesCount = () => { return photoCategories()?.count };
-    const photoCategoryYears = () => [...new Set(photoCategories()?.items?.map(x => x.year))];
+    const photoCategoryYears = () => [...new Set(photoCategories()?.items?.map(x => x.year))].sort();
+    const photoCategoriesForYear = (year: number) => photoCategories().items.filter(x => x.year === year).sort(x => x.id);
 
     return (
         <ContentLayout>
@@ -25,9 +27,9 @@ const GridView: Component = () => {
 
             <Suspense fallback={<p>Loading...</p>}>
                 <MainContent title="Categories - Grid">
-                    {photoCategoriesCount()}
-                    {photoCategoryYears()}
-                    <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
+                    <For each={photoCategoryYears()}>{ year =>
+                        <YearGrid year={year} categories={photoCategoriesForYear(year)}/>
+                    }</For>
                 </MainContent>
             </Suspense>
         </ContentLayout>
