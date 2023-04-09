@@ -1,23 +1,21 @@
-import { Component, Suspense, createEffect } from "solid-js";
-import { accessToken, authGuard } from '../auth/auth';
+import { Component, Suspense } from "solid-js";
+
+import { authGuard } from '../auth/auth';
+import { getPhotoCategories } from '../api/api';
+
 import ContentLayout from '../components/layout/ContentLayout';
+import MainContent from '../components/layout/MainContent';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
-import MainContent from '../components/layout/MainContent';
-import { getCategories } from '../api/api';
 
 const GridView: Component = () => {
     authGuard();
 
-    const categories = getCategories(accessToken());
-    const count = () => categories?.data?.count;
-    const years = () => [...new Set(categories?.data?.items?.map(x => x.year))];
+    const photoCategoriesQuery = getPhotoCategories();
 
-    createEffect(() => {
-        if(categories.isSuccess) {
-            console.log(categories.data);
-        }
-    });
+    const photoCategories = () => photoCategoriesQuery?.data;
+    const photoCategoriesCount = () => { console.log('here'); return photoCategories()?.count };
+    const photoCategoryYears = () => [...new Set(photoCategories()?.items?.map(x => x.year))];
 
     return (
         <ContentLayout>
@@ -27,8 +25,8 @@ const GridView: Component = () => {
 
             <Suspense fallback={<p>Loading...</p>}>
                 <MainContent title="Categories - Grid">
-                    {count()}
-                    {years()}
+                    {photoCategoriesCount()}
+                    {photoCategoryYears()}
                     <p>Here is a variable: {import.meta.env.VITE_AUTH_CLIENT_ID}</p>
                 </MainContent>
             </Suspense>
