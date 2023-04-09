@@ -14,7 +14,7 @@ const GridView: Component = () => {
     const photoCategoriesQuery = getPhotoCategories();
 
     const photoCategories = () => photoCategoriesQuery?.data;
-    const photoCategoriesCount = () => { console.log('here'); return photoCategories()?.count };
+    const photoCategoriesCount = () => { return photoCategories()?.count };
     const photoCategoryYears = () => [...new Set(photoCategories()?.items?.map(x => x.year))];
 
     return (
