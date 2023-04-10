@@ -6,6 +6,7 @@ import { presetDaisy } from 'unocss-preset-daisy';
 
 import { appRoutes } from './src/routes';
 import { allThemes } from './src/models/Theme';
+import { allThumbnailClasses } from './src/models/ThumbnailSize';
 
 export default defineConfig<Theme>({
     presets: [
@@ -21,7 +22,8 @@ export default defineConfig<Theme>({
         })
     ],
     safelist: [
-        ...new Set(appRoutes.filter(r => !!r.icon).map(r => r.icon))
+        ...new Set(appRoutes.filter(r => !!r.icon).map(r => r.icon)),
+        ...new Set(allThumbnailClasses)
     ],
     shortcuts: [
         {

@@ -18,7 +18,7 @@ const YearGrid: Component<Props> = (props) => {
 
             <div class="flex flex-gap-2 flex-wrap place-content-center">
                 <For each={props.categories}>{ category =>
-                    <CategoryCard category={category} showTitles={settings.showTitles} />
+                    <CategoryCard category={category} showTitles={settings.showTitles} thumbnailSize={settings.thumbnailSize} />
                 }</For>
             </div>
         </>

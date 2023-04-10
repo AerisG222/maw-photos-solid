@@ -1,16 +1,23 @@
 import { Component, Show } from 'solid-js';
 
 import { PhotoCategory } from '../../models/api/PhotoCategory';
+import { allThumbnailSizes, ThumbnailSizeIdType } from '../../models/ThumbnailSize';
+import { equalsIgnoreCase } from '../../models/Utils';
 
 export type Props = {
     category: PhotoCategory,
-    showTitles: boolean
+    showTitles: boolean,
+    thumbnailSize: ThumbnailSizeIdType
 }
 
 const CategoryCard: Component<Props> = (props) => {
+    const thumbnailClass = () => allThumbnailSizes
+        .filter(x => equalsIgnoreCase(x.id, props.thumbnailSize))
+        .map(x => x.klass)[0];
+
     return(
         <div>
-            <img src={props.category.teaserImageSq.url} width="160" height="120" />
+            <img src={props.category.teaserImageSq.url} classList={thumbnailClass()} />
             <Show when={props.showTitles}>
                 <div class="text-center">{props.category.name}</div>
             </Show>
