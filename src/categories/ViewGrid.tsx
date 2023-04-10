@@ -8,10 +8,12 @@ import MainContent from '../components/layout/MainContent';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
 import YearGrid from './components/YearGrid';
+import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 
 const GridView: Component = () => {
     authGuard();
 
+    const [settings] = useCategoryGridViewSettings();
     const photoCategoriesQuery = getPhotoCategories();
 
     const photoCategories = () => photoCategoriesQuery?.data;
@@ -26,7 +28,7 @@ const GridView: Component = () => {
             </Toolbar>
 
             <Suspense fallback={<p>Loading...</p>}>
-                <MainContent title="Categories - Grid">
+                <MainContent title="Categories - Grid" margin={settings.margin}>
                     <For each={photoCategoryYears()}>{ year =>
                         <YearGrid year={year} categories={photoCategoriesForYear(year)}/>
                     }</For>

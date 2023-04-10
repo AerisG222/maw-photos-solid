@@ -7,6 +7,7 @@ import { presetDaisy } from 'unocss-preset-daisy';
 import { allRouteIcons } from './src/routes';
 import { allThemes } from './src/models/Theme';
 import { allThumbnailClasses } from './src/models/ThumbnailSize';
+import { allMarginClasses } from './src/models/Margin';
 
 export default defineConfig<Theme>({
     presets: [
@@ -23,6 +24,7 @@ export default defineConfig<Theme>({
     ],
     safelist: [
         ...allRouteIcons,
+        ...allMarginClasses,
         ...allThumbnailClasses
     ],
     shortcuts: [
