@@ -21,3 +21,8 @@ export const appRoutes = [
     ...settingsRoutes,
     ...redirectRoutes
 ];
+
+export const allRouteIcons = new Set(appRoutes
+    .filter(x => !!x.icon)
+    .map(x => x.icon)
+);

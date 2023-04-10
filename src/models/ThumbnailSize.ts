@@ -11,9 +11,10 @@ export const allThumbnailSizes: ThumbnailSize[] = [
     { id: "tiny",      name: 'Tiny',       klass: { 'w-[40px]': true,  'h-[30px]': true } },
 ];
 
-export const allThumbnailClasses = allThumbnailSizes
+export const allThumbnailClasses = new Set(allThumbnailSizes
     .map(x => Object.keys(x.klass))
-    .flat(1);
+    .flat(1)
+);
 
 export const defaultThumbnailSize: ThumbnailSizeIdType = 'default';
 
