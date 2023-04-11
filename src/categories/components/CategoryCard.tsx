@@ -16,7 +16,7 @@ const CategoryCard: Component<Props> = (props) => {
         .map(x => x.klass)[0];
 
     return(
-        <div>
+        <div class="bg-secondary-content:6 border-1 border-rounded border-primaryContent-[10%]">
             <img src={props.category.teaserImageSq.url} classList={thumbnailClass()} />
             <Show when={props.showTitles}>
                 <div class="text-center">{props.category.name}</div>
