@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
 
 import App from './App';
 import { AllSettingsProvider } from './contexts/AllSettingsProvider';
+import { CategoryProvider } from './contexts/CategoryContext';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,9 +20,11 @@ const queryClient = new QueryClient({
 render(() =>
         <AllSettingsProvider>
         <QueryClientProvider client={queryClient}>
+        <CategoryProvider>
         <Router>
             <App />
         </Router>
+        </CategoryProvider>
         </QueryClientProvider>
         </AllSettingsProvider>
     ,

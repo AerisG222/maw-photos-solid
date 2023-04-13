@@ -1,12 +1,12 @@
 import { Component, For } from 'solid-js';
 
-import { PhotoCategory } from '../../models/api/PhotoCategory';
 import CategoryCard from './CategoryCard';
 import { useCategoryGridViewSettings } from '../../contexts/CategoryGridViewSettingsContext';
+import { Category } from '../../models/Category';
 
 export type Props = {
     year: number;
-    categories: PhotoCategory[]
+    categories: Category[]
 }
 const YearGrid: Component<Props> = (props) => {
     const [settings] = useCategoryGridViewSettings();

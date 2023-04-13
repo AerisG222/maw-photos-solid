@@ -1,11 +1,11 @@
 import { Component, Show } from 'solid-js';
 
-import { PhotoCategory } from '../../models/api/PhotoCategory';
 import { allThumbnailSizes, ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { equalsIgnoreCase } from '../../models/Utils';
+import { Category } from '../../models/Category';
 
 export type Props = {
-    category: PhotoCategory,
+    category: Category,
     showTitles: boolean,
     thumbnailSize: ThumbnailSizeIdType
 }

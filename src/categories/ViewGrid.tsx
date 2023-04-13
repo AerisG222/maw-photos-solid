@@ -1,25 +1,33 @@
-import { Component, For, Suspense } from "solid-js";
+import { Component, For, Suspense, createEffect } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { getPhotoCategories } from '../api/api';
+import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
+import { useCategory } from '../contexts/CategoryContext';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
 import YearGrid from './components/YearGrid';
-import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
+import CategoryFilterBar from './components/CategoryFilterBar';
 
 const GridView: Component = () => {
     authGuard();
 
+    const [categoryState, { setPhotoCategories, getCategoriesForYear, getAllYears }] = useCategory();
     const [settings] = useCategoryGridViewSettings();
+
     const photoCategoriesQuery = getPhotoCategories();
 
-    const photoCategories = () => photoCategoriesQuery?.data;
-    const photoCategoriesCount = () => { return photoCategories()?.count };
-    const photoCategoryYears = () => [...new Set(photoCategories()?.items?.map(x => x.year))].sort();
-    const photoCategoriesForYear = (year: number) => photoCategories().items.filter(x => x.year === year).sort(x => x.id);
+    createEffect(() => {
+        console.log('a');
+
+        if(photoCategoriesQuery.isSuccess) {
+            console.log('b');
+            setPhotoCategories(photoCategoriesQuery.data.items);
+        }
+    })
 
     return (
         <ContentLayout>
@@ -28,9 +36,11 @@ const GridView: Component = () => {
             </Toolbar>
 
             <Suspense fallback={<p>Loading...</p>}>
-                <MainContent title="Categories - Grid" margin={settings.margin}>
-                    <For each={photoCategoryYears()}>{ year =>
-                        <YearGrid year={year} categories={photoCategoriesForYear(year)}/>
+                <MainContent margin={settings.margin}>
+                    <CategoryFilterBar />
+
+                    <For each={getAllYears()}>{ year =>
+                        <YearGrid year={year} categories={getCategoriesForYear(year)}/>
                     }</For>
                 </MainContent>
             </Suspense>
