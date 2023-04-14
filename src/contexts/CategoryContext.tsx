@@ -4,6 +4,7 @@ import { createStore } from "solid-js/store";
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { VideoCategory } from '../models/api/VideoCategory';
 import { adaptPhotoCategories, adaptVideoCategories, Category } from '../models/Category';
+import { CategoryTypeFilter, CategoryTypeFilterIdType, getCategoryTypeFilter, yearFilterPredicate } from '../models/CategoryTypeFilter';
 
 export type CategoryState = {
     readonly photoCategories: Category[];
@@ -22,7 +23,7 @@ export type CategoryContextValue = [
         setVideoCategories: (videooCategories: VideoCategory[]) => void;
         getAllCategories: () => Category[];
         getAllYears: () => number[];
-        getCategoriesForYear: (year: number) => Category[];
+        getCategoriesForYearAndTypeFilter: (year: number, type: CategoryTypeFilterIdType) => Category[];
     }
 ];
 
@@ -33,7 +34,7 @@ const CategoryContext = createContext<CategoryContextValue>([
         setVideoCategories: () => undefined,
         getAllCategories: () => undefined,
         getAllYears: () => undefined,
-        getCategoriesForYear: () => undefined,
+        getCategoriesForYearAndTypeFilter: () => undefined,
     }
 ]);
 
@@ -56,12 +57,12 @@ export const CategoryProvider: ParentComponent = (props) => {
         ...new Set(getAllCategories().map(c => c.year))
     ].sort());
 
-    const getCategoriesForYear = (year: number) => getAllCategories()
-        .filter(c => c.year === year)
+    const getCategoriesForYearAndTypeFilter = (year: number, type: CategoryTypeFilterIdType) => getAllCategories()
+        .filter(c => getCategoryTypeFilter(type).filter(c) && yearFilterPredicate(c, year))
         .sort(c => c.id);
 
     return (
-        <CategoryContext.Provider value={[state, { setPhotoCategories, setVideoCategories, getAllCategories, getAllYears, getCategoriesForYear }]}>
+        <CategoryContext.Provider value={[state, { setPhotoCategories, setVideoCategories, getAllCategories, getAllYears, getCategoriesForYearAndTypeFilter }]}>
             {props.children}
         </CategoryContext.Provider>
     );

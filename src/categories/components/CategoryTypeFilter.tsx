@@ -1,19 +1,18 @@
 import { Component } from 'solid-js';
 import Select from '../../settings/components/Select';
-import { CategoryTypeFilterIdType, allCategoryTypeFilters } from '../../models/CategoryTypeFilter';
+import { allCategoryTypeFilters } from '../../models/CategoryTypeFilter';
+import { useCategoryFilterSettings } from '../../contexts/CategoryFilterSettingsContext';
 
-export type Props = {
-    selectedCategoryFilterType: CategoryTypeFilterIdType;
-}
+const CategoryTypeFilter: Component = () => {
+    const [filter, { setTypeFilter }] = useCategoryFilterSettings();
 
-const CategoryTypeFilter: Component<Props> = (props) => {
     const onChangeFilter = (val: string) => {
-        console.log(val);
+        setTypeFilter(val);
     }
 
     return (
         <>
-            <Select title='Category Type' itemArray={allCategoryTypeFilters} selectedValue={props.selectedCategoryFilterType} onChange={onChangeFilter} />
+            <Select title='Category Type' itemArray={allCategoryTypeFilters} selectedValue={filter.typeFilter} onChange={onChangeFilter} />
         </>
     );
 }

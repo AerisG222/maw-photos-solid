@@ -5,9 +5,9 @@ import YearFilter from './YearFilter';
 
 const CategoryFilterBar: Component = () => {
     return (
-        <div>
+        <div class="flex flex-gap-8 justify-center">
             <YearFilter />
-            <CategoryTypeFilter selectedCategoryFilterType="" />
+            <CategoryTypeFilter />
         </div>
     );
 }

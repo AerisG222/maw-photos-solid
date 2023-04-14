@@ -1,12 +1,14 @@
 import { Component } from 'solid-js';
 import { useCategory } from '../../contexts/CategoryContext';
 import Select from '../../settings/components/Select';
+import { useCategoryFilterSettings } from '../../contexts/CategoryFilterSettingsContext';
 
 const YearFilter: Component = () => {
     const [categoryState, { getAllYears }] = useCategory();
+    const [filter, { setYearFilter }] = useCategoryFilterSettings();
 
     const onChangeFilter = (val: string) => {
-        console.log(val);
+        setYearFilter(val);
     }
 
     const toKvp = (allYears: number[]) => allYears.map(y => {
@@ -18,7 +20,7 @@ const YearFilter: Component = () => {
 
     return (
         <>
-            <Select title='Year' itemArray={toKvp(getAllYears())} selectedValue={-1} onChange={onChangeFilter} />
+            <Select title='Year' itemArray={toKvp(getAllYears())} selectedValue={filter.yearFilter} onChange={onChangeFilter} />
         </>
     );
 }

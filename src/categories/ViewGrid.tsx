@@ -11,20 +11,19 @@ import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
 import YearGrid from './components/YearGrid';
 import CategoryFilterBar from './components/CategoryFilterBar';
+import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
 
 const GridView: Component = () => {
     authGuard();
 
-    const [categoryState, { setPhotoCategories, getCategoriesForYear, getAllYears }] = useCategory();
+    const [categoryState, { setPhotoCategories, getCategoriesForYearAndTypeFilter, getAllYears }] = useCategory();
     const [settings] = useCategoryGridViewSettings();
+    const [filter] = useCategoryFilterSettings();
 
     const photoCategoriesQuery = getPhotoCategories();
 
     createEffect(() => {
-        console.log('a');
-
         if(photoCategoriesQuery.isSuccess) {
-            console.log('b');
             setPhotoCategories(photoCategoriesQuery.data.items);
         }
     })
@@ -40,7 +39,7 @@ const GridView: Component = () => {
                     <CategoryFilterBar />
 
                     <For each={getAllYears()}>{ year =>
-                        <YearGrid year={year} categories={getCategoriesForYear(year)}/>
+                        <YearGrid year={year} categories={getCategoriesForYearAndTypeFilter(year, filter.typeFilter)}/>
                     }</For>
                 </MainContent>
             </Suspense>
