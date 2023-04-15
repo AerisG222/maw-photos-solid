@@ -2,11 +2,19 @@ import { createQuery } from '@tanstack/solid-query';
 import { accessToken } from '../auth/auth';
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { ApiCollection } from '../models/api/ApiCollection';
+import { VideoCategory } from '../models/api/VideoCategory';
 
 export const getPhotoCategories = () => {
     return createQuery<ApiCollection<PhotoCategory>>(
         () => ["photo_categories"],
         () => queryMawApi('photo-categories'),
+    );
+}
+
+export const getVideoCategories = () => {
+    return createQuery<ApiCollection<VideoCategory>>(
+        () => ["video_categories"],
+        () => queryMawApi('video-categories'),
     );
 }
 

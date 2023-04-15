@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store";
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { VideoCategory } from '../models/api/VideoCategory';
 import { adaptPhotoCategories, adaptVideoCategories, Category } from '../models/Category';
-import { CategoryTypeFilter, CategoryTypeFilterIdType, getCategoryTypeFilter, yearFilterPredicate } from '../models/CategoryTypeFilter';
+import { CategoryTypeFilterIdType, getCategoryTypeFilter, yearFilterPredicate } from '../models/CategoryTypeFilter';
 
 export type CategoryState = {
     readonly photoCategories: Category[];
@@ -50,7 +50,10 @@ export const CategoryProvider: ParentComponent = (props) => {
     }
 
     const getAllCategories = createMemo(() => {
-        return state.photoCategories
+        return [
+            ...state.photoCategories,
+            ...state.videoCategories
+        ];
     });
 
     const getAllYears = createMemo(() => [
