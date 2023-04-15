@@ -1,7 +1,6 @@
-import { Component, For, Suspense, createEffect } from "solid-js";
+import { Component, For, Suspense } from "solid-js";
 
 import { authGuard } from '../auth/auth';
-import { getPhotoCategories, getVideoCategories } from '../api/api';
 import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 import { useCategory } from '../contexts/CategoryContext';
 
@@ -16,22 +15,9 @@ import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsCon
 const GridView: Component = () => {
     authGuard();
 
-    const [categoryState, { setPhotoCategories, setVideoCategories, getCategoriesForYearAndTypeFilter, getAllYears }] = useCategory();
+    const [categoryState, { getCategoriesForYearAndTypeFilter, getAllYears }] = useCategory();
     const [settings] = useCategoryGridViewSettings();
     const [filter] = useCategoryFilterSettings();
-
-    const photoCategoriesQuery = getPhotoCategories();
-    const videoCategoriesQuery = getVideoCategories();
-
-    createEffect(() => {
-        if(photoCategoriesQuery.isSuccess) {
-            setPhotoCategories(photoCategoriesQuery.data.items);
-        }
-
-        if(videoCategoriesQuery.isSuccess) {
-            setVideoCategories(videoCategoriesQuery.data.items);
-        }
-    })
 
     return (
         <ContentLayout>

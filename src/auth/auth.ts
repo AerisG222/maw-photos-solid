@@ -55,7 +55,7 @@ export async function completeAuth() {
 export function isLoggedIn() {
     const u = user();
 
-    return !!u && !u.expired;
+    return u ? !u.expired : false;
 }
 
 // https://github.com/solidjs/solid-router/issues/75#issuecomment-1256848390
