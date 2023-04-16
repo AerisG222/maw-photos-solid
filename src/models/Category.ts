@@ -1,43 +1,45 @@
-import { PhotoCategory } from './api/PhotoCategory';
-import { VideoCategory } from './api/VideoCategory';
-import { CategoryTeaser } from './CategoryTeaser';
+import { MultimediaAsset } from './api/MultimediaAsset';
 
-export type Category =
-    CategoryTeaser & {
-        createDate: Date;
-        actual: PhotoCategory | VideoCategory;
-    }
-
-export const adaptPhotoCategories = (categories: PhotoCategory[]): Category[] =>
-    categories.map((c) => adaptPhotoCategory(c));
-
-function adaptPhotoCategory(category: PhotoCategory): Category {
-    return {
-        type: 'photo',
-        route: 'asdf', //RouteHelper.photoCategoriesAbs(undefined, category.id),
-        id: category.id,
-        name: category.name,
-        year: category.year,
-        createDate: category.createDate,
-        teaserImage: category.teaserImage,
-        teaserImageSq: category.teaserImageSq,
-        actual: category,
-    };
+export interface ICategory {
+    id: number;
+    name: string;
+    year: number;
+    createDate: Date;
+    teaserImage: MultimediaAsset;
+    teaserImageSq: MultimediaAsset;
 }
 
-export const adaptVideoCategories = (categories: VideoCategory[]): Category[] =>
-    categories.map((c) => adaptVideoCategory(c));
+export class Category<T extends ICategory> {
+    public readonly route: string;
 
-function adaptVideoCategory(category: VideoCategory): Category {
-    return {
-        type: 'video',
-        route: 'asdf2', //RouteHelper.videoCategoriesAbs(category.id),
-        id: category.id,
-        name: category.name,
-        year: category.year,
-        createDate: category.createDate,
-        teaserImage: category.teaserImage,
-        teaserImageSq: category.teaserImageSq,
-        actual: category,
-    };
+    constructor(
+        public readonly actual: T,
+        public readonly type: 'photo' | 'video'
+    ) {
+        this.route = 'xyz';
+    }
+
+    public get id() {
+        return this.actual.id;
+    }
+
+    public get name() {
+        return this.actual.name;
+    }
+
+    public get year() {
+        return this.actual.year;
+    }
+
+    public get createDate() {
+        return this.actual.createDate;
+    }
+
+    public get teaserImage() {
+        return this.actual.teaserImage;
+    }
+
+    public get teaserImageSq() {
+        return this.actual.teaserImageSq;
+    }
 }

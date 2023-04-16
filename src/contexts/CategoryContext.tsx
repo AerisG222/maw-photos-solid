@@ -3,12 +3,12 @@ import { createStore } from "solid-js/store";
 
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { VideoCategory } from '../models/api/VideoCategory';
-import { adaptPhotoCategories, adaptVideoCategories, Category } from '../models/Category';
+import { Category, ICategory } from '../models/Category';
 import { CategoryTypeFilterIdType, getCategoryTypeFilter, yearFilterPredicate } from '../models/CategoryTypeFilter';
 
 export type CategoryState = {
-    readonly photoCategories: Category[];
-    readonly videoCategories: Category[];
+    readonly photoCategories: Category<PhotoCategory>[];
+    readonly videoCategories: Category<VideoCategory>[];
 };
 
 export const defaultCategoryState: CategoryState = {
@@ -21,9 +21,9 @@ export type CategoryContextValue = [
     actions: {
         setPhotoCategories: (photoCategories: PhotoCategory[]) => void;
         setVideoCategories: (videooCategories: VideoCategory[]) => void;
-        getAllCategories: () => Category[];
+        getAllCategories: () => ICategory[];
         getAllYears: () => number[];
-        getCategoriesForYearAndTypeFilter: (year: number, type: CategoryTypeFilterIdType) => Category[];
+        getCategoriesForYearAndTypeFilter: (year: number, type: CategoryTypeFilterIdType) => ICategory[];
     }
 ];
 
@@ -42,11 +42,11 @@ export const CategoryProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultCategoryState);
 
     const setPhotoCategories = (photoCategories: PhotoCategory[]) => {
-        setState({ photoCategories: adaptPhotoCategories(photoCategories)});
+        setState({ photoCategories: photoCategories.map(x => new Category<PhotoCategory>(x, 'photo')) });
     };
 
     const setVideoCategories = (videoCategories: VideoCategory[]) => {
-        setState({ videoCategories: adaptVideoCategories(videoCategories)});
+        setState({ videoCategories: videoCategories.map(x => new Category<VideoCategory>(x, 'video')) });
     }
 
     const getAllCategories = createMemo(() => {
