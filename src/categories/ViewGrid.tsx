@@ -1,4 +1,4 @@
-import { Component, For, Suspense, createEffect } from "solid-js";
+import { Component, For, Suspense } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
