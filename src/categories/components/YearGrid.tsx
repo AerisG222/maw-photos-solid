@@ -2,11 +2,11 @@ import { Component, For } from 'solid-js';
 
 import CategoryCard from './CategoryCard';
 import { useCategoryGridViewSettings } from '../../contexts/CategoryGridViewSettingsContext';
-import { Category } from '../../models/Category';
+import { ICategory } from '../../models/Category';
 
 export type Props = {
     year: number;
-    categories: Category[]
+    categories: ICategory[]
 }
 const YearGrid: Component<Props> = (props) => {
     const [settings] = useCategoryGridViewSettings();
