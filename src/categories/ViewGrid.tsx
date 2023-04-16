@@ -1,6 +1,7 @@
-import { Component, For, Suspense } from "solid-js";
+import { Component, For, Suspense, createEffect } from "solid-js";
 
 import { authGuard } from '../auth/auth';
+import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
 import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
 import { useCategory } from '../contexts/CategoryContext';
 
@@ -10,12 +11,11 @@ import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
 import YearGrid from './components/YearGrid';
 import CategoryFilterBar from './components/CategoryFilterBar';
-import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
 
 const GridView: Component = () => {
     authGuard();
 
-    const [categoryState, { getCategoriesForYearAndTypeFilter, getAllYears }] = useCategory();
+    const [categoryState, { getCategories, getYears }] = useCategory();
     const [settings] = useCategoryGridViewSettings();
     const [filter] = useCategoryFilterSettings();
 
@@ -29,8 +29,8 @@ const GridView: Component = () => {
                 <MainContent margin={settings.margin}>
                     <CategoryFilterBar />
 
-                    <For each={getAllYears()}>{ year =>
-                        <YearGrid year={year} categories={getCategoriesForYearAndTypeFilter(year, filter.typeFilter)}/>
+                    <For each={getYears(filter.yearFilter, filter.typeFilter)}>{ year =>
+                        <YearGrid year={year} categories={getCategories(year, filter.typeFilter)}/>
                     }</For>
                 </MainContent>
             </Suspense>

@@ -4,7 +4,8 @@ import { createStore } from "solid-js/store";
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { VideoCategory } from '../models/api/VideoCategory';
 import { Category, ICategory } from '../models/Category';
-import { CategoryTypeFilterIdType, getCategoryTypeFilter, yearFilterPredicate } from '../models/CategoryTypeFilter';
+import { CategoryTypeFilterIdType, getCategoryTypeFilter } from '../models/CategoryTypeFilter';
+import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 
 export type CategoryState = {
     readonly photoCategories: Category<PhotoCategory>[];
@@ -23,7 +24,8 @@ export type CategoryContextValue = [
         setVideoCategories: (videooCategories: VideoCategory[]) => void;
         getAllCategories: () => ICategory[];
         getAllYears: () => number[];
-        getCategoriesForYearAndTypeFilter: (year: number, type: CategoryTypeFilterIdType) => ICategory[];
+        getCategories: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => ICategory[];
+        getYears: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => number[];
     }
 ];
 
@@ -34,7 +36,8 @@ const CategoryContext = createContext<CategoryContextValue>([
         setVideoCategories: () => undefined,
         getAllCategories: () => undefined,
         getAllYears: () => undefined,
-        getCategoriesForYearAndTypeFilter: () => undefined,
+        getCategories: () => undefined,
+        getYears: () => undefined,
     }
 ]);
 
@@ -51,21 +54,36 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const getAllCategories = createMemo(() => {
         return [
-            ...state.photoCategories,
-            ...state.videoCategories
+            ...(state.photoCategories as ICategory[]),
+            ...(state.videoCategories as ICategory[])
         ];
     });
 
     const getAllYears = createMemo(() => [
         ...new Set(getAllCategories().map(c => c.year))
-    ].sort());
+    ].sort()
+    .reverse());
 
-    const getCategoriesForYearAndTypeFilter = (year: number, type: CategoryTypeFilterIdType) => getAllCategories()
+    // todo: can we memoize?
+    const getCategories = (year: YearFilterIdType, type: CategoryTypeFilterIdType) => getAllCategories()
         .filter(c => getCategoryTypeFilter(type).filter(c) && yearFilterPredicate(c, year))
-        .sort(c => c.id);
+        .sort(c => c.id)
+        .reverse();
+
+    const getYears = (year: YearFilterIdType, type: CategoryTypeFilterIdType) => [
+        ...new Set(getCategories(year, type)
+            .map(x => x.year)
+    )];
 
     return (
-        <CategoryContext.Provider value={[state, { setPhotoCategories, setVideoCategories, getAllCategories, getAllYears, getCategoriesForYearAndTypeFilter }]}>
+        <CategoryContext.Provider value={[state, {
+            setPhotoCategories,
+            setVideoCategories,
+            getAllCategories,
+            getAllYears,
+            getCategories,
+            getYears
+        }]}>
             {props.children}
         </CategoryContext.Provider>
     );

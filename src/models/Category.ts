@@ -1,6 +1,6 @@
 import { MultimediaAsset } from './api/MultimediaAsset';
 
-export interface ICategory {
+export interface IApiCategory {
     id: number;
     name: string;
     year: number;
@@ -9,7 +9,11 @@ export interface ICategory {
     teaserImageSq: MultimediaAsset;
 }
 
-export class Category<T extends ICategory> {
+export interface ICategory extends IApiCategory {
+    type: 'photo' | 'video';
+}
+
+export class Category<T extends IApiCategory> implements ICategory {
     public readonly route: string;
 
     constructor(
