@@ -7,6 +7,9 @@ dependencies:
   '@tanstack/solid-query':
     specifier: ^4.29.1
     version: 4.29.1(solid-js@1.7.3)
+  '@unocss/preset-uno':
+    specifier: ^0.51.4
+    version: 0.51.4
   oidc-client-ts:
     specifier: ^2.2.2
     version: 2.2.2
@@ -22,9 +25,6 @@ devDependencies:
     specifier: ^5.58.0
     version: 5.58.0(eslint@8.38.0)(typescript@5.0.4)
   '@unocss/preset-icons':
-    specifier: ^0.51.4
-    version: 0.51.4
-  '@unocss/preset-mini':
     specifier: ^0.51.4
     version: 0.51.4
   '@unocss/reset':
@@ -995,13 +995,12 @@ packages:
 
   /@unocss/core@0.51.4:
     resolution: {integrity: sha512-glPBN989gJNNVzjulH6NlLAekBLuZbsFRIDqwZ1ZaoWY6teu8Z6uo3pqFCy+ibjxZSEha77BcnKfDzd2Hccsdw==}
-    dev: true
 
   /@unocss/extractor-arbitrary-variants@0.51.4:
     resolution: {integrity: sha512-WfRsMEYthIkZjdTaTpzquTMtsb+GCp18tHM3CjlR9fsM7BGDF1rmMwcqWDzQc+wtiW+mzQFybL3chBgNdPloYA==}
     dependencies:
       '@unocss/core': 0.51.4
-    dev: true
+    dev: false
 
   /@unocss/inspector@0.50.8:
     resolution: {integrity: sha512-M963+B9iYGDI7m8KONppJ9EvrDowKWnzzmMLGf+D+qEXmXdnSztMZxEnOdg/caYyHJMw+4jlftyYRZB0VXnAGA==}
@@ -1068,7 +1067,7 @@ packages:
     dependencies:
       '@unocss/core': 0.51.4
       '@unocss/extractor-arbitrary-variants': 0.51.4
-    dev: true
+    dev: false
 
   /@unocss/preset-tagify@0.50.8:
     resolution: {integrity: sha512-CNm9wEmDGEsCvBgWTBOPhH5ts5iobQh5mBeZyH2uCKuQNX+Vc21tXLX78bCk2V4yJ7mpqUWokDNqgTaNhTZjnw==}
@@ -1091,6 +1090,14 @@ packages:
       '@unocss/preset-wind': 0.50.8
     dev: true
 
+  /@unocss/preset-uno@0.51.4:
+    resolution: {integrity: sha512-akB0CWo60dzQ3N7WuqrfYLNOXrGlZQt7Pvtac3U7oAMw/Rmc9MXSkAF9ONpP3rm8dFucAi8L9+ZZGz18MjZL4w==}
+    dependencies:
+      '@unocss/core': 0.51.4
+      '@unocss/preset-mini': 0.51.4
+      '@unocss/preset-wind': 0.51.4
+    dev: false
+
   /@unocss/preset-web-fonts@0.50.8:
     resolution: {integrity: sha512-diGJVTC3W2lovRL9hlV7h4mdzKjoyJD1rlLai2QMZP/+UCsEwDcL9JFF0lZTlEN5GtcbgvcyPRZKB1/ituvjdg==}
     dependencies:
@@ -1104,6 +1111,13 @@ packages:
       '@unocss/core': 0.50.8
       '@unocss/preset-mini': 0.50.8
     dev: true
+
+  /@unocss/preset-wind@0.51.4:
+    resolution: {integrity: sha512-QrY2CLl507cetAKNtmPMOIuFBv4og8+zi5GsDwKBdHDBT/BcmQg8dq8xnlg5hVV0BlbaV+EqMeU9T9Xzgj3JyQ==}
+    dependencies:
+      '@unocss/core': 0.51.4
+      '@unocss/preset-mini': 0.51.4
+    dev: false
 
   /@unocss/reset@0.50.8:
     resolution: {integrity: sha512-2WoM6O9VyuHDPAnvCXr7LBJQ8ZRHDnuQAFsL1dWXp561Iq2l9whdNtPuMcozLGJGUUrFfVBXIrHY4sfxxScgWg==}

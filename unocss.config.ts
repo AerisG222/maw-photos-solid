@@ -1,6 +1,6 @@
 import { defineConfig } from '@unocss/vite';
-import type { Theme } from '@unocss/preset-mini';
-import { presetMini } from '@unocss/preset-mini';
+import type { Theme } from '@unocss/preset-uno';
+import { presetUno } from '@unocss/preset-uno';
 import { presetIcons } from '@unocss/preset-icons';
 import { presetDaisy } from 'unocss-preset-daisy';
 
@@ -17,7 +17,7 @@ export default defineConfig<Theme>({
                 'vertical-align': 'middle',
             }
         }),
-        presetMini(),
+        presetUno(),
         presetDaisy({
             themes: allThemes.map(x => x.id)
         })
