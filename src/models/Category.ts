@@ -1,3 +1,5 @@
+import { categoriesPhotos } from '../categories-photos/_routes';
+import { categoriesVideos } from '../categories-videos/_routes';
 import { MultimediaAsset } from './api/MultimediaAsset';
 
 export interface IApiCategory {
@@ -11,6 +13,7 @@ export interface IApiCategory {
 
 export interface ICategory extends IApiCategory {
     type: 'photo' | 'video';
+    route: string;
 }
 
 export class Category<T extends IApiCategory> implements ICategory {
@@ -20,7 +23,14 @@ export class Category<T extends IApiCategory> implements ICategory {
         public readonly actual: T,
         public readonly type: 'photo' | 'video'
     ) {
-        this.route = 'xyz';
+        switch(this.type) {
+            case 'photo':
+                this.route = `${categoriesPhotos.path}/${this.id}`;
+                break;
+            case 'video':
+                this.route = `${categoriesVideos.path}/${this.id}`;
+                break;
+        }
     }
 
     public get id() {
