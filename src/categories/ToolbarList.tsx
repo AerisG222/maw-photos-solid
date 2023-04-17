@@ -1,13 +1,20 @@
 import { Component } from 'solid-js';
+
+import { useCategoryListViewSettings } from '../contexts/CategoryListViewSettingsContext';
+import { getNextThumbnailSize } from '../models/ThumbnailSize';
+import { getNextMarginSize } from '../models/Margin';
+
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 
 const ListToolbar: Component = () => {
+    const [settings, { setThumbnailSize, setMargin }] = useCategoryListViewSettings();
+
     const onToggleThumbnail = () => {
-        console.log("thumbnail");
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
     }
 
     const onToggleMargins = () => {
-        console.log("margins");
+        setMargin(getNextMarginSize(settings.margin).id);
     }
 
     return (

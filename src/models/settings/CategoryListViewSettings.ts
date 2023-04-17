@@ -1,5 +1,5 @@
 import { MarginIdType, defaultMargin } from '../Margin';
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultListThumbnailSize } from '../ThumbnailSize';
 
 export type CategoryListViewSettingsState = {
     readonly margin: MarginIdType;
@@ -8,5 +8,5 @@ export type CategoryListViewSettingsState = {
 
 export const defaultCategoryListViewSettings: CategoryListViewSettingsState = {
     margin: defaultMargin,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultListThumbnailSize,
 };

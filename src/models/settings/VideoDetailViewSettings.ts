@@ -1,4 +1,4 @@
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 import { VideoSizeIdType, defaultVideoSize } from '../VideoSize';
 
 export type VideoDetailViewSettingsState = {
@@ -10,7 +10,7 @@ export type VideoDetailViewSettingsState = {
 
 export const defaultVideoDetailViewSettings: VideoDetailViewSettingsState = {
     showBreadcrumbs: true,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
     showVideoList: true,
     videoSize: defaultVideoSize,
 };

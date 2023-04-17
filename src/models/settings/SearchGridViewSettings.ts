@@ -1,5 +1,5 @@
 import { MarginIdType, defaultMargin } from '../Margin';
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 
 export type SearchGridViewSettingsState = {
     margin: MarginIdType;
@@ -12,5 +12,5 @@ export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     margin: defaultMargin,
     showTitles: true,
     showYears: true,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
 };

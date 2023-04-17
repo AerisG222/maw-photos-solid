@@ -14,7 +14,7 @@ const YearList: Component<Props> = (props) => {
     return(
         <>
             <h3 class="h3">{props.year}</h3>
-            <div class="divider" />
+            <div class="divider m-y-[.4rem]" />
 
             <div>
                 <For each={props.categories}>{ category =>

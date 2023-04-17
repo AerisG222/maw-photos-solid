@@ -1,5 +1,5 @@
 import { MarginIdType, defaultMargin } from '../Margin';
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 
 export type SearchListViewSettingsState = {
     readonly margin: MarginIdType;
@@ -8,5 +8,5 @@ export type SearchListViewSettingsState = {
 
 export const defaultSearchListViewSettings: SearchListViewSettingsState = {
     margin: defaultMargin,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
 };

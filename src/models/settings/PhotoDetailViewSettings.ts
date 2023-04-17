@@ -1,4 +1,4 @@
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 
 export type PhotoDetailViewSettingsState = {
     showBreadcrumbs: boolean;
@@ -8,6 +8,6 @@ export type PhotoDetailViewSettingsState = {
 
 export const defaultPhotoDetailViewSettings: PhotoDetailViewSettingsState = {
     showBreadcrumbs: true,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
     showPhotoList: true,
 };

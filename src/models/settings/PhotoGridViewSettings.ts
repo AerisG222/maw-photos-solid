@@ -1,5 +1,5 @@
 import { MarginIdType, defaultMargin } from '../Margin';
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 
 export type PhotoGridViewSettingsState = {
     margin: MarginIdType;
@@ -10,5 +10,5 @@ export type PhotoGridViewSettingsState = {
 export const defaultPhotoGridViewSettings: PhotoGridViewSettingsState = {
     margin: defaultMargin,
     showBreadcrumbs: true,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
 };

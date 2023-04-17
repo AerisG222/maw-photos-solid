@@ -16,7 +16,8 @@ export const allThumbnailClasses = new Set(allThumbnailSizes
     .flat(1)
 );
 
-export const defaultThumbnailSize: ThumbnailSizeIdType = 'default';
+export const defaultGridThumbnailSize: ThumbnailSizeIdType = 'default';
+export const defaultListThumbnailSize: ThumbnailSizeIdType = 'verySmall';
 
 export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
     var idx = allThumbnailSizes.findIndex(x => equalsIgnoreCase(x.id, thumbnailSize));

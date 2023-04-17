@@ -1,4 +1,4 @@
-import { ThumbnailSizeIdType, defaultThumbnailSize } from '../ThumbnailSize';
+import { ThumbnailSizeIdType, defaultGridThumbnailSize } from '../ThumbnailSize';
 
 export type RandomDetailViewSettingsState = {
     showBreadcrumbs: boolean;
@@ -8,6 +8,6 @@ export type RandomDetailViewSettingsState = {
 
 export const defaultRandomDetailViewSettings: RandomDetailViewSettingsState = {
     showBreadcrumbs: true,
-    thumbnailSize: defaultThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize,
     showPhotoList: true,
 };

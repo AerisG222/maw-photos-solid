@@ -29,7 +29,9 @@ const ListView: Component = () => {
                     <CategoryFilterBar />
 
                     <For each={getYears(filter.yearFilter, filter.typeFilter)}>{ year =>
-                        <YearList year={year} categories={getCategories(year, filter.typeFilter)}/>
+                        <div class="mb-4">
+                            <YearList year={year} categories={getCategories(year, filter.typeFilter)} />
+                        </div>
                     }</For>
                 </MainContent>
             </Suspense>
