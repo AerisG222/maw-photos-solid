@@ -17,8 +17,9 @@ const CategoryCard: Component<Props> = (props) => {
         .map(x => x.klass)[0];
 
     return(
-        <A href={props.category.route} class="bg-secondary-content:6 border-1 rounded-1 border-primaryContent-[10%] cursor-pointer [&>img]:saturate-50 hover:[&>img]:saturate-100 hover:border-primary hover:color-primary">
-            <img src={props.category.teaserImageSq.url} class="rounded-t-1 " classList={thumbnailClass()} />
+        <A href={props.category.route}
+            class="group bg-secondary-content:6 border-1 rounded-1 border-primaryContent-[10%] cursor-pointer hover:border-primary hover:color-primary">
+            <img src={props.category.teaserImageSq.url} class="rounded-t-1 saturate-50 group-hover:saturate-100" classList={thumbnailClass()} />
             <Show when={props.showTitles}>
                 <div class="text-center pb-1 max-w-[160px]">{props.category.name}</div>
             </Show>

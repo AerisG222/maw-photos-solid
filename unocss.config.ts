@@ -8,6 +8,7 @@ import { allRouteIcons } from './src/routes';
 import { allThemes } from './src/models/Theme';
 import { allThumbnailClasses } from './src/models/ThumbnailSize';
 import { allMarginClasses } from './src/models/Margin';
+import { allCategoryTypeIcons } from './src/models/CategoryTypeFilter';
 
 export default defineConfig<Theme>({
     presets: [
@@ -25,7 +26,8 @@ export default defineConfig<Theme>({
     safelist: [
         ...allRouteIcons,
         ...allMarginClasses,
-        ...allThumbnailClasses
+        ...allThumbnailClasses,
+        ...allCategoryTypeIcons
     ],
     shortcuts: [
         {
