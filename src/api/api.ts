@@ -3,11 +3,19 @@ import { accessToken } from '../auth/auth';
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { ApiCollection } from '../models/api/ApiCollection';
 import { VideoCategory } from '../models/api/VideoCategory';
+import { Photo } from '../models/api/Photo';
 
 export const getPhotoCategories = () => {
     return createQuery<ApiCollection<PhotoCategory>>(
         () => ["photo_categories"],
         () => queryMawApi('photo-categories'),
+    );
+}
+
+export const getPhotos = (categoryId: number) => {
+    return createQuery<ApiCollection<Photo>>(
+        () => ["photos", categoryId],
+        () => queryMawApi(`photo-categories/${categoryId}/photos`)
     );
 }
 
