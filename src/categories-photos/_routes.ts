@@ -54,11 +54,13 @@ export const categoriesPhotosRoutes = [
     categoriesPhotosBulkEdit
 ];
 
-export const getPhotoCategoryPath = (categoryId: number): string => {
-    return buildPath(categoriesPhotos, {id: categoryId});
-}
+export const getPhotoCategoryPath = (categoryId: number): string =>
+    buildPath(categoriesPhotos, {id: categoryId});
 
-export const getRouteForViewMode = (mode: string): AppRouteDefinition => {
+export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number): string =>
+    buildPath(getRouteForViewMode(viewMode), categoryId);
+
+const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {
         return categoriesPhotosGrid;
     }
