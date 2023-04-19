@@ -19,7 +19,7 @@ const YearFilter: Component = () => {
         }
     }
 
-    const toKvp = (allYears: number[]) => [
+    const toKvp = (allYears: number[]) => !allYears ? [] : [
         { id: allYearFilterId, name: 'All Years' },
         ...allYears.map(y => {
             return {

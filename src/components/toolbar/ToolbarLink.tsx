@@ -10,10 +10,16 @@ interface Props {
 }
 
 const ToolbarLink: Component<Props> = (props) => {
+    const handleClick = () => {
+        if(props.clickHandler) {
+            props.clickHandler();
+        }
+    }
+
     return (
         <A
             href={buildPath(props.route, props.routeParams)}
-            onClick={evt => props.clickHandler()}
+            onClick={evt => handleClick()}
             end={true}
             activeClass="color-primary-content bg-primary m-r[-1px]"
             inactiveClass="color-primary"
