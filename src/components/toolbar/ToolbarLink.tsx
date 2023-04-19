@@ -1,15 +1,18 @@
 import { Component } from "solid-js";
 import { A } from "@solidjs/router";
+
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 
 interface Props {
     route: AppRouteDefinition;
+    clickHandler?: () => void;
 }
 
 const ToolbarLink: Component<Props> = (props) => {
     return (
         <A
             href={props.route.path}
+            onClick={evt => props.clickHandler()}
             end={true}
             activeClass="color-primary-content bg-primary m-r[-1px]"
             inactiveClass="color-primary"

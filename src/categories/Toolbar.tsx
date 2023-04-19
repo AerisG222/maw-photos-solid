@@ -1,16 +1,20 @@
 import { ParentComponent, Show } from 'solid-js'
+
 import { categoriesGrid, categoriesList } from './_routes';
-import ToolbarLayout from '../components/toolbar/ToolbarLayout';
+import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
+
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
 
 const Toolbar: ParentComponent = (props) => {
+    const [settings, { setViewMode }] = useCategoryPageSettings();
     const c = () => props.children;
 
     return (
         <ToolbarLayout>
-            <ToolbarLink route={categoriesGrid} />
-            <ToolbarLink route={categoriesList} />
+            <ToolbarLink route={categoriesGrid} clickHandler={() => setViewMode('grid')} />
+            <ToolbarLink route={categoriesList} clickHandler={() => setViewMode('list')} />
 
             <Show when={!!c()}>
                 <ToolbarDivider />
