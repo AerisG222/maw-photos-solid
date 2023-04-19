@@ -6,7 +6,7 @@ import { equalsIgnoreCase } from '../models/Utils'
 export const categoriesPhotos: AppRouteDefinition = {
     icon: undefined as string,
     name: undefined as string,
-    path: `${categories.path}/photos`,
+    path: `${categories.path}/photos/:id`,
     component: lazy(() => import('./PhotoCategories'))
 }
 
@@ -54,26 +54,34 @@ export const categoriesPhotosRoutes = [
     categoriesPhotosBulkEdit
 ];
 
-export const getPathForViewMode = (mode: string): string => {
+const getPhotoCategoryPath = (path: string, categoryId: number) => {
+    return path.replace(":id", categoryId.toString());
+}
+
+export const getPathForPhotoCategory = (categoryId: number) => {
+    return getPhotoCategoryPath(categoriesPhotos.path, categoryId);
+}
+
+export const getPathForViewMode = (mode: string, categoryId: number): string => {
     if(equalsIgnoreCase('grid', mode)) {
-        return categoriesPhotosGrid.path;
+        return getPhotoCategoryPath(categoriesPhotosGrid.path, categoryId);
     }
 
     if(equalsIgnoreCase('detail', mode)) {
-        return categoriesPhotosDetail.path;
+        return getPhotoCategoryPath(categoriesPhotosDetail.path, categoryId);
     }
 
     if(equalsIgnoreCase('fullscreen', mode)) {
-        return categoriesPhotosFullscreen.path;
+        return getPhotoCategoryPath(categoriesPhotosFullscreen.path, categoryId);
     }
 
     if(equalsIgnoreCase('map', mode)) {
-        return categoriesPhotosMap.path;
+        return getPhotoCategoryPath(categoriesPhotosMap.path, categoryId);
     }
 
     if(equalsIgnoreCase('bulkEdit', mode)) {
-        return categoriesPhotosBulkEdit.path;
+        return getPhotoCategoryPath(categoriesPhotosBulkEdit.path, categoryId);
     }
 
-    return categoriesPhotosGrid.path;
+    return getPhotoCategoryPath(categoriesPhotosGrid.path, categoryId);
 }

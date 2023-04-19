@@ -1,4 +1,4 @@
-import { categoriesPhotos } from '../categories-photos/_routes';
+import { getPathForPhotoCategory } from '../categories-photos/_routes';
 import { categoriesVideos } from '../categories-videos/_routes';
 import { MultimediaAsset } from './api/MultimediaAsset';
 
@@ -25,7 +25,7 @@ export class Category<T extends IApiCategory> implements ICategory {
     ) {
         switch(this.type) {
             case 'photo':
-                this.route = `${categoriesPhotos.path}/${this.id}`;
+                this.route = getPathForPhotoCategory(this.id);
                 break;
             case 'video':
                 this.route = `${categoriesVideos.path}/${this.id}`;
