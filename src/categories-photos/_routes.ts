@@ -1,6 +1,6 @@
 import { lazy } from 'solid-js'
 import { categories } from '../categories/_routes'
-import { AppRouteDefinition } from '../models/AppRouteDefinition'
+import { AppRouteDefinition, buildPath } from '../models/AppRouteDefinition'
 import { equalsIgnoreCase } from '../models/Utils'
 
 export const categoriesPhotos: AppRouteDefinition = {
@@ -54,34 +54,30 @@ export const categoriesPhotosRoutes = [
     categoriesPhotosBulkEdit
 ];
 
-const getPhotoCategoryPath = (path: string, categoryId: number) => {
-    return path.replace(":id", categoryId.toString());
+export const getPhotoCategoryPath = (categoryId: number): string => {
+    return buildPath(categoriesPhotos, {id: categoryId});
 }
 
-export const getPathForPhotoCategory = (categoryId: number) => {
-    return getPhotoCategoryPath(categoriesPhotos.path, categoryId);
-}
-
-export const getPathForViewMode = (mode: string, categoryId: number): string => {
+export const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {
-        return getPhotoCategoryPath(categoriesPhotosGrid.path, categoryId);
+        return categoriesPhotosGrid;
     }
 
     if(equalsIgnoreCase('detail', mode)) {
-        return getPhotoCategoryPath(categoriesPhotosDetail.path, categoryId);
+        return categoriesPhotosDetail;
     }
 
     if(equalsIgnoreCase('fullscreen', mode)) {
-        return getPhotoCategoryPath(categoriesPhotosFullscreen.path, categoryId);
+        return categoriesPhotosFullscreen;
     }
 
     if(equalsIgnoreCase('map', mode)) {
-        return getPhotoCategoryPath(categoriesPhotosMap.path, categoryId);
+        return categoriesPhotosMap.path;
     }
 
     if(equalsIgnoreCase('bulkEdit', mode)) {
-        return getPhotoCategoryPath(categoriesPhotosBulkEdit.path, categoryId);
+        return categoriesPhotosBulkEdit;
     }
 
-    return getPhotoCategoryPath(categoriesPhotosGrid.path, categoryId);
+    return categoriesPhotosGrid;
 }

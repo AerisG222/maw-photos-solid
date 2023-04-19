@@ -2,8 +2,9 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { Component } from "solid-js";
 
 import { authGuard } from '../auth/auth';
-import { getPathForViewMode } from './_routes';
+import { getRouteForViewMode } from './_routes';
 import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
+import { buildPath } from '../models/AppRouteDefinition';
 
 const PhotoCategories: Component = () => {
     authGuard();
@@ -12,7 +13,7 @@ const PhotoCategories: Component = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    navigate(getPathForViewMode(settings.viewMode, parseInt(params.id)));
+    navigate(buildPath(getRouteForViewMode(settings.viewMode), params));
 
     return (<></>);
 };
