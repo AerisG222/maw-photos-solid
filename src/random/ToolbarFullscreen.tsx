@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 
 const FullscreenToolbar: Component = () => {
     const onToggleSlideshow = () => {
@@ -51,7 +51,7 @@ const FullscreenToolbar: Component = () => {
                 clickHandler={onMoveNext}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-rotate-left"

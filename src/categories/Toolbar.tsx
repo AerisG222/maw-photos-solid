@@ -3,7 +3,7 @@ import { ParentComponent, Show } from 'solid-js'
 import { categoriesGrid, categoriesList } from './_routes';
 import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
 
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
 
@@ -17,7 +17,7 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLink route={categoriesList} clickHandler={() => setViewMode('list')} />
 
             <Show when={!!c()}>
-                <ToolbarDivider />
+                <Divider />
                 {c()}
             </Show>
         </ToolbarLayout>

@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 
 const DetailToolbar: Component = () => {
     const onToggleSlideshow = () => {
@@ -83,7 +83,7 @@ const DetailToolbar: Component = () => {
                 clickHandler={onMoveNext}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-outline-file-download"
@@ -91,7 +91,7 @@ const DetailToolbar: Component = () => {
                 clickHandler={onDownloadCategory}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-rotate-left"
@@ -115,7 +115,7 @@ const DetailToolbar: Component = () => {
                 clickHandler={onFlipVertical}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-image"
@@ -138,7 +138,7 @@ const DetailToolbar: Component = () => {
                 clickHandler={onDownloadHighUntouched}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-title"

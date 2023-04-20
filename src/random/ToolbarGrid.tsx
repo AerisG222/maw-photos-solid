@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 
 const GridToolbar: Component = () => {
     const onToggleSlideshow = () => {
@@ -27,7 +27,7 @@ const GridToolbar: Component = () => {
                 clickHandler={onToggleSlideshow}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-title"

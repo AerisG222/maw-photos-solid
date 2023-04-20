@@ -1,5 +1,5 @@
 import { ParentComponent, Show } from 'solid-js'
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
 import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
@@ -18,7 +18,7 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={{id: categoryId}} />
 
             <Show when={!!c()}>
-                <ToolbarDivider />
+                <Divider />
                 {c()}
             </Show>
         </ToolbarLayout>

@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 
 const Toolbar: Component = () => {
@@ -38,7 +38,7 @@ const Toolbar: Component = () => {
                 clickHandler={onMoveNext}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-outline-switch-video"
@@ -46,7 +46,7 @@ const Toolbar: Component = () => {
                 clickHandler={onMoveNext}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-title"

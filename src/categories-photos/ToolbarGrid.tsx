@@ -4,7 +4,7 @@ import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettin
 import { getNextMarginSize } from '../models/Margin';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import Divider from '../components/Divider';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
 const GridToolbar: Component = () => {
@@ -34,7 +34,7 @@ const GridToolbar: Component = () => {
                 clickHandler={onToggleSlideshow}
             />
 
-            <ToolbarDivider />
+            <Divider />
 
             <ToolbarButton
                 icon="i-ic-round-title"
