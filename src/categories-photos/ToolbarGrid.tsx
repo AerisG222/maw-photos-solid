@@ -1,22 +1,29 @@
 import { Component } from 'solid-js';
+
+import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
+import { getNextMarginSize } from '../models/Margin';
+
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
+import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
 const GridToolbar: Component = () => {
+    const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettings();
+
     const onToggleSlideshow = () => {
         console.log("slideshow");
     }
 
     const onToggleBreadcrumbs = () => {
-        console.log("titles");
+        setShowBreadcrumbs(!settings.showBreadcrumbs);
     };
 
     const onToggleThumbnailSize = () => {
-        console.log("thumbnail");
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
     }
 
     const onToggleMargins = () => {
-        console.log("margins");
+        setMargin(getNextMarginSize(settings.margin).id);
     }
 
     return (
