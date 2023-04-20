@@ -2,17 +2,20 @@ import { Component, Show } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
+import { usePhotoListContext } from '../contexts/PhotoListContext';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
-import MainContent from '../components/layout/MainContent';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
+import MainContentWithSidebar from '../components/layout/MainContentWithSidebar';
+import Sidebar from './components/Sidebar';
 
 const ViewDetail: Component = () => {
     authGuard();
 
     const [settings] = usePhotoDetailViewSettingsContext();
+    const [photoListState] = usePhotoListContext();
 
     return (
         <ContentLayout>
@@ -20,11 +23,13 @@ const ViewDetail: Component = () => {
                 <DetailToolbar />
             </Toolbar>
 
-            <MainContent>
+            <MainContentWithSidebar sidebar={<Sidebar />}>
                 <Show when={settings.showBreadcrumbs}>
                     <CategoryBreadcrumb />
                 </Show>
-            </MainContent>
+
+                <img src={photoListState.activePhoto?.imageMd?.url} />
+            </MainContentWithSidebar>
         </ContentLayout>
     );
 };
