@@ -10,11 +10,13 @@ import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 export type CategoryState = {
     readonly photoCategories: Category<PhotoCategory>[];
     readonly videoCategories: Category<VideoCategory>[];
+    readonly activeCategory: ICategory;
 };
 
 export const defaultCategoryState: CategoryState = {
     photoCategories: [],
     videoCategories: [],
+    activeCategory: undefined
 };
 
 export type CategoryContextValue = [
@@ -26,6 +28,7 @@ export type CategoryContextValue = [
         getAllYears: () => number[];
         getCategories: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => ICategory[];
         getYears: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => number[];
+        setActiveCategory: (category: ICategory) => void;
     }
 ];
 
@@ -38,6 +41,7 @@ const CategoryContext = createContext<CategoryContextValue>([
         getAllYears: () => undefined,
         getCategories: () => undefined,
         getYears: () => undefined,
+        setActiveCategory: () => undefined,
     }
 ]);
 
@@ -75,6 +79,8 @@ export const CategoryProvider: ParentComponent = (props) => {
             .map(x => x.year)
     )];
 
+    const setActiveCategory = (category: ICategory) => setState({ activeCategory: category });
+
     return (
         <CategoryContext.Provider value={[state, {
             setPhotoCategories,
@@ -82,7 +88,8 @@ export const CategoryProvider: ParentComponent = (props) => {
             getAllCategories,
             getAllYears,
             getCategories,
-            getYears
+            getYears,
+            setActiveCategory
         }]}>
             {props.children}
         </CategoryContext.Provider>
