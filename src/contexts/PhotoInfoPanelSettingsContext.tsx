@@ -79,7 +79,7 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const usePhotoInfoPanelSettings = () => useContext(PhotoInfoPanelSettingsContext);
+export const usePhotoInfoPanelSettingsContext = () => useContext(PhotoInfoPanelSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_PHOTO_INFO_PANEL, defaultPhotoInfoPanelSettings);

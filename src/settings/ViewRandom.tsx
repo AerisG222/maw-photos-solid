@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 
-import { useRandomPageSettings } from '../contexts/RandomPageSettingsContext';
-import { useRandomInfoPanelSettings } from '../contexts/RandomInfoPanelSettingsContext';
-import { useRandomDetailViewSettings } from '../contexts/RandomDetailViewSettingsContext';
-import { useRandomGridViewSettings } from '../contexts/RandomGridViewSettingsContext';
+import { useRandomPageSettingsContext } from '../contexts/RandomPageSettingsContext';
+import { useRandomInfoPanelSettingsContext } from '../contexts/RandomInfoPanelSettingsContext';
+import { useRandomDetailViewSettingsContext } from '../contexts/RandomDetailViewSettingsContext';
+import { useRandomGridViewSettingsContext } from '../contexts/RandomGridViewSettingsContext';
 import { allRandomViewModes } from '../models/PhotoViewMode';
 import { allMapZoomLevels } from '../models/MapZoomLevel';
 import { allMapTypes } from '../models/MapType';
@@ -22,17 +22,17 @@ import Toolbar from './Toolbar';
 import Toggle from './components/Toggle';
 
 const ViewRandom: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettings();
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettingsContext();
     const [detailSettings, {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
         setShowPhotoList: setDetailShowPhotoList,
         setThumbnailSize: setDetailThumbnailSize
-    }] = useRandomDetailViewSettings();
+    }] = useRandomDetailViewSettingsContext();
     const [gridSettings, {
         setShowBreadcrumbs: setGridShowBreadcrumbs,
         setThumbnailSize: setGridThumbnailSize,
         setMargin: setGridMargin
-    }] = useRandomGridViewSettings();
+    }] = useRandomGridViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -45,7 +45,7 @@ const ViewRandom: Component = () => {
         setShowMinimap,
         setMinimapZoom,
         setMinimapMapType
-    }] = useRandomInfoPanelSettings();
+    }] = useRandomInfoPanelSettingsContext();
 
     return (
         <ContentLayout>

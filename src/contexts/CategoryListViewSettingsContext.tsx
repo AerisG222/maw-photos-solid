@@ -40,7 +40,7 @@ export const CategoryListSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useCategoryListViewSettings = () => useContext(CategoryListViewSettingsContext);
+export const useCategoryListViewSettingsContext = () => useContext(CategoryListViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings);

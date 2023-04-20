@@ -5,18 +5,18 @@ import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
 import ListToolbar from './ToolbarList';
 import MainContent from '../components/layout/MainContent';
-import { useCategory } from '../contexts/CategoryContext';
-import { useCategoryListViewSettings } from '../contexts/CategoryListViewSettingsContext';
-import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryContext } from '../contexts/CategoryContext';
+import { useCategoryListViewSettingsContext } from '../contexts/CategoryListViewSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
 import CategoryFilterBar from './components/CategoryFilterBar';
 import YearList from './components/YearList';
 
 const ListView: Component = () => {
     authGuard();
 
-    const [categoryState, { getCategories, getYears }] = useCategory();
-    const [settings] = useCategoryListViewSettings();
-    const [filter] = useCategoryFilterSettings();
+    const [categoryState, { getCategories, getYears }] = useCategoryContext();
+    const [settings] = useCategoryListViewSettingsContext();
+    const [filter] = useCategoryFilterSettingsContext();
 
     return (
         <ContentLayout>

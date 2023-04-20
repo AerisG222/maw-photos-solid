@@ -42,7 +42,7 @@ export const RandomDetailSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useRandomDetailViewSettings = () => useContext(RandomDetailViewSettingsContext);
+export const useRandomDetailViewSettingsContext = () => useContext(RandomDetailViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_RANDOM_VIEW_DETAIL, defaultRandomDetailViewSettings);

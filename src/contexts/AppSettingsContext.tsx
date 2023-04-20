@@ -34,7 +34,7 @@ export const AppSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useAppSettings = () => useContext(AppSettingsContext);
+export const useAppSettingsContext = () => useContext(AppSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_APP, defaultAppSettings);

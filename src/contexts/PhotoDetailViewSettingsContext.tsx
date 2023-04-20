@@ -42,7 +42,7 @@ export const PhotoDetailSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const usePhotoDetailViewSettings = () => useContext(PhotoDetailViewSettingsContext);
+export const usePhotoDetailViewSettingsContext = () => useContext(PhotoDetailViewSettingsContext);
 
 function loadPhotoDetailViewSettings() {
     return loadJson(KEY_SETTINGS_PHOTO_VIEW_DETAIL, defaultPhotoDetailViewSettings);

@@ -9,12 +9,12 @@ import Toolbar from "./Toolbar";
 import MainContent from '../components/layout/MainContent';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import PhotoGridItem from './components/PhotoGridItem';
-import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
 
 const ViewGrid: Component = () => {
     authGuard();
 
-    const [settings] = usePhotoGridViewSettings();
+    const [settings] = usePhotoGridViewSettingsContext();
     const [photoState] = usePhotoListContext();
 
     return (

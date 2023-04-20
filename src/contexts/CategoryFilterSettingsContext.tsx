@@ -43,7 +43,7 @@ export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useCategoryFilterSettings = () => useContext(CategoryFilterSettingsContext);
+export const useCategoryFilterSettingsContext = () => useContext(CategoryFilterSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings);

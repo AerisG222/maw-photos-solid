@@ -43,7 +43,7 @@ export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const usePhotoGridViewSettings = () => useContext(PhotoGridViewSettingsContext);
+export const usePhotoGridViewSettingsContext = () => useContext(PhotoGridViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_PHOTO_VIEW_GRID, defaultPhotoGridViewSettings);

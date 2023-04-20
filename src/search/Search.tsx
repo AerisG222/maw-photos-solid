@@ -2,12 +2,12 @@ import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 import { authGuard } from '../auth/auth';
 import { getPathForViewMode } from './_routes';
-import { useSearchPageSettings } from '../contexts/SearchPageSettingsContext';
+import { useSearchPageSettingsContext } from '../contexts/SearchPageSettingsContext';
 
 const Search: Component = () => {
     authGuard();
 
-    const [settings] = useSearchPageSettings();
+    const [settings] = useSearchPageSettingsContext();
     const navigate = useNavigate();
 
     navigate(getPathForViewMode(settings.viewMode));

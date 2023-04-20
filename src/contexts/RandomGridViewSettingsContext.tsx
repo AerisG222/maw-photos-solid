@@ -43,7 +43,7 @@ export const RandomGridSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useRandomGridViewSettings = () => useContext(RandomGridViewSettingsContext);
+export const useRandomGridViewSettingsContext = () => useContext(RandomGridViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_RANDOM_VIEW_GRID, defaultRandomGridViewSettings);

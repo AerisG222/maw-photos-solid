@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 
-import { useCategoryListViewSettings } from '../../contexts/CategoryListViewSettingsContext';
+import { useCategoryListViewSettingsContext } from '../../contexts/CategoryListViewSettingsContext';
 import { ICategory } from '../../models/Category';
 import CategoryListItem from './CategoryListItem';
 
@@ -9,7 +9,7 @@ export type Props = {
     categories: ICategory[]
 }
 const YearList: Component<Props> = (props) => {
-    const [settings] = useCategoryListViewSettings();
+    const [settings] = useCategoryListViewSettingsContext();
 
     return(
         <>

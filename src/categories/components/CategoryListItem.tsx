@@ -4,7 +4,7 @@ import { A } from '@solidjs/router';
 import { getThumbnailClass, ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { ICategory } from '../../models/Category';
 import { getCategoryTypeIcon } from '../../models/CategoryTypeFilter';
-import { useCategory } from '../../contexts/CategoryContext';
+import { useCategoryContext } from '../../contexts/CategoryContext';
 
 export type Props = {
     category: ICategory,
@@ -12,7 +12,7 @@ export type Props = {
 }
 
 const CategoryListItem: Component<Props> = (props) => {
-    const [category, {setActiveCategory}] = useCategory();
+    const [category, {setActiveCategory}] = useCategoryContext();
     const categoryTypeThumbnail = () => getCategoryTypeIcon(props.category.type);
 
     return (

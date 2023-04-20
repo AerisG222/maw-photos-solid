@@ -43,7 +43,7 @@ export const CategoryGridSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useCategoryGridViewSettings = () => useContext(CategoryGridViewSettingsContext);
+export const useCategoryGridViewSettingsContext = () => useContext(CategoryGridViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, defaultCategoryGridViewSettings);

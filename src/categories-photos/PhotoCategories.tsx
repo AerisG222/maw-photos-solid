@@ -3,7 +3,7 @@ import { Component, createEffect } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { getPhotoCategoryViewPath } from './_routes';
-import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
 import { getPhotos } from '../api/api';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 
@@ -11,7 +11,7 @@ const PhotoCategories: Component = () => {
     authGuard();
 
     const [photos, { setPhotos }] = usePhotoListContext();
-    const [settings] = usePhotoPageSettings();
+    const [settings] = usePhotoPageSettingsContext();
     const navigate = useNavigate();
     const params = useParams();
     const categoryId = parseInt(params.id);

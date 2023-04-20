@@ -34,7 +34,7 @@ export const SearchPageSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useSearchPageSettings = () => useContext(SearchPageSettingsContext);
+export const useSearchPageSettingsContext = () => useContext(SearchPageSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_SEARCH_PAGE, defaultSearchPageSettings);

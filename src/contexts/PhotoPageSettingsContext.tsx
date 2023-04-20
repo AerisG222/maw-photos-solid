@@ -39,7 +39,7 @@ export const PhotoPageSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const usePhotoPageSettings = () => useContext(PhotoPageSettingsContext);
+export const usePhotoPageSettingsContext = () => useContext(PhotoPageSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_PHOTO_PAGE, defaultPhotoPageSettings);

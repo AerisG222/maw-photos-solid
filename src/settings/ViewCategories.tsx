@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 
-import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
-import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
-import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
-import { useCategoryListViewSettings } from '../contexts/CategoryListViewSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
+import { useCategoryListViewSettingsContext } from '../contexts/CategoryListViewSettingsContext';
 import { allCategoryTypeFilters } from '../models/CategoryTypeFilter';
 import { allCategoryViewModes } from '../models/CategoryViewMode';
 import { allMargins } from '../models/Margin';
@@ -18,17 +18,17 @@ import Toolbar from './Toolbar';
 import Toggle from './components/Toggle';
 
 const ViewCategories: Component = () => {
-    const [filterSettings, { setTypeFilter }] = useCategoryFilterSettings();
-    const [pageSettings, { setViewMode }] = useCategoryPageSettings();
+    const [filterSettings, { setTypeFilter }] = useCategoryFilterSettingsContext();
+    const [pageSettings, { setViewMode }] = useCategoryPageSettingsContext();
     const [gridSettings, {
         setShowTitles: setGridShowTitles,
         setMargin: setGridMargin,
         setThumbnailSize: setGridThumbnailSize
-    }] = useCategoryGridViewSettings();
+    }] = useCategoryGridViewSettingsContext();
     const [listSettings, {
         setMargin: setListMargin,
         setThumbnailSize: setListThumbnailSize
-    }] = useCategoryListViewSettings()
+    }] = useCategoryListViewSettingsContext()
 
     return (
         <ContentLayout>

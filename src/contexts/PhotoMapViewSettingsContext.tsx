@@ -40,7 +40,7 @@ export const PhotoMapSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const usePhotoMapViewSettings = () => useContext(PhotoMapViewSettingsContext);
+export const usePhotoMapViewSettingsContext = () => useContext(PhotoMapViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_PHOTO_VIEW_MAP, defaultPhotoMapViewSettings);

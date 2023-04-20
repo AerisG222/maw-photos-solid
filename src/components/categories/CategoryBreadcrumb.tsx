@@ -1,8 +1,8 @@
 import { Component } from 'solid-js';
-import { useCategory } from '../../contexts/CategoryContext';
+import { useCategoryContext } from '../../contexts/CategoryContext';
 
 const CategoryBreadcrumb: Component = () => {
-    const [state] = useCategory();
+    const [state] = useCategoryContext();
 
     return (
         <div class="text-center">

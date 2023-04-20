@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { usePhotoPageSettings } from '../contexts/PhotoPageSettingsContext';
-import { usePhotoGridViewSettings } from '../contexts/PhotoGridViewSettingsContext';
-import { usePhotoDetailViewSettings } from '../contexts/PhotoDetailViewSettingsContext';
-import { usePhotoInfoPanelSettings } from '../contexts/PhotoInfoPanelSettingsContext';
-import { usePhotoMapViewSettings } from '../contexts/PhotoMapViewSettingsContext';
+import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
+import { usePhotoInfoPanelSettingsContext } from '../contexts/PhotoInfoPanelSettingsContext';
+import { usePhotoMapViewSettingsContext } from '../contexts/PhotoMapViewSettingsContext';
 import { allMapTypes } from '../models/MapType';
 import { allMapZoomLevels } from '../models/MapZoomLevel';
 import { allMargins } from '../models/Margin';
@@ -23,18 +23,18 @@ import Toolbar from './Toolbar';
 import Toggle from './components/Toggle';
 
 const ViewPhotos: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettings();
-    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettings();
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettingsContext();
+    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettingsContext();
     const [detailSettings, {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
         setShowPhotoList: setDetailShowPhotoList,
         setThumbnailSize: setDetailThumbnailSize
-    }] = usePhotoDetailViewSettings();
+    }] = usePhotoDetailViewSettingsContext();
     const [gridSettings, {
         setMargin: setGridMargin,
         setShowBreadcrumbs: setGridShowBreadcrumbs,
         setThumbnailSize: setGridThumbnailSize
-    }] = usePhotoGridViewSettings();
+    }] = usePhotoGridViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -47,7 +47,7 @@ const ViewPhotos: Component = () => {
         setShowMinimap,
         setMinimapZoom,
         setMinimapMapType: setInfoPanelMapType
-    }] = usePhotoInfoPanelSettings();
+    }] = usePhotoInfoPanelSettingsContext();
 
     return (
         <ContentLayout>

@@ -39,7 +39,7 @@ export const RandomPageSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useRandomPageSettings = () => useContext(RandomPageSettingsContext);
+export const useRandomPageSettingsContext = () => useContext(RandomPageSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_RANDOM_PAGE, defaultRandomPageSettings);

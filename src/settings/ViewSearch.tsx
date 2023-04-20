@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-import { useSearchPageSettings } from '../contexts/SearchPageSettingsContext';
-import { useSearchGridViewSettings } from '../contexts/SearchGridViewSettingsContext';
-import { useSearchListViewSettings } from '../contexts/SearchListViewSettingsContext';
+import { useSearchPageSettingsContext } from '../contexts/SearchPageSettingsContext';
+import { useSearchGridViewSettingsContext } from '../contexts/SearchGridViewSettingsContext';
+import { useSearchListViewSettingsContext } from '../contexts/SearchListViewSettingsContext';
 import { allThumbnailSizes } from '../models/ThumbnailSize';
 import { allMargins } from '../models/Margin';
 import { allCategoryViewModes } from '../models/CategoryViewMode';
@@ -16,14 +16,14 @@ import Toolbar from './Toolbar';
 import Toggle from './components/Toggle';
 
 const ViewSearch: Component = () => {
-    const [pageSettings, { setViewMode }] = useSearchPageSettings();
-    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettings();
+    const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
+    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettingsContext();
     const [gridSettings, {
         setShowTitles: setGridShowTitles,
         setShowYears: setGridShowYears,
         setMargin: setGridMargin,
         setThumbnailSize: setGridThumbnailSize
-    }] = useSearchGridViewSettings();
+    }] = useSearchGridViewSettingsContext();
 
     return (
         <ContentLayout>

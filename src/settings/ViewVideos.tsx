@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 
-import { useVideoInfoPanelSettings } from '../contexts/VideoInfoPanelSettingsContext';
-import { useVideoDetailViewSettings } from '../contexts/VideoDetailViewSettingsContext';
+import { useVideoInfoPanelSettingsContext } from '../contexts/VideoInfoPanelSettingsContext';
+import { useVideoDetailViewSettingsContext } from '../contexts/VideoDetailViewSettingsContext';
 import { allVideoSizes } from '../models/VideoSize';
 import { allThumbnailSizes } from '../models/ThumbnailSize';
 import { allMapTypes } from '../models/MapType';
@@ -23,7 +23,7 @@ const ViewVideos: Component = () => {
         setThumbnailSize: setDetailThumbnailSize,
         setShowVideoList: setDetailShowVideoList,
         setVideoSize: setDetailVideoSize
-    }] = useVideoDetailViewSettings();
+    }] = useVideoDetailViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -33,7 +33,7 @@ const ViewVideos: Component = () => {
         setShowMinimap,
         setMinimapZoom,
         setMinimapMapType
-    }] = useVideoInfoPanelSettings();
+    }] = useVideoInfoPanelSettingsContext();
 
     return (
         <ContentLayout>

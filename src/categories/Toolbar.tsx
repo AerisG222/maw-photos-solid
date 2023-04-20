@@ -1,14 +1,14 @@
 import { ParentComponent, Show } from 'solid-js'
 
 import { categoriesGrid, categoriesList } from './_routes';
-import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
+import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
 
 import ToolbarDivider from '../components/toolbar/ToolbarDivider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
 
 const Toolbar: ParentComponent = (props) => {
-    const [settings, { setViewMode }] = useCategoryPageSettings();
+    const [settings, { setViewMode }] = useCategoryPageSettingsContext();
     const c = () => props.children;
 
     return (

@@ -34,7 +34,7 @@ export const CategoryPageSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useCategoryPageSettings = () => useContext(CategoryPageSettingsContext);
+export const useCategoryPageSettingsContext = () => useContext(CategoryPageSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_PAGE, defaultCategoryPageSettings);

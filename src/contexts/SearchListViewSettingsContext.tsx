@@ -40,7 +40,7 @@ export const SearchListSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useSearchListViewSettings = () => useContext(SearchListViewSettingsContext);
+export const useSearchListViewSettingsContext = () => useContext(SearchListViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings);

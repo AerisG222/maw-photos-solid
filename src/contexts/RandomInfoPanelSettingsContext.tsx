@@ -79,7 +79,7 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useRandomInfoPanelSettings = () => useContext(RandomInfoPanelSettingsContext);
+export const useRandomInfoPanelSettingsContext = () => useContext(RandomInfoPanelSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_RANDOM_INFO_PANEL, defaultRandomInfoPanelSettings);

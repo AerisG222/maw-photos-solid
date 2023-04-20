@@ -1,10 +1,10 @@
 import { Component } from 'solid-js';
 import Select from '../../settings/components/Select';
 import { allCategoryTypeFilters } from '../../models/CategoryTypeFilter';
-import { useCategoryFilterSettings } from '../../contexts/CategoryFilterSettingsContext';
+import { useCategoryFilterSettingsContext } from '../../contexts/CategoryFilterSettingsContext';
 
 const CategoryTypeFilter: Component = () => {
-    const [filter, { setTypeFilter }] = useCategoryFilterSettings();
+    const [filter, { setTypeFilter }] = useCategoryFilterSettingsContext();
 
     const onChangeFilter = (val: string) => {
         setTypeFilter(val);

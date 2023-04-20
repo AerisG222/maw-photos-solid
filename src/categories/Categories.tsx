@@ -3,13 +3,13 @@ import { Component } from "solid-js";
 
 import { authGuard } from '../auth/auth';
 import { getPathForViewMode } from './_routes';
-import { useCategoryPageSettings } from '../contexts/CategoryPageSettingsContext';
+import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
 
 const Categories: Component = () => {
     authGuard();
 
     const navigate = useNavigate();
-    const [settings] = useCategoryPageSettings();
+    const [settings] = useCategoryPageSettingsContext();
 
     navigate(getPathForViewMode(settings.viewMode));
 

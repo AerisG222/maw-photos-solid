@@ -96,4 +96,4 @@ export const CategoryProvider: ParentComponent = (props) => {
     );
 }
 
-export const useCategory = () => useContext(CategoryContext);
+export const useCategoryContext = () => useContext(CategoryContext);

@@ -51,7 +51,7 @@ export const VideoDetailSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useVideoDetailViewSettings = () => useContext(VideoDetailViewSettingsContext);
+export const useVideoDetailViewSettingsContext = () => useContext(VideoDetailViewSettingsContext);
 
 function loadState() {
     return loadJson(KEY_SETTINGS_VIDEO_VIEW_DETAIL, defaultVideoDetailViewSettings);

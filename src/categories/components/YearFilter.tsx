@@ -1,15 +1,15 @@
 import { Component } from 'solid-js';
 
-import { useCategory } from '../../contexts/CategoryContext';
-import { useCategoryFilterSettings } from '../../contexts/CategoryFilterSettingsContext';
+import { useCategoryContext } from '../../contexts/CategoryContext';
+import { useCategoryFilterSettingsContext } from '../../contexts/CategoryFilterSettingsContext';
 
 import Select from '../../settings/components/Select';
 import { allYearFilterId } from '../../models/YearFilter';
 import { equalsIgnoreCase } from '../../models/Utils';
 
 const YearFilter: Component = () => {
-    const [categoryState, { getAllYears }] = useCategory();
-    const [filter, { setYearFilter }] = useCategoryFilterSettings();
+    const [categoryState, { getAllYears }] = useCategoryContext();
+    const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
 
     const onChangeFilter = (val: string) => {
         if(equalsIgnoreCase(val, allYearFilterId)) {

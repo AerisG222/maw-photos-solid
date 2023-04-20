@@ -67,7 +67,7 @@ export const VideoInfoPanelSettingsProvider: ParentComponent = (props) => {
     );
 }
 
-export const useVideoInfoPanelSettings = () => useContext(VideoInfoPanelSettingsContext);
+export const useVideoInfoPanelSettingsContext = () => useContext(VideoInfoPanelSettingsContext);
 
 function loadVideoInfoPanelSettings() {
     return loadJson(KEY_SETTINGS_VIDEO_INFO_PANEL, defaultVideoInfoPanelSettings);

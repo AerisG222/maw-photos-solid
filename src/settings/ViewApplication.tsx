@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { useAppSettings } from '../contexts/AppSettingsContext';
+import { useAppSettingsContext } from '../contexts/AppSettingsContext';
 import { allThemes } from '../models/Theme';
 
 import ContentLayout from '../components/layout/ContentLayout';
@@ -11,7 +11,7 @@ import Select from './components/Select';
 import Toolbar from './Toolbar';
 
 const ViewApplication: Component = () => {
-    const [appSettings, { setTheme }] = useAppSettings();
+    const [appSettings, { setTheme }] = useAppSettingsContext();
 
     return (
         <ContentLayout>

@@ -1,9 +1,9 @@
 import { Component, For, Suspense } from "solid-js";
 
 import { authGuard } from '../auth/auth';
-import { useCategoryFilterSettings } from '../contexts/CategoryFilterSettingsContext';
-import { useCategoryGridViewSettings } from '../contexts/CategoryGridViewSettingsContext';
-import { useCategory } from '../contexts/CategoryContext';
+import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
+import { useCategoryContext } from '../contexts/CategoryContext';
 
 import ContentLayout from '../components/layout/ContentLayout';
 import MainContent from '../components/layout/MainContent';
@@ -15,9 +15,9 @@ import CategoryFilterBar from './components/CategoryFilterBar';
 const GridView: Component = () => {
     authGuard();
 
-    const [categoryState, { getCategories, getYears }] = useCategory();
-    const [settings] = useCategoryGridViewSettings();
-    const [filter] = useCategoryFilterSettings();
+    const [categoryState, { getCategories, getYears }] = useCategoryContext();
+    const [settings] = useCategoryGridViewSettingsContext();
+    const [filter] = useCategoryFilterSettingsContext();
 
     return (
         <ContentLayout>

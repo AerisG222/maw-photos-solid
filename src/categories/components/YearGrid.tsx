@@ -1,7 +1,7 @@
 import { Component, For } from 'solid-js';
 
 import CategoryCard from './CategoryCard';
-import { useCategoryGridViewSettings } from '../../contexts/CategoryGridViewSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../../contexts/CategoryGridViewSettingsContext';
 import { ICategory } from '../../models/Category';
 
 export type Props = {
@@ -9,7 +9,7 @@ export type Props = {
     categories: ICategory[]
 }
 const YearGrid: Component<Props> = (props) => {
-    const [settings] = useCategoryGridViewSettings();
+    const [settings] = useCategoryGridViewSettingsContext();
 
     return(
         <>
