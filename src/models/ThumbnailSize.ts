@@ -28,3 +28,7 @@ export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
 
     return allThumbnailSizes[idx + 1];
 }
+
+export const getThumbnailClass = (thumbnailSize: ThumbnailSizeIdType) => allThumbnailSizes
+        .filter(x => equalsIgnoreCase(x.id, thumbnailSize))
+        .map(x => x.klass)[0];

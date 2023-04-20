@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
+
 import { Photo } from '../../models/api/Photo';
-import { ThumbnailSizeIdType, allThumbnailSizes } from '../../models/ThumbnailSize';
-import { equalsIgnoreCase } from '../../models/Utils';
+import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
 
 export type Props = {
     photo: Photo,
@@ -9,12 +9,11 @@ export type Props = {
 }
 
 const PhotoGridItem: Component<Props> = (props) => {
-    const thumbnailClass = () => allThumbnailSizes
-        .filter(x => equalsIgnoreCase(x.id, props.thumbnailSize))
-        .map(x => x.klass)[0];
-
     return (
-        <img class="block rounded-1" classList={thumbnailClass()} src={props.photo.imageXsSq.url} />
+        <img
+            class="block rounded-1"
+            classList={getThumbnailClass(props.thumbnailSize)}
+            src={props.photo.imageXsSq.url} />
     );
 };
 
