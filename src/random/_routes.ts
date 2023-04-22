@@ -2,53 +2,68 @@ import { lazy } from 'solid-js'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
 import { equalsIgnoreCase } from '../models/Utils'
 
-export const random: AppRouteDefinition = {
-    icon: "i-ic-round-shuffle",
-    name: "Random",
-    path: "/random",
-    component: lazy(() => import('./Random'))
+const basePath = "/random";
+
+export const randomRedirect: AppRouteDefinition = {
+    path: '/',
+    absolutePath: basePath,
+    component: lazy(() => import("./RandomRedirect"))
 }
 
 export const randomGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${random.path}/grid`,
+    path: '/grid',
+    absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const randomDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    path: `${random.path}/detail`,
+    path: '/detail',
+    absolutePath: `${basePath}/detail`,
     component: lazy(() => import('./ViewDetail'))
 }
 
 export const randomFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    path: `${random.path}/fullscreen`,
+    path: '/fullscreen',
+    absolutePath: `${basePath}/fullscreen`,
     component: lazy(() => import('./ViewFullscreen'))
 }
 
+export const random: AppRouteDefinition = {
+    icon: "i-ic-round-shuffle",
+    name: "Random",
+    path: basePath,
+    absolutePath: basePath,
+    component: lazy(() => import('./Random')),
+    children: [
+        randomRedirect,
+        randomGrid,
+        randomDetail,
+        randomFullscreen
+    ]
+}
+
 export const randomRoutes = [
-    random,
-    randomGrid,
-    randomDetail,
-    randomFullscreen
+    random
 ];
 
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
-        return randomGrid.path;
+        return randomGrid.absolutePath;
     }
 
     if(equalsIgnoreCase('detail', mode)) {
-        return randomDetail.path;
+        return randomDetail.absolutePath;
     }
 
     if(equalsIgnoreCase('fullscreen', mode)) {
-        return randomFullscreen.path;
+        return randomFullscreen.absolutePath;
     }
 
-    return randomGrid.path;
+    return randomGrid.absolutePath;
 }
