@@ -1,8 +1,10 @@
-import { Component } from 'solid-js';
+import { Component, createEffect } from 'solid-js';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
 const CategoryBreadcrumb: Component = () => {
     const [state] = useCategoryContext();
+
+    createEffect(() => {console.log(state.activeCategory)});
 
     return (
         <div class="text-center">

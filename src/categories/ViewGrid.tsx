@@ -15,6 +15,8 @@ import CategoryFilterBar from './components/CategoryFilterBar';
 const GridView: Component = () => {
     authGuard();
 
+    console.log('grid');
+
     const [categoryState, { getCategories, getYears }] = useCategoryContext();
     const [settings] = useCategoryGridViewSettingsContext();
     const [filter] = useCategoryFilterSettingsContext();

@@ -29,6 +29,8 @@ export type CategoryContextValue = [
         getCategories: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => ICategory[];
         getYears: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => number[];
         setActiveCategory: (category: ICategory) => void;
+        setActivePhotoCategory: (categoryId: number) => void;
+        setActiveVideoCategory: (categoryId: number) => void;
     }
 ];
 
@@ -42,6 +44,8 @@ const CategoryContext = createContext<CategoryContextValue>([
         getCategories: () => undefined,
         getYears: () => undefined,
         setActiveCategory: () => undefined,
+        setActivePhotoCategory: () => undefined,
+        setActiveVideoCategory: () => undefined,
     }
 ]);
 
@@ -79,7 +83,19 @@ export const CategoryProvider: ParentComponent = (props) => {
             .map(x => x.year)
     )];
 
-    const setActiveCategory = (category: ICategory) => setState({ activeCategory: category });
+    const setActiveCategory = (category: ICategory) => {
+        console.log(category);
+        setState({ activeCategory: category })
+    };
+
+    const setActivePhotoCategory = (categoryId: number) => {
+        console.log(categoryId);
+        const cat = state.photoCategories.find(x => x.id === categoryId);
+        console.log(cat);
+        setActiveCategory(cat);
+    };
+
+    const setActiveVideoCategory = (categoryId: number) => setActiveCategory(state.videoCategories.find(x => x.id === categoryId));
 
     return (
         <CategoryContext.Provider value={[state, {
@@ -89,7 +105,9 @@ export const CategoryProvider: ParentComponent = (props) => {
             getAllYears,
             getCategories,
             getYears,
-            setActiveCategory
+            setActiveCategory,
+            setActivePhotoCategory,
+            setActiveVideoCategory,
         }]}>
             {props.children}
         </CategoryContext.Provider>

@@ -2,42 +2,56 @@ import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { equalsIgnoreCase } from '../models/Utils';
 
-export const categories: AppRouteDefinition = {
-    icon: "i-ic-round-home",
-    name: "Categories",
-    path: "/categories",
-    component: lazy(() => import('./Categories'))
+const basePath = '/categories';
+
+export const categoriesRedirect: AppRouteDefinition = {
+    path: "/",
+    absolutePath: basePath,
+    component: lazy(() => import('./CategoriesRedirect'))
 }
 
 export const categoriesGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${categories.path}/grid`,
+    path: "/grid",
+    absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const categoriesList: AppRouteDefinition = {
     icon: "i-ic-round-format-list-bulleted",
     name: "List View",
-    path: `${categories.path}/list`,
+    path: "/list",
+    absolutePath: `${basePath}/list`,
     component: lazy(() => import('./ViewList'))
 }
 
+export const categories: AppRouteDefinition = {
+    icon: "i-ic-round-home",
+    name: "Categories",
+    path: basePath,
+    absolutePath: basePath,
+    component: lazy(() => import('./Categories')),
+    children: [
+        categoriesRedirect,
+        categoriesGrid,
+        categoriesList
+    ]
+}
+
 export const categoriesRoutes = [
-    categories,
-    categoriesGrid,
-    categoriesList
+    categories
 ];
 
 // todo (for all areas): try to consolidate view mode settings with the routes above
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
-        return categoriesGrid.path;
+        return categoriesGrid.absolutePath;
     }
 
     if(equalsIgnoreCase('list', mode)) {
-        return categoriesList.path;
+        return categoriesList.absolutePath;
     }
 
-    return categoriesGrid.path;
+    return categoriesGrid.absolutePath;
 }
