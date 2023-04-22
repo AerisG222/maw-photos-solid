@@ -1,21 +1,25 @@
 import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 
-export const login: AppRouteDefinition = {
-    icon: undefined,
-    name: undefined,
-    path: "/login",
+const basePath = "/login";
+
+export const loginPage: AppRouteDefinition = {
+    path: '/',
+    absolutePath: basePath,
     component: lazy(() => import('./Login'))
 }
 
 export const handleResponse: AppRouteDefinition = {
-    icon: undefined,
-    name: undefined,
-    path: `${login.path}/handle-response`,
+    path: '/handle-response',
+    absolutePath: `${basePath}/handle-response`,
     component: lazy(() => import('./HandleResponse'))
 }
 
-export const loginRoutes = [
-    login,
-    handleResponse
-];
+export const login: AppRouteDefinition = {
+    path: basePath,
+    absolutePath: basePath,
+    children: [
+        loginPage,
+        handleResponse
+    ]
+}

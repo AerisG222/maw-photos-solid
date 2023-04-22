@@ -7,7 +7,3 @@ export const about: AppRouteDefinition = {
     path: "/about",
     component: lazy(() => import('./About'))
 }
-
-export const aboutRoutes = [
-    about
-];

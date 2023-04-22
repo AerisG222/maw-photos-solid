@@ -39,10 +39,6 @@ export const search: AppRouteDefinition = {
     ]
 }
 
-export const searchRoutes = [
-    search
-];
-
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
         return searchGrid.absolutePath;

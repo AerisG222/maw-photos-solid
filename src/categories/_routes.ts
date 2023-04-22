@@ -39,10 +39,6 @@ export const categories: AppRouteDefinition = {
     ]
 }
 
-export const categoriesRoutes = [
-    categories
-];
-
 // todo (for all areas): try to consolidate view mode settings with the routes above
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {

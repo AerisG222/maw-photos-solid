@@ -1,11 +1,12 @@
 import { useNavigate } from '@solidjs/router';
 import { Component, onMount } from "solid-js";
+import { categories } from '../categories/_routes';
 
 const Redirect: Component = () => {
     const navigate = useNavigate();
 
     onMount(() => {
-        navigate("/categories", { replace: true });
+        navigate(categories.absolutePath, { replace: true });
     });
 
     return (<></>);

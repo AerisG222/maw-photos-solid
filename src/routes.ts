@@ -1,26 +1,26 @@
-import { loginRoutes } from './auth/_routes';
-import { categoriesRoutes } from './categories/_routes';
-import { aboutRoutes } from './about/_routes';
-import { categoriesPhotosRoutes } from './categories-photos/_routes';
-import { categoriesVideosRoutes } from './categories-videos/_routes';
-import { randomRoutes } from './random/_routes';
-import { searchRoutes } from './search/_routes';
-import { statsRoutes } from './stats/_routes';
-import { settingsRoutes } from './settings/_routes';
-import { redirectRoutes } from './redirect/_routes';
+import { login } from './auth/_routes';
+import { categories } from './categories/_routes';
+import { about } from './about/_routes';
+import { categoriesPhotos } from './categories-photos/_routes';
+import { categoriesVideos } from './categories-videos/_routes';
+import { random } from './random/_routes';
+import { search } from './search/_routes';
+import { stats } from './stats/_routes';
+import { settings } from './settings/_routes';
+import { catchAllRedirect } from './redirect/_routes';
 import { AppRouteDefinition } from './models/AppRouteDefinition';
 
 export const appRoutes = [
-    ...loginRoutes,
-    ...categoriesRoutes,
-    ...categoriesPhotosRoutes,
-    ...categoriesVideosRoutes,
-    ...searchRoutes,
-    ...randomRoutes,
-    ...statsRoutes,
-    ...aboutRoutes,
-    ...settingsRoutes,
-    ...redirectRoutes
+    login,
+    categories,
+    categoriesPhotos,
+    categoriesVideos,
+    search,
+    random,
+    stats,
+    about,
+    settings,
+    catchAllRedirect
 ];
 
 const getAllIcons = (routes: AppRouteDefinition[]) => {

@@ -72,7 +72,3 @@ export const settings: AppRouteDefinition = {
         settingsRandom
     ]
 }
-
-export const settingsRoutes = [
-    settings,
-];

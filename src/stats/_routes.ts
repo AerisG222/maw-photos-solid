@@ -45,7 +45,3 @@ export const stats: AppRouteDefinition = {
         statsCombined
     ]
 }
-
-export const statsRoutes = [
-    stats,
-];

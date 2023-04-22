@@ -67,10 +67,6 @@ export const categoriesPhotos: AppRouteDefinition = {
     ]
 }
 
-export const categoriesPhotosRoutes = [
-    categoriesPhotos
-];
-
 export const getPhotoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesPhotos, {id: categoryId});
 

@@ -48,10 +48,6 @@ export const random: AppRouteDefinition = {
     ]
 }
 
-export const randomRoutes = [
-    random
-];
-
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
         return randomGrid.absolutePath;

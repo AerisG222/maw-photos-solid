@@ -8,7 +8,3 @@ export const categoriesVideos: AppRouteDefinition = {
     path: `${categories.path}/videos`,
     component: lazy(() => import('./VideoCategories'))
 }
-
-export const categoriesVideosRoutes = [
-    categoriesVideos
-];
