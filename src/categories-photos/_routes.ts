@@ -3,55 +3,72 @@ import { categories } from '../categories/_routes'
 import { AppRouteDefinition, buildPath } from '../models/AppRouteDefinition'
 import { equalsIgnoreCase } from '../models/Utils'
 
-export const categoriesPhotos: AppRouteDefinition = {
-    icon: undefined as string,
-    name: undefined as string,
-    path: `${categories.path}/photos/:id`,
-    component: lazy(() => import('./PhotoCategories'))
+const basePath = `${categories.absolutePath}/photos/:id`;
+
+export const categoriesPhotosRedirect: AppRouteDefinition = {
+    path: '/',
+    absolutePath: basePath,
+    component: lazy(() => import('./PhotoCategoriesRedirect'))
 }
 
 export const categoriesPhotosGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${categoriesPhotos.path}/grid`,
+    path: "/grid",
+    absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const categoriesPhotosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    path: `${categoriesPhotos.path}/detail`,
+    path: 'detail',
+    absolutePath: `${basePath}/detail`,
     component: lazy(() => import('./ViewDetail'))
 }
 
 export const categoriesPhotosFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    path: `${categoriesPhotos.path}/fullscreen`,
+    path: 'fullscreen',
+    absolutePath: `${basePath}/fullscreen`,
     component: lazy(() => import('./ViewFullscreen'))
 }
 
 export const categoriesPhotosMap: AppRouteDefinition = {
     icon: "i-ic-round-map",
     name: "Map View",
-    path: `${categoriesPhotos.path}/map`,
+    path: '/map',
+    absolutePath: `${basePath}/map`,
     component: lazy(() => import('./ViewMap'))
 }
 
 export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     icon: "i-ic-round-collections",
     name: "Bulk Edit View",
-    path: `${categoriesPhotos.path}/bulk-edit`,
+    path: '/bulk-edit',
+    absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import('./ViewBulkEdit'))
 }
 
+export const categoriesPhotos: AppRouteDefinition = {
+    icon: undefined as string,
+    name: undefined as string,
+    path: basePath,
+    absolutePath: basePath,
+    component: lazy(() => import('./PhotoCategories')),
+    children: [
+        categoriesPhotosRedirect,
+        categoriesPhotosGrid,
+        categoriesPhotosDetail,
+        categoriesPhotosFullscreen,
+        categoriesPhotosMap,
+        categoriesPhotosBulkEdit
+    ]
+}
+
 export const categoriesPhotosRoutes = [
-    categoriesPhotos,
-    categoriesPhotosGrid,
-    categoriesPhotosDetail,
-    categoriesPhotosFullscreen,
-    categoriesPhotosMap,
-    categoriesPhotosBulkEdit
+    categoriesPhotos
 ];
 
 export const getPhotoCategoryPath = (categoryId: number): string =>
