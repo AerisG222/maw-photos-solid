@@ -2,41 +2,55 @@ import { lazy } from 'solid-js'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
 import { equalsIgnoreCase } from '../models/Utils'
 
-export const search: AppRouteDefinition = {
-    icon: "i-ic-round-search",
-    name: "Search",
-    path: "/search",
-    component: lazy(() => import('./Search'))
+const basePath = "/search";
+
+export const searchRedirect: AppRouteDefinition = {
+    path: "/",
+    absolutePath: basePath,
+    component: lazy(() => import('./SearchRedirect'))
 }
 
 export const searchGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: `${search.path}/grid`,
+    path: "/grid",
+    absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
 }
 
 export const searchList: AppRouteDefinition = {
     icon: "i-ic-round-format-list-bulleted",
     name: "List View",
-    path: `${search.path}/list`,
+    path: "/list",
+    absolutePath: `${basePath}/list`,
     component: lazy(() => import('./ViewList'))
 }
 
+export const search: AppRouteDefinition = {
+    icon: "i-ic-round-search",
+    name: "Search",
+    path: basePath,
+    absolutePath: basePath,
+    component: lazy(() => import('./Search')),
+    children: [
+        searchRedirect,
+        searchGrid,
+        searchList
+    ]
+}
+
 export const searchRoutes = [
-    search,
-    searchGrid,
-    searchList
+    search
 ];
 
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
-        return searchGrid.path;
+        return searchGrid.absolutePath;
     }
 
     if(equalsIgnoreCase('list', mode)) {
-        return searchList.path;
+        return searchList.absolutePath;
     }
 
-    return searchGrid.path;
+    return searchGrid.absolutePath;
 }
