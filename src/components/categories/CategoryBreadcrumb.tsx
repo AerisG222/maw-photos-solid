@@ -1,11 +1,10 @@
-import { Component, createEffect } from 'solid-js';
+import { Component } from 'solid-js';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
 const CategoryBreadcrumb: Component = () => {
     const [state] = useCategoryContext();
 
-    createEffect(() => {console.log(state.activeCategory)});
-
+    // todo: can we make active category more robust so it is not null in some instances?
     return (
         <div class="text-center">
             <span>{state.activeCategory?.year}</span>

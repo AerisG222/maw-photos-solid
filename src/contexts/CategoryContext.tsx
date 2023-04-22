@@ -84,14 +84,12 @@ export const CategoryProvider: ParentComponent = (props) => {
     )];
 
     const setActiveCategory = (category: ICategory) => {
-        console.log(category);
         setState({ activeCategory: category })
     };
 
     const setActivePhotoCategory = (categoryId: number) => {
-        console.log(categoryId);
         const cat = state.photoCategories.find(x => x.id === categoryId);
-        console.log(cat);
+
         setActiveCategory(cat);
     };
 

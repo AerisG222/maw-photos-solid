@@ -6,8 +6,6 @@ import { authGuard } from '../auth/auth';
 const Categories: Component = () => {
     authGuard();
 
-    console.log('here');
-
     return <Outlet />;
 };
 
