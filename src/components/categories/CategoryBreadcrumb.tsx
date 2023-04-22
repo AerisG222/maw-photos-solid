@@ -8,9 +8,9 @@ const CategoryBreadcrumb: Component = () => {
 
     return (
         <div class="text-center">
-            <span>{state.activeCategory.year}</span>
+            <span>{state.activeCategory?.year}</span>
             <span class="text-6 i-ic-round-arrow-right" />
-            <span>{state.activeCategory.name}</span>
+            <span>{state.activeCategory?.name}</span>
         </div>
     );
 };
