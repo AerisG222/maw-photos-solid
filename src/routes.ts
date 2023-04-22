@@ -8,6 +8,7 @@ import { searchRoutes } from './search/_routes';
 import { statsRoutes } from './stats/_routes';
 import { settingsRoutes } from './settings/_routes';
 import { redirectRoutes } from './redirect/_routes';
+import { AppRouteDefinition } from './models/AppRouteDefinition';
 
 export const appRoutes = [
     ...loginRoutes,
@@ -22,7 +23,28 @@ export const appRoutes = [
     ...redirectRoutes
 ];
 
-export const allRouteIcons = new Set(appRoutes
-    .filter(x => !!x.icon)
-    .map(x => x.icon)
-);
+const getAllIcons = (routes: AppRouteDefinition[]) => {
+    const icons = [];
+
+    for(const route of routes) {
+        getIcons(route, icons);
+    }
+
+    return icons;
+}
+
+const getIcons = (route: AppRouteDefinition, icons: string[]) => {
+    if(route.children) {
+        for(const childRoute of route.children) {
+            getIcons(childRoute, icons);
+        }
+    }
+
+    if(route.icon) {
+        icons.push(route.icon);
+    }
+
+    return icons;
+}
+
+export const allRouteIcons = new Set(getAllIcons(appRoutes));
