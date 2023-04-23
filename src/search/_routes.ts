@@ -29,6 +29,7 @@ export const searchList: AppRouteDefinition = {
 export const search: AppRouteDefinition = {
     icon: "i-ic-round-search",
     name: "Search",
+    helpText: "Search photo and video categories.",
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./Search')),

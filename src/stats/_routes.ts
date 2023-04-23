@@ -36,6 +36,7 @@ export const statsCombined: AppRouteDefinition = {
 export const stats: AppRouteDefinition = {
     icon: "i-ic-round-bar-chart",
     name: "Statistics",
+    helpText: "View statistics for all photos and videos.",
     path: "/stats",
     component: lazy(() => import('./Stats')),
     children: [

@@ -5,6 +5,7 @@ export type AppRouteDefinition =
         icon?: string;
         name?: string;
         absolutePath?: string;
+        helpText?: string;
     };
 
 export const buildPath = (route: AppRouteDefinition, routeParams?: any) => {

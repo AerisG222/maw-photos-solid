@@ -60,6 +60,7 @@ export const settingsRandom: AppRouteDefinition = {
 export const settings: AppRouteDefinition = {
     icon: "i-ic-baseline-settings",
     name: "Settings",
+    helpText: "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
     path: "/settings",
     component: lazy(() => import('./Settings')),
     children: [

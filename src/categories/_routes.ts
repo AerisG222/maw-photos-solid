@@ -29,6 +29,7 @@ export const categoriesList: AppRouteDefinition = {
 export const categories: AppRouteDefinition = {
     icon: "i-ic-round-home",
     name: "Categories",
+    helpText: "Browse photos and videos by year and category.",
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./Categories')),

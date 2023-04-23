@@ -37,6 +37,7 @@ export const randomFullscreen: AppRouteDefinition = {
 export const random: AppRouteDefinition = {
     icon: "i-ic-round-shuffle",
     name: "Random",
+    helpText: "Play though an unending list of random photos.",
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./Random')),
