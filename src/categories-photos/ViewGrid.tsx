@@ -1,6 +1,5 @@
 import { Component, For, Show } from "solid-js";
 
-import { authGuard } from '../auth/auth';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 
 import ContentLayout from '../components/layout/ContentLayout';
@@ -12,8 +11,6 @@ import PhotoGridItem from './components/PhotoGridItem';
 import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
 
 const ViewGrid: Component = () => {
-    authGuard();
-
     const [settings] = usePhotoGridViewSettingsContext();
     const [photoState] = usePhotoListContext();
 

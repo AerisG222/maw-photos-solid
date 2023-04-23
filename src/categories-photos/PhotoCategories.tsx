@@ -1,14 +1,13 @@
 import { Outlet, useParams } from '@solidjs/router';
 import { Component, batch, createEffect } from "solid-js";
 
-import { authGuard } from '../auth/auth';
 import { getPhotos } from '../api/api';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 
-const PhotoCategories: Component = () => {
-    authGuard();
+import AuthGuard from '../components/auth/AuthGuard';
 
+const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
     const [photos, { setPhotos }] = usePhotoListContext();
     const params = useParams();
@@ -24,7 +23,11 @@ const PhotoCategories: Component = () => {
         }
     });
 
-    return <Outlet />;
+    return (
+        <AuthGuard>
+            <Outlet />
+        </AuthGuard>
+    );
 };
 
 export default PhotoCategories;

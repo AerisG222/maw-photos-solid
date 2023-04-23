@@ -1,6 +1,5 @@
 import { Component, For, Suspense } from "solid-js";
 
-import { authGuard } from '../auth/auth';
 import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
 import ListToolbar from './ToolbarList';
@@ -12,8 +11,6 @@ import CategoryFilterBar from './components/CategoryFilterBar';
 import YearList from './components/YearList';
 
 const ListView: Component = () => {
-    authGuard();
-
     const [categoryState, { getCategories, getYears }] = useCategoryContext();
     const [settings] = useCategoryListViewSettingsContext();
     const [filter] = useCategoryFilterSettingsContext();

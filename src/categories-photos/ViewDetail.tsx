@@ -1,6 +1,5 @@
 import { Component, Show } from "solid-js";
 
-import { authGuard } from '../auth/auth';
 import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 
@@ -12,8 +11,6 @@ import MainContentWithSidebar from '../components/layout/MainContentWithSidebar'
 import Sidebar from './components/Sidebar';
 
 const ViewDetail: Component = () => {
-    authGuard();
-
     const [settings] = usePhotoDetailViewSettingsContext();
     const [photoListState] = usePhotoListContext();
 

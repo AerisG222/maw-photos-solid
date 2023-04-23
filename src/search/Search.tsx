@@ -1,12 +1,14 @@
 import { Outlet } from '@solidjs/router';
 import { Component } from "solid-js";
 
-import { authGuard } from '../auth/auth';
+import AuthGuard from '../components/auth/AuthGuard';
 
 const Search: Component = () => {
-    authGuard();
-
-    return <Outlet />;
+    return (
+        <AuthGuard>
+            <Outlet />
+        </AuthGuard>
+    );
 };
 
 export default Search;
