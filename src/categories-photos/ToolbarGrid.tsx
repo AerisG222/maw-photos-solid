@@ -4,7 +4,7 @@ import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettin
 import { getNextMarginSize } from '../models/Margin';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/Divider';
+import Divider from '../components/layout/Divider';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
 const GridToolbar: Component = () => {

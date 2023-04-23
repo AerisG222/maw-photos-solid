@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/Divider';
+import Divider from '../components/layout/Divider';
 
 const DetailToolbar: Component = () => {
     const onToggleSlideshow = () => {

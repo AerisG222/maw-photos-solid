@@ -1,5 +1,5 @@
 import { Component } from 'solid-js';
-import Divider from '../../components/Divider';
+import Divider from '../../components/layout/Divider';
 
 const Sidebar: Component = () => {
     return (
