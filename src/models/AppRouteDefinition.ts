@@ -18,8 +18,17 @@ export const buildPath = (route: AppRouteDefinition, routeParams?: any) => {
 
     let path = route.absolutePath;
 
+    // apply provided replacements
     for(let [key, value] of Object.entries(routeParams)) {
         path = path.replace(`:${key}`, value);
+    }
+
+    // remove optional params that may remain
+    path = path.replace(/:(.*)\?/, '');
+
+    // do not end w/ trailing slash
+    if(path.endsWith('/')) {
+        path = path.slice(0, -1);
     }
 
     return path;

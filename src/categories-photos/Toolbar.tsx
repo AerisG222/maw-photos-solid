@@ -1,21 +1,23 @@
 import { ParentComponent, Show } from 'solid-js'
+import { useParams } from '@solidjs/router';
+
+import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
+
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
-import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
-import { useParams } from '@solidjs/router';
 
 const Toolbar: ParentComponent = (props) => {
-    const categoryId = parseInt(useParams().id);
+    const categoryId = parseInt(useParams().categoryId);
     const c = () => props.children;
 
     return (
         <ToolbarLayout>
-            <ToolbarLink route={categoriesPhotosGrid}       routeParams={{id: categoryId}} />
-            <ToolbarLink route={categoriesPhotosDetail}     routeParams={{id: categoryId}} />
-            <ToolbarLink route={categoriesPhotosFullscreen} routeParams={{id: categoryId}} />
-            <ToolbarLink route={categoriesPhotosMap}        routeParams={{id: categoryId}} />
-            <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={{id: categoryId}} />
+            <ToolbarLink route={categoriesPhotosGrid}       routeParams={{categoryId: categoryId}} />
+            <ToolbarLink route={categoriesPhotosDetail}     routeParams={{categoryId: categoryId}} />
+            <ToolbarLink route={categoriesPhotosFullscreen} routeParams={{categoryId: categoryId}} />
+            <ToolbarLink route={categoriesPhotosMap}        routeParams={{categoryId: categoryId}} />
+            <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={{categoryId: categoryId}} />
 
             <Show when={!!c()}>
                 <Divider />
