@@ -11,7 +11,7 @@ const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
     const [photos, { setPhotos, setActivePhoto }] = usePhotoListContext();
     const params = useParams();
-    const categoryId = parseInt(params.id);
+    const categoryId = parseInt(params.categoryId);
     const photoId = parseInt(params.photoId);
     const photosQuery = getPhotos(categoryId);
 

@@ -12,7 +12,7 @@ const ViewBulkEdit: Component = () => {
     const [photoList] = usePhotoListContext();
     const navigate = useNavigate();
     const params = useParams();
-    const categoryId = parseInt(params.id);
+    const categoryId = parseInt(params.categoryId);
 
     if(!photoList.photos || photoList.photos.length === 0) {
         navigate(getPhotoCategoryPath(categoryId));

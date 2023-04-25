@@ -3,7 +3,7 @@ import { categories } from '../categories/_routes'
 import { AppRouteDefinition, buildPath } from '../models/AppRouteDefinition'
 import { equalsIgnoreCase } from '../models/Utils'
 
-const basePath = `${categories.absolutePath}/photos/:id`;
+const basePath = `${categories.absolutePath}/photos/:categoryId`;
 
 export const categoriesPhotosRedirect: AppRouteDefinition = {
     path: '/',
@@ -68,10 +68,10 @@ export const categoriesPhotos: AppRouteDefinition = {
 }
 
 export const getPhotoCategoryPath = (categoryId: number): string =>
-    buildPath(categoriesPhotos, {id: categoryId});
+    buildPath(categoriesPhotos, {categoryId: categoryId});
 
 export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number): string =>
-    buildPath(getRouteForViewMode(viewMode), {id: categoryId});
+    buildPath(getRouteForViewMode(viewMode), {categoryId: categoryId});
 
 const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {

@@ -8,7 +8,7 @@ const PhotoCategoriesRedirect: Component = () => {
     const [settings] = usePhotoPageSettingsContext();
     const navigate = useNavigate();
     const params = useParams();
-    const categoryId = parseInt(params.id);
+    const categoryId = parseInt(params.categoryId);
 
     navigate(getPhotoCategoryViewPath(settings.viewMode, categoryId));
 
