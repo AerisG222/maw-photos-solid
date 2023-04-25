@@ -14,8 +14,8 @@ export const categoriesPhotosRedirect: AppRouteDefinition = {
 export const categoriesPhotosGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    path: "/grid",
-    absolutePath: `${basePath}/grid`,
+    path: "/grid/:photoId?",
+    absolutePath: `${basePath}/grid/:photoId?`,
     component: lazy(() => import('./ViewGrid'))
 }
 

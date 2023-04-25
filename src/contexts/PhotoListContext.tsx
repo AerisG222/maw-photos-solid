@@ -19,13 +19,15 @@ export type PhotoListContextValue = [
     state: PhotoListState,
     actions: {
         setPhotos: (photos: Photo[]) => void;
+        setActivePhoto: (photoId: number) => void;
     }
 ];
 
 const PhotoListContext = createContext<PhotoListContextValue>([
     defaultPhotoListState,
     {
-        setPhotos: () => undefined
+        setPhotos: () => undefined,
+        setActivePhoto: () => undefined
     }
 ]);
 
@@ -36,9 +38,20 @@ export const PhotoListProvider: ParentComponent = (props) => {
         setState({ photos: photos });
     };
 
+    const setActivePhoto = (photoId: number) => {
+        if(photoId) {
+            const idx = state.photos.findIndex(x => x.id === photoId);
+            const photo = state.photos[idx];
+            setState({ activePhoto: photo, activeIndex: idx});
+        } else {
+            setState({ activePhoto: undefined, activeIndex: undefined});
+        }
+    }
+
     return (
         <PhotoListContext.Provider value={[state, {
-            setPhotos
+            setPhotos,
+            setActivePhoto
         }]}>
             {props.children}
         </PhotoListContext.Provider>

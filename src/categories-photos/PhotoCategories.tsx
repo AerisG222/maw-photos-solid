@@ -9,9 +9,10 @@ import AuthGuard from '../components/auth/AuthGuard';
 
 const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
-    const [photos, { setPhotos }] = usePhotoListContext();
+    const [photos, { setPhotos, setActivePhoto }] = usePhotoListContext();
     const params = useParams();
     const categoryId = parseInt(params.id);
+    const photoId = parseInt(params.photoId);
     const photosQuery = getPhotos(categoryId);
 
     createEffect(() => {
@@ -20,6 +21,13 @@ const PhotoCategories: Component = () => {
                 setActivePhotoCategory(categoryId);
                 setPhotos(photosQuery.data.items);
             });
+        }
+
+        if(params.photoId) {
+            const id = parseInt(params.photoId);
+            setActivePhoto(id);
+        } else {
+            setActivePhoto(undefined);
         }
     });
 
