@@ -6,16 +6,21 @@ import { useCategoryFilterSettingsContext } from '../../contexts/CategoryFilterS
 import Select from '../../settings/components/Select';
 import { allYearFilterId } from '../../models/YearFilter';
 import { equalsIgnoreCase } from '../../models/Utils';
+import { useSearchParams } from '@solidjs/router';
 
 const YearFilter: Component = () => {
     const [categoryState, { getAllYears }] = useCategoryContext();
     const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const onChangeFilter = (val: string) => {
         if(equalsIgnoreCase(val, allYearFilterId)) {
+            setSearchParams({year: val});
             setYearFilter(val);
         } else {
-            setYearFilter(parseInt(val));
+            const year = parseInt(val);
+            setSearchParams({year: year});
+            setYearFilter(year);
         }
     }
 
