@@ -7,4 +7,3 @@ export type CategoryPageSettingsState = {
 export const defaultCategoryPageSettings: CategoryPageSettingsState = {
     viewMode: defaultCategoryViewMode
 };
-

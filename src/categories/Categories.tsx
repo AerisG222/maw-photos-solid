@@ -6,10 +6,14 @@ import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSett
 
 const Categories: Component = () => {
     const [searchParams] = useSearchParams();
-    const [state, { setYearFilter }] = useCategoryFilterSettingsContext();
+    const [state, { setYearFilter, setTypeFilter }] = useCategoryFilterSettingsContext();
 
     if(searchParams.year) {
         setYearFilter(parseInt(searchParams.year))
+    }
+
+    if(searchParams.type) {
+        setTypeFilter(searchParams.type);
     }
 
     return (
