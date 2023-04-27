@@ -1,6 +1,6 @@
 import { ICategory } from './Category';
 import { KeyValuePair } from './KeyValuePair';
-import { equalsIgnoreCase } from './Utils';
+import { equalsIgnoreCase } from './utils/StringUtils';
 
 export type CategoryTypeFilterIdType = string;
 export type CategoryTypeFilter = KeyValuePair<CategoryTypeFilterIdType> & { filter: (c: ICategory) => boolean };

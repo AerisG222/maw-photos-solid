@@ -5,7 +5,7 @@ import { useCategoryFilterSettingsContext } from '../../contexts/CategoryFilterS
 
 import Select from '../../settings/components/Select';
 import { allYearFilterId } from '../../models/YearFilter';
-import { equalsIgnoreCase } from '../../models/Utils';
+import { equalsIgnoreCase } from '../../models/utils/StringUtils';
 import { useSearchParams } from '@solidjs/router';
 
 const YearFilter: Component = () => {

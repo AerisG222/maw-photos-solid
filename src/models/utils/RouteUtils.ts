@@ -1,4 +1,4 @@
-import { AppRouteDefinition } from './AppRouteDefinition';
+import { AppRouteDefinition } from '../AppRouteDefinition';
 
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     if(!routeParams) {

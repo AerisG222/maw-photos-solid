@@ -1,5 +1,5 @@
 import { KeyValuePair } from './KeyValuePair';
-import { equalsIgnoreCase } from './Utils';
+import { equalsIgnoreCase } from './utils/StringUtils';
 
 export type ThumbnailSizeIdType = string;
 export type ThumbnailSize = KeyValuePair<ThumbnailSizeIdType> & { klass: any };

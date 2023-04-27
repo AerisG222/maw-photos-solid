@@ -1,6 +1,6 @@
 import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
-import { equalsIgnoreCase } from '../models/Utils';
+import { equalsIgnoreCase } from '../models/utils/StringUtils';
 import { YearFilterIdType } from '../models/YearFilter';
 import { CategoryTypeFilterIdType } from '../models/CategoryTypeFilter';
 

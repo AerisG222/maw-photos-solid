@@ -1,5 +1,5 @@
 import { KeyValuePair } from './KeyValuePair';
-import { equalsIgnoreCase } from './Utils';
+import { equalsIgnoreCase } from './utils/StringUtils';
 
 export type MarginIdType = string;
 export type Margin = KeyValuePair<MarginIdType> & { klass: any };

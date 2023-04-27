@@ -1,8 +1,8 @@
 import { lazy } from 'solid-js'
 import { categories } from '../categories/_routes'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
-import { buildPath } from '../models/RouteUtils'
-import { equalsIgnoreCase } from '../models/Utils'
+import { buildPath } from '../models/utils/RouteUtils'
+import { equalsIgnoreCase } from '../models/utils/StringUtils'
 
 const basePath = `${categories.absolutePath}/photos/:categoryId`;
 

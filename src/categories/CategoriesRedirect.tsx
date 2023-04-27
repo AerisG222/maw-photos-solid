@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 
-import { buildPath } from '../models/RouteUtils';
+import { buildPath } from '../models/utils/RouteUtils';
 import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
 import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
 import { buildSearch, getRouteForViewMode } from './_routes';

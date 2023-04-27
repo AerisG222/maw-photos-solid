@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
-import { buildPath } from '../../models/RouteUtils';
+import { buildPath } from '../../models/utils/RouteUtils';
 
 interface Props {
     route: AppRouteDefinition;
