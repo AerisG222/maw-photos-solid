@@ -4,9 +4,8 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { getPhotoCategoryPath } from './_routes';
 
-import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewBulkEdit: Component = () => {
     const [photoList] = usePhotoListContext();
@@ -14,17 +13,16 @@ const ViewBulkEdit: Component = () => {
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 
+    const toolbar = <Toolbar />;
+
     if(!photoList.photos || photoList.photos.length === 0) {
         navigate(getPhotoCategoryPath(categoryId));
     }
 
     return (
-        <ContentLayout>
-            <Toolbar />
-            <MainContent title="Photo Categories Bulk Edit">
-
-            </MainContent>
-        </ContentLayout>
+        <Layout toolbar={toolbar} title="Photo Categories Bulk Edit">
+            ...content...
+        </Layout>
     );
 };
 

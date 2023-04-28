@@ -39,7 +39,7 @@ export const about: AppRouteDefinition = {
     helpText: "View help and release notes for this application.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import('./Layout')),
+    component: lazy(() => import('./AboutLayout')),
     children: [
         aboutRedirect,
         aboutHelp,

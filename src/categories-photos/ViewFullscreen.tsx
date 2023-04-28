@@ -1,21 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewFullscreen: Component = () => {
+    const toolbar = (
+        <Toolbar>
+            <FullscreenToolbar />
+        </Toolbar>
+    );
+
     return (
-        <ContentLayout>
-            <Toolbar>
-                <FullscreenToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} title="Photo Categories Fullscreen">
 
-            <MainContent title="Photo Categories Fullscreen">
-
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 

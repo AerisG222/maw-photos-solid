@@ -1,21 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 import GridToolbar from './ToolbarGrid';
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewGrid: Component = () => {
+    const toolbar = (
+        <Toolbar>
+            <GridToolbar />
+        </Toolbar>
+    );
+
     return (
-        <ContentLayout>
-            <Toolbar>
-                <GridToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} title="Search Grid">
 
-            <MainContent title="Search Grid">
-
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 

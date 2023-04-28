@@ -1,21 +1,27 @@
 import { JSXElement, ParentComponent, Show, children } from 'solid-js'
+
 import { MarginIdType, getMarginClass } from '../../models/Margin';
 
 interface Props {
     title?: string;
     margin?: MarginIdType;
-    sidebar: JSXElement;
+    toolbar?: JSXElement;
+    sidebar?: JSXElement;
 }
 
-// todo: consolidate w/ maincontent?
-const MainContentWithSidebar: ParentComponent<Props> = (props) => {
+const Layout: ParentComponent<Props> = (props) => {
     const c = children(() => props.children);
 
     return (
         <div class="grid
-            grid-rows-[max-content_auto] grid-cols-[100vw]
-            md:grid-rows-[100vh] md:grid-cols-[auto_max-content]">
-            <div class="overflow-y-auto pl-2 pr-2 pb-8">
+            grid-rows-[max-content_auto_max-content] grid-cols-[100vw]
+            md:grid-rows-[100vh] md:grid-cols-[max-content_auto_max-content]"
+        >
+            <Show when={props.toolbar} fallback={<div />}>
+                {props.toolbar}
+            </Show>
+
+            <div class="overflow-y-auto px-2 pb-8">
                 <div classList={getMarginClass(props.margin)}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
@@ -24,11 +30,12 @@ const MainContentWithSidebar: ParentComponent<Props> = (props) => {
                     {c()}
                 </div>
             </div>
-            <div>
+
+            <Show when={props.sidebar} fallback={<div />}>
                 {props.sidebar}
-            </div>
+            </Show>
         </div>
     );
 };
 
-export default MainContentWithSidebar;
+export default Layout;

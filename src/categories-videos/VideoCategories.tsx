@@ -1,19 +1,15 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from "./Toolbar";
-import MainContent from '../components/layout/MainContent';
 import AuthGuard from '../components/auth/AuthGuard';
+import Layout from '../components/layout/Layout';
 
 const VideoCategories: Component = () => {
     return (
         <AuthGuard>
-            <ContentLayout>
-                <Toolbar />
-                <MainContent title="Video Categories">
+            <Layout toolbar={<Toolbar />} title="Video Categories">
 
-                </MainContent>
-            </ContentLayout>
+            </Layout>
         </AuthGuard>
     );
 };

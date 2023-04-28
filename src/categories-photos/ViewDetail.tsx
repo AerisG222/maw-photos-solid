@@ -3,31 +3,29 @@ import { Component, Show } from "solid-js";
 import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 
-import ContentLayout from '../components/layout/ContentLayout';
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import MainContentWithSidebar from '../components/layout/MainContentWithSidebar';
 import Sidebar from './components/Sidebar';
+import Layout from '../components/layout/Layout';
 
 const ViewDetail: Component = () => {
     const [settings] = usePhotoDetailViewSettingsContext();
     const [photoListState] = usePhotoListContext();
+    const toolbar = (
+        <Toolbar>
+            <DetailToolbar />
+        </Toolbar>
+    );
 
     return (
-        <ContentLayout>
-            <Toolbar>
-                <DetailToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} sidebar={<Sidebar />}>
+            <Show when={settings.showBreadcrumbs}>
+                <CategoryBreadcrumb />
+            </Show>
 
-            <MainContentWithSidebar sidebar={<Sidebar />}>
-                <Show when={settings.showBreadcrumbs}>
-                    <CategoryBreadcrumb />
-                </Show>
-
-                <img src={photoListState.activePhoto?.imageMd?.url} />
-            </MainContentWithSidebar>
-        </ContentLayout>
+            <img src={photoListState.activePhoto?.imageMd?.url} />
+        </Layout>
     );
 };
 

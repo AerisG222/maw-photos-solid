@@ -4,18 +4,19 @@ import ContentLayout from '../components/layout/ContentLayout';
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
 import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewGrid: Component = () => {
+    const toolbar = (
+        <Toolbar>
+            <GridToolbar />
+        </Toolbar>
+    );
+
     return (
-        <ContentLayout>
-            <Toolbar>
-                <GridToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} title="Random Grid">
 
-            <MainContent title="Random Grid">
-
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 

@@ -1,21 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
 import ListToolbar from './ToolbarList';
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewList: Component = () => {
+    const toolbar = (
+        <Toolbar>
+            <ListToolbar />
+        </Toolbar>
+    );
+
     return (
-        <ContentLayout>
-            <Toolbar>
-                <ListToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} title="Search List">
 
-            <MainContent title="Search List">
-
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 

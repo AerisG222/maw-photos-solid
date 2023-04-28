@@ -4,34 +4,32 @@ import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSett
 import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 
-import ContentLayout from '../components/layout/ContentLayout';
-import MainContent from '../components/layout/MainContent';
 import Toolbar from "./Toolbar";
 import GridToolbar from './ToolbarGrid';
 import YearGrid from './components/YearGrid';
 import CategoryFilterBar from './components/CategoryFilterBar';
+import Layout from '../components/layout/Layout';
 
 const GridView: Component = () => {
     const [categoryState, { getCategories, getYears }] = useCategoryContext();
     const [settings] = useCategoryGridViewSettingsContext();
     const [filter] = useCategoryFilterSettingsContext();
+    const toolbar = (
+        <Toolbar>
+            <GridToolbar />
+        </Toolbar>
+    );
 
     return (
-        <ContentLayout>
-            <Toolbar>
-                <GridToolbar />
-            </Toolbar>
-
+        <Layout toolbar={toolbar} margin={settings.margin}>
             <Suspense fallback={<p>Loading...</p>}>
-                <MainContent margin={settings.margin}>
-                    <CategoryFilterBar />
+                <CategoryFilterBar />
 
-                    <For each={getYears(filter.yearFilter, filter.typeFilter)}>{ year =>
-                        <YearGrid year={year} categories={getCategories(year, filter.typeFilter)}/>
-                    }</For>
-                </MainContent>
+                <For each={getYears(filter.yearFilter, filter.typeFilter)}>{ year =>
+                    <YearGrid year={year} categories={getCategories(year, filter.typeFilter)}/>
+                }</For>
             </Suspense>
-        </ContentLayout>
+        </Layout>
     );
 };
 

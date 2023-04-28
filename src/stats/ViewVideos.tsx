@@ -1,17 +1,13 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import Toolbar from './Toolbar';
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewVideos: Component = () => {
     return (
-        <ContentLayout>
-            <Toolbar />
-            <MainContent title="Stats Videos">
+        <Layout toolbar={<Toolbar />} title="Stats Videos">
 
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 

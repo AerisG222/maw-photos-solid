@@ -1,21 +1,20 @@
 import { Component } from "solid-js";
 
-import ContentLayout from '../components/layout/ContentLayout';
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
-import MainContent from '../components/layout/MainContent';
+import Layout from '../components/layout/Layout';
 
 const ViewMap: Component = () => {
+    const toolbar = (
+        <Toolbar>
+            <MapToolbar />
+        </Toolbar>
+    );
+
     return (
-        <ContentLayout>
-            <Toolbar>
-                <MapToolbar />
-            </Toolbar>
+        <Layout toolbar={toolbar} title="Photo Categories Map">
 
-            <MainContent title="Photo Categories Map">
-
-            </MainContent>
-        </ContentLayout>
+        </Layout>
     );
 };
 
