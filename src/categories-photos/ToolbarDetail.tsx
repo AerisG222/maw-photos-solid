@@ -1,8 +1,12 @@
 import { Component } from 'solid-js';
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
+import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
+import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
 const DetailToolbar: Component = () => {
+    const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = usePhotoDetailViewSettingsContext();
+
     const onToggleSlideshow = () => {
         console.log("slideshow");
     };
@@ -52,15 +56,15 @@ const DetailToolbar: Component = () => {
     }
 
     const onToggleBreadcrumbs = () => {
-        console.log("titles");
+        setShowBreadcrumbs(!settings.showBreadcrumbs);
     };
 
     const onTogglePhotoList = () => {
-        console.log("toggle photo list");
+        setShowPhotoList(!settings.showPhotoList);
     };
 
-    const onToggleMargins = () => {
-        console.log("margins");
+    const onToggleThumbnailSize = () => {
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
     };
 
     return (
@@ -153,7 +157,7 @@ const DetailToolbar: Component = () => {
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
                 name="Toggle Margins"
-                clickHandler={onToggleMargins}
+                clickHandler={onToggleThumbnailSize}
             />
         </>
     );

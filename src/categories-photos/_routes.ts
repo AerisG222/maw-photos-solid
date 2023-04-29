@@ -23,16 +23,16 @@ export const categoriesPhotosGrid: AppRouteDefinition = {
 export const categoriesPhotosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    path: 'detail',
-    absolutePath: `${basePath}/detail`,
+    path: '/detail/:photoId?',
+    absolutePath: `${basePath}/detail/:photoId?`,
     component: lazy(() => import('./ViewDetail'))
 }
 
 export const categoriesPhotosFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    path: 'fullscreen',
-    absolutePath: `${basePath}/fullscreen`,
+    path: '/fullscreen/:photoId?',
+    absolutePath: `${basePath}/fullscreen/:photoId?`,
     component: lazy(() => import('./ViewFullscreen'))
 }
 

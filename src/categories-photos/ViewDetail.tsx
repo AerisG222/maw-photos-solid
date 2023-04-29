@@ -8,6 +8,8 @@ import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Sidebar from './components/Sidebar';
 import Layout from '../components/layout/Layout';
+import PhotoList from './components/PhotoList';
+import { getThumbnailClass } from '../models/ThumbnailSize';
 
 const ViewDetail: Component = () => {
     const [settings] = usePhotoDetailViewSettingsContext();
@@ -20,11 +22,19 @@ const ViewDetail: Component = () => {
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
-            <Show when={settings.showBreadcrumbs}>
-                <CategoryBreadcrumb />
-            </Show>
+            <div class="flex flex-col flex-[max-content_auto_max-content]">
+                <Show when={settings.showBreadcrumbs} fallback={<div />}>
+                    <CategoryBreadcrumb />
+                </Show>
 
-            <img src={photoListState.activePhoto?.imageMd?.url} />
+                <div>
+                    <img src={photoListState.activePhoto?.imageMd?.url} />
+                </div>
+
+                <Show when={settings.showPhotoList} fallback={<div/>}>
+                    <PhotoList thumbnailClass={getThumbnailClass(settings.thumbnailSize)} />
+                </Show>
+            </div>
         </Layout>
     );
 };
