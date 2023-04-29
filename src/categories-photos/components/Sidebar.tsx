@@ -3,6 +3,14 @@ import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
 import { usePhotoInfoPanelSettingsContext } from "../../contexts/PhotoInfoPanelSettingsContext";
+import RatingsCard from './RatingsCard';
+import CommentsCard from './CommentsCard';
+import HistogramCard from './HistogramCard';
+import ExifCard from './ExifCard';
+import EffectsCard from './EffectsCard';
+import MinimapCard from './MinimapCard';
+import MetadataEditorCard from './MetadataEditorCard';
+import CategoryTeaserCard from './CategoryTeaserCard';
 
 const Sidebar: Component = () => {
     const [
@@ -61,35 +69,35 @@ const Sidebar: Component = () => {
             <Show when={settings.expandInfoPanel}>
                 <div class="w-[500px] bg-secondary-content:6 border-l-1 border-l-secondary-content:10%">
                     <Show when={settings.expandInfoPanel && settings.showRatings}>
-                        <div>ratings</div>
+                        <RatingsCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showComments}>
-                        <div>comments</div>
+                        <CommentsCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showExif}>
-                        <div>exif</div>
+                        <ExifCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showEffects}>
-                        <div>effects</div>
+                        <EffectsCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showHistogram}>
-                        <div>histogram</div>
+                        <HistogramCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showMinimap}>
-                        <div>minimap</div>
+                        <MinimapCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showMetadataEditor}>
-                        <div>metadata</div>
+                        <MetadataEditorCard />
                     </Show>
 
                     <Show when={settings.expandInfoPanel && settings.showCategoryTeaserChooser}>
-                        <div>category teaser</div>
+                        <CategoryTeaserCard />
                     </Show>
                 </div>
             </Show>
