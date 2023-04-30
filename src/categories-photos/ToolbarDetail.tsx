@@ -155,7 +155,7 @@ const DetailToolbar: Component = () => {
                 clickHandler={onTogglePhotoList}
             />
             <ToolbarButton
-                icon="i-ic-round-format-indent-increase"
+                icon="i-mdi-image-size-select-large"
                 name="Toggle Margins"
                 clickHandler={onToggleThumbnailSize}
             />
