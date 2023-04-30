@@ -9,7 +9,6 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Sidebar from './components/Sidebar';
 import Layout from '../components/layout/Layout';
 import PhotoList from './components/PhotoList';
-import { getThumbnailClass } from '../models/ThumbnailSize';
 
 const ViewDetail: Component = () => {
     const [settings] = usePhotoDetailViewSettingsContext();
@@ -32,7 +31,7 @@ const ViewDetail: Component = () => {
                 </div>
 
                 <Show when={settings.showPhotoList} fallback={<div/>}>
-                    <PhotoList thumbnailClass={getThumbnailClass(settings.thumbnailSize)} />
+                    <PhotoList thumbnailSize={settings.thumbnailSize} />
                 </Show>
             </div>
         </Layout>
