@@ -14,7 +14,7 @@ const PhotoList: Component<Props> = (props) => {
     return (
         <div class="flex flex-nowrap overflow-x-auto">
             <For each={photos.photos}>{photo =>
-                <A href="#x" class="cursor-pointer mr-[0.1rem] saturate-40 hover:saturate-100 border-1 border-transparent hover:border-primary">
+                <A href={`/categories/photos/${photo.categoryId}/detail/${photo.id}`} class="cursor-pointer mr-[0.1rem] saturate-40 hover:saturate-100 border-1 border-transparent hover:border-primary">
                     <img src={photo.imageXsSq.url} class="max-w-none" classList={getThumbnailClass(props.thumbnailSize)} />
                 </A>
             }</For>
