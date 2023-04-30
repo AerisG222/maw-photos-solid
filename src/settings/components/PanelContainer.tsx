@@ -5,7 +5,7 @@ const Panel: ParentComponent = (props) => {
 
     return (
         <>
-            <div class="flex flex-wrap flex-gap4">
+            <div class="flex flex-wrap flex-gap4 mb-4">
                 {c()}
             </div>
         </>
