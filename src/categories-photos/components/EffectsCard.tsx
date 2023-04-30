@@ -1,13 +1,9 @@
 import { Component } from 'solid-js';
 
-import InfoCard from './InfoCard'
-
 const EffectsCard: Component = () => {
 
     return (
-        <InfoCard>
-            <div>effects</div>
-        </InfoCard>
+        <div>effects</div>
     );
 }
 
