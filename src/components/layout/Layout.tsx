@@ -21,7 +21,7 @@ const Layout: ParentComponent<Props> = (props) => {
                 {props.toolbar}
             </Show>
 
-            <div class="overflow-y-auto px-2 pb-8">
+            <div class="overflow-y-auto px-2">
                 <div classList={getMarginClass(props.margin)}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>

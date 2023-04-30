@@ -21,12 +21,12 @@ const ViewDetail: Component = () => {
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
-            <div class="flex flex-col flex-[max-content_auto_max-content]">
+            <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh">
                 <Show when={settings.showBreadcrumbs} fallback={<div />}>
                     <CategoryBreadcrumb />
                 </Show>
 
-                <div>
+                <div class="flex-1">
                     <img src={photoListState.activePhoto?.imageMd?.url} />
                 </div>
 
