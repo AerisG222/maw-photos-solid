@@ -26,8 +26,8 @@ const ViewDetail: Component = () => {
                     <CategoryBreadcrumb />
                 </Show>
 
-                <div class="flex-1">
-                    <img src={photoListState.activePhoto?.imageMd?.url} />
+                <div class="flex-1 mb-1">
+                    <img src={photoListState.activePhoto?.imageMd?.url} class="h-100% max-w-100% max-h-100% object-contain justify-self-center m-x-auto" />
                 </div>
 
                 <Show when={settings.showPhotoList} fallback={<div/>}>
