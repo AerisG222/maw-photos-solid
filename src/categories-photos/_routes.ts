@@ -71,8 +71,11 @@ export const categoriesPhotos: AppRouteDefinition = {
 export const getPhotoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesPhotos, {categoryId: categoryId});
 
-export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number): string =>
-    buildPath(getRouteForViewMode(viewMode), {categoryId: categoryId});
+export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number, photoId?: number): string =>
+    getPhotoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, photoId);
+
+export const getPhotoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, photoId?: number): string =>
+    buildPath(route, {categoryId: categoryId, photoId: photoId});
 
 const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {

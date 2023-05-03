@@ -1,5 +1,6 @@
 import { AppRouteDefinition } from '../AppRouteDefinition';
 
+// todo: figure out a better way
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     if(!routeParams) {
         return route.absolutePath;
@@ -9,11 +10,16 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
 
     // apply provided replacements
     for(let [key, value] of Object.entries(routeParams)) {
-        path = path.replace(`:${key}`, value);
+        if(value) {
+            path = path.replace(new RegExp(`:${key}\\??`), value);
+        }
     }
 
-    // remove optional params that may remain
-    path = path.replace(/:(.*)\?/, '');
+    // remove params that may remain [this will remove all interior params]
+    path = path.replaceAll(/:.*?\//g, '');
+
+    // remove params that may remain at the end of the path
+    path = path.replaceAll(/:.*\??/g, '');
 
     // do not end w/ trailing slash
     if(path.endsWith('/')) {

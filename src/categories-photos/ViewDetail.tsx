@@ -1,5 +1,7 @@
 import { Component, Show } from "solid-js";
+import { useNavigate, useParams } from '@solidjs/router';
 
+import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
 import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 
@@ -11,13 +13,22 @@ import Layout from '../components/layout/Layout';
 import PhotoList from './components/PhotoList';
 
 const ViewDetail: Component = () => {
+    const navigate = useNavigate();
+    const params = useParams();
     const [settings] = usePhotoDetailViewSettingsContext();
     const [photoListState] = usePhotoListContext();
+
     const toolbar = (
         <Toolbar>
             <DetailToolbar />
         </Toolbar>
     );
+
+    if(!params.photoId) {
+        const p = photoListState.photos[0];
+
+        navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
+    }
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
