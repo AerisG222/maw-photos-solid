@@ -91,7 +91,7 @@ const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     }
 
     if(equalsIgnoreCase('map', mode)) {
-        return categoriesPhotosMap.path;
+        return categoriesPhotosMap;
     }
 
     if(equalsIgnoreCase('bulkEdit', mode)) {
