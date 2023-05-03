@@ -7,10 +7,12 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
+import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
     const [photoState] = usePhotoListContext();
+    const [settings, { setViewMode }] = usePhotoPageSettingsContext();
 
     const c = () => props.children;
     const getParams = () => ({
@@ -21,11 +23,11 @@ const Toolbar: ParentComponent = (props) => {
     return (
         <Show when={categoryState.activeCategory}>
             <ToolbarLayout>
-                <ToolbarLink route={categoriesPhotosGrid}       routeParams={getParams()} />
-                <ToolbarLink route={categoriesPhotosDetail}     routeParams={getParams()} />
-                <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getParams()} />
-                <ToolbarLink route={categoriesPhotosMap}        routeParams={getParams()} />
-                <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getParams()} />
+                <ToolbarLink route={categoriesPhotosGrid}       routeParams={getParams()} clickHandler={() => setViewMode("grid")}/>
+                <ToolbarLink route={categoriesPhotosDetail}     routeParams={getParams()} clickHandler={() => setViewMode("detail")}/>
+                <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getParams()} clickHandler={() => setViewMode("fullscreen")}/>
+                <ToolbarLink route={categoriesPhotosMap}        routeParams={getParams()} clickHandler={() => setViewMode("map")}/>
+                <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getParams()} clickHandler={() => setViewMode("bulkEdit")}/>
 
                 <Show when={!!c()}>
                     <Divider />
