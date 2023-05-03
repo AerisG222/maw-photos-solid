@@ -1,5 +1,5 @@
 import { Outlet, useParams } from '@solidjs/router';
-import { Component, batch, createEffect } from "solid-js";
+import { Component, Show, batch, createEffect, onCleanup } from "solid-js";
 
 import { getPhotos } from '../api/api';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
@@ -12,8 +12,13 @@ const PhotoCategories: Component = () => {
     const [photos, { setPhotos, setActivePhoto }] = usePhotoListContext();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
-    const photoId = parseInt(params.photoId);
     const photosQuery = getPhotos(categoryId);
+
+    onCleanup(() => {
+        setActivePhoto(undefined);
+        setActivePhotoCategory(-1);
+        setPhotos([]);
+    });
 
     createEffect(() => {
         if(photosQuery.isSuccess) {
@@ -33,7 +38,9 @@ const PhotoCategories: Component = () => {
 
     return (
         <AuthGuard>
-            <Outlet />
+            <Show when={photos.photos && photos.photos.length > 0}>
+                <Outlet />
+            </Show>
         </AuthGuard>
     );
 };
