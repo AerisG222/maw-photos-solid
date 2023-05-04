@@ -7,22 +7,17 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
+import MovePreviousButton from './components/toolbar/MovePreviousButton';
+import MoveNextButton from './components/toolbar/MoveNextButton';
+import ToggleSlideshowButton from './components/toolbar/ToggleSlideshowButton';
+import RotateCounterClockwiseButton from './components/toolbar/RotateCounterClockwiseButton';
+import RotateClockwiseButton from './components/toolbar/RotateClockwiseButton';
+import FlipHorizontalButton from './components/toolbar/FlipHorizontalButton';
+import FlipVerticalButton from './components/toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
-    const [state, {activePhotoIsFirst, activePhotoIsLast}] = usePhotoListContext();
-
-    const onToggleSlideshow = () => {
-        console.log("slideshow");
-    }
-
-    const onMoveNext = () => {
-        console.log('move next');
-    }
-
-    const onMovePrevious = () => {
-        console.log('move prev');
-    }
+    const [state] = usePhotoListContext();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -36,43 +31,13 @@ const GridToolbar: Component = () => {
         setMargin(getNextMarginSize(settings.margin).id);
     }
 
-    const onRotateCounterClockwise = () => {
-        console.log('rotate ccw');
-    }
-
-    const onRotateClockwise = () => {
-        console.log('rotate cw');
-    }
-
-    const onFlipHorizontal = () => {
-        console.log('fliph');
-    }
-
-    const onFlipVertical = () => {
-        console.log('flipw');
-    }
-
     return (
         <>
-            <ToolbarButton
-                icon="i-ic-round-play-arrow"
-                name="Start / Stop Slideshow"
-                clickHandler={onToggleSlideshow}
-            />
+            <ToggleSlideshowButton />
 
             <Show when={state.activePhoto}>
-                <ToolbarButton
-                    disabled={activePhotoIsFirst()}
-                    icon="i-ic-round-chevron-left"
-                    name="Move Previous"
-                    clickHandler={onMovePrevious}
-                />
-                <ToolbarButton
-                    disabled={activePhotoIsLast()}
-                    icon="i-ic-round-chevron-right"
-                    name="Move Next"
-                    clickHandler={onMoveNext}
-                />
+                <MovePreviousButton />
+                <MoveNextButton />
             </Show>
 
             <Divider />
@@ -96,26 +61,10 @@ const GridToolbar: Component = () => {
             </Show>
 
             <Show when={state.activePhoto}>
-                <ToolbarButton
-                    icon="i-ic-round-rotate-left"
-                    name="Rotate Counter-Clockwise"
-                    clickHandler={onRotateCounterClockwise}
-                />
-                <ToolbarButton
-                    icon="i-ic-round-rotate-right"
-                    name="Rotate Clockwise"
-                    clickHandler={onRotateClockwise}
-                />
-                <ToolbarButton
-                    icon="i-ic-round-flip"
-                    name="Flip Horizontal"
-                    clickHandler={onFlipHorizontal}
-                />
-                <ToolbarButton
-                    icon="i-ic-round-flip rotate-90"
-                    name="Flip Vertical"
-                    clickHandler={onFlipVertical}
-                />
+                <RotateCounterClockwiseButton />
+                <RotateClockwiseButton />
+                <FlipHorizontalButton />
+                <FlipVerticalButton />
             </Show>
         </>
     );

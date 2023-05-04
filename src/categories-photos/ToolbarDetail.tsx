@@ -1,59 +1,25 @@
 import { Component } from 'solid-js';
-import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/layout/Divider';
+
 import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
+import ToolbarButton from '../components/toolbar/ToolbarButton';
+import Divider from '../components/layout/Divider';
+import ToggleSlideshowButton from './components/toolbar/ToggleSlideshowButton';
+import MovePreviousButton from './components/toolbar/MovePreviousButton';
+import MoveNextButton from './components/toolbar/MoveNextButton';
+import RotateCounterClockwiseButton from './components/toolbar/RotateCounterClockwiseButton';
+import RotateClockwiseButton from './components/toolbar/RotateClockwiseButton';
+import FlipHorizontalButton from './components/toolbar/FlipHorizontalButton';
+import FlipVerticalButton from './components/toolbar/FlipVerticalButton';
+import DownloadCategoryButton from './components/toolbar/DownloadCategoryButton';
+import DownloadPhotoLowResButton from './components/toolbar/DownloadPhotoLowResButton';
+import DownloadPhotoMediumResButton from './components/toolbar/DownloadPhotoMediumResButton';
+import DownloadPhotoHighResButton from './components/toolbar/DownloadPhotoHighResButton';
+import DownloadPhotoHighUntouchedButton from './components/toolbar/DownloadPhotoHighUntouchedButton';
+
 const DetailToolbar: Component = () => {
     const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = usePhotoDetailViewSettingsContext();
-
-    const onToggleSlideshow = () => {
-        console.log("slideshow");
-    };
-
-    const onMovePrevious = () => {
-        console.log("previous");
-    };
-
-    const onMoveNext = () => {
-        console.log("next");
-    };
-
-    const onDownloadCategory = () => {
-        console.log("download category");
-    };
-
-    const onRotateLeft = () => {
-        console.log("rotate left");
-    };
-
-    const onRotateRight = () => {
-        console.log("rotate right");
-    };
-
-    const onFlipHorizontal = () => {
-        console.log("flip horizontal");
-    };
-
-    const onFlipVertical = () => {
-        console.log("flip vertical");
-    };
-
-    const onDownloadSmall = () => {
-        console.log("download small");
-    }
-
-    const onDownloadMedium = () => {
-        console.log("download medium");
-    }
-
-    const onDownloadHigh = () => {
-        console.log("download high");
-    }
-
-    const onDownloadHighUntouched = () => {
-        console.log("download high untouched");
-    }
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -69,78 +35,27 @@ const DetailToolbar: Component = () => {
 
     return (
         <>
-            <ToolbarButton
-                icon="i-ic-round-play-arrow"
-                name="Start / Stop Slideshow"
-                clickHandler={onToggleSlideshow}
-            />
-
-            <ToolbarButton
-                icon="i-ic-round-navigate-before"
-                name="Previous Photo"
-                clickHandler={onMovePrevious}
-            />
-
-            <ToolbarButton
-                icon="i-ic-round-navigate-next"
-                name="Next Photo"
-                clickHandler={onMoveNext}
-            />
+            <ToggleSlideshowButton />
+            <MovePreviousButton />
+            <MoveNextButton />
 
             <Divider />
 
-            <ToolbarButton
-                icon="i-ic-outline-file-download"
-                name="Download All Photos in Category"
-                clickHandler={onDownloadCategory}
-            />
+            <DownloadCategoryButton />
 
             <Divider />
 
-            <ToolbarButton
-                icon="i-ic-round-rotate-left"
-                name="Rotate Left"
-                clickHandler={onRotateLeft}
-            />
-            <ToolbarButton
-                icon="i-ic-round-rotate-right"
-                name="Rotate Right"
-                clickHandler={onRotateRight}
-            />
-            <ToolbarButton
-                icon="i-ic-round-flip"
-                name="Flip Horizontal"
-                clickHandler={onFlipHorizontal}
-            />
-            <ToolbarButton
-                rotate90={true}
-                icon="i-ic-round-flip"
-                name="Flip Vertical"
-                clickHandler={onFlipVertical}
-            />
+            <RotateCounterClockwiseButton />
+            <RotateClockwiseButton />
+            <FlipHorizontalButton />
+            <FlipVerticalButton />
 
             <Divider />
 
-            <ToolbarButton
-                icon="i-ic-round-image text-sm"
-                name="Low Res Download"
-                clickHandler={onDownloadSmall}
-            />
-            <ToolbarButton
-                icon="i-ic-round-image text-lg"
-                name="Medium Res Download"
-                clickHandler={onDownloadMedium}
-            />
-            <ToolbarButton
-                icon="i-ic-round-image"
-                name="High Res Download"
-                clickHandler={onDownloadHigh}
-            />
-            <ToolbarButton
-                icon="i-ic-round-image"
-                name="High Res Download (untouched)"
-                clickHandler={onDownloadHighUntouched}
-            />
+            <DownloadPhotoLowResButton />
+            <DownloadPhotoMediumResButton />
+            <DownloadPhotoHighResButton />
+            <DownloadPhotoHighUntouchedButton />
 
             <Divider />
 
