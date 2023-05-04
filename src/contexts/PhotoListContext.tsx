@@ -20,6 +20,8 @@ export type PhotoListContextValue = [
     actions: {
         setPhotos: (photos: Photo[]) => void;
         setActivePhoto: (photoId: number) => void;
+        activePhotoIsFirst: () => boolean;
+        activePhotoIsLast: () => boolean;
     }
 ];
 
@@ -27,7 +29,9 @@ const PhotoListContext = createContext<PhotoListContextValue>([
     defaultPhotoListState,
     {
         setPhotos: () => undefined,
-        setActivePhoto: () => undefined
+        setActivePhoto: () => undefined,
+        activePhotoIsFirst: () => undefined,
+        activePhotoIsLast: () => undefined,
     }
 ]);
 
@@ -48,10 +52,15 @@ export const PhotoListProvider: ParentComponent = (props) => {
         }
     }
 
+    const activePhotoIsFirst = () => state.activeIndex === 0;
+    const activePhotoIsLast = () => state.activeIndex === state.photos.length - 1;
+
     return (
         <PhotoListContext.Provider value={[state, {
             setPhotos,
-            setActivePhoto
+            setActivePhoto,
+            activePhotoIsFirst,
+            activePhotoIsLast
         }]}>
             {props.children}
         </PhotoListContext.Provider>

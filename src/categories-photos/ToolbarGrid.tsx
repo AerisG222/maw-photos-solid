@@ -10,7 +10,7 @@ import Divider from '../components/layout/Divider';
 
 const GridToolbar: Component = () => {
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
-    const [state] = usePhotoListContext();
+    const [state, {activePhotoIsFirst, activePhotoIsLast}] = usePhotoListContext();
 
     const onToggleSlideshow = () => {
         console.log("slideshow");
@@ -62,11 +62,13 @@ const GridToolbar: Component = () => {
 
             <Show when={state.activePhoto}>
                 <ToolbarButton
+                    disabled={activePhotoIsFirst()}
                     icon="i-ic-round-chevron-left"
                     name="Move Previous"
                     clickHandler={onMovePrevious}
                 />
                 <ToolbarButton
+                    disabled={activePhotoIsLast()}
                     icon="i-ic-round-chevron-right"
                     name="Move Next"
                     clickHandler={onMoveNext}

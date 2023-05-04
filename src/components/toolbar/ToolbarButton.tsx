@@ -5,6 +5,7 @@ interface Props {
     name: string;
     active?: boolean;
     rotate90?: boolean;
+    disabled?: boolean;
     clickHandler: () => void;
 }
 
@@ -17,7 +18,8 @@ const ToolbarButton: Component<Props> = (props) => {
 
     return (
         <button
-            class="px-3 py-1 hover:bg-accent hover:color-accentContent"
+            disabled={props.disabled}
+            class="px-3 py-1 hover:bg-accent hover:color-accentContent disabled:bg-transparent! disabled:color-secondary-content disabled:opacity-20"
             classList={{"rotate-90": props.rotate90, "bg-accent": props.active, "color-accentContent": props.active}}
             title={props.name}
             onClick={[handleClick, null]}
