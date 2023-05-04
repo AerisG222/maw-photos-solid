@@ -122,12 +122,12 @@ const DetailToolbar: Component = () => {
             <Divider />
 
             <ToolbarButton
-                icon="i-ic-round-image"
+                icon="i-ic-round-image text-sm"
                 name="Low Res Download"
                 clickHandler={onDownloadSmall}
             />
             <ToolbarButton
-                icon="i-ic-round-image"
+                icon="i-ic-round-image text-lg"
                 name="Medium Res Download"
                 clickHandler={onDownloadMedium}
             />
