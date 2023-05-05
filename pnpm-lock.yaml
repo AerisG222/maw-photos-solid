@@ -31,11 +31,11 @@ devDependencies:
     specifier: ^0.51.8
     version: 0.51.8
   '@unocss/reset':
-    specifier: ^0.51.8
-    version: 0.51.8
+    specifier: ^0.51.10
+    version: 0.51.10
   '@unocss/vite':
     specifier: ^0.51.8
-    version: 0.51.8(vite@4.3.4)
+    version: 0.51.8(vite@4.3.5)
   daisyui:
     specifier: ^2.51.6
     version: 2.51.6(autoprefixer@10.4.14)(postcss@8.4.23)
@@ -52,11 +52,11 @@ devDependencies:
     specifier: ^4.0.0
     version: 4.0.0(daisyui@2.51.6)(unocss@0.50.8)
   vite:
-    specifier: ^4.3.4
-    version: 4.3.4
+    specifier: ^4.3.5
+    version: 4.3.5
   vite-plugin-solid:
     specifier: ^2.7.0
-    version: 2.7.0(solid-js@1.7.4)(vite@4.3.4)
+    version: 2.7.0(solid-js@1.7.4)(vite@4.3.5)
 
 packages:
 
@@ -991,12 +991,12 @@ packages:
       eslint-visitor-keys: 3.4.0
     dev: true
 
-  /@unocss/astro@0.50.8(vite@4.3.4):
+  /@unocss/astro@0.50.8(vite@4.3.5):
     resolution: {integrity: sha512-kphNlr0PWGzvkCgKx7RaZWQ45khieCCt9OffUnxbRRft+jodsVXIwzHn+bOhGtIKpEpZiOzxRzTYjfW/R6XnTw==}
     dependencies:
       '@unocss/core': 0.50.8
       '@unocss/reset': 0.50.8
-      '@unocss/vite': 0.50.8(vite@4.3.4)
+      '@unocss/vite': 0.50.8(vite@4.3.5)
     transitivePeerDependencies:
       - rollup
       - vite
@@ -1174,8 +1174,8 @@ packages:
     resolution: {integrity: sha512-2WoM6O9VyuHDPAnvCXr7LBJQ8ZRHDnuQAFsL1dWXp561Iq2l9whdNtPuMcozLGJGUUrFfVBXIrHY4sfxxScgWg==}
     dev: true
 
-  /@unocss/reset@0.51.8:
-    resolution: {integrity: sha512-mVUP2F/ItPKatkRh5tWBNDZG2YqG7oKxfYxQUYbNAv/hiTKPlKc3PX9T4vZKEvJarbzucTIGbYHdzwqExzG9Kw==}
+  /@unocss/reset@0.51.10:
+    resolution: {integrity: sha512-9jlchQFXpbjTXqhjBCUA6PgbUkB6bqQhMaLdCUIgGgPLvTcDSsjH89dUuM/iVT1UlPGLlZBpeXeVbHoERgjvRA==}
     dev: true
 
   /@unocss/scope@0.50.8:
@@ -1224,7 +1224,7 @@ packages:
       '@unocss/core': 0.50.8
     dev: true
 
-  /@unocss/vite@0.50.8(vite@4.3.4):
+  /@unocss/vite@0.50.8(vite@4.3.5):
     resolution: {integrity: sha512-pHk7D0jHAlBUKSp0y0dMuKesLSSv1O0fTNewUAz1NUpISTno3zizuKSpRs8OzCFInta6QeAVSaWe8K69PcfFog==}
     peerDependencies:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
@@ -1239,12 +1239,12 @@ packages:
       chokidar: 3.5.3
       fast-glob: 3.2.12
       magic-string: 0.30.0
-      vite: 4.3.4
+      vite: 4.3.5
     transitivePeerDependencies:
       - rollup
     dev: true
 
-  /@unocss/vite@0.51.8(vite@4.3.4):
+  /@unocss/vite@0.51.8(vite@4.3.5):
     resolution: {integrity: sha512-0mVCgh2Bci2oey6VXGAJBI3x/p5whJiY32BpJaugCmLlZPc6rnWQ8o/FaOTed2EznWAGA8zRRF2l3fEVCURh9g==}
     peerDependencies:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
@@ -1259,7 +1259,7 @@ packages:
       chokidar: 3.5.3
       fast-glob: 3.2.12
       magic-string: 0.30.0
-      vite: 4.3.4
+      vite: 4.3.5
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -2897,8 +2897,8 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup@3.21.3:
-    resolution: {integrity: sha512-VnPfEG51nIv2xPLnZaekkuN06q9ZbnyDcLkaBdJa/W7UddyhOfMP2yOPziYQfeY7k++fZM8FdQIummFN5y14kA==}
+  /rollup@3.21.5:
+    resolution: {integrity: sha512-a4NTKS4u9PusbUJcfF4IMxuqjFzjm6ifj76P54a7cKnvVzJaG12BLVR+hgU2YDGHzyMMQNxLAZWuALsn8q2oQg==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -3236,10 +3236,10 @@ packages:
       parsel-js: 1.1.0
       postcss: 8.4.21
       postcss-js: 4.0.1(postcss@8.4.21)
-      unocss: 0.50.8(postcss@8.4.23)(vite@4.3.4)
+      unocss: 0.50.8(postcss@8.4.23)(vite@4.3.5)
     dev: true
 
-  /unocss@0.50.8(postcss@8.4.23)(vite@4.3.4):
+  /unocss@0.50.8(postcss@8.4.23)(vite@4.3.5):
     resolution: {integrity: sha512-3yqKkSm/SKCKxFolXNR12Mi64lr4PW95LSHKZ/a9Yzlf2PT1NirAn8/uJ8KoJJBNR2YWobtkLi4UplFz/8IAYA==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -3248,7 +3248,7 @@ packages:
       '@unocss/webpack':
         optional: true
     dependencies:
-      '@unocss/astro': 0.50.8(vite@4.3.4)
+      '@unocss/astro': 0.50.8(vite@4.3.5)
       '@unocss/cli': 0.50.8
       '@unocss/core': 0.50.8
       '@unocss/postcss': 0.50.8(postcss@8.4.23)
@@ -3266,7 +3266,7 @@ packages:
       '@unocss/transformer-compile-class': 0.50.8
       '@unocss/transformer-directives': 0.50.8
       '@unocss/transformer-variant-group': 0.50.8
-      '@unocss/vite': 0.50.8(vite@4.3.4)
+      '@unocss/vite': 0.50.8(vite@4.3.5)
     transitivePeerDependencies:
       - postcss
       - rollup
@@ -3299,7 +3299,7 @@ packages:
     resolution: {integrity: sha512-T1ab131NkP3BfXB7KUSgV7Rhu81R2id+L6NaJ7NypAAG5iV6gXnPpQE5RK1fvb+3JYsPTL+ihWna5sr5RN9gaQ==}
     dev: true
 
-  /vite-plugin-solid@2.7.0(solid-js@1.7.4)(vite@4.3.4):
+  /vite-plugin-solid@2.7.0(solid-js@1.7.4)(vite@4.3.5):
     resolution: {integrity: sha512-avp/Jl5zOp/Itfo67xtDB2O61U7idviaIp4mLsjhCa13PjKNasz+IID0jYTyqUp9SFx6/PmBr6v4KgDppqompg==}
     peerDependencies:
       solid-js: ^1.7.2
@@ -3312,14 +3312,14 @@ packages:
       merge-anything: 5.1.4
       solid-js: 1.7.4
       solid-refresh: 0.5.2(solid-js@1.7.4)
-      vite: 4.3.4
-      vitefu: 0.2.4(vite@4.3.4)
+      vite: 4.3.5
+      vitefu: 0.2.4(vite@4.3.5)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@4.3.4:
-    resolution: {integrity: sha512-f90aqGBoxSFxWph2b39ae2uHAxm5jFBBdnfueNxZAT1FTpM13ccFQExCaKbR2xFW5atowjleRniQ7onjJ22QEg==}
+  /vite@4.3.5:
+    resolution: {integrity: sha512-0gEnL9wiRFxgz40o/i/eTBwm+NEbpUeTWhzKrZDSdKm6nplj+z4lKz8ANDgildxHm47Vg8EUia0aicKbawUVVA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -3345,12 +3345,12 @@ packages:
     dependencies:
       esbuild: 0.17.18
       postcss: 8.4.23
-      rollup: 3.21.3
+      rollup: 3.21.5
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
 
-  /vitefu@0.2.4(vite@4.3.4):
+  /vitefu@0.2.4(vite@4.3.5):
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0
@@ -3358,7 +3358,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.3.4
+      vite: 4.3.5
     dev: true
 
   /which-boxed-primitive@1.0.2:
