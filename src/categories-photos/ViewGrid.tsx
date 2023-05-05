@@ -9,6 +9,7 @@ import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import PhotoGridItem from './components/PhotoGridItem';
 import Layout from '../components/layout/Layout';
+import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from './_routes';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
@@ -24,7 +25,7 @@ const ViewGrid: Component = () => {
         <Layout margin={settings.margin} toolbar={toolbar}>
             <Show when={photoState.activePhoto}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
-                    <A href={`/categories/photos/${photoState.activePhoto.categoryId}/grid`}>
+                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)}>
                         <img src={photoState.activePhoto.imageLg.url} class="w-[100%] h-[100%] object-contain self-center" />
                     </A>
                 </div>
