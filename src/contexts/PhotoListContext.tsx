@@ -22,6 +22,8 @@ export type PhotoListContextValue = [
         setActivePhoto: (photoId: number) => void;
         activePhotoIsFirst: () => boolean;
         activePhotoIsLast: () => boolean;
+        getNextPhoto: () => Photo | undefined;
+        getPreviousPhoto: () => Photo | undefined;
     }
 ];
 
@@ -32,6 +34,8 @@ const PhotoListContext = createContext<PhotoListContextValue>([
         setActivePhoto: () => undefined,
         activePhotoIsFirst: () => undefined,
         activePhotoIsLast: () => undefined,
+        getNextPhoto: () => undefined,
+        getPreviousPhoto: () => undefined
     }
 ]);
 
@@ -45,22 +49,54 @@ export const PhotoListProvider: ParentComponent = (props) => {
     const setActivePhoto = (photoId: number) => {
         if(photoId) {
             const idx = state.photos.findIndex(x => x.id === photoId);
-            const photo = state.photos[idx];
-            setState({ activePhoto: photo, activeIndex: idx});
+
+            setActivePhotoByIndex(idx);
         } else {
-            setState({ activePhoto: undefined, activeIndex: undefined});
+            unsetActivePhoto();
         }
     }
 
     const activePhotoIsFirst = () => state.activeIndex === 0;
     const activePhotoIsLast = () => state.activeIndex === state.photos.length - 1;
 
+    const unsetActivePhoto = () => {
+        setState({
+            activePhoto: undefined,
+            activeIndex: undefined
+        });
+    }
+
+    const setActivePhotoByIndex = (index: number) => {
+        setState({
+            activePhoto: state.photos[index],
+            activeIndex: index
+        });
+    }
+
+    const getNextPhoto = () => {
+        if(activePhotoIsLast()) {
+            return undefined;
+        }
+
+        return state.photos[state.activeIndex + 1];
+    }
+
+    const getPreviousPhoto = () => {
+        if(activePhotoIsFirst()) {
+            return undefined;
+        }
+
+        return state.photos[state.activeIndex - 1];
+    }
+
     return (
         <PhotoListContext.Provider value={[state, {
             setPhotos,
             setActivePhoto,
             activePhotoIsFirst,
-            activePhotoIsLast
+            activePhotoIsLast,
+            getNextPhoto,
+            getPreviousPhoto
         }]}>
             {props.children}
         </PhotoListContext.Provider>
