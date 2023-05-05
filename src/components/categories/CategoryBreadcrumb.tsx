@@ -1,6 +1,7 @@
 import { Component } from 'solid-js';
-import { useCategoryContext } from '../../contexts/CategoryContext';
 import { A } from '@solidjs/router';
+
+import { useCategoryContext } from '../../contexts/CategoryContext';
 
 const CategoryBreadcrumb: Component = () => {
     const [state] = useCategoryContext();
