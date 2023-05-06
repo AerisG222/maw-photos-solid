@@ -1,4 +1,4 @@
-import { Component, For, JSXElement, createSignal } from 'solid-js';
+import { Component, For } from 'solid-js';
 import { A } from '@solidjs/router';
 
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
@@ -26,16 +26,15 @@ const PhotoList: Component<Props> = (props) => {
 
     const scroll = (el: HTMLAnchorElement, photo: Photo) => {
         if(photos.activePhoto?.id === photo.id) {
-            console.log(`activeid: ${photos.activePhoto.id} :: ${el.href}`);
-
             const parent = el.parentElement;
 
             if (parent) {
+                const startingOffset = parent.firstChild.offsetLeft;
                 const parentMiddle = parent.clientWidth / 2;
-                const imgWidth = el.clientWidth / 2;
+                const imgMiddle = el.clientWidth / 2;
                 const newLeft = Math.max(
                     0,
-                    el.offsetLeft - imgWidth - parentMiddle
+                    el.offsetLeft - startingOffset - parentMiddle + imgMiddle
                 );
 
                 parent.scrollTo({ top: 0, left: newLeft, behavior: 'smooth' });
