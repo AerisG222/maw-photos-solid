@@ -1,7 +1,7 @@
 import { Outlet, useParams } from '@solidjs/router';
 import { Component, Show, batch, createEffect, onCleanup } from "solid-js";
 
-import { getPhotos } from '../api/api';
+import { getPhotos } from '../api/PhotoCategories';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 

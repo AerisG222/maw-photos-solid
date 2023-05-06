@@ -1,16 +1,18 @@
 import { Component, createEffect } from "solid-js";
 import { useRoutes } from "@solidjs/router";
+import { CreateQueryResult } from '@tanstack/solid-query';
 
-import PrimaryNav from "./components/primary-nav/PrimaryNav";
 import { appRoutes } from "./routes";
 import { useAppSettingsContext } from './contexts/AppSettingsContext';
 import { isLoggedIn } from './auth/auth';
-import { getPhotoCategories, getVideoCategories } from './api/api';
+import { getPhotoCategories } from './api/PhotoCategories';
+import { getVideoCategories } from './api/VideoCategories';
 import { ApiCollection } from './models/api/ApiCollection';
 import { PhotoCategory } from './models/api/PhotoCategory';
-import { CreateQueryResult } from '@tanstack/solid-query';
 import { VideoCategory } from './models/api/VideoCategory';
 import { useCategoryContext } from './contexts/CategoryContext';
+
+import PrimaryNav from "./components/primary-nav/PrimaryNav";
 
 const App: Component = () => {
     const Routes = useRoutes(appRoutes);
