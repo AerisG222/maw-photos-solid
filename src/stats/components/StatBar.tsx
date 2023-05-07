@@ -5,7 +5,7 @@ const StatBar: ParentComponent = (props) => {
 
     return (
         <>
-            <div class="stats shadow">
+            <div class="stats shadow w-[100%]">
                 {c()}
             </div>
         </>
