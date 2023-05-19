@@ -28,6 +28,7 @@
         "@solidjs/router": "^0.8.2",
         "@tanstack/solid-query": "^4.29.5",
         "@unocss/preset-uno": "^0.51.12",
+        "highcharts": "^11.0.1",
         "numbro": "^2.3.6",
         "oidc-client-ts": "^2.2.3",
         "solid-js": "^1.7.5"

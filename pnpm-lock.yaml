@@ -10,6 +10,9 @@ dependencies:
   '@unocss/preset-uno':
     specifier: ^0.51.12
     version: 0.51.12
+  highcharts:
+    specifier: ^11.0.1
+    version: 11.0.1
   numbro:
     specifier: ^2.3.6
     version: 2.3.6
@@ -2185,6 +2188,10 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
+
+  /highcharts@11.0.1:
+    resolution: {integrity: sha512-KRwNwm6kJsp3JxNSpORuWLzvLnPuqCR3n0qbGjw+0m6MIxrlkUWnFaZJ2uXjMur6j3RUC66te36tldlSheYydQ==}
+    dev: false
 
   /html-entities@2.3.3:
     resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
