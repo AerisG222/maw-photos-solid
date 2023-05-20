@@ -11,6 +11,7 @@ import StatBox from './components/StatBox';
 import StatBar from './components/StatBar';
 import ToolbarPhotos from './ToolbarPhotos';
 import Treemap from './components/Treemap';
+import StatLayout from './components/StatLayout';
 
 const ViewPhotos: Component = () => {
     const [search] = useSearchParams();
@@ -26,7 +27,7 @@ const ViewPhotos: Component = () => {
 
     return (
         <Layout toolbar={toolbar}>
-            <div class="grid grid-rows-[max-content_auto] h-[calc(100vh-.25rem)]">
+            <StatLayout>
                 <div class="m-y-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getPhotoCategoryYears().length).format({thousandSeparated: true})} />
@@ -38,7 +39,7 @@ const ViewPhotos: Component = () => {
                 <div class="m-y-2">
                     <Treemap data={getPhotoStats()} formatFunc={getFmtFunc()} />
                 </div>
-            </div>
+            </StatLayout>
         </Layout>
     );
 };

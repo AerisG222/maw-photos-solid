@@ -1,16 +1,21 @@
 import { Component } from "solid-js";
+import { useSearchParams } from '@solidjs/router';
 import numbro from 'numbro';
 
 import { useCategoryContext } from '../contexts/CategoryContext';
+import { getAggFuncs } from './_funcs';
 
 import Toolbar from './Toolbar';
 import Layout from '../components/layout/Layout';
 import StatBar from './components/StatBar';
 import StatBox from './components/StatBox';
 import CombinedToolbar from './ToolbarCombined';
+import StatLayout from './components/StatLayout';
+import Treemap from './components/Treemap';
 
 const ViewCombined: Component = () => {
-    const [state, { getAllYears, getAllCategories, getCombinedCount, getCombinedFileSize }] = useCategoryContext();
+    const [search] = useSearchParams();
+    const [state, { getAllYears, getAllCategories, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
     const toolbar = (
         <>
             <Toolbar>
@@ -19,16 +24,24 @@ const ViewCombined: Component = () => {
         </>
     );
 
+    const getStats = () => getCombinedStatsChartData(getAggFuncs(search.mode).agg);
+    const getFmtFunc = () => getAggFuncs(search.mode).fmt;
+
     return (
         <Layout toolbar={toolbar}>
-            <div class="m-y-2">
-                <StatBar>
-                    <StatBox title="Years" value={numbro(getAllYears().length).format({thousandSeparated: true})} />
-                    <StatBox title="Categories" value={numbro(getAllCategories().length).format({thousandSeparated: true})} />
-                    <StatBox title="Photos &amp; Videos" value={numbro(getCombinedCount()).format({thousandSeparated: true})} />
-                    <StatBox title="File Size" value={numbro(getCombinedFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
-                </StatBar>
-            </div>
+            <StatLayout>
+                <div class="m-y-2">
+                    <StatBar>
+                        <StatBox title="Years" value={numbro(getAllYears().length).format({thousandSeparated: true})} />
+                        <StatBox title="Categories" value={numbro(getAllCategories().length).format({thousandSeparated: true})} />
+                        <StatBox title="Photos &amp; Videos" value={numbro(getCombinedCount()).format({thousandSeparated: true})} />
+                        <StatBox title="File Size" value={numbro(getCombinedFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
+                    </StatBar>
+                </div>
+                <div class="m-y-2">
+                    <Treemap data={getStats()} formatFunc={getFmtFunc()} />
+                </div>
+            </StatLayout>
         </Layout>
     );
 };

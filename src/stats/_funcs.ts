@@ -3,7 +3,7 @@ import numbro from 'numbro';
 const sizeAgg = d => d.totalSize;
 const sizeFmt = v => numbro(v).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true});
 
-const countAgg = d => d.children ? 0 : 1;
+const countAgg = d => d.children ? 0 : (d.photoCount ?? 0) + (d.videoCount ?? 0);
 const countFmt = v => numbro(v).format({thousandSeparated: true});
 
 const durationAgg = d => d.totalDuration;

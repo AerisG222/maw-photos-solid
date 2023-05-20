@@ -200,18 +200,21 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const setActiveVideoCategory = (categoryId: number) => setActiveCategory(state.videoCategories.find(x => x.id === categoryId));
 
-    const getPhotoStatsChartData = (valueFunc: (cat: PhotoCategory) => number) => buildPhotoStatsData(getPhotoCategoryYears(), state.photoCategories.map(x => x.actual), valueFunc);
+    const getPhotoStatsChartData = (valueFunc: (cat: PhotoCategory) => number) =>
+        buildStatsData(getPhotoCategoryYears(), state.photoCategories.map(x => x.actual), valueFunc);
 
-    const getVideoStatsChartData = (valueFunc: (cat: VideoCategory) => number) => createMemo(() => ({ name: 'Videos', children: [] }));
+    const getVideoStatsChartData = (valueFunc: (cat: VideoCategory) => number) =>
+        buildStatsData(getVideoCategoryYears(), state.videoCategories.map(x => x.actual), valueFunc);
 
-    const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) => createMemo(() => ({ name: 'Combined', children: [] }));
+    const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) =>
+        buildStatsData(getAllYears(), getAllCategories().map(x => x.actual), valueFunc);
 
-    const buildPhotoStatsData = (years: number[], photoCategories: PhotoCategory[], valueFunc: (Category) => number) => {
+    const buildStatsData = (years: number[], categories: PhotoCategory[] | VideoCategory[], valueFunc: (Category) => number) => {
         const result = [];
 
         for(const year of years) {
-            const yearId = `photos-year-${year}`;
-            const categoriesInYear = photoCategories.filter(x => x.year === year);
+            const yearId = `year-${year}`;
+            const categoriesInYear = categories.filter(x => x.year === year);
 
             const yearPoint = {
                 id: yearId,
@@ -224,7 +227,7 @@ export const CategoryProvider: ParentComponent = (props) => {
 
             for(const cat of categoriesInYear) {
                 result.push({
-                    id: `photos-year-${year}-${cat.id}`,
+                    id: `year-${year}-${cat.id}`,
                     parent: yearId,
                     name: cat.name,
                     value: valueFunc(cat)
