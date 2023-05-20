@@ -1,11 +1,10 @@
 import { Component, createEffect } from 'solid-js';
 import * as Highcharts from 'highcharts';
 import HighchartsTreemap from 'highcharts/modules/treemap';
-import numbro from 'numbro';
 
 export type Props = {
     data: any;
-    mode: string;
+    formatFunc: (value: number) => string;
 };
 
 const Treemap: Component<Props> = (props) => {
@@ -13,16 +12,7 @@ const Treemap: Component<Props> = (props) => {
 
     let el;
 
-    const sizeAgg = d => d.totalSize;
-    const sizeFmt = v => numbro(v).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true});
-
-    const countAgg = d => d.children ? 0 : 1;
-    const countFmt = v => numbro(v).format({thousandSeparated: true});
-
-    const agg = props.mode === 'size' ? sizeAgg : countAgg;
-    const aggFmt = props.mode === 'size' ? sizeFmt : countFmt;
-
-    const labelFormat = (x: Highcharts.PointLabelObject) => `<b>${x.point.name}</b><br/>${aggFmt(x.point.value)}`;
+    const labelFormat = (x: Highcharts.PointLabelObject) => `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
 
     createEffect(() =>{
         Highcharts.chart('chart', {
@@ -45,7 +35,7 @@ const Treemap: Component<Props> = (props) => {
                         }
                     },
                     tooltip: {
-                        pointFormatter: function () { return `<b>${this.name}</b>: ${aggFmt(this.value)}`; }
+                        pointFormatter: function () { return `<b>${this.name}</b>: ${props.formatFunc(this.value)}`; }
                     }
                 }
             },
@@ -86,7 +76,7 @@ const Treemap: Component<Props> = (props) => {
                 allowTraversingTree: true,
                 animationLimit: 1000,
                 turboThreshold: 5000,
-                data: props.data(),
+                data: props.data,
             }]
         });
     });

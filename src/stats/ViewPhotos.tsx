@@ -3,6 +3,7 @@ import { useSearchParams } from '@solidjs/router';
 import numbro from 'numbro';
 
 import { useCategoryContext } from '../contexts/CategoryContext';
+import { getAggFuncs } from './_funcs';
 
 import Toolbar from './Toolbar';
 import Layout from '../components/layout/Layout';
@@ -20,7 +21,8 @@ const ViewPhotos: Component = () => {
         </Toolbar>
     );
 
-    const data = () => getPhotoStatsChartData();
+    const getPhotoStats = () => getPhotoStatsChartData(getAggFuncs(search.mode).agg);
+    const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
         <Layout toolbar={toolbar}>
@@ -34,7 +36,7 @@ const ViewPhotos: Component = () => {
                     </StatBar>
                 </div>
                 <div class="m-y-2">
-                    <Treemap data={data()} mode={search.mode} />
+                    <Treemap data={getPhotoStats()} formatFunc={getFmtFunc()} />
                 </div>
             </div>
         </Layout>

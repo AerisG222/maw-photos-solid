@@ -41,9 +41,9 @@ export type CategoryContextValue = [
         getVideoDuration: () => number;
         getCombinedCount: () => number;
         getCombinedFileSize: () => number;
-        getPhotoStatsChartData: () => any;
-        getVideoStatsChartData: () => any;
-        getCombinedStatsChartData: () => any;
+        getPhotoStatsChartData: (valueFunc: (cat: PhotoCategory) => number) => any;
+        getVideoStatsChartData: (valueFunc: (cat: VideoCategory) => number) => any;
+        getCombinedStatsChartData: (valueFunc: (cat: Category) => number) => any;
     }
 ];
 
@@ -200,13 +200,13 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const setActiveVideoCategory = (categoryId: number) => setActiveCategory(state.videoCategories.find(x => x.id === categoryId));
 
-    const getPhotoStatsChartData = () => createMemo(() => buildPhotoStatsData(getPhotoCategoryYears(), state.photoCategories.map(x => x.actual)));
+    const getPhotoStatsChartData = (valueFunc: (cat: PhotoCategory) => number) => buildPhotoStatsData(getPhotoCategoryYears(), state.photoCategories.map(x => x.actual), valueFunc);
 
-    const getVideoStatsChartData = () => createMemo(() => ({ name: 'Videos', children: [] }));
+    const getVideoStatsChartData = (valueFunc: (cat: VideoCategory) => number) => createMemo(() => ({ name: 'Videos', children: [] }));
 
-    const getCombinedStatsChartData = () => createMemo(() => ({ name: 'Combined', children: [] }));
+    const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) => createMemo(() => ({ name: 'Combined', children: [] }));
 
-    const buildPhotoStatsData = (years: number[], photoCategories: PhotoCategory[]) => {
+    const buildPhotoStatsData = (years: number[], photoCategories: PhotoCategory[], valueFunc: (Category) => number) => {
         const result = [];
 
         for(const year of years) {
@@ -227,10 +227,10 @@ export const CategoryProvider: ParentComponent = (props) => {
                     id: `photos-year-${year}-${cat.id}`,
                     parent: yearId,
                     name: cat.name,
-                    value: cat.totalSize
+                    value: valueFunc(cat)
                 })
 
-                yearPoint.value += cat.totalSize;
+                yearPoint.value += valueFunc(cat);
             }
         }
 
