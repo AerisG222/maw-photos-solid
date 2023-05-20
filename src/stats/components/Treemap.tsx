@@ -4,6 +4,7 @@ import HighchartsTreemap from 'highcharts/modules/treemap';
 
 export type Props = {
     data: any;
+    seriesName: string;
     formatFunc: (value: number) => string;
 };
 
@@ -16,10 +17,14 @@ const Treemap: Component<Props> = (props) => {
 
     createEffect(() =>{
         Highcharts.chart('chart', {
+            accessibility: {
+                enabled: false,
+            },
             title: undefined,
             chart: {
                 height: el.parentElement.clientHeight,
                 margin: 0,
+                backgroundColor: '#333'
             },
             plotOptions: {
                 treemap: {
@@ -40,7 +45,7 @@ const Treemap: Component<Props> = (props) => {
                 }
             },
             series: [{
-                name: 'Photos',
+                name: props.seriesName,
                 type: 'treemap',
                 layoutAlgorithm: 'squarified',
                 borderWidth: 1,

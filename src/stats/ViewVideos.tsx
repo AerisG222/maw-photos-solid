@@ -38,7 +38,7 @@ const ViewVideos: Component = () => {
                     </StatBar>
                 </div>
                 <div class="m-y-2">
-                    <Treemap data={getVideoStats()} formatFunc={getFmtFunc()} />
+                    <Treemap seriesName='Videos' data={getVideoStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>
         </Layout>

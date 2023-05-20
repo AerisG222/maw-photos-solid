@@ -39,7 +39,7 @@ const ViewCombined: Component = () => {
                     </StatBar>
                 </div>
                 <div class="m-y-2">
-                    <Treemap data={getStats()} formatFunc={getFmtFunc()} />
+                    <Treemap seriesName='Combined' data={getStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>
         </Layout>
