@@ -16,7 +16,7 @@ const Login: Component = () => {
 
     return (
         <div class="text-center">
-            <img src="/android-chrome-192x192.png" class="inline mt-12 mb-8" />
+            <img src="/icon-192x192.png" class="inline mt-12 mb-8" />
 
             <p>Welcome to photos.mikeandwan.us</p>
 
@@ -28,6 +28,7 @@ const Login: Component = () => {
             <p>Otherwise, please click the button below to initiate the login.</p>
 
             <button
+                class="btn btn-primary btn-outline gap-2 mt-8"
                 type="submit"
                 onClick={async () => await initiateAuthInline()}
             >
