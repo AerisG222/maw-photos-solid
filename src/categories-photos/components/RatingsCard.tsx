@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { getRating } from '../../api/Photos';
+import { getRating, ratePhoto } from '../../api/Photos';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 
 import Rating from '../../components/rating/Rating';
@@ -8,6 +8,11 @@ import Rating from '../../components/rating/Rating';
 const RatingsCard: Component = () => {
     const [state] = usePhotoListContext();
     const ratingQuery = getRating(state.activePhoto?.id);
+
+    const rate = (rating: number) => {
+        ratePhoto(state.activePhoto?.id, rating);
+        ratingQuery.refetch();
+    }
 
     return (
         <table class="m-x-8">
@@ -17,7 +22,7 @@ const RatingsCard: Component = () => {
                     <td>
                         <Rating
                             editable={true}
-                            clickHandler={console.log}
+                            clickHandler={rate}
                             numberStars={5}
                             value={ratingQuery?.data?.userRating} />
                     </td>

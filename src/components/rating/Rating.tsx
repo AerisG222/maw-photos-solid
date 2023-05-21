@@ -1,4 +1,4 @@
-import { Component, For, createSignal } from 'solid-js';
+import { Component, For, createSignal, onMount } from 'solid-js';
 
 export type Props = {
     editable: boolean;
@@ -10,17 +10,11 @@ export type Props = {
 const Rating: Component<Props> = (props) => {
     const [stars, setStars] = createSignal([]);
 
-    const x = [];
-    for(let i = 0; i < props.numberStars; i++) {
-        x.push(false);
-    }
-    setStars(stars);
-
-    const getClassList = (i: number) => {
+    const getClassList = (star: boolean) => {
         return {
             'cursor-pointer': props.editable,
-            'i-ic-round-star': i < 3,
-            'i-ic-round-star-outline': i >= 3,
+            'i-ic-round-star': star,
+            'i-ic-round-star-outline': !star,
         }
     }
 
@@ -30,14 +24,39 @@ const Rating: Component<Props> = (props) => {
         }
     }
 
+    const reset = () => showStars(props.value);
+
+    const showStars = (val: number) => {
+        const x = [];
+
+        for(let i = 0; i < props.numberStars; i++) {
+            x.push(val > i);
+        }
+
+        setStars(x);
+    }
+
+    const mouseEnter = (i) => {
+        if(!props.editable) {
+            return;
+        }
+
+        showStars(i);
+    };
+
+    onMount(() => reset());
+
     return (
-        <For each={x}>{ (star, i) =>
-            <span
-                class="text-6"
-                classList={getClassList(i())}
-                onClick={() => handleClick(i() + 1)}
-            />
-        }</For>
+        <div onMouseLeave={() => { if(props.editable) { reset(); }} }>
+            <For each={stars()}>{ (star, i) =>
+                <span
+                    class="text-6"
+                    classList={getClassList(star)}
+                    onClick={() => handleClick(i() + 1)}
+                    onMouseEnter={() => mouseEnter(i() + 1)}
+                />
+            }</For>
+        </div>
     );
 }
 
