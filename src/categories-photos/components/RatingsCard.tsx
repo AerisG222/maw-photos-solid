@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, Suspense, createResource } from 'solid-js';
 
 import { getRating, ratePhoto } from '../../api/Photos';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
@@ -7,14 +7,15 @@ import Rating from '../../components/rating/Rating';
 
 const RatingsCard: Component = () => {
     const [state] = usePhotoListContext();
-    const ratingQuery = getRating(state.activePhoto?.id);
+    const [ratingResource, { mutate, refetch }] = createResource(state.activePhoto?.id, getRating);
 
-    const rate = (rating: number) => {
-        ratePhoto(state.activePhoto?.id, rating);
-        ratingQuery.refetch();
+    const rate = async (rating: number) => {
+        await ratePhoto(state.activePhoto?.id, rating);
+        await refetch();
     }
 
     return (
+        <Suspense>
         <table class="m-x-8">
             <tbody>
                 <tr>
@@ -24,7 +25,7 @@ const RatingsCard: Component = () => {
                             editable={true}
                             clickHandler={rate}
                             numberStars={5}
-                            value={ratingQuery?.data?.userRating} />
+                            value={ratingResource()?.userRating} />
                     </td>
                 </tr>
                 <tr>
@@ -33,11 +34,12 @@ const RatingsCard: Component = () => {
                         <Rating
                             editable={false}
                             numberStars={5}
-                            value={ratingQuery?.data?.averageRating} />
+                            value={ratingResource()?.averageRating} />
                     </td>
                 </tr>
             </tbody>
         </table>
+        </Suspense>
     );
 }
 

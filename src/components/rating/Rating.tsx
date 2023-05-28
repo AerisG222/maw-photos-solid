@@ -20,7 +20,9 @@ const Rating: Component<Props> = (props) => {
 
     const handleClick = (rating: number) => {
         if(props.editable && props.clickHandler) {
-            props.clickHandler(rating);
+            const ratingValue = rating === props.value ? -1 : rating;
+
+            props.clickHandler(ratingValue);
         }
     }
 

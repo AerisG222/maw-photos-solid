@@ -4,9 +4,6 @@ dependencies:
   '@solidjs/router':
     specifier: ^0.8.2
     version: 0.8.2(solid-js@1.7.5)
-  '@tanstack/solid-query':
-    specifier: ^4.29.11
-    version: 4.29.11(solid-js@1.7.5)
   '@unocss/preset-uno':
     specifier: ^0.52.4
     version: 0.52.4
@@ -812,19 +809,6 @@ packages:
     peerDependencies:
       solid-js: ^1.5.3
     dependencies:
-      solid-js: 1.7.5
-    dev: false
-
-  /@tanstack/query-core@4.29.11:
-    resolution: {integrity: sha512-8C+hF6SFAb/TlFZyS9FItgNwrw4PMa7YeX+KQYe2ZAiEz6uzg6yIr+QBzPkUwZ/L0bXvGd1sufTm3wotoz+GwQ==}
-    dev: false
-
-  /@tanstack/solid-query@4.29.11(solid-js@1.7.5):
-    resolution: {integrity: sha512-YSMeHTyI72zbcPhRcK4d63oCdZvwPhvMM2Kx0baPNR8yvH9uqzjlHTqiPms7AVpFF9WGl0wtXUJBuLvRH9iahA==}
-    peerDependencies:
-      solid-js: ^1.5.7
-    dependencies:
-      '@tanstack/query-core': 4.29.11
       solid-js: 1.7.5
     dev: false
 

@@ -26,7 +26,6 @@
     },
     "dependencies": {
         "@solidjs/router": "^0.8.2",
-        "@tanstack/solid-query": "^4.29.11",
         "@unocss/preset-uno": "^0.52.4",
         "highcharts": "^11.0.1",
         "numbro": "^2.3.6",
