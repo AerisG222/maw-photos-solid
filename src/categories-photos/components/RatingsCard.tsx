@@ -7,11 +7,11 @@ import Rating from '../../components/rating/Rating';
 
 const RatingsCard: Component = () => {
     const [state] = usePhotoListContext();
-    const [ratingResource, { mutate, refetch }] = createResource(state.activePhoto?.id, getRating);
+    const [ratingResource, { mutate, refetch }] = createResource(() => state.activePhoto?.id, getRating);
 
     const rate = async (rating: number) => {
         await ratePhoto(state.activePhoto?.id, rating);
-        await refetch();
+        refetch();
     }
 
     return (
