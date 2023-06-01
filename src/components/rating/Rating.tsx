@@ -1,4 +1,4 @@
-import { Component, For, createSignal } from 'solid-js';
+import { Component, For, createEffect, createSignal } from 'solid-js';
 
 export type Props = {
     editable: boolean;
@@ -8,6 +8,7 @@ export type Props = {
 };
 
 const Rating: Component<Props> = (props) => {
+    const [stars, setStars] = createSignal([]);
     const [hoverStar, setHoverStar] = createSignal(0);
 
     const getClassList = (star: boolean) => {
@@ -26,23 +27,22 @@ const Rating: Component<Props> = (props) => {
         }
     }
 
-    const getStars = () => {
-        const stars = [];
+    const getStarsArray = () => {
+        var highlightedStars = hoverStar() > 0 ? hoverStar() : props.value;
+        var stars = Array(props.numberStars);
 
-        for(let i = 0; i < props.numberStars; i++) {
-            if(hoverStar() > 0) {
-                stars.push(hoverStar() > i)
-            } else {
-                stars.push(props.value > i)
-            }
+        for(let i = 0; i < stars.length; i++) {
+            stars[i] = highlightedStars > i
         }
 
         return stars;
     }
 
+    createEffect(() => setStars(getStarsArray()));
+
     return (
         <div onMouseLeave={() => { if(props.editable) { setHoverStar(0) }} }>
-            <For each={getStars()}>{ (star, i) =>
+            <For each={stars()}>{ (star, i) =>
                 <span
                     class="text-6"
                     classList={getClassList(star)}
