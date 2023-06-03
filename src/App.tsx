@@ -1,4 +1,4 @@
-import { Component, Resource, createEffect, createResource, createSignal } from "solid-js";
+import { Component, createEffect, createResource } from "solid-js";
 import { useRoutes } from "@solidjs/router";
 
 import { appRoutes } from "./routes";
@@ -9,40 +9,22 @@ import { getVideoCategories } from './api/VideoCategories';
 import { useCategoryContext } from './contexts/CategoryContext';
 
 import PrimaryNav from "./components/primary-nav/PrimaryNav";
-import { ApiCollection } from './models/api/ApiCollection';
-import { PhotoCategory } from './models/api/PhotoCategory';
-import { VideoCategory } from './models/api/VideoCategory';
 
 const App: Component = () => {
     const Routes = useRoutes(appRoutes);
     const [appSettings] = useAppSettingsContext();
     const [categoryState, { setPhotoCategories, setVideoCategories }] = useCategoryContext();
-    const [isInitialized, setIsInitialized] = createSignal(false);
 
-    let photoCategories: Resource<ApiCollection<PhotoCategory>> = undefined;
-    let videoCategories: Resource<ApiCollection<VideoCategory>> = undefined;
+    const getPhotoCats = (isLoggedIn) => isLoggedIn ? getPhotoCategories() : null;
+    const getVideoCats = (isLoggedIn) => isLoggedIn ? getVideoCategories() : null;
+
+    const [photoCategories] = createResource(isLoggedIn, getPhotoCats);
+    const [videoCategories] = createResource(isLoggedIn, getVideoCats);
 
     createEffect(() => {
-        if(isLoggedIn() && !isInitialized()) {
-            setIsInitialized(true);
-
-            const [p] = createResource(getPhotoCategories);
-            const [v] = createResource(getVideoCategories);
-
-            photoCategories = p;
-            videoCategories = v;
-        }
+        setPhotoCategories(photoCategories()?.items ?? []);
+        setVideoCategories(videoCategories()?.items ?? []);
     });
-
-    createEffect(() => {
-        if(photoCategories && !photoCategories.loading) {
-            setPhotoCategories(photoCategories().items);
-        }
-
-        if(videoCategories && !videoCategories.loading) {
-            setVideoCategories(videoCategories().items);
-        }
-    })
 
     return (
         <div data-theme={appSettings.theme}
