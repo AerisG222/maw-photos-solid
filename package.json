@@ -17,7 +17,7 @@
         "@unocss/reset": "^0.52.7",
         "@unocss/vite": "^0.52.7",
         "daisyui": "^2.51.6",
-        "eslint": "^8.41.0",
+        "eslint": "^8.42.0",
         "eslint-plugin-solid": "^0.12.1",
         "typescript": "^5.1.3",
         "unocss-preset-daisy": "^4.0.0",
