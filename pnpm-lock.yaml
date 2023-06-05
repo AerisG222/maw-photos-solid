@@ -12,8 +12,8 @@ dependencies:
     specifier: ^0.53.0
     version: 0.53.0
   highcharts:
-    specifier: ^11.0.1
-    version: 11.0.1
+    specifier: ^11.1.0
+    version: 11.1.0
   numbro:
     specifier: ^2.3.6
     version: 2.3.6
@@ -2440,8 +2440,8 @@ packages:
       function-bind: 1.1.1
     dev: true
 
-  /highcharts@11.0.1:
-    resolution: {integrity: sha512-KRwNwm6kJsp3JxNSpORuWLzvLnPuqCR3n0qbGjw+0m6MIxrlkUWnFaZJ2uXjMur6j3RUC66te36tldlSheYydQ==}
+  /highcharts@11.1.0:
+    resolution: {integrity: sha512-vhmqq6/frteWMx0GKYWwEFL25g4OYc7+m+9KQJb/notXbNtIb8KVy+ijOF7XAFqF165cq0pdLIePAmyFY5ph3g==}
     dev: false
 
   /html-encoding-sniffer@3.0.0:
