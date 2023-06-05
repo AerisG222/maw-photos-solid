@@ -10,7 +10,7 @@ const ExifCard: Component = () => {
     const [exifResource] = createResource(() => state.activePhoto?.id, getExifData);
 
     const getTableData = dataType => {
-        if(exifResource.loading) {
+        if(exifResource.loading || !exifResource()) {
             return [];
         }
 
