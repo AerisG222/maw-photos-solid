@@ -1,4 +1,4 @@
-import { Component, Show, createEffect } from "solid-js";
+import { Component, Show } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
@@ -41,8 +41,6 @@ const ViewDetail: Component = () => {
 
         return `max-height: calc(100vh - ${reservedHeight}px);`;
     }
-
-    createEffect(() => console.log(getEffectStyles()));
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
