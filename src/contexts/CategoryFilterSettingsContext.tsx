@@ -32,7 +32,6 @@ export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
     const setMissingGpsFilter = (missingGpsFilter: boolean) => updateState({missingGpsFilter: missingGpsFilter});
 
     const updateState = (update: Partial<CategoryFilterSettingsState>) => {
-        console.log(update);
         setState(update);
         saveState(state);
     }
