@@ -24,6 +24,8 @@ export type PhotoListContextValue = [
         activePhotoIsLast: () => boolean;
         getNextPhoto: () => Photo | undefined;
         getPreviousPhoto: () => Photo | undefined;
+        moveNext: () => void;
+        movePrevious: () => void;
     }
 ];
 
@@ -35,7 +37,9 @@ const PhotoListContext = createContext<PhotoListContextValue>([
         activePhotoIsFirst: () => undefined,
         activePhotoIsLast: () => undefined,
         getNextPhoto: () => undefined,
-        getPreviousPhoto: () => undefined
+        getPreviousPhoto: () => undefined,
+        moveNext: () => undefined,
+        movePrevious: () => undefined
     }
 ]);
 
@@ -67,6 +71,10 @@ export const PhotoListProvider: ParentComponent = (props) => {
     }
 
     const setActivePhotoByIndex = (index: number) => {
+        if(index < 0 || index >= state.photos.length) {
+            return;
+        }
+
         setState({
             activePhoto: state.photos[index],
             activeIndex: index
@@ -89,6 +97,14 @@ export const PhotoListProvider: ParentComponent = (props) => {
         return state.photos[state.activeIndex - 1];
     }
 
+    const moveNext = () => {
+        setActivePhotoByIndex(state.activeIndex + 1);
+    }
+
+    const movePrevious = () => {
+        setActivePhotoByIndex(state.activeIndex - 1);
+    }
+
     return (
         <PhotoListContext.Provider value={[state, {
             setPhotos,
@@ -96,7 +112,9 @@ export const PhotoListProvider: ParentComponent = (props) => {
             activePhotoIsFirst,
             activePhotoIsLast,
             getNextPhoto,
-            getPreviousPhoto
+            getPreviousPhoto,
+            moveNext,
+            movePrevious
         }]}>
             {props.children}
         </PhotoListContext.Provider>
