@@ -21,6 +21,3 @@ export const getGpsDetail = (videoId: number) =>
 
 export const setGpsCoordinateOverride = (videoId: number, gps: GpsCoordinate) =>
     patchMawApi(`videos/${videoId}/gps`, gps);
-
-export const setTeaser = (categoryId: number, videoId: number) =>
-    patchMawApi(`video-categories/${categoryId}/teaser`, { videoId });

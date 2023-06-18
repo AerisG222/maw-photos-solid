@@ -40,6 +40,3 @@ export const getGpsDetail = (photoId: number) =>
 
 export const setGpsCoordinateOverride = (photoId: number, gps: GpsCoordinate) =>
     patchMawApi(`photos/${photoId}/gps`, gps);
-
-export const setTeaser = (categoryId: number, photoId: number) =>
-    patchMawApi(`photo-categories/${categoryId}/teaser`, { photoId });
