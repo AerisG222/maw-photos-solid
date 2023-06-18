@@ -1,5 +1,5 @@
 import { createContext, createMemo, ParentComponent, useContext } from 'solid-js';
-import { createStore } from "solid-js/store";
+import { createStore, unwrap } from "solid-js/store";
 
 import { PhotoCategory } from '../models/api/PhotoCategory';
 import { VideoCategory } from '../models/api/VideoCategory';
@@ -7,6 +7,8 @@ import { Category, ICategory } from '../models/Category';
 import { CategoryTypeFilterIdType, getCategoryTypeFilter } from '../models/CategoryTypeFilter';
 import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 import { buildStatsData } from '../models/utils/ChartUtils';
+import { Photo } from '../models/api/Photo';
+import { Video } from '../models/api/Video';
 
 export type CategoryState = {
     readonly photoCategories: Category<PhotoCategory>[];
@@ -45,6 +47,7 @@ export type CategoryContextValue = [
         getPhotoStatsChartData: (valueFunc: (cat: PhotoCategory) => number) => any;
         getVideoStatsChartData: (valueFunc: (cat: VideoCategory) => number) => any;
         getCombinedStatsChartData: (valueFunc: (cat: Category) => number) => any;
+        updateTeaser: (photoOrVideo: Photo | Video) => void;
     }
 ];
 
@@ -72,6 +75,7 @@ const CategoryContext = createContext<CategoryContextValue>([
         getPhotoStatsChartData: () => undefined,
         getVideoStatsChartData: () => undefined,
         getCombinedStatsChartData: () => undefined,
+        updateTeaser: () => undefined
     }
 ]);
 
@@ -171,6 +175,35 @@ export const CategoryProvider: ParentComponent = (props) => {
     const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) =>
         buildStatsData(getAllYears(), getAllCategories().map(x => x.actual), valueFunc);
 
+    // todo - trying to update the teaser for the active category is not showing the updated teaser in the category teaser chooser
+    const updateTeaser = (photoOrVideo: Photo | Video) => {
+        if(state.activeCategory.type === 'photo') {
+            setState(
+                'photoCategories',
+                cat => cat.id === state.activeCategory.id,
+                cat => {
+                    cat.actual.teaserImage = (photoOrVideo as Photo).imageXs;
+                    cat.actual.teaserImageSq = (photoOrVideo as Photo).imageXsSq;
+
+                    return cat;
+                }
+            );
+        }
+
+        if(state.activeCategory.type === 'video') {
+            setState(
+                'videoCategories',
+                cat => cat.id === state.activeCategory.id,
+                cat => {
+                    cat.actual.teaserImage = (photoOrVideo as Video).thumbnail;
+                    cat.actual.teaserImageSq = (photoOrVideo as Video).thumbnailSq;
+
+                    return cat;
+                }
+            );
+        }
+    }
+
     return (
         <CategoryContext.Provider value={[state, {
             setPhotoCategories,
@@ -194,6 +227,7 @@ export const CategoryProvider: ParentComponent = (props) => {
             getPhotoStatsChartData,
             getVideoStatsChartData,
             getCombinedStatsChartData,
+            updateTeaser
         }]}>
             {props.children}
         </CategoryContext.Provider>
