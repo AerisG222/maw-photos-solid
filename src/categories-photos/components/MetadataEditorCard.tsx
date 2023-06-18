@@ -3,7 +3,8 @@ import {
     createEffect,
     createResource,
     createSignal
-    } from 'solid-js';
+} from 'solid-js';
+
 import { getGpsDetail, setGpsCoordinateOverride } from '../../api/Photos';
 import { GpsCoordinate } from '../../models/api/GpsCoordinate';
 import { GpsDetail } from '../../models/api/GpsDetail';
@@ -27,6 +28,32 @@ const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> 
     return getGpsDetail(photo.id);
 }
 
+const parseGps = (val: string): GpsCoordinate | undefined => {
+    const parts = val
+        .trim()
+        .replace('[', '')
+        .replace(']', '')
+        .replace('(', '')
+        .replace(')', '')
+        .split(',');
+
+    if (parts.length !== 2) {
+        return undefined;
+    }
+
+    const lat = Number(parts[0]);
+    const lng = Number(parts[1]);
+
+    if (isNaN(lat) || isNaN(lng)) {
+        return undefined;
+    }
+
+    return {
+        latitude: lat,
+        longitude: lng,
+    };
+};
+
 const MetadataEditorCard: Component = () => {
     const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
@@ -35,37 +62,17 @@ const MetadataEditorCard: Component = () => {
 
     createEffect(() => {
         const src = gpsDetail()?.source;
-        const ov = gpsDetail()?.override;
 
         setSourceGps(src ? { lat: src.latitude.toString(), lng: src.longitude.toString() } : { lat: undefined, lng: undefined } );
-        setOverride(ov ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() } : { lat: undefined, lng: undefined });
+
+        updateOverrideInputsFromApi();
     });
 
-    const parseGps = (val: string): GpsCoordinate | undefined => {
-        const parts = val
-            .trim()
-            .replace('[', '')
-            .replace(']', '')
-            .replace('(', '')
-            .replace(')', '')
-            .split(',');
+    const updateOverrideInputsFromApi = () => {
+        const ov = gpsDetail()?.override;
 
-        if (parts.length !== 2) {
-            return undefined;
-        }
-
-        const lat = Number(parts[0]);
-        const lng = Number(parts[1]);
-
-        if (isNaN(lat) || isNaN(lng)) {
-            return undefined;
-        }
-
-        return {
-            latitude: lat,
-            longitude: lng,
-        };
-    };
+        setOverride(ov ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() } : { lat: undefined, lng: undefined });
+    }
 
     const onPaste = (evt: ClipboardEvent) => {
         const clipboardData = evt.clipboardData;
@@ -88,7 +95,7 @@ const MetadataEditorCard: Component = () => {
     const cancel = (evt: Event) => {
         evt.preventDefault();
 
-        setOverride({lat: undefined, lng: undefined});
+        updateOverrideInputsFromApi();
     }
 
     const save = (evt: Event) => {
