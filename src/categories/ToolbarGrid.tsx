@@ -2,7 +2,7 @@ import { Component } from 'solid-js';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
-import { getNextThumbnailSize } from '../models/ThumbnailSize';
+import { defaultGridThumbnailSize, getNextThumbnailSize } from '../models/ThumbnailSize';
 import { getNextMarginSize } from '../models/Margin';
 
 const GridToolbar: Component = () => {
@@ -26,6 +26,7 @@ const GridToolbar: Component = () => {
                 icon="i-ic-round-title"
                 name="Show / Hide Category Titles"
                 clickHandler={onToggleTitles}
+                disabled={settings.thumbnailSize !== defaultGridThumbnailSize}
             />
             <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
