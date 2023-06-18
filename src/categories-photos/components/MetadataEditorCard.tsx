@@ -1,17 +1,45 @@
-import { Component, Show, createSignal } from 'solid-js';
-
-import { setGpsCoordinateOverride } from '../../api/Photos';
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import {
+    Component,
+    createEffect,
+    createResource,
+    createSignal
+    } from 'solid-js';
+import { getGpsDetail, setGpsCoordinateOverride } from '../../api/Photos';
 import { GpsCoordinate } from '../../models/api/GpsCoordinate';
+import { GpsDetail } from '../../models/api/GpsDetail';
+import { Photo } from '../../models/api/Photo';
+import { usePhotoListContext } from '../../contexts/PhotoListContext';
+
 
 type GpsOverride = {
     lat: string | undefined,
     lng: string | undefined
 };
 
+const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
+    if(!photo) {
+        return {
+            source: { latitude: undefined, longitude: undefined },
+            override: { latitude: undefined, longitude: undefined }
+        };
+    }
+
+    return getGpsDetail(photo.id);
+}
+
 const MetadataEditorCard: Component = () => {
+    const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [photoList, { moveNext }] = usePhotoListContext();
+    const [gpsDetail] = createResource(() => photoList.activePhoto, fetchGpsData);
+
+    createEffect(() => {
+        const src = gpsDetail()?.source;
+        const ov = gpsDetail()?.override;
+
+        setSourceGps(src ? { lat: src.latitude.toString(), lng: src.longitude.toString() } : { lat: undefined, lng: undefined } );
+        setOverride(ov ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() } : { lat: undefined, lng: undefined });
+    });
 
     const parseGps = (val: string): GpsCoordinate | undefined => {
         const parts = val
@@ -102,15 +130,14 @@ const MetadataEditorCard: Component = () => {
     }
 
     return (
-        <Show when={photoList.activePhoto}>
         <form>
             <div class="grid grid-cols-3 grid-rows-3 grid-gap-2">
                 <div><label class="label">Latitude</label></div>
-                <div><input type="text" class="input input-sm w-[100%]" placeholder="Source" value={photoList.activePhoto.latitude} disabled /></div>
+                <div><input type="text" class="input input-sm w-[100%]" placeholder="Source" value={sourceGps().lat ?? ""} disabled /></div>
                 <div><input type="text" class="input input-sm w-[100%]" placeholder="Override" classList={getValidationClass(override().lat)} onPaste={onPaste} value={override().lat ?? ""} onInput={evt => setOverride(prev => ({ lat: evt.currentTarget.value, lng: prev.lng}))} /></div>
 
                 <div><label class="label">Longitude</label></div>
-                <div><input type="text" class="input input-sm w-[100%]" placeholder="Source" value={photoList.activePhoto.longitude} disabled /></div>
+                <div><input type="text" class="input input-sm w-[100%]" placeholder="Source" value={sourceGps().lng ?? ""} disabled /></div>
                 <div><input type="text" class="input input-sm w-[100%]" placeholder="Override" classList={getValidationClass(override().lng)} onPaste={onPaste} value={override().lng ?? ""} onInput={evt => setOverride(prev => ({ lat: prev.lat, lng: evt.currentTarget.value }))} /></div>
 
                 <div><button class="btn btn-sm btn-outline btn-error w-[100%]" onClick={cancel}>Cancel</button></div>
@@ -118,7 +145,6 @@ const MetadataEditorCard: Component = () => {
                 <div><button class="btn btn-sm btn-outline w-[100%]" onClick={saveAndMoveNext} disabled={!isOverrideValid()} classList={getButtonClass()}>Save Move Next</button></div>
             </div>
         </form>
-        </Show>
     );
 }
 

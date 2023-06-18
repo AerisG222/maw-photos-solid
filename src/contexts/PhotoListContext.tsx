@@ -98,11 +98,13 @@ export const PhotoListProvider: ParentComponent = (props) => {
     }
 
     const moveNext = () => {
+        console.log("NEED TO UPDATE URL HERE!");
         setActivePhotoByIndex(state.activeIndex + 1);
     }
 
     const movePrevious = () => {
         setActivePhotoByIndex(state.activeIndex - 1);
+        console.log("NEED TO UPDATE URL HERE!");
     }
 
     return (
