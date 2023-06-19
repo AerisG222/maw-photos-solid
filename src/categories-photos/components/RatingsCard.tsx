@@ -3,10 +3,10 @@ import { Component, Suspense, createResource } from 'solid-js';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 
 import Rating from '../../components/rating/Rating';
-import { useMediaServiceContext } from '../../contexts/MediaServiceContext';
+import { useRatingServiceContext } from '../../contexts/RatingServiceContext';
 
 const RatingsCard: Component = (props) => {
-    const {fetchRating, setRating} = useMediaServiceContext();
+    const {fetchRating, setRating} = useRatingServiceContext();
     const [state] = usePhotoListContext();
     const [ratingResource, { mutate, refetch }] = createResource(() => state.activePhoto?.id, fetchRating);
 

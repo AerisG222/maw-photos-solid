@@ -6,7 +6,7 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 
 import AuthGuard from '../components/auth/AuthGuard';
-import { MediaServiceProvider } from '../contexts/MediaServiceContext';
+import { RatingServiceProvider } from '../contexts/RatingServiceContext';
 import { PhotoMediaService } from '../services/PhotoMediaService';
 
 const PhotoCategories: Component = () => {
@@ -38,13 +38,15 @@ const PhotoCategories: Component = () => {
         }
     });
 
+    const mediaService = new PhotoMediaService();
+
     return (
         <AuthGuard>
-            <MediaServiceProvider svc={new PhotoMediaService()}>
+            <RatingServiceProvider svc={mediaService}>
                 <Show when={photos.photos && photos.photos.length > 0}>
                     <Outlet />
                 </Show>
-            </MediaServiceProvider>
+            </RatingServiceProvider>
         </AuthGuard>
     );
 };

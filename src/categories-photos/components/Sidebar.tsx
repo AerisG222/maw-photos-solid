@@ -14,7 +14,6 @@ import MinimapCard from './MinimapCard';
 import MetadataEditorCard from './MetadataEditorCard';
 import CategoryTeaserCard from './CategoryTeaserCard';
 import InfoCard from './InfoCard';
-import { PhotoMediaService } from '../../services/PhotoMediaService';
 
 const Sidebar: Component = () => {
     const [
