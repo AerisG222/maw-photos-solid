@@ -12,6 +12,7 @@ import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 import { ExifServiceProvider } from '../contexts/ExifServiceContext';
 import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';
 import { MetadataEditServiceProvider } from '../contexts/MetadataEditServiceContext';
+import { PhotoEffectsProvider } from '../contexts/PhotoEffectsContext';
 
 const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
@@ -46,6 +47,7 @@ const PhotoCategories: Component = () => {
 
     return (
         <AuthGuard>
+            <PhotoEffectsProvider>
             <RatingServiceProvider svc={mediaService}>
             <CommentServiceProvider svc={mediaService}>
             <ExifServiceProvider svc={mediaService}>
@@ -59,6 +61,7 @@ const PhotoCategories: Component = () => {
             </ExifServiceProvider>
             </CommentServiceProvider>
             </RatingServiceProvider>
+            </PhotoEffectsProvider>
         </AuthGuard>
     );
 };
