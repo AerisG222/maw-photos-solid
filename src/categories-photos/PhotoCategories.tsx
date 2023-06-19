@@ -8,6 +8,7 @@ import { useCategoryContext } from '../contexts/CategoryContext';
 import AuthGuard from '../components/auth/AuthGuard';
 import { RatingServiceProvider } from '../contexts/RatingServiceContext';
 import { PhotoMediaService } from '../services/PhotoMediaService';
+import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 
 const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
@@ -43,9 +44,11 @@ const PhotoCategories: Component = () => {
     return (
         <AuthGuard>
             <RatingServiceProvider svc={mediaService}>
+            <CommentServiceProvider svc={mediaService}>
                 <Show when={photos.photos && photos.photos.length > 0}>
                     <Outlet />
                 </Show>
+            </CommentServiceProvider>
             </RatingServiceProvider>
         </AuthGuard>
     );
