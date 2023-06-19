@@ -6,7 +6,7 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 
 import AuthGuard from '../components/auth/AuthGuard';
-import { MediaServiceProvider } from '../contexts/PhotoMediaServicesContext';
+import { MediaServiceProvider } from '../contexts/MediaServiceContext';
 import { PhotoMediaService } from '../services/PhotoMediaService';
 
 const PhotoCategories: Component = () => {
@@ -40,7 +40,7 @@ const PhotoCategories: Component = () => {
 
     return (
         <AuthGuard>
-            <MediaServiceProvider svc={new PhotoMediaService}>
+            <MediaServiceProvider svc={new PhotoMediaService()}>
                 <Show when={photos.photos && photos.photos.length > 0}>
                     <Outlet />
                 </Show>

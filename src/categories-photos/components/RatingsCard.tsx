@@ -1,18 +1,17 @@
 import { Component, Suspense, createResource } from 'solid-js';
 
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
-import { IMediaService } from '../../services/IMediaService';
 
 import Rating from '../../components/rating/Rating';
-import { useMediaServiceContext } from '../../contexts/PhotoMediaServicesContext';
+import { useMediaServiceContext } from '../../contexts/MediaServiceContext';
 
 const RatingsCard: Component = (props) => {
-    const [mediaService] = useMediaServiceContext();
+    const {fetchRating, setRating} = useMediaServiceContext();
     const [state] = usePhotoListContext();
-    const [ratingResource, { mutate, refetch }] = createResource(() => state.activePhoto?.id, mediaService.svc.fetchRating);
+    const [ratingResource, { mutate, refetch }] = createResource(() => state.activePhoto?.id, fetchRating);
 
     const rate = async (rating: number) => {
-        await mediaService.svc.setRating(state.activePhoto?.id, rating);
+        await setRating(state.activePhoto?.id, rating);
         refetch();
     }
 
