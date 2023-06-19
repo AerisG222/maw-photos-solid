@@ -2,10 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 
 import { IMediaService } from '../services/IMediaService';
 
-const MediaServiceContext = createContext<IMediaService>({
-    fetchRating: () => undefined,
-    setRating: () => undefined
-});
+const MediaServiceContext = createContext<IMediaService>(undefined);
 
 type Props = {
     svc: IMediaService
