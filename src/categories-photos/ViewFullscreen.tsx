@@ -6,13 +6,23 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
+import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from './_routes';
+import { useNavigate, useParams } from '@solidjs/router';
 
 const ViewFullscreen: Component = () => {
+    const navigate = useNavigate();
+    const params = useParams();
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
     const [photoListState] = usePhotoListContext();
 
     setFullscreen(true);
     onCleanup(() => setFullscreen(false));
+
+    if(!params.photoId) {
+        const p = photoListState.photos[0];
+
+        navigate(getPhotoCategoryRoutePath(categoriesPhotosFullscreen, p.categoryId, p.id));
+    }
 
     const toolbar = (
         <Toolbar>
