@@ -1,10 +1,11 @@
 import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { setTeaser } from '../../api/PhotoCategories';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useCategoryTeaserServiceContext } from '../../contexts/CategoryTeaserServiceContext';
 
 const CategoryTeaserCard: Component = () => {
+    const {setTeaser} = useCategoryTeaserServiceContext();
     const [categoryState, {updateTeaser}] = useCategoryContext();
     const [listState] = usePhotoListContext();
 

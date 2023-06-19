@@ -10,6 +10,7 @@ import { RatingServiceProvider } from '../contexts/RatingServiceContext';
 import { PhotoMediaService } from '../services/PhotoMediaService';
 import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 import { ExifServiceProvider } from '../contexts/ExifServiceContext';
+import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';
 
 const PhotoCategories: Component = () => {
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
@@ -47,9 +48,11 @@ const PhotoCategories: Component = () => {
             <RatingServiceProvider svc={mediaService}>
             <CommentServiceProvider svc={mediaService}>
             <ExifServiceProvider svc={mediaService}>
+            <CategoryTeaserServiceProvider svc={mediaService}>
                 <Show when={photos.photos && photos.photos.length > 0}>
                     <Outlet />
                 </Show>
+            </CategoryTeaserServiceProvider>
             </ExifServiceProvider>
             </CommentServiceProvider>
             </RatingServiceProvider>
