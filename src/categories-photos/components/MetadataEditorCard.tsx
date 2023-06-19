@@ -5,28 +5,17 @@ import {
     createSignal
 } from 'solid-js';
 
-import { getGpsDetail, setGpsCoordinateOverride } from '../../api/Photos';
 import { GpsCoordinate } from '../../models/api/GpsCoordinate';
 import { GpsDetail } from '../../models/api/GpsDetail';
 import { Photo } from '../../models/api/Photo';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
 
 
 type GpsOverride = {
     lat: string | undefined,
     lng: string | undefined
 };
-
-const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
-    if(!photo) {
-        return {
-            source: { latitude: undefined, longitude: undefined },
-            override: { latitude: undefined, longitude: undefined }
-        };
-    }
-
-    return getGpsDetail(photo.id);
-}
 
 const parseGps = (val: string): GpsCoordinate | undefined => {
     const parts = val
@@ -55,9 +44,22 @@ const parseGps = (val: string): GpsCoordinate | undefined => {
 };
 
 const MetadataEditorCard: Component = () => {
+    const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [photoList, { moveNext }] = usePhotoListContext();
+
+    const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
+        if(!photo) {
+            return {
+                source: { latitude: undefined, longitude: undefined },
+                override: { latitude: undefined, longitude: undefined }
+            };
+        }
+
+        return fetchGpsDetail(photo.id);
+    }
+
     const [gpsDetail] = createResource(() => photoList.activePhoto, fetchGpsData);
 
     createEffect(() => {
