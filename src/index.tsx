@@ -7,19 +7,16 @@ import { Router } from '@solidjs/router';
 import App from './App';
 import { AllSettingsProvider } from './contexts/AllSettingsProvider';
 import { CategoryProvider } from './contexts/CategoryContext';
-import { PhotoListProvider } from './contexts/PhotoListContext';
 import { FullscreenProvider } from './contexts/FullscreenContext';
 
 render(() =>
         <AllSettingsProvider>
         <CategoryProvider>
-        <PhotoListProvider>
         <FullscreenProvider>
         <Router>
             <App />
         </Router>
         </FullscreenProvider>
-        </PhotoListProvider>
         </CategoryProvider>
         </AllSettingsProvider>
     ,
