@@ -1,8 +1,8 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { RandomDetailViewSettingsState, defaultRandomDetailViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
+import { RandomDetailViewSettingsState, defaultRandomDetailViewSettings } from '../../models/settings';
+import { ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { KEY_SETTINGS_RANDOM_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type RandomDetailViewSettingsContextValue = [

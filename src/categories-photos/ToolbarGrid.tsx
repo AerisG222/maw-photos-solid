@@ -1,6 +1,6 @@
 import { Component, Show } from 'solid-js';
 
-import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { getNextMarginSize } from '../models/Margin';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 import { usePhotoListContext } from '../contexts/PhotoListContext';

@@ -1,7 +1,7 @@
 import { Component, For, Suspense } from "solid-js";
 
-import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
-import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 
 import Toolbar from "./Toolbar";

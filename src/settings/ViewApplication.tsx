@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { useAppSettingsContext } from '../contexts/AppSettingsContext';
+import { useAppSettingsContext } from '../contexts/settings/AppSettingsContext';
 import { allThemes } from '../models/Theme';
 
 import Panel from './components/Panel';

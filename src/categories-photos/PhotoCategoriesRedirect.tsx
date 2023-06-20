@@ -2,7 +2,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { Component } from "solid-js";
 
 import { getPhotoCategoryViewPath } from './_routes';
-import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 
 const PhotoCategoriesRedirect: Component = () => {
     const [settings] = usePhotoPageSettingsContext();

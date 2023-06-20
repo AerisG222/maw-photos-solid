@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
-import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
 import { defaultGridThumbnailSize, getNextThumbnailSize } from '../models/ThumbnailSize';
 import { getNextMarginSize } from '../models/Margin';
 

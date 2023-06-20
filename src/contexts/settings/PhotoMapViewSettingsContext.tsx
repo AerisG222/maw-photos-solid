@@ -1,10 +1,10 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapTypeIdType } from '../models/MapType';
-import { PhotoMapViewSettingsState, defaultPhotoMapViewSettings } from '../models/settings';
+import { MapTypeIdType } from '../../models/MapType';
+import { PhotoMapViewSettingsState, defaultPhotoMapViewSettings } from '../../models/settings';
 import { KEY_SETTINGS_PHOTO_VIEW_MAP, loadJson, saveJson } from './_storage';
-import { MapZoomLevelIdType } from '../models/MapZoomLevel';
+import { MapZoomLevelIdType } from '../../models/MapZoomLevel';
 
 export type PhotoMapViewSettingsContextValue = [
     state: PhotoMapViewSettingsState,

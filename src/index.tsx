@@ -5,7 +5,7 @@ import { render } from 'solid-js/web';
 import { Router } from '@solidjs/router';
 
 import App from './App';
-import { AllSettingsProvider } from './contexts/AllSettingsProvider';
+import { AllSettingsProvider } from './contexts/settings/AllSettingsProvider';
 import { CategoryProvider } from './contexts/CategoryContext';
 import { FullscreenProvider } from './contexts/FullscreenContext';
 

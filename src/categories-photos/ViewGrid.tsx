@@ -2,7 +2,7 @@ import { Component, For, Show } from "solid-js";
 import { A } from '@solidjs/router';
 
 import { usePhotoListContext } from '../contexts/PhotoListContext';
-import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";

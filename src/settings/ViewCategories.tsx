@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 
-import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
-import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
-import { useCategoryGridViewSettingsContext } from '../contexts/CategoryGridViewSettingsContext';
-import { useCategoryListViewSettingsContext } from '../contexts/CategoryListViewSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
+import { useCategoryPageSettingsContext } from '../contexts/settings/CategoryPageSettingsContext';
+import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
+import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
 import { allCategoryTypeFilters } from '../models/CategoryTypeFilter';
 import { allCategoryViewModes } from '../models/CategoryViewMode';
 import { allMargins } from '../models/Margin';

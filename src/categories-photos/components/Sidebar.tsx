@@ -1,6 +1,6 @@
 import { Component, For, Show } from "solid-js";
 
-import { usePhotoInfoPanelSettingsContext } from "../../contexts/PhotoInfoPanelSettingsContext";
+import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
 
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";

@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
-import { usePhotoGridViewSettingsContext } from '../contexts/PhotoGridViewSettingsContext';
-import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
-import { usePhotoInfoPanelSettingsContext } from '../contexts/PhotoInfoPanelSettingsContext';
-import { usePhotoMapViewSettingsContext } from '../contexts/PhotoMapViewSettingsContext';
+import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
+import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
+import { usePhotoInfoPanelSettingsContext } from '../contexts/settings/PhotoInfoPanelSettingsContext';
+import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
 import { allMapTypes } from '../models/MapType';
 import { allMapZoomLevels } from '../models/MapZoomLevel';
 import { allMargins } from '../models/Margin';

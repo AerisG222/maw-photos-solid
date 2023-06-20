@@ -1,9 +1,9 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MarginIdType } from '../models/Margin';
-import { RandomGridViewSettingsState, defaultRandomGridViewSettings } from '../models/settings';
-import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
+import { MarginIdType } from '../../models/Margin';
+import { RandomGridViewSettingsState, defaultRandomGridViewSettings } from '../../models/settings';
+import { ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { KEY_SETTINGS_RANDOM_VIEW_GRID, loadJson, saveJson } from './_storage';
 
 export type RandomGridViewSettingsContextValue = [

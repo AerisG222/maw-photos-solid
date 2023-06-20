@@ -2,7 +2,7 @@ import { Outlet, useSearchParams } from '@solidjs/router';
 import { Component } from "solid-js";
 
 import AuthGuard from '../components/auth/AuthGuard';
-import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
 
 const Categories: Component = () => {
     const [searchParams] = useSearchParams();

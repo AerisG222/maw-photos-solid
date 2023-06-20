@@ -2,7 +2,7 @@ import { Component, Show } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
-import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
+import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { getThumbnailSize } from '../models/ThumbnailSize';
 

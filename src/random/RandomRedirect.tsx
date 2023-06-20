@@ -2,7 +2,7 @@ import { useNavigate } from '@solidjs/router';
 import { Component } from "solid-js";
 
 import { getPathForViewMode } from './_routes';
-import { useRandomPageSettingsContext } from '../contexts/RandomPageSettingsContext';
+import { useRandomPageSettingsContext } from '../contexts/settings/RandomPageSettingsContext';
 
 const Random: Component = () => {
     const [settings] = useRandomPageSettingsContext();

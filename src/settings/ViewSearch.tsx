@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-import { useSearchPageSettingsContext } from '../contexts/SearchPageSettingsContext';
-import { useSearchGridViewSettingsContext } from '../contexts/SearchGridViewSettingsContext';
-import { useSearchListViewSettingsContext } from '../contexts/SearchListViewSettingsContext';
+import { useSearchPageSettingsContext } from '../contexts/settings/SearchPageSettingsContext';
+import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
+import { useSearchListViewSettingsContext } from '../contexts/settings/SearchListViewSettingsContext';
 import { allThumbnailSizes } from '../models/ThumbnailSize';
 import { allMargins } from '../models/Margin';
 import { allCategoryViewModes } from '../models/CategoryViewMode';

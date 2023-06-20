@@ -7,7 +7,7 @@ import { usePhotoListContext } from '../contexts/PhotoListContext';
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
 import ToolbarLink from '../components/toolbar/ToolbarLink';
-import { usePhotoPageSettingsContext } from '../contexts/PhotoPageSettingsContext';
+import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();

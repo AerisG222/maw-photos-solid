@@ -1,10 +1,10 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { CategoryTypeFilterIdType } from '../models/CategoryTypeFilter';
-import { CategoryFilterSettingsState, defaultCategoryFilterSettings } from '../models/settings';
+import { CategoryTypeFilterIdType } from '../../models/CategoryTypeFilter';
+import { CategoryFilterSettingsState, defaultCategoryFilterSettings } from '../../models/settings';
 import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from './_storage';
-import { YearFilterIdType } from '../models/YearFilter';
+import { YearFilterIdType } from '../../models/YearFilter';
 
 export type CategoryFilterSettingsContextValue = [
     state: CategoryFilterSettingsState,

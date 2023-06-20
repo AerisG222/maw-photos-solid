@@ -1,8 +1,8 @@
 import { ParentComponent, Show } from 'solid-js'
 
 import { buildSearch, categoriesGrid, categoriesList } from './_routes';
-import { useCategoryPageSettingsContext } from '../contexts/CategoryPageSettingsContext';
-import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryPageSettingsContext } from '../contexts/settings/CategoryPageSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';

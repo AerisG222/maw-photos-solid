@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { useCategoryFilterSettingsContext } from '../../contexts/CategoryFilterSettingsContext';
+import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 
 import Select from '../../settings/components/Select';
 import { allYearFilterId } from '../../models/YearFilter';

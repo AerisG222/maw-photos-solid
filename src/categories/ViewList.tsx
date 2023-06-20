@@ -1,8 +1,8 @@
 import { Component, For, Suspense } from "solid-js";
 
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { useCategoryListViewSettingsContext } from '../contexts/CategoryListViewSettingsContext';
-import { useCategoryFilterSettingsContext } from '../contexts/CategoryFilterSettingsContext';
+import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
+import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
 
 import Toolbar from "./Toolbar";
 import ListToolbar from './ToolbarList';

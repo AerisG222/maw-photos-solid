@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { useCategoryListViewSettingsContext } from '../contexts/CategoryListViewSettingsContext';
+import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 import { getNextMarginSize } from '../models/Margin';
 

@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { usePhotoDetailViewSettingsContext } from '../contexts/PhotoDetailViewSettingsContext';
+import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';

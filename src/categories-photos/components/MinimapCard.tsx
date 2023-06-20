@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { usePhotoInfoPanelSettingsContext } from '../../contexts/PhotoInfoPanelSettingsContext';
+import { usePhotoInfoPanelSettingsContext } from '../../contexts/settings/PhotoInfoPanelSettingsContext';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 
 const MinimapCard: Component = () => {

@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 
-import { useRandomPageSettingsContext } from '../contexts/RandomPageSettingsContext';
-import { useRandomInfoPanelSettingsContext } from '../contexts/RandomInfoPanelSettingsContext';
-import { useRandomDetailViewSettingsContext } from '../contexts/RandomDetailViewSettingsContext';
-import { useRandomGridViewSettingsContext } from '../contexts/RandomGridViewSettingsContext';
+import { useRandomPageSettingsContext } from '../contexts/settings/RandomPageSettingsContext';
+import { useRandomInfoPanelSettingsContext } from '../contexts/settings/RandomInfoPanelSettingsContext';
+import { useRandomDetailViewSettingsContext } from '../contexts/settings/RandomDetailViewSettingsContext';
+import { useRandomGridViewSettingsContext } from '../contexts/settings/RandomGridViewSettingsContext';
 import { allRandomViewModes } from '../models/PhotoViewMode';
 import { allMapZoomLevels } from '../models/MapZoomLevel';
 import { allMapTypes } from '../models/MapType';
