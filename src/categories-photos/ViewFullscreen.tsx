@@ -8,15 +8,22 @@ import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from './_routes';
 import { useNavigate, useParams } from '@solidjs/router';
+import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 
 const ViewFullscreen: Component = () => {
+    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const navigate = useNavigate();
     const params = useParams();
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
     const [photoListState] = usePhotoListContext();
 
+    hideXpad();
     setFullscreen(true);
-    onCleanup(() => setFullscreen(false));
+
+    onCleanup(() => {
+        setFullscreen(false)
+        showXpad();
+    });
 
     if(!params.photoId) {
         const p = photoListState.photos[0];

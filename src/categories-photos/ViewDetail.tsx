@@ -1,10 +1,12 @@
-import { Component, Show } from "solid-js";
+import { Component, Show, onCleanup } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { getThumbnailSize } from '../models/ThumbnailSize';
+import { usePhotoEffectsContext } from '../contexts/PhotoEffectsContext';
+import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
@@ -12,9 +14,9 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Sidebar from './components/Sidebar';
 import Layout from '../components/layout/Layout';
 import PhotoList from './components/PhotoList';
-import { usePhotoEffectsContext } from '../contexts/PhotoEffectsContext';
 
 const ViewDetail: Component = () => {
+    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const navigate = useNavigate();
     const params = useParams();
     const [settings] = usePhotoDetailViewSettingsContext();
@@ -41,6 +43,12 @@ const ViewDetail: Component = () => {
 
         return `max-height: calc(100vh - ${reservedHeight}px);`;
     }
+
+    hideXpad();
+
+    onCleanup(() => {
+        showXpad();
+    });
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>

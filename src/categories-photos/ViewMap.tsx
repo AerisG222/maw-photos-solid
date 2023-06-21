@@ -1,12 +1,14 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 
 const ViewMap: Component = () => {
+    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = usePhotoMapViewSettingsContext();
     const [photoListState] = usePhotoListContext();
     const [initialized, setInitialized] = createSignal(false);
@@ -63,6 +65,12 @@ const ViewMap: Component = () => {
 
     onMount(() => {
         initMap();
+    });
+
+    hideXpad();
+
+    onCleanup(() => {
+        showXpad();
     });
 
     createEffect(() => {

@@ -1,6 +1,7 @@
 import { JSXElement, ParentComponent, Show, children } from 'solid-js'
 
 import { MarginIdType, getMarginClass } from '../../models/Margin';
+import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 
 interface Props {
     title?: string;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const Layout: ParentComponent<Props> = (props) => {
+    const [layoutOptions] = useLayoutOptionsContext();
     const c = children(() => props.children);
 
     return (
@@ -21,7 +23,7 @@ const Layout: ParentComponent<Props> = (props) => {
                 {props.toolbar}
             </Show>
 
-            <div class="overflow-y-auto px-2">
+            <div class="overflow-y-auto" classList={{'px-2': layoutOptions.xPad}}>
                 <div classList={getMarginClass(props.margin)}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
