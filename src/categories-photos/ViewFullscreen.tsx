@@ -17,14 +17,6 @@ const ViewFullscreen: Component = () => {
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
     const [photoListState] = usePhotoListContext();
 
-    hideXpad();
-    setFullscreen(true);
-
-    onCleanup(() => {
-        setFullscreen(false)
-        showXpad();
-    });
-
     if(!params.photoId) {
         const p = photoListState.photos[0];
 
@@ -36,6 +28,14 @@ const ViewFullscreen: Component = () => {
             <FullscreenToolbar />
         </Toolbar>
     );
+
+    hideXpad();
+    setFullscreen(true);
+
+    onCleanup(() => {
+        setFullscreen(false)
+        showXpad();
+    });
 
     return (
         <Layout toolbar={toolbar}>
