@@ -1,6 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 
-import { ICategoryTeaserService } from '../services/ICategoryTeaserService';
+import { ICategoryTeaserService } from '../models/services/ICategoryTeaserService';
 
 const CategoryTeaserServiceContext = createContext<ICategoryTeaserService>(undefined);
 

@@ -1,4 +1,4 @@
-import { Rating } from '../api/models/Rating';
+import { Rating } from '../../api/models/Rating';
 
 export interface IRatingService {
     fetchRating: (id: number) => Promise<Rating>;

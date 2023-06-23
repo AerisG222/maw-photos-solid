@@ -3,7 +3,7 @@ import { Component, Show } from "solid-js";
 
 import { PhotoListProvider } from '../contexts/PhotoListContext';
 import { RatingServiceProvider } from '../contexts/RatingServiceContext';
-import { PhotoMediaService } from '../services/PhotoMediaService';
+import { PhotoMediaService } from '../api/PhotoMediaService';
 import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 import { ExifServiceProvider } from '../contexts/ExifServiceContext';
 import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';
