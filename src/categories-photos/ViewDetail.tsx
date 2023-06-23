@@ -1,4 +1,4 @@
-import { Component, Show, onCleanup } from "solid-js";
+import { Component, Show, createEffect, onCleanup } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
@@ -23,17 +23,21 @@ const ViewDetail: Component = () => {
     const [photoListState] = usePhotoListContext();
     const [photoEffectsState, { getEffectStyles }] = usePhotoEffectsContext();
 
+    createEffect(() => {
+        if(!params.photoId) {
+            const p = photoListState.photos[0];
+
+            if(p) {
+                navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
+            }
+        }
+    })
+
     const toolbar = (
         <Toolbar>
             <DetailToolbar />
         </Toolbar>
     );
-
-    if(!params.photoId) {
-        const p = photoListState.photos[0];
-
-        navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
-    }
 
     const getMaxHeight = () => {
         let reservedHeight = 0;

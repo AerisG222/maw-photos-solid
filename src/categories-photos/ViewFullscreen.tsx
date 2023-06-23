@@ -1,4 +1,4 @@
-import { Component, onCleanup } from "solid-js";
+import { Component, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from '../contexts/FullscreenContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
@@ -17,11 +17,13 @@ const ViewFullscreen: Component = () => {
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
     const [photoListState] = usePhotoListContext();
 
-    if(!params.photoId) {
-        const p = photoListState.photos[0];
+    createEffect(() => {
+        if(!params.photoId) {
+            const p = photoListState.photos[0];
 
-        navigate(getPhotoCategoryRoutePath(categoriesPhotosFullscreen, p.categoryId, p.id));
-    }
+            navigate(getPhotoCategoryRoutePath(categoriesPhotosFullscreen, p.categoryId, p.id));
+        }
+    });
 
     const toolbar = (
         <Toolbar>
