@@ -4,7 +4,7 @@ import { A } from '@solidjs/router';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from '../_routes';
-import { Photo } from '../../api/models/Photo';
+import { Photo } from '../../models/Photo';
 
 export type Props = {
     thumbnailSize: ThumbnailSizeIdType;
@@ -50,7 +50,7 @@ const PhotoList: Component<Props> = (props) => {
                     class="cursor-pointer mr-[0.1rem] saturate-20 hover:saturate-100 border-1 border-transparent hover:border-primary"
                     classList={getClassList(photo)}
                     ref={el => scroll(el, photo)}>
-                    <img src={photo.imageXsSq.url} class="max-w-none" classList={getThumbnailClass(props.thumbnailSize)} />
+                    <img src={photo.imageXsSqUrl} class="max-w-none" classList={getThumbnailClass(props.thumbnailSize)} />
                 </A>
             }</For>
         </div>

@@ -7,7 +7,7 @@ import {
 
 import { GpsCoordinate } from '../../api/models/GpsCoordinate';
 import { GpsDetail } from '../../api/models/GpsDetail';
-import { Photo } from '../../api/models/Photo';
+import { Photo } from '../../models/Photo';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
 

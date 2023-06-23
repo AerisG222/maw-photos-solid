@@ -190,7 +190,7 @@ const HistogramCard: Component = () => {
 
     createEffect(() => {
         if(state.activePhoto) {
-            img.src = state.activePhoto.imageMd.url;
+            img.src = state.activePhoto.imageMdUrl;
         }
     })
 

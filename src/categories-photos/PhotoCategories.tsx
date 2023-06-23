@@ -1,5 +1,5 @@
 import { Outlet, useParams } from '@solidjs/router';
-import { Component, Show } from "solid-js";
+import { Component } from "solid-js";
 
 import { PhotoListProvider } from '../contexts/PhotoListContext';
 import { RatingServiceProvider } from '../contexts/RatingServiceContext';
@@ -29,9 +29,7 @@ const PhotoCategories: Component = () => {
             <ExifServiceProvider svc={mediaService}>
             <MetadataEditServiceProvider svc={mediaService}>
             <CategoryTeaserServiceProvider svc={mediaService}>
-                {/* <Show when={photos.photos && photos.photos.length > 0}> */}
-                    <Outlet />
-                {/* </Show> */}
+                <Outlet />
             </CategoryTeaserServiceProvider>
             </MetadataEditServiceProvider>
             </ExifServiceProvider>

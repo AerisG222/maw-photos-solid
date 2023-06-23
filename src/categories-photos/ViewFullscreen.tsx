@@ -41,7 +41,7 @@ const ViewFullscreen: Component = () => {
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
                 <img
-                    src={photoListState.activePhoto?.imageMd?.url}
+                    src={photoListState.activePhoto?.imageMdUrl}
                     class="h-100% max-w-100% object-contain" />
             </div>
         </Layout>

@@ -3,6 +3,7 @@ import { ApiCollection } from './models/ApiCollection';
 import { VideoCategory as ApiVideoCategory } from './models/VideoCategory';
 import { Video as ApiVideo } from './models/Video';
 import { VideoCategory } from '../models/Category';
+import { Video } from '../models/Video';
 
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     const videoCategories = await internalGetVideoCategories();
@@ -24,10 +25,25 @@ export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     }));
 }
 
+export const getVideos = async (categoryId: number): Promise<Video[]> => {
+    const videos = await internalGetVideos(categoryId);
+
+    return videos.items.map(x => ({
+        id: x.id,
+        categoryId: x.categoryId,
+        createDate: x.createDate,
+        latitude: x.latitude,
+        longitude: x.longitude,
+        thumbnailSqUrl: x.thumbnailSq.url,
+        videoScaledUrl: x.videoScaled.url,
+        videoFullUrl: x.videoFull.url
+    }));
+}
+
 const internalGetVideoCategories = () =>
     queryMawApi<ApiCollection<ApiVideoCategory>>('video-categories');
 
-export const getVideos = (categoryId: number) =>
+const internalGetVideos = (categoryId: number) =>
     queryMawApi<ApiCollection<ApiVideo>>(`video-categories/${categoryId}/photos`);
 
 export const setTeaser = (categoryId: number, videoId: number) =>

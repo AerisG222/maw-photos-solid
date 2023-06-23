@@ -26,7 +26,7 @@ const ViewGrid: Component = () => {
             <Show when={photoState.activePhoto}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
                     <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)}>
-                        <img src={photoState.activePhoto.imageLg.url} class="w-[100%] h-[100%] object-contain self-center" />
+                        <img src={photoState.activePhoto.imageLgUrl} class="w-[100%] h-[100%] object-contain self-center" />
                     </A>
                 </div>
             </Show>

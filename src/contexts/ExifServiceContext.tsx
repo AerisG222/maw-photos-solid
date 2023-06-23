@@ -1,6 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 
-import { IExifService } from '../services/IExifService';
+import { IExifService } from '../models/services/IExifService';
 
 const ExifServiceContext = createContext<IExifService>(undefined);
 

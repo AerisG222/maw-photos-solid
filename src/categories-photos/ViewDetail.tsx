@@ -58,7 +58,7 @@ const ViewDetail: Component = () => {
                 </Show>
 
                 <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                    <img src={photoListState.activePhoto?.imageMd?.url}
+                    <img src={photoListState.activePhoto?.imageMdUrl}
                         class="h-100% max-w-100% object-contain"
                         style={`${getMaxHeight()} ${getEffectStyles()}` } />
                 </div>

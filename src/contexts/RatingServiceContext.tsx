@@ -1,6 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 
-import { IRatingService } from '../services/IRatingService';
+import { IRatingService } from '../models/services/IRatingService';
 
 const RatingServiceContext = createContext<IRatingService>(undefined);
 

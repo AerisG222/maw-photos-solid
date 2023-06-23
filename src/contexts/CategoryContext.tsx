@@ -5,8 +5,8 @@ import { Category, PhotoCategory, VideoCategory } from '../models/Category';
 import { CategoryTypeFilterIdType, getCategoryTypeFilter } from '../models/CategoryTypeFilter';
 import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 import { buildStatsData } from '../models/utils/ChartUtils';
-import { Photo } from '../api/models/Photo';
-import { Video } from '../api/models/Video';
+import { Photo } from '../models/Photo';
+import { Video } from '../models/Video';
 
 export type CategoryState = {
     readonly photoCategories: PhotoCategory[];
@@ -180,7 +180,7 @@ export const CategoryProvider: ParentComponent = (props) => {
                 'photoCategories',
                 cat => cat.id === state.activeCategory.id,
                 "teaserImageUrl",
-                (photoOrVideo as Photo).imageXsSq.url
+                (photoOrVideo as Photo).imageXsSqUrl
             );
         }
 
@@ -189,7 +189,7 @@ export const CategoryProvider: ParentComponent = (props) => {
                 'videoCategories',
                 cat => cat.id === state.activeCategory.id,
                 "teaserImageUrl",
-                (photoOrVideo as Video).thumbnailSq.url
+                (photoOrVideo as Video).thumbnailSqUrl
             );
         }
     }

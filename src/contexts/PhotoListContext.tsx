@@ -1,6 +1,6 @@
 import { ParentComponent, createContext, useContext } from 'solid-js';
 
-import { Photo } from '../api/models/Photo';
+import { Photo } from '../models/Photo';
 import { createStore } from 'solid-js/store';
 
 export type PhotoListState = {
@@ -12,7 +12,7 @@ export type PhotoListState = {
 export const defaultPhotoListState = {
     photos: [],
     activePhoto: undefined,
-    activeIndex: -1
+    activeIndex: undefined
 }
 
 export type PhotoListContextValue = [
@@ -48,6 +48,7 @@ export const PhotoListProvider: ParentComponent = (props) => {
 
     const setPhotos = (photos: Photo[]) => {
         setState({ photos: photos });
+        setActivePhoto(state.activePhoto?.id);
     };
 
     const setActivePhoto = (photoId: number) => {
@@ -72,13 +73,16 @@ export const PhotoListProvider: ParentComponent = (props) => {
 
     const setActivePhotoByIndex = (index: number) => {
         if(index < 0 || index >= state.photos.length) {
-            return;
+            setState({
+                activePhoto: undefined,
+                activeIndex: undefined
+            })
+        } else {
+            setState({
+                activePhoto: state.photos[index],
+                activeIndex: index
+            });
         }
-
-        setState({
-            activePhoto: state.photos[index],
-            activeIndex: index
-        });
     }
 
     const getNextPhoto = () => {
