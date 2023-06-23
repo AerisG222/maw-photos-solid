@@ -2,11 +2,11 @@ import { Component, Show } from 'solid-js';
 import { A } from '@solidjs/router';
 
 import { getThumbnailClass, ThumbnailSizeIdType } from '../../models/ThumbnailSize';
-import { ICategory } from '../../models/Category';
+import { Category } from '../../models/Category';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
 export type Props = {
-    category: ICategory,
+    category: Category,
     showTitles: boolean,
     thumbnailSize: ThumbnailSizeIdType
 }
@@ -19,7 +19,7 @@ const CategoryCard: Component<Props> = (props) => {
             onClick={evt => setActiveCategory(props.category)}
             class="group bg-secondary-content:6 border-1 rounded-1 border-primaryContent-[10%] cursor-pointer hover:border-primary hover:color-primary">
             <img
-                src={props.category.teaserImageSq.url}
+                src={props.category.teaserImageUrl}
                 class="rounded-t-1 saturate-50 group-hover:saturate-100"
                 classList={getThumbnailClass(props.thumbnailSize)} />
             <Show when={props.showTitles}>

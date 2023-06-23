@@ -1,14 +1,14 @@
-import { ICategory } from './Category';
+import { Category } from './Category';
 import { KeyValuePair } from './KeyValuePair';
 import { equalsIgnoreCase } from './utils/StringUtils';
 
 export type CategoryTypeFilterIdType = string;
-export type CategoryTypeFilter = KeyValuePair<CategoryTypeFilterIdType> & { filter: (c: ICategory) => boolean };
+export type CategoryTypeFilter = KeyValuePair<CategoryTypeFilterIdType> & { filter: (c: Category) => boolean };
 
 export const allCategoryTypeFilters: CategoryTypeFilter[] = [
-    { id: 'all',   name: 'Photos and Videos', filter: (c: ICategory) => true },
-    { id: 'photo', name: 'Photos',            filter: (c: ICategory) => equalsIgnoreCase('photo', c.type) },
-    { id: 'video', name: 'Videos',            filter: (c: ICategory) => equalsIgnoreCase('video', c.type) },
+    { id: 'all',   name: 'Photos and Videos', filter: (c: Category) => true },
+    { id: 'photo', name: 'Photos',            filter: (c: Category) => equalsIgnoreCase('photo', c.type) },
+    { id: 'video', name: 'Videos',            filter: (c: Category) => equalsIgnoreCase('video', c.type) },
 ];
 
 export const defaultCategoryTypeFilter: CategoryTypeFilterIdType = 'all';

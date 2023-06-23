@@ -1,12 +1,12 @@
 import { Component, For } from 'solid-js';
 
 import { useCategoryListViewSettingsContext } from '../../contexts/settings/CategoryListViewSettingsContext';
-import { ICategory } from '../../models/Category';
+import { Category } from '../../models/Category';
 import CategoryListItem from './CategoryListItem';
 
 export type Props = {
     year: number;
-    categories: ICategory[]
+    categories: Category[]
 }
 const YearList: Component<Props> = (props) => {
     const [settings] = useCategoryListViewSettingsContext();

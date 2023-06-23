@@ -15,8 +15,8 @@ const CategoryLoader: ParentComponent = (props) => {
     const [videoCategories] = createResource(isLoggedIn, getVideoCats);
 
     createEffect(() => {
-        setPhotoCategories(photoCategories()?.items ?? []);
-        setVideoCategories(videoCategories()?.items ?? []);
+        setPhotoCategories(photoCategories() ?? []);
+        setVideoCategories(videoCategories() ?? []);
     });
 
     return (

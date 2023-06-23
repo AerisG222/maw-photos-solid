@@ -1,5 +1,4 @@
-import { PhotoCategory } from '../../api/models/PhotoCategory';
-import { VideoCategory } from '../../api/models/VideoCategory';
+import { Category } from '../../models/Category';
 
 // https://www.learnui.design/tools/data-color-picker.html
 export const chartColors = [
@@ -40,7 +39,7 @@ export const chartColors = [
     '#ffa600',
 ];
 
-export const buildStatsData = (years: number[], categories: PhotoCategory[] | VideoCategory[], valueFunc: (Category) => number) => {
+export const buildStatsData = (years: number[], categories: Category[], valueFunc: (cat: Category) => number) => {
     const result = [];
 
     for(const year of years) {

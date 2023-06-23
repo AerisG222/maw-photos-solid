@@ -2,12 +2,12 @@ import { Component, For } from 'solid-js';
 
 import CategoryCard from './CategoryCard';
 import { useCategoryGridViewSettingsContext } from '../../contexts/settings/CategoryGridViewSettingsContext';
-import { ICategory } from '../../models/Category';
+import { Category } from '../../models/Category';
 import { defaultGridThumbnailSize } from '../../models/ThumbnailSize';
 
 export type Props = {
     year: number;
-    categories: ICategory[]
+    categories: Category[]
 }
 const YearGrid: Component<Props> = (props) => {
     const [settings] = useCategoryGridViewSettingsContext();
