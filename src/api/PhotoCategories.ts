@@ -1,7 +1,7 @@
 import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from '../models/api/ApiCollection';
-import { PhotoCategory } from '../models/api/PhotoCategory';
-import { Photo } from '../models/api/Photo';
+import { ApiCollection } from './models/ApiCollection';
+import { PhotoCategory } from './models/PhotoCategory';
+import { Photo } from './models/Photo';
 
 export const getPhotoCategories = () =>
     queryMawApi<ApiCollection<PhotoCategory>>('photo-categories');

@@ -1,7 +1,7 @@
 import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from '../models/api/ApiCollection';
-import { VideoCategory } from '../models/api/VideoCategory';
-import { Video } from '../models/api/Video';
+import { ApiCollection } from './models/ApiCollection';
+import { VideoCategory } from './models/VideoCategory';
+import { Video } from './models/Video';
 
 export const getVideoCategories = () =>
     queryMawApi<ApiCollection<VideoCategory>>('video-categories');

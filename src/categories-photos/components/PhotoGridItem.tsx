@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { Photo } from '../../models/api/Photo';
+import { Photo } from '../../api/models/Photo';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
 import { A } from '@solidjs/router';
 import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../_routes';

@@ -1,5 +1,5 @@
-import { PhotoCategory } from '../api/PhotoCategory';
-import { VideoCategory } from '../api/VideoCategory';
+import { PhotoCategory } from '../../api/models/PhotoCategory';
+import { VideoCategory } from '../../api/models/VideoCategory';
 
 // https://www.learnui.design/tools/data-color-picker.html
 export const chartColors = [

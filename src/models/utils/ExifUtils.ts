@@ -1,4 +1,4 @@
-import { ExifDetail } from '../api/ExifDetail';
+import { ExifDetail } from '../../api/models/ExifDetail';
 
 interface FormatInstruction {
     category: 'exif' | 'maker' | 'composite';

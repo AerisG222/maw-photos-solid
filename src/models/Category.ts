@@ -1,6 +1,6 @@
 import { getPhotoCategoryPath } from '../categories-photos/_routes';
 import { categoriesVideos } from '../categories-videos/_routes';
-import { MultimediaAsset } from './api/MultimediaAsset';
+import { MultimediaAsset } from '../api/models/MultimediaAsset';
 
 export interface IApiCategory {
     id: number;

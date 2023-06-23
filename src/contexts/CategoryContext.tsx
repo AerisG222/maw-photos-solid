@@ -1,14 +1,14 @@
 import { createContext, createMemo, ParentComponent, useContext } from 'solid-js';
 import { createStore, unwrap } from "solid-js/store";
 
-import { PhotoCategory } from '../models/api/PhotoCategory';
-import { VideoCategory } from '../models/api/VideoCategory';
+import { PhotoCategory } from '../api/models/PhotoCategory';
+import { VideoCategory } from '../api/models/VideoCategory';
 import { Category, ICategory } from '../models/Category';
 import { CategoryTypeFilterIdType, getCategoryTypeFilter } from '../models/CategoryTypeFilter';
 import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 import { buildStatsData } from '../models/utils/ChartUtils';
-import { Photo } from '../models/api/Photo';
-import { Video } from '../models/api/Video';
+import { Photo } from '../api/models/Photo';
+import { Video } from '../api/models/Video';
 
 export type CategoryState = {
     readonly photoCategories: Category<PhotoCategory>[];

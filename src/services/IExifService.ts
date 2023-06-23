@@ -1,4 +1,4 @@
-import { ExifDetail } from '../models/api/ExifDetail';
+import { ExifDetail } from '../api/models/ExifDetail';
 
 export interface IExifService {
     fetchExif: (id: number) => Promise<ExifDetail>;

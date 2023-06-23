@@ -1,7 +1,7 @@
-import { ApiCollection } from '../models/api/ApiCollection';
-import { GpsCoordinate } from '../models/api/GpsCoordinate';
-import { GpsDetail } from '../models/api/GpsDetail';
-import { Rating } from '../models/api/Rating';
+import { ApiCollection } from './models/ApiCollection';
+import { GpsCoordinate } from './models/GpsCoordinate';
+import { GpsDetail } from './models/GpsDetail';
+import { Rating } from './models/Rating';
 import { patchMawApi, postMawApi, queryMawApi } from './Shared';
 
 export const getRating = (videoId: number) =>

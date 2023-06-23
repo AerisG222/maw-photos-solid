@@ -1,6 +1,6 @@
 import { ParentComponent, createContext, useContext } from 'solid-js';
 
-import { Photo } from '../models/api/Photo';
+import { Photo } from '../api/models/Photo';
 import { createStore } from 'solid-js/store';
 
 export type PhotoListState = {

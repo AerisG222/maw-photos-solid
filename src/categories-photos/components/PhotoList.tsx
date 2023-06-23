@@ -4,7 +4,7 @@ import { A } from '@solidjs/router';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from '../_routes';
-import { Photo } from '../../models/api/Photo';
+import { Photo } from '../../api/models/Photo';
 
 export type Props = {
     thumbnailSize: ThumbnailSizeIdType;
