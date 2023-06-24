@@ -6,6 +6,8 @@ import { getPhotoCategoryPath } from './_routes';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
+import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
+import BulkEditSidebar from './components/BulkEditSidebar';
 
 const ViewBulkEdit: Component = () => {
     const [photoList] = usePhotoListContext();
@@ -20,8 +22,8 @@ const ViewBulkEdit: Component = () => {
     }
 
     return (
-        <Layout toolbar={toolbar} title="Photo Categories Bulk Edit">
-            ...content...
+        <Layout toolbar={toolbar} sidebar={<BulkEditSidebar />}>
+            <CategoryBreadcrumb />
         </Layout>
     );
 };
