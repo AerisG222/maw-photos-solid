@@ -35,6 +35,7 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
         createDate: x.createDate,
         latitude: x.latitude,
         longitude: x.longitude,
+        imageXsUrl: x.imageXs.url,
         imageXsSqUrl: x.imageXsSq.url,
         imageSmUrl: x.imageSm.url,
         imageMdUrl: x.imageMd.url,

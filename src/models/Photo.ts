@@ -4,6 +4,7 @@ export type Photo = {
     createDate: Date;
     latitude?: number;
     longitude?: number;
+    imageXsUrl: string;
     imageXsSqUrl: string;
     imageSmUrl: string;
     imageMdUrl: string;
