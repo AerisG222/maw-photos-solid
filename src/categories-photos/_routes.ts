@@ -39,8 +39,8 @@ export const categoriesPhotosFullscreen: AppRouteDefinition = {
 export const categoriesPhotosMap: AppRouteDefinition = {
     icon: "i-ic-round-map",
     name: "Map View",
-    path: '/map',
-    absolutePath: `${basePath}/map`,
+    path: '/map/:photoId?',
+    absolutePath: `${basePath}/map/:photoId?`,
     component: lazy(() => import('./ViewMap'))
 }
 
