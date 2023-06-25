@@ -5,43 +5,11 @@ import {
     createSignal
 } from 'solid-js';
 
-import { GpsCoordinate } from '../../api/models/GpsCoordinate';
 import { GpsDetail } from '../../api/models/GpsDetail';
 import { Photo } from '../../models/Photo';
 import { usePhotoListContext } from '../../contexts/PhotoListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
-
-
-type GpsOverride = {
-    lat: string | undefined,
-    lng: string | undefined
-};
-
-const parseGps = (val: string): GpsCoordinate | undefined => {
-    const parts = val
-        .trim()
-        .replace('[', '')
-        .replace(']', '')
-        .replace('(', '')
-        .replace(')', '')
-        .split(',');
-
-    if (parts.length !== 2) {
-        return undefined;
-    }
-
-    const lat = Number(parts[0]);
-    const lng = Number(parts[1]);
-
-    if (isNaN(lat) || isNaN(lng)) {
-        return undefined;
-    }
-
-    return {
-        latitude: lat,
-        longitude: lng,
-    };
-};
+import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
 
 const MetadataEditorCard: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
@@ -118,10 +86,6 @@ const MetadataEditorCard: Component = () => {
 
     const isOverrideValid = () => {
         return isValidLatLng(override().lat) && isValidLatLng(override().lng);
-    }
-
-    const isValidLatLng = (val: string) => {
-        return val !== undefined && !isNaN(parseFloat(val));
     }
 
     const getValidationClass = (val: string) => {

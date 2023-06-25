@@ -4,7 +4,11 @@ import InfoCard from './InfoCard';
 import BulkEditFilterCard from './BulkEditFilterCard';
 import BulkEditGpsCard from './BulkEditGpsCard';
 
-const BulkEditSidebar: Component = () => {
+type Props = {
+    onSave: (gps: GpsOverride) => void;
+};
+
+const BulkEditSidebar: Component<Props> = (props) => {
     const cards = [
         {
             title: "Filter/Selection Tools",
@@ -14,7 +18,7 @@ const BulkEditSidebar: Component = () => {
         {
             title: "GPS",
             icon: "i-ic-round-place",
-            component: <BulkEditGpsCard />
+            component: <BulkEditGpsCard onSave={props.onSave}/>
         }
     ];
 

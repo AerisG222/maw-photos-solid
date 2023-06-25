@@ -14,10 +14,8 @@ const BulkEditFilterCard: Component = () => {
                 />
             </div>
 
-            <div class="divider" />
-
-            <div>
-                <button class="btn btn-sm">Select All</button>
+            <div class="mt-4">
+                <button class="btn btn-sm mr-2">Select All</button>
                 <button class="btn btn-sm">Deselect All</button>
             </div>
         </div>
