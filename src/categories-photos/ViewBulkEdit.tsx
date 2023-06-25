@@ -32,25 +32,17 @@ const ViewBulkEdit: Component = () => {
         console.log(gps);
     };
 
-    const onSelectAll = () => {
-        console.log('set all')
-        setAll(true);
-    };
-
-    const onDeselectAll = () => {
-        console.log('unset all')
-        setAll(false);
-    };
-
     const setAll = (doSelect: boolean) => {
-        setPhotos(photos => {
-            for(const photo of photos) {
-                photo.isSelected = doSelect;
-            }
+        setPhotos(photos =>
+            photos.map(p => {
+                if(p.isSelected === doSelect) {
+                    return p;
+                }
 
-            return [...photos];
-        })
-    }
+                return {...p, isSelected: doSelect}
+            })
+        )
+    };
 
     const onHidePhotosWithGps = (hide: boolean) => {
         let photos: Photo[] = [];
@@ -65,15 +57,16 @@ const ViewBulkEdit: Component = () => {
     };
 
     const toggle = (photo: SelectablePhoto) => {
-        console.log('toggle');
-        setPhotos(photos => {
-            const p = photos.find(p => p.imageUrl == photo.imageUrl);
+        setPhotos(photos =>
+            photos.map(p => {
+                if(p.imageUrl === photo.imageUrl) {
+                    return {...p, isSelected: !p.isSelected };
+                }
 
-            p.isSelected = !p.isSelected;
-
-            return [...photos];
-        });
-    }
+                return p;
+            })
+        );
+    };
 
     if(!photoList.photos || photoList.photos.length === 0) {
         navigate(getPhotoCategoryPath(categoryId));
@@ -84,8 +77,8 @@ const ViewBulkEdit: Component = () => {
     const toolbar = <Toolbar />;
     const sidebar = <BulkEditSidebar
         onSave={onSave}
-        onSelectAll={onSelectAll}
-        onDeselectAll={onDeselectAll}
+        onSelectAll={() => setAll(true)}
+        onDeselectAll={() => setAll(false)}
         onHidePhotosWithGps={onHidePhotosWithGps} />;
 
     return (
@@ -96,7 +89,7 @@ const ViewBulkEdit: Component = () => {
                 <For each={photos()}>{ photo =>
                     <div class="border-1 border-color-primary:40 hover:border-color-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(photo)}>
                         <input type="checkbox" class="checkbox checkbox-sm mt-1" checked={photo.isSelected} onInput={evt => photo.isSelected = evt.currentTarget.checked} />
-                        <img src={photo.imageUrl} />
+                        <img src={photo.imageUrl} class="w-160px h-120px" />
                     </div>
                 }</For>
             </div>
