@@ -1,10 +1,11 @@
-import { Component, For, createSignal } from "solid-js";
+import { Component, For, createEffect, createSignal } from "solid-js";
 
 import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { getPhotoCategoryPath } from './_routes';
-import { GpsOverride } from '../models/utils/GpsUtils';
 import { Photo } from '../models/Photo';
+import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
+import { GpsCoordinate } from '../api/models/GpsCoordinate';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
@@ -12,11 +13,13 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './components/BulkEditSidebar';
 
 type SelectablePhoto = {
+    id: number,
     isSelected: boolean,
     imageUrl: string
 };
 
 const ViewBulkEdit: Component = () => {
+    const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [photos, setPhotos] = createSignal<SelectablePhoto[]>([]);
     const [photoList] = usePhotoListContext();
     const navigate = useNavigate();
@@ -24,12 +27,17 @@ const ViewBulkEdit: Component = () => {
     const categoryId = parseInt(params.categoryId);
 
     const buildSelectablePhoto = (photo: Photo) => ({
-        isSelected: false,
-        imageUrl: photo.imageXsSqUrl
+        id: photo.id,
+        imageUrl: photo.imageXsSqUrl,
+        isSelected: false
     });
 
-    const onSave = (gps: GpsOverride) => {
-        console.log(gps);
+    const onSave = async (gps: GpsCoordinate) => {
+        const photosToUpdate = photos().filter(p => p.isSelected);
+
+        for(const photo of photosToUpdate) {
+            await setGpsCoordinateOverride(photo.id, gps);
+        }
     };
 
     const setAll = (doSelect: boolean) => {
@@ -72,7 +80,9 @@ const ViewBulkEdit: Component = () => {
         navigate(getPhotoCategoryPath(categoryId));
     }
 
-    setPhotos(photoList.photos.map(buildSelectablePhoto));
+    createEffect(() => {
+        setPhotos(photoList.photos.map(buildSelectablePhoto));
+    })
 
     const toolbar = <Toolbar />;
     const sidebar = <BulkEditSidebar

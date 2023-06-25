@@ -1,9 +1,10 @@
 import { Component, createSignal } from 'solid-js';
 
 import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
+import { GpsCoordinate } from '../../api/models/GpsCoordinate';
 
 type Props = {
-    onSave: (gps: GpsOverride) => void;
+    onSave: (gps: GpsCoordinate) => void;
 };
 
 const BulkEditGpsCard: Component<Props> = (props) => {
@@ -54,7 +55,7 @@ const BulkEditGpsCard: Component<Props> = (props) => {
     const save = (evt: Event) => {
         evt.preventDefault();
 
-        props.onSave(override());
+        props.onSave({ latitude: parseFloat(override().lat), longitude: parseFloat(override().lng)});
     }
 
     return (
