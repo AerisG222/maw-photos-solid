@@ -2,6 +2,7 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 
 import { Photo } from '../models/Photo';
 import { createStore } from 'solid-js/store';
+import { GpsCoordinate } from '../api/models/GpsCoordinate';
 
 export type PhotoListState = {
     readonly photos: Photo[];
@@ -24,6 +25,7 @@ export type PhotoListContextValue = [
         activePhotoIsLast: () => boolean;
         getNextPhoto: () => Photo | undefined;
         getPreviousPhoto: () => Photo | undefined;
+        setGpsOverride: (photoId: number, coord: GpsCoordinate) => void;
         moveNext: () => void;
         movePrevious: () => void;
     }
@@ -38,6 +40,7 @@ const PhotoListContext = createContext<PhotoListContextValue>([
         activePhotoIsLast: () => undefined,
         getNextPhoto: () => undefined,
         getPreviousPhoto: () => undefined,
+        setGpsOverride: () => undefined,
         moveNext: () => undefined,
         movePrevious: () => undefined
     }
@@ -111,6 +114,20 @@ export const PhotoListProvider: ParentComponent = (props) => {
         console.log("NEED TO UPDATE URL HERE!");
     }
 
+    const setGpsOverride = (photoId: number, coord: GpsCoordinate) => {
+        const idx = state.photos.findIndex(p => p.id === photoId);
+
+        setState(
+            "photos",
+            idx,
+            "latitude",
+            {
+                latitude: coord.latitude,
+                longitude: coord.longitude
+            }
+        );
+    }
+
     return (
         <PhotoListContext.Provider value={[state, {
             setPhotos,
@@ -119,6 +136,7 @@ export const PhotoListProvider: ParentComponent = (props) => {
             activePhotoIsLast,
             getNextPhoto,
             getPreviousPhoto,
+            setGpsOverride,
             moveNext,
             movePrevious
         }]}>

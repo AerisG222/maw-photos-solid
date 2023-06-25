@@ -1,4 +1,4 @@
-import { Component, For, createEffect, createSignal } from "solid-js";
+import { Component, For, Show, createEffect, createSignal } from "solid-js";
 
 import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
@@ -15,13 +15,16 @@ import BulkEditSidebar from './components/BulkEditSidebar';
 type SelectablePhoto = {
     id: number,
     isSelected: boolean,
-    imageUrl: string
+    imageUrl: string,
+    latitude?: number,
+    longitude?: number
 };
 
 const ViewBulkEdit: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [photos, setPhotos] = createSignal<SelectablePhoto[]>([]);
-    const [photoList] = usePhotoListContext();
+    const [hidePhotosWithGps, setHidePhotosWithGps] = createSignal(false);
+    const [photoList, { setGpsOverride }] = usePhotoListContext();
     const navigate = useNavigate();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
@@ -29,14 +32,21 @@ const ViewBulkEdit: Component = () => {
     const buildSelectablePhoto = (photo: Photo) => ({
         id: photo.id,
         imageUrl: photo.imageXsSqUrl,
+        latitude: photo.latitude,
+        longitude: photo.longitude,
         isSelected: false
     });
 
     const onSave = async (gps: GpsCoordinate) => {
         const photosToUpdate = photos().filter(p => p.isSelected);
 
+        // assume success - make sure photos that may be removed from view are not still tracked as
+        // participating in a future edit
+        setAll(false);
+
         for(const photo of photosToUpdate) {
             await setGpsCoordinateOverride(photo.id, gps);
+            setGpsOverride(photo.id, gps);
         }
     };
 
@@ -53,15 +63,7 @@ const ViewBulkEdit: Component = () => {
     };
 
     const onHidePhotosWithGps = (hide: boolean) => {
-        let photos: Photo[] = [];
-
-        if(hide) {
-            photos = photoList.photos.filter(x => !x.latitude && !x.longitude);
-        } else {
-            photos = photoList.photos;
-        }
-
-        setPhotos(photos.map(buildSelectablePhoto));
+        setHidePhotosWithGps(hide);
     };
 
     const toggle = (photo: SelectablePhoto) => {
@@ -97,10 +99,12 @@ const ViewBulkEdit: Component = () => {
 
             <div class="flex flex-wrap flex-gap-2 mx-8 flex-justify-center">
                 <For each={photos()}>{ photo =>
-                    <div class="border-1 border-color-primary:40 hover:border-color-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(photo)}>
-                        <input type="checkbox" class="checkbox checkbox-sm mt-1" checked={photo.isSelected} onInput={evt => photo.isSelected = evt.currentTarget.checked} />
-                        <img src={photo.imageUrl} class="w-160px h-120px" />
-                    </div>
+                    <Show when={hidePhotosWithGps() ? !photo.latitude && !photo.longitude : true}>
+                        <div class="border-1 border-color-primary:40 hover:border-color-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(photo)}>
+                            <input type="checkbox" class="checkbox checkbox-sm mt-1" checked={photo.isSelected} onInput={evt => photo.isSelected = evt.currentTarget.checked} />
+                            <img src={photo.imageUrl} class="w-160px h-120px" />
+                        </div>
+                    </Show>
                 }</For>
             </div>
         </Layout>
