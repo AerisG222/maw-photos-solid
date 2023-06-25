@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, Show, lazy } from "solid-js";
 
 import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
 
@@ -73,56 +73,56 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-star",
             clickHandler: toggleRatings,
             active: () => settings.expandInfoPanel && settings.showRatings,
-            component: <RatingsCard />
+            component: lazy(() => import('./RatingsCard'))
         },
         {
             title: "Comments",
             icon: "i-ic-round-comment",
             clickHandler: toggleComments,
             active: () => settings.expandInfoPanel && settings.showComments,
-            component: <CommentsCard />
+            component: lazy(() => import('./CommentsCard'))
         },
         {
             title: "EXIF Data",
             icon: "i-ic-round-tune",
             clickHandler: toggleExif,
             active: () => settings.expandInfoPanel && settings.showExif,
-            component: <ExifCard />
+            component: lazy(() => import('./ExifCard'))
         },
         {
             title: "Effects",
             icon: "i-ic-round-photo-filter",
             clickHandler: toggleEffects,
             active: () => settings.expandInfoPanel && settings.showEffects,
-            component: <EffectsCard />
+            component: lazy(() => import('./EffectsCard'))
         },
         {
             title: "Histogram",
             icon: "i-ic-round-color-lens",
             clickHandler: toggleHistogram,
             active: () => settings.expandInfoPanel && settings.showHistogram,
-            component: <HistogramCard />
+            component: lazy(() => import('./HistogramCard'))
         },
         {
             title: "MiniMap",
             icon: "i-ic-round-map",
             clickHandler: toggleMinimap,
             active: () => settings.expandInfoPanel && settings.showMinimap,
-            component: <MinimapCard />
+            component: lazy(() => import('./MinimapCard'))
         },
         {
             title: "Metadata Editor",
             icon: "i-ic-round-edit",
             clickHandler: toggleMetadataEditor,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
-            component: <MetadataEditorCard />
+            component: lazy(() => import('./MetadataEditorCard'))
         },
         {
             title: "Category Teaser Chooser",
             icon: "i-ic-round-image-search",
             clickHandler: toggleCategoryTeaserChooser,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
-            component: <CategoryTeaserCard />
+            component: lazy(() => import('./CategoryTeaserCard'))
         }
     ];
 
