@@ -2,7 +2,25 @@ import { Component } from 'solid-js';
 
 import Checkbox from '../../settings/components/Checkbox';
 
-const BulkEditFilterCard: Component = () => {
+type Props = {
+    onHidePhotosWithGps: (hide: boolean) => void;
+    onSelectAll: () => void;
+    onDeselectAll: () => void;
+};
+
+const BulkEditFilterCard: Component<Props> = (props) => {
+    const onSelectAll = (evt: Event) => {
+        evt.preventDefault();
+
+        props.onSelectAll();
+    };
+
+    const onDeselectAll = (evt: Event) => {
+        evt.preventDefault();
+
+        props.onDeselectAll();
+    };
+
     return (
         <div class="mx-4">
             <div>
@@ -10,13 +28,13 @@ const BulkEditFilterCard: Component = () => {
                     name="hideGps"
                     title="Hide Photos with GPS Data"
                     isSelected={false}
-                    onChange={() => console.log('x')}
+                    onChange={props.onHidePhotosWithGps}
                 />
             </div>
 
             <div class="mt-4">
-                <button class="btn btn-sm mr-2">Select All</button>
-                <button class="btn btn-sm">Deselect All</button>
+                <button class="btn btn-sm mr-2" onClick={onSelectAll}>Select All</button>
+                <button class="btn btn-sm" onClick={onDeselectAll}>Deselect All</button>
             </div>
         </div>
     );

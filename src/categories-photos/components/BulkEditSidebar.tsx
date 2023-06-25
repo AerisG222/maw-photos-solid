@@ -6,6 +6,9 @@ import BulkEditGpsCard from './BulkEditGpsCard';
 
 type Props = {
     onSave: (gps: GpsOverride) => void;
+    onHidePhotosWithGps: (hide: boolean) => void;
+    onSelectAll: () => void;
+    onDeselectAll: () => void;
 };
 
 const BulkEditSidebar: Component<Props> = (props) => {
@@ -13,7 +16,10 @@ const BulkEditSidebar: Component<Props> = (props) => {
         {
             title: "Filter/Selection Tools",
             icon: "i-ic-round-filter-list",
-            component: <BulkEditFilterCard />
+            component: <BulkEditFilterCard
+                onSelectAll={props.onSelectAll}
+                onDeselectAll={props.onDeselectAll}
+                onHidePhotosWithGps={props.onHidePhotosWithGps} />
         },
         {
             title: "GPS",

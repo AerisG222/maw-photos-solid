@@ -3,12 +3,12 @@ import { Component } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { getPhotoCategoryPath } from './_routes';
+import { GpsOverride } from '../models/utils/GpsUtils';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './components/BulkEditSidebar';
-import { GpsOverride } from '../models/utils/GpsUtils';
 
 const ViewBulkEdit: Component = () => {
     const [photoList] = usePhotoListContext();
@@ -18,10 +18,26 @@ const ViewBulkEdit: Component = () => {
 
     const onSave = (gps: GpsOverride) => {
         console.log(gps);
-    }
+    };
+
+    const onSelectAll = () => {
+        console.log('select all');
+    };
+
+    const onDeselectAll = () => {
+        console.log('select none');
+    };
+
+    const onHidePhotosWithGps = (hide: boolean) => {
+        console.log(`hide: ${hide}`);
+    };
 
     const toolbar = <Toolbar />;
-    const sidebar = <BulkEditSidebar onSave={onSave} />;
+    const sidebar = <BulkEditSidebar
+        onSave={onSave}
+        onSelectAll={onSelectAll}
+        onDeselectAll={onDeselectAll}
+        onHidePhotosWithGps={onHidePhotosWithGps} />;
 
     if(!photoList.photos || photoList.photos.length === 0) {
         navigate(getPhotoCategoryPath(categoryId));
