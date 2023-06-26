@@ -10,7 +10,7 @@ export const getVideoCategories = async (): Promise<VideoCategory[]> => {
 
     return videoCategories.items.map(x => ({
         id: x.id,
-        type: 'photo',
+        type: 'video',
         name: x.name,
         year: x.year,
         createDate: x.createDate,
@@ -44,7 +44,7 @@ const internalGetVideoCategories = () =>
     queryMawApi<ApiCollection<ApiVideoCategory>>('video-categories');
 
 const internalGetVideos = (categoryId: number) =>
-    queryMawApi<ApiCollection<ApiVideo>>(`video-categories/${categoryId}/photos`);
+    queryMawApi<ApiCollection<ApiVideo>>(`video-categories/${categoryId}/videos`);
 
 export const setTeaser = (categoryId: number, videoId: number) =>
     patchMawApi(`video-categories/${categoryId}/teaser`, { videoId });
