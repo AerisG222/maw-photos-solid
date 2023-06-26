@@ -24,11 +24,11 @@ const Toolbar: ParentComponent = (props) => {
     return (
         <Show when={categoryState.activeCategory}>
             <ToolbarLayout>
-                <ToolbarLink route={categoriesPhotosGrid}       routeParams={getParams()} shortcutKeys={['g']} clickHandler={() => setViewMode("grid")}/>
-                <ToolbarLink route={categoriesPhotosDetail}     routeParams={getParams()} shortcutKeys={['w']} clickHandler={() => setViewMode("detail")}/>
-                <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getParams()} shortcutKeys={['f']} clickHandler={() => setViewMode("fullscreen")}/>
-                <ToolbarLink route={categoriesPhotosMap}        routeParams={getParams()} shortcutKeys={['z']} clickHandler={() => setViewMode("map")}/>
-                <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getParams()} shortcutKeys={['b']} clickHandler={() => setViewMode("bulkEdit")}/>
+                <ToolbarLink route={categoriesPhotosGrid}       routeParams={getParams()} clickHandler={() => setViewMode("grid")}/>
+                <ToolbarLink route={categoriesPhotosDetail}     routeParams={getParams()} clickHandler={() => setViewMode("detail")}/>
+                <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getParams()} clickHandler={() => setViewMode("fullscreen")}/>
+                <ToolbarLink route={categoriesPhotosMap}        routeParams={getParams()} clickHandler={() => setViewMode("map")}/>
+                <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getParams()} clickHandler={() => setViewMode("bulkEdit")}/>
 
                 <Show when={!!c()}>
                     <Divider />
