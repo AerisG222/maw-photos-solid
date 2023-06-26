@@ -19,7 +19,6 @@ const ToolbarButton: Component<Props> = (props) => {
     }
 
     if(props.shortcutKeys) {
-        console.log(props.shortcutKeys);
         createShortcut(props.shortcutKeys, () => { props.clickHandler() });
     }
 
