@@ -24,18 +24,21 @@ const GridToolbar: Component = () => {
         <>
             <ToolbarButton
                 icon="i-ic-round-title"
-                name="Show / Hide Category Titles"
+                name="Show / Hide Category Titles (T)"
+                shortcutKeys={['t']}
                 clickHandler={onToggleTitles}
                 disabled={settings.thumbnailSize !== defaultGridThumbnailSize}
             />
             <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
-                name="Toggle Grid Thumbnail Size"
+                name="Toggle Grid Thumbnail Size (S)"
+                shortcutKeys={['s']}
                 clickHandler={onToggleThumbnailSize}
             />
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
-                name="Toggle Category Margins"
+                name="Toggle Category Margins (M)"
+                shortcutKeys={['m']}
                 clickHandler={onToggleMargins}
             />
         </>

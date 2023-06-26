@@ -30,6 +30,7 @@
         "vitest": "^0.32.2"
     },
     "dependencies": {
+        "@solid-primitives/keyboard": "^1.2.3",
         "@solidjs/router": "^0.8.2",
         "@unocss/preset-uno": "^0.53.3",
         "highcharts": "^11.1.0",
