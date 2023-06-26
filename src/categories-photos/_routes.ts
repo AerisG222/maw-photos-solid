@@ -15,6 +15,8 @@ export const categoriesPhotosRedirect: AppRouteDefinition = {
 export const categoriesPhotosGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
     name: "Grid View",
+    tooltip: "Grid View (G)",
+    shortcutKeys: ['g'],
     path: "/grid/:photoId?",
     absolutePath: `${basePath}/grid/:photoId?`,
     component: lazy(() => import('./ViewGrid'))
@@ -23,6 +25,8 @@ export const categoriesPhotosGrid: AppRouteDefinition = {
 export const categoriesPhotosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
+    tooltip: "Detail View (W)",
+    shortcutKeys: ['w'],
     path: '/detail/:photoId?',
     absolutePath: `${basePath}/detail/:photoId?`,
     component: lazy(() => import('./ViewDetail'))
@@ -31,6 +35,8 @@ export const categoriesPhotosDetail: AppRouteDefinition = {
 export const categoriesPhotosFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
+    tooltip: "Fullscreen View (F)",
+    shortcutKeys: ['f'],
     path: '/fullscreen/:photoId?',
     absolutePath: `${basePath}/fullscreen/:photoId?`,
     component: lazy(() => import('./ViewFullscreen'))
@@ -39,6 +45,8 @@ export const categoriesPhotosFullscreen: AppRouteDefinition = {
 export const categoriesPhotosMap: AppRouteDefinition = {
     icon: "i-ic-round-map",
     name: "Map View",
+    tooltip: "Map View (Z)",
+    shortcutKeys: ['z'],
     path: '/map/:photoId?',
     absolutePath: `${basePath}/map/:photoId?`,
     component: lazy(() => import('./ViewMap'))
@@ -47,6 +55,8 @@ export const categoriesPhotosMap: AppRouteDefinition = {
 export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     icon: "i-ic-round-collections",
     name: "Bulk Edit View",
+    tooltip: "Bulk Edit View (B)",
+    shortcutKeys: ['b'],
     path: '/bulk-edit',
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import('./ViewBulkEdit'))
