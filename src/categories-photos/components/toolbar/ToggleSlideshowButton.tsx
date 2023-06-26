@@ -10,7 +10,8 @@ const ToggleSlideshowButton: Component = () => {
     return (
         <ToolbarButton
             icon="i-ic-round-play-arrow"
-            name="Start / Stop Slideshow"
+            name="Start / Stop Slideshow (P)"
+            shortcutKeys={['p']}
             clickHandler={onToggleSlideshow}
         />
     );

@@ -32,6 +32,7 @@ const Sidebar: Component = () => {
     ] = usePhotoInfoPanelSettingsContext();
 
     const toggleExpandedState = () => {
+        console.log('x');
         setExpandInfoPanel(!settings.expandInfoPanel);
     };
 
@@ -70,56 +71,72 @@ const Sidebar: Component = () => {
     const cards = [
         {
             title: "Ratings",
+            tooltip: "Ratings (R)",
             icon: "i-ic-round-star",
+            shortcutKeys: ['r'],
             clickHandler: toggleRatings,
             active: () => settings.expandInfoPanel && settings.showRatings,
             component: lazy(() => import('./RatingsCard'))
         },
         {
             title: "Comments",
+            tooltip: "Comments (C)",
             icon: "i-ic-round-comment",
+            shortcutKeys: ['c'],
             clickHandler: toggleComments,
             active: () => settings.expandInfoPanel && settings.showComments,
             component: lazy(() => import('./CommentsCard'))
         },
         {
             title: "EXIF Data",
+            tooltip: "EXIF Data (X)",
             icon: "i-ic-round-tune",
+            shortcutKeys: ['x'],
             clickHandler: toggleExif,
             active: () => settings.expandInfoPanel && settings.showExif,
             component: lazy(() => import('./ExifCard'))
         },
         {
             title: "Effects",
+            tooltip: "Effects (E)",
             icon: "i-ic-round-photo-filter",
+            shortcutKeys: ['e'],
             clickHandler: toggleEffects,
             active: () => settings.expandInfoPanel && settings.showEffects,
             component: lazy(() => import('./EffectsCard'))
         },
         {
             title: "Histogram",
+            tooltip: "Histogram (H)",
             icon: "i-ic-round-color-lens",
+            shortcutKeys: ['h'],
             clickHandler: toggleHistogram,
             active: () => settings.expandInfoPanel && settings.showHistogram,
             component: lazy(() => import('./HistogramCard'))
         },
         {
             title: "MiniMap",
+            tooltip: "MiniMap (V)",
             icon: "i-ic-round-map",
+            shortcutKeys: ['v'],
             clickHandler: toggleMinimap,
             active: () => settings.expandInfoPanel && settings.showMinimap,
             component: lazy(() => import('./MinimapCard'))
         },
         {
             title: "Metadata Editor",
+            tooltip: "Metadata Editor (N)",
             icon: "i-ic-round-edit",
+            shortcutKeys: ['n'],
             clickHandler: toggleMetadataEditor,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
             component: lazy(() => import('./MetadataEditorCard'))
         },
         {
             title: "Category Teaser Chooser",
+            tooltip: "Category Teaser Chooser (K)",
             icon: "i-ic-round-image-search",
+            shortcutKeys: ['k'],
             clickHandler: toggleCategoryTeaserChooser,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import('./CategoryTeaserCard'))
@@ -142,12 +159,13 @@ const Sidebar: Component = () => {
 
             <SidebarLayout>
                 <ToolbarButton
-                    name="Expand / Collapse"
+                    name="Expand / Collapse (I)"
                     icon={
                         settings.expandInfoPanel
                             ? "i-ic-chevron-right"
                             : "i-ic-chevron-left"
                     }
+                    shortcutKeys={['i']}
                     clickHandler={toggleExpandedState}
                 />
 
@@ -155,8 +173,9 @@ const Sidebar: Component = () => {
 
                 <For each={cards}>{ card =>
                     <ToolbarButton
-                        name={card.title}
+                        name={card.tooltip}
                         icon={card.icon}
+                        shortcutKeys={card.shortcutKeys}
                         clickHandler={card.clickHandler}
                         active={card.active()}
                     />

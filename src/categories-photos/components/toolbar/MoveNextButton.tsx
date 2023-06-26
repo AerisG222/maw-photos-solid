@@ -23,7 +23,8 @@ const MoveNextButton: Component = () => {
         <ToolbarButton
             disabled={activePhotoIsLast()}
             icon="i-ic-round-chevron-right"
-            name="Move Next"
+            name="Move Next (&rarr;)"
+            shortcutKeys={['arrowright']}
             clickHandler={moveNext}
         />
     );

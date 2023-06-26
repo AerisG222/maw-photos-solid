@@ -14,6 +14,7 @@ const Layout: ParentComponent<Props> = (props) => {
     const [layoutOptions] = useLayoutOptionsContext();
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
+    const sidebar = children(() => props.sidebar);
 
     return (
         <div class="grid
@@ -34,8 +35,8 @@ const Layout: ParentComponent<Props> = (props) => {
                 </div>
             </div>
 
-            <Show when={props.sidebar} fallback={<div />}>
-                {props.sidebar}
+            <Show when={sidebar()} fallback={<div />}>
+                {sidebar()}
             </Show>
         </div>
     );

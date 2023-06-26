@@ -23,7 +23,8 @@ const MovePreviousButton: Component = () => {
         <ToolbarButton
             disabled={activePhotoIsFirst()}
             icon="i-ic-round-chevron-left"
-            name="Move Previous"
+            name="Move Previous (&larr;)"
+            shortcutKeys={['arrowleft']}
             clickHandler={movePrevious}
         />
     );

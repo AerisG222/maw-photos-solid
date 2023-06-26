@@ -45,17 +45,20 @@ const GridToolbar: Component = () => {
             <Show when={!state.activePhoto}>
                 <ToolbarButton
                     icon="i-ic-round-title"
-                    name="Show / Hide Category Breadcrumbs"
+                    name="Show / Hide Category Breadcrumbs (T)"
+                    shortcutKeys={['t']}
                     clickHandler={onToggleBreadcrumbs}
                 />
                 <ToolbarButton
                     icon="i-ic-round-photo-size-select-large"
-                    name="Toggle Thumbnail Size"
+                    name="Toggle Thumbnail Size (S)"
+                    shortcutKeys={['s']}
                     clickHandler={onToggleThumbnailSize}
                 />
                 <ToolbarButton
                     icon="i-ic-round-format-indent-increase"
-                    name="Toggle Margins"
+                    name="Toggle Margins (M)"
+                    shortcutKeys={['m']}
                     clickHandler={onToggleMargins}
                 />
             </Show>
