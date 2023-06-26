@@ -12,15 +12,16 @@ interface Props {
 
 const Layout: ParentComponent<Props> = (props) => {
     const [layoutOptions] = useLayoutOptionsContext();
-    const c = children(() => props.children);
+    const content = children(() => props.children);
+    const toolbar = children(() => props.toolbar);
 
     return (
         <div class="grid
             grid-rows-[max-content_auto_max-content] grid-cols-[100vw]
             md:grid-rows-[100vh] md:grid-cols-[max-content_auto_max-content]"
         >
-            <Show when={props.toolbar} fallback={<div />}>
-                {props.toolbar}
+            <Show when={toolbar()} fallback={<div />}>
+                {toolbar()}
             </Show>
 
             <div class="overflow-y-auto" classList={{'px-2': layoutOptions.xPad}}>
@@ -29,7 +30,7 @@ const Layout: ParentComponent<Props> = (props) => {
                         <h1 class="head1">{props.title}</h1>
                     </Show>
 
-                    {c()}
+                    {content()}
                 </div>
             </div>
 

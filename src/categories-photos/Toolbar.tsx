@@ -1,4 +1,4 @@
-import { ParentComponent, Show } from 'solid-js'
+import { ParentComponent, Show, children } from 'solid-js'
 
 import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
@@ -14,7 +14,8 @@ const Toolbar: ParentComponent = (props) => {
     const [photoState] = usePhotoListContext();
     const [settings, { setViewMode }] = usePhotoPageSettingsContext();
 
-    const c = () => props.children;
+    const c = children(() => props.children);
+
     const getParams = () => ({
         categoryId: categoryState.activeCategory?.id,
         photoId: photoState.activePhoto?.id

@@ -1,4 +1,4 @@
-import { ParentComponent, Show } from 'solid-js'
+import { ParentComponent, Show, children } from 'solid-js'
 
 import { statsCombined, statsPhotos, statsVideos } from './_routes';
 
@@ -7,7 +7,7 @@ import ToolbarLink from '../components/toolbar/ToolbarLink';
 import Divider from '../components/layout/Divider';
 
 const Toolbar: ParentComponent = (props) => {
-    const c = () => props.children;
+    const c = children(() => props.children);
 
     return (
         <ToolbarLayout>

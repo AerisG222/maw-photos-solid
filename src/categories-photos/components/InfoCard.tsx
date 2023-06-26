@@ -1,4 +1,4 @@
-import { ParentComponent } from 'solid-js';
+import { ParentComponent, children } from 'solid-js';
 
 export type Props = {
     icon: string;
@@ -6,7 +6,7 @@ export type Props = {
 }
 
 const InfoCard: ParentComponent<Props> = (props) => {
-    const c = () => props.children;
+    const c = children(() => props.children);
 
     return (
         <div class="bg-primaryContent rounded m-1 p-2 border-1 border-secondary-content:10%">

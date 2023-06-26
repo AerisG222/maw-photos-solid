@@ -1,7 +1,7 @@
-import { ParentComponent } from 'solid-js';
+import { ParentComponent, children } from 'solid-js';
 
 const StatBar: ParentComponent = (props) => {
-    const c = () => props.children;
+    const c = children(() => props.children);
 
     return (
         <>
@@ -9,7 +9,7 @@ const StatBar: ParentComponent = (props) => {
                 {c()}
             </div>
         </>
-    )
+    );
 }
 
 export default StatBar;

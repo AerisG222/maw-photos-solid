@@ -1,4 +1,4 @@
-import { ParentComponent, Show } from 'solid-js'
+import { ParentComponent, Show, children } from 'solid-js'
 
 import { buildSearch, categoriesGrid, categoriesList } from './_routes';
 import { useCategoryPageSettingsContext } from '../contexts/settings/CategoryPageSettingsContext';
@@ -11,7 +11,7 @@ import ToolbarLink from '../components/toolbar/ToolbarLink';
 const Toolbar: ParentComponent = (props) => {
     const [settings, { setViewMode }] = useCategoryPageSettingsContext();
     const [filterState] = useCategoryFilterSettingsContext();
-    const c = () => props.children;
+    const c = children(() => props.children);
 
     return (
         <ToolbarLayout>

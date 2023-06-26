@@ -1,4 +1,4 @@
-import { ParentComponent, createEffect, createResource } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource } from 'solid-js';
 
 import { getPhotos } from '../api/PhotoCategories';
 import { useCategoryContext } from '../contexts/CategoryContext';
@@ -13,6 +13,8 @@ const PhotoListLoader: ParentComponent<Props> = (props) => {
     const [photosResource] = createResource(props.categoryId, getPhotos);
     const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
     const [photos, { setPhotos, setActivePhoto }] = usePhotoListContext();
+
+    const c = children(() => props.children);
 
     createEffect(() => {
         setActivePhotoCategory(props.categoryId);
@@ -30,7 +32,7 @@ const PhotoListLoader: ParentComponent<Props> = (props) => {
 
     return (
         <>
-            {props.children}
+            {c()}
         </>
     )
 };

@@ -1,4 +1,4 @@
-import { ParentComponent, createEffect, createResource } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource } from 'solid-js';
 
 import { isLoggedIn } from './auth/auth';
 import { getPhotoCategories } from './api/PhotoCategories';
@@ -14,6 +14,8 @@ const CategoryLoader: ParentComponent = (props) => {
     const [photoCategories] = createResource(isLoggedIn, getPhotoCats);
     const [videoCategories] = createResource(isLoggedIn, getVideoCats);
 
+    const c = children(() => props.children);
+
     createEffect(() => {
         setPhotoCategories(photoCategories() ?? []);
         setVideoCategories(videoCategories() ?? []);
@@ -21,7 +23,7 @@ const CategoryLoader: ParentComponent = (props) => {
 
     return (
         <>
-            {props.children}
+            {c()}
         </>
     )
 }
