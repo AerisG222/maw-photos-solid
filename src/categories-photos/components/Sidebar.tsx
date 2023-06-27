@@ -5,14 +5,6 @@ import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoI
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
-import RatingsCard from './RatingsCard';
-import CommentsCard from './CommentsCard';
-import HistogramCard from './HistogramCard';
-import ExifCard from './ExifCard';
-import EffectsCard from './EffectsCard';
-import MinimapCard from './MinimapCard';
-import MetadataEditorCard from './MetadataEditorCard';
-import CategoryTeaserCard from './CategoryTeaserCard';
 import InfoCard from './InfoCard';
 
 const Sidebar: Component = () => {
@@ -32,7 +24,6 @@ const Sidebar: Component = () => {
     ] = usePhotoInfoPanelSettingsContext();
 
     const toggleExpandedState = () => {
-        console.log('x');
         setExpandInfoPanel(!settings.expandInfoPanel);
     };
 
