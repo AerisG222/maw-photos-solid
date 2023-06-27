@@ -15,10 +15,10 @@
         "@iconify-json/mdi": "^1.1.52",
         "@solidjs/testing-library": "^0.8.1",
         "@types/google.maps": "^3.53.4",
-        "@typescript-eslint/parser": "^5.60.0",
-        "@unocss/preset-icons": "^0.53.3",
-        "@unocss/reset": "^0.53.3",
-        "@unocss/vite": "^0.53.3",
+        "@typescript-eslint/parser": "^5.60.1",
+        "@unocss/preset-icons": "^0.53.4",
+        "@unocss/reset": "^0.53.4",
+        "@unocss/vite": "^0.53.4",
         "daisyui": "^3.1.6",
         "eslint": "^8.43.0",
         "eslint-plugin-solid": "^0.12.1",
@@ -32,10 +32,10 @@
     "dependencies": {
         "@solid-primitives/keyboard": "^1.2.3",
         "@solidjs/router": "^0.8.2",
-        "@unocss/preset-uno": "^0.53.3",
+        "@unocss/preset-uno": "^0.53.4",
         "highcharts": "^11.1.0",
         "numbro": "^2.3.6",
         "oidc-client-ts": "^2.2.4",
-        "solid-js": "^1.7.6"
+        "solid-js": "^1.7.7"
     }
 }
