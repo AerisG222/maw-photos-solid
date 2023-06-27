@@ -14,7 +14,7 @@ const MainImage: Component<Props> = (props) => {
     return (
         <img src={photoListState.activePhoto?.imageMdUrl}
             class="h-100% w-100% max-w-100% object-contain self-center"
-            style={`${props.maxHeightStyle} ${getFilterStyles()} ${getTransformStyles()}` } />
+            style={`${props.maxHeightStyle ?? ''} ${getFilterStyles()} ${getTransformStyles()}` } />
     );
 }
 
