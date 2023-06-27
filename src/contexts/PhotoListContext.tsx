@@ -3,6 +3,8 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 import { Photo } from '../models/Photo';
 import { createStore } from 'solid-js/store';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
+import { useNavigate } from '@solidjs/router';
+import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../categories-photos/_routes';
 
 export type PhotoListState = {
     readonly photos: Photo[];
@@ -26,8 +28,10 @@ export type PhotoListContextValue = [
         getNextPhoto: () => Photo | undefined;
         getPreviousPhoto: () => Photo | undefined;
         setGpsOverride: (photoId: number, coord: GpsCoordinate) => void;
+        moveFirst: () => void;
         moveNext: () => void;
         movePrevious: () => void;
+        moveLast: () => void;
     }
 ];
 
@@ -41,13 +45,16 @@ const PhotoListContext = createContext<PhotoListContextValue>([
         getNextPhoto: () => undefined,
         getPreviousPhoto: () => undefined,
         setGpsOverride: () => undefined,
+        moveFirst: () => undefined,
         moveNext: () => undefined,
-        movePrevious: () => undefined
+        movePrevious: () => undefined,
+        moveLast: () => undefined
     }
 ]);
 
 export const PhotoListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultPhotoListState);
+    const navigate = useNavigate();
 
     const setPhotos = (photos: Photo[]) => {
         setState({ photos: photos });
@@ -104,14 +111,26 @@ export const PhotoListProvider: ParentComponent = (props) => {
         return state.photos[state.activeIndex - 1];
     }
 
+    const navigateToPhoto = (photo: Photo) => {
+        if(photo) {
+            navigate(getPhotoCategoryRoutePath(categoriesPhotosGrid, photo.categoryId, photo.id));
+        }
+    }
+
+    const moveFirst = () => {
+        navigateToPhoto(state.photos[0]);
+    }
+
     const moveNext = () => {
-        console.log("NEED TO UPDATE URL HERE!");
-        setActivePhotoByIndex(state.activeIndex + 1);
+        navigateToPhoto(getNextPhoto());
     }
 
     const movePrevious = () => {
-        setActivePhotoByIndex(state.activeIndex - 1);
-        console.log("NEED TO UPDATE URL HERE!");
+        navigateToPhoto(getPreviousPhoto())
+    }
+
+    const moveLast = () => {
+        navigateToPhoto(state.photos[state.photos.length - 1]);
     }
 
     const setGpsOverride = (photoId: number, coord: GpsCoordinate) => {
@@ -137,8 +156,10 @@ export const PhotoListProvider: ParentComponent = (props) => {
             getNextPhoto,
             getPreviousPhoto,
             setGpsOverride,
+            moveFirst,
             moveNext,
-            movePrevious
+            movePrevious,
+            moveLast
         }]}>
             {props.children}
         </PhotoListContext.Provider>
