@@ -5,22 +5,26 @@ import { createStore } from 'solid-js/store';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
 import { useNavigate } from '@solidjs/router';
 import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../categories-photos/_routes';
+import { AppRouteDefinition } from '../models/AppRouteDefinition';
 
 export type PhotoListState = {
     readonly photos: Photo[];
     readonly activePhoto: Photo;
     readonly activeIndex: number;
+    readonly activeRouteDefinition: AppRouteDefinition
 }
 
 export const defaultPhotoListState = {
     photos: [],
     activePhoto: undefined,
-    activeIndex: undefined
+    activeIndex: undefined,
+    activeRouteDefinition: undefined
 }
 
 export type PhotoListContextValue = [
     state: PhotoListState,
     actions: {
+        setActiveRouteDefinition: (def: ActiveRouteDefinition) => void;
         setPhotos: (photos: Photo[]) => void;
         setActivePhoto: (photoId: number) => void;
         activePhotoIsFirst: () => boolean;
@@ -38,6 +42,7 @@ export type PhotoListContextValue = [
 const PhotoListContext = createContext<PhotoListContextValue>([
     defaultPhotoListState,
     {
+        setActiveRouteDefinition: () => undefined,
         setPhotos: () => undefined,
         setActivePhoto: () => undefined,
         activePhotoIsFirst: () => undefined,
@@ -55,6 +60,10 @@ const PhotoListContext = createContext<PhotoListContextValue>([
 export const PhotoListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultPhotoListState);
     const navigate = useNavigate();
+
+    const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
+        setState({activeRouteDefinition});
+    }
 
     const setPhotos = (photos: Photo[]) => {
         setState({ photos: photos });
@@ -112,8 +121,8 @@ export const PhotoListProvider: ParentComponent = (props) => {
     }
 
     const navigateToPhoto = (photo: Photo) => {
-        if(photo) {
-            navigate(getPhotoCategoryRoutePath(categoriesPhotosGrid, photo.categoryId, photo.id));
+        if(photo && state.activeRouteDefinition) {
+            navigate(getPhotoCategoryRoutePath(state.activeRouteDefinition, photo.categoryId, photo.id));
         }
     }
 
@@ -149,6 +158,7 @@ export const PhotoListProvider: ParentComponent = (props) => {
 
     return (
         <PhotoListContext.Provider value={[state, {
+            setActiveRouteDefinition,
             setPhotos,
             setActivePhoto,
             activePhotoIsFirst,

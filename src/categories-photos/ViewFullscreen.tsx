@@ -16,7 +16,9 @@ const ViewFullscreen: Component = () => {
     const navigate = useNavigate();
     const params = useParams();
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
-    const [photoListState] = usePhotoListContext();
+    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
+
+    setActiveRouteDefinition(categoriesPhotosFullscreen);
 
     createEffect(() => {
         if(!params.photoId) {

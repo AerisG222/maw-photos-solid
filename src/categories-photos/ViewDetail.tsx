@@ -1,7 +1,7 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
+import { categoriesPhotosDetail, categoriesPhotosGrid, getPhotoCategoryRoutePath } from './_routes';
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
@@ -20,7 +20,9 @@ const ViewDetail: Component = () => {
     const navigate = useNavigate();
     const params = useParams();
     const [settings] = usePhotoDetailViewSettingsContext();
-    const [photoListState] = usePhotoListContext();
+    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
+
+    setActiveRouteDefinition(categoriesPhotosDetail);
 
     createEffect(() => {
         if(!params.photoId) {

@@ -15,8 +15,10 @@ import { useSlideshowContext } from '../contexts/SlideshowContext';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
-    const [photoState] = usePhotoListContext();
+    const [photoState, { setActiveRouteDefinition }] = usePhotoListContext();
     const [slideshowState, { stop }] = useSlideshowContext();
+
+    setActiveRouteDefinition(categoriesPhotosGrid);
 
     const toolbar = (
         <Toolbar>

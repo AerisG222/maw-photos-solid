@@ -2,7 +2,7 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 
 import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
-import { getPhotoCategoryPath } from './_routes';
+import { categoriesPhotosBulkEdit, getPhotoCategoryPath } from './_routes';
 import { Photo } from '../models/Photo';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
@@ -24,10 +24,12 @@ const ViewBulkEdit: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [photos, setPhotos] = createSignal<SelectablePhoto[]>([]);
     const [hidePhotosWithGps, setHidePhotosWithGps] = createSignal(false);
-    const [photoList, { setGpsOverride }] = usePhotoListContext();
+    const [photoList, { setActiveRouteDefinition, setGpsOverride }] = usePhotoListContext();
     const navigate = useNavigate();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
+
+    setActiveRouteDefinition(categoriesPhotosBulkEdit);
 
     const buildSelectablePhoto = (photo: Photo) => ({
         id: photo.id,

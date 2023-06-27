@@ -13,11 +13,13 @@ import Layout from '../components/layout/Layout';
 const ViewMap: Component = () => {
     const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = usePhotoMapViewSettingsContext();
-    const [photoListState] = usePhotoListContext();
+    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
     const navigate = useNavigate();
     const params = useParams();
     const [initialized, setInitialized] = createSignal(false);
     let el: HTMLDivElement | undefined;
+
+    setActiveRouteDefinition(categoriesPhotosMap);
 
     const toolbar = (
         <Toolbar>
