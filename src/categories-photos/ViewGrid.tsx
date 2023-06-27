@@ -11,10 +11,12 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import PhotoGridItem from './components/PhotoGridItem';
 import Layout from '../components/layout/Layout';
 import MainImage from './components/MainImage';
+import { useSlideshowContext } from '../contexts/SlideshowContext';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
     const [photoState] = usePhotoListContext();
+    const [slideshowState, { stop }] = useSlideshowContext();
 
     const toolbar = (
         <Toolbar>
@@ -26,7 +28,7 @@ const ViewGrid: Component = () => {
         <Layout margin={settings.margin} toolbar={toolbar}>
             <Show when={photoState.activePhoto}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
-                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)}>
+                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)} onClick={stop}>
                         <MainImage />
                     </A>
                 </div>
