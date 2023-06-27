@@ -3,13 +3,14 @@ import { A } from '@solidjs/router';
 
 import { usePhotoListContext } from '../contexts/PhotoListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
+import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from './_routes';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import PhotoGridItem from './components/PhotoGridItem';
 import Layout from '../components/layout/Layout';
-import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from './_routes';
+import MainImage from './components/MainImage';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
@@ -26,7 +27,7 @@ const ViewGrid: Component = () => {
             <Show when={photoState.activePhoto}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
                     <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)}>
-                        <img src={photoState.activePhoto.imageLgUrl} class="w-[100%] h-[100%] object-contain self-center" />
+                        <MainImage />
                     </A>
                 </div>
             </Show>

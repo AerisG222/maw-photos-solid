@@ -4,9 +4,8 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { usePhotoListContext } from '../contexts/PhotoListContext';
-import { getThumbnailSize } from '../models/ThumbnailSize';
-import { usePhotoEffectsContext } from '../contexts/PhotoEffectsContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
+import { getThumbnailSize } from '../models/ThumbnailSize';
 
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
@@ -14,6 +13,7 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Sidebar from './components/Sidebar';
 import Layout from '../components/layout/Layout';
 import PhotoList from './components/PhotoList';
+import MainImage from './components/MainImage';
 
 const ViewDetail: Component = () => {
     const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -21,7 +21,6 @@ const ViewDetail: Component = () => {
     const params = useParams();
     const [settings] = usePhotoDetailViewSettingsContext();
     const [photoListState] = usePhotoListContext();
-    const [photoEffectsState, { getEffectStyles }] = usePhotoEffectsContext();
 
     createEffect(() => {
         if(!params.photoId) {
@@ -39,6 +38,12 @@ const ViewDetail: Component = () => {
         </Toolbar>
     );
 
+    hideXpad();
+
+    onCleanup(() => {
+        showXpad();
+    });
+
     const getMaxHeight = () => {
         let reservedHeight = 0;
 
@@ -48,12 +53,6 @@ const ViewDetail: Component = () => {
         return `max-height: calc(100vh - ${reservedHeight}px);`;
     }
 
-    hideXpad();
-
-    onCleanup(() => {
-        showXpad();
-    });
-
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
             <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
@@ -62,9 +61,7 @@ const ViewDetail: Component = () => {
                 </Show>
 
                 <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                    <img src={photoListState.activePhoto?.imageMdUrl}
-                        class="h-100% max-w-100% object-contain"
-                        style={`${getMaxHeight()} ${getEffectStyles()}` } />
+                    <MainImage maxHeightStyle={getMaxHeight()}/>
                 </div>
 
                 <Show when={settings.showPhotoList} fallback={<div/>}>
