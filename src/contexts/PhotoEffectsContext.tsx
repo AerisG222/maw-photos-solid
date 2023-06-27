@@ -16,7 +16,13 @@ export type PhotoEffectsContextValue = [
         setSaturation: (value: number) => void;
         setInvert: (value: number) => void;
         setHueRotate: (value: number) => void;
-        getEffectStyles: () => void;
+        getFilterStyles: () => void;
+
+        rotateClockwise: () => void;
+        rotateCounterClockwise: () => void;
+        flipHorizontal: () => void;
+        flipVertical: () => void;
+        getTransformStyles: () => void;
     }
 ];
 
@@ -33,7 +39,13 @@ const PhotoEffectsContext = createContext<PhotoEffectsContextValue>([
         setSaturation: (value: number) => undefined,
         setInvert: (value: number) => undefined,
         setHueRotate: (value: number) => undefined,
-        getEffectStyles: () => undefined,
+        getFilterStyles: () => undefined,
+
+        rotateClockwise: () => undefined,
+        rotateCounterClockwise: () => undefined,
+        flipHorizontal: () => undefined,
+        flipVertical: () => undefined,
+        getTransformStyles: () => undefined,
     }
 ]);
 
@@ -51,7 +63,7 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
     const setInvert = (value: number) => setState({invert: value});
     const setHueRotate = (value: number) => setState({hueRotate: value});
 
-    const getEffectStyles = () => {
+    const getFilterStyles = () => {
         const style: string[] = [];
 
         if (state.grayscale > 0) {
@@ -87,7 +99,34 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
         }
 
         if(style.length > 0) {
-            return `filter: ${style.join(' ')}`;
+            return `filter: ${style.join(' ')};`;
+        }
+
+        return '';
+    }
+
+    const rotateClockwise = () => setState(s => ({...s, rotation: s.rotation + 90}));
+    const rotateCounterClockwise = () => setState(s => ({...s, rotation: s.rotation - 90}));
+    const flipHorizontal = () => setState(s => ({...s, flipHorizontal: !s.flipHorizontal}));
+    const flipVertical = () => setState(s => ({...s, flipVertical: !s.flipVertical}));
+
+    const getTransformStyles = () => {
+        const style: string[] = [];
+
+        if(state.rotation !== 0) {
+            style.push(`rotate(${state.rotation}deg)`)
+        }
+
+        if(state.flipHorizontal) {
+            style.push('scaleX(-1)')
+        }
+
+        if(state.flipVertical) {
+            style.push('scaleY(-1)')
+        }
+
+        if(style.length > 0) {
+            return `transform: ${style.join(' ')};`;
         }
 
         return '';
@@ -104,7 +143,12 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
             setSaturation,
             setInvert,
             setHueRotate,
-            getEffectStyles,
+            getFilterStyles,
+            rotateClockwise,
+            rotateCounterClockwise,
+            flipHorizontal,
+            flipVertical,
+            getTransformStyles
         }]}>
             {props.children}
         </PhotoEffectsContext.Provider>

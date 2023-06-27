@@ -1,10 +1,14 @@
 import { Component } from 'solid-js';
 
+import { usePhotoEffectsContext } from '../../../contexts/PhotoEffectsContext';
+
 import ToolbarButton from '../../../components/toolbar/ToolbarButton';
 
 const FlipVerticalButton: Component = () => {
+    const [photoEffectsState, { flipVertical }] = usePhotoEffectsContext();
+
     const onFlipVertical = () => {
-        console.log("flipv");
+        flipVertical();
     };
 
     return (

@@ -9,12 +9,12 @@ type Props = {
 
 const MainImage: Component<Props> = (props) => {
     const [photoListState] = usePhotoListContext();
-    const [photoEffectsState, { getEffectStyles }] = usePhotoEffectsContext();
+    const [photoEffectsState, { getFilterStyles, getTransformStyles }] = usePhotoEffectsContext();
 
     return (
         <img src={photoListState.activePhoto?.imageMdUrl}
             class="h-100% w-100% max-w-100% object-contain self-center"
-            style={`${props.maxHeightStyle} ${getEffectStyles()}` } />
+            style={`${props.maxHeightStyle} ${getFilterStyles()} ${getTransformStyles()}` } />
     );
 }
 
