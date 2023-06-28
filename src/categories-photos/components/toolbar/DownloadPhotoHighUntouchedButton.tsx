@@ -1,18 +1,17 @@
 import { Component } from 'solid-js';
 
-import ToolbarButton from '../../../components/toolbar/ToolbarButton';
+import { usePhotoListContext } from '../../../contexts/PhotoListContext';
+
+import ToolbarExternalLink from '../../../components/toolbar/ToolbarExternalLink';
 
 const DownloadPhotoHighUntouchedButton: Component = () => {
-    const onDownloadHighUntouched = () => {
-        console.log("download high untouched");
-    }
+    const [photoListState] = usePhotoListContext();
 
     return (
-        <ToolbarButton
-            icon="i-ic-round-image"
-            name="High Res Download (untouched)"
-            clickHandler={onDownloadHighUntouched}
-        />
+        <ToolbarExternalLink
+            title="High Res Download (untouched)"
+            url={photoListState.activePhoto?.imagePrtUrl}
+            iconClass='i-ic-round-image' />
     );
 }
 
