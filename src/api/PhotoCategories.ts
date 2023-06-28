@@ -36,10 +36,14 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
         latitude: x.latitude,
         longitude: x.longitude,
         imageXsUrl: x.imageXs.url,
+        imageXsWidth: x.imageXs.width,
         imageXsSqUrl: x.imageXsSq.url,
         imageSmUrl: x.imageSm.url,
+        imageSmWidth: x.imageSm.width,
         imageMdUrl: x.imageMd.url,
+        imageMdWidth: x.imageMd.width,
         imageLgUrl: x.imageLg.url,
+        imageLgWidth: x.imageLg.width,
         imagePrtUrl: x.imagePrt.url
     }));
 }

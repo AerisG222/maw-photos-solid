@@ -5,9 +5,13 @@ export type Photo = {
     latitude?: number;
     longitude?: number;
     imageXsUrl: string;
+    imageXsWidth: number;
     imageXsSqUrl: string;
     imageSmUrl: string;
+    imageSmWidth: number;
     imageMdUrl: string;
+    imageMdWidth: number;
     imageLgUrl: string;
+    imageLgWidth: number;
     imagePrtUrl: string;
 };
