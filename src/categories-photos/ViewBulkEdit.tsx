@@ -65,6 +65,7 @@ const ViewBulkEdit: Component = () => {
     };
 
     const onHidePhotosWithGps = (hide: boolean) => {
+        setAll(false);
         setHidePhotosWithGps(hide);
     };
 
