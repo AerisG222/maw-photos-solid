@@ -50,7 +50,11 @@ const ViewDetail: Component = () => {
         let reservedHeight = 0;
 
         reservedHeight += settings.showBreadcrumbs ? 28 : 0;
-        reservedHeight += getThumbnailSize(settings.thumbnailSize).height;
+
+        if(settings.showPhotoList) {
+            // 20 => rough approximation for scrollbar height
+            reservedHeight += getThumbnailSize(settings.thumbnailSize).height + 20;
+        }
 
         return `max-height: calc(100vh - ${reservedHeight}px);`;
     }
