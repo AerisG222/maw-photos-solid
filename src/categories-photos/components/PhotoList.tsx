@@ -50,7 +50,11 @@ const PhotoList: Component<Props> = (props) => {
                     class="cursor-pointer mr-[0.1rem] saturate-20 hover:saturate-100 border-1 border-transparent hover:border-primary"
                     classList={getClassList(photo)}
                     ref={el => scroll(el, photo)}>
-                    <img src={photo.imageXsSqUrl} class="max-w-none" classList={getThumbnailClass(props.thumbnailSize)} />
+                    <img
+                        src={photo.imageXsSqUrl}
+                        class="max-w-none"
+                        classList={getThumbnailClass(props.thumbnailSize)}
+                        loading="lazy" />
                 </A>
             }</For>
         </div>

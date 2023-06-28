@@ -23,7 +23,8 @@ const CategoryListItem: Component<Props> = (props) => {
             <img
                 src={props.category.teaserImageUrl}
                 classList={getThumbnailClass(props.thumbnailSize)}
-                class="inline saturate-50 group-hover:saturate-100" />
+                class="inline saturate-50 group-hover:saturate-100"
+                loading="lazy" />
             <span class="m-l-4">{props.category.name}</span>
         </A>
     );
