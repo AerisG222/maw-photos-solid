@@ -1,17 +1,17 @@
 import { Component, Show } from "solid-js";
 import { A } from '@solidjs/router';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from './_routes';
-import { useSlideshowContext } from '../contexts/SlideshowContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
+import { usePhotoGridViewSettingsContext } from '../../contexts/settings/PhotoGridViewSettingsContext';
+import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from '../../categories-photos/_routes';
+import { useSlideshowContext } from '../../contexts/SlideshowContext';
 
-import GridToolbar from './ToolbarGrid';
-import Toolbar from "./Toolbar";
-import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import Layout from '../components/layout/Layout';
-import MediaGrid from './components/MediaGrid';
-import MediaMainItem from './components/MediaMainItem';
+import GridToolbar from '../../categories-photos/ToolbarGrid';
+import Toolbar from "../../categories-photos/Toolbar";
+import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
+import Layout from '../layout/Layout';
+import MediaGrid from '../media/MediaGrid';
+import MediaMainItem from './MediaMainItem';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();

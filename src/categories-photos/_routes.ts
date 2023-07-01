@@ -19,7 +19,7 @@ export const categoriesPhotosGrid: AppRouteDefinition = {
     shortcutKeys: ['g'],
     path: "/grid/:photoId?",
     absolutePath: `${basePath}/grid/:photoId?`,
-    component: lazy(() => import('./ViewGrid'))
+    component: lazy(() => import('../components/media/ViewGrid'))
 }
 
 export const categoriesPhotosDetail: AppRouteDefinition = {
@@ -29,7 +29,7 @@ export const categoriesPhotosDetail: AppRouteDefinition = {
     shortcutKeys: ['w'],
     path: '/detail/:photoId?',
     absolutePath: `${basePath}/detail/:photoId?`,
-    component: lazy(() => import('./ViewDetail'))
+    component: lazy(() => import('../components/media/ViewDetail'))
 }
 
 export const categoriesPhotosFullscreen: AppRouteDefinition = {

@@ -1,19 +1,19 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
-import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { getThumbnailSize } from '../models/ThumbnailSize';
+import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
+import { usePhotoDetailViewSettingsContext } from '../../contexts/settings/PhotoDetailViewSettingsContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
+import { getThumbnailSize } from '../../models/ThumbnailSize';
 
-import DetailToolbar from './ToolbarDetail';
-import Toolbar from "./Toolbar";
-import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import Sidebar from './components/Sidebar';
-import Layout from '../components/layout/Layout';
-import MediaList from './components/MediaList';
-import MediaMainItem from './components/MediaMainItem';
+import DetailToolbar from '../../categories-photos/ToolbarDetail';
+import Toolbar from "../../categories-photos/Toolbar";
+import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
+import Sidebar from '../../categories-photos/components/Sidebar';
+import Layout from '../layout/Layout';
+import MediaList from './MediaList';
+import MediaMainItem from './MediaMainItem';
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();

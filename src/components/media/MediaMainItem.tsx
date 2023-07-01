@@ -2,7 +2,7 @@ import { Component } from 'solid-js';
 
 import { Media } from '../../models/Media';
 
-import MainImage from './MainImage';
+import MainPhoto from '../photos/MainPhoto';
 
 type Props = {
     media: Media;
@@ -21,7 +21,7 @@ const MediaMainItem: Component<Props> = (props) => {
 
         switch (props.media.kind) {
             case 'photo':
-                return <MainImage photo={props.media} maxHeightStyle={props.maxHeightStyle} />;
+                return <MainPhoto photo={props.media} maxHeightStyle={props.maxHeightStyle} />;
             case 'video':
                 return <div>video</div>
             default:

@@ -8,7 +8,7 @@ type Props = {
     maxHeightStyle?: string;
 };
 
-const MainImage: Component<Props> = (props) => {
+const MainPhoto: Component<Props> = (props) => {
     const [, { getFilterStyles, getTransformStyles }] = usePhotoEffectsContext();
 
     const getSrcset = () => {
@@ -34,4 +34,4 @@ const MainImage: Component<Props> = (props) => {
     );
 }
 
-export default MainImage;
+export default MainPhoto;

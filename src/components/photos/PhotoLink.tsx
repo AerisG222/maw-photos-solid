@@ -2,10 +2,10 @@ import { Component } from 'solid-js';
 
 import { Photo } from '../../models/Media';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
-import { getPhotoCategoryRoutePath } from '../_routes';
+import { getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 
-import MediaLink from './MediaLink';
+import MediaLink from '../media/MediaLink';
 
 export type Props = {
     photo: Photo;

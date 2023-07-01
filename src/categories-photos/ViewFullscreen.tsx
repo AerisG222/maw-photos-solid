@@ -9,7 +9,7 @@ import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
-import MainImage from './components/MainImage';
+import MainPhoto from '../components/photos/MainPhoto';
 import { Photo } from '../models/Media';
 
 const ViewFullscreen: Component = () => {
@@ -46,7 +46,7 @@ const ViewFullscreen: Component = () => {
     return (
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
-                <MainImage photo={mediaList.activeItem as Photo} />
+                <MainPhoto photo={mediaList.activeItem as Photo} />
             </div>
         </Layout>
     );

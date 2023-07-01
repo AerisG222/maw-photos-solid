@@ -2,8 +2,8 @@ import { Component, For } from 'solid-js';
 
 import { Media } from '../../models/Media';
 
-import PhotoLink from './PhotoLink';
-import { categoriesPhotosGrid } from '../_routes';
+import PhotoLink from '../photos/PhotoLink';
+import { categoriesPhotosGrid } from '../../categories-photos/_routes';
 
 type Props = {
     items: Media[];
