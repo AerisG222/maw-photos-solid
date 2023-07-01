@@ -7,7 +7,7 @@ import {
 
 import { GpsDetail } from '../../api/models/GpsDetail';
 import { Photo } from '../../models/Photo';
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
 import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
 
@@ -15,7 +15,7 @@ const MetadataEditorCard: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
-    const [photoList, { moveNext }] = usePhotoListContext();
+    const [photoList, { moveNext }] = useMediaListContext();
 
     const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
         if(!photo) {

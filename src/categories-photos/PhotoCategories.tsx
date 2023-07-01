@@ -1,7 +1,7 @@
 import { Outlet, useParams } from '@solidjs/router';
 import { Component } from "solid-js";
 
-import { PhotoListProvider } from '../contexts/PhotoListContext';
+import { MediaListProvider } from '../contexts/MediaListContext';
 import { RatingServiceProvider } from '../contexts/RatingServiceContext';
 import { PhotoMediaService } from '../api/PhotoMediaService';
 import { CommentServiceProvider } from '../contexts/CommentServiceContext';
@@ -20,7 +20,7 @@ const PhotoCategories: Component = () => {
 
     return (
         <AuthGuard>
-            <PhotoListProvider>
+            <MediaListProvider>
             <PhotoLoader
                 categoryId={parseInt(params.categoryId, 10)}
                 photoId={params.photoId ? parseInt(params.photoId, 10) : undefined}>
@@ -40,7 +40,7 @@ const PhotoCategories: Component = () => {
             </PhotoEffectsProvider>
             </SlideshowProvider>
             </PhotoLoader>
-            </PhotoListProvider>
+            </MediaListProvider>
         </AuthGuard>
     );
 };

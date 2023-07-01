@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-import { usePhotoListContext } from './PhotoListContext';
+import { useMediaListContext } from './MediaListContext';
 
 export type SlideshowState = {
     intervalSeconds: number,
@@ -37,14 +37,14 @@ export const SlideshowProvider: ParentComponent = (props) => {
     let id: number;
 
     const [state, setState] = createStore({...defaultSlideshowState});
-    const [photoList, {activePhotoIsLast, moveFirst, moveNext}] = usePhotoListContext();
+    const [mediaList, {activeItemIsLast, moveFirst, moveNext}] = useMediaListContext();
 
     const setSlideshowInterval = (interval: number) => setState({intervalSeconds: interval});
 
     const start = () => {
         setState({isPlaying: true});
 
-        if(!photoList.activePhoto) {
+        if(!mediaList.activeItem) {
             moveFirst();
         }
 
@@ -53,7 +53,7 @@ export const SlideshowProvider: ParentComponent = (props) => {
         }
 
         id = setInterval(() => {
-            if(activePhotoIsLast()) {
+            if(activeItemIsLast()) {
                 stop();
                 return;
             }

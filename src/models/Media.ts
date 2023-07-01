@@ -1,4 +1,5 @@
 export type Photo = {
+    kind: "photo";
     id: number;
     categoryId: number;
     createDate: Date;
@@ -15,3 +16,17 @@ export type Photo = {
     imageLgWidth: number;
     imagePrtUrl: string;
 };
+
+export type Video = {
+    kind: "video";
+    id: number;
+    categoryId: number;
+    createDate: Date;
+    latitude?: number;
+    longitude?: number;
+    thumbnailSqUrl: string;
+    videoScaledUrl: string;
+    videoFullUrl: string;
+};
+
+export type Media = Photo | Video;

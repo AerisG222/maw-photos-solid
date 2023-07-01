@@ -1,9 +1,9 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { categoriesPhotosDetail, categoriesPhotosGrid, getPhotoCategoryRoutePath } from './_routes';
+import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from './_routes';
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../models/ThumbnailSize';
 
@@ -12,21 +12,21 @@ import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Sidebar from './components/Sidebar';
 import Layout from '../components/layout/Layout';
-import PhotoList from './components/PhotoList';
-import MainImage from './components/MainImage';
+import MediaList from './components/MediaList';
+import MediaMainItem from './components/MediaMainItem';
 
 const ViewDetail: Component = () => {
-    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
+    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const navigate = useNavigate();
     const params = useParams();
     const [settings] = usePhotoDetailViewSettingsContext();
-    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
+    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
     setActiveRouteDefinition(categoriesPhotosDetail);
 
     createEffect(() => {
         if(!params.photoId) {
-            const p = photoListState.photos[0];
+            const p = mediaList.items[0];
 
             if(p) {
                 navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
@@ -67,11 +67,13 @@ const ViewDetail: Component = () => {
                 </Show>
 
                 <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                    <MainImage maxHeightStyle={getMaxHeight()}/>
+                    <MediaMainItem
+                        media={mediaList.activeItem}
+                        maxHeightStyle={getMaxHeight()} />
                 </div>
 
                 <Show when={settings.showPhotoList} fallback={<div/>}>
-                    <PhotoList thumbnailSize={settings.thumbnailSize} />
+                    <MediaList thumbnailSize={settings.thumbnailSize} />
                 </Show>
             </div>
         </Layout>

@@ -1,7 +1,7 @@
 import { Component, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from '../contexts/FullscreenContext';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from './_routes';
 import { useNavigate, useParams } from '@solidjs/router';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
@@ -10,19 +10,20 @@ import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import MainImage from './components/MainImage';
+import { Photo } from '../models/Media';
 
 const ViewFullscreen: Component = () => {
-    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
+    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const navigate = useNavigate();
     const params = useParams();
-    const [fullscreen, { setFullscreen }] = useFullscreenContext();
-    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
+    const [, { setFullscreen }] = useFullscreenContext();
+    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
     setActiveRouteDefinition(categoriesPhotosFullscreen);
 
     createEffect(() => {
         if(!params.photoId) {
-            const p = photoListState.photos[0];
+            const p = mediaList.items[0];
 
             navigate(getPhotoCategoryRoutePath(categoriesPhotosFullscreen, p.categoryId, p.id));
         }
@@ -45,7 +46,7 @@ const ViewFullscreen: Component = () => {
     return (
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
-                <MainImage />
+                <MainImage photo={mediaList.activeItem as Photo} />
             </div>
         </Layout>
     );

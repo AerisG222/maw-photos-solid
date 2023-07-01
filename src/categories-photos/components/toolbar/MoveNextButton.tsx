@@ -1,11 +1,11 @@
 import { Component } from 'solid-js';
 
-import { usePhotoListContext } from '../../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../../contexts/MediaListContext';
 
 import ToolbarButton from '../../../components/toolbar/ToolbarButton';
 
 const MoveNextButton: Component = () => {
-    const [state, {activePhotoIsLast, moveNext}] = usePhotoListContext();
+    const [state, {activeItemIsLast: activePhotoIsLast, moveNext}] = useMediaListContext();
 
     return (
         <ToolbarButton

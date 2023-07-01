@@ -2,7 +2,7 @@ import { Component, createEffect, createSignal, onCleanup, onMount } from "solid
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { categoriesPhotosMap, getPhotoCategoryRoutePath } from './_routes';
 
@@ -11,9 +11,9 @@ import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 
 const ViewMap: Component = () => {
-    const [layoutOptions, { showXpad, hideXpad }] = useLayoutOptionsContext();
+    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = usePhotoMapViewSettingsContext();
-    const [photoListState, { setActiveRouteDefinition }] = usePhotoListContext();
+    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const navigate = useNavigate();
     const params = useParams();
     const [initialized, setInitialized] = createSignal(false);
@@ -56,19 +56,19 @@ const ViewMap: Component = () => {
 
             infoWindow = new InfoWindow({ content: "" });
 
-            for(const photo of photoListState.photos) {
-                if(photo.latitude && photo.longitude) {
-                    const marker = new AdvancedMarkerElement({map, position: { lat: photo.latitude, lng: photo.longitude}});
+            for(const item of mediaList.items) {
+                if(item.latitude && item.longitude) {
+                    const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
 
                     marker.addListener("click", () => {
-                        infoWindow.setContent(`<img src="${photo.imageXsUrl}" />`);
+                        infoWindow.setContent(`<img src="${item.imageXsUrl ?? item.thubnailSq}" />`);
                         infoWindow.open({
                             anchor: marker,
                             map
                         });
                     });
 
-                    markers[photo.id] = marker;
+                    markers[item.id] = marker;
                 }
             }
 
@@ -77,15 +77,15 @@ const ViewMap: Component = () => {
     }
 
     const updateMap = () => {
-        if(photoListState.activePhoto?.latitude && photoListState.activePhoto?.longitude) {
+        if(mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
             const pos = {
-                lat: photoListState.activePhoto?.latitude,
-                lng: photoListState.activePhoto?.longitude
+                lat: mediaList.activeItem?.latitude,
+                lng: mediaList.activeItem?.longitude
             };
 
             map.panTo(pos);
 
-            const marker = markers[photoListState.activePhoto.id];
+            const marker = markers[mediaList.activeItem.id];
             mapEvent.trigger(marker, 'click');
         }
     }
@@ -105,7 +105,7 @@ const ViewMap: Component = () => {
             updateMap();
 
             if(!params.photoId) {
-                const p = photoListState.photos.find(x => x.latitude && x.longitude);
+                const p = mediaList.items.find(x => x.latitude && x.longitude);
 
                 if(p) {
                     navigate(getPhotoCategoryRoutePath(categoriesPhotosMap, p.categoryId, p.id));

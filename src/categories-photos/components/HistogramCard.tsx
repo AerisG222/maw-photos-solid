@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal } from 'solid-js';
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
 interface Histogram {
     r: number[];
@@ -15,7 +15,7 @@ const HistogramCard: Component = () => {
     const _b = 'b';
     const _lum = 'lum';
 
-    const [state] = usePhotoListContext();
+    const [state] = useMediaListContext();
     const [channel, setChannel] = createSignal(_rgb);
 
     const img = document.createElement("img");

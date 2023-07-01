@@ -2,7 +2,7 @@ import { ParentComponent, children, createEffect, createResource } from 'solid-j
 
 import { getPhotos } from '../api/PhotoCategories';
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     categoryId: number;
@@ -11,8 +11,8 @@ type Props = {
 
 const PhotoListLoader: ParentComponent<Props> = (props) => {
     const [photosResource] = createResource(props.categoryId, getPhotos);
-    const [categoryState, { setActivePhotoCategory }] = useCategoryContext();
-    const [photos, { setPhotos, setActivePhoto }] = usePhotoListContext();
+    const [, { setActivePhotoCategory }] = useCategoryContext();
+    const [items, { setItems, setActiveItem: setActivePhoto }] = useMediaListContext();
 
     const c = children(() => props.children);
 
@@ -20,10 +20,10 @@ const PhotoListLoader: ParentComponent<Props> = (props) => {
         setActivePhotoCategory(props.categoryId);
 
         if(!photosResource.loading && !photosResource.error) {
-            setPhotos(photosResource());
+            setItems(photosResource());
         } else {
-            if(photos?.activePhoto?.categoryId !== props.categoryId) {
-                setPhotos([]);
+            if(items?.activeItem?.categoryId !== props.categoryId) {
+                setItems([]);
             }
         }
 

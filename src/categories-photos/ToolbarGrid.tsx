@@ -3,7 +3,7 @@ import { Component, Show } from 'solid-js';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { getNextMarginSize } from '../models/Margin';
 import { getNextThumbnailSize } from '../models/ThumbnailSize';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
@@ -17,7 +17,7 @@ import FlipVerticalButton from './components/toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
-    const [state] = usePhotoListContext();
+    const [state] = useMediaListContext();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -35,14 +35,14 @@ const GridToolbar: Component = () => {
         <>
             <ToggleSlideshowButton />
 
-            <Show when={state.activePhoto}>
+            <Show when={state.activeItem}>
                 <MovePreviousButton />
                 <MoveNextButton />
             </Show>
 
             <Divider />
 
-            <Show when={!state.activePhoto}>
+            <Show when={!state.activeItem}>
                 <ToolbarButton
                     icon="i-ic-round-title"
                     name="Show / Hide Category Breadcrumbs (T)"
@@ -63,7 +63,7 @@ const GridToolbar: Component = () => {
                 />
             </Show>
 
-            <Show when={state.activePhoto}>
+            <Show when={state.activeItem}>
                 <RotateCounterClockwiseButton />
                 <RotateClockwiseButton />
                 <FlipHorizontalButton />

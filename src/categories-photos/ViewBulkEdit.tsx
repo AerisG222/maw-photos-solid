@@ -1,9 +1,9 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
 
 import { useNavigate, useParams } from '@solidjs/router';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { categoriesPhotosBulkEdit, getPhotoCategoryPath } from './_routes';
-import { Photo } from '../models/Photo';
+import { Photo } from '../models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
 
@@ -24,7 +24,7 @@ const ViewBulkEdit: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [photos, setPhotos] = createSignal<SelectablePhoto[]>([]);
     const [hidePhotosWithGps, setHidePhotosWithGps] = createSignal(false);
-    const [photoList, { setActiveRouteDefinition, setGpsOverride }] = usePhotoListContext();
+    const [mediaList, { setActiveRouteDefinition, setGpsOverride }] = useMediaListContext();
     const navigate = useNavigate();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
@@ -81,12 +81,12 @@ const ViewBulkEdit: Component = () => {
         );
     };
 
-    if(!photoList.photos || photoList.photos.length === 0) {
+    if(!mediaList.items || mediaList.items.length === 0) {
         navigate(getPhotoCategoryPath(categoryId));
     }
 
     createEffect(() => {
-        setPhotos(photoList.photos.map(buildSelectablePhoto));
+        setPhotos(mediaList.items.map(buildSelectablePhoto));
     })
 
     const toolbar = <Toolbar />;

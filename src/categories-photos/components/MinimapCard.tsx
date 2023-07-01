@@ -1,10 +1,10 @@
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
 import { usePhotoInfoPanelSettingsContext } from '../../contexts/settings/PhotoInfoPanelSettingsContext';
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
 const MinimapCard: Component = () => {
     const [infoState, { setMinimapMapType, setMinimapZoom } ] = usePhotoInfoPanelSettingsContext();
-    const [photoListState] = usePhotoListContext();
+    const [photoListState] = useMediaListContext();
 
     const defaultMapOptions = {
         controlSize: 24,

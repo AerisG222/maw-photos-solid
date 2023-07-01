@@ -1,11 +1,11 @@
 import { Component } from 'solid-js';
 
-import { usePhotoListContext } from '../../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../../contexts/MediaListContext';
 
 import ToolbarExternalLink from '../../../components/toolbar/ToolbarExternalLink';
 
 const DownloadPhotoHighUntouchedButton: Component = () => {
-    const [photoListState] = usePhotoListContext();
+    const [photoListState] = useMediaListContext();
 
     return (
         <ToolbarExternalLink

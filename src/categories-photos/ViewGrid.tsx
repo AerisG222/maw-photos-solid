@@ -1,22 +1,22 @@
-import { Component, For, Show } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from '@solidjs/router';
 
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from './_routes';
+import { useSlideshowContext } from '../contexts/SlideshowContext';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import PhotoGridItem from './components/PhotoGridItem';
 import Layout from '../components/layout/Layout';
-import MainImage from './components/MainImage';
-import { useSlideshowContext } from '../contexts/SlideshowContext';
+import MediaGrid from './components/MediaGrid';
+import MediaMainItem from './components/MediaMainItem';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
-    const [photoState, { setActiveRouteDefinition }] = usePhotoListContext();
-    const [slideshowState, { stop }] = useSlideshowContext();
+    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
+    const [,{ stop }] = useSlideshowContext();
 
     setActiveRouteDefinition(categoriesPhotosGrid);
 
@@ -28,10 +28,10 @@ const ViewGrid: Component = () => {
 
     return (
         <Layout margin={settings.margin} toolbar={toolbar}>
-            <Show when={photoState.activePhoto}>
+            <Show when={mediaList.activeItem}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
-                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, photoState.activePhoto.categoryId, undefined)} onClick={stop}>
-                        <MainImage />
+                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, mediaList.activeItem.categoryId, undefined)} onClick={stop}>
+                        <MediaMainItem media={mediaList.activeItem} />
                     </A>
                 </div>
             </Show>
@@ -41,11 +41,10 @@ const ViewGrid: Component = () => {
                     <CategoryBreadcrumb />
                 </Show>
 
-                <div class="flex flex-gap-2 flex-wrap place-content-center mb-4">
-                    <For each={photoState.photos}>{ photo =>
-                        <PhotoGridItem photo={photo} thumbnailSize={settings.thumbnailSize} />
-                    }</For>
-                </div>
+                <MediaGrid
+                    items={mediaList.items}
+                    thumbnailSize={settings.thumbnailSize}
+                />
             </div>
         </Layout>
     );

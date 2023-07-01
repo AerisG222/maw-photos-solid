@@ -1,13 +1,13 @@
 import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useCategoryTeaserServiceContext } from '../../contexts/CategoryTeaserServiceContext';
 
 const CategoryTeaserCard: Component = () => {
     const {setTeaser} = useCategoryTeaserServiceContext();
     const [categoryState, {updateTeaser}] = useCategoryContext();
-    const [listState] = usePhotoListContext();
+    const [listState] = useMediaListContext();
 
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();

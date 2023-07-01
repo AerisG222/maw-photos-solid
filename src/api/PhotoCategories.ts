@@ -4,7 +4,7 @@ import { PhotoCategory as ApiPhotoCategory } from './models/PhotoCategory';
 import { Photo as ApiPhoto } from './models/Photo';
 import { PhotoCategory } from '../models/Category';
 import { getPhotoCategoryPath } from '../categories-photos/_routes';
-import { Photo } from '../models/Photo';
+import { Photo } from '../models/Media';
 
 export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
     const apiCategories = await internalGetPhotoCategories();
@@ -30,6 +30,7 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
     const apiPhotos = await internalGetPhotos(categoryId);
 
     return apiPhotos.items.map(x => ({
+        kind: 'photo',
         id: x.id,
         categoryId: x.categoryId,
         createDate: x.createDate,

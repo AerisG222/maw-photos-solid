@@ -2,7 +2,7 @@ import { ParentComponent, Show, children } from 'solid-js'
 
 import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { usePhotoListContext } from '../contexts/PhotoListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -11,14 +11,14 @@ import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSetti
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
-    const [photoState] = usePhotoListContext();
+    const [photoState] = useMediaListContext();
     const [settings, { setViewMode }] = usePhotoPageSettingsContext();
 
     const c = children(() => props.children);
 
     const getParams = () => ({
         categoryId: categoryState.activeCategory?.id,
-        photoId: photoState.activePhoto?.id
+        photoId: photoState.activeItem?.id
     });
 
     return (

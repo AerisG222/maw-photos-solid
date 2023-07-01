@@ -1,12 +1,12 @@
 import { Component, For, createResource, createSignal } from 'solid-js';
 
-import { usePhotoListContext } from '../../contexts/PhotoListContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useCommentServiceContext } from '../../contexts/CommentServiceContext';
 
 const CommentsCard: Component = () => {
     const {fetchComments, addComment} = useCommentServiceContext();
     const [commentText, setCommentText] = createSignal("");
-    const [state] = usePhotoListContext();
+    const [state] = useMediaListContext();
     const [commentResource, { mutate, refetch }] = createResource(() => state.activePhoto?.id, fetchComments);
 
     const addPhotoComment = async (comment: string) => {
