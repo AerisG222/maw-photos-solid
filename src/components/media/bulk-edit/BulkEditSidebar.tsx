@@ -1,6 +1,6 @@
 import { Component, For } from "solid-js";
 
-import InfoCard from '../../../categories-photos/components/InfoCard';
+import InfoCard from '../../sidebar/InfoCard';
 import BulkEditFilterCard from './BulkEditFilterCard';
 import BulkEditGpsCard from './BulkEditGpsCard';
 

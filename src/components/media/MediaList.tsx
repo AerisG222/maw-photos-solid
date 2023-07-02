@@ -3,9 +3,9 @@ import { Component, For } from 'solid-js';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { Media } from '../../models/Media';
-import { categoriesPhotosDetail } from '../_routes';
+import { categoriesPhotosDetail } from '../../categories-photos/_routes';
 
-import PhotoLink from './PhotoLink';
+import PhotoLink from '../photos/PhotoLink';
 
 export type Props = {
     thumbnailSize: ThumbnailSizeIdType;

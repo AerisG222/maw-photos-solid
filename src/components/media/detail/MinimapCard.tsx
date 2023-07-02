@@ -1,10 +1,10 @@
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { usePhotoInfoPanelSettingsContext } from '../../contexts/settings/PhotoInfoPanelSettingsContext';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { usePhotoInfoPanelSettingsContext } from '../../../contexts/settings/PhotoInfoPanelSettingsContext';
+import { useMediaListContext } from '../../../contexts/MediaListContext';
 
 const MinimapCard: Component = () => {
     const [infoState, { setMinimapMapType, setMinimapZoom } ] = usePhotoInfoPanelSettingsContext();
-    const [photoListState] = useMediaListContext();
+    const [mediaList] = useMediaListContext();
 
     const defaultMapOptions = {
         controlSize: 24,
@@ -37,10 +37,10 @@ const MinimapCard: Component = () => {
     }
 
     const updateMap = () => {
-        if(photoListState.activePhoto?.latitude && photoListState.activePhoto?.longitude) {
+        if(mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
             const pos = {
-                lat: photoListState.activePhoto?.latitude,
-                lng: photoListState.activePhoto?.longitude
+                lat: mediaList.activeItem?.latitude,
+                lng: mediaList.activeItem?.longitude
             };
 
             map.setCenter(pos);

@@ -1,5 +1,6 @@
 import { Component, createEffect, createSignal } from 'solid-js';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+
+import { useMediaListContext } from '../../../contexts/MediaListContext';
 
 interface Histogram {
     r: number[];
@@ -189,8 +190,8 @@ const HistogramCard: Component = () => {
     img.onload = updateHistogram;
 
     createEffect(() => {
-        if(state.activePhoto) {
-            img.src = state.activePhoto.imageMdUrl;
+        if(state.activeItem) {
+            img.src = state.activeItem.imageMdUrl;
         }
     })
 

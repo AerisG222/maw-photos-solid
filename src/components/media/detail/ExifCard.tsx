@@ -1,14 +1,14 @@
 import { Component, For, createResource, createSignal } from 'solid-js';
-import { useMediaListContext } from '../../contexts/MediaListContext';
 
-import { getFormattedExif } from '../../models/utils/ExifUtils';
-import { useExifServiceContext } from '../../contexts/ExifServiceContext';
+import { useMediaListContext } from '../../../contexts/MediaListContext';
+import { getFormattedExif } from '../../../models/utils/ExifUtils';
+import { useExifServiceContext } from '../../../contexts/ExifServiceContext';
 
 const ExifCard: Component = () => {
     const {fetchExif} = useExifServiceContext();
     const [currentTab, setCurrentTab] = createSignal("exif");
-    const [state] = useMediaListContext();
-    const [exifResource] = createResource(() => state.activePhoto?.id, fetchExif);
+    const [mediaList] = useMediaListContext();
+    const [exifResource] = createResource(() => mediaList.activeItem?.id, fetchExif);
 
     const getTableData = dataType => {
         if(exifResource.loading || !exifResource()) {

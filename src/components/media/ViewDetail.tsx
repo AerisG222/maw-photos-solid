@@ -10,7 +10,7 @@ import { getThumbnailSize } from '../../models/ThumbnailSize';
 import DetailToolbar from '../../categories-photos/ToolbarDetail';
 import Toolbar from "../../categories-photos/Toolbar";
 import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
-import Sidebar from '../../categories-photos/components/Sidebar';
+import Sidebar from './detail/Sidebar';
 import Layout from '../layout/Layout';
 import MediaList from './MediaList';
 import MediaMainItem from './MediaMainItem';

@@ -1,11 +1,11 @@
 import { Component, For, Show, lazy } from "solid-js";
 
-import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
+import { usePhotoInfoPanelSettingsContext } from "../../../contexts/settings/PhotoInfoPanelSettingsContext";
 
-import Divider from "../../components/layout/Divider";
-import SidebarLayout from "../../components/sidebar/SidebarLayout";
-import ToolbarButton from "../../components/toolbar/ToolbarButton";
-import InfoCard from './InfoCard';
+import Divider from "../../layout/Divider";
+import SidebarLayout from "../../sidebar/SidebarLayout";
+import ToolbarButton from "../../toolbar/ToolbarButton";
+import InfoCard from '../../sidebar/InfoCard';
 
 const Sidebar: Component = () => {
     const [

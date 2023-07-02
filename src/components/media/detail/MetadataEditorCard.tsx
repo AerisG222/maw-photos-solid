@@ -5,17 +5,17 @@ import {
     createSignal
 } from 'solid-js';
 
-import { GpsDetail } from '../../api/models/GpsDetail';
-import { Photo } from '../../models/Photo';
-import { useMediaListContext } from '../../contexts/MediaListContext';
-import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
-import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
+import { GpsDetail } from '../../../api/models/GpsDetail';
+import { Photo } from '../../../models/Media';
+import { useMediaListContext } from '../../../contexts/MediaListContext';
+import { useMetadataEditServiceContext } from '../../../contexts/MetadataEditServiceContext';
+import { GpsOverride, isValidLatLng, parseGps } from '../../../models/utils/GpsUtils';
 
 const MetadataEditorCard: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
-    const [photoList, { moveNext }] = useMediaListContext();
+    const [mediaList, { moveNext }] = useMediaListContext();
 
     const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
         if(!photo) {
@@ -28,7 +28,7 @@ const MetadataEditorCard: Component = () => {
         return fetchGpsDetail(photo.id);
     }
 
-    const [gpsDetail] = createResource(() => photoList.activePhoto, fetchGpsData);
+    const [gpsDetail] = createResource(() => mediaList.activeItem, fetchGpsData);
 
     createEffect(() => {
         const src = gpsDetail()?.source;
@@ -71,8 +71,8 @@ const MetadataEditorCard: Component = () => {
     const save = (evt: Event) => {
         evt.preventDefault();
 
-        if(photoList.activePhoto && isValidLatLng(override().lat) && isValidLatLng(override().lng)) {
-            setGpsCoordinateOverride(photoList.activePhoto.id, {
+        if(mediaList.activeItem && isValidLatLng(override().lat) && isValidLatLng(override().lng)) {
+            setGpsCoordinateOverride(mediaList.activeItem.id, {
                 latitude: parseFloat(override().lat),
                 longitude: parseFloat(override().lng)
             });
