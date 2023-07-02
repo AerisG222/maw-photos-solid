@@ -3,7 +3,7 @@ import { Component } from 'solid-js';
 import Checkbox from '../../settings/components/Checkbox';
 
 type Props = {
-    onHidePhotosWithGps: (hide: boolean) => void;
+    onHideMediaWithGps: (hide: boolean) => void;
     onSelectAll: () => void;
     onDeselectAll: () => void;
 };
@@ -28,7 +28,7 @@ const BulkEditFilterCard: Component<Props> = (props) => {
                     name="hideGps"
                     title="Hide Photos with GPS Data"
                     isSelected={false}
-                    onChange={props.onHidePhotosWithGps}
+                    onChange={props.onHideMediaWithGps}
                 />
             </div>
 

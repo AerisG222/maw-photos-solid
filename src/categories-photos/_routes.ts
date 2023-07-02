@@ -59,7 +59,7 @@ export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     shortcutKeys: ['b'],
     path: '/bulk-edit',
     absolutePath: `${basePath}/bulk-edit`,
-    component: lazy(() => import('./ViewBulkEdit'))
+    component: lazy(() => import('../components/media/ViewBulkEdit'))
 }
 
 export const categoriesPhotos: AppRouteDefinition = {
