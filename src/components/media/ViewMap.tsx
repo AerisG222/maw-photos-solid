@@ -1,14 +1,14 @@
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { categoriesPhotosMap, getPhotoCategoryRoutePath } from './_routes';
+import { usePhotoMapViewSettingsContext } from '../../contexts/settings/PhotoMapViewSettingsContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
+import { categoriesPhotosMap, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 
-import MapToolbar from './ToolbarMap';
-import Toolbar from "./Toolbar";
-import Layout from '../components/layout/Layout';
+import MapToolbar from '../../categories-photos/ToolbarMap';
+import Toolbar from "../../categories-photos/Toolbar";
+import Layout from '../layout/Layout';
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();

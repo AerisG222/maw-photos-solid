@@ -49,7 +49,7 @@ export const categoriesPhotosMap: AppRouteDefinition = {
     shortcutKeys: ['z'],
     path: '/map/:photoId?',
     absolutePath: `${basePath}/map/:photoId?`,
-    component: lazy(() => import('./ViewMap'))
+    component: lazy(() => import('../components/media/ViewMap'))
 }
 
 export const categoriesPhotosBulkEdit: AppRouteDefinition = {
