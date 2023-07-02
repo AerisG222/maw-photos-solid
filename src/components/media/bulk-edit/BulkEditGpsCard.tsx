@@ -1,7 +1,7 @@
 import { Component, createSignal } from 'solid-js';
 
-import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
-import { GpsCoordinate } from '../../api/models/GpsCoordinate';
+import { GpsOverride, isValidLatLng, parseGps } from '../../../models/utils/GpsUtils';
+import { GpsCoordinate } from '../../../api/models/GpsCoordinate';
 
 type Props = {
     onSave: (gps: GpsCoordinate) => void;

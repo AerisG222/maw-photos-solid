@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import Checkbox from '../../settings/components/Checkbox';
+import Checkbox from '../../../settings/components/Checkbox';
 
 type Props = {
     onHideMediaWithGps: (hide: boolean) => void;

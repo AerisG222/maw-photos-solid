@@ -10,7 +10,7 @@ import { GpsCoordinate } from '../../api/models/GpsCoordinate';
 import Toolbar from "../../categories-photos/Toolbar";
 import Layout from '../layout/Layout';
 import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
-import BulkEditSidebar from '../../categories-photos/components/BulkEditSidebar';
+import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
 
 type SelectableMedia = {
     id: number,
