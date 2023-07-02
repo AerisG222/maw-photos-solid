@@ -39,7 +39,7 @@ export const categoriesPhotosFullscreen: AppRouteDefinition = {
     shortcutKeys: ['f'],
     path: '/fullscreen/:photoId?',
     absolutePath: `${basePath}/fullscreen/:photoId?`,
-    component: lazy(() => import('./ViewFullscreen'))
+    component: lazy(() => import('../components/media/ViewFullscreen'))
 }
 
 export const categoriesPhotosMap: AppRouteDefinition = {

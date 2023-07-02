@@ -1,16 +1,15 @@
 import { Component, createEffect, onCleanup } from "solid-js";
 
-import { useFullscreenContext } from '../contexts/FullscreenContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from './_routes';
+import { useFullscreenContext } from '../../contexts/FullscreenContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
+import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { useNavigate, useParams } from '@solidjs/router';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
+import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 
-import FullscreenToolbar from './ToolbarFullscreen';
-import Toolbar from "./Toolbar";
-import Layout from '../components/layout/Layout';
-import MainPhoto from '../components/photos/MainPhoto';
-import { Photo } from '../models/Media';
+import FullscreenToolbar from '../../categories-photos/ToolbarFullscreen';
+import Toolbar from "../../categories-photos/Toolbar";
+import Layout from '../layout/Layout';
+import MediaMainItem from './MediaMainItem';
 
 const ViewFullscreen: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -46,7 +45,7 @@ const ViewFullscreen: Component = () => {
     return (
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
-                <MainPhoto photo={mediaList.activeItem as Photo} />
+                <MediaMainItem media={mediaList.activeItem} />
             </div>
         </Layout>
     );
