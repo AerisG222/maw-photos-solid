@@ -12,13 +12,13 @@ export const categoriesVideosRedirect: AppRouteDefinition = {
     component: lazy(() => import('./VideoCategoriesRedirect'))
 }
 
-// export const categoriesVideosDetail: AppRouteDefinition = {
-//     icon: "i-ic-round-dashboard",
-//     name: "Detail View",
-//     path: '/detail/:videoId?',
-//     absolutePath: `${basePath}/detail/:videoId?`,
-//     component: lazy(() => import('./ViewDetail'))
-// }
+export const categoriesVideosDetail: AppRouteDefinition = {
+    icon: "i-ic-round-dashboard",
+    name: "Detail View",
+    path: '/detail/:videoId?',
+    absolutePath: `${basePath}/detail/:videoId?`,
+    component: lazy(() => import('../components/media/ViewDetail'))
+}
 
 export const categoriesVideos: AppRouteDefinition = {
     icon: undefined as string,
@@ -28,12 +28,12 @@ export const categoriesVideos: AppRouteDefinition = {
     component: lazy(() => import('./VideoCategories')),
     children: [
         categoriesVideosRedirect,
-        //categoriesVideosDetail
+        categoriesVideosDetail
     ]
 }
 
 export const getVideoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesVideos, {categoryId: categoryId});
 
-// export const getVideoCategoryViewPath = (categoryId: number, videoId?: number): string =>
-//     buildPath(categoriesVideosDetail, {categoryId, videoId});
+export const getVideoCategoryViewPath = (categoryId: number, videoId?: number): string =>
+    buildPath(categoriesVideosDetail, {categoryId, videoId});
