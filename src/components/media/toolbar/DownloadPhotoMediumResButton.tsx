@@ -4,15 +4,16 @@ import { useMediaListContext } from '../../../contexts/MediaListContext';
 
 import ToolbarExternalLink from '../../../components/toolbar/ToolbarExternalLink';
 
-const DownloadPhotoHighResButton: Component = () => {
+const DownloadPhotoMediumResButton: Component = () => {
     const [photoListState] = useMediaListContext();
 
     return (
         <ToolbarExternalLink
-            title="High Res Download"
-            url={photoListState.activePhoto?.imageLgUrl}
-            iconClass='i-ic-round-image' />
+            title="High Res Download (untouched)"
+            url={photoListState.activeItem?.imageMdUrl}
+            iconClass='i-ic-round-image'
+            textClassList={{'text-lg': true}} />
     );
 }
 
-export default DownloadPhotoHighResButton;
+export default DownloadPhotoMediumResButton;

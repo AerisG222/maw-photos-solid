@@ -6,8 +6,8 @@ import { usePhotoGridViewSettingsContext } from '../../contexts/settings/PhotoGr
 import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from '../../categories-photos/_routes';
 import { useSlideshowContext } from '../../contexts/SlideshowContext';
 
-import GridToolbar from '../../categories-photos/ToolbarGrid';
-import Toolbar from "../../categories-photos/Toolbar";
+import GridToolbar from './ToolbarGrid';
+import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
 import Layout from '../layout/Layout';
 import MediaGrid from '../media/MediaGrid';

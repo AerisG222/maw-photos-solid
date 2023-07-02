@@ -7,8 +7,8 @@ import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../../models/ThumbnailSize';
 
-import DetailToolbar from '../../categories-photos/ToolbarDetail';
-import Toolbar from "../../categories-photos/Toolbar";
+import DetailToolbar from './ToolbarDetail';
+import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
 import Sidebar from './detail/Sidebar';
 import Layout from '../layout/Layout';

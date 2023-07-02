@@ -1,13 +1,13 @@
 import { Component, createEffect, onCleanup } from "solid-js";
+import { useNavigate, useParams } from '@solidjs/router';
 
 import { useFullscreenContext } from '../../contexts/FullscreenContext';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { categoriesPhotosFullscreen, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
-import { useNavigate, useParams } from '@solidjs/router';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 
-import FullscreenToolbar from '../../categories-photos/ToolbarFullscreen';
-import Toolbar from "../../categories-photos/Toolbar";
+import FullscreenToolbar from './ToolbarFullscreen';
+import Toolbar from "./Toolbar";
 import Layout from '../layout/Layout';
 import MediaMainItem from './MediaMainItem';
 

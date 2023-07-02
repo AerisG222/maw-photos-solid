@@ -6,8 +6,8 @@ import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 import { categoriesPhotosMap, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 
-import MapToolbar from '../../categories-photos/ToolbarMap';
-import Toolbar from "../../categories-photos/Toolbar";
+import MapToolbar from './ToolbarMap';
+import Toolbar from "./Toolbar";
 import Layout from '../layout/Layout';
 
 const ViewMap: Component = () => {

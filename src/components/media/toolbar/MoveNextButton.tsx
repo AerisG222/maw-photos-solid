@@ -5,11 +5,11 @@ import { useMediaListContext } from '../../../contexts/MediaListContext';
 import ToolbarButton from '../../../components/toolbar/ToolbarButton';
 
 const MoveNextButton: Component = () => {
-    const [state, {activeItemIsLast: activePhotoIsLast, moveNext}] = useMediaListContext();
+    const [state, {activeItemIsLast, moveNext}] = useMediaListContext();
 
     return (
         <ToolbarButton
-            disabled={activePhotoIsLast()}
+            disabled={activeItemIsLast()}
             icon="i-ic-round-chevron-right"
             name="Move Next (&rarr;)"
             shortcutKeys={['arrowright']}

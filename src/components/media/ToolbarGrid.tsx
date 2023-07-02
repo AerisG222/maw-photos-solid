@@ -1,19 +1,19 @@
 import { Component, Show } from 'solid-js';
 
-import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { getNextMarginSize } from '../models/Margin';
-import { getNextThumbnailSize } from '../models/ThumbnailSize';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { usePhotoGridViewSettingsContext } from '../../contexts/settings/PhotoGridViewSettingsContext';
+import { getNextMarginSize } from '../../models/Margin';
+import { getNextThumbnailSize } from '../../models/ThumbnailSize';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/layout/Divider';
-import MovePreviousButton from './components/toolbar/MovePreviousButton';
-import MoveNextButton from './components/toolbar/MoveNextButton';
-import ToggleSlideshowButton from './components/toolbar/ToggleSlideshowButton';
-import RotateCounterClockwiseButton from './components/toolbar/RotateCounterClockwiseButton';
-import RotateClockwiseButton from './components/toolbar/RotateClockwiseButton';
-import FlipHorizontalButton from './components/toolbar/FlipHorizontalButton';
-import FlipVerticalButton from './components/toolbar/FlipVerticalButton';
+import ToolbarButton from '../toolbar/ToolbarButton';
+import Divider from '../layout/Divider';
+import MovePreviousButton from './toolbar/MovePreviousButton';
+import MoveNextButton from './toolbar/MoveNextButton';
+import ToggleSlideshowButton from './toolbar/ToggleSlideshowButton';
+import RotateCounterClockwiseButton from './toolbar/RotateCounterClockwiseButton';
+import RotateClockwiseButton from './toolbar/RotateClockwiseButton';
+import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
+import FlipVerticalButton from './toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();

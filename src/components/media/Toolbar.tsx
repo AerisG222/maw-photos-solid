@@ -1,13 +1,13 @@
 import { ParentComponent, Show, children } from 'solid-js'
 
-import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from './_routes';
-import { useCategoryContext } from '../contexts/CategoryContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from '../../categories-photos/_routes';
+import { useCategoryContext } from '../../contexts/CategoryContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
-import Divider from '../components/layout/Divider';
-import ToolbarLayout from '../components/toolbar/ToolbarLayout';
-import ToolbarLink from '../components/toolbar/ToolbarLink';
-import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
+import Divider from '../layout/Divider';
+import ToolbarLayout from '../toolbar/ToolbarLayout';
+import ToolbarLink from '../toolbar/ToolbarLink';
+import { usePhotoPageSettingsContext } from '../../contexts/settings/PhotoPageSettingsContext';
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();

@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
-import MoveNextButton from './components/toolbar/MoveNextButton';
-import MovePreviousButton from './components/toolbar/MovePreviousButton';
+import MoveNextButton from './toolbar/MoveNextButton';
+import MovePreviousButton from './toolbar/MovePreviousButton';
 
 const FullscreenToolbar: Component = () => {
     return (

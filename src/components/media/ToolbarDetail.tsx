@@ -1,22 +1,22 @@
 import { Component } from 'solid-js';
 
-import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
-import { getNextThumbnailSize } from '../models/ThumbnailSize';
+import { usePhotoDetailViewSettingsContext } from '../../contexts/settings/PhotoDetailViewSettingsContext';
+import { getNextThumbnailSize } from '../../models/ThumbnailSize';
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/layout/Divider';
-import ToggleSlideshowButton from './components/toolbar/ToggleSlideshowButton';
-import MovePreviousButton from './components/toolbar/MovePreviousButton';
-import MoveNextButton from './components/toolbar/MoveNextButton';
-import RotateCounterClockwiseButton from './components/toolbar/RotateCounterClockwiseButton';
-import RotateClockwiseButton from './components/toolbar/RotateClockwiseButton';
-import FlipHorizontalButton from './components/toolbar/FlipHorizontalButton';
-import FlipVerticalButton from './components/toolbar/FlipVerticalButton';
-import DownloadCategoryButton from './components/toolbar/DownloadCategoryButton';
-import DownloadPhotoLowResButton from './components/toolbar/DownloadPhotoLowResButton';
-import DownloadPhotoMediumResButton from './components/toolbar/DownloadPhotoMediumResButton';
-import DownloadPhotoHighResButton from './components/toolbar/DownloadPhotoHighResButton';
-import DownloadPhotoHighUntouchedButton from './components/toolbar/DownloadPhotoHighUntouchedButton';
+import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import Divider from '../../components/layout/Divider';
+import ToggleSlideshowButton from './toolbar/ToggleSlideshowButton';
+import MovePreviousButton from './toolbar/MovePreviousButton';
+import MoveNextButton from './toolbar/MoveNextButton';
+import RotateCounterClockwiseButton from './toolbar/RotateCounterClockwiseButton';
+import RotateClockwiseButton from './toolbar/RotateClockwiseButton';
+import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
+import FlipVerticalButton from './toolbar/FlipVerticalButton';
+import DownloadCategoryButton from './toolbar/DownloadCategoryButton';
+import DownloadPhotoLowResButton from './toolbar/DownloadPhotoLowResButton';
+import DownloadPhotoMediumResButton from './toolbar/DownloadPhotoMediumResButton';
+import DownloadPhotoHighResButton from './toolbar/DownloadPhotoHighResButton';
+import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouchedButton';
 
 const DetailToolbar: Component = () => {
     const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = usePhotoDetailViewSettingsContext();

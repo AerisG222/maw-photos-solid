@@ -7,7 +7,7 @@ import { Media } from '../../models/Media';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../../api/models/GpsCoordinate';
 
-import Toolbar from "../../categories-photos/Toolbar";
+import Toolbar from "./Toolbar";
 import Layout from '../layout/Layout';
 import CategoryBreadcrumb from '../categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
