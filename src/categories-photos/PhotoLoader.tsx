@@ -9,7 +9,7 @@ type Props = {
     photoId: number | undefined;
 };
 
-const PhotoListLoader: ParentComponent<Props> = (props) => {
+const PhotoLoader: ParentComponent<Props> = (props) => {
     const [photosResource] = createResource(props.categoryId, getPhotos);
     const [, { setActivePhotoCategory }] = useCategoryContext();
     const [items, { setItems, setActiveItem: setActivePhoto }] = useMediaListContext();
@@ -37,4 +37,4 @@ const PhotoListLoader: ParentComponent<Props> = (props) => {
     )
 };
 
-export default PhotoListLoader;
+export default PhotoLoader;

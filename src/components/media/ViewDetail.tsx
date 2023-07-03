@@ -1,5 +1,5 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
-import { useNavigate, useParams } from '@solidjs/router';
+import { useLocation, useNavigate, useParams } from '@solidjs/router';
 
 import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { usePhotoDetailViewSettingsContext } from '../../contexts/settings/PhotoDetailViewSettingsContext';
@@ -14,22 +14,37 @@ import Sidebar from './detail/Sidebar';
 import Layout from '../layout/Layout';
 import MediaList from './MediaList';
 import MediaMainItem from './MediaMainItem';
+import { categoriesVideosDetail } from '../../categories-videos/_routes';
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const navigate = useNavigate();
     const params = useParams();
+    const location = useLocation();
     const [settings] = usePhotoDetailViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
-    setActiveRouteDefinition(categoriesPhotosDetail);
-
     createEffect(() => {
-        if(!params.photoId) {
-            const p = mediaList.items[0];
+        if(location.pathname.indexOf('photos')) {
+            setActiveRouteDefinition(categoriesPhotosDetail);
 
-            if(p) {
-                navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
+            if(!params.photoId) {
+                const p = mediaList.items[0];
+
+                if(p) {
+                    navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
+                }
+            }
+        }
+        if(location.pathname.indexOf('photos')) {
+            setActiveRouteDefinition(categoriesVideosDetail);
+
+            if(!params.videoId) {
+                const p = mediaList.items[0];
+
+                if(p) {
+                    navigate(getVideoCategoryRoutePath(categoriesVideosDetail, p.categoryId, p.id));
+                }
             }
         }
     })

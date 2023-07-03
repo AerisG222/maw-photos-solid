@@ -1,4 +1,5 @@
 import { lazy } from 'solid-js'
+
 import { categories } from '../categories/_routes'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
 import { buildPath } from '../models/utils/RouteUtils'

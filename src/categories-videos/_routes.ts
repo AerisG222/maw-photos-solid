@@ -3,6 +3,7 @@ import { lazy } from 'solid-js';
 import { categories } from '../categories/_routes';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { buildPath } from '../models/utils/RouteUtils';
+import { equalsIgnoreCase } from '../models/utils/StringUtils';
 
 const basePath = `${categories.absolutePath}/videos/:categoryId`;
 
@@ -35,5 +36,32 @@ export const categoriesVideos: AppRouteDefinition = {
 export const getVideoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesVideos, {categoryId: categoryId});
 
-export const getVideoCategoryViewPath = (categoryId: number, videoId?: number): string =>
-    buildPath(categoriesVideosDetail, {categoryId, videoId});
+export const getVideoCategoryViewPath = (viewMode: string, categoryId: number, videoId?: number): string =>
+    getVideoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, videoId);
+
+export const getVideoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, videoId?: number): string =>
+    buildPath(route, {categoryId: categoryId, videoId: videoId});
+
+const getRouteForViewMode = (mode: string): AppRouteDefinition => {
+    // if(equalsIgnoreCase('grid', mode)) {
+    //     return categoriesPhotosGrid;
+    // }
+
+    if(equalsIgnoreCase('detail', mode)) {
+        return categoriesVideosDetail;
+    }
+
+    // if(equalsIgnoreCase('fullscreen', mode)) {
+    //     return categoriesPhotosFullscreen;
+    // }
+
+    // if(equalsIgnoreCase('map', mode)) {
+    //     return categoriesPhotosMap;
+    // }
+
+    // if(equalsIgnoreCase('bulkEdit', mode)) {
+    //     return categoriesPhotosBulkEdit;
+    // }
+
+    return categoriesVideosDetail;
+}
