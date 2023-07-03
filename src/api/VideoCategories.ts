@@ -38,7 +38,11 @@ export const getVideos = async (categoryId: number): Promise<Video[]> => {
         longitude: x.longitude,
         thumbnailSqUrl: x.thumbnailSq.url,
         videoScaledUrl: x.videoScaled.url,
-        videoFullUrl: x.videoFull.url
+        videoScaledHeight: x.videoScaled.height,
+        videoScaledWidth: x.videoScaled.width,
+        videoFullUrl: x.videoFull.url,
+        videoFullHeight: x.videoFull.height,
+        videoFullWidth: x.videoFull.width
     }));
 }
 

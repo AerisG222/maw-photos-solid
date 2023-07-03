@@ -14,7 +14,7 @@ import Sidebar from './detail/Sidebar';
 import Layout from '../layout/Layout';
 import MediaList from './MediaList';
 import MediaMainItem from './MediaMainItem';
-import { categoriesVideosDetail } from '../../categories-videos/_routes';
+import { categoriesVideosDetail, getVideoCategoryRoutePath } from '../../categories-videos/_routes';
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -25,25 +25,25 @@ const ViewDetail: Component = () => {
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
     createEffect(() => {
-        if(location.pathname.indexOf('photos')) {
+        if(location.pathname.indexOf('photos') >= 0) {
             setActiveRouteDefinition(categoriesPhotosDetail);
 
             if(!params.photoId) {
-                const p = mediaList.items[0];
+                const m = mediaList.items[0];
 
-                if(p) {
-                    navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, p.categoryId, p.id));
+                if(m) {
+                    navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, m.categoryId, m.id));
                 }
             }
         }
-        if(location.pathname.indexOf('photos')) {
+        if(location.pathname.indexOf('videos') >= 0) {
             setActiveRouteDefinition(categoriesVideosDetail);
 
             if(!params.videoId) {
-                const p = mediaList.items[0];
+                const m = mediaList.items[0];
 
-                if(p) {
-                    navigate(getVideoCategoryRoutePath(categoriesVideosDetail, p.categoryId, p.id));
+                if(m) {
+                    navigate(getVideoCategoryRoutePath(categoriesVideosDetail, m.categoryId, m.id));
                 }
             }
         }

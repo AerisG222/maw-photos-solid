@@ -26,7 +26,11 @@ export type Video = {
     longitude?: number;
     thumbnailSqUrl: string;
     videoScaledUrl: string;
+    videoScaledHeight: number;
+    videoScaledWidth: number;
     videoFullUrl: string;
+    videoFullHeight: number;
+    videoFullWidth: number;
 };
 
 export type Media = Photo | Video;
