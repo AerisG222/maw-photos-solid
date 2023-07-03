@@ -4,8 +4,10 @@ import { useMediaListContext } from '../../contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../../models/ThumbnailSize';
 import { Media } from '../../models/Media';
 import { categoriesPhotosDetail } from '../../categories-photos/_routes';
+import { categoriesVideosDetail } from '../../categories-videos/_routes';
 
 import PhotoLink from '../photos/PhotoLink';
+import VideoLink from '../videos/VideoLink';
 
 export type Props = {
     thumbnailSize: ThumbnailSizeIdType;
@@ -23,10 +25,15 @@ const MediaList: Component<Props> = (props) => {
                     thumbnailSize={props.thumbnailSize}
                     isActiveItem={mediaList.activeItem?.id === media.id}
                     route={categoriesPhotosDetail}
-                    media={media}
                     scroll={scroll} />;
             case 'video':
-                return <div>video</div>
+                return <VideoLink
+                    video={media}
+                    rounded={false}
+                    thumbnailSize={props.thumbnailSize}
+                    isActiveItem={mediaList.activeItem?.id === media.id}
+                    route={categoriesVideosDetail}
+                    scroll={scroll} />;
             default:
                 // eslint-disable-next-line no-case-declarations
                 const _exhaustiveCheck: never = media;
