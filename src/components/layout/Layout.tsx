@@ -3,12 +3,12 @@ import { JSXElement, ParentComponent, Show, children } from 'solid-js'
 import { MarginIdType, getMarginClass } from '../../models/Margin';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 
-interface Props {
+type Props = {
     title?: string;
     margin?: MarginIdType;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
-}
+};
 
 const Layout: ParentComponent<Props> = (props) => {
     const [layoutOptions] = useLayoutOptionsContext();

@@ -16,7 +16,7 @@ const ExifCard: Component = () => {
         }
 
         return getFormattedExif(exifResource(), dataType);
-    }
+    };
 
     return (
         <>
@@ -39,6 +39,6 @@ const ExifCard: Component = () => {
             </table>
         </>
     );
-}
+};
 
 export default ExifCard;

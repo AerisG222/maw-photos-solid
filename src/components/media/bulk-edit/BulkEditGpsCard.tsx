@@ -26,11 +26,11 @@ const BulkEditGpsCard: Component<Props> = (props) => {
                 });
             }
         }
-    }
+    };
 
     const isOverrideValid = () => {
         return isValidLatLng(override().lat) && isValidLatLng(override().lng);
-    }
+    };
 
     const getValidationClass = (val: string) => {
         const nullOrEmpty = val === undefined || val === "";
@@ -44,7 +44,7 @@ const BulkEditGpsCard: Component<Props> = (props) => {
         return {
             'btn-disabled': !isOverrideValid()
         }
-    }
+    };
 
     const cancel = (evt: Event) => {
         evt.preventDefault();
@@ -56,7 +56,7 @@ const BulkEditGpsCard: Component<Props> = (props) => {
         evt.preventDefault();
 
         props.onSave({ latitude: parseFloat(override().lat), longitude: parseFloat(override().lng)});
-    }
+    };
 
     return (
         <div class="mx-4">
@@ -74,6 +74,6 @@ const BulkEditGpsCard: Component<Props> = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default BulkEditGpsCard;

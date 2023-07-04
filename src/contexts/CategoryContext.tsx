@@ -192,7 +192,7 @@ export const CategoryProvider: ParentComponent = (props) => {
                 (photoOrVideo as Video).thumbnailSqUrl
             );
         }
-    }
+    };
 
     return (
         <CategoryContext.Provider value={[state, {
@@ -222,6 +222,6 @@ export const CategoryProvider: ParentComponent = (props) => {
             {props.children}
         </CategoryContext.Provider>
     );
-}
+};
 
 export const useCategoryContext = () => useContext(CategoryContext);

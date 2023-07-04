@@ -1,10 +1,12 @@
 import { Component } from "solid-js";
+
 import { categories } from "../../categories/_routes";
 import { search } from "../../search/_routes";
 import { random } from "../../random/_routes";
 import { stats } from "../../stats/_routes";
 import { about } from "../../about/_routes";
 import { settings } from "../../settings/_routes";
+
 import PrimaryNavLink from "./PrimaryNavLink";
 
 const PrimaryNav: Component = () => {

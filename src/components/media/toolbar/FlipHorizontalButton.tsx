@@ -18,6 +18,6 @@ const FlipHorizontalButton: Component = () => {
             clickHandler={onFlipHorizontal}
         />
     );
-}
+};
 
 export default FlipHorizontalButton;

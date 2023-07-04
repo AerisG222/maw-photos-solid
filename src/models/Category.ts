@@ -11,7 +11,7 @@ export type Category = {
     totalSize: number;
     isMissingGpsData: boolean;
     route: string;
-}
+};
 
 export type PhotoCategory = Category & {
     downloadLink: string;
@@ -19,4 +19,4 @@ export type PhotoCategory = Category & {
 
 export type VideoCategory = Category & {
     totalDuration: number;
-}
+};

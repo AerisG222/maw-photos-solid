@@ -28,4 +28,4 @@ export const getAggFuncs = (mode: string) => {
         agg: countAgg,
         fmt: countFmt
     }
-}
+};

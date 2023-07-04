@@ -34,14 +34,14 @@ export const CategoryGridSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<CategoryGridViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <CategoryGridViewSettingsContext.Provider value={[state, { setMargin, setShowTitles, setThumbnailSize }]}>
             {props.children}
         </CategoryGridViewSettingsContext.Provider>
     );
-}
+};
 
 export const useCategoryGridViewSettingsContext = () => useContext(CategoryGridViewSettingsContext);
 

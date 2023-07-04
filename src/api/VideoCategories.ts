@@ -24,7 +24,7 @@ export const getVideoCategories = async (): Promise<VideoCategory[]> => {
         route: getVideoCategoryPath(x.id),
         totalDuration: x.totalDuration
     }));
-}
+};
 
 export const getVideos = async (categoryId: number): Promise<Video[]> => {
     const videos = await internalGetVideos(categoryId);
@@ -44,7 +44,7 @@ export const getVideos = async (categoryId: number): Promise<Video[]> => {
         videoFullHeight: x.videoFull.height,
         videoFullWidth: x.videoFull.width
     }));
-}
+};
 
 const internalGetVideoCategories = () =>
     queryMawApi<ApiCollection<ApiVideoCategory>>('video-categories');

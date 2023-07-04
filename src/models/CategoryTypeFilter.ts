@@ -26,4 +26,4 @@ export const getCategoryTypeIcon = (categoryType: string) => {
     }
 
     return { [iconPhoto]: true };
-}
+};

@@ -2,7 +2,7 @@ import { Component, createEffect } from 'solid-js';
 import * as Highcharts from 'highcharts';
 import HighchartsTreemap from 'highcharts/modules/treemap';
 
-export type Props = {
+type Props = {
     data: any;
     seriesName: string;
     formatFunc: (value: number) => string;
@@ -89,6 +89,6 @@ const Treemap: Component<Props> = (props) => {
     return (
         <div id="chart" ref={el} />
     );
-}
+};
 
 export default Treemap;

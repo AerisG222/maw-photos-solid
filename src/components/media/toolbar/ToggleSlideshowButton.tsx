@@ -18,6 +18,6 @@ const ToggleSlideshowButton: Component = () => {
             clickHandler={onToggleSlideshow}
         />
     );
-}
+};
 
 export default ToggleSlideshowButton;

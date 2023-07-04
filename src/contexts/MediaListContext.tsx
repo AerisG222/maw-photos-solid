@@ -11,8 +11,8 @@ export type MediaListState = {
     readonly items: Media[];
     readonly activeItem: Media;
     readonly activeIndex: number;
-    readonly activeRouteDefinition: AppRouteDefinition
-}
+    readonly activeRouteDefinition: AppRouteDefinition;
+};
 
 export const defaultMediaListState = {
     type: undefined,
@@ -64,7 +64,7 @@ export const MediaListProvider: ParentComponent = (props) => {
 
     const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
         setState({activeRouteDefinition});
-    }
+    };
 
     const setItems = (items: Media[]) => {
         setState({ items });
@@ -79,7 +79,7 @@ export const MediaListProvider: ParentComponent = (props) => {
         } else {
             unsetActiveItem();
         }
-    }
+    };
 
     const activeItemIsFirst = () => state.activeIndex === 0;
     const activeItemIsLast = () => state.activeIndex === state.items.length - 1;
@@ -89,7 +89,7 @@ export const MediaListProvider: ParentComponent = (props) => {
             activeItem: undefined,
             activeIndex: undefined
         });
-    }
+    };
 
     const setActiveItemByIndex = (index: number) => {
         if(index < 0 || index >= state.items.length) {
@@ -103,7 +103,7 @@ export const MediaListProvider: ParentComponent = (props) => {
                 activeIndex: index
             });
         }
-    }
+    };
 
     const getNextItem = () => {
         if(activeItemIsLast()) {
@@ -111,7 +111,7 @@ export const MediaListProvider: ParentComponent = (props) => {
         }
 
         return state.items[state.activeIndex + 1];
-    }
+    };
 
     const getPreviousItem = () => {
         if(activeItemIsFirst()) {
@@ -119,29 +119,29 @@ export const MediaListProvider: ParentComponent = (props) => {
         }
 
         return state.items[state.activeIndex - 1];
-    }
+    };
 
     const navigateToItem = (photo: Media) => {
         if(photo && state.activeRouteDefinition) {
             navigate(getPhotoCategoryRoutePath(state.activeRouteDefinition, photo.categoryId, photo.id));
         }
-    }
+    };
 
     const moveFirst = () => {
         navigateToItem(state.items[0]);
-    }
+    };
 
     const moveNext = () => {
         navigateToItem(getNextItem());
-    }
+    };
 
     const movePrevious = () => {
         navigateToItem(getPreviousItem())
-    }
+    };
 
     const moveLast = () => {
         navigateToItem(state.items[state.items.length - 1]);
-    }
+    };
 
     const setGpsOverride = (photoId: number, coord: GpsCoordinate) => {
         const idx = state.items.findIndex(p => p.id === photoId);
@@ -154,7 +154,7 @@ export const MediaListProvider: ParentComponent = (props) => {
                 longitude: coord.longitude
             }
         );
-    }
+    };
 
     return (
         <MediaListContext.Provider value={[state, {
@@ -173,7 +173,7 @@ export const MediaListProvider: ParentComponent = (props) => {
         }]}>
             {props.children}
         </MediaListContext.Provider>
-    )
-}
+    );
+};
 
 export const useMediaListContext = () => useContext(MediaListContext);

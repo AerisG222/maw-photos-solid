@@ -58,7 +58,7 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<RandomInfoPanelSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <RandomInfoPanelSettingsContext.Provider value={[state, {
@@ -77,7 +77,7 @@ export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </RandomInfoPanelSettingsContext.Provider>
     );
-}
+};
 
 export const useRandomInfoPanelSettingsContext = () => useContext(RandomInfoPanelSettingsContext);
 

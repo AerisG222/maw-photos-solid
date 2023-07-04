@@ -1,9 +1,10 @@
 import { Component } from 'solid-js';
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
 import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
 import { defaultGridThumbnailSize, getNextThumbnailSize } from '../models/ThumbnailSize';
 import { getNextMarginSize } from '../models/Margin';
+
+import ToolbarButton from '../components/toolbar/ToolbarButton';
 
 const GridToolbar: Component = () => {
     const [settings, { setShowTitles, setMargin, setThumbnailSize }] = useCategoryGridViewSettingsContext();
@@ -14,11 +15,11 @@ const GridToolbar: Component = () => {
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    }
+    };
 
     const onToggleMargins = () => {
         setMargin(getNextMarginSize(settings.margin).id);
-    }
+    };
 
     return (
         <>

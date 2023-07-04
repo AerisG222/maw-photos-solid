@@ -58,7 +58,7 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<PhotoInfoPanelSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <PhotoInfoPanelSettingsContext.Provider value={[state, {
@@ -77,7 +77,7 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </PhotoInfoPanelSettingsContext.Provider>
     );
-}
+};
 
 export const usePhotoInfoPanelSettingsContext = () => useContext(PhotoInfoPanelSettingsContext);
 

@@ -37,7 +37,7 @@ export const VideoDetailSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<VideoDetailViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <VideoDetailViewSettingsContext.Provider value={[state, {
@@ -49,7 +49,7 @@ export const VideoDetailSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </VideoDetailViewSettingsContext.Provider>
     );
-}
+};
 
 export const useVideoDetailViewSettingsContext = () => useContext(VideoDetailViewSettingsContext);
 

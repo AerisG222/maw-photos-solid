@@ -10,6 +10,6 @@ const Panel: ParentComponent = (props) => {
             </div>
         </>
     );
-}
+};
 
 export default Panel;

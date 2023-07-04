@@ -8,6 +8,6 @@ const StatLayout: ParentComponent = (props) => {
             {c()}
         </div>
     );
-}
+};
 
 export default StatLayout;

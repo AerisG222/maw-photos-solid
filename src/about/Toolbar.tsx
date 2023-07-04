@@ -13,6 +13,6 @@ const Toolbar: Component = () => {
             <ToolbarLink route={aboutAndroid} />
         </ToolbarLayout>
     );
-}
+};
 
 export default Toolbar;

@@ -5,7 +5,7 @@ import { IMetadataEditService } from '../models/services/IMetadataEditService';
 const MetadataEditServiceContext = createContext<IMetadataEditService>(undefined);
 
 type Props = {
-    svc: IMetadataEditService
+    svc: IMetadataEditService;
 };
 
 export const MetadataEditServiceProvider: ParentComponent<Props> = (props) => {
@@ -14,6 +14,6 @@ export const MetadataEditServiceProvider: ParentComponent<Props> = (props) => {
             {props.children}
         </MetadataEditServiceContext.Provider>
     );
-}
+};
 
 export const useMetadataEditServiceContext = () => useContext(MetadataEditServiceContext);

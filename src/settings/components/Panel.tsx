@@ -1,6 +1,6 @@
 import { ParentComponent, children } from 'solid-js';
 
-interface Props {
+type Props = {
     title: string;
 }
 
@@ -15,6 +15,6 @@ const Panel: ParentComponent<Props> = (props) => {
             </div>
         </>
     );
-}
+};
 
 export default Panel;

@@ -32,7 +32,7 @@ export const CategoryPageSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </CategoryPageSettingsContext.Provider>
     );
-}
+};
 
 export const useCategoryPageSettingsContext = () => useContext(CategoryPageSettingsContext);
 

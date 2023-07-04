@@ -12,15 +12,15 @@ const CommentsCard: Component = () => {
     const addPhotoComment = async (comment: string) => {
         await addComment(mediaList.activeItem?.id, comment);
         refetch();
-    }
+    };
 
-    const commentsToDisplay = () => commentResource()?.items ?? []
+    const commentsToDisplay = () => commentResource()?.items ?? [];
 
     const clearComment = (evt: Event) => {
         evt.preventDefault();
 
         setCommentText("");
-    }
+    };
 
     const saveComment = async (evt: Event) => {
         evt.preventDefault();
@@ -28,7 +28,7 @@ const CommentsCard: Component = () => {
         if(commentText()) {
             await addPhotoComment(commentText())
         }
-    }
+    };
 
     return (
         <>
@@ -51,6 +51,6 @@ const CommentsCard: Component = () => {
             </form>
         </>
     );
-}
+};
 
 export default CommentsCard;

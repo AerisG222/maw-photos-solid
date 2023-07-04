@@ -19,6 +19,6 @@ const RotateClockwiseButton: Component = () => {
             clickHandler={onRotateClockwise}
         />
     );
-}
+};
 
 export default RotateClockwiseButton;

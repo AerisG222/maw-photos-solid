@@ -5,26 +5,27 @@ import { createShortcut } from '@solid-primitives/keyboard';
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 import { buildPath } from '../../models/utils/RouteUtils';
 
-interface Props {
+type Props = {
     route: AppRouteDefinition;
     routeParams?: any;
     routeSearch?: any;
     clickHandler?: () => void;
-}
+};
 
 const ToolbarLink: Component<Props> = (props) => {
     let el: HTMLAnchorElement;
+
     const handleClick = () => {
         if(props.clickHandler) {
             props.clickHandler();
         }
-    }
+    };
 
     onMount(() => {
         if(props.route.shortcutKeys) {
             createShortcut(props.route.shortcutKeys, () => { el.click() });
         }
-    })
+    });
 
     return (
         <A

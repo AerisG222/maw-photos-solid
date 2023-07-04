@@ -14,6 +14,6 @@ export const ExifServiceProvider: ParentComponent<Props> = (props) => {
             {props.children}
         </ExifServiceContext.Provider>
     );
-}
+};
 
 export const useExifServiceContext = () => useContext(ExifServiceContext);

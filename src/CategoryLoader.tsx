@@ -25,7 +25,7 @@ const CategoryLoader: ParentComponent = (props) => {
         <>
             {c()}
         </>
-    )
-}
+    );
+};
 
 export default CategoryLoader;

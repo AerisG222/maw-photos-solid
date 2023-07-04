@@ -7,7 +7,7 @@ export const statsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     component: lazy(() => import('./StatsRedirect'))
-}
+};
 
 export const statsPhotos: AppRouteDefinition = {
     icon: "i-ic-outline-photo-camera",
@@ -15,7 +15,7 @@ export const statsPhotos: AppRouteDefinition = {
     path: "/photos",
     absolutePath: `${basePath}/photos`,
     component: lazy(() => import('./ViewPhotos'))
-}
+};
 
 export const statsVideos: AppRouteDefinition = {
     icon: "i-ic-round-videocam",
@@ -23,7 +23,7 @@ export const statsVideos: AppRouteDefinition = {
     path: "/videos",
     absolutePath: `${basePath}/videos`,
     component: lazy(() => import('./ViewVideos'))
-}
+};
 
 export const statsCombined: AppRouteDefinition = {
     icon: "i-ic-round-functions",
@@ -31,7 +31,7 @@ export const statsCombined: AppRouteDefinition = {
     path: "/combined",
     absolutePath: `${basePath}/combined`,
     component: lazy(() => import('./ViewCombined'))
-}
+};
 
 export const stats: AppRouteDefinition = {
     icon: "i-ic-round-bar-chart",
@@ -45,4 +45,4 @@ export const stats: AppRouteDefinition = {
         statsVideos,
         statsCombined
     ]
-}
+};

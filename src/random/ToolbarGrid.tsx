@@ -5,7 +5,7 @@ import Divider from '../components/layout/Divider';
 const GridToolbar: Component = () => {
     const onToggleSlideshow = () => {
         console.log("slideshow");
-    }
+    };
 
     const onToggleBreadcrumbs = () => {
         console.log("titles");
@@ -13,11 +13,11 @@ const GridToolbar: Component = () => {
 
     const onToggleThumbnailSize = () => {
         console.log("thumbnail");
-    }
+    };
 
     const onToggleMargins = () => {
         console.log("margins");
-    }
+    };
 
     return (
         <>

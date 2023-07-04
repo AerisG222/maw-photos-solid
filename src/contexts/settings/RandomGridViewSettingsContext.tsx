@@ -34,14 +34,14 @@ export const RandomGridSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<RandomGridViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <RandomGridViewSettingsContext.Provider value={[state, { setMargin, setShowBreadcrumbs, setThumbnailSize }]}>
             {props.children}
         </RandomGridViewSettingsContext.Provider>
     );
-}
+};
 
 export const useRandomGridViewSettingsContext = () => useContext(RandomGridViewSettingsContext);
 

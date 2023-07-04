@@ -1,10 +1,10 @@
 import { Component } from 'solid-js'
 
-export type Props = {
-    title: string,
-    name: string,
-    isSelected: boolean,
-    onChange: (isSelected: boolean) => void
+type Props = {
+    title: string;
+    name: string;
+    isSelected: boolean;
+    onChange: (isSelected: boolean) => void;
 };
 
 const Select: Component<Props> = (props) => {
@@ -17,7 +17,7 @@ const Select: Component<Props> = (props) => {
                 </label>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Select;

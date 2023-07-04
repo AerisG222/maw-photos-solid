@@ -30,7 +30,7 @@ const MediaMainItem: Component<Props> = (props) => {
                 const _exhaustiveCheck: never = props.media;
                 return _exhaustiveCheck;
         }
-    }
+    };
 
     return (
         <>

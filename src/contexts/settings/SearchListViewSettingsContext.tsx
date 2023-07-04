@@ -31,14 +31,14 @@ export const SearchListSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<SearchListViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <SearchListViewSettingsContext.Provider value={[state, { setMargin, setThumbnailSize }]}>
             {props.children}
         </SearchListViewSettingsContext.Provider>
     );
-}
+};
 
 export const useSearchListViewSettingsContext = () => useContext(SearchListViewSettingsContext);
 

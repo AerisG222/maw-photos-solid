@@ -11,7 +11,7 @@ export const categoriesPhotosRedirect: AppRouteDefinition = {
     path: '/',
     absolutePath: basePath,
     component: lazy(() => import('./PhotoCategoriesRedirect'))
-}
+};
 
 export const categoriesPhotosGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
@@ -21,7 +21,7 @@ export const categoriesPhotosGrid: AppRouteDefinition = {
     path: "/grid/:photoId?",
     absolutePath: `${basePath}/grid/:photoId?`,
     component: lazy(() => import('../components/media/ViewGrid'))
-}
+};
 
 export const categoriesPhotosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
@@ -31,7 +31,7 @@ export const categoriesPhotosDetail: AppRouteDefinition = {
     path: '/detail/:photoId?',
     absolutePath: `${basePath}/detail/:photoId?`,
     component: lazy(() => import('../components/media/ViewDetail'))
-}
+};
 
 export const categoriesPhotosFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
@@ -41,7 +41,7 @@ export const categoriesPhotosFullscreen: AppRouteDefinition = {
     path: '/fullscreen/:photoId?',
     absolutePath: `${basePath}/fullscreen/:photoId?`,
     component: lazy(() => import('../components/media/ViewFullscreen'))
-}
+};
 
 export const categoriesPhotosMap: AppRouteDefinition = {
     icon: "i-ic-round-map",
@@ -51,7 +51,7 @@ export const categoriesPhotosMap: AppRouteDefinition = {
     path: '/map/:photoId?',
     absolutePath: `${basePath}/map/:photoId?`,
     component: lazy(() => import('../components/media/ViewMap'))
-}
+};
 
 export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     icon: "i-ic-round-collections",
@@ -61,7 +61,7 @@ export const categoriesPhotosBulkEdit: AppRouteDefinition = {
     path: '/bulk-edit',
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import('../components/media/ViewBulkEdit'))
-}
+};
 
 export const categoriesPhotos: AppRouteDefinition = {
     icon: undefined as string,
@@ -77,7 +77,7 @@ export const categoriesPhotos: AppRouteDefinition = {
         categoriesPhotosMap,
         categoriesPhotosBulkEdit
     ]
-}
+};
 
 export const getPhotoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesPhotos, {categoryId: categoryId});
@@ -110,4 +110,4 @@ const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     }
 
     return categoriesPhotosGrid;
-}
+};

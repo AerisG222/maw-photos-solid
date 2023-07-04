@@ -32,7 +32,7 @@ export const AppSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </AppSettingsContext.Provider>
     );
-}
+};
 
 export const useAppSettingsContext = () => useContext(AppSettingsContext);
 

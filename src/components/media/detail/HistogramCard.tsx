@@ -2,12 +2,12 @@ import { Component, createEffect, createSignal } from 'solid-js';
 
 import { useMediaListContext } from '../../../contexts/MediaListContext';
 
-interface Histogram {
+type Histogram = {
     r: number[];
     g: number[];
     b: number[];
     lum: number[];
-}
+};
 
 const HistogramCard: Component = () => {
     const _rgb = 'rgb';
@@ -25,7 +25,7 @@ const HistogramCard: Component = () => {
 
     const updateHistogram = () => {
         renderHistogram(channel());
-    }
+    };
 
     const renderHistogram = (channel: string) => {
         if(!canvas) {
@@ -44,7 +44,7 @@ const HistogramCard: Component = () => {
 
             drawHistogram(channel, hist, maxCount);
         }
-    }
+    };
 
     const getImageData = (): Uint8ClampedArray => {
         const tempCanvas = document.createElement('canvas');
@@ -57,7 +57,7 @@ const HistogramCard: Component = () => {
         ctx.drawImage(img, 0, 0);
 
         return ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-    }
+    };
 
     const getMaxCount = (channel: string, histogram: Histogram): number => {
         let maxCount = 0;
@@ -81,26 +81,18 @@ const HistogramCard: Component = () => {
         }
 
         return maxCount;
-    }
+    };
 
-    const includeR = (channel: string): boolean => {
-        return channel === _rgb || channel === _r;
-    }
-
-    const includeG = (channel: string): boolean => {
-        return channel === _rgb || channel === _g;
-    }
-
-    const includeB = (channel: string): boolean => {
-        return channel === _rgb || channel === _b;
-    }
+    const includeR = (channel: string): boolean => channel === _rgb || channel === _r;
+    const includeG = (channel: string): boolean => channel === _rgb || channel === _g;
+    const includeB = (channel: string): boolean => channel === _rgb || channel === _b;
 
     const getLuma = (r: number, g: number, b: number): number => {
         // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
         const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
         return Math.round(luma);
-    }
+    };
 
     // inspiration:
     //   http://mihai.sucan.ro/coding/svg-or-canvas/histogram.html
@@ -127,7 +119,7 @@ const HistogramCard: Component = () => {
         }
 
         return { r, g, b, lum };
-    }
+    };
 
     const drawHistogram = (
         channel: string,
@@ -157,7 +149,7 @@ const HistogramCard: Component = () => {
         }
 
         ctx.globalCompositeOperation = 'source-over';
-    }
+    };
 
     const drawHistogramChannel = (
         ctx: CanvasRenderingContext2D,
@@ -185,7 +177,7 @@ const HistogramCard: Component = () => {
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-    }
+    };
 
     img.onload = updateHistogram;
 
@@ -193,11 +185,11 @@ const HistogramCard: Component = () => {
         if(state.activeItem) {
             img.src = state.activeItem.imageMdUrl;
         }
-    })
+    });
 
     createEffect(() => {
         renderHistogram(channel());
-    })
+    });
 
     return (
         <>
@@ -228,6 +220,6 @@ const HistogramCard: Component = () => {
             </div>
         </>
     );
-}
+};
 
 export default HistogramCard;

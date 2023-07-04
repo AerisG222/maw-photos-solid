@@ -31,7 +31,7 @@ const getAllIcons = (routes: AppRouteDefinition[]) => {
     }
 
     return icons;
-}
+};
 
 const getIcons = (route: AppRouteDefinition, icons: string[]) => {
     if(route.children) {
@@ -45,6 +45,6 @@ const getIcons = (route: AppRouteDefinition, icons: string[]) => {
     }
 
     return icons;
-}
+};
 
 export const allRouteIcons = new Set(getAllIcons(appRoutes));

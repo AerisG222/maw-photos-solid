@@ -16,6 +16,6 @@ const MoveNextButton: Component = () => {
             clickHandler={moveNext}
         />
     );
-}
+};
 
 export default MoveNextButton;

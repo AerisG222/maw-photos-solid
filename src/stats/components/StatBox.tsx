@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-export type Props = {
+type Props = {
     title: string;
     value: string;
 };
@@ -13,7 +13,7 @@ const StatBox: Component<Props> = (props) => {
                 <div class="stat-value text-primary">{props.value}</div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default StatBox;

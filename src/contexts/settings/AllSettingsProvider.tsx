@@ -59,4 +59,4 @@ export const AllSettingsProvider: ParentComponent = (props) => {
         </CategoryFilterSettingsProvider>
         </AppSettingsProvider>
     );
-}
+};

@@ -33,14 +33,14 @@ export const PhotoDetailSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<PhotoDetailViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <PhotoDetailViewSettingsContext.Provider value={[state, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize }]}>
             {props.children}
         </PhotoDetailViewSettingsContext.Provider>
     );
-}
+};
 
 export const usePhotoDetailViewSettingsContext = () => useContext(PhotoDetailViewSettingsContext);
 

@@ -8,7 +8,7 @@ const PhotosToolbar: Component = () => {
 
     const selectMode = (mode: string) => {
         setSearchParams({mode});
-    }
+    };
 
     return (
         <>
@@ -26,6 +26,6 @@ const PhotosToolbar: Component = () => {
             />
         </>
     );
-}
+};
 
 export default PhotosToolbar;

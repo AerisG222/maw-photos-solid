@@ -8,7 +8,7 @@ const CombinedToolbar: Component = () => {
 
     const selectMode = (mode: string) => {
         setSearchParams({mode});
-    }
+    };
 
     return (
         <>
@@ -26,6 +26,6 @@ const CombinedToolbar: Component = () => {
             />
         </>
     );
-}
+};
 
 export default CombinedToolbar;

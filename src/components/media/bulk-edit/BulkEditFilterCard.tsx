@@ -38,6 +38,6 @@ const BulkEditFilterCard: Component<Props> = (props) => {
             </div>
         </div>
     );
-}
+};
 
 export default BulkEditFilterCard;

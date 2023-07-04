@@ -1,6 +1,6 @@
 import { Component, For, createEffect, createSignal } from 'solid-js';
 
-export type Props = {
+type Props = {
     editable: boolean;
     numberStars: number;
     value: number;
@@ -17,7 +17,7 @@ const Rating: Component<Props> = (props) => {
             'i-ic-round-star': star,
             'i-ic-round-star-outline': !star,
         }
-    }
+    };
 
     const handleClick = (rating: number) => {
         if(props.editable && props.clickHandler) {
@@ -25,7 +25,7 @@ const Rating: Component<Props> = (props) => {
 
             props.clickHandler(ratingValue);
         }
-    }
+    };
 
     const getStarsArray = () => {
         var highlightedStars = hoverStar() > 0 ? hoverStar() : props.value;
@@ -36,7 +36,7 @@ const Rating: Component<Props> = (props) => {
         }
 
         return stars;
-    }
+    };
 
     createEffect(() => setStars(getStarsArray()));
 
@@ -52,6 +52,6 @@ const Rating: Component<Props> = (props) => {
             }</For>
         </div>
     );
-}
+};
 
 export default Rating;

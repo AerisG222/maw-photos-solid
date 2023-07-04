@@ -9,7 +9,7 @@ const authSettings: UserManagerSettings = {
     client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
     redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI,
     scope: "maw_api"
-}
+};
 
 Log.setLogger(console);
 

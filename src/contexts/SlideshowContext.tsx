@@ -6,7 +6,7 @@ import { useMediaListContext } from './MediaListContext';
 export type SlideshowState = {
     intervalSeconds: number,
     isPlaying: boolean;
-}
+};
 
 const defaultSlideshowState = {
     intervalSeconds: 2.5,
@@ -88,6 +88,6 @@ export const SlideshowProvider: ParentComponent = (props) => {
             {props.children}
         </SlideshowContext.Provider>
     );
-}
+};
 
 export const useSlideshowContext = () => useContext(SlideshowContext);

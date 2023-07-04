@@ -26,7 +26,7 @@ export const getNextMarginSize = (margin: MarginIdType) => {
     }
 
     return allMargins[idx + 1];
-}
+};
 
 export const getMarginClass = (margin: MarginIdType) => allMargins
         .filter(x => equalsIgnoreCase(x.id, margin))

@@ -14,7 +14,7 @@ const CategoryTeaserCard: Component = () => {
 
         await setTeaser(categoryState.activeCategory.id, mediaList.activeItem.id);
         updateTeaser(mediaList.activeItem);
-    }
+    };
 
     return (
         <>
@@ -29,6 +29,6 @@ const CategoryTeaserCard: Component = () => {
             </div>
         </>
     );
-}
+};
 
 export default CategoryTeaserCard;

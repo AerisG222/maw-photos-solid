@@ -6,10 +6,10 @@ import { Category } from '../../models/Category';
 import { getCategoryTypeIcon } from '../../models/CategoryTypeFilter';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
-export type Props = {
-    category: Category,
-    thumbnailSize: ThumbnailSizeIdType
-}
+type Props = {
+    category: Category;
+    thumbnailSize: ThumbnailSizeIdType;
+};
 
 const CategoryListItem: Component<Props> = (props) => {
     const [category, {setActiveCategory}] = useCategoryContext();
@@ -28,6 +28,6 @@ const CategoryListItem: Component<Props> = (props) => {
             <span class="m-l-4">{props.category.name}</span>
         </A>
     );
-}
+};
 
 export default CategoryListItem;

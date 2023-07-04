@@ -10,6 +10,6 @@ const StatBar: ParentComponent = (props) => {
             </div>
         </>
     );
-}
+};
 
 export default StatBar;

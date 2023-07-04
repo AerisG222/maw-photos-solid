@@ -34,14 +34,14 @@ export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<PhotoGridViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <PhotoGridViewSettingsContext.Provider value={[state, { setMargin, setShowBreadcrumbs, setThumbnailSize }]}>
             {props.children}
         </PhotoGridViewSettingsContext.Provider>
     );
-}
+};
 
 export const usePhotoGridViewSettingsContext = () => useContext(PhotoGridViewSettingsContext);
 

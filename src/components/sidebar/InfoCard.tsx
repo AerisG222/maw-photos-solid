@@ -1,9 +1,9 @@
 import { ParentComponent, children } from 'solid-js';
 
-export type Props = {
+type Props = {
     icon: string;
     title: string;
-}
+};
 
 const InfoCard: ParentComponent<Props> = (props) => {
     const c = children(() => props.children);
@@ -19,7 +19,7 @@ const InfoCard: ParentComponent<Props> = (props) => {
                 {c()}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default InfoCard;

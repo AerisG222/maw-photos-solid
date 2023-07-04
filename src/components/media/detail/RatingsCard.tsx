@@ -13,7 +13,7 @@ const RatingsCard: Component = (props) => {
     const rate = async (rating: number) => {
         await setRating(mediaList.activeItem?.id, rating);
         refetch();
-    }
+    };
 
     return (
         <Suspense>
@@ -42,6 +42,6 @@ const RatingsCard: Component = (props) => {
         </table>
         </Suspense>
     );
-}
+};
 
 export default RatingsCard;

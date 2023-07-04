@@ -33,14 +33,14 @@ export const RandomDetailSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<RandomDetailViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <RandomDetailViewSettingsContext.Provider value={[state, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize }]}>
             {props.children}
         </RandomDetailViewSettingsContext.Provider>
     );
-}
+};
 
 export const useRandomDetailViewSettingsContext = () => useContext(RandomDetailViewSettingsContext);
 

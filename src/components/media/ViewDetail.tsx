@@ -47,7 +47,7 @@ const ViewDetail: Component = () => {
                 }
             }
         }
-    })
+    });
 
     const toolbar = (
         <Toolbar>
@@ -72,7 +72,7 @@ const ViewDetail: Component = () => {
         }
 
         return `max-height: calc(100vh - ${reservedHeight}px);`;
-    }
+    };
 
     return (
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>

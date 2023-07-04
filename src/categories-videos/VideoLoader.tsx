@@ -34,7 +34,7 @@ const VideoLoader: ParentComponent<Props> = (props) => {
         <>
             {c()}
         </>
-    )
+    );
 };
 
 export default VideoLoader;

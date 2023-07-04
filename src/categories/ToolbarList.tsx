@@ -11,11 +11,11 @@ const ListToolbar: Component = () => {
 
     const onToggleThumbnail = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
-    }
+    };
 
     const onToggleMargins = () => {
         setMargin(getNextMarginSize(settings.margin).id);
-    }
+    };
 
     return (
         <>

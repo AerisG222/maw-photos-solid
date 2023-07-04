@@ -26,6 +26,6 @@ export const FullscreenProvider: ParentComponent = (props) => {
             {props.children}
         </FullscreenContext.Provider>
     );
-}
+};
 
 export const useFullscreenContext = () => useContext(FullscreenContext);

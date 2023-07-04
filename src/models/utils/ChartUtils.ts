@@ -68,4 +68,4 @@ export const buildStatsData = (years: number[], categories: Category[], valueFun
     }
 
     return result;
-}
+};

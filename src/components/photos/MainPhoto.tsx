@@ -22,7 +22,7 @@ const MainPhoto: Component<Props> = (props) => {
         }
 
         return set.join(', ');
-    }
+    };
 
     return (
         <img src={props.photo?.imageMdUrl}

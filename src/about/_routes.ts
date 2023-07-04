@@ -7,7 +7,7 @@ export const aboutRedirect: AppRouteDefinition = {
     path: '/',
     absolutePath: basePath,
     component: lazy(() => import('./AboutRedirect'))
-}
+};
 
 export const aboutHelp: AppRouteDefinition = {
     icon: "i-ic-round-help",
@@ -15,7 +15,7 @@ export const aboutHelp: AppRouteDefinition = {
     path: "/help",
     absolutePath: `${basePath}/help`,
     component: lazy(() => import('./ViewHelp'))
-}
+};
 
 export const aboutReleaseNotes: AppRouteDefinition = {
     icon: "i-ic-round-info",
@@ -23,7 +23,7 @@ export const aboutReleaseNotes: AppRouteDefinition = {
     path: "/release-notes",
     absolutePath: `${basePath}/release-notes`,
     component: lazy(() => import('./ViewReleaseNotes'))
-}
+};
 
 export const aboutAndroid: AppRouteDefinition = {
     icon: "i-ic-android",
@@ -31,7 +31,7 @@ export const aboutAndroid: AppRouteDefinition = {
     path: "/android",
     absolutePath: `${basePath}/android`,
     component: lazy(() => import('./ViewAndroid'))
-}
+};
 
 export const about: AppRouteDefinition = {
     icon: "i-ic-round-help-outline",

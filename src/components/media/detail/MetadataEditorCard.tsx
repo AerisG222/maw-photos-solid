@@ -26,7 +26,7 @@ const MetadataEditorCard: Component = () => {
         }
 
         return fetchGpsDetail(photo.id);
-    }
+    };
 
     const [gpsDetail] = createResource(() => mediaList.activeItem, fetchGpsData);
 
@@ -42,7 +42,7 @@ const MetadataEditorCard: Component = () => {
         const ov = gpsDetail()?.override;
 
         setOverride(ov ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() } : { lat: undefined, lng: undefined });
-    }
+    };
 
     const onPaste = (evt: ClipboardEvent) => {
         const clipboardData = evt.clipboardData;
@@ -60,13 +60,13 @@ const MetadataEditorCard: Component = () => {
                 });
             }
         }
-    }
+    };
 
     const cancel = (evt: Event) => {
         evt.preventDefault();
 
         updateOverrideInputsFromApi();
-    }
+    };
 
     const save = (evt: Event) => {
         evt.preventDefault();
@@ -77,16 +77,16 @@ const MetadataEditorCard: Component = () => {
                 longitude: parseFloat(override().lng)
             });
         }
-    }
+    };
 
     const saveAndMoveNext = (evt: Event) => {
         save(evt);
         moveNext();
-    }
+    };
 
     const isOverrideValid = () => {
         return isValidLatLng(override().lat) && isValidLatLng(override().lng);
-    }
+    };
 
     const getValidationClass = (val: string) => {
         const nullOrEmpty = val === undefined || val === "";
@@ -94,13 +94,13 @@ const MetadataEditorCard: Component = () => {
         return {
             'input-error': nullOrEmpty ? false : !isValidLatLng(val)
         };
-    }
+    };
 
     const getButtonClass = () => {
         return {
             'btn-disabled': !isOverrideValid()
         }
-    }
+    };
 
     return (
         <form>
@@ -119,6 +119,6 @@ const MetadataEditorCard: Component = () => {
             </div>
         </form>
     );
-}
+};
 
 export default MetadataEditorCard;

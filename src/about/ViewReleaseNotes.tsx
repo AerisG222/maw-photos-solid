@@ -428,7 +428,7 @@ const ViewApplication: Component = () => {
                 <li>Improved interface and implementation</li>
             </ul>
 
-            <p></p>
+            <p />
         </>
     );
 };

@@ -14,6 +14,6 @@ const DownloadPhotoLowResButton: Component = () => {
             iconClass='i-ic-round-image'
             textClassList={{'text-sm': true}} />
     );
-}
+};
 
 export default DownloadPhotoLowResButton;

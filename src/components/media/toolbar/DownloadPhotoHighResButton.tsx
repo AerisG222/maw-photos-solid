@@ -13,6 +13,6 @@ const DownloadPhotoHighResButton: Component = () => {
             url={photoListState.activeItem?.imageLgUrl}
             iconClass='i-ic-round-image' />
     );
-}
+};
 
 export default DownloadPhotoHighResButton;

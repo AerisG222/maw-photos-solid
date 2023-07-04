@@ -103,7 +103,7 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
         }
 
         return '';
-    }
+    };
 
     const rotateClockwise = () => setState(s => ({...s, rotation: s.rotation + 90}));
     const rotateCounterClockwise = () => setState(s => ({...s, rotation: s.rotation - 90}));
@@ -130,7 +130,7 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
         }
 
         return '';
-    }
+    };
 
     return (
         <PhotoEffectsContext.Provider value={[state, {
@@ -153,6 +153,6 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
             {props.children}
         </PhotoEffectsContext.Provider>
     );
-}
+};
 
 export const usePhotoEffectsContext = () => useContext(PhotoEffectsContext);

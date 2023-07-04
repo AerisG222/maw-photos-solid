@@ -8,7 +8,7 @@ export const randomRedirect: AppRouteDefinition = {
     path: '/',
     absolutePath: basePath,
     component: lazy(() => import("./RandomRedirect"))
-}
+};
 
 export const randomGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
@@ -16,7 +16,7 @@ export const randomGrid: AppRouteDefinition = {
     path: '/grid',
     absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
-}
+};
 
 export const randomDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
@@ -24,7 +24,7 @@ export const randomDetail: AppRouteDefinition = {
     path: '/detail',
     absolutePath: `${basePath}/detail`,
     component: lazy(() => import('./ViewDetail'))
-}
+};
 
 export const randomFullscreen: AppRouteDefinition = {
     icon: "i-ic-round-fullscreen",
@@ -32,7 +32,7 @@ export const randomFullscreen: AppRouteDefinition = {
     path: '/fullscreen',
     absolutePath: `${basePath}/fullscreen`,
     component: lazy(() => import('./ViewFullscreen'))
-}
+};
 
 export const random: AppRouteDefinition = {
     icon: "i-ic-round-shuffle",
@@ -47,7 +47,7 @@ export const random: AppRouteDefinition = {
         randomDetail,
         randomFullscreen
     ]
-}
+};
 
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
@@ -63,4 +63,4 @@ export const getPathForViewMode = (mode: string): string => {
     }
 
     return randomGrid.absolutePath;
-}
+};

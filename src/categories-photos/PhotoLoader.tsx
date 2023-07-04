@@ -34,7 +34,7 @@ const PhotoLoader: ParentComponent<Props> = (props) => {
         <>
             {c()}
         </>
-    )
+    );
 };
 
 export default PhotoLoader;

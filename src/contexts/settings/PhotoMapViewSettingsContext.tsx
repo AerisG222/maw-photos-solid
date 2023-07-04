@@ -31,14 +31,14 @@ export const PhotoMapSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<PhotoMapViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <PhotoMapViewSettingsContext.Provider value={[state, { setMapType, setZoom }]}>
             {props.children}
         </PhotoMapViewSettingsContext.Provider>
     );
-}
+};
 
 export const usePhotoMapViewSettingsContext = () => useContext(PhotoMapViewSettingsContext);
 

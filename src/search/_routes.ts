@@ -8,7 +8,7 @@ export const searchRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     component: lazy(() => import('./SearchRedirect'))
-}
+};
 
 export const searchGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
@@ -16,7 +16,7 @@ export const searchGrid: AppRouteDefinition = {
     path: "/grid",
     absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
-}
+};
 
 export const searchList: AppRouteDefinition = {
     icon: "i-ic-round-format-list-bulleted",
@@ -24,7 +24,7 @@ export const searchList: AppRouteDefinition = {
     path: "/list",
     absolutePath: `${basePath}/list`,
     component: lazy(() => import('./ViewList'))
-}
+};
 
 export const search: AppRouteDefinition = {
     icon: "i-ic-round-search",
@@ -38,7 +38,7 @@ export const search: AppRouteDefinition = {
         searchGrid,
         searchList
     ]
-}
+};
 
 export const getPathForViewMode = (mode: string): string => {
     if(equalsIgnoreCase('grid', mode)) {
@@ -50,4 +50,4 @@ export const getPathForViewMode = (mode: string): string => {
     }
 
     return searchGrid.absolutePath;
-}
+};

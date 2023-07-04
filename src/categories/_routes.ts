@@ -10,7 +10,7 @@ export const categoriesRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     component: lazy(() => import('./CategoriesRedirect'))
-}
+};
 
 export const categoriesGrid: AppRouteDefinition = {
     icon: "i-ic-outline-apps",
@@ -18,7 +18,7 @@ export const categoriesGrid: AppRouteDefinition = {
     path: "/grid",
     absolutePath: `${basePath}/grid`,
     component: lazy(() => import('./ViewGrid'))
-}
+};
 
 export const categoriesList: AppRouteDefinition = {
     icon: "i-ic-round-format-list-bulleted",
@@ -26,7 +26,7 @@ export const categoriesList: AppRouteDefinition = {
     path: "/list",
     absolutePath: `${basePath}/list`,
     component: lazy(() => import('./ViewList'))
-}
+};
 
 export const categories: AppRouteDefinition = {
     icon: "i-ic-round-home",
@@ -40,7 +40,7 @@ export const categories: AppRouteDefinition = {
         categoriesGrid,
         categoriesList
     ]
-}
+};
 
 export const getRouteForViewMode = (mode: string) => {
     if(equalsIgnoreCase('list', mode)) {
@@ -48,8 +48,8 @@ export const getRouteForViewMode = (mode: string) => {
     }
 
     return categoriesGrid;
-}
+};
 
 export const buildSearch = (year: YearFilterIdType, type: CategoryTypeFilterIdType) => {
     return {year: year, type: type};
-}
+};

@@ -30,14 +30,14 @@ export const RandomPageSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<RandomPageSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <RandomPageSettingsContext.Provider value={[state, { setViewMode, setSlideshowDisplayDurationSeconds }]}>
             {props.children}
         </RandomPageSettingsContext.Provider>
     );
-}
+};
 
 export const useRandomPageSettingsContext = () => useContext(RandomPageSettingsContext);
 

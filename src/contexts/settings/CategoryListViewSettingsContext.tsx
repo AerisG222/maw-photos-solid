@@ -31,14 +31,14 @@ export const CategoryListSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<CategoryListViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <CategoryListViewSettingsContext.Provider value={[state, { setMargin, setThumbnailSize }]}>
             {props.children}
         </CategoryListViewSettingsContext.Provider>
     );
-}
+};
 
 export const useCategoryListViewSettingsContext = () => useContext(CategoryListViewSettingsContext);
 

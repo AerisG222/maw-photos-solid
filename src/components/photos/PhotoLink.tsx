@@ -7,7 +7,7 @@ import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 
 import MediaLink from '../media/MediaLink';
 
-export type Props = {
+type Props = {
     photo: Photo;
     thumbnailSize: ThumbnailSizeIdType;
     rounded: boolean;

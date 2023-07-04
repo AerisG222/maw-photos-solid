@@ -8,7 +8,7 @@ const StatsRedirect: Component = () => {
 
     navigate(statsPhotos.absolutePath);
 
-    return <></>
+    return <></>;
 };
 
 export default StatsRedirect;

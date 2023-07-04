@@ -24,7 +24,7 @@ export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
         route: getPhotoCategoryPath(x.id),
         downloadLink: x.downloadLink
     }));
-}
+};
 
 export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
     const apiPhotos = await internalGetPhotos(categoryId);
@@ -47,7 +47,7 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
         imageLgWidth: x.imageLg.width,
         imagePrtUrl: x.imagePrt.url
     }));
-}
+};
 
 const internalGetPhotoCategories = () =>
     queryMawApi<ApiCollection<ApiPhotoCategory>>('photo-categories');

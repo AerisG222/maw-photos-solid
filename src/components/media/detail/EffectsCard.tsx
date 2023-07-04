@@ -79,6 +79,6 @@ const EffectsCard: Component = () => {
             <button id="effect-reset" class="mt-4 btn btn-sm btn-error btn-outline" onClick={reset}>Reset</button>
         </>
     );
-}
+};
 
 export default EffectsCard;

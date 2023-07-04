@@ -32,7 +32,7 @@ export const SearchPageSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </SearchPageSettingsContext.Provider>
     );
-}
+};
 
 export const useSearchPageSettingsContext = () => useContext(SearchPageSettingsContext);
 

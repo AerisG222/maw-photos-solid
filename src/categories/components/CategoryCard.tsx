@@ -5,11 +5,11 @@ import { getThumbnailClass, ThumbnailSizeIdType } from '../../models/ThumbnailSi
 import { Category } from '../../models/Category';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
-export type Props = {
-    category: Category,
-    showTitles: boolean,
-    thumbnailSize: ThumbnailSizeIdType
-}
+type Props = {
+    category: Category;
+    showTitles: boolean;
+    thumbnailSize: ThumbnailSizeIdType;
+};
 
 const CategoryCard: Component<Props> = (props) => {
     const [category, {setActiveCategory}] = useCategoryContext();
@@ -28,6 +28,6 @@ const CategoryCard: Component<Props> = (props) => {
             </Show>
         </A>
     );
-}
+};
 
 export default CategoryCard;

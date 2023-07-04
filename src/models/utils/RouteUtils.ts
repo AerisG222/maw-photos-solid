@@ -27,7 +27,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     }
 
     return path;
-}
+};
 
 const buildSearch = (routeSearch?: any) => {
     let search = '';
@@ -45,7 +45,7 @@ const buildSearch = (routeSearch?: any) => {
     }
 
     return search;
-}
+};
 
 export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSearch?: any) => {
     // todo: update all other routes to include absolute path if this works
@@ -56,4 +56,4 @@ export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSea
     path += buildSearch(routeSearch);
 
     return path;
-}
+};

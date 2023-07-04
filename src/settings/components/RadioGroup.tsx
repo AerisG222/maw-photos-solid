@@ -1,12 +1,12 @@
 import { Component, For } from 'solid-js'
 import { KeyValuePair } from '../../models/KeyValuePair';
 
-export type Props<T> = {
-    title: string,
-    groupName: string,
-    itemArray: KeyValuePair<T>[],
-    selectedValue: T,
-    onChange: (value: string) => void
+type Props<T> = {
+    title: string;
+    groupName: string;
+    itemArray: KeyValuePair<T>[];
+    selectedValue: T;
+    onChange: (value: string) => void;
 };
 
 const RadioGroup: Component<Props<string|number>> = (props) => {
@@ -23,6 +23,6 @@ const RadioGroup: Component<Props<string|number>> = (props) => {
             }</For>
         </>
     );
-}
+};
 
 export default RadioGroup;

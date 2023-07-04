@@ -16,6 +16,6 @@ const MovePreviousButton: Component = () => {
             clickHandler={movePrevious}
         />
     );
-}
+};
 
 export default MovePreviousButton;

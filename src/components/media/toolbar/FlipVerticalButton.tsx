@@ -19,6 +19,6 @@ const FlipVerticalButton: Component = () => {
             clickHandler={onFlipVertical}
         />
     );
-}
+};
 
 export default FlipVerticalButton;

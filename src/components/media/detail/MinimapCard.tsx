@@ -51,7 +51,7 @@ const MinimapCard: Component = () => {
             el.style.visibility = 'hidden';
             marker.position = null;
         }
-    }
+    };
 
     onMount(() => {
         initMap();
@@ -66,6 +66,6 @@ const MinimapCard: Component = () => {
     return (
         <div class="h-[320px] w-[100%]" ref={el} />
     );
-}
+};
 
 export default MinimapCard;

@@ -34,14 +34,14 @@ export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<CategoryFilterSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <CategoryFilterSettingsContext.Provider value={[state, { setTypeFilter, setYearFilter, setMissingGpsFilter }]}>
             {props.children}
         </CategoryFilterSettingsContext.Provider>
     );
-}
+};
 
 export const useCategoryFilterSettingsContext = () => useContext(CategoryFilterSettingsContext);
 

@@ -2,11 +2,11 @@ import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
-
-import Select from '../../settings/components/Select';
 import { allYearFilterId } from '../../models/YearFilter';
 import { equalsIgnoreCase } from '../../models/utils/StringUtils';
 import { useSearchParams } from '@solidjs/router';
+
+import Select from '../../settings/components/Select';
 
 const YearFilter: Component = () => {
     const [categoryState, { getAllYears }] = useCategoryContext();
@@ -22,7 +22,7 @@ const YearFilter: Component = () => {
             setSearchParams({year: year});
             setYearFilter(year);
         }
-    }
+    };
 
     const toKvp = (allYears: number[]) => !allYears ? [] : [
         { id: allYearFilterId, name: 'All Years' },
@@ -41,6 +41,6 @@ const YearFilter: Component = () => {
             selectedValue={filter.yearFilter}
             onChange={onChangeFilter} />
     );
-}
+};
 
 export default YearFilter;

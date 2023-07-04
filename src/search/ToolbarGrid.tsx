@@ -1,4 +1,5 @@
 import { Component } from 'solid-js';
+
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 
 const GridToolbar: Component = () => {
@@ -12,11 +13,11 @@ const GridToolbar: Component = () => {
 
     const onToggleThumbnailSize = () => {
         console.log("thumbnail");
-    }
+    };
 
     const onToggleMargins = () => {
         console.log("margins");
-    }
+    };
 
     return (
         <>

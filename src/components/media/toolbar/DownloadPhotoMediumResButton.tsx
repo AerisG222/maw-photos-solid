@@ -14,6 +14,6 @@ const DownloadPhotoMediumResButton: Component = () => {
             iconClass='i-ic-round-image'
             textClassList={{'text-lg': true}} />
     );
-}
+};
 
 export default DownloadPhotoMediumResButton;

@@ -21,7 +21,7 @@ export const defaultListThumbnailSize: ThumbnailSizeIdType = 'verySmall';
 
 export const getThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
     return allThumbnailSizes.find(x => equalsIgnoreCase(x.id, thumbnailSize)) ?? allThumbnailClasses[0];
-}
+};
 
 export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
     var idx = allThumbnailSizes.findIndex(x => equalsIgnoreCase(x.id, thumbnailSize));
@@ -31,7 +31,7 @@ export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
     }
 
     return allThumbnailSizes[idx + 1];
-}
+};
 
 export const getThumbnailClass = (thumbnailSize: ThumbnailSizeIdType) => allThumbnailSizes
         .filter(x => equalsIgnoreCase(x.id, thumbnailSize))

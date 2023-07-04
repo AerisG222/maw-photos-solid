@@ -14,6 +14,6 @@ export const CommentServiceProvider: ParentComponent<Props> = (props) => {
             {props.children}
         </CommentServiceContext.Provider>
     );
-}
+};
 
 export const useCommentServiceContext = () => useContext(CommentServiceContext);

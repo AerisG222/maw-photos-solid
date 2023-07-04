@@ -1,9 +1,9 @@
 import { Component, For } from 'solid-js';
 
 import { Media } from '../../models/Media';
+import { categoriesPhotosGrid } from '../../categories-photos/_routes';
 
 import PhotoLink from '../photos/PhotoLink';
-import { categoriesPhotosGrid } from '../../categories-photos/_routes';
 
 type Props = {
     items: Media[];
@@ -31,7 +31,7 @@ const MediaGrid: Component<Props> = (props) => {
                 const _exhaustiveCheck: never = media;
                 return _exhaustiveCheck;
         }
-    }
+    };
 
     return (
         <div class="flex flex-gap-2 flex-wrap place-content-center mb-4">

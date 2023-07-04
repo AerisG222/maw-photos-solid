@@ -7,7 +7,7 @@ export const settingsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     component: lazy(() => import('./SettingsRedirect'))
-}
+};
 
 export const settingsApplication: AppRouteDefinition = {
     icon: "i-ic-round-home",
@@ -15,7 +15,7 @@ export const settingsApplication: AppRouteDefinition = {
     path: '/application',
     absolutePath: `${basePath}/application`,
     component: lazy(() => import('./ViewApplication'))
-}
+};
 
 export const settingsCategories: AppRouteDefinition = {
     icon: "i-ic-round-collections",
@@ -23,7 +23,7 @@ export const settingsCategories: AppRouteDefinition = {
     path: '/categories',
     absolutePath: `${basePath}/categories`,
     component: lazy(() => import('./ViewCategories'))
-}
+};
 
 export const settingsPhotos: AppRouteDefinition = {
     icon: "i-ic-round-image",
@@ -31,7 +31,7 @@ export const settingsPhotos: AppRouteDefinition = {
     path: '/photos',
     absolutePath: `${basePath}/photos`,
     component: lazy(() => import('./ViewPhotos'))
-}
+};
 
 export const settingsVideos: AppRouteDefinition = {
     icon: "i-ic-round-videocam",
@@ -39,7 +39,7 @@ export const settingsVideos: AppRouteDefinition = {
     path: '/videos',
     absolutePath: `${basePath}/videos`,
     component: lazy(() => import('./ViewVideos'))
-}
+};
 
 export const settingsSearch: AppRouteDefinition = {
     icon: "i-ic-round-search",
@@ -47,7 +47,7 @@ export const settingsSearch: AppRouteDefinition = {
     path: '/search',
     absolutePath: `${basePath}/search`,
     component: lazy(() => import('./ViewSearch'))
-}
+};
 
 export const settingsRandom: AppRouteDefinition = {
     icon: "i-ic-round-shuffle",
@@ -55,7 +55,7 @@ export const settingsRandom: AppRouteDefinition = {
     path: '/random',
     absolutePath: `${basePath}/random`,
     component: lazy(() => import('./ViewRandom'))
-}
+};
 
 export const settings: AppRouteDefinition = {
     icon: "i-ic-baseline-settings",
@@ -72,4 +72,4 @@ export const settings: AppRouteDefinition = {
         settingsSearch,
         settingsRandom
     ]
-}
+};

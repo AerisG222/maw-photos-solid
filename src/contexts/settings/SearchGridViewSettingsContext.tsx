@@ -37,14 +37,14 @@ export const SearchGridSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <SearchGridViewSettingsContext.Provider value={[state, { setMargin, setShowTitles, setShowYears, setThumbnailSize }]}>
             {props.children}
         </SearchGridViewSettingsContext.Provider>
     );
-}
+};
 
 export const useSearchGridViewSettingsContext = () => useContext(SearchGridViewSettingsContext);
 

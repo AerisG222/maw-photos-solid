@@ -4,11 +4,11 @@ import ToolbarButton from '../components/toolbar/ToolbarButton';
 const ListToolbar: Component = () => {
     const onToggleThumbnailSize = () => {
         console.log("thumbnail");
-    }
+    };
 
     const onToggleMargins = () => {
         console.log("margins");
-    }
+    };
 
     return (
         <>

@@ -8,7 +8,7 @@ const VideoToolbar: Component = () => {
 
     const selectMode = (mode: string) => {
         setSearchParams({mode});
-    }
+    };
 
     return (
         <>
@@ -32,6 +32,6 @@ const VideoToolbar: Component = () => {
             />
         </>
     );
-}
+};
 
 export default VideoToolbar;

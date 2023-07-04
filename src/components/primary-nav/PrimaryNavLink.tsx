@@ -2,9 +2,9 @@ import { Component } from "solid-js";
 import { A } from "@solidjs/router";
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 
-interface Props {
+type Props = {
     route: AppRouteDefinition;
-}
+};
 
 const PrimaryNavLink: Component<Props> = (props) => {
     return (

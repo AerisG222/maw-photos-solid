@@ -9,9 +9,9 @@ import { categoriesVideosDetail } from '../../categories-videos/_routes';
 import PhotoLink from '../photos/PhotoLink';
 import VideoLink from '../videos/VideoLink';
 
-export type Props = {
+type Props = {
     thumbnailSize: ThumbnailSizeIdType;
-}
+};
 
 const MediaList: Component<Props> = (props) => {
     const [mediaList] = useMediaListContext();
@@ -39,7 +39,7 @@ const MediaList: Component<Props> = (props) => {
                 const _exhaustiveCheck: never = media;
                 return _exhaustiveCheck;
         }
-    }
+    };
 
     const scroll = (el: HTMLAnchorElement, media: Media) => {
         if(mediaList.activeItem?.id === media.id) {
@@ -57,7 +57,7 @@ const MediaList: Component<Props> = (props) => {
                 parent.scrollTo({ top: 0, left: newLeft, behavior: 'smooth' });
             }
         }
-    }
+    };
 
     return (
         <div class="flex flex-nowrap overflow-x-auto">
@@ -66,6 +66,6 @@ const MediaList: Component<Props> = (props) => {
             }</For>
         </div>
     );
-}
+};
 
 export default MediaList;

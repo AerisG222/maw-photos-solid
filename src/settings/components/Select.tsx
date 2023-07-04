@@ -1,11 +1,11 @@
 import { Component, For, createEffect } from 'solid-js'
 import { KeyValuePair } from '../../models/KeyValuePair';
 
-export type Props<T> = {
-    title: string,
-    itemArray: KeyValuePair<T>[],
-    selectedValue: T,
-    onChange: (value: string) => void
+type Props<T> = {
+    title: string;
+    itemArray: KeyValuePair<T>[];
+    selectedValue: T;
+    onChange: (value: string) => void;
 };
 
 const Select: Component<Props<string|number>> = (props) => {
@@ -22,7 +22,7 @@ const Select: Component<Props<string|number>> = (props) => {
                 </select>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Select;

@@ -14,6 +14,6 @@ export const RatingServiceProvider: ParentComponent<Props> = (props) => {
             {props.children}
         </RatingServiceContext.Provider>
     );
-}
+};
 
 export const useRatingServiceContext = () => useContext(RatingServiceContext);

@@ -14,6 +14,6 @@ export const CategoryTeaserServiceProvider: ParentComponent<Props> = (props) => 
             {props.children}
         </CategoryTeaserServiceContext.Provider>
     );
-}
+};
 
 export const useCategoryTeaserServiceContext = () => useContext(CategoryTeaserServiceContext);

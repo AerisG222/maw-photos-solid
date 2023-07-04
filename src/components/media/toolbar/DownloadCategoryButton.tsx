@@ -14,7 +14,7 @@ const DownloadCategoryButton: Component = () => {
         }
 
         return '';
-    }
+    };
 
     return (
         <ToolbarExternalLink

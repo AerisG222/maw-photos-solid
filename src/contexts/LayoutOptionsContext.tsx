@@ -35,6 +35,6 @@ export const LayoutOptionsProvider: ParentComponent = (props) => {
             {props.children}
         </LayoutOptionsContext.Provider>
     );
-}
+};
 
 export const useLayoutOptionsContext = () => useContext(LayoutOptionsContext);

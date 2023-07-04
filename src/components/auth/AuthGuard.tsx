@@ -16,7 +16,7 @@ const AuthGuard: ParentComponent = (props) => {
         if(!isLoggedIn()) {
             navigate("/login", { replace: true})
         }
-    })
+    });
 
     return (
         <>

@@ -49,7 +49,7 @@ export const VideoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<VideoInfoPanelSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <VideoInfoPanelSettingsContext.Provider value={[state, {
@@ -65,7 +65,7 @@ export const VideoInfoPanelSettingsProvider: ParentComponent = (props) => {
             {props.children}
         </VideoInfoPanelSettingsContext.Provider>
     );
-}
+};
 
 export const useVideoInfoPanelSettingsContext = () => useContext(VideoInfoPanelSettingsContext);
 

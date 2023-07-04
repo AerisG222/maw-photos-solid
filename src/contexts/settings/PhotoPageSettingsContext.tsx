@@ -30,14 +30,14 @@ export const PhotoPageSettingsProvider: ParentComponent = (props) => {
     const updateState = (update: Partial<PhotoPageSettingsState>) => {
         setState(update);
         saveState(state);
-    }
+    };
 
     return (
         <PhotoPageSettingsContext.Provider value={[state, { setViewMode, setSlideshowDisplayDurationSeconds }]}>
             {props.children}
         </PhotoPageSettingsContext.Provider>
     );
-}
+};
 
 export const usePhotoPageSettingsContext = () => useContext(PhotoPageSettingsContext);
 

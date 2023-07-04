@@ -21,7 +21,7 @@ const MainVideo: Component<Props> = (props) => {
             height: `${video.videoScaledHeight}px`,
             width: `${video.videoScaledWidth}px`
         };
-    }
+    };
 
     const getVideoUrl = (video: Video, videoSize: VideoSizeIdType) =>
         videoSize === 'large' ?
@@ -43,6 +43,6 @@ const MainVideo: Component<Props> = (props) => {
             <code>video</code> element.
         </video>
     );
-}
+};
 
 export default MainVideo;

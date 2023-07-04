@@ -13,6 +13,6 @@ const DownloadPhotoHighUntouchedButton: Component = () => {
             url={photoListState.activeItem?.imagePrtUrl}
             iconClass='i-ic-round-image' />
     );
-}
+};
 
 export default DownloadPhotoHighUntouchedButton;

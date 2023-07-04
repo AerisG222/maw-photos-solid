@@ -132,4 +132,4 @@ export const getFormattedExif = (exif: ExifDetail, category: string) => {
     });
 
     return data;
-}
+};

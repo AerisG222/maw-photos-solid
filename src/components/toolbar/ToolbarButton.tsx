@@ -1,7 +1,7 @@
 import { createShortcut } from '@solid-primitives/keyboard';
 import { Component } from "solid-js";
 
-interface Props {
+type Props = {
     icon: string;
     name: string;
     active?: boolean;
@@ -9,14 +9,14 @@ interface Props {
     disabled?: boolean;
     shortcutKeys?: string[];
     clickHandler: () => void;
-}
+};
 
 const ToolbarButton: Component<Props> = (props) => {
     const handleClick = (data: any, evt: Event) => {
         evt.preventDefault();
 
         props.clickHandler();
-    }
+    };
 
     if(props.shortcutKeys) {
         createShortcut(props.shortcutKeys, () => { props.clickHandler() });

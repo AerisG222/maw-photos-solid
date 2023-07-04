@@ -10,6 +10,6 @@ const CategoryFilterBar: Component = () => {
             <CategoryTypeFilter />
         </div>
     );
-}
+};
 
 export default CategoryFilterBar;

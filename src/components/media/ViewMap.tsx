@@ -88,7 +88,7 @@ const ViewMap: Component = () => {
             const marker = markers[mediaList.activeItem.id];
             mapEvent.trigger(marker, 'click');
         }
-    }
+    };
 
     onMount(() => {
         initMap();
