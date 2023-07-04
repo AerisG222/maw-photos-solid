@@ -1,7 +1,5 @@
-import { Component, Show, createEffect, onCleanup } from "solid-js";
-import { useLocation, useNavigate, useParams } from '@solidjs/router';
+import { Component, Show, onCleanup } from "solid-js";
 
-import { categoriesPhotosDetail, getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { usePhotoDetailViewSettingsContext } from '../../contexts/settings/PhotoDetailViewSettingsContext';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
@@ -14,40 +12,12 @@ import Sidebar from './detail/Sidebar';
 import Layout from '../layout/Layout';
 import MediaList from './MediaList';
 import MediaMainItem from './MediaMainItem';
-import { categoriesVideosDetail, getVideoCategoryRoutePath } from '../../categories-videos/_routes';
+import MediaSelectedGuard from './MediaSelectedGuard';
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
-    const navigate = useNavigate();
-    const params = useParams();
-    const location = useLocation();
     const [settings] = usePhotoDetailViewSettingsContext();
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
-
-    createEffect(() => {
-        if(location.pathname.indexOf('photos') >= 0) {
-            setActiveRouteDefinition(categoriesPhotosDetail);
-
-            if(!params.photoId) {
-                const m = mediaList.items[0];
-
-                if(m) {
-                    navigate(getPhotoCategoryRoutePath(categoriesPhotosDetail, m.categoryId, m.id));
-                }
-            }
-        }
-        if(location.pathname.indexOf('videos') >= 0) {
-            setActiveRouteDefinition(categoriesVideosDetail);
-
-            if(!params.videoId) {
-                const m = mediaList.items[0];
-
-                if(m) {
-                    navigate(getVideoCategoryRoutePath(categoriesVideosDetail, m.categoryId, m.id));
-                }
-            }
-        }
-    });
+    const [mediaList] = useMediaListContext();
 
     const toolbar = (
         <Toolbar>
@@ -75,6 +45,7 @@ const ViewDetail: Component = () => {
     };
 
     return (
+        <MediaSelectedGuard>
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
             <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
                 <Show when={settings.showBreadcrumbs} fallback={<div />}>
@@ -92,6 +63,7 @@ const ViewDetail: Component = () => {
                 </Show>
             </div>
         </Layout>
+        </MediaSelectedGuard>
     );
 };
 
