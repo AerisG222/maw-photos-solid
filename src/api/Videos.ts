@@ -1,4 +1,5 @@
 import { ApiCollection } from './models/ApiCollection';
+import { Comment } from './models/Comment';
 import { GpsCoordinate } from './models/GpsCoordinate';
 import { GpsDetail } from './models/GpsDetail';
 import { Rating } from './models/Rating';
@@ -10,8 +11,15 @@ export const getRating = (videoId: number) =>
 export const rateVideo = (videoId: number, rating: number) =>
     patchMawApi(`videos/${videoId}/rating`, { videoId, rating });
 
-export const getComments = (videoId: number) =>
-    queryMawApi<ApiCollection<Comment>>(`videos/${videoId}/comments`);
+export const getComments = async (videoId: number) => {
+    const comments = await queryMawApi<ApiCollection<Comment>>(`videos/${videoId}/comments`);
+
+    for(let c of comments.items) {
+        c.entryDate = c.entryDate ? new Date(c.entryDate) : null
+    }
+
+    return comments;
+}
 
 export const addComment = (videoId: number, comment: string) =>
     postMawApi(`videos/${videoId}/comments`, { comment });
