@@ -2,7 +2,11 @@ import { KeyValuePair } from './KeyValuePair';
 import { equalsIgnoreCase } from './utils/StringUtils';
 
 export type ThumbnailSizeIdType = string;
-export type ThumbnailSize = KeyValuePair<ThumbnailSizeIdType> & { klass: any };
+export type ThumbnailSize = KeyValuePair<ThumbnailSizeIdType> & {
+    width: number,
+    height: number,
+    klass: {}
+};
 
 export const allThumbnailSizes: ThumbnailSize[] = [
     { id: "default",   name: 'Default',    width: 160, height: 120, klass: { 'w-[160px]': true, 'h-[120px]': true } },
