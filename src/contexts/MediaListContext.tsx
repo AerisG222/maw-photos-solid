@@ -159,12 +159,12 @@ export const MediaListProvider: ParentComponent = (props) => {
     return (
         <MediaListContext.Provider value={[state, {
             setActiveRouteDefinition,
-            setItems: setItems,
-            setActiveItem: setActiveItem,
-            activeItemIsFirst: activeItemIsFirst,
-            activeItemIsLast: activeItemIsLast,
-            getNextItem: getNextItem,
-            getPreviousItem: getPreviousItem,
+            setItems,
+            setActiveItem,
+            activeItemIsFirst,
+            activeItemIsLast,
+            getNextItem,
+            getPreviousItem,
             setGpsOverride,
             moveFirst,
             moveNext,
