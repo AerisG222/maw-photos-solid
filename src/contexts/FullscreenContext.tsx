@@ -1,7 +1,13 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { defaultFullscreenState, FullscreenState } from '../models/FullscreenState';
+export type FullscreenState = {
+    readonly isFullscreen: boolean;
+};
+
+export const defaultFullscreenState: FullscreenState = {
+    isFullscreen: false
+};
 
 export type FullscreenContextValue = [
     state: FullscreenState,

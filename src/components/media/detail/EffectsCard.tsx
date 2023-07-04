@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { defaultPhotoEffects } from '../../../models/PhotoEffects';
+import { defaultPhotoEffects } from '../../../contexts/PhotoEffectsContext';
 import { usePhotoEffectsContext } from '../../../contexts/PhotoEffectsContext';
 
 import EffectsResetButton from './EffectsResetButton';
