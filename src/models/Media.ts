@@ -1,5 +1,9 @@
+export const MediaTypePhoto = "photo";
+export const MediaTypeVideo = "video";
+export type MediaTypes = typeof MediaTypePhoto | typeof MediaTypeVideo;
+
 export type Photo = {
-    kind: "photo";
+    kind: typeof MediaTypePhoto;
     id: number;
     categoryId: number;
     createDate: Date;
@@ -18,7 +22,7 @@ export type Photo = {
 };
 
 export type Video = {
-    kind: "video";
+    kind: typeof MediaTypeVideo;
     id: number;
     categoryId: number;
     createDate: Date;

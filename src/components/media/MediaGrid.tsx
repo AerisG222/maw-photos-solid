@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 
-import { Media } from '../../models/Media';
+import { Media, MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
 import { categoriesPhotosGrid } from '../../categories-photos/_routes';
 
 import PhotoLink from '../photos/PhotoLink';
@@ -17,14 +17,14 @@ const MediaGrid: Component<Props> = (props) => {
     //   3. ts will error if any new types are added in future
     const getGridItem = (media: Media) => {
         switch (media.kind) {
-            case 'photo':
+            case MediaTypePhoto:
                 return <PhotoLink
                     photo={media}
                     rounded={true}
                     isActiveItem={false}  // no need to show highlight state in grid view
                     route={categoriesPhotosGrid}
                     thumbnailSize={props.thumbnailSize} />;
-            case 'video':
+            case MediaTypeVideo:
                 return <div>video</div>
             default:
                 // eslint-disable-next-line no-case-declarations

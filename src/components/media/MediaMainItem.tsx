@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { Media } from '../../models/Media';
+import { Media, MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
 
 import MainPhoto from '../photos/MainPhoto';
 import MainVideo from '../videos/MainVideo';
@@ -21,9 +21,9 @@ const MediaMainItem: Component<Props> = (props) => {
         }
 
         switch (props.media.kind) {
-            case 'photo':
+            case MediaTypePhoto:
                 return <MainPhoto photo={props.media} maxHeightStyle={props.maxHeightStyle} />;
-            case 'video':
+            case MediaTypeVideo:
                 return <MainVideo video={props.media} videoSize={'large'} />
             default:
                 // eslint-disable-next-line no-case-declarations

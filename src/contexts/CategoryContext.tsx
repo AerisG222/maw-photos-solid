@@ -7,6 +7,7 @@ import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 import { buildStatsData } from '../models/utils/ChartUtils';
 import { Photo } from '../models/Photo';
 import { Video } from '../models/Video';
+import { MediaTypePhoto, MediaTypeVideo } from '../models/Media';
 
 export type CategoryState = {
     readonly photoCategories: PhotoCategory[];
@@ -175,7 +176,7 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     // todo - trying to update the teaser for the active category is not showing the updated teaser in the category teaser chooser
     const updateTeaser = (photoOrVideo: Photo | Video) => {
-        if(state.activeCategory.type === 'photo') {
+        if(state.activeCategory.type === MediaTypePhoto) {
             setState(
                 'photoCategories',
                 cat => cat.id === state.activeCategory.id,
@@ -184,7 +185,7 @@ export const CategoryProvider: ParentComponent = (props) => {
             );
         }
 
-        if(state.activeCategory.type === 'video') {
+        if(state.activeCategory.type === MediaTypeVideo) {
             setState(
                 'videoCategories',
                 cat => cat.id === state.activeCategory.id,

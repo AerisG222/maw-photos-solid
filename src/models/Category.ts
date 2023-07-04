@@ -1,6 +1,8 @@
+import { MediaTypes } from './Media';
+
 export type Category = {
     id: number;
-    type: 'photo' | 'video';
+    type: MediaTypes;
     name: string;
     year: number;
     createDate: Date;

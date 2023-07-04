@@ -2,6 +2,7 @@ import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../../contexts/CategoryContext';
 import { PhotoCategory } from '../../../models/Category';
+import { MediaTypePhoto } from '../../../models/Media';
 
 import ToolbarExternalLink from '../../../components/toolbar/ToolbarExternalLink';
 
@@ -9,7 +10,7 @@ const DownloadCategoryButton: Component = () => {
     const [categoryState] = useCategoryContext();
 
     const getLink = () => {
-        if(categoryState.activeCategory && categoryState.activeCategory.type === 'photo'){
+        if(categoryState.activeCategory && categoryState.activeCategory.type === MediaTypePhoto){
             return (categoryState.activeCategory as PhotoCategory).downloadLink;
         }
 
