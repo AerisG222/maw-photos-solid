@@ -13,7 +13,7 @@
     "devDependencies": {
         "@iconify-json/ic": "^1.1.13",
         "@iconify-json/mdi": "^1.1.52",
-        "@solidjs/testing-library": "^0.8.3",
+        "@solidjs/testing-library": "^0.8.4",
         "@types/google.maps": "^3.53.4",
         "@typescript-eslint/parser": "^5.61.0",
         "@unocss/preset-icons": "^0.53.4",
