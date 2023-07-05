@@ -13,12 +13,54 @@ export const categoriesVideosRedirect: AppRouteDefinition = {
     component: lazy(() => import('./VideoCategoriesRedirect'))
 };
 
+export const categoriesVideosGrid: AppRouteDefinition = {
+    icon: "i-ic-outline-apps",
+    name: "Grid View",
+    tooltip: "Grid View (G)",
+    shortcutKeys: ['g'],
+    path: "/grid/:videoId?",
+    absolutePath: `${basePath}/grid/:videoId?`,
+    component: lazy(() => import('../components/media/ViewGrid'))
+};
+
 export const categoriesVideosDetail: AppRouteDefinition = {
     icon: "i-ic-round-dashboard",
     name: "Detail View",
+    tooltip: "Detail View (W)",
+    shortcutKeys: ['w'],
     path: '/detail/:videoId?',
     absolutePath: `${basePath}/detail/:videoId?`,
     component: lazy(() => import('../components/media/ViewDetail'))
+};
+
+export const categoriesVideosFullscreen: AppRouteDefinition = {
+    icon: "i-ic-round-fullscreen",
+    name: "Fullscreen View",
+    tooltip: "Fullscreen View (F)",
+    shortcutKeys: ['f'],
+    path: '/fullscreen/:videoId?',
+    absolutePath: `${basePath}/fullscreen/:videoId?`,
+    component: lazy(() => import('../components/media/ViewFullscreen'))
+};
+
+export const categoriesVideosMap: AppRouteDefinition = {
+    icon: "i-ic-round-map",
+    name: "Map View",
+    tooltip: "Map View (Z)",
+    shortcutKeys: ['z'],
+    path: '/map/:videoId?',
+    absolutePath: `${basePath}/map/:videoId?`,
+    component: lazy(() => import('../components/media/ViewMap'))
+};
+
+export const categoriesVideosBulkEdit: AppRouteDefinition = {
+    icon: "i-ic-round-collections",
+    name: "Bulk Edit View",
+    tooltip: "Bulk Edit View (B)",
+    shortcutKeys: ['b'],
+    path: '/bulk-edit',
+    absolutePath: `${basePath}/bulk-edit`,
+    component: lazy(() => import('../components/media/ViewBulkEdit'))
 };
 
 export const categoriesVideos: AppRouteDefinition = {
@@ -29,7 +71,11 @@ export const categoriesVideos: AppRouteDefinition = {
     component: lazy(() => import('./VideoCategories')),
     children: [
         categoriesVideosRedirect,
-        categoriesVideosDetail
+        categoriesVideosGrid,
+        categoriesVideosDetail,
+        categoriesVideosFullscreen,
+        categoriesVideosMap,
+        categoriesVideosBulkEdit
     ]
 };
 
@@ -43,25 +89,25 @@ export const getVideoCategoryRoutePath = (route: AppRouteDefinition, categoryId:
     buildPath(route, {categoryId: categoryId, videoId: videoId});
 
 const getRouteForViewMode = (mode: string): AppRouteDefinition => {
-    // if(equalsIgnoreCase('grid', mode)) {
-    //     return categoriesPhotosGrid;
-    // }
+    if(equalsIgnoreCase('grid', mode)) {
+        return categoriesVideosGrid;
+    }
 
     if(equalsIgnoreCase('detail', mode)) {
         return categoriesVideosDetail;
     }
 
-    // if(equalsIgnoreCase('fullscreen', mode)) {
-    //     return categoriesPhotosFullscreen;
-    // }
+    if(equalsIgnoreCase('fullscreen', mode)) {
+        return categoriesVideosFullscreen;
+    }
 
-    // if(equalsIgnoreCase('map', mode)) {
-    //     return categoriesPhotosMap;
-    // }
+    if(equalsIgnoreCase('map', mode)) {
+        return categoriesVideosMap;
+    }
 
-    // if(equalsIgnoreCase('bulkEdit', mode)) {
-    //     return categoriesPhotosBulkEdit;
-    // }
+    if(equalsIgnoreCase('bulkEdit', mode)) {
+        return categoriesVideosBulkEdit;
+    }
 
     return categoriesVideosDetail;
 };

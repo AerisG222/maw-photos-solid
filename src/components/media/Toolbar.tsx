@@ -4,12 +4,12 @@ import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFulls
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../../contexts/settings/PhotoPageSettingsContext';
+import { MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
+import { categoriesVideosBulkEdit, categoriesVideosDetail, categoriesVideosFullscreen, categoriesVideosGrid, categoriesVideosMap } from '../../categories-videos/_routes';
 
 import Divider from '../layout/Divider';
 import ToolbarLayout from '../toolbar/ToolbarLayout';
 import ToolbarLink from '../toolbar/ToolbarLink';
-import { MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
-import { categoriesVideosDetail } from '../../categories-videos/_routes';
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
@@ -40,7 +40,11 @@ const Toolbar: ParentComponent = (props) => {
                         <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getPhotoParams()} clickHandler={() => setViewMode("bulkEdit")}/>
                     </Match>
                     <Match when={categoryState.activeCategory.type === MediaTypeVideo}>
+                        <ToolbarLink route={categoriesVideosGrid}       routeParams={getVideoParams()} clickHandler={() => setViewMode("grid")}/>
                         <ToolbarLink route={categoriesVideosDetail}     routeParams={getVideoParams()} clickHandler={() => setViewMode("detail")}/>
+                        <ToolbarLink route={categoriesVideosFullscreen} routeParams={getVideoParams()} clickHandler={() => setViewMode("fullscreen")}/>
+                        <ToolbarLink route={categoriesVideosMap}        routeParams={getVideoParams()} clickHandler={() => setViewMode("map")}/>
+                        <ToolbarLink route={categoriesVideosBulkEdit}   routeParams={getVideoParams()} clickHandler={() => setViewMode("bulkEdit")}/>
                     </Match>
                 </Switch>
 
