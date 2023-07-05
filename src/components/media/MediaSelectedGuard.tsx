@@ -16,7 +16,7 @@ const MediaSelectedGuard: ParentComponent = (props) => {
         if(location.pathname.indexOf('photos') >= 0) {
             setActiveRouteDefinition(categoriesPhotosDetail);
 
-            if(!params.photoId) {
+            if(!params.id) {
                 const m = mediaList.items[0];
 
                 if(m) {
@@ -28,7 +28,7 @@ const MediaSelectedGuard: ParentComponent = (props) => {
         if(location.pathname.indexOf('videos') >= 0) {
             setActiveRouteDefinition(categoriesVideosDetail);
 
-            if(!params.videoId) {
+            if(!params.id) {
                 const m = mediaList.items[0];
 
                 if(m) {

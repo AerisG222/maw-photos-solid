@@ -104,7 +104,7 @@ const ViewMap: Component = () => {
         if(initialized()) {
             updateMap();
 
-            if(!params.photoId) {
+            if(!params.id) {
                 const p = mediaList.items.find(x => x.latitude && x.longitude);
 
                 if(p) {

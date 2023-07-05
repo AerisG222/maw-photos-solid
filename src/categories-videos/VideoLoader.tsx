@@ -6,7 +6,7 @@ import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     categoryId: number;
-    videoId: number | undefined;
+    id: number | undefined;
 };
 
 const VideoLoader: ParentComponent<Props> = (props) => {
@@ -27,7 +27,7 @@ const VideoLoader: ParentComponent<Props> = (props) => {
             }
         }
 
-        setActiveItem(props.videoId);
+        setActiveItem(props.id);
     });
 
     return (

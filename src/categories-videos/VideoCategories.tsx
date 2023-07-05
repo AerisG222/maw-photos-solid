@@ -20,7 +20,7 @@ const VideoCategories: Component = () => {
             <MediaListProvider>
             <VideoLoader
                 categoryId={parseInt(params.categoryId, 10)}
-                videoId={params.videoId ? parseInt(params.videoId, 10) : undefined}>
+                id={params.id ? parseInt(params.id, 10) : undefined}>
             <RatingServiceProvider svc={mediaService}>
             <CommentServiceProvider svc={mediaService}>
             <MetadataEditServiceProvider svc={mediaService}>

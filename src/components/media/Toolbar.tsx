@@ -20,12 +20,12 @@ const Toolbar: ParentComponent = (props) => {
 
     const getPhotoParams = () => ({
         categoryId: categoryState.activeCategory?.id,
-        photoId: mediaList.activeItem?.id,
+        id: mediaList.activeItem?.id,
     });
 
     const getVideoParams = () => ({
         categoryId: categoryState.activeCategory?.id,
-        videoId: mediaList.activeItem?.id,
+        id: mediaList.activeItem?.id,
     });
 
     return (

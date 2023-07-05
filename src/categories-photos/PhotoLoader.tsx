@@ -6,7 +6,7 @@ import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     categoryId: number;
-    photoId: number | undefined;
+    id: number | undefined;
 };
 
 const PhotoLoader: ParentComponent<Props> = (props) => {
@@ -27,7 +27,7 @@ const PhotoLoader: ParentComponent<Props> = (props) => {
             }
         }
 
-        setActivePhoto(props.photoId);
+        setActivePhoto(props.id);
     });
 
     return (

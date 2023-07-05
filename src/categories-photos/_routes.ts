@@ -18,8 +18,8 @@ export const categoriesPhotosGrid: AppRouteDefinition = {
     name: "Grid View",
     tooltip: "Grid View (G)",
     shortcutKeys: ['g'],
-    path: "/grid/:photoId?",
-    absolutePath: `${basePath}/grid/:photoId?`,
+    path: "/grid/:id?",
+    absolutePath: `${basePath}/grid/:id?`,
     component: lazy(() => import('../components/media/ViewGrid'))
 };
 
@@ -28,8 +28,8 @@ export const categoriesPhotosDetail: AppRouteDefinition = {
     name: "Detail View",
     tooltip: "Detail View (W)",
     shortcutKeys: ['w'],
-    path: '/detail/:photoId?',
-    absolutePath: `${basePath}/detail/:photoId?`,
+    path: '/detail/:id?',
+    absolutePath: `${basePath}/detail/:id?`,
     component: lazy(() => import('../components/media/ViewDetail'))
 };
 
@@ -38,8 +38,8 @@ export const categoriesPhotosFullscreen: AppRouteDefinition = {
     name: "Fullscreen View",
     tooltip: "Fullscreen View (F)",
     shortcutKeys: ['f'],
-    path: '/fullscreen/:photoId?',
-    absolutePath: `${basePath}/fullscreen/:photoId?`,
+    path: '/fullscreen/:id?',
+    absolutePath: `${basePath}/fullscreen/:id?`,
     component: lazy(() => import('../components/media/ViewFullscreen'))
 };
 
@@ -48,8 +48,8 @@ export const categoriesPhotosMap: AppRouteDefinition = {
     name: "Map View",
     tooltip: "Map View (Z)",
     shortcutKeys: ['z'],
-    path: '/map/:photoId?',
-    absolutePath: `${basePath}/map/:photoId?`,
+    path: '/map/:id?',
+    absolutePath: `${basePath}/map/:id?`,
     component: lazy(() => import('../components/media/ViewMap'))
 };
 
@@ -80,13 +80,13 @@ export const categoriesPhotos: AppRouteDefinition = {
 };
 
 export const getPhotoCategoryPath = (categoryId: number): string =>
-    buildPath(categoriesPhotos, {categoryId: categoryId});
+    buildPath(categoriesPhotos, {categoryId});
 
-export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number, photoId?: number): string =>
-    getPhotoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, photoId);
+export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number, id?: number): string =>
+    getPhotoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, id);
 
-export const getPhotoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, photoId?: number): string =>
-    buildPath(route, {categoryId: categoryId, photoId: photoId});
+export const getPhotoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, id?: number): string =>
+    buildPath(route, {categoryId, id});
 
 const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {

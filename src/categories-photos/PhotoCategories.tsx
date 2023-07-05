@@ -23,7 +23,7 @@ const PhotoCategories: Component = () => {
             <MediaListProvider>
             <PhotoLoader
                 categoryId={parseInt(params.categoryId, 10)}
-                photoId={params.photoId ? parseInt(params.photoId, 10) : undefined}>
+                id={params.id ? parseInt(params.id, 10) : undefined}>
             <SlideshowProvider>
             <PhotoEffectsProvider>
             <RatingServiceProvider svc={mediaService}>

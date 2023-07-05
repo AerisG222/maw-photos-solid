@@ -18,8 +18,8 @@ export const categoriesVideosGrid: AppRouteDefinition = {
     name: "Grid View",
     tooltip: "Grid View (G)",
     shortcutKeys: ['g'],
-    path: "/grid/:videoId?",
-    absolutePath: `${basePath}/grid/:videoId?`,
+    path: "/grid/:id?",
+    absolutePath: `${basePath}/grid/:id?`,
     component: lazy(() => import('../components/media/ViewGrid'))
 };
 
@@ -28,8 +28,8 @@ export const categoriesVideosDetail: AppRouteDefinition = {
     name: "Detail View",
     tooltip: "Detail View (W)",
     shortcutKeys: ['w'],
-    path: '/detail/:videoId?',
-    absolutePath: `${basePath}/detail/:videoId?`,
+    path: '/detail/:id?',
+    absolutePath: `${basePath}/detail/:id?`,
     component: lazy(() => import('../components/media/ViewDetail'))
 };
 
@@ -38,8 +38,8 @@ export const categoriesVideosFullscreen: AppRouteDefinition = {
     name: "Fullscreen View",
     tooltip: "Fullscreen View (F)",
     shortcutKeys: ['f'],
-    path: '/fullscreen/:videoId?',
-    absolutePath: `${basePath}/fullscreen/:videoId?`,
+    path: '/fullscreen/:id?',
+    absolutePath: `${basePath}/fullscreen/:id?`,
     component: lazy(() => import('../components/media/ViewFullscreen'))
 };
 
@@ -48,8 +48,8 @@ export const categoriesVideosMap: AppRouteDefinition = {
     name: "Map View",
     tooltip: "Map View (Z)",
     shortcutKeys: ['z'],
-    path: '/map/:videoId?',
-    absolutePath: `${basePath}/map/:videoId?`,
+    path: '/map/:id?',
+    absolutePath: `${basePath}/map/:id?`,
     component: lazy(() => import('../components/media/ViewMap'))
 };
 
@@ -80,13 +80,13 @@ export const categoriesVideos: AppRouteDefinition = {
 };
 
 export const getVideoCategoryPath = (categoryId: number): string =>
-    buildPath(categoriesVideos, {categoryId: categoryId});
+    buildPath(categoriesVideos, {categoryId});
 
-export const getVideoCategoryViewPath = (viewMode: string, categoryId: number, videoId?: number): string =>
-    getVideoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, videoId);
+export const getVideoCategoryViewPath = (viewMode: string, categoryId: number, id?: number): string =>
+    getVideoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, id);
 
-export const getVideoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, videoId?: number): string =>
-    buildPath(route, {categoryId: categoryId, videoId: videoId});
+export const getVideoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, id?: number): string =>
+    buildPath(route, {categoryId, id});
 
 const getRouteForViewMode = (mode: string): AppRouteDefinition => {
     if(equalsIgnoreCase('grid', mode)) {
