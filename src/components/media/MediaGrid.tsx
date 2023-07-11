@@ -4,6 +4,8 @@ import { Media, MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
 import { categoriesPhotosGrid } from '../../categories-photos/_routes';
 
 import PhotoLink from '../photos/PhotoLink';
+import VideoLink from '../videos/VideoLink';
+import { categoriesVideosGrid } from '../../categories-videos/_routes';
 
 type Props = {
     items: Media[];
@@ -25,7 +27,12 @@ const MediaGrid: Component<Props> = (props) => {
                     route={categoriesPhotosGrid}
                     thumbnailSize={props.thumbnailSize} />;
             case MediaTypeVideo:
-                return <div>video</div>
+                return <VideoLink
+                video={media}
+                rounded={true}
+                isActiveItem={false}  // no need to show highlight state in grid view
+                route={categoriesVideosGrid}
+                thumbnailSize={props.thumbnailSize} />;
             default:
                 // eslint-disable-next-line no-case-declarations
                 const _exhaustiveCheck: never = media;
