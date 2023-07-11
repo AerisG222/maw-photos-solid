@@ -30,7 +30,10 @@ const ViewGrid: Component = () => {
         <Layout margin={settings.margin} toolbar={toolbar}>
             <Show when={mediaList.activeItem}>
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
-                    <A href={getPhotoCategoryRoutePath(categoriesPhotosGrid, mediaList.activeItem.categoryId, undefined)} onClick={stop}>
+                    <A
+                        class="flex h-100%"
+                        href={getPhotoCategoryRoutePath(categoriesPhotosGrid, mediaList.activeItem.categoryId, undefined)}
+                        onClick={stop}>
                         <MediaMainItem media={mediaList.activeItem} />
                     </A>
                 </div>

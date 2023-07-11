@@ -30,7 +30,7 @@ const MainVideo: Component<Props> = (props) => {
 
     return (
         <video
-            class="center-block"
+            class="center-block m-auto"
             autoplay={false}
             style={getVideoDimensions(props.video, props.videoSize)}
             controls
