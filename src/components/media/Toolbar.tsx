@@ -6,6 +6,7 @@ import { useMediaListContext } from '../../contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../../contexts/settings/PhotoPageSettingsContext';
 import { MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
 import { categoriesVideosBulkEdit, categoriesVideosDetail, categoriesVideosFullscreen, categoriesVideosGrid, categoriesVideosMap } from '../../categories-videos/_routes';
+import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap } from './_routes';
 
 import Divider from '../layout/Divider';
 import ToolbarLayout from '../toolbar/ToolbarLayout';
@@ -33,18 +34,18 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLayout>
                 <Switch>
                     <Match when={categoryState.activeCategory.type === MediaTypePhoto}>
-                        <ToolbarLink route={categoriesPhotosGrid}       routeParams={getPhotoParams()} clickHandler={() => setViewMode("grid")}/>
-                        <ToolbarLink route={categoriesPhotosDetail}     routeParams={getPhotoParams()} clickHandler={() => setViewMode("detail")}/>
-                        <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getPhotoParams()} clickHandler={() => setViewMode("fullscreen")}/>
-                        <ToolbarLink route={categoriesPhotosMap}        routeParams={getPhotoParams()} clickHandler={() => setViewMode("map")}/>
-                        <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getPhotoParams()} clickHandler={() => setViewMode("bulkEdit")}/>
+                        <ToolbarLink route={categoriesPhotosGrid}       routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+                        <ToolbarLink route={categoriesPhotosDetail}     routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                        <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+                        <ToolbarLink route={categoriesPhotosMap}        routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+                        <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
                     </Match>
                     <Match when={categoryState.activeCategory.type === MediaTypeVideo}>
-                        <ToolbarLink route={categoriesVideosGrid}       routeParams={getVideoParams()} clickHandler={() => setViewMode("grid")}/>
-                        <ToolbarLink route={categoriesVideosDetail}     routeParams={getVideoParams()} clickHandler={() => setViewMode("detail")}/>
-                        <ToolbarLink route={categoriesVideosFullscreen} routeParams={getVideoParams()} clickHandler={() => setViewMode("fullscreen")}/>
-                        <ToolbarLink route={categoriesVideosMap}        routeParams={getVideoParams()} clickHandler={() => setViewMode("map")}/>
-                        <ToolbarLink route={categoriesVideosBulkEdit}   routeParams={getVideoParams()} clickHandler={() => setViewMode("bulkEdit")}/>
+                        <ToolbarLink route={categoriesVideosGrid}       routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+                        <ToolbarLink route={categoriesVideosDetail}     routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                        <ToolbarLink route={categoriesVideosFullscreen} routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+                        <ToolbarLink route={categoriesVideosMap}        routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+                        <ToolbarLink route={categoriesVideosBulkEdit}   routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
                     </Match>
                 </Switch>
 
