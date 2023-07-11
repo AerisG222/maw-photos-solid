@@ -3,9 +3,16 @@ import { lazy } from 'solid-js'
 import { categories } from '../categories/_routes'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
 import { buildPath } from '../models/utils/RouteUtils'
-import { equalsIgnoreCase } from '../models/utils/StringUtils'
+import { buildMediaRoutes, MediaViewAll, MediaViewModeGrid, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeMap, MediaViewModeBulkEdit, MediaView } from '../components/media/_routes'
 
 const basePath = `${categories.absolutePath}/photos/:categoryId`;
+const mediaRoutes = buildMediaRoutes(basePath, MediaViewAll);
+
+export const categoriesPhotosGrid = mediaRoutes[MediaViewModeGrid];
+export const categoriesPhotosDetail = mediaRoutes[MediaViewModeDetail];
+export const categoriesPhotosFullscreen = mediaRoutes[MediaViewModeFullscreen];
+export const categoriesPhotosMap = mediaRoutes[MediaViewModeMap];
+export const categoriesPhotosBulkEdit = mediaRoutes[MediaViewModeBulkEdit];
 
 export const categoriesPhotosRedirect: AppRouteDefinition = {
     path: '/',
@@ -13,59 +20,7 @@ export const categoriesPhotosRedirect: AppRouteDefinition = {
     component: lazy(() => import('./PhotoCategoriesRedirect'))
 };
 
-export const categoriesPhotosGrid: AppRouteDefinition = {
-    icon: "i-ic-outline-apps",
-    name: "Grid View",
-    tooltip: "Grid View (G)",
-    shortcutKeys: ['g'],
-    path: "/grid/:id?",
-    absolutePath: `${basePath}/grid/:id?`,
-    component: lazy(() => import('../components/media/ViewGrid'))
-};
-
-export const categoriesPhotosDetail: AppRouteDefinition = {
-    icon: "i-ic-round-dashboard",
-    name: "Detail View",
-    tooltip: "Detail View (W)",
-    shortcutKeys: ['w'],
-    path: '/detail/:id?',
-    absolutePath: `${basePath}/detail/:id?`,
-    component: lazy(() => import('../components/media/ViewDetail'))
-};
-
-export const categoriesPhotosFullscreen: AppRouteDefinition = {
-    icon: "i-ic-round-fullscreen",
-    name: "Fullscreen View",
-    tooltip: "Fullscreen View (F)",
-    shortcutKeys: ['f'],
-    path: '/fullscreen/:id?',
-    absolutePath: `${basePath}/fullscreen/:id?`,
-    component: lazy(() => import('../components/media/ViewFullscreen'))
-};
-
-export const categoriesPhotosMap: AppRouteDefinition = {
-    icon: "i-ic-round-map",
-    name: "Map View",
-    tooltip: "Map View (Z)",
-    shortcutKeys: ['z'],
-    path: '/map/:id?',
-    absolutePath: `${basePath}/map/:id?`,
-    component: lazy(() => import('../components/media/ViewMap'))
-};
-
-export const categoriesPhotosBulkEdit: AppRouteDefinition = {
-    icon: "i-ic-round-collections",
-    name: "Bulk Edit View",
-    tooltip: "Bulk Edit View (B)",
-    shortcutKeys: ['b'],
-    path: '/bulk-edit',
-    absolutePath: `${basePath}/bulk-edit`,
-    component: lazy(() => import('../components/media/ViewBulkEdit'))
-};
-
 export const categoriesPhotos: AppRouteDefinition = {
-    icon: undefined as string,
-    name: undefined as string,
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./PhotoCategories')),
@@ -82,32 +37,10 @@ export const categoriesPhotos: AppRouteDefinition = {
 export const getPhotoCategoryPath = (categoryId: number): string =>
     buildPath(categoriesPhotos, {categoryId});
 
-export const getPhotoCategoryViewPath = (viewMode: string, categoryId: number, id?: number): string =>
+export const getPhotoCategoryViewPath = (viewMode: MediaView, categoryId: number, id?: number): string =>
     getPhotoCategoryRoutePath(getRouteForViewMode(viewMode), categoryId, id);
 
 export const getPhotoCategoryRoutePath = (route: AppRouteDefinition, categoryId: number, id?: number): string =>
     buildPath(route, {categoryId, id});
 
-const getRouteForViewMode = (mode: string): AppRouteDefinition => {
-    if(equalsIgnoreCase('grid', mode)) {
-        return categoriesPhotosGrid;
-    }
-
-    if(equalsIgnoreCase('detail', mode)) {
-        return categoriesPhotosDetail;
-    }
-
-    if(equalsIgnoreCase('fullscreen', mode)) {
-        return categoriesPhotosFullscreen;
-    }
-
-    if(equalsIgnoreCase('map', mode)) {
-        return categoriesPhotosMap;
-    }
-
-    if(equalsIgnoreCase('bulkEdit', mode)) {
-        return categoriesPhotosBulkEdit;
-    }
-
-    return categoriesPhotosGrid;
-};
+const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => mediaRoutes[mode];
