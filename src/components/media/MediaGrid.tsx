@@ -28,11 +28,11 @@ const MediaGrid: Component<Props> = (props) => {
                     thumbnailSize={props.thumbnailSize} />;
             case MediaTypeVideo:
                 return <VideoLink
-                video={media}
-                rounded={true}
-                isActiveItem={false}  // no need to show highlight state in grid view
-                route={categoriesVideosGrid}
-                thumbnailSize={props.thumbnailSize} />;
+                    video={media}
+                    rounded={true}
+                    isActiveItem={false}  // no need to show highlight state in grid view
+                    route={categoriesVideosGrid}
+                    thumbnailSize={props.thumbnailSize} />;
             default:
                 // eslint-disable-next-line no-case-declarations
                 const _exhaustiveCheck: never = media;
