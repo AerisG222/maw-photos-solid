@@ -5,7 +5,7 @@ import { PhotoCategory } from '../../models/Category';
 import { ICategoryService } from './ICategoryService';
 import { isLoggedIn } from '../../auth/auth';
 
-class PhotoCategoryService
+export class PhotoCategoryService
     implements ICategoryService
 {
     private getPhotoCats = (isLoggedIn: boolean) => isLoggedIn ? getPhotoCategories() : null;

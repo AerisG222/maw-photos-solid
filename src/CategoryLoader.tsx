@@ -1,28 +1,30 @@
 import { ParentComponent, children, createEffect } from 'solid-js';
 
 import { useCategoryContext } from './contexts/CategoryContext';
-import { photoCategoryService } from './_services/categories/PhotoCategoryService';
-import { videoCategoryService } from './_services/categories/VideoCategoryService';
+import { categoryTypes } from './models/CategoryTypes';
 
 const CategoryLoader: ParentComponent = (props) => {
     const [, { addCategories }] = useCategoryContext();
 
-    const photoCategories = photoCategoryService.load();
-    const videoCategories = videoCategoryService.load();
+    const resources = [];
+
+    for(const categoryTypeInfo in categoryTypes) {
+        resources.push({
+            res: categoryTypes[categoryTypeInfo].svc.load(),
+            processed: false
+        });
+    }
 
     const c = children(() => props.children);
 
     createEffect(() => {
-        if(photoCategories.state === "ready") {
-            addCategories(photoCategories() ?? []);
-        }
+        resources
+            .filter(r => r.res.state === "ready" && !r.processed)
+            .map(r => {
+                r.processed = true;
+                addCategories(r.res());
+            });
     });
-
-    createEffect(() => {
-        if(videoCategories.state === "ready") {
-            addCategories(videoCategories() ?? []);
-        }
-    })
 
     return (
         <>
