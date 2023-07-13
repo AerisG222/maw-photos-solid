@@ -2,40 +2,48 @@ import { createContext, createMemo, ParentComponent, useContext } from 'solid-js
 import { createStore } from "solid-js/store";
 
 import { Category, PhotoCategory, VideoCategory } from '../models/Category';
-import { CategoryTypeFilterIdType, getCategoryTypeFilter } from '../models/CategoryTypeFilter';
-import { YearFilterIdType, yearFilterPredicate } from '../models/YearFilter';
 import { buildStatsData } from '../models/utils/ChartUtils';
-import { Photo } from '../models/Photo';
-import { Video } from '../models/Video';
-import { MediaTypePhoto, MediaTypeVideo } from '../models/Media';
+import { CategoryType } from '../models/CategoryType';
+import { FilterFunction, SortFunction } from '../models/UtilityTypes';
 
 export type CategoryState = {
-    readonly photoCategories: PhotoCategory[];
-    readonly videoCategories: VideoCategory[];
-    readonly activeCategory: Category;
+    readonly categories: Category[];
+    readonly filters: FilterFunction[];
+    readonly sort?: SortFunction;
+    readonly activeCategory?: Category;
 };
 
 export const defaultCategoryState: CategoryState = {
-    photoCategories: [],
-    videoCategories: [],
+    categories: [],
+    filters: [],
+    sort: undefined,
     activeCategory: undefined
 };
 
 export type CategoryContextValue = [
     state: CategoryState,
     actions: {
-        setPhotoCategories: (photoCategories: PhotoCategory[]) => void;
-        setVideoCategories: (videooCategories: VideoCategory[]) => void;
+        clearCategories: () => void;
+        setCategories: (categories: Category[]) => void;
+        addCategories: (categories: Category[]) => void;
 
-        getAllCategories: () => Category[];
-        getPhotoCategoryYears: () => number[];
-        getVideoCategoryYears: () => number[];
+        clearFilters: () => void;
+        addFilter: (filter: FilterFunction) => void;
+        removeFilter: (name: string) => void;
+
+        clearSort: () => void;
+        setSort: (sort: SortFunction) => void;
+
         getAllYears: () => number[];
-        getCategories: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => Category[];
-        getYears: (year: YearFilterIdType, type: CategoryTypeFilterIdType) => number[];
+        getFilteredYears: () => number[];
+
+        getFilteredAndSortedCategories: () => Category[];
+        getFilteredCategoriesForYear: (year: number) => Category[];
+
         setActiveCategory: (category: Category) => void;
-        setActivePhotoCategory: (categoryId: number) => void;
-        setActiveVideoCategory: (categoryId: number) => void;
+        setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
+
+        // hmmm... move these to components?
         getPhotoCount: () => number;
         getPhotoFileSize: () => number;
         getVideoCount: () => number;
@@ -46,68 +54,113 @@ export type CategoryContextValue = [
         getPhotoStatsChartData: (valueFunc: (cat: PhotoCategory) => number) => any;
         getVideoStatsChartData: (valueFunc: (cat: VideoCategory) => number) => any;
         getCombinedStatsChartData: (valueFunc: (cat: Category) => number) => any;
-        updateTeaser: (photoOrVideo: Photo | Video) => void;
+
+        updateTeaser: (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => void;
     }
 ];
 
-const CategoryContext = createContext<CategoryContextValue>([
-    defaultCategoryState,
-    {
-        setPhotoCategories: () => undefined,
-        setVideoCategories: () => undefined,
-        getAllCategories: () => undefined,
-        getPhotoCategoryYears: () => undefined,
-        getVideoCategoryYears: () => undefined,
-        getAllYears: () => undefined,
-        getCategories: () => undefined,
-        getYears: () => undefined,
-        setActiveCategory: () => undefined,
-        setActivePhotoCategory: () => undefined,
-        setActiveVideoCategory: () => undefined,
-        getPhotoCount: () => undefined,
-        getPhotoFileSize: () => undefined,
-        getVideoCount: () => undefined,
-        getVideoFileSize: () => undefined,
-        getVideoDuration: () => undefined,
-        getCombinedCount: () => undefined,
-        getCombinedFileSize: () => undefined,
-        getPhotoStatsChartData: () => undefined,
-        getVideoStatsChartData: () => undefined,
-        getCombinedStatsChartData: () => undefined,
-        updateTeaser: () => undefined
-    }
-]);
+const CategoryContext = createContext<CategoryContextValue>();
 
 export const CategoryProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultCategoryState);
 
-    const setPhotoCategories = (photoCategories: PhotoCategory[]) => {
-        setState({ photoCategories: photoCategories });
+    const clearCategories = () => {
+        setState({ categories: [] });
     };
 
-    const setVideoCategories = (videoCategories: VideoCategory[]) => {
-        setState({ videoCategories: videoCategories });
-    }
+    const setCategories = (categories: Category[]) => {
+        setState({ categories });
+    };
 
-    const getAllCategories = createMemo(() => {
-        return [
-            ...(state.photoCategories),
-            ...(state.videoCategories)
-        ];
-    });
+    const addCategories = (categories: Category[]) => {
+        if(categories) {
+            setState(s => ({ categories: [...s.categories, ...categories] }));
+        }
+    };
 
-    const getPhotoCategoryYears = createMemo(() => [
-            ...new Set(state.photoCategories.map(c => c.year))
+    const clearFilters = () => {
+        setState({ filters: [] });
+    };
+
+    const addFilter = (filter: FilterFunction) => {
+        setState({ filters: [...state.filters, filter ]});
+    };
+
+    const removeFilter = (filterName: string) => {
+        const idx = state.filters.findIndex(f => f.name === filterName);
+
+        if(idx >= 0) {
+            setState(s => ({ filters: s.filters.toSpliced(idx, 1) }))
+        }
+    };
+
+    const clearSort = () => {
+        setState({ sort: undefined });
+    };
+
+    const setSort = (sort: SortFunction) => {
+        setState({ sort });
+    };
+
+    const getAllYears = createMemo(() => [
+            ...new Set(state.categories.map(c => c.year))
         ].sort()
         .reverse()
     );
 
+    const getFilteredCategories = createMemo(() => {
+        if(state.filters.length === 0) {
+            return state.categories;
+        }
+
+        const filtered = [];
+
+        for(const category of state.categories) {
+            let include = true;
+
+            for(const filter of state.filters) {
+                if(!filter.filterFn(category)) {
+                    include = false;
+                    break;
+                }
+            }
+
+            if(include) {
+                filtered.push(category);
+            }
+        }
+
+        return filtered;
+    });
+
+    const getFilteredAndSortedCategories = createMemo(() => {
+        const filteredCategories = getFilteredCategories();
+
+        return state.sort ?
+            filteredCategories.sort(state.sort.sortFn) :
+            filteredCategories;
+    });
+
+    const getFilteredYears = createMemo(() => [
+            ...new Set(getFilteredCategories().map(c => c.year))
+        ].sort()
+        .reverse()
+    );
+
+    const getFilteredCategoriesForYear = (year: number) => getFilteredAndSortedCategories().filter(c => c.year === year);
+
+    const getPhotoCategories = createMemo(() => state.categories.filter(c => c.type === "photo") as PhotoCategory[]);
+    const getVideoCategories = createMemo(() => state.categories.filter(c => c.type === "video") as VideoCategory[]);
+
+    const getPhotoCategoryYears = createMemo(() => [... new Set(getPhotoCategories().map(c => c.year))]);
+    const getVideoCategoryYears = createMemo(() => [... new Set(getVideoCategories().map(c => c.year))]);
+
     const getPhotoCount = createMemo(() =>
-        state.photoCategories.reduce<number>((prev, category) => prev + category.count, 0)
+        getPhotoCategories().reduce<number>((prev, category) => prev + category.count, 0)
     );
 
     const getVideoCount = createMemo(() =>
-        state.videoCategories.reduce<number>((prev, category) => prev + category.count, 0)
+        getVideoCategories().reduce<number>((prev, category) => prev + category.count, 0)
     );
 
     const getCombinedCount = createMemo(() =>
@@ -115,11 +168,11 @@ export const CategoryProvider: ParentComponent = (props) => {
     );
 
     const getPhotoFileSize = createMemo(() =>
-        state.photoCategories.reduce<number>((prev, category) => prev + category.totalSize, 0)
+        getPhotoCategories().reduce<number>((prev, category) => prev + category.totalSize, 0)
     );
 
     const getVideoFileSize = createMemo(() =>
-        state.videoCategories.reduce<number>((prev, category) => prev + category.totalSize, 0)
+        getVideoCategories().reduce<number>((prev, category) => prev + category.totalSize, 0)
     );
 
     const getCombinedFileSize = createMemo(() =>
@@ -127,87 +180,59 @@ export const CategoryProvider: ParentComponent = (props) => {
     );
 
     const getVideoDuration = createMemo(() =>
-        state.videoCategories.reduce<number>((prev, category) => prev + category.totalDuration, 0)
+        getVideoCategories().reduce<number>((prev, category) => prev + category.totalDuration, 0)
     );
-
-    const getVideoCategoryYears = createMemo(() => [
-            ...new Set(state.videoCategories.map(c => c.year))
-        ].sort()
-        .reverse()
-    );
-
-    const getAllYears = createMemo(() => [
-            ...new Set(getAllCategories().map(c => c.year))
-        ].sort()
-        .reverse()
-    );
-
-    // todo: can we memoize?
-    const getCategories = (year: YearFilterIdType, type: CategoryTypeFilterIdType) => getAllCategories()
-        .filter(c => getCategoryTypeFilter(type).filter(c) && yearFilterPredicate(c, year))
-        .sort(c => c.id)
-        .reverse();
-
-    const getYears = (year: YearFilterIdType, type: CategoryTypeFilterIdType) => [
-        ...new Set(getCategories(year, type)
-            .map(x => x.year)
-    )];
 
     const setActiveCategory = (category: Category) => {
         setState({ activeCategory: category })
     };
 
-    const setActivePhotoCategory = (categoryId: number) => {
-        const cat = state.photoCategories.find(x => x.id === categoryId);
+    const setActiveCategoryById = (categoryType: CategoryType, categoryId: number) => {
+        const cat = state.categories.find(c => c.type === categoryType && c.id === categoryId);
 
         setActiveCategory(cat);
     };
 
-    const setActiveVideoCategory = (categoryId: number) => setActiveCategory(state.videoCategories.find(x => x.id === categoryId));
-
     const getPhotoStatsChartData = (valueFunc: (cat: PhotoCategory) => number) =>
-        buildStatsData(getPhotoCategoryYears(), state.photoCategories, valueFunc);
+        buildStatsData(getPhotoCategoryYears(), getPhotoCategories(), valueFunc);
 
     const getVideoStatsChartData = (valueFunc: (cat: VideoCategory) => number) =>
-        buildStatsData(getVideoCategoryYears(), state.videoCategories, valueFunc);
+        buildStatsData(getVideoCategoryYears(), getVideoCategories(), valueFunc);
 
     const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) =>
-        buildStatsData(getAllYears(), getAllCategories(), valueFunc);
+        buildStatsData(getAllYears(), state.categories, valueFunc);
 
     // todo - trying to update the teaser for the active category is not showing the updated teaser in the category teaser chooser
-    const updateTeaser = (photoOrVideo: Photo | Video) => {
-        if(state.activeCategory.type === MediaTypePhoto) {
-            setState(
-                'photoCategories',
-                cat => cat.id === state.activeCategory.id,
-                "teaserImageUrl",
-                (photoOrVideo as Photo).imageXsSqUrl
-            );
-        }
-
-        if(state.activeCategory.type === MediaTypeVideo) {
-            setState(
-                'videoCategories',
-                cat => cat.id === state.activeCategory.id,
-                "teaserImageUrl",
-                (photoOrVideo as Video).thumbnailSqUrl
-            );
-        }
+    const updateTeaser = (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => {
+        setState(
+            "categories",
+            cat => cat.type === categoryType && cat.id === categoryId,
+            "teaserImageUrl",
+            teaserImageUrl
+        );
     };
 
     return (
         <CategoryContext.Provider value={[state, {
-            setPhotoCategories,
-            setVideoCategories,
-            getAllCategories,
-            getPhotoCategoryYears,
-            getVideoCategoryYears,
+            clearCategories,
+            setCategories,
+            addCategories,
+
+            clearFilters,
+            addFilter,
+            removeFilter,
+
+            clearSort,
+            setSort,
+
             getAllYears,
-            getCategories,
-            getYears,
+            getFilteredYears,
+            getFilteredAndSortedCategories,
+            getFilteredCategoriesForYear,
+
             setActiveCategory,
-            setActivePhotoCategory,
-            setActiveVideoCategory,
+            setActiveCategoryById,
+
             getPhotoCount,
             getPhotoFileSize,
             getVideoCount,
@@ -218,6 +243,7 @@ export const CategoryProvider: ParentComponent = (props) => {
             getPhotoStatsChartData,
             getVideoStatsChartData,
             getCombinedStatsChartData,
+
             updateTeaser
         }]}>
             {props.children}

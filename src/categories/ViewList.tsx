@@ -2,7 +2,6 @@ import { Component, For, Suspense } from "solid-js";
 
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
-import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryFilterSettingsContext';
 
 import Toolbar from "./Toolbar";
 import ListToolbar from './ToolbarList';
@@ -11,9 +10,9 @@ import YearList from './components/YearList';
 import Layout from '../components/layout/Layout';
 
 const ListView: Component = () => {
-    const [categoryState, { getCategories, getYears }] = useCategoryContext();
+    const [, { getFilteredYears, getFilteredCategoriesForYear }] = useCategoryContext();
     const [settings] = useCategoryListViewSettingsContext();
-    const [filter] = useCategoryFilterSettingsContext();
+
     const toolbar = (
         <Toolbar>
             <ListToolbar />
@@ -25,10 +24,8 @@ const ListView: Component = () => {
             <Suspense fallback={<p>Loading...</p>}>
                 <CategoryFilterBar />
 
-                <For each={getYears(filter.yearFilter, filter.typeFilter)}>{ year =>
-                    <div class="mb-4">
-                        <YearList year={year} categories={getCategories(year, filter.typeFilter)} />
-                    </div>
+                <For each={getFilteredYears()}>{ year =>
+                    <YearList year={year} categories={getFilteredCategoriesForYear(year)}/>
                 }</For>
             </Suspense>
         </Layout>

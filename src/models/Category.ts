@@ -1,8 +1,8 @@
-import { MediaTypes } from './Media';
+import { CategoryType } from './CategoryType';
 
 export type Category = {
     id: number;
-    type: MediaTypes;
+    type: CategoryType;
     name: string;
     year: number;
     createDate: Date;

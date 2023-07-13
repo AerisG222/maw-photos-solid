@@ -1,4 +1,4 @@
-import { Component, For, createEffect } from 'solid-js'
+import { Component, For } from 'solid-js'
 import { KeyValuePair } from '../../models/KeyValuePair';
 
 type Props<T> = {

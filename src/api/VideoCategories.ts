@@ -3,15 +3,16 @@ import { ApiCollection } from './models/ApiCollection';
 import { VideoCategory as ApiVideoCategory } from './models/VideoCategory';
 import { Video as ApiVideo } from './models/Video';
 import { VideoCategory } from '../models/Category';
-import { Video } from '../models/Media';
+import { MediaTypeVideo, Video } from '../models/Media';
 import { getVideoCategoryPath } from '../categories-videos/_routes';
+import { CategoryTypeVideo } from '../models/CategoryType';
 
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     const videoCategories = await internalGetVideoCategories();
 
     return videoCategories.items.map(x => ({
         id: x.id,
-        type: 'video',
+        type: CategoryTypeVideo,
         name: x.name,
         year: x.year,
         createDate: x.createDate,
@@ -30,7 +31,7 @@ export const getVideos = async (categoryId: number): Promise<Video[]> => {
     const videos = await internalGetVideos(categoryId);
 
     return videos.items.map(x => ({
-        kind: 'video',
+        kind: MediaTypeVideo,
         id: x.id,
         categoryId: x.categoryId,
         createDate: x.createDate,
