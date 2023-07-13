@@ -1,16 +1,15 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { CategoryTypeFilterIdType } from '../../models/CategoryTypeFilter';
 import { CategoryFilterSettingsState, defaultCategoryFilterSettings } from '../../models/settings';
 import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from './_storage';
-import { YearFilterIdType } from '../../models/YearFilter';
+import { CategoryType } from '../../models/CategoryType';
 
 export type CategoryFilterSettingsContextValue = [
     state: CategoryFilterSettingsState,
     actions: {
-        setTypeFilter: (typeFilter: CategoryTypeFilterIdType) => void;
-        setYearFilter: (yearFilter: YearFilterIdType) => void;
+        setTypeFilter: (typeFilter?: CategoryType) => void;
+        setYearFilter: (yearFilter?: number) => void;
         setMissingGpsFilter: (missingGpsFilter: boolean) => void;
     }
 ];
@@ -27,8 +26,8 @@ const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContex
 export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setTypeFilter = (typeFilter: CategoryTypeFilterIdType) => updateState({typeFilter: typeFilter});
-    const setYearFilter = (yearFilter: YearFilterIdType) => updateState({yearFilter: yearFilter});
+    const setTypeFilter = (typeFilter?: CategoryType) => updateState({typeFilter: typeFilter});
+    const setYearFilter = (yearFilter?: number) => updateState({yearFilter: yearFilter});
     const setMissingGpsFilter = (missingGpsFilter: boolean) => updateState({missingGpsFilter: missingGpsFilter});
 
     const updateState = (update: Partial<CategoryFilterSettingsState>) => {

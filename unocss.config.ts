@@ -8,7 +8,14 @@ import { allRouteIcons } from './src/routes';
 import { allThemes } from './src/models/Theme';
 import { allThumbnailClasses } from './src/models/ThumbnailSize';
 import { allMarginClasses } from './src/models/Margin';
-import { allCategoryTypeIcons } from './src/models/CategoryTypeFilter';
+
+// ideally this would be a query against categoryTypes, but due to the imports
+// in that file it can not be used, so we must use the list below to avoid the
+// dependencies there...
+const categoryTypeIcons = [
+    "i-ic-round-camera-alt",
+    "i-ic-round-videocam"
+];
 
 export default defineConfig<Theme>({
     presets: [
@@ -27,7 +34,7 @@ export default defineConfig<Theme>({
         ...allRouteIcons,
         ...allMarginClasses,
         ...allThumbnailClasses,
-        ...allCategoryTypeIcons
+        ...categoryTypeIcons
     ],
     shortcuts: [
         {

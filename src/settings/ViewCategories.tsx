@@ -4,10 +4,10 @@ import { useCategoryFilterSettingsContext } from '../contexts/settings/CategoryF
 import { useCategoryPageSettingsContext } from '../contexts/settings/CategoryPageSettingsContext';
 import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
 import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
-import { allCategoryTypeFilters } from '../models/CategoryTypeFilter';
 import { allCategoryViewModes } from '../models/CategoryViewMode';
 import { allMargins } from '../models/Margin';
 import { allThumbnailSizes } from '../models/ThumbnailSize';
+import { categoryTypesOptions } from '../models/CategoryTypes';
 
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
@@ -33,7 +33,7 @@ const ViewCategories: Component = () => {
         <Layout toolbar={<Toolbar />} title="Settings - Categories">
             <PanelContainer>
                 <Panel title="Category Page">
-                    <RadioGroup title="Type Filter" itemArray={allCategoryTypeFilters} groupName='pageTypeFilter' selectedValue={filterSettings.typeFilter} onChange={setTypeFilter} />
+                    <RadioGroup title="Type Filter" itemArray={categoryTypesOptions} groupName='pageTypeFilter' selectedValue={filterSettings.typeFilter} onChange={setTypeFilter} />
                     <RadioGroup title="View" itemArray={allCategoryViewModes} groupName="pageView" selectedValue={pageSettings.viewMode} onChange={setViewMode} />
                 </Panel>
 

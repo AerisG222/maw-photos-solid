@@ -2,6 +2,7 @@ import { ICategoryService } from '../_services/categories/ICategoryService';
 import { CategoryType } from './CategoryType';
 import { photoCategoryService } from '../_services/categories/PhotoCategoryService';
 import { videoCategoryService } from '../_services/categories/VideoCategoryService';
+import { KeyValuePair } from './KeyValuePair';
 
 type CategoryTypeInfo = {
     nameSingular: string;
@@ -11,6 +12,7 @@ type CategoryTypeInfo = {
     svc: ICategoryService;
 };
 
+// if you add categoryTypes, please be sure to safelist the icon in unocss.config.ts
 export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
     photo: {
         nameSingular: "Photo",
@@ -27,3 +29,8 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         svc: videoCategoryService
     }
 };
+
+export const categoryTypesOptions: KeyValuePair<string>[] = [
+    {id: 'all', name: 'All'},
+    ...Object.keys(categoryTypes).map(key => ({id: key, name: categoryTypes[key].namePlural}))
+];

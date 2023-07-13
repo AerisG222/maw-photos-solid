@@ -3,7 +3,6 @@ import { useSearchParams } from '@solidjs/router';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
-import { allYearFilterId } from '../../models/YearFilter';
 
 import Select from '../../settings/components/Select';
 import { Category } from '../../models/Category';
@@ -18,14 +17,16 @@ const YearFilter: Component = () => {
         if(searchParams.year) {
             untrack(() => {
                 batch(() => {
-                    setYearFilter(parseInt(searchParams.year))
+                    const yearFilter = searchParams.year === 'all' ? undefined : parseInt(searchParams.year);
+
+                    setYearFilter(yearFilter)
 
                     removeFilter(YEAR_FILTER);
 
-                    if(searchParams.year !== 'all') {
+                    if(yearFilter) {
                         addFilter({
                             name: YEAR_FILTER,
-                            filterFn: (c: Category) => c.year === parseInt(searchParams.year)
+                            filterFn: (c: Category) => c.year === yearFilter
                         });
                     }
                 });
@@ -36,7 +37,7 @@ const YearFilter: Component = () => {
     const onChangeFilter = (val: string) => setSearchParams({year: val});
 
     const toKvp = (allYears: number[]) => !allYears ? [] : [
-        { id: allYearFilterId, name: 'All Years' },
+        { id: 'all', name: 'All' },
         ...allYears.map(y => {
             return {
                 id: y,
@@ -49,7 +50,7 @@ const YearFilter: Component = () => {
         <Select
             title='Year'
             itemArray={toKvp(getAllYears())}
-            selectedValue={filter.yearFilter}
+            selectedValue={filter.yearFilter ?? 'all'}
             onChange={onChangeFilter} />
     );
 };

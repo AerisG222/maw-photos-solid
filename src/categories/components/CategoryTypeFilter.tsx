@@ -1,10 +1,10 @@
 import { Component, batch, createEffect, untrack } from 'solid-js';
 import { useSearchParams } from '@solidjs/router';
 
-import { allCategoryTypeFilters } from '../../models/CategoryTypeFilter';
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { Category } from '../../models/Category';
+import { categoryTypesOptions } from '../../models/CategoryTypes';
 
 import Select from '../../settings/components/Select';
 
@@ -32,7 +32,7 @@ const CategoryTypeFilter: Component = () => {
                 });
             });
         }
-    })
+    });
 
     const onChangeFilter = (val: string) => setSearchParams({type: val});
 
@@ -40,7 +40,7 @@ const CategoryTypeFilter: Component = () => {
         <>
             <Select
                 title='Category Type'
-                itemArray={allCategoryTypeFilters}
+                itemArray={categoryTypesOptions}
                 selectedValue={filter.typeFilter}
                 onChange={onChangeFilter} />
         </>
