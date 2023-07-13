@@ -4,8 +4,8 @@ import { VideoCategory as ApiVideoCategory } from './models/VideoCategory';
 import { Video as ApiVideo } from './models/Video';
 import { VideoCategory } from '../models/Category';
 import { MediaTypeVideo, Video } from '../models/Media';
-import { getVideoCategoryPath } from '../categories-videos/_routes';
 import { CategoryTypeVideo } from '../models/CategoryType';
+import { getCategoryPath } from '../categories/_routes';
 
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     const videoCategories = await internalGetVideoCategories();
@@ -22,7 +22,7 @@ export const getVideoCategories = async (): Promise<VideoCategory[]> => {
         count: x.videoCount,
         totalSize: x.totalSize,
         isMissingGpsData: x.isMissingGpsData,
-        route: getVideoCategoryPath(x.id),
+        route: getCategoryPath(CategoryTypeVideo, x.id),
         totalDuration: x.totalDuration
     }));
 };

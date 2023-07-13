@@ -5,7 +5,7 @@ import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSi
 import { getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 
-import MediaLink from '../media/MediaLink';
+import MediaLink from '../../media/MediaLink';
 
 type Props = {
     photo: Photo;

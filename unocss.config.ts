@@ -4,7 +4,7 @@ import { presetUno } from '@unocss/preset-uno';
 import { presetIcons } from '@unocss/preset-icons';
 import { presetDaisy } from 'unocss-preset-daisy';
 
-import { allRouteIcons } from './src/routes';
+//import { allRouteIcons } from './src/routes';
 import { allThemes } from './src/models/Theme';
 import { allThumbnailClasses } from './src/models/ThumbnailSize';
 import { allMarginClasses } from './src/models/Margin';
@@ -15,6 +15,25 @@ import { allMarginClasses } from './src/models/Margin';
 const categoryTypeIcons = [
     "i-ic-round-camera-alt",
     "i-ic-round-videocam"
+];
+
+// uh oh - now we have the same issue for route icons...
+const allRouteIcons = [
+    "i-ic-outline-apps",
+    "i-ic-round-dashboard",
+    "i-ic-round-fullscreen",
+    "i-ic-round-map",
+    "i-ic-round-collections",
+    "i-ic-round-format-list-bulleted",
+    "i-ic-round-home",
+    "i-ic-round-search",
+    "i-ic-round-image",
+    "i-ic-round-videocam",
+    "i-ic-round-shuffle",
+    "i-ic-baseline-settings",
+    "i-ic-outline-photo-camera",
+    "i-ic-round-functions",
+    "i-ic-round-bar-chart"
 ];
 
 export default defineConfig<Theme>({

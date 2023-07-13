@@ -3,9 +3,9 @@ import { ApiCollection } from './models/ApiCollection';
 import { PhotoCategory as ApiPhotoCategory } from './models/PhotoCategory';
 import { Photo as ApiPhoto } from './models/Photo';
 import { PhotoCategory } from '../models/Category';
-import { getPhotoCategoryPath } from '../categories-photos/_routes';
 import { CategoryTypePhoto } from '../models/CategoryType';
 import { MediaTypePhoto, Photo } from '../models/Media';
+import { getCategoryPath } from '../categories/_routes';
 
 export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
     const apiCategories = await internalGetPhotoCategories();
@@ -22,7 +22,7 @@ export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
         count: x.photoCount,
         totalSize: x.totalSize,
         isMissingGpsData: x.isMissingGpsData,
-        route: getPhotoCategoryPath(x.id),
+        route: getCategoryPath(CategoryTypePhoto, x.id),
         downloadLink: x.downloadLink
     }));
 };

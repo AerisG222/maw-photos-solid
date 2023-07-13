@@ -3,7 +3,7 @@ import { lazy } from 'solid-js'
 import { categories } from '../categories/_routes'
 import { AppRouteDefinition } from '../models/AppRouteDefinition'
 import { buildPath } from '../models/utils/RouteUtils'
-import { buildMediaRoutes, MediaViewAll, MediaViewModeGrid, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeMap, MediaViewModeBulkEdit, MediaView } from '../components/media/_routes'
+import { buildMediaRoutes, MediaViewAll, MediaViewModeGrid, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeMap, MediaViewModeBulkEdit, MediaView } from '../media/_routes'
 
 const basePath = `${categories.absolutePath}/photos/:categoryId`;
 const mediaRoutes = buildMediaRoutes(basePath, MediaViewAll);

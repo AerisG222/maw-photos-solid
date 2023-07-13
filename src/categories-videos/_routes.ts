@@ -2,7 +2,7 @@ import { lazy } from 'solid-js';
 
 import { categories } from '../categories/_routes';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
-import { MediaView, MediaViewAll, MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, buildMediaRoutes } from '../components/media/_routes';
+import { MediaView, MediaViewAll, MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, buildMediaRoutes } from '../media/_routes';
 import { buildPath } from '../models/utils/RouteUtils';
 
 const basePath = `${categories.absolutePath}/videos/:categoryId`;

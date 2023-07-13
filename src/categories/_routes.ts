@@ -2,6 +2,7 @@ import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { equalsIgnoreCase } from '../models/utils/StringUtils';
 import { CategoryType } from '../models/CategoryType';
+import { categoryTypes } from '../models/CategoryTypes';
 
 const basePath = '/categories';
 
@@ -30,7 +31,7 @@ export const categoriesList: AppRouteDefinition = {
 export const categories: AppRouteDefinition = {
     icon: "i-ic-round-home",
     name: "Categories",
-    helpText: "Browse photos and videos by year and category.",
+    helpText: "Browse by year and category.",
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./Categories')),
@@ -52,3 +53,5 @@ export const getRouteForViewMode = (mode: string) => {
 export const buildSearch = (year?: number, type?: CategoryType) => {
     return {year: year, type: type};
 };
+
+export const getCategoryPath = (categoryType: CategoryType, categoryId: number) => `${basePath}/${categoryTypes[categoryType].routePart}/${categoryId}`;
