@@ -3,9 +3,10 @@ import { Component } from 'solid-js';
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 import { Video, Media } from '../../models/Media';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
-import { getVideoCategoryRoutePath } from '../../categories-videos/_routes';
+import { getMediaPath } from '../../media/_routes';
+import { CategoryTypeVideo } from '../../models/CategoryType';
 
-import MediaLink from '../media/MediaLink';
+import MediaLink from '../../media/MediaLink';
 
 type Props = {
     video: Video;
@@ -25,11 +26,12 @@ const VideoLink: Component<Props> = (props) => {
         }
     });
 
+    // todo: make category type dynamic?
     return (
         <MediaLink
             media={props.video}
             scroll={props.scroll}
-            url={getVideoCategoryRoutePath(props.route, props.video.categoryId, props.video.id)}
+            url={getMediaPath(props.route, CategoryTypeVideo, props.video.categoryId, props.video.id)}
             rounded={props.rounded}
             isActiveItem={props.isActiveItem}>
             <img

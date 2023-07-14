@@ -1,20 +1,18 @@
 import { login } from './auth/_routes';
 import { categories } from './categories/_routes';
 import { about } from './about/_routes';
-import { categoriesPhotos } from './categories-photos/_routes';
-import { categoriesVideos } from './categories-videos/_routes';
 import { random } from './random/_routes';
 import { search } from './search/_routes';
 import { stats } from './stats/_routes';
 import { settings } from './settings/_routes';
 import { catchAllRedirect } from './redirect/_routes';
 import { AppRouteDefinition } from './models/AppRouteDefinition';
+import { mediaRoutes } from './media/_routes';
 
 export const appRoutes = [
     login,
     categories,
-    categoriesPhotos,
-    categoriesVideos,
+    mediaRoutes,
     search,
     random,
     stats,

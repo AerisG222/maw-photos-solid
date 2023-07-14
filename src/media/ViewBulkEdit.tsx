@@ -2,15 +2,16 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { categoriesPhotosBulkEdit, getPhotoCategoryPath } from '../categories-photos/_routes';
 import { Media } from '../models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
+import { bulkEditRoute, getMediaCategoryPath } from './_routes';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
+import { CategoryType } from '../models/CategoryType';
 
 type SelectableMedia = {
     id: number,
@@ -29,7 +30,7 @@ const ViewBulkEdit: Component = () => {
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 
-    setActiveRouteDefinition(categoriesPhotosBulkEdit);
+    setActiveRouteDefinition(bulkEditRoute);
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
@@ -82,7 +83,7 @@ const ViewBulkEdit: Component = () => {
     };
 
     if(!mediaList.items || mediaList.items.length === 0) {
-        navigate(getPhotoCategoryPath(categoryId));
+        navigate(getMediaCategoryPath(params.categoryType as CategoryType, categoryId));
     }
 
     createEffect(() => {

@@ -1,5 +1,8 @@
 import { lazy } from 'solid-js';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
+import { CategoryType } from '../models/CategoryType';
+import { buildPath } from '../models/utils/RouteUtils';
+//import { categories } from '../categories/_routes';
 
 export const MediaViewModeBulkEdit = "bulk-edit";
 export const MediaViewModeDetail = "detail";
@@ -22,31 +25,13 @@ export const MediaViewAll: MediaView[] = [
     MediaViewModeMap,
 ];
 
-export const buildMediaRoutes = (basePath: string, views: MediaView[]) => {
-    const mediaRoutes = {};
+const basePath = `/categories/:categoryType/:categoryId`;
 
-    if(views.indexOf(MediaViewModeGrid) >= 0) {
-        mediaRoutes[MediaViewModeGrid] = buildGridRoute(basePath);
-    }
-
-    if(views.indexOf(MediaViewModeDetail) >= 0) {
-        mediaRoutes[MediaViewModeDetail] = buildDetailRoute(basePath);
-    }
-
-    if(views.indexOf(MediaViewModeFullscreen) >= 0) {
-        mediaRoutes[MediaViewModeFullscreen] = buildFullscreenRoute(basePath);
-    }
-
-    if(views.indexOf(MediaViewModeMap) >= 0) {
-        mediaRoutes[MediaViewModeMap] = buildMapRoute(basePath);
-    }
-
-    if(views.indexOf(MediaViewModeBulkEdit) >= 0) {
-        mediaRoutes[MediaViewModeBulkEdit] = buildBulkEditRoute(basePath);
-    }
-
-    return mediaRoutes;
-};
+const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
+    path: '/',
+    absolutePath: basePath,
+    component: lazy(() => import('./Redirect'))
+});
 
 const buildGridRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-outline-apps",
@@ -97,3 +82,52 @@ const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import('./ViewBulkEdit'))
 });
+
+const redirectRoute = buildRedirectRoute(basePath);
+export const gridRoute = buildGridRoute(basePath);
+export const detailRoute = buildDetailRoute(basePath);
+export const fullscreenRoute = buildFullscreenRoute(basePath);
+export const mapRoute = buildMapRoute(basePath);
+export const bulkEditRoute = buildBulkEditRoute(basePath);
+
+export const mediaRoutes: AppRouteDefinition = {
+    path: basePath,
+    absolutePath: basePath,
+    component: lazy(() => import('../categories-photos/PhotoCategories')),
+    children: [
+        redirectRoute,
+        gridRoute,
+        detailRoute,
+        fullscreenRoute,
+        mapRoute,
+        bulkEditRoute,
+    ]
+};
+
+export const getMediaCategoryPath = (categoryType: CategoryType, categoryId: number): string =>
+    buildPath(mediaRoutes, {categoryType, categoryId});
+
+export const getMediaPathByView = (viewMode: MediaView, categoryType: CategoryType, categoryId: number, id?: number): string =>
+    getMediaPath(getRouteForViewMode(viewMode), categoryType, categoryId, id);
+
+export const getMediaPath = (route: AppRouteDefinition, categoryType: CategoryType, categoryId: number, id?: number): string =>
+    buildPath(route, {categoryType, categoryId, id});
+
+const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => {
+    switch(mode) {
+        case MediaViewModeBulkEdit:
+            return bulkEditRoute;
+        case MediaViewModeDetail:
+            return detailRoute;
+        case MediaViewModeFullscreen:
+            return fullscreenRoute;
+        case MediaViewModeGrid:
+            return gridRoute;
+        case MediaViewModeMap:
+            return mapRoute;
+        default:
+            // eslint-disable-next-line no-case-declarations
+            const _exhaustiveCheck: never = mode;
+            return _exhaustiveCheck;
+    }
+};

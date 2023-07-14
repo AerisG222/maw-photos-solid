@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { Media, MediaTypePhoto, MediaTypeVideo } from '../../models/Media';
+import { Media, MediaTypePhoto, MediaTypeVideo } from '../models/Media';
 
 import MainPhoto from '../components/photos/MainPhoto';
 import MainVideo from '../components/videos/MainVideo';

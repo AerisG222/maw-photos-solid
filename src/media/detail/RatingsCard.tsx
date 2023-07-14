@@ -3,7 +3,7 @@ import { Component, Suspense, createResource } from 'solid-js';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useRatingServiceContext } from '../../contexts/RatingServiceContext';
 
-import Rating from '../../../components/rating/Rating';
+import Rating from '../../components/rating/Rating';
 
 const RatingsCard: Component = (props) => {
     const {fetchRating, setRating} = useRatingServiceContext();

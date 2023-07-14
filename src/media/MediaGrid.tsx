@@ -1,11 +1,10 @@
 import { Component, For } from 'solid-js';
 
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../models/Media';
-import { categoriesPhotosGrid } from '../categories-photos/_routes';
+import { gridRoute } from './_routes';
 
 import PhotoLink from '../components/photos/PhotoLink';
 import VideoLink from '../components/videos/VideoLink';
-import { categoriesVideosGrid } from '../categories-videos/_routes';
 
 type Props = {
     items: Media[];
@@ -24,14 +23,14 @@ const MediaGrid: Component<Props> = (props) => {
                     photo={media}
                     rounded={true}
                     isActiveItem={false}  // no need to show highlight state in grid view
-                    route={categoriesPhotosGrid}
+                    route={gridRoute}
                     thumbnailSize={props.thumbnailSize} />;
             case MediaTypeVideo:
                 return <VideoLink
                     video={media}
                     rounded={true}
                     isActiveItem={false}  // no need to show highlight state in grid view
-                    route={categoriesVideosGrid}
+                    route={gridRoute}
                     thumbnailSize={props.thumbnailSize} />;
             default:
                 // eslint-disable-next-line no-case-declarations

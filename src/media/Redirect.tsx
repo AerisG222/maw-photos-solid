@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from '@solidjs/router';
 import { Component } from "solid-js";
 
-import { getPhotoCategoryViewPath } from './_routes';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
+import { MediaView, getMediaPathByView } from './_routes';
+import { CategoryTypePhoto } from '../models/CategoryType';
 
 const PhotoCategoriesRedirect: Component = () => {
     const [settings] = usePhotoPageSettingsContext();
@@ -10,7 +11,7 @@ const PhotoCategoriesRedirect: Component = () => {
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 
-    navigate(getPhotoCategoryViewPath(settings.viewMode, categoryId));
+    navigate(getMediaPathByView(settings.viewMode as MediaView, CategoryTypePhoto, categoryId));
 
     return <></>;
 };

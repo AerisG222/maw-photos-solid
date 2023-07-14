@@ -2,10 +2,12 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 
 import { createStore } from 'solid-js/store';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
-import { useNavigate } from '@solidjs/router';
-import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../categories-photos/_routes';
+import { useNavigate, useParams } from '@solidjs/router';
+//import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../categories-photos/_routes';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { Media } from '../models/Media';
+import { getMediaPath } from '../media/_routes';
+import { CategoryType } from '../models/CategoryType';
 
 export type MediaListState = {
     readonly items: Media[];
@@ -60,6 +62,7 @@ const MediaListContext = createContext<MediaListContextValue>([
 
 export const MediaListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultMediaListState);
+    const params = useParams();
     const navigate = useNavigate();
 
     const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
@@ -121,9 +124,9 @@ export const MediaListProvider: ParentComponent = (props) => {
         return state.items[state.activeIndex - 1];
     };
 
-    const navigateToItem = (photo: Media) => {
-        if(photo && state.activeRouteDefinition) {
-            navigate(getPhotoCategoryRoutePath(state.activeRouteDefinition, photo.categoryId, photo.id));
+    const navigateToItem = (media: Media) => {
+        if(media && state.activeRouteDefinition) {
+            navigate(getMediaPath(state.activeRouteDefinition, params.categoryType as CategoryType, parseInt(params.categoryId, 10), media.id));
         }
     };
 

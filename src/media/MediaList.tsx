@@ -3,8 +3,7 @@ import { Component, For } from 'solid-js';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../models/Media';
-import { categoriesPhotosDetail } from '../categories-photos/_routes';
-import { categoriesVideosDetail } from '../categories-videos/_routes';
+import { detailRoute } from './_routes';
 
 import PhotoLink from '../components/photos/PhotoLink';
 import VideoLink from '../components/videos/VideoLink';
@@ -24,7 +23,7 @@ const MediaList: Component<Props> = (props) => {
                     rounded={false}
                     thumbnailSize={props.thumbnailSize}
                     isActiveItem={mediaList.activeItem?.id === media.id}
-                    route={categoriesPhotosDetail}
+                    route={detailRoute}
                     scroll={scroll} />;
             case MediaTypeVideo:
                 return <VideoLink
@@ -32,7 +31,7 @@ const MediaList: Component<Props> = (props) => {
                     rounded={false}
                     thumbnailSize={props.thumbnailSize}
                     isActiveItem={mediaList.activeItem?.id === media.id}
-                    route={categoriesVideosDetail}
+                    route={detailRoute}
                     scroll={scroll} />;
             default:
                 // eslint-disable-next-line no-case-declarations

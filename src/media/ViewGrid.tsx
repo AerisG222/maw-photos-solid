@@ -1,10 +1,10 @@
 import { Component, Show } from "solid-js";
-import { A } from '@solidjs/router';
+import { A, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { getPhotoCategoryRoutePath, categoriesPhotosGrid } from '../categories-photos/_routes';
 import { useSlideshowContext } from '../contexts/SlideshowContext';
+import { getMediaPath, getMediaPathByView, gridRoute } from './_routes';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
@@ -12,13 +12,15 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Layout from '../components/layout/Layout';
 import MediaGrid from '../media/MediaGrid';
 import MediaMainItem from './MediaMainItem';
+import { CategoryType } from '../models/CategoryType';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [,{ stop }] = useSlideshowContext();
+    const params = useParams();
 
-    setActiveRouteDefinition(categoriesPhotosGrid);
+    setActiveRouteDefinition(gridRoute);
 
     const toolbar = (
         <Toolbar>
@@ -32,7 +34,7 @@ const ViewGrid: Component = () => {
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
                     <A
                         class="flex h-100%"
-                        href={getPhotoCategoryRoutePath(categoriesPhotosGrid, mediaList.activeItem.categoryId, undefined)}
+                        href={getMediaPath(gridRoute, params.categoryType as CategoryType, mediaList.activeItem.categoryId, undefined)}
                         onClick={stop}>
                         <MediaMainItem media={mediaList.activeItem} />
                     </A>

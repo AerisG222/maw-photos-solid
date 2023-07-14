@@ -2,8 +2,9 @@ import { Component } from 'solid-js';
 
 import { Photo } from '../../models/Media';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
-import { getPhotoCategoryRoutePath } from '../../categories-photos/_routes';
 import { AppRouteDefinition } from '../../models/AppRouteDefinition';
+import { getMediaPath } from '../../media/_routes';
+import { CategoryTypePhoto } from '../../models/CategoryType';
 
 import MediaLink from '../../media/MediaLink';
 
@@ -25,11 +26,12 @@ const PhotoLink: Component<Props> = (props) => {
         }
     });
 
+    /// todo: make category type dynamic
     return (
         <MediaLink
             media={props.photo}
             scroll={props.scroll}
-            url={getPhotoCategoryRoutePath(props.route, props.photo.categoryId, props.photo.id)}
+            url={getMediaPath(props.route, CategoryTypePhoto, props.photo.categoryId, props.photo.id)}
             rounded={props.rounded}
             isActiveItem={props.isActiveItem}>
             <img

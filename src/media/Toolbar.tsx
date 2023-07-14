@@ -1,12 +1,9 @@
-import { Match, ParentComponent, Show, Switch, children } from 'solid-js'
+import { ParentComponent, Show, children } from 'solid-js'
 
-import { categoriesPhotosBulkEdit, categoriesPhotosDetail, categoriesPhotosFullscreen, categoriesPhotosGrid, categoriesPhotosMap } from '../../categories-photos/_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
-import { MediaTypePhoto, MediaTypeVideo } from '../models/Media';
-import { categoriesVideosBulkEdit, categoriesVideosDetail, categoriesVideosFullscreen, categoriesVideosGrid, categoriesVideosMap } from '../../categories-videos/_routes';
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap } from './_routes';
+import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from './_routes';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -15,16 +12,13 @@ import ToolbarLink from '../components/toolbar/ToolbarLink';
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
-    const [settings, { setViewMode }] = usePhotoPageSettingsContext();
+    const [, { setViewMode }] = usePhotoPageSettingsContext();
 
     const c = children(() => props.children);
 
-    const getPhotoParams = () => ({
-        categoryId: categoryState.activeCategory?.id,
-        id: mediaList.activeItem?.id,
-    });
-
-    const getVideoParams = () => ({
+    // todo: pull these from url?
+    const getRouteParams = () => ({
+        categoryType: categoryState.activeCategory.type,
         categoryId: categoryState.activeCategory?.id,
         id: mediaList.activeItem?.id,
     });
@@ -32,22 +26,11 @@ const Toolbar: ParentComponent = (props) => {
     return (
         <Show when={categoryState.activeCategory}>
             <ToolbarLayout>
-                <Switch>
-                    <Match when={categoryState.activeCategory.type === MediaTypePhoto}>
-                        <ToolbarLink route={categoriesPhotosGrid}       routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-                        <ToolbarLink route={categoriesPhotosDetail}     routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-                        <ToolbarLink route={categoriesPhotosFullscreen} routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
-                        <ToolbarLink route={categoriesPhotosMap}        routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
-                        <ToolbarLink route={categoriesPhotosBulkEdit}   routeParams={getPhotoParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
-                    </Match>
-                    <Match when={categoryState.activeCategory.type === MediaTypeVideo}>
-                        <ToolbarLink route={categoriesVideosGrid}       routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-                        <ToolbarLink route={categoriesVideosDetail}     routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-                        <ToolbarLink route={categoriesVideosFullscreen} routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
-                        <ToolbarLink route={categoriesVideosMap}        routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
-                        <ToolbarLink route={categoriesVideosBulkEdit}   routeParams={getVideoParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
-                    </Match>
-                </Switch>
+                <ToolbarLink route={gridRoute}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+                <ToolbarLink route={detailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                <ToolbarLink route={fullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+                <ToolbarLink route={mapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+                <ToolbarLink route={bulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
 
                 <Show when={!!c()}>
                     <Divider />

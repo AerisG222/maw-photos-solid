@@ -3,21 +3,25 @@ import { ParentComponent, children, createEffect, createResource } from 'solid-j
 import { getPhotos } from '../api/PhotoCategories';
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
+import { CategoryType } from '../models/CategoryType';
+import { useParams } from '@solidjs/router';
 
+// todo: props or url param?
 type Props = {
     categoryId: number;
     id: number | undefined;
 };
 
 const PhotoLoader: ParentComponent<Props> = (props) => {
-    const [photosResource] = createResource(props.categoryId, getPhotos);
-    const [, { setActivePhotoCategory }] = useCategoryContext();
+    const params = useParams();
+    const [photosResource] = createResource(parseInt(params.categoryId, 10), getPhotos);
+    const [, { setActiveCategoryById }] = useCategoryContext();
     const [items, { setItems, setActiveItem: setActivePhoto }] = useMediaListContext();
 
     const c = children(() => props.children);
 
     createEffect(() => {
-        setActivePhotoCategory(props.categoryId);
+        setActiveCategoryById(params.categoryType as CategoryType, props.categoryId);
 
         if(!photosResource.loading && !photosResource.error) {
             setItems(photosResource());
