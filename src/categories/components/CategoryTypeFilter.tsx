@@ -3,8 +3,8 @@ import { useSearchParams } from '@solidjs/router';
 
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { Category } from '../../models/Category';
-import { categoryTypesOptions } from '../../models/CategoryTypes';
+import { Category } from '../../_models/Category';
+import { categoryTypesOptions } from '../../_models/CategoryTypes';
 
 import Select from '../../settings/components/Select';
 

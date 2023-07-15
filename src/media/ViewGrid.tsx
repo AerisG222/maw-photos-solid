@@ -5,7 +5,7 @@ import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { useSlideshowContext } from '../contexts/SlideshowContext';
 import { getMediaPath, gridRoute } from './_routes';
-import { CategoryType } from '../models/CategoryType';
+import { CategoryType } from '../_models/CategoryType';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";

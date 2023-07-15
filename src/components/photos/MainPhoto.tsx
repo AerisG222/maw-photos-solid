@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import { usePhotoEffectsContext } from '../../contexts/PhotoEffectsContext';
-import { Photo } from '../../models/Media';
+import { Photo } from '../../_models/Media';
 
 type Props = {
     photo: Photo;

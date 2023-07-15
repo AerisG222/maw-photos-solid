@@ -1,8 +1,8 @@
 import { Component, Show } from 'solid-js';
 
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { getNextMarginSize } from '../models/Margin';
-import { getNextThumbnailSize } from '../models/ThumbnailSize';
+import { getNextMarginSize } from '../_models/Margin';
+import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from '../contexts/MediaListContext';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';

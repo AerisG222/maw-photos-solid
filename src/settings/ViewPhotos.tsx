@@ -5,12 +5,12 @@ import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridV
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { usePhotoInfoPanelSettingsContext } from '../contexts/settings/PhotoInfoPanelSettingsContext';
 import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
-import { allMapTypes } from '../models/MapType';
-import { allMapZoomLevels } from '../models/MapZoomLevel';
-import { allMargins } from '../models/Margin';
-import { allPhotoViewModes } from '../models/PhotoViewMode';
-import { allThumbnailSizes } from '../models/ThumbnailSize';
-import { allSlideshowDurations } from '../models/SlideshowDuration';
+import { allMapTypes } from '../_models/MapType';
+import { allMapZoomLevels } from '../_models/MapZoomLevel';
+import { allMargins } from '../_models/Margin';
+import { allPhotoViewModes } from '../_models/PhotoViewMode';
+import { allThumbnailSizes } from '../_models/ThumbnailSize';
+import { allSlideshowDurations } from '../_models/SlideshowDuration';
 
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';

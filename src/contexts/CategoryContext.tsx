@@ -1,10 +1,10 @@
 import { createContext, createMemo, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { Category, PhotoCategory, VideoCategory } from '../models/Category';
-import { buildStatsData } from '../models/utils/ChartUtils';
-import { CategoryType } from '../models/CategoryType';
-import { FilterFunction, SortFunction } from '../models/UtilityTypes';
+import { Category, PhotoCategory, VideoCategory } from '../_models/Category';
+import { buildStatsData } from '../_models/utils/ChartUtils';
+import { CategoryType } from '../_models/CategoryType';
+import { FilterFunction, SortFunction } from '../_models/UtilityTypes';
 
 export type CategoryState = {
     readonly categories: Category[];

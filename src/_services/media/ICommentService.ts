@@ -1,5 +1,5 @@
-import { ApiCollection } from '../../_api/models/ApiCollection';
-import { Comment } from '../../_api/models/Comment';
+import { ApiCollection } from '../../_api/_models/ApiCollection';
+import { Comment } from '../../_api/_models/Comment';
 
 export interface ICommentService {
     fetchComments: (id: number) => Promise<ApiCollection<Comment>>;

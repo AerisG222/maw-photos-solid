@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
-import { Video } from '../../models/Media';
-import { VideoSizeIdType } from '../../models/VideoSize';
+import { Video } from '../../_models/Media';
+import { VideoSizeIdType } from '../../_models/VideoSize';
 
 type Props = {
     video: Video;

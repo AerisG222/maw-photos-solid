@@ -1,10 +1,10 @@
 import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from './models/ApiCollection';
-import { VideoCategory as ApiVideoCategory } from './models/VideoCategory';
-import { Video as ApiVideo } from './models/Video';
-import { VideoCategory } from '../models/Category';
-import { MediaTypeVideo, Video } from '../models/Media';
-import { CategoryTypeVideos } from '../models/CategoryType';
+import { ApiCollection } from './_models/ApiCollection';
+import { VideoCategory as ApiVideoCategory } from './_models/VideoCategory';
+import { Video as ApiVideo } from './_models/Video';
+import { VideoCategory } from '../_models/Category';
+import { MediaTypeVideo, Video } from '../_models/Media';
+import { CategoryTypeVideos } from '../_models/CategoryType';
 import { getCategoryPath } from '../categories/_routes';
 
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {

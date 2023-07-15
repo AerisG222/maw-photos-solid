@@ -3,7 +3,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { detailRoute, getMediaPath } from './_routes';
-import { CategoryType } from '../models/CategoryType';
+import { CategoryType } from '../_models/CategoryType';
 
 const MediaSelectedGuard: ParentComponent = (props) => {
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();

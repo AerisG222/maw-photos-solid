@@ -1,7 +1,7 @@
 import { Component, For, createResource, createSignal } from 'solid-js';
 
 import { useMediaListContext } from '../../contexts/MediaListContext';
-import { getFormattedExif } from '../../models/utils/ExifUtils';
+import { getFormattedExif } from '../../_models/utils/ExifUtils';
 import { useExifServiceContext } from '../../contexts/ExifServiceContext';
 
 const ExifCard: Component = () => {

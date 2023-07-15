@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect } from 'solid-js';
 import { useParams } from '@solidjs/router';
 
-import { categoryTypes } from '../models/CategoryTypes';
+import { categoryTypes } from '../_models/CategoryTypes';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { ICategoryService } from '../_services/categories/ICategoryService';
 

@@ -1,11 +1,11 @@
-import { ApiCollection } from './models/ApiCollection';
-import { Photo } from './models/Photo';
-import { Comment } from './models/Comment';
-import { ExifDetail } from './models/ExifDetail';
-import { GpsDetail } from './models/GpsDetail';
-import { GpsCoordinate } from './models/GpsCoordinate';
+import { ApiCollection } from './_models/ApiCollection';
+import { Photo } from './_models/Photo';
+import { Comment } from './_models/Comment';
+import { ExifDetail } from './_models/ExifDetail';
+import { GpsDetail } from './_models/GpsDetail';
+import { GpsCoordinate } from './_models/GpsCoordinate';
 import { patchMawApi, postMawApi, queryMawApi } from './Shared';
-import { Rating } from './models/Rating';
+import { Rating } from './_models/Rating';
 
 export const getRandomPhoto = () =>
     queryMawApi<Photo>('photos/random');

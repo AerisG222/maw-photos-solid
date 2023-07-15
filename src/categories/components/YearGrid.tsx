@@ -1,8 +1,8 @@
 import { Component, For } from 'solid-js';
 
 import { useCategoryGridViewSettingsContext } from '../../contexts/settings/CategoryGridViewSettingsContext';
-import { Category } from '../../models/Category';
-import { defaultGridThumbnailSize } from '../../models/ThumbnailSize';
+import { Category } from '../../_models/Category';
+import { defaultGridThumbnailSize } from '../../_models/ThumbnailSize';
 
 import CategoryCard from './CategoryCard';
 

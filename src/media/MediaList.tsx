@@ -1,8 +1,8 @@
 import { Component, For } from 'solid-js';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { ThumbnailSizeIdType } from '../models/ThumbnailSize';
-import { Media, MediaTypePhoto, MediaTypeVideo } from '../models/Media';
+import { ThumbnailSizeIdType } from '../_models/ThumbnailSize';
+import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
 import { detailRoute } from './_routes';
 
 import PhotoLink from '../components/photos/PhotoLink';

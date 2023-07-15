@@ -1,7 +1,7 @@
 import { Resource } from 'solid-js';
 
-import { Category } from '../../models/Category';
-import { Media } from '../../models/Media';
+import { Category } from '../../_models/Category';
+import { Media } from '../../_models/Media';
 
 export interface ICategoryService {
     load: () => Resource<Category[]>;

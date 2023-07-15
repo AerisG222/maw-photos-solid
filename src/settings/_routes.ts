@@ -1,5 +1,5 @@
 import { lazy } from 'solid-js'
-import { AppRouteDefinition } from '../models/AppRouteDefinition'
+import { AppRouteDefinition } from '../_models/AppRouteDefinition'
 
 const basePath = "/settings";
 

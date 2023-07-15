@@ -1,8 +1,8 @@
 import { Component } from 'solid-js';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { PhotoCategory } from '../../models/Category';
-import { MediaTypePhoto } from '../../models/Media';
+import { PhotoCategory } from '../../_models/Category';
+import { MediaTypePhoto } from '../../_models/Media';
 
 import ToolbarExternalLink from '../../components/toolbar/ToolbarExternalLink';
 

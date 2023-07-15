@@ -1,4 +1,4 @@
-import { Category } from '../../models/Category';
+import { Category } from '../../_models/Category';
 
 // https://www.learnui.design/tools/data-color-picker.html
 export const chartColors = [

@@ -2,16 +2,16 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { Media } from '../models/Media';
+import { Media } from '../_models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
-import { GpsCoordinate } from '../_api/models/GpsCoordinate';
+import { GpsCoordinate } from '../_api/_models/GpsCoordinate';
 import { bulkEditRoute, getMediaCategoryPath } from './_routes';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
-import { CategoryType } from '../models/CategoryType';
+import { CategoryType } from '../_models/CategoryType';
 
 type SelectableMedia = {
     id: number,

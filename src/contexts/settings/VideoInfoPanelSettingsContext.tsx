@@ -1,10 +1,10 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapTypeIdType } from '../../models/MapType';
-import { VideoInfoPanelSettingsState, defaultVideoInfoPanelSettings } from '../../models/settings';
+import { MapTypeIdType } from '../../_models/MapType';
+import { VideoInfoPanelSettingsState, defaultVideoInfoPanelSettings } from '../../_models/settings';
 import { KEY_SETTINGS_VIDEO_INFO_PANEL, loadJson, saveJson } from './_storage';
-import { MapZoomLevelIdType } from '../../models/MapZoomLevel';
+import { MapZoomLevelIdType } from '../../_models/MapZoomLevel';
 
 export type VideoInfoPanelSettingsContextValue = [
     state: VideoInfoPanelSettingsState,

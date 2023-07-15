@@ -1,7 +1,7 @@
 import { Component, For } from 'solid-js';
 
 import { useCategoryListViewSettingsContext } from '../../contexts/settings/CategoryListViewSettingsContext';
-import { Category } from '../../models/Category';
+import { Category } from '../../_models/Category';
 
 import CategoryListItem from './CategoryListItem';
 

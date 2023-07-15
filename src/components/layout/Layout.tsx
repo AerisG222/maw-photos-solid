@@ -1,6 +1,6 @@
 import { JSXElement, ParentComponent, Show, children } from 'solid-js'
 
-import { MarginIdType, getMarginClass } from '../../models/Margin';
+import { MarginIdType, getMarginClass } from '../../_models/Margin';
 import { useLayoutOptionsContext } from '../../contexts/LayoutOptionsContext';
 
 type Props = {

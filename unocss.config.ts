@@ -5,9 +5,9 @@ import { presetIcons } from '@unocss/preset-icons';
 import { presetDaisy } from 'unocss-preset-daisy';
 
 //import { allRouteIcons } from './src/routes';
-import { allThemes } from './src/models/Theme';
-import { allThumbnailClasses } from './src/models/ThumbnailSize';
-import { allMarginClasses } from './src/models/Margin';
+import { allThemes } from './src/_models/Theme';
+import { allThumbnailClasses } from './src/_models/ThumbnailSize';
+import { allMarginClasses } from './src/_models/Margin';
 
 // ideally this would be a query against categoryTypes, but due to the imports
 // in that file it can not be used, so we must use the list below to avoid the

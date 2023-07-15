@@ -1,8 +1,8 @@
 import { lazy } from 'solid-js';
-import { AppRouteDefinition } from '../models/AppRouteDefinition';
-import { equalsIgnoreCase } from '../models/utils/StringUtils';
-import { CategoryType } from '../models/CategoryType';
-import { categoryTypes } from '../models/CategoryTypes';
+import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { equalsIgnoreCase } from '../_models/utils/StringUtils';
+import { CategoryType } from '../_models/CategoryType';
+import { categoryTypes } from '../_models/CategoryTypes';
 
 const basePath = '/categories';
 

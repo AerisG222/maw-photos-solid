@@ -2,8 +2,8 @@ import { Component, onMount } from "solid-js";
 import { A } from "@solidjs/router";
 import { createShortcut } from '@solid-primitives/keyboard';
 
-import { AppRouteDefinition } from '../../models/AppRouteDefinition';
-import { buildPath } from '../../models/utils/RouteUtils';
+import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
+import { buildPath } from '../../_models/utils/RouteUtils';
 
 type Props = {
     route: AppRouteDefinition;

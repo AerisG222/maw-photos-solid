@@ -1,7 +1,7 @@
 import { lazy } from 'solid-js';
-import { AppRouteDefinition } from '../models/AppRouteDefinition';
-import { CategoryType } from '../models/CategoryType';
-import { buildPath } from '../models/utils/RouteUtils';
+import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { CategoryType } from '../_models/CategoryType';
+import { buildPath } from '../_models/utils/RouteUtils';
 //import { categories } from '../categories/_routes';
 
 export const MediaViewModeBulkEdit = "bulk-edit";

@@ -5,11 +5,11 @@ import {
     createSignal
 } from 'solid-js';
 
-import { GpsDetail } from '../../_api/models/GpsDetail';
-import { Photo } from '../../models/Media';
+import { GpsDetail } from '../../_api/_models/GpsDetail';
+import { Photo } from '../../_models/Media';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
-import { GpsOverride, isValidLatLng, parseGps } from '../../models/utils/GpsUtils';
+import { GpsOverride, isValidLatLng, parseGps } from '../../_models/utils/GpsUtils';
 
 const MetadataEditorCard: Component = () => {
     const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();

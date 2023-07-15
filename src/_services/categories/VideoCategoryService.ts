@@ -1,10 +1,10 @@
 import { Resource, createResource } from 'solid-js';
 
-import { VideoCategory } from '../../models/Category';
+import { VideoCategory } from '../../_models/Category';
 import { ICategoryService } from './ICategoryService';
 import { isLoggedIn } from '../../auth/auth';
 import { getVideoCategories, getVideos, setTeaser } from '../../_api/VideoCategories';
-import { Video } from '../../models/Media';
+import { Video } from '../../_models/Media';
 
 class VideoCategoryService
     implements ICategoryService

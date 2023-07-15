@@ -1,6 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 
-import { IMetadataEditService } from '../models/services/IMetadataEditService';
+import { IMetadataEditService } from '../_models/services/IMetadataEditService';
 
 const MetadataEditServiceContext = createContext<IMetadataEditService>(undefined);
 

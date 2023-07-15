@@ -5,7 +5,7 @@ import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapVie
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getMediaPath, mapRoute } from './_routes';
-import { CategoryType } from '../models/CategoryType';
+import { CategoryType } from '../_models/CategoryType';
 
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";

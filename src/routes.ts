@@ -6,7 +6,7 @@ import { search } from './search/_routes';
 import { stats } from './stats/_routes';
 import { settings } from './settings/_routes';
 import { catchAllRedirect } from './redirect/_routes';
-import { AppRouteDefinition } from './models/AppRouteDefinition';
+import { AppRouteDefinition } from './_models/AppRouteDefinition';
 import { mediaRoutes } from './media/_routes';
 
 export const appRoutes = [

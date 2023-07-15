@@ -1,7 +1,7 @@
 import { ParentComponent, children } from 'solid-js';
 import { A } from '@solidjs/router';
 
-import { Media } from '../models/Media';
+import { Media } from '../_models/Media';
 
 type Props = {
     url: string;

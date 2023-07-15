@@ -1,10 +1,10 @@
 import { Component } from 'solid-js';
 
-import { AppRouteDefinition } from '../../models/AppRouteDefinition';
-import { Video, Media } from '../../models/Media';
-import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
+import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
+import { Video, Media } from '../../_models/Media';
+import { ThumbnailSizeIdType, getThumbnailClass } from '../../_models/ThumbnailSize';
 import { getMediaPath } from '../../media/_routes';
-import { CategoryTypeVideos } from '../../models/CategoryType';
+import { CategoryTypeVideos } from '../../_models/CategoryType';
 
 import MediaLink from '../../media/MediaLink';
 

@@ -3,7 +3,7 @@ import { Component, createEffect } from 'solid-js';
 
 import { MediaListProvider } from '../contexts/MediaListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { CategoryType } from '../models/CategoryType';
+import { CategoryType } from '../_models/CategoryType';
 import { SlideshowProvider } from '../contexts/SlideshowContext';
 import { PhotoEffectsProvider } from '../contexts/PhotoEffectsContext';
 import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';

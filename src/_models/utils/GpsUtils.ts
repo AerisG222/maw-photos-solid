@@ -1,4 +1,4 @@
-import { GpsCoordinate } from '../../_api/models/GpsCoordinate';
+import { GpsCoordinate } from '../../_api/_models/GpsCoordinate';
 
 export type GpsOverride = {
     lat: string | undefined,

@@ -1,6 +1,6 @@
 import { Component, For } from 'solid-js';
 
-import { Media, MediaTypePhoto, MediaTypeVideo } from '../models/Media';
+import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
 import { gridRoute } from './_routes';
 
 import PhotoLink from '../components/photos/PhotoLink';

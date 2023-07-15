@@ -3,7 +3,7 @@ import { Component } from "solid-js";
 
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaView, getMediaPathByView } from './_routes';
-import { CategoryTypePhotos } from '../models/CategoryType';
+import { CategoryTypePhotos } from '../_models/CategoryType';
 
 const PhotoCategoriesRedirect: Component = () => {
     const [settings] = usePhotoPageSettingsContext();

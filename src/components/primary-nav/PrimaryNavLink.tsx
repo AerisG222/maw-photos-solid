@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import { A } from "@solidjs/router";
-import { AppRouteDefinition } from '../../models/AppRouteDefinition';
+import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
 
 type Props = {
     route: AppRouteDefinition;

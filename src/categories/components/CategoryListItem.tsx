@@ -1,10 +1,10 @@
 import { Component } from 'solid-js';
 import { A } from '@solidjs/router';
 
-import { getThumbnailClass, ThumbnailSizeIdType } from '../../models/ThumbnailSize';
-import { Category } from '../../models/Category';
+import { getThumbnailClass, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
+import { Category } from '../../_models/Category';
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { categoryTypes } from '../../models/CategoryTypes';
+import { categoryTypes } from '../../_models/CategoryTypes';
 
 type Props = {
     category: Category;

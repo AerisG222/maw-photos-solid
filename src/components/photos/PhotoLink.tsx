@@ -1,10 +1,10 @@
 import { Component } from 'solid-js';
 
-import { Photo } from '../../models/Media';
-import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
-import { AppRouteDefinition } from '../../models/AppRouteDefinition';
+import { Photo } from '../../_models/Media';
+import { ThumbnailSizeIdType, getThumbnailClass } from '../../_models/ThumbnailSize';
+import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
 import { getMediaPath } from '../../media/_routes';
-import { CategoryTypePhotos } from '../../models/CategoryType';
+import { CategoryTypePhotos } from '../../_models/CategoryType';
 
 import MediaLink from '../../media/MediaLink';
 

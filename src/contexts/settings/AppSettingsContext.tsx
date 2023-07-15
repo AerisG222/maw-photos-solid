@@ -2,8 +2,8 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { KEY_SETTINGS_APP, loadJson, saveJson } from './_storage';
-import { AppSettingsState, defaultAppSettings } from '../../models/settings';
-import { ThemeIdType } from '../../models/Theme';
+import { AppSettingsState, defaultAppSettings } from '../../_models/settings';
+import { ThemeIdType } from '../../_models/Theme';
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,

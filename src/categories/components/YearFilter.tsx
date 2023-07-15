@@ -5,7 +5,7 @@ import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 
 import Select from '../../settings/components/Select';
-import { Category } from '../../models/Category';
+import { Category } from '../../_models/Category';
 
 const YearFilter: Component = () => {
     const YEAR_FILTER = "YearFilter_Year";

@@ -1,8 +1,8 @@
 import { Component } from 'solid-js';
 
 import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
-import { getNextThumbnailSize } from '../models/ThumbnailSize';
-import { getNextMarginSize } from '../models/Margin';
+import { getNextThumbnailSize } from '../_models/ThumbnailSize';
+import { getNextMarginSize } from '../_models/Margin';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 
