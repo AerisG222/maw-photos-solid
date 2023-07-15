@@ -5,7 +5,7 @@ import { useRatingServiceContext } from '../../contexts/RatingServiceContext';
 
 import Rating from '../../components/rating/Rating';
 
-const RatingsCard: Component = (props) => {
+const RatingsCard: Component = () => {
     const {fetchRating, setRating} = useRatingServiceContext();
     const [mediaList] = useMediaListContext();
     const [ratingResource, { mutate, refetch }] = createResource(() => mediaList.activeItem?.id, fetchRating);

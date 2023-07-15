@@ -1,3 +1,3 @@
-export const CategoryTypePhoto = "photo";
-export const CategoryTypeVideo = "video";
-export type CategoryType = typeof CategoryTypePhoto | typeof CategoryTypeVideo;
+export const CategoryTypePhotos = "photos";
+export const CategoryTypeVideos = "videos";
+export type CategoryType = typeof CategoryTypePhotos | typeof CategoryTypeVideos;

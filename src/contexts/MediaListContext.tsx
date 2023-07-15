@@ -3,7 +3,6 @@ import { ParentComponent, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { GpsCoordinate } from '../api/models/GpsCoordinate';
 import { useNavigate, useParams } from '@solidjs/router';
-//import { categoriesPhotosGrid, getPhotoCategoryRoutePath } from '../categories-photos/_routes';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { Media } from '../models/Media';
 import { getMediaPath } from '../media/_routes';
@@ -28,13 +27,13 @@ export type MediaListContextValue = [
     state: MediaListState,
     actions: {
         setActiveRouteDefinition: (def: ActiveRouteDefinition) => void;
-        setItems: (photos: Media[]) => void;
-        setActiveItem: (photoId: number) => void;
+        setItems: (media: Media[]) => void;
+        setActiveItem: (id: number) => void;
         activeItemIsFirst: () => boolean;
         activeItemIsLast: () => boolean;
         getNextItem: () => Media | undefined;
         getPreviousItem: () => Media | undefined;
-        setGpsOverride: (photoId: number, coord: GpsCoordinate) => void;
+        setGpsOverride: (id: number, coord: GpsCoordinate) => void;
         moveFirst: () => void;
         moveNext: () => void;
         movePrevious: () => void;
@@ -74,9 +73,9 @@ export const MediaListProvider: ParentComponent = (props) => {
         setActiveItem(state.activeItem?.id);
     };
 
-    const setActiveItem = (photoId: number) => {
-        if(photoId) {
-            const idx = state.items.findIndex(x => x.id === photoId);
+    const setActiveItem = (id: number | undefined) => {
+        if(id) {
+            const idx = state.items.findIndex(x => x.id === id);
 
             setActiveItemByIndex(idx);
         } else {
@@ -146,8 +145,8 @@ export const MediaListProvider: ParentComponent = (props) => {
         navigateToItem(state.items[state.items.length - 1]);
     };
 
-    const setGpsOverride = (photoId: number, coord: GpsCoordinate) => {
-        const idx = state.items.findIndex(p => p.id === photoId);
+    const setGpsOverride = (id: number, coord: GpsCoordinate) => {
+        const idx = state.items.findIndex(p => p.id === id);
 
         setState(
             "items",

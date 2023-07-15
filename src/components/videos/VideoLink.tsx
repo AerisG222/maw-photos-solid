@@ -4,7 +4,7 @@ import { AppRouteDefinition } from '../../models/AppRouteDefinition';
 import { Video, Media } from '../../models/Media';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../models/ThumbnailSize';
 import { getMediaPath } from '../../media/_routes';
-import { CategoryTypeVideo } from '../../models/CategoryType';
+import { CategoryTypeVideos } from '../../models/CategoryType';
 
 import MediaLink from '../../media/MediaLink';
 
@@ -31,7 +31,7 @@ const VideoLink: Component<Props> = (props) => {
         <MediaLink
             media={props.video}
             scroll={props.scroll}
-            url={getMediaPath(props.route, CategoryTypeVideo, props.video.categoryId, props.video.id)}
+            url={getMediaPath(props.route, CategoryTypeVideos, props.video.categoryId, props.video.id)}
             rounded={props.rounded}
             isActiveItem={props.isActiveItem}>
             <img

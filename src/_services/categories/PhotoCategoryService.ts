@@ -1,17 +1,25 @@
 import { Resource, createResource } from 'solid-js';
 
-import { getPhotoCategories, setTeaser } from '../../api/PhotoCategories';
+import { getPhotoCategories, getPhotos, setTeaser } from '../../api/PhotoCategories';
 import { PhotoCategory } from '../../models/Category';
 import { ICategoryService } from './ICategoryService';
 import { isLoggedIn } from '../../auth/auth';
+import { Photo } from '../../models/Media';
 
 export class PhotoCategoryService
     implements ICategoryService
 {
-    private getPhotoCats = (isLoggedIn: boolean) => isLoggedIn ? getPhotoCategories() : null;
+    private getCategories = (isLoggedIn: boolean) =>
+        isLoggedIn ? getPhotoCategories() : undefined;
 
     load(): Resource<PhotoCategory[]> {
-        const [resource] = createResource(isLoggedIn, this.getPhotoCats);
+        const [resource] = createResource(isLoggedIn, this.getCategories);
+
+        return resource;
+    }
+
+    loadMedia(categoryId: number): Resource<Photo[]> {
+        const [resource] = createResource(() => getPhotos(categoryId));
 
         return resource;
     }

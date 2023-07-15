@@ -4,7 +4,8 @@ import { A, useParams } from '@solidjs/router';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { useSlideshowContext } from '../contexts/SlideshowContext';
-import { getMediaPath, getMediaPathByView, gridRoute } from './_routes';
+import { getMediaPath, gridRoute } from './_routes';
+import { CategoryType } from '../models/CategoryType';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
@@ -12,7 +13,6 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Layout from '../components/layout/Layout';
 import MediaGrid from '../media/MediaGrid';
 import MediaMainItem from './MediaMainItem';
-import { CategoryType } from '../models/CategoryType';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();

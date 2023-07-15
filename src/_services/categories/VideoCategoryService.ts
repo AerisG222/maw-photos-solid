@@ -3,7 +3,8 @@ import { Resource, createResource } from 'solid-js';
 import { VideoCategory } from '../../models/Category';
 import { ICategoryService } from './ICategoryService';
 import { isLoggedIn } from '../../auth/auth';
-import { getVideoCategories, setTeaser } from '../../api/VideoCategories';
+import { getVideoCategories, getVideos, setTeaser } from '../../api/VideoCategories';
+import { Video } from '../../models/Media';
 
 class VideoCategoryService
     implements ICategoryService
@@ -12,6 +13,12 @@ class VideoCategoryService
 
     load(): Resource<VideoCategory[]> {
         const [resource] = createResource(isLoggedIn, this.getCategories);
+
+        return resource;
+    }
+
+    loadMedia(categoryId: number): Resource<Video[]> {
+        const [resource] = createResource(() => getVideos(categoryId));
 
         return resource;
     }

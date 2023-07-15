@@ -16,7 +16,7 @@ type CategoryTypeInfo = {
 
 // if you add categoryTypes, please be sure to safelist the icon in unocss.config.ts
 export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
-    photo: {
+    photos: {
         nameSingular: "Photo",
         namePlural: "Photos",
         routePart: "photos",
@@ -24,7 +24,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         svc: photoCategoryService,
         views: MediaViewAll
     },
-    video: {
+    videos: {
         nameSingular: "Video",
         namePlural: "Videos",
         routePart: "videos",

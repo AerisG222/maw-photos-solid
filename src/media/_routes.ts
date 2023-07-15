@@ -93,7 +93,7 @@ export const bulkEditRoute = buildBulkEditRoute(basePath);
 export const mediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import('../categories-photos/PhotoCategories')),
+    component: lazy(() => import('./MediaCategory')),
     children: [
         redirectRoute,
         gridRoute,
