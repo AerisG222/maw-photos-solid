@@ -11,8 +11,8 @@ import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 import { ExifServiceProvider } from '../contexts/ExifServiceContext';
 import { MetadataEditServiceProvider } from '../contexts/MetadataEditServiceContext';
 import { RatingServiceProvider } from '../contexts/RatingServiceContext';
-import { PhotoMediaService } from '../api/PhotoMediaService';
-import { VideoMediaService } from '../api/VideoMediaService';
+import { PhotoMediaService } from '../_services/media/PhotoMediaService';
+import { VideoMediaService } from '../_services/media/VideoMediaService';
 
 import AuthGuard from '../components/auth/AuthGuard';
 import MediaLoader from './MediaLoader';
