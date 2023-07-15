@@ -5,7 +5,7 @@ import {
     createSignal
 } from 'solid-js';
 
-import { GpsDetail } from '../../api/models/GpsDetail';
+import { GpsDetail } from '../../_api/models/GpsDetail';
 import { Photo } from '../../models/Media';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';

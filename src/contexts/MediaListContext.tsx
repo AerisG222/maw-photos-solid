@@ -1,7 +1,7 @@
 import { ParentComponent, createContext, useContext } from 'solid-js';
 
 import { createStore } from 'solid-js/store';
-import { GpsCoordinate } from '../api/models/GpsCoordinate';
+import { GpsCoordinate } from '../_api/models/GpsCoordinate';
 import { useNavigate, useParams } from '@solidjs/router';
 import { AppRouteDefinition } from '../models/AppRouteDefinition';
 import { Media } from '../models/Media';

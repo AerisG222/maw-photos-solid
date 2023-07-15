@@ -1,6 +1,6 @@
 import { Resource, createResource } from 'solid-js';
 
-import { getPhotoCategories, getPhotos, setTeaser } from '../../api/PhotoCategories';
+import { getPhotoCategories, getPhotos, setTeaser } from '../../_api/PhotoCategories';
 import { PhotoCategory } from '../../models/Category';
 import { ICategoryService } from './ICategoryService';
 import { isLoggedIn } from '../../auth/auth';

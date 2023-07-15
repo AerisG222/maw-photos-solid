@@ -4,7 +4,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { Media } from '../models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
-import { GpsCoordinate } from '../api/models/GpsCoordinate';
+import { GpsCoordinate } from '../_api/models/GpsCoordinate';
 import { bulkEditRoute, getMediaCategoryPath } from './_routes';
 
 import Toolbar from "./Toolbar";

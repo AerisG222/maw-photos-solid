@@ -1,5 +1,5 @@
-import { setTeaser } from '../../api/VideoCategories';
-import { addComment, getComments, getGpsDetail, getRating, rateVideo, setGpsCoordinateOverride } from '../../api/Videos';
+import { setTeaser } from '../../_api/VideoCategories';
+import { addComment, getComments, getGpsDetail, getRating, rateVideo, setGpsCoordinateOverride } from '../../_api/Videos';
 import { IRatingService } from './IRatingService';
 import { ICommentService } from './ICommentService';
 import { ICategoryTeaserService } from './ICategoryTeaserService';
