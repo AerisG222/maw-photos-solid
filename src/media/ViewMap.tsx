@@ -62,7 +62,7 @@ const ViewMap: Component = () => {
                     const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
 
                     marker.addListener("click", () => {
-                        infoWindow.setContent(`<img src="${item.imageXsUrl ?? item.thubnailSq}" />`);
+                        infoWindow.setContent(`<img src="${item.imageXsUrl ?? item.thumbnailSqUrl}" />`);
                         infoWindow.open({
                             anchor: marker,
                             map
