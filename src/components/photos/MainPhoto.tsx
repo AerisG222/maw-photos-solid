@@ -1,16 +1,12 @@
 import { Component } from 'solid-js';
 
-import { usePhotoEffectsContext } from '../../contexts/PhotoEffectsContext';
 import { Photo } from '../../_models/Media';
 
 type Props = {
     photo: Photo;
-    maxHeightStyle?: string;
 };
 
 const MainPhoto: Component<Props> = (props) => {
-    const [, { getFilterStyles, getTransformStyles }] = usePhotoEffectsContext();
-
     const getSrcset = () => {
         const set = [];
 
@@ -26,10 +22,9 @@ const MainPhoto: Component<Props> = (props) => {
 
     return (
         <img src={props.photo?.imageMdUrl}
+            class="h-100% w-100% max-h-100vh max-w-100% object-contain"
             srcset={getSrcset()}
             sizes="100vw"
-            class="h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
-            style={`${props.maxHeightStyle ?? ''} ${getFilterStyles()} ${getTransformStyles()}`}
             loading="eager" />
     );
 }

@@ -48,13 +48,13 @@ export type PhotoEffectsContextValue = [
         setSaturation: (value: number) => void;
         setInvert: (value: number) => void;
         setHueRotate: (value: number) => void;
-        getFilterStyles: () => void;
+        getFilterStyles: () => string;
 
         rotateClockwise: () => void;
         rotateCounterClockwise: () => void;
         flipHorizontal: () => void;
         flipVertical: () => void;
-        getTransformStyles: () => void;
+        getTransformStyles: () => string;
     }
 ];
 
