@@ -1,12 +1,12 @@
 import { Component } from 'solid-js';
 
-import { defaultPhotoEffects } from '../../contexts/PhotoEffectsContext';
-import { usePhotoEffectsContext } from '../../contexts/PhotoEffectsContext';
+import { defaultVisualEffects } from '../../contexts/VisualEffectsContext';
+import { useVisualEffectsContext } from '../../contexts/VisualEffectsContext';
 
 import EffectsResetButton from './EffectsResetButton';
 
 const EffectsCard: Component = () => {
-    const [photoEffectsState, {
+    const [visualEffectsState, {
         reset,
         setGrayscale,
         setBrightness,
@@ -16,63 +16,63 @@ const EffectsCard: Component = () => {
         setSaturation,
         setInvert,
         setHueRotate
-    }] = usePhotoEffectsContext();
+    }] = useVisualEffectsContext();
 
     return (
         <>
             <div class="flex flex-gap-2">
                 <div class="w-[100%]">
                     <div>
-                        Grayscale ({photoEffectsState.grayscale})
-                        <EffectsResetButton enabled={defaultPhotoEffects.grayscale !== photoEffectsState.grayscale} handleClick={() => setGrayscale(defaultPhotoEffects.grayscale)} />
+                        Grayscale ({visualEffectsState.grayscale})
+                        <EffectsResetButton enabled={defaultVisualEffects.grayscale !== visualEffectsState.grayscale} handleClick={() => setGrayscale(defaultVisualEffects.grayscale)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={photoEffectsState.grayscale} onInput={evt => setGrayscale(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={visualEffectsState.grayscale} onInput={evt => setGrayscale(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Brightness ({photoEffectsState.brightness}%)
-                        <EffectsResetButton enabled={defaultPhotoEffects.brightness !== photoEffectsState.brightness} handleClick={() => setBrightness(defaultPhotoEffects.brightness)} />
+                        Brightness ({visualEffectsState.brightness}%)
+                        <EffectsResetButton enabled={defaultVisualEffects.brightness !== visualEffectsState.brightness} handleClick={() => setBrightness(defaultVisualEffects.brightness)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={photoEffectsState.brightness} onInput={evt => setBrightness(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={visualEffectsState.brightness} onInput={evt => setBrightness(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Contrast ({photoEffectsState.contrast}%)
-                        <EffectsResetButton enabled={defaultPhotoEffects.contrast !== photoEffectsState.contrast} handleClick={() => setContrast(defaultPhotoEffects.contrast)} />
+                        Contrast ({visualEffectsState.contrast}%)
+                        <EffectsResetButton enabled={defaultVisualEffects.contrast !== visualEffectsState.contrast} handleClick={() => setContrast(defaultVisualEffects.contrast)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={photoEffectsState.contrast} onInput={evt => setContrast(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={visualEffectsState.contrast} onInput={evt => setContrast(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Blur ({photoEffectsState.blur}px)
-                        <EffectsResetButton enabled={defaultPhotoEffects.blur !== photoEffectsState.blur} handleClick={() => setBlur(defaultPhotoEffects.blur)} />
+                        Blur ({visualEffectsState.blur}px)
+                        <EffectsResetButton enabled={defaultVisualEffects.blur !== visualEffectsState.blur} handleClick={() => setBlur(defaultVisualEffects.blur)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="10" step="0.1" value={photoEffectsState.blur} onInput={evt => setBlur(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="10" step="0.1" value={visualEffectsState.blur} onInput={evt => setBlur(evt.currentTarget.valueAsNumber)} /></div>
                 </div>
 
                 <div></div>
 
                 <div class="w-[100%]">
                     <div>
-                        Sepia ({photoEffectsState.sepia})
-                        <EffectsResetButton enabled={defaultPhotoEffects.sepia !== photoEffectsState.sepia} handleClick={() => setSepia(defaultPhotoEffects.sepia)} />
+                        Sepia ({visualEffectsState.sepia})
+                        <EffectsResetButton enabled={defaultVisualEffects.sepia !== visualEffectsState.sepia} handleClick={() => setSepia(defaultVisualEffects.sepia)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={photoEffectsState.sepia} onInput={evt => setSepia(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={visualEffectsState.sepia} onInput={evt => setSepia(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Saturation ({photoEffectsState.saturation}%)
-                        <EffectsResetButton enabled={defaultPhotoEffects.saturation !== photoEffectsState.saturation} handleClick={() => setSaturation(defaultPhotoEffects.saturation)} />
+                        Saturation ({visualEffectsState.saturation}%)
+                        <EffectsResetButton enabled={defaultVisualEffects.saturation !== visualEffectsState.saturation} handleClick={() => setSaturation(defaultVisualEffects.saturation)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={photoEffectsState.saturation} onInput={evt => setSaturation(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="1000" step="1" value={visualEffectsState.saturation} onInput={evt => setSaturation(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Invert ({photoEffectsState.invert}%)
-                        <EffectsResetButton enabled={defaultPhotoEffects.invert !== photoEffectsState.invert} handleClick={() => setInvert(defaultPhotoEffects.invert)} />
+                        Invert ({visualEffectsState.invert}%)
+                        <EffectsResetButton enabled={defaultVisualEffects.invert !== visualEffectsState.invert} handleClick={() => setInvert(defaultVisualEffects.invert)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={photoEffectsState.invert} onInput={evt => setInvert(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="100" step="1" value={visualEffectsState.invert} onInput={evt => setInvert(evt.currentTarget.valueAsNumber)} /></div>
 
                     <div>
-                        Hue-Rotate ({photoEffectsState.hueRotate}&deg;)
-                        <EffectsResetButton enabled={defaultPhotoEffects.hueRotate !== photoEffectsState.hueRotate} handleClick={() => setHueRotate(defaultPhotoEffects.hueRotate)} />
+                        Hue-Rotate ({visualEffectsState.hueRotate}&deg;)
+                        <EffectsResetButton enabled={defaultVisualEffects.hueRotate !== visualEffectsState.hueRotate} handleClick={() => setHueRotate(defaultVisualEffects.hueRotate)} />
                     </div>
-                    <div><input type="range" class="range range-sm" min="0" max="360" step="1" value={photoEffectsState.hueRotate} onInput={evt => setHueRotate(evt.currentTarget.valueAsNumber)} /></div>
+                    <div><input type="range" class="range range-sm" min="0" max="360" step="1" value={visualEffectsState.hueRotate} onInput={evt => setHueRotate(evt.currentTarget.valueAsNumber)} /></div>
                 </div>
             </div>
 

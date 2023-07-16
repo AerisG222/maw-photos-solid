@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
-import { usePhotoEffectsContext } from '../contexts/PhotoEffectsContext';
+import { useVisualEffectsContext } from '../contexts/VisualEffectsContext';
 
 import MainPhoto from '../components/photos/MainPhoto';
 import MainVideo from '../components/videos/MainVideo';
@@ -12,7 +12,7 @@ type Props = {
 }
 
 const MediaMainItem: Component<Props> = (props) => {
-    const [, { getFilterStyles, getTransformStyles }] = usePhotoEffectsContext();
+    const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
 
     // we use the switch below rather than the Switch Component for a couple reasons:
     //   1. below can properly narrow type within the case (see: https://github.com/solidjs/solid/issues/199)

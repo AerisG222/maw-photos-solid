@@ -1,11 +1,11 @@
 import { Component } from 'solid-js';
 
-import { usePhotoEffectsContext } from '../../contexts/PhotoEffectsContext';
+import { useVisualEffectsContext } from '../../contexts/VisualEffectsContext';
 
 import ToolbarButton from '../../components/toolbar/ToolbarButton';
 
 const RotateClockwiseButton: Component = () => {
-    const [photoEffectsState, { rotateClockwise }] = usePhotoEffectsContext();
+    const [, { rotateClockwise }] = useVisualEffectsContext();
 
     const onRotateClockwise = () => {
         rotateClockwise();

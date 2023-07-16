@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-export type PhotoEffectsState = {
+export type VisualEffectsState = {
     // filters
     readonly grayscale: number;
     readonly sepia: number;
@@ -18,7 +18,7 @@ export type PhotoEffectsState = {
     readonly flipVertical: boolean;
 };
 
-export const defaultPhotoEffects: PhotoEffectsState = {
+export const defaultVisualEffects: VisualEffectsState = {
     // filters
     grayscale: 0,
     sepia: 0,
@@ -35,8 +35,8 @@ export const defaultPhotoEffects: PhotoEffectsState = {
     flipVertical: false
 };
 
-export type PhotoEffectsContextValue = [
-    state: PhotoEffectsState,
+export type VisualEffectsContextValue = [
+    state: VisualEffectsState,
     actions: {
         reset: () => void;
 
@@ -58,8 +58,8 @@ export type PhotoEffectsContextValue = [
     }
 ];
 
-const PhotoEffectsContext = createContext<PhotoEffectsContextValue>([
-    {...defaultPhotoEffects},
+const VisualEffectsContext = createContext<VisualEffectsContextValue>([
+    {...defaultVisualEffects},
     {
         reset: () => undefined,
 
@@ -81,10 +81,10 @@ const PhotoEffectsContext = createContext<PhotoEffectsContextValue>([
     }
 ]);
 
-export const PhotoEffectsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore({...defaultPhotoEffects});
+export const VisualEffectsProvider: ParentComponent = (props) => {
+    const [state, setState] = createStore({...defaultVisualEffects});
 
-    const reset = () => setState({...defaultPhotoEffects});
+    const reset = () => setState({...defaultVisualEffects});
 
     const setGrayscale = (value: number) => setState({grayscale: value});
     const setBrightness = (value: number) => setState({brightness: value});
@@ -165,7 +165,7 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <PhotoEffectsContext.Provider value={[state, {
+        <VisualEffectsContext.Provider value={[state, {
             reset,
             setGrayscale,
             setBrightness,
@@ -183,8 +183,8 @@ export const PhotoEffectsProvider: ParentComponent = (props) => {
             getTransformStyles
         }]}>
             {props.children}
-        </PhotoEffectsContext.Provider>
+        </VisualEffectsContext.Provider>
     );
 };
 
-export const usePhotoEffectsContext = () => useContext(PhotoEffectsContext);
+export const useVisualEffectsContext = () => useContext(VisualEffectsContext);

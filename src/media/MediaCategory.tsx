@@ -5,7 +5,7 @@ import { MediaListProvider } from '../contexts/MediaListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { CategoryType } from '../_models/CategoryType';
 import { SlideshowProvider } from '../contexts/SlideshowContext';
-import { PhotoEffectsProvider } from '../contexts/PhotoEffectsContext';
+import { VisualEffectsProvider } from '../contexts/VisualEffectsContext';
 import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';
 import { CommentServiceProvider } from '../contexts/CommentServiceContext';
 import { ExifServiceProvider } from '../contexts/ExifServiceContext';
@@ -36,7 +36,7 @@ const MediaCategory: Component = () => {
             <MediaLoader>
             <ActiveMediaItem>
             <SlideshowProvider>
-            <PhotoEffectsProvider>
+            <VisualEffectsProvider>
             <ExifServiceProvider svc={photoMediaService}>
             <RatingServiceProvider svc={photoMediaService}>
             <CommentServiceProvider svc={photoMediaService}>
@@ -48,7 +48,7 @@ const MediaCategory: Component = () => {
             </CommentServiceProvider>
             </RatingServiceProvider>
             </ExifServiceProvider>
-            </PhotoEffectsProvider>
+            </VisualEffectsProvider>
             </SlideshowProvider>
             </ActiveMediaItem>
             </MediaLoader>
