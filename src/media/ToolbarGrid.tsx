@@ -1,9 +1,11 @@
 import { Component, Show } from 'solid-js';
+import { useParams } from '@solidjs/router';
 
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from '../contexts/MediaListContext';
+import { categoryTypes } from '../_models/CategoryTypes';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
@@ -18,6 +20,7 @@ import FlipVerticalButton from './toolbar/FlipVerticalButton';
 const GridToolbar: Component = () => {
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
     const [state] = useMediaListContext();
+    const params = useParams();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -40,7 +43,9 @@ const GridToolbar: Component = () => {
                 <MoveNextButton />
             </Show>
 
-            <Divider />
+            <Show when={state.activeItem || categoryTypes[params.categoryType].slideshowAvailable}>
+                <Divider />
+            </Show>
 
             <Show when={!state.activeItem}>
                 <ToolbarButton

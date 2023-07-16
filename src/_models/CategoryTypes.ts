@@ -5,13 +5,14 @@ import { videoCategoryService } from '../_services/categories/VideoCategoryServi
 import { KeyValuePair } from './KeyValuePair';
 import { MediaView, MediaViewAll } from '../media/_routes';
 
-type CategoryTypeInfo = {
+export type CategoryTypeInfo = {
     nameSingular: string;
     namePlural: string;
     routePart: string;  // todo: improve naming
     icon: string;
     svc: ICategoryService;
     views: MediaView[];
+    slideshowAvailable: boolean;
 };
 
 // if you add categoryTypes, please be sure to safelist the icon in unocss.config.ts
@@ -22,7 +23,8 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         routePart: "photos",
         icon: "i-ic-round-camera-alt",
         svc: photoCategoryService,
-        views: MediaViewAll
+        views: MediaViewAll,
+        slideshowAvailable: true
     },
     videos: {
         nameSingular: "Video",
@@ -30,7 +32,8 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         routePart: "videos",
         icon: "i-ic-round-videocam",
         svc: videoCategoryService,
-        views: MediaViewAll
+        views: MediaViewAll,
+        slideshowAvailable: false
     }
 };
 
