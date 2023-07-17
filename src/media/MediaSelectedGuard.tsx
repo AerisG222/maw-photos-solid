@@ -6,14 +6,12 @@ import { detailRoute, getMediaPath } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 
 const MediaSelectedGuard: ParentComponent = (props) => {
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
+    const [mediaList] = useMediaListContext();
     const navigate = useNavigate();
     const params = useParams();
     const c = children(() => props.children);
 
     createEffect(() => {
-        setActiveRouteDefinition(detailRoute);
-
         if(!params.id) {
             const m = mediaList.items[0];
 

@@ -4,6 +4,7 @@ import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDet
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../_models/ThumbnailSize';
+import { detailRoute } from './_routes';
 
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
@@ -17,13 +18,15 @@ import MediaSelectedGuard from './MediaSelectedGuard';
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [settings] = usePhotoDetailViewSettingsContext();
-    const [mediaList] = useMediaListContext();
+    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
     const toolbar = (
         <Toolbar>
             <DetailToolbar />
         </Toolbar>
     );
+
+    setActiveRouteDefinition(detailRoute);
 
     hideXpad();
 
