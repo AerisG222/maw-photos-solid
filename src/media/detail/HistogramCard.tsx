@@ -21,6 +21,8 @@ const HistogramCard: Component = () => {
     const [histogram, setHistogram] = createSignal({r: [], g: [], b: [], lum: []});
 
     let histogramCanvas: HTMLCanvasElement = undefined;
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
         if(!histogramCanvas) {
@@ -35,7 +37,11 @@ const HistogramCard: Component = () => {
     };
 
     const updateHistogramFromImage = (img): void => {
-        const data = getImageData(img);
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        tempCtx.drawImage(img, 0, 0);
+
+        const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
 
         setHistogram(calcHistogram(data));
     }
@@ -43,36 +49,12 @@ const HistogramCard: Component = () => {
     const updateHistogramFromVideoFrame = async (timestamp, frame) => {
         const bitmap = await createImageBitmap(state.mediaElement);
 
-        const tempCanvas = document.createElement('canvas');
-
-        tempCanvas.width = bitmap.width;
-        tempCanvas.height = bitmap.height;
-
-        const ctx = tempCanvas.getContext('2d') as CanvasRenderingContext2D;
-
-        ctx.drawImage(bitmap, 0, 0);
-
-        const data = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-
-        setHistogram(calcHistogram(data));
+        updateHistogramFromImage(bitmap);
 
         if(!state.mediaElement.ended) {
             state.mediaElement.requestVideoFrameCallback(updateHistogramFromVideoFrame);
         }
     }
-
-    const getImageData = (img): Uint8ClampedArray => {
-        const tempCanvas = document.createElement('canvas');
-
-        tempCanvas.width = img.width;
-        tempCanvas.height = img.height;
-
-        const ctx = tempCanvas.getContext('2d') as CanvasRenderingContext2D;
-
-        ctx.drawImage(img, 0, 0);
-
-        return ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-    };
 
     const getMaxCount = (channel: string, histogram: Histogram): number => {
         let maxCount = 0;
@@ -196,6 +178,10 @@ const HistogramCard: Component = () => {
 
     createEffect(() => {
         const el = state.mediaElement;
+
+        if(!el) {
+            return;
+        }
 
         if(el.nodeName === 'IMG') {
             (el as HTMLImageElement).onload = () => updateHistogramFromImage(el);
