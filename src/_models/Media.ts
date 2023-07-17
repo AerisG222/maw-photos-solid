@@ -38,3 +38,12 @@ export type Video = {
 };
 
 export type Media = Photo | Video;
+
+export const getMediaTeaserUrl = (media: Media) => {
+    switch(media.kind) {
+        case MediaTypePhoto:
+            return media.imageXsSqUrl;
+        case MediaTypeVideo:
+            return media.thumbnailSqUrl;
+    }
+};

@@ -10,6 +10,7 @@ import { CategoryType } from '../_models/CategoryType';
 import MapToolbar from './ToolbarMap';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
+import { getMediaTeaserUrl } from '../_models/Media';
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -62,7 +63,7 @@ const ViewMap: Component = () => {
                     const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
 
                     marker.addListener("click", () => {
-                        infoWindow.setContent(`<img src="${item.imageXsUrl ?? item.thumbnailSqUrl}" />`);
+                        infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
                         infoWindow.open({
                             anchor: marker,
                             map

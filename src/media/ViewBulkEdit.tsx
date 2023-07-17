@@ -2,7 +2,7 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { Media } from '../_models/Media';
+import { Media, getMediaTeaserUrl } from '../_models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../_api/_models/GpsCoordinate';
 import { bulkEditRoute, getMediaCategoryPath } from './_routes';
@@ -34,7 +34,7 @@ const ViewBulkEdit: Component = () => {
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
-        imageUrl: media.imageXsSqUrl ?? media.thumbnailSqUrl,
+        imageUrl: getMediaTeaserUrl(media),
         latitude: media.latitude,
         longitude: media.longitude,
         isSelected: false
