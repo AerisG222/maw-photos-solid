@@ -13,6 +13,7 @@ export type MediaListState = {
     readonly activeItem: Media;
     readonly activeIndex: number;
     readonly activeRouteDefinition: AppRouteDefinition;
+    readonly mediaElement: HTMLImageElement | HTMLVideoElement;
 };
 
 export const defaultMediaListState = {
@@ -20,7 +21,8 @@ export const defaultMediaListState = {
     items: [],
     activeItem: undefined,
     activeIndex: undefined,
-    activeRouteDefinition: undefined
+    activeRouteDefinition: undefined,
+    mediaElement: undefined
 }
 
 export type MediaListContextValue = [
@@ -29,6 +31,7 @@ export type MediaListContextValue = [
         setActiveRouteDefinition: (def: ActiveRouteDefinition) => void;
         setItems: (media: Media[]) => void;
         setActiveItem: (id: number) => void;
+        setMediaElement: (el: HTMLImageElement | HTMLVideoElement) => void;
         activeItemIsFirst: () => boolean;
         activeItemIsLast: () => boolean;
         getNextItem: () => Media | undefined;
@@ -47,6 +50,7 @@ const MediaListContext = createContext<MediaListContextValue>([
         setActiveRouteDefinition: () => undefined,
         setItems: () => undefined,
         setActiveItem: () => undefined,
+        setMediaElement: () => undefined,
         activeItemIsFirst: () => undefined,
         activeItemIsLast: () => undefined,
         getNextItem: () => undefined,
@@ -83,22 +87,22 @@ export const MediaListProvider: ParentComponent = (props) => {
         }
     };
 
+    const setMediaElement = (el: HTMLImageElement | HTMLVideoElement) => setState({mediaElement: el});
+
     const activeItemIsFirst = () => state.activeIndex === 0;
     const activeItemIsLast = () => state.activeIndex === state.items.length - 1;
 
     const unsetActiveItem = () => {
         setState({
             activeItem: undefined,
-            activeIndex: undefined
+            activeIndex: undefined,
+            mediaElement: undefined
         });
     };
 
     const setActiveItemByIndex = (index: number) => {
         if(index < 0 || index >= state.items.length) {
-            setState({
-                activeItem: undefined,
-                activeIndex: undefined
-            })
+            unsetActiveItem();
         } else {
             setState({
                 activeItem: state.items[index],
@@ -163,6 +167,7 @@ export const MediaListProvider: ParentComponent = (props) => {
             setActiveRouteDefinition,
             setItems,
             setActiveItem,
+            setMediaElement,
             activeItemIsFirst,
             activeItemIsLast,
             getNextItem,

@@ -18,35 +18,50 @@ const HistogramCard: Component = () => {
 
     const [state] = useMediaListContext();
     const [channel, setChannel] = createSignal(_rgb);
+    const [histogram, setHistogram] = createSignal({r: [], g: [], b: [], lum: []});
 
-    const img = document.createElement("img");
-    let canvas: HTMLCanvasElement = undefined;
-    img.setAttribute('crossorigin', 'anonymous');
+    let histogramCanvas: HTMLCanvasElement = undefined;
 
-    const updateHistogram = () => {
-        renderHistogram(channel());
-    };
-
-    const renderHistogram = (channel: string) => {
-        if(!canvas) {
+    const renderHistogram = (histogram: Histogram, channel: string) => {
+        if(!histogramCanvas) {
             return;
         }
 
-        let data = undefined;
+        if(histogram) {
+            const maxCount = getMaxCount(channel, histogram);
 
-        try {
-            data = getImageData();
-        } catch { }
-
-        if(data) {
-            const hist = calcHistogram(data);
-            const maxCount = getMaxCount(channel, hist);
-
-            drawHistogram(channel, hist, maxCount);
+            drawHistogram(channel, histogram, maxCount);
         }
     };
 
-    const getImageData = (): Uint8ClampedArray => {
+    const updateHistogramFromImage = (img): void => {
+        const data = getImageData(img);
+
+        setHistogram(calcHistogram(data));
+    }
+
+    const updateHistogramFromVideoFrame = async (timestamp, frame) => {
+        const bitmap = await createImageBitmap(state.mediaElement);
+
+        const tempCanvas = document.createElement('canvas');
+
+        tempCanvas.width = bitmap.width;
+        tempCanvas.height = bitmap.height;
+
+        const ctx = tempCanvas.getContext('2d') as CanvasRenderingContext2D;
+
+        ctx.drawImage(bitmap, 0, 0);
+
+        const data = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
+
+        setHistogram(calcHistogram(data));
+
+        if(!state.mediaElement.ended) {
+            state.mediaElement.requestVideoFrameCallback(updateHistogramFromVideoFrame);
+        }
+    }
+
+    const getImageData = (img): Uint8ClampedArray => {
         const tempCanvas = document.createElement('canvas');
 
         tempCanvas.width = img.width;
@@ -126,9 +141,9 @@ const HistogramCard: Component = () => {
         histogram: Histogram,
         maxCount: number
     ): void => {
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        const ctx = histogramCanvas.getContext('2d') as CanvasRenderingContext2D;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
 
         ctx.globalCompositeOperation = 'lighter';
 
@@ -160,35 +175,39 @@ const HistogramCard: Component = () => {
         ctx.fillStyle = color;
 
         ctx.beginPath();
-        ctx.moveTo(0, canvas.height);
+        ctx.moveTo(0, histogramCanvas.height);
 
         for (let x, y, i = 0; i <= 255; i++) {
             if (!(i in vals)) {
                 continue;
             }
 
-            y = Math.round((vals[i] / maxCount) * canvas.height);
-            x = Math.round((i / 255) * canvas.width);
+            y = Math.round((vals[i] / maxCount) * histogramCanvas.height);
+            x = Math.round((i / 255) * histogramCanvas.width);
 
-            ctx.lineTo(x, canvas.height - y);
+            ctx.lineTo(x, histogramCanvas.height - y);
         }
 
-        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(histogramCanvas.width, histogramCanvas.height);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
     };
 
-    img.onload = updateHistogram;
-
     createEffect(() => {
-        if(state.activeItem) {
-            img.src = state.activeItem.imageMdUrl;
+        const el = state.mediaElement;
+
+        if(el.nodeName === 'IMG') {
+            (el as HTMLImageElement).onload = () => updateHistogramFromImage(el);
+        }
+
+        if(el.nodeName === 'VIDEO') {
+            (el as HTMLVideoElement).requestVideoFrameCallback(updateHistogramFromVideoFrame);
         }
     });
 
     createEffect(() => {
-        renderHistogram(channel());
+        renderHistogram(histogram(), channel());
     });
 
     return (
@@ -216,7 +235,7 @@ const HistogramCard: Component = () => {
                 </label>
             </form>
             <div>
-                <canvas class="histogram" width="473px" height="200px" ref={canvas} />
+                <canvas class="histogram" width="473px" height="200px" ref={histogramCanvas} />
             </div>
         </>
     );

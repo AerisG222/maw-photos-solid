@@ -2,6 +2,7 @@ import { Component } from 'solid-js';
 
 import { Video } from '../../_models/Media';
 import { VideoSizeIdType } from '../../_models/VideoSize';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
 type Props = {
     video: Video;
@@ -9,6 +10,8 @@ type Props = {
 };
 
 const MainVideo: Component<Props> = (props) => {
+    const [, {setMediaElement}] = useMediaListContext();
+
     const getVideoDimensions = (video: Video, videoSize: VideoSizeIdType) => {
         if(videoSize === 'large') {
             return {
@@ -33,8 +36,10 @@ const MainVideo: Component<Props> = (props) => {
     return (
         <video
             class="h-100% w-100% center-block m-auto"
+            crossorigin='anonymous'  // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls
+            ref={el => setMediaElement(el)}
         >
             <source
                 src={getVideoUrl(props.video, props.videoSize)}
