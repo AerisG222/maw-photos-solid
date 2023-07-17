@@ -28,11 +28,12 @@ const MainVideo: Component<Props> = (props) => {
             video.videoFullUrl :
             video.videoScaledUrl;
 
+    // todo: add option to restrict video to src size to avoid scaling?
+    // style={getVideoDimensions(props.video, props.videoSize)}
     return (
         <video
-            class="center-block m-auto"
+            class="h-100% w-100% center-block m-auto"
             autoplay={false}
-            style={getVideoDimensions(props.video, props.videoSize)}
             controls
         >
             <source
