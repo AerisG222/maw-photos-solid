@@ -1,6 +1,6 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 
-import { ICommentService } from '../_models/services/ICommentService';
+import { ICommentService } from '../_services/media/ICommentService';
 
 const CommentServiceContext = createContext<ICommentService>(undefined);
 
