@@ -34,7 +34,7 @@ const ViewBulkEdit: Component = () => {
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
-        imageUrl: media.imageXsSqUrl ?? media.thumbnailSq,
+        imageUrl: media.imageXsSqUrl ?? media.thumbnailSqUrl,
         latitude: media.latitude,
         longitude: media.longitude,
         isSelected: false
