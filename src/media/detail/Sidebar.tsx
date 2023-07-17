@@ -1,6 +1,8 @@
 import { Component, For, Show, lazy } from "solid-js";
 
 import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
+import { MediaTypePhoto } from '../../_models/Media';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
@@ -22,6 +24,8 @@ const Sidebar: Component = () => {
             setShowCategoryTeaserChooser,
         },
     ] = usePhotoInfoPanelSettingsContext();
+
+    const [mediaList] = useMediaListContext();
 
     const toggleExpandedState = () => {
         setExpandInfoPanel(!settings.expandInfoPanel);
@@ -66,6 +70,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-star",
             shortcutKeys: ['r'],
             clickHandler: toggleRatings,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showRatings,
             component: lazy(() => import('./RatingsCard'))
         },
@@ -75,6 +80,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-comment",
             shortcutKeys: ['c'],
             clickHandler: toggleComments,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showComments,
             component: lazy(() => import('./CommentsCard'))
         },
@@ -84,6 +90,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-tune",
             shortcutKeys: ['x'],
             clickHandler: toggleExif,
+            enable: (media: Media) => media?.kind === MediaTypePhoto,
             active: () => settings.expandInfoPanel && settings.showExif,
             component: lazy(() => import('./ExifCard'))
         },
@@ -93,6 +100,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-photo-filter",
             shortcutKeys: ['e'],
             clickHandler: toggleEffects,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showEffects,
             component: lazy(() => import('./EffectsCard'))
         },
@@ -102,6 +110,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-color-lens",
             shortcutKeys: ['h'],
             clickHandler: toggleHistogram,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showHistogram,
             component: lazy(() => import('./HistogramCard'))
         },
@@ -111,6 +120,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-map",
             shortcutKeys: ['v'],
             clickHandler: toggleMinimap,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showMinimap,
             component: lazy(() => import('./MinimapCard'))
         },
@@ -120,6 +130,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-edit",
             shortcutKeys: ['n'],
             clickHandler: toggleMetadataEditor,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
             component: lazy(() => import('./MetadataEditorCard'))
         },
@@ -129,6 +140,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-image-search",
             shortcutKeys: ['k'],
             clickHandler: toggleCategoryTeaserChooser,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import('./CategoryTeaserCard'))
         }
@@ -138,7 +150,7 @@ const Sidebar: Component = () => {
         <div class="flex">
             <Show when={settings.expandInfoPanel}>
                 <div class="w-[500px] bg-secondary-content:6 border-l-1 border-l-secondary-content:10% overflow-y-auto overflow-x-hidden">
-                    <For each={cards}>{ card =>
+                    <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
                         <Show when={card.active()}>
                             <InfoCard title={card.title} icon={card.icon}>
                                 {card.component}
@@ -162,7 +174,7 @@ const Sidebar: Component = () => {
 
                 <Divider />
 
-                <For each={cards}>{ card =>
+                <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
                     <ToolbarButton
                         name={card.tooltip}
                         icon={card.icon}
