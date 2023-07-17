@@ -37,7 +37,7 @@ const MediaMainItem: Component<Props> = (props) => {
 
     return (
         <div
-            class="h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
+            class="grid h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
             style={`${props.maxHeightStyle ?? ''} ${getTransformStyles()} ${getFilterStyles()}`}>
             { getMainDisplay() }
         </div>
