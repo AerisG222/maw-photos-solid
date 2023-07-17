@@ -4,14 +4,14 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { Media, getMediaTeaserUrl } from '../_models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
-import { GpsCoordinate } from '../_api/_models/GpsCoordinate';
+import { GpsCoordinate } from '../_models/Gps';
 import { bulkEditRoute, getMediaCategoryPath } from './_routes';
+import { CategoryType } from '../_models/CategoryType';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
-import { CategoryType } from '../_models/CategoryType';
 
 type SelectableMedia = {
     id: number,

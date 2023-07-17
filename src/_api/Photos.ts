@@ -1,11 +1,11 @@
-import { ApiCollection } from './_models/ApiCollection';
-import { Photo } from './_models/Photo';
-import { Comment } from './_models/Comment';
-import { ExifDetail } from './_models/ExifDetail';
-import { GpsDetail } from './_models/GpsDetail';
-import { GpsCoordinate } from './_models/GpsCoordinate';
+import { ApiCollection } from './models/ApiCollection';
+import { Photo } from './models/Photo';
+import { Comment } from './models/Comment';
+import { ExifDetail } from './models/ExifDetail';
+import { ApiGpsDetail } from './models/ApiGpsDetail';
+import { ApiGpsCoordinate } from './models/ApiGpsCoordinate';
 import { patchMawApi, postMawApi, queryMawApi } from './Shared';
-import { Rating } from './_models/Rating';
+import { Rating } from './models/Rating';
 
 export const getRandomPhoto = () =>
     queryMawApi<Photo>('photos/random');
@@ -36,7 +36,7 @@ export const addComment = (photoId: number, comment: string) =>
     postMawApi(`photos/${photoId}/comments`, { comment });
 
 export const getGpsDetail = (photoId: number) =>
-    queryMawApi<GpsDetail>(`photos/${photoId}/gps`);
+    queryMawApi<ApiGpsDetail>(`photos/${photoId}/gps`);
 
-export const setGpsCoordinateOverride = (photoId: number, gps: GpsCoordinate) =>
+export const setGpsCoordinateOverride = (photoId: number, gps: ApiGpsCoordinate) =>
     patchMawApi(`photos/${photoId}/gps`, gps);

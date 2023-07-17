@@ -1,7 +1,7 @@
 import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from './_models/ApiCollection';
-import { PhotoCategory as ApiPhotoCategory } from './_models/PhotoCategory';
-import { Photo as ApiPhoto } from './_models/Photo';
+import { ApiCollection } from './models/ApiCollection';
+import { PhotoCategory as ApiPhotoCategory } from './models/PhotoCategory';
+import { Photo as ApiPhoto } from './models/Photo';
 import { PhotoCategory } from '../_models/Category';
 import { CategoryTypePhotos } from '../_models/CategoryType';
 import { MediaTypePhoto, Photo } from '../_models/Media';

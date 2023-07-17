@@ -1,8 +1,8 @@
-import { ApiCollection } from './_models/ApiCollection';
-import { Comment } from './_models/Comment';
-import { GpsCoordinate } from './_models/GpsCoordinate';
-import { GpsDetail } from './_models/GpsDetail';
-import { Rating } from './_models/Rating';
+import { ApiCollection } from './models/ApiCollection';
+import { Comment } from './models/Comment';
+import { ApiGpsCoordinate } from './models/ApiGpsCoordinate';
+import { ApiGpsDetail } from './models/ApiGpsDetail';
+import { Rating } from './models/Rating';
 import { patchMawApi, postMawApi, queryMawApi } from './Shared';
 
 export const getRating = (videoId: number) =>
@@ -25,7 +25,7 @@ export const addComment = (videoId: number, comment: string) =>
     postMawApi(`videos/${videoId}/comments`, { comment });
 
 export const getGpsDetail = (videoId: number) =>
-    queryMawApi<GpsDetail>(`videos/${videoId}/gps`);
+    queryMawApi<ApiGpsDetail>(`videos/${videoId}/gps`);
 
-export const setGpsCoordinateOverride = (videoId: number, gps: GpsCoordinate) =>
+export const setGpsCoordinateOverride = (videoId: number, gps: ApiGpsCoordinate) =>
     patchMawApi(`videos/${videoId}/gps`, gps);

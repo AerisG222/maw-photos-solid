@@ -1,5 +1,4 @@
-import { GpsCoordinate } from '../../_api/_models/GpsCoordinate';
-import { GpsDetail } from '../../_api/_models/GpsDetail';
+import { GpsCoordinate, GpsDetail } from '../../_models/Gps';
 
 export interface IMetadataEditService {
     fetchGpsDetail: (id: number) => Promise<GpsDetail>;
