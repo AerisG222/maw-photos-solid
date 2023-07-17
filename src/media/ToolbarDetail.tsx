@@ -1,7 +1,9 @@
-import { Component } from 'solid-js';
+import { Component, Show } from 'solid-js';
+import { useParams } from '@solidjs/router';
 
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
+import { CategoryTypePhotos } from '../_models/CategoryType';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
@@ -20,6 +22,7 @@ import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouch
 
 const DetailToolbar: Component = () => {
     const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = usePhotoDetailViewSettingsContext();
+    const params = useParams();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -41,9 +44,10 @@ const DetailToolbar: Component = () => {
 
             <Divider />
 
-            <DownloadCategoryButton />
-
-            <Divider />
+            <Show when={params.categoryType === CategoryTypePhotos}>
+                <DownloadCategoryButton />
+                <Divider />
+            </Show>
 
             <RotateCounterClockwiseButton />
             <RotateClockwiseButton />
@@ -52,12 +56,14 @@ const DetailToolbar: Component = () => {
 
             <Divider />
 
-            <DownloadPhotoLowResButton />
-            <DownloadPhotoMediumResButton />
-            <DownloadPhotoHighResButton />
-            <DownloadPhotoHighUntouchedButton />
+            <Show when={params.categoryType === CategoryTypePhotos}>
+                <DownloadPhotoLowResButton />
+                <DownloadPhotoMediumResButton />
+                <DownloadPhotoHighResButton />
+                <DownloadPhotoHighUntouchedButton />
 
-            <Divider />
+                <Divider />
+            </Show>
 
             <ToolbarButton
                 icon="i-ic-round-title"
