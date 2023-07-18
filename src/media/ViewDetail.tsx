@@ -48,7 +48,7 @@ const ViewDetail: Component = () => {
     };
 
     return (
-        <MediaSelectedGuard>
+        <MediaSelectedGuard targetRoute={detailRoute}>
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
             <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
                 <Show when={settings.showBreadcrumbs} fallback={<div />}>

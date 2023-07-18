@@ -3,13 +3,13 @@ import { Component, onCleanup } from "solid-js";
 import { useFullscreenContext } from '../contexts/FullscreenContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
+import { fullscreenRoute } from './_routes';
 
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import MediaMainItem from './MediaMainItem';
 import MediaSelectedGuard from './MediaSelectedGuard';
-import { fullscreenRoute } from './_routes';
 
 const ViewFullscreen: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -33,7 +33,7 @@ const ViewFullscreen: Component = () => {
     });
 
     return (
-        <MediaSelectedGuard>
+        <MediaSelectedGuard targetRoute={fullscreenRoute}>
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
                 <MediaMainItem media={mediaList.activeItem} />
