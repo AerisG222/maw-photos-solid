@@ -1,17 +1,22 @@
-import { useNavigate, useParams } from '@solidjs/router';
-import { Component } from "solid-js";
+import { Component, createEffect } from "solid-js";
+import { useNavigate } from '@solidjs/router';
 
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaView, getMediaPathByView } from './_routes';
-import { CategoryType } from '../_models/CategoryType';
+import { useCategoryContext } from '../contexts/CategoryContext';
 
 const Redirect: Component = () => {
-    const [settings] = usePhotoPageSettingsContext();
     const navigate = useNavigate();
-    const params = useParams();
-    const categoryId = parseInt(params.categoryId);
+    const [categoryContext] = useCategoryContext();
+    const [settings] = usePhotoPageSettingsContext();
 
-    navigate(getMediaPathByView(settings.viewMode as MediaView, params.categoryType as CategoryType, categoryId));
+    createEffect(() => {
+        const cat = categoryContext.activeCategory;
+
+        if(cat) {
+            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id));
+        }
+    });
 
     return <></>;
 };

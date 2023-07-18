@@ -1,22 +1,25 @@
 import { ParentComponent, children, createEffect } from 'solid-js';
-import { useNavigate, useParams } from '@solidjs/router';
+import { useNavigate } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { detailRoute, getMediaPath } from './_routes';
-import { CategoryType } from '../_models/CategoryType';
+import { useCategoryContext } from '../contexts/CategoryContext';
 
 const MediaSelectedGuard: ParentComponent = (props) => {
+    const [categoryContext] = useCategoryContext();
     const [mediaList] = useMediaListContext();
     const navigate = useNavigate();
-    const params = useParams();
     const c = children(() => props.children);
 
     createEffect(() => {
-        if(!params.id) {
+        if(categoryContext.activeCategory &&
+            mediaList.items &&
+            mediaList.items.length > 0 &&
+            !mediaList.activeItem) {
             const m = mediaList.items[0];
 
             if(m) {
-                navigate(getMediaPath(detailRoute, params.categoryType as CategoryType, m.categoryId, m.id));
+                navigate(getMediaPath(detailRoute, categoryContext.activeCategory.type, m.categoryId, m.id));
             }
         }
     });
