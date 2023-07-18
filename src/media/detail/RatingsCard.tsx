@@ -1,19 +1,37 @@
-import { Component, Suspense, createResource } from 'solid-js';
+import { Component, Suspense, createEffect, createResource, createSignal } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useRatingServiceContext } from '../../contexts/RatingServiceContext';
+import { useMediaListContext } from '../../contexts/MediaListContext';
 
 import Rating from '../../components/rating/Rating';
 
 const RatingsCard: Component = () => {
-    const {fetchRating, setRating} = useRatingServiceContext();
     const [mediaList] = useMediaListContext();
-    const [ratingResource, { mutate, refetch }] = createResource(() => mediaList.activeItem?.id, fetchRating);
+    const [ratingContext] = useRatingServiceContext();
+    const [fetchRatingSignal, setFetchRatingSignal] = createSignal({ media: undefined, service: undefined });
+
+    // option 1: use below approach to make sure we have a valid service configured
+    // option 2: change to define functions that take the media type and id, and have that function
+    //           call the right service based on type?
+    const getRatings = () => {
+        if(ratingContext.service && mediaList.activeItem) {
+            return ratingContext.service.fetchRating(mediaList.activeItem.id);
+        }
+    };
+
+    const [ratingResource, { mutate, refetch }] = createResource(fetchRatingSignal, getRatings);
 
     const rate = async (rating: number) => {
-        await setRating(mediaList.activeItem?.id, rating);
+        await ratingContext.service.setRating(mediaList.activeItem?.id, rating);
         refetch();
     };
+
+    createEffect(() => {
+        setFetchRatingSignal({
+            media: mediaList.activeItem,
+            service: ratingContext.service
+        });
+    });
 
     return (
         <Suspense>

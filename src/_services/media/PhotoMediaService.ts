@@ -22,3 +22,5 @@ export class PhotoMediaService
     fetchGpsDetail = getGpsDetail;
     setGpsCoordinateOverride = setGpsCoordinateOverride;
 }
+
+export const photoMediaService = new PhotoMediaService();

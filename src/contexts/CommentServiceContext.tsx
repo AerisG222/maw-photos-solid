@@ -1,19 +1,11 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { useContext } from 'solid-js';
 
+import { buildServiceContext } from '../_models/utils/ServiceContextUtil';
 import { ICommentService } from '../_services/media/ICommentService';
 
-const CommentServiceContext = createContext<ICommentService>(undefined);
-
-type Props = {
-    svc: ICommentService
-};
-
-export const CommentServiceProvider: ParentComponent<Props> = (props) => {
-    return (
-        <CommentServiceContext.Provider value={props.svc}>
-            {props.children}
-        </CommentServiceContext.Provider>
-    );
-};
+export const {
+    ServiceContext: CommentServiceContext,
+    ServiceProvider: CommentServiceProvider
+} = buildServiceContext<ICommentService>();
 
 export const useCommentServiceContext = () => useContext(CommentServiceContext);

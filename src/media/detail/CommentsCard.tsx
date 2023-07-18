@@ -1,16 +1,24 @@
-import { Component, For, createResource, createSignal } from 'solid-js';
+import { Component, For, createEffect, createResource, createSignal } from 'solid-js';
 
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useCommentServiceContext } from '../../contexts/CommentServiceContext';
 
 const CommentsCard: Component = () => {
-    const {fetchComments, addComment} = useCommentServiceContext();
+    const [fetchCommentSignal, setFetchCommentSignal] = createSignal({ media: undefined, service: undefined });
+    const [commentContext] = useCommentServiceContext();
     const [commentText, setCommentText] = createSignal("");
     const [mediaList] = useMediaListContext();
-    const [commentResource, { mutate, refetch }] = createResource(() => mediaList.activeItem?.id, fetchComments);
 
-    const addPhotoComment = async (comment: string) => {
-        await addComment(mediaList.activeItem?.id, comment);
+    const getComments = () => {
+        if(commentContext.service && mediaList.activeItem) {
+            return commentContext.service.fetchComments(mediaList.activeItem.id);
+        }
+    }
+
+    const [commentResource, { mutate, refetch }] = createResource(fetchCommentSignal, getComments);
+
+    const addComment = async (comment: string) => {
+        await commentContext.service.addComment(mediaList.activeItem?.id, comment);
         refetch();
     };
 
@@ -26,9 +34,16 @@ const CommentsCard: Component = () => {
         evt.preventDefault();
 
         if(commentText()) {
-            await addPhotoComment(commentText())
+            await addComment(commentText())
         }
     };
+
+    createEffect(() => {
+        setFetchCommentSignal({
+            media: mediaList.activeItem,
+            service: commentContext.service
+        });
+    });
 
     return (
         <>

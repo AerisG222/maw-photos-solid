@@ -19,3 +19,5 @@ export class VideoMediaService
     fetchGpsDetail = getGpsDetail;
     setGpsCoordinateOverride = setGpsCoordinateOverride;
 }
+
+export const videoMediaService = new VideoMediaService();

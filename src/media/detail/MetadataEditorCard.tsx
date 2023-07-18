@@ -1,34 +1,23 @@
-import {
-    Component,
-    createEffect,
-    createResource,
-    createSignal
-} from 'solid-js';
+import { Component, createEffect, createResource, createSignal } from 'solid-js';
 
-import { GpsDetail } from '../../_models/Gps';
-import { Photo } from '../../_models/Media';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
 import { GpsOverride, isValidLatLng, parseGps } from '../../_models/utils/GpsUtils';
 
 const MetadataEditorCard: Component = () => {
-    const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
+    const [metadataEditorContext] = useMetadataEditServiceContext();
+    const [fetchMetadataEditSignal, setFetchMetadataEditSignal] = createSignal({ media: undefined, service: undefined });
     const [sourceGps, setSourceGps] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [override, setOverride] = createSignal<GpsOverride>({lat: undefined, lng: undefined});
     const [mediaList, { moveNext }] = useMediaListContext();
 
-    const fetchGpsData = (photo: Photo | undefined): GpsDetail | Promise<GpsDetail> => {
-        if(!photo) {
-            return {
-                source: { latitude: undefined, longitude: undefined },
-                override: { latitude: undefined, longitude: undefined }
-            };
+    const fetchGpsData = () => {
+        if(metadataEditorContext.service && mediaList.activeItem) {
+            return metadataEditorContext.service.fetchGpsDetail(mediaList.activeItem.id);
         }
-
-        return fetchGpsDetail(photo.id);
     };
 
-    const [gpsDetail] = createResource(() => mediaList.activeItem, fetchGpsData);
+    const [gpsDetail] = createResource(fetchMetadataEditSignal, fetchGpsData);
 
     createEffect(() => {
         const src = gpsDetail()?.source;
@@ -71,8 +60,11 @@ const MetadataEditorCard: Component = () => {
     const save = (evt: Event) => {
         evt.preventDefault();
 
-        if(mediaList.activeItem && isValidLatLng(override().lat) && isValidLatLng(override().lng)) {
-            setGpsCoordinateOverride(mediaList.activeItem.id, {
+        if(metadataEditorContext.service &&
+            mediaList.activeItem &&
+            isValidLatLng(override().lat) &&
+            isValidLatLng(override().lng)) {
+            metadataEditorContext.service.setGpsCoordinateOverride(mediaList.activeItem.id, {
                 latitude: parseFloat(override().lat),
                 longitude: parseFloat(override().lng)
             });
@@ -101,6 +93,13 @@ const MetadataEditorCard: Component = () => {
             'btn-disabled': !isOverrideValid()
         }
     };
+
+    createEffect(() => {
+        setFetchMetadataEditSignal({
+            media: mediaList.activeItem,
+            service: metadataEditorContext.service
+        });
+    });
 
     return (
         <form>

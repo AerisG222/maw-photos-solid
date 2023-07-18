@@ -3,17 +3,21 @@ import { Component } from 'solid-js';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useCategoryTeaserServiceContext } from '../../contexts/CategoryTeaserServiceContext';
+import { getMediaTeaserUrl } from '../../_models/Media';
 
 const CategoryTeaserCard: Component = () => {
-    const {setTeaser} = useCategoryTeaserServiceContext();
+    const [teaserServiceContext] = useCategoryTeaserServiceContext();
     const [categoryState, {updateTeaser}] = useCategoryContext();
     const [mediaList] = useMediaListContext();
 
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();
 
-        await setTeaser(categoryState.activeCategory.id, mediaList.activeItem.id);
-        updateTeaser(mediaList.activeItem);
+        if(categoryState.activeCategory && teaserServiceContext.service) {
+            await teaserServiceContext.service.setTeaser(categoryState.activeCategory.id, mediaList.activeItem.id);
+
+            updateTeaser(categoryState.activeCategory.type, categoryState.activeCategory.id, getMediaTeaserUrl(mediaList.activeItem));
+        }
     };
 
     return (

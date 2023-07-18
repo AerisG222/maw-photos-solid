@@ -1,19 +1,11 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { useContext } from 'solid-js';
 
 import { ICategoryTeaserService } from '../_services/media/ICategoryTeaserService';
+import { buildServiceContext } from '../_models/utils/ServiceContextUtil';
 
-const CategoryTeaserServiceContext = createContext<ICategoryTeaserService>(undefined);
-
-type Props = {
-    svc: ICategoryTeaserService
-};
-
-export const CategoryTeaserServiceProvider: ParentComponent<Props> = (props) => {
-    return (
-        <CategoryTeaserServiceContext.Provider value={props.svc}>
-            {props.children}
-        </CategoryTeaserServiceContext.Provider>
-    );
-};
+export const {
+    ServiceContext: CategoryTeaserServiceContext,
+    ServiceProvider: CategoryTeaserServiceProvider
+} = buildServiceContext<ICategoryTeaserService>();
 
 export const useCategoryTeaserServiceContext = () => useContext(CategoryTeaserServiceContext);

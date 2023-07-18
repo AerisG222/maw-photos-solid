@@ -1,19 +1,11 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { useContext } from 'solid-js';
 
 import { IMetadataEditService } from '../_services/media/IMetadataEditService';
+import { buildServiceContext } from '../_models/utils/ServiceContextUtil';
 
-const MetadataEditServiceContext = createContext<IMetadataEditService>(undefined);
-
-type Props = {
-    svc: IMetadataEditService;
-};
-
-export const MetadataEditServiceProvider: ParentComponent<Props> = (props) => {
-    return (
-        <MetadataEditServiceContext.Provider value={props.svc}>
-            {props.children}
-        </MetadataEditServiceContext.Provider>
-    );
-};
+export const {
+    ServiceContext: MetadataEditServiceContext,
+    ServiceProvider: MetadataEditServiceProvider
+} = buildServiceContext<IMetadataEditService>();
 
 export const useMetadataEditServiceContext = () => useContext(MetadataEditServiceContext);

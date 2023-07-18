@@ -1,14 +1,22 @@
-import { Component, For, createResource, createSignal } from 'solid-js';
+import { Component, For, createEffect, createResource, createSignal } from 'solid-js';
 
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { getFormattedExif } from '../../_models/utils/ExifUtils';
 import { useExifServiceContext } from '../../contexts/ExifServiceContext';
 
 const ExifCard: Component = () => {
-    const {fetchExif} = useExifServiceContext();
+    const [fetchExifSignal, setFetchExifSignal] = createSignal({ media: undefined, service: undefined });
     const [currentTab, setCurrentTab] = createSignal("exif");
+    const [exifContext] = useExifServiceContext();
     const [mediaList] = useMediaListContext();
-    const [exifResource] = createResource(() => mediaList.activeItem?.id, fetchExif);
+
+    const getExifData = () => {
+        if(exifContext.service && mediaList.activeItem) {
+            return exifContext.service.fetchExif(mediaList.activeItem.id);
+        }
+    };
+
+    const [exifResource] = createResource(fetchExifSignal, getExifData);
 
     const getTableData = dataType => {
         if(exifResource.loading || !exifResource()) {
@@ -17,6 +25,13 @@ const ExifCard: Component = () => {
 
         return getFormattedExif(exifResource(), dataType);
     };
+
+    createEffect(() => {
+        setFetchExifSignal({
+            media: mediaList.activeItem,
+            service: exifContext.service
+        });
+    });
 
     return (
         <>
