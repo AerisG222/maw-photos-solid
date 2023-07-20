@@ -60,7 +60,12 @@ const CommentsCard: Component = () => {
             </div>
 
             <form>
-                <textarea class="textarea w-[100%]" placeholder="Comment" onInput={evt => setCommentText(evt.currentTarget.value)} value={commentText()} />
+                <textarea
+                    class="textarea w-[100%]"
+                    placeholder="Comment"
+                    onKeyDown={evt => evt.stopPropagation() }
+                    onInput={evt => setCommentText(evt.currentTarget.value)}
+                    value={commentText()} />
                 <button class="btn btn-sm btn-outline btn-primary mr-4" onClick={saveComment}>Save</button>
                 <button class="btn btn-sm btn-outline btn-error" onClick={clearComment}>Cancel</button>
             </form>
