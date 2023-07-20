@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import Toolbar from './Toolbar';
 import GridToolbar from './ToolbarGrid';
 import Layout from '../components/layout/Layout';
+import SearchBar from './components/SearchBar';
 
 const ViewGrid: Component = () => {
     const toolbar = (
@@ -12,8 +13,8 @@ const ViewGrid: Component = () => {
     );
 
     return (
-        <Layout toolbar={toolbar} title="Search Grid">
-
+        <Layout toolbar={toolbar}>
+            <SearchBar />
         </Layout>
     );
 };
