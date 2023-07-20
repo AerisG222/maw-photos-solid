@@ -8,7 +8,8 @@ const authSettings: UserManagerSettings = {
     authority: import.meta.env.VITE_AUTH_AUTHORITY,
     client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
     redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI,
-    scope: "maw_api"
+    scope: "offline_access openid profile maw_api role",
+    loadUserInfo: true
 };
 
 Log.setLogger(console);
@@ -55,4 +56,10 @@ export function isLoggedIn() {
     const u = user();
 
     return u ? !u.expired : false;
+}
+
+export function isAdmin() {
+    const u = user();
+
+    return (u?.profile?.role as Array<string>|undefined)?.findIndex(r => r === 'admin') >= 0;
 }

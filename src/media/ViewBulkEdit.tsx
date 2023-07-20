@@ -5,13 +5,14 @@ import { useMediaListContext } from '../contexts/MediaListContext';
 import { Media, getMediaTeaserUrl } from '../_models/Media';
 import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsCoordinate } from '../_models/Gps';
-import { bulkEditRoute, getMediaCategoryPath } from './_routes';
+import { MediaViewModeGrid, bulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
+import AdminGuard from '../auth/AdminGuard';
 
 type SelectableMedia = {
     id: number,
@@ -98,6 +99,7 @@ const ViewBulkEdit: Component = () => {
         onHideMediaWithGps={onHideMediaWithGps} />;
 
     return (
+        <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, params.categoryType as CategoryType, categoryId)}>
         <Layout toolbar={toolbar} sidebar={sidebar}>
             <CategoryBreadcrumb />
 
@@ -112,6 +114,7 @@ const ViewBulkEdit: Component = () => {
                 }</For>
             </div>
         </Layout>
+        </AdminGuard>
     );
 };
 

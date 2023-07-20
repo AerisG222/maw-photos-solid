@@ -4,6 +4,7 @@ import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from './_routes';
+import { isAdmin } from '../auth/auth';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -30,7 +31,10 @@ const Toolbar: ParentComponent = (props) => {
                 <ToolbarLink route={detailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
                 <ToolbarLink route={fullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
                 <ToolbarLink route={mapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
-                <ToolbarLink route={bulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+
+                <Show when={isAdmin()}>
+                    <ToolbarLink route={bulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                </Show>
 
                 <Show when={!!c()}>
                     <Divider />
