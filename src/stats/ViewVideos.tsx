@@ -15,7 +15,7 @@ import StatLayout from './components/StatLayout';
 
 const ViewVideos: Component = () => {
     const [search] = useSearchParams();
-    const [state, { getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useCategoryContext();
+    const [, { getVideoCategories, getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useCategoryContext();
     const toolbar = (
         <Toolbar>
             <ToolbarVideo />
@@ -31,8 +31,8 @@ const ViewVideos: Component = () => {
                 <div class="m-y-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getVideoCategoryYears().length).format({thousandSeparated: true})} />
-                        <StatBox title="Categories" value={numbro(state.videoCategories.length).format({thousandSeparated: true})} />
-                        <StatBox title="Photos" value={numbro(getVideoCount()).format({thousandSeparated: true})} />
+                        <StatBox title="Categories" value={numbro(getVideoCategories().length).format({thousandSeparated: true})} />
+                        <StatBox title="Videos" value={numbro(getVideoCount()).format({thousandSeparated: true})} />
                         <StatBox title="File Size" value={numbro(getVideoFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
                         <StatBox title="Duration" value={numbro(getVideoDuration()).format({output: "time"})} />
                     </StatBar>

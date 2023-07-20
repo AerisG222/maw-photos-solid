@@ -15,7 +15,7 @@ import Treemap from './components/Treemap';
 
 const ViewCombined: Component = () => {
     const [search] = useSearchParams();
-    const [state, { getAllYears, getAllCategories, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
+    const [state, { getAllYears, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
     const toolbar = (
         <>
             <Toolbar>
@@ -33,7 +33,7 @@ const ViewCombined: Component = () => {
                 <div class="m-y-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getAllYears().length).format({thousandSeparated: true})} />
-                        <StatBox title="Categories" value={numbro(getAllCategories().length).format({thousandSeparated: true})} />
+                        <StatBox title="Categories" value={numbro(state.categories.length).format({thousandSeparated: true})} />
                         <StatBox title="Photos &amp; Videos" value={numbro(getCombinedCount()).format({thousandSeparated: true})} />
                         <StatBox title="File Size" value={numbro(getCombinedFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
                     </StatBar>

@@ -15,7 +15,7 @@ import StatLayout from './components/StatLayout';
 
 const ViewPhotos: Component = () => {
     const [search] = useSearchParams();
-    const [state, { getPhotoCategoryYears, getPhotoCount, getPhotoFileSize, getPhotoStatsChartData }] = useCategoryContext();
+    const [, { getPhotoCategories, getPhotoCategoryYears, getPhotoCount, getPhotoFileSize, getPhotoStatsChartData }] = useCategoryContext();
     const toolbar = (
         <Toolbar>
             <ToolbarPhotos />
@@ -31,7 +31,7 @@ const ViewPhotos: Component = () => {
                 <div class="m-y-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getPhotoCategoryYears().length).format({thousandSeparated: true})} />
-                        <StatBox title="Categories" value={numbro(state.photoCategories.length).format({thousandSeparated: true})} />
+                        <StatBox title="Categories" value={numbro(getPhotoCategories().length).format({thousandSeparated: true})} />
                         <StatBox title="Photos" value={numbro(getPhotoCount()).format({thousandSeparated: true})} />
                         <StatBox title="File Size" value={numbro(getPhotoFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
                     </StatBar>

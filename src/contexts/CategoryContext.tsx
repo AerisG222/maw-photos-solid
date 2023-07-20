@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 
 import { Category, PhotoCategory, VideoCategory } from '../_models/Category';
 import { buildStatsData } from '../_models/utils/ChartUtils';
-import { CategoryType } from '../_models/CategoryType';
+import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
 import { FilterFunction, SortFunction } from '../_models/UtilityTypes';
 
 export type CategoryState = {
@@ -43,7 +43,11 @@ export type CategoryContextValue = [
         setActiveCategory: (category: Category) => void;
         setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
 
-        // hmmm... move these to components?
+        // hmmm... move these to components or stat context?
+        getPhotoCategories: () => PhotoCategory[],
+        getPhotoCategoryYears: () => number[],
+        getVideoCategories: () => VideoCategory[],
+        getVideoCategoryYears: () => number[],
         getPhotoCount: () => number;
         getPhotoFileSize: () => number;
         getVideoCount: () => number;
@@ -149,8 +153,8 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const getFilteredCategoriesForYear = (year: number) => getFilteredAndSortedCategories().filter(c => c.year === year);
 
-    const getPhotoCategories = createMemo(() => state.categories.filter(c => c.type === "photo") as PhotoCategory[]);
-    const getVideoCategories = createMemo(() => state.categories.filter(c => c.type === "video") as VideoCategory[]);
+    const getPhotoCategories = createMemo(() => state.categories.filter(c => c.type === CategoryTypePhotos) as PhotoCategory[]);
+    const getVideoCategories = createMemo(() => state.categories.filter(c => c.type === CategoryTypeVideos) as VideoCategory[]);
 
     const getPhotoCategoryYears = createMemo(() => [... new Set(getPhotoCategories().map(c => c.year))]);
     const getVideoCategoryYears = createMemo(() => [... new Set(getVideoCategories().map(c => c.year))]);
@@ -233,6 +237,10 @@ export const CategoryProvider: ParentComponent = (props) => {
             setActiveCategory,
             setActiveCategoryById,
 
+            getPhotoCategories,
+            getPhotoCategoryYears,
+            getVideoCategories,
+            getVideoCategoryYears,
             getPhotoCount,
             getPhotoFileSize,
             getVideoCount,
