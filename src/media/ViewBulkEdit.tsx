@@ -2,11 +2,13 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { Media, getMediaTeaserUrl } from '../_models/Media';
-import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
+import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from '../_models/Media';
 import { GpsCoordinate } from '../_models/Gps';
 import { MediaViewModeGrid, bulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
+import { IMetadataEditService } from '../_services/media/IMetadataEditService';
+import { photoMediaService } from '../_services/media/PhotoMediaService';
+import { videoMediaService } from '../_services/media/VideoMediaService';
 
 import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
@@ -16,6 +18,7 @@ import AdminGuard from '../auth/AdminGuard';
 
 type SelectableMedia = {
     id: number,
+    kind: MediaTypes,
     isSelected: boolean,
     imageUrl: string,
     latitude?: number,
@@ -23,7 +26,6 @@ type SelectableMedia = {
 };
 
 const ViewBulkEdit: Component = () => {
-    const { fetchGpsDetail, setGpsCoordinateOverride } = useMetadataEditServiceContext();
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
     const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
     const [mediaList, { setActiveRouteDefinition, setGpsOverride }] = useMediaListContext();
@@ -35,6 +37,7 @@ const ViewBulkEdit: Component = () => {
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
+        kind: media.kind,
         imageUrl: getMediaTeaserUrl(media),
         latitude: media.latitude,
         longitude: media.longitude,
@@ -49,8 +52,21 @@ const ViewBulkEdit: Component = () => {
         setAll(false);
 
         for(const media of mediaToUpdate) {
-            await setGpsCoordinateOverride(media.id, gps);
-            setGpsOverride(media.id, gps);
+            let svc: IMetadataEditService = undefined;
+
+            switch(media.kind) {
+                case MediaTypePhoto:
+                    svc = photoMediaService;
+                    break;
+                case MediaTypeVideo:
+                    svc = videoMediaService;
+                    break;
+            }
+
+            if(svc) {
+                await svc.setGpsCoordinateOverride(media.id, gps);
+                setGpsOverride(media.id, gps);
+            }
         }
     };
 
