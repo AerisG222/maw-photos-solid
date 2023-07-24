@@ -29,10 +29,10 @@ const SearchGridViewSettingsContext = createContext<SearchGridViewSettingsContex
 export const SearchGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
-    const setShowTitles = (showTitles: boolean) => updateState({showTitles: showTitles});
-    const setShowYears = (showYears: boolean) => updateState({showTitles: showYears});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
+    const setMargin = (margin: MarginIdType) => updateState({margin});
+    const setShowTitles = (showTitles: boolean) => updateState({showTitles});
+    const setShowYears = (showYears: boolean) => updateState({showYears});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize});
 
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);

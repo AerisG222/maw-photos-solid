@@ -1,22 +1,28 @@
 import { Component } from 'solid-js';
 
+import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
+import { getNextThumbnailSize } from '../_models/ThumbnailSize';
+import { getNextMarginSize } from '../_models/Margin';
+
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 
 const GridToolbar: Component = () => {
+    const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] = useSearchGridViewSettingsContext();
+
     const onToggleYears = () => {
-        console.log("titles");
+        setShowYears(!settingsContext.showYears);
     };
 
     const onToggleTitles = () => {
-        console.log("titles");
+        setShowTitles(!settingsContext.showTitles);
     };
 
     const onToggleThumbnailSize = () => {
-        console.log("thumbnail");
+        setThumbnailSize(getNextThumbnailSize(settingsContext.thumbnailSize).id);
     };
 
     const onToggleMargins = () => {
-        console.log("margins");
+        setMargin(getNextMarginSize(settingsContext.margin).id);
     };
 
     return (
