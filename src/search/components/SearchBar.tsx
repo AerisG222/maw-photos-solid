@@ -31,6 +31,11 @@ const SearchBar: Component = () => {
         }
     }
 
+    const onClearSearch = () => {
+        setSearchTerm("");
+        clearCategories();
+    }
+
     createEffect(() => {
         if(searchResource.state === "ready") {
             setCategories(searchResource().results);
@@ -38,22 +43,28 @@ const SearchBar: Component = () => {
     });
 
     return (
-        <div class="flex flex-row">
+        <div class="flex flex-row justify-center">
             <input
                 type="text"
                 placeholder="Search Terms"
-                class="input input-bordered w-full mr-4"
+                class="input input-bordered input-md w-[400px]"
                 value={searchContext.term}
                 onChange={evt => setSearchTerm(evt.currentTarget.value)} />
 
             <button
-                class="hover:bg-accent hover:color-accentContent disabled:bg-transparent! disabled:color-secondary-content disabled:opacity-20"
+                class="ml-2 btn btn-outline hover:bg-accent hover:color-accentContent"
                 title="Search"
                 onClick={onSearch}
             >
-                <div>
-                    <span class="text-6 i-ic-round-search" /> Search
-                </div>
+                <span class="text-6 i-ic-round-search" />
+            </button>
+
+            <button
+                class="ml-12 btn btn-warning btn-outline hover:bg-accent hover:color-accentContent"
+                title="Cancel"
+                onClick={onClearSearch}
+            >
+                <span class="text-6 i-ic-round-close" />
             </button>
         </div>
     )
