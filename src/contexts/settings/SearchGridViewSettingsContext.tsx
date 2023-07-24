@@ -16,15 +16,7 @@ export type SearchGridViewSettingsContextValue = [
     }
 ];
 
-const SearchGridViewSettingsContext = createContext<SearchGridViewSettingsContextValue>([
-    defaultSearchGridViewSettings,
-    {
-        setMargin: () => undefined,
-        setShowTitles: () => undefined,
-        setShowYears: () => undefined,
-        setThumbnailSize: () => undefined
-    }
-]);
+const SearchGridViewSettingsContext = createContext<SearchGridViewSettingsContextValue>();
 
 export const SearchGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

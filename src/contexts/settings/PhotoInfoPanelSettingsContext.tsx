@@ -23,22 +23,7 @@ export type PhotoInfoPanelSettingsContextValue = [
     }
 ];
 
-const PhotoInfoPanelSettingsContext = createContext<PhotoInfoPanelSettingsContextValue>([
-    defaultPhotoInfoPanelSettings,
-    {
-        setExpandInfoPanel: () => undefined,
-        setShowRatings: () => undefined,
-        setShowCategoryTeaserChooser: () => undefined,
-        setShowComments: () => undefined,
-        setShowExif: () => undefined,
-        setShowEffects: () => undefined,
-        setShowMetadataEditor: () => undefined,
-        setShowHistogram: () => undefined,
-        setShowMinimap: () => undefined,
-        setMinimapZoom: () => undefined,
-        setMinimapMapType: () => undefined,
-    }
-]);
+const PhotoInfoPanelSettingsContext = createContext<PhotoInfoPanelSettingsContextValue>();
 
 export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

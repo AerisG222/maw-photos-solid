@@ -14,14 +14,7 @@ export type PhotoDetailViewSettingsContextValue = [
     }
 ];
 
-const PhotoDetailViewSettingsContext = createContext<PhotoDetailViewSettingsContextValue>([
-    defaultPhotoDetailViewSettings,
-    {
-        setShowBreadcrumbs: () => undefined,
-        setThumbnailSize: () => undefined,
-        setShowPhotoList: () => undefined
-    }
-]);
+const PhotoDetailViewSettingsContext = createContext<PhotoDetailViewSettingsContextValue>();
 
 export const PhotoDetailSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadPhotoDetailViewSettings());

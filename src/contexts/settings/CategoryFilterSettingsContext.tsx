@@ -14,14 +14,7 @@ export type CategoryFilterSettingsContextValue = [
     }
 ];
 
-const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContextValue>([
-    defaultCategoryFilterSettings,
-    {
-        setTypeFilter: () => undefined,
-        setYearFilter: () => undefined,
-        setMissingGpsFilter: () => undefined
-    }
-]);
+const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContextValue>();
 
 export const CategoryFilterSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

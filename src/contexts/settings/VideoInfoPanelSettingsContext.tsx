@@ -20,19 +20,7 @@ export type VideoInfoPanelSettingsContextValue = [
     }
 ];
 
-const VideoInfoPanelSettingsContext = createContext<VideoInfoPanelSettingsContextValue>([
-    defaultVideoInfoPanelSettings,
-    {
-        setExpandInfoPanel: () => undefined,
-        setShowRatings: () => undefined,
-        setShowCategoryTeaserChooser: () => undefined,
-        setShowComments: () => undefined,
-        setShowMetadataEditor: () => undefined,
-        setShowMinimap: () => undefined,
-        setMinimapZoom: () => undefined,
-        setMinimapMapType: () => undefined,
-    }
-]);
+const VideoInfoPanelSettingsContext = createContext<VideoInfoPanelSettingsContextValue>();
 
 export const VideoInfoPanelSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadVideoInfoPanelSettings());

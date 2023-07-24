@@ -13,13 +13,7 @@ export type RandomPageSettingsContextValue = [
     }
 ];
 
-const RandomPageSettingsContext = createContext<RandomPageSettingsContextValue>([
-    defaultRandomPageSettings,
-    {
-        setViewMode: () => undefined,
-        setSlideshowDisplayDurationSeconds: () => undefined
-    }
-]);
+const RandomPageSettingsContext = createContext<RandomPageSettingsContextValue>();
 
 export const RandomPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

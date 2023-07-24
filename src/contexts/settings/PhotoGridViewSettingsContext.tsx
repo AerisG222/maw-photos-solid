@@ -15,14 +15,7 @@ export type PhotoGridViewSettingsContextValue = [
     }
 ];
 
-const PhotoGridViewSettingsContext = createContext<PhotoGridViewSettingsContextValue>([
-    defaultPhotoGridViewSettings,
-    {
-        setMargin: () => undefined,
-        setThumbnailSize: () => undefined,
-        setShowBreadcrumbs: () => undefined
-    }
-]);
+const PhotoGridViewSettingsContext = createContext<PhotoGridViewSettingsContextValue>();
 
 export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

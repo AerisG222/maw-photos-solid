@@ -58,28 +58,7 @@ export type VisualEffectsContextValue = [
     }
 ];
 
-const VisualEffectsContext = createContext<VisualEffectsContextValue>([
-    {...defaultVisualEffects},
-    {
-        reset: () => undefined,
-
-        setGrayscale: (value: number) => undefined,
-        setBrightness: (value: number) => undefined,
-        setContrast: (value: number) => undefined,
-        setBlur: (value: number) => undefined,
-        setSepia: (value: number) => undefined,
-        setSaturation: (value: number) => undefined,
-        setInvert: (value: number) => undefined,
-        setHueRotate: (value: number) => undefined,
-        getFilterStyles: () => undefined,
-
-        rotateClockwise: () => undefined,
-        rotateCounterClockwise: () => undefined,
-        flipHorizontal: () => undefined,
-        flipVertical: () => undefined,
-        getTransformStyles: () => undefined,
-    }
-]);
+const VisualEffectsContext = createContext<VisualEffectsContextValue>();
 
 export const VisualEffectsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore({...defaultVisualEffects});

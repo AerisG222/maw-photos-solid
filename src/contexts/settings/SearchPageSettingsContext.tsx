@@ -12,12 +12,7 @@ export type SearchPageSettingsContextValue = [
     }
 ];
 
-const SearchPageSettingsContext = createContext<SearchPageSettingsContextValue>([
-    defaultSearchPageSettings,
-    {
-        setViewMode: () => undefined
-    }
-]);
+const SearchPageSettingsContext = createContext<SearchPageSettingsContextValue>();
 
 export const SearchPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

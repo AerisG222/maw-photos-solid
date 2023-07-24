@@ -14,13 +14,7 @@ export type SearchListViewSettingsContextValue = [
     }
 ];
 
-const SearchListViewSettingsContext = createContext<SearchListViewSettingsContextValue>([
-    defaultSearchListViewSettings,
-    {
-        setMargin: () => undefined,
-        setThumbnailSize: () => undefined
-    }
-]);
+const SearchListViewSettingsContext = createContext<SearchListViewSettingsContextValue>();
 
 export const SearchListSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

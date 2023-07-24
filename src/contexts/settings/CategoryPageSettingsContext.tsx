@@ -12,12 +12,7 @@ export type CategoryPageSettingsContextValue = [
     }
 ];
 
-const CategoryPageSettingsContext = createContext<CategoryPageSettingsContextValue>([
-    defaultCategoryPageSettings,
-    {
-        setViewMode: () => undefined
-    }
-]);
+const CategoryPageSettingsContext = createContext<CategoryPageSettingsContextValue>();
 
 export const CategoryPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

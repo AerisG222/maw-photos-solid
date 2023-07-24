@@ -15,14 +15,7 @@ export type RandomGridViewSettingsContextValue = [
     }
 ];
 
-const RandomGridViewSettingsContext = createContext<RandomGridViewSettingsContextValue>([
-    defaultRandomGridViewSettings,
-    {
-        setMargin: () => undefined,
-        setThumbnailSize: () => undefined,
-        setShowBreadcrumbs: () => undefined
-    }
-]);
+const RandomGridViewSettingsContext = createContext<RandomGridViewSettingsContextValue>();
 
 export const RandomGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

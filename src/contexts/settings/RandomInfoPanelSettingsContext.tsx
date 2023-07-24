@@ -23,22 +23,7 @@ export type RandomInfoPanelSettingsContextValue = [
     }
 ];
 
-const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsContextValue>([
-    defaultRandomInfoPanelSettings,
-    {
-        setExpandInfoPanel: () => undefined,
-        setShowRatings: () => undefined,
-        setShowCategoryTeaserChooser: () => undefined,
-        setShowComments: () => undefined,
-        setShowExif: () => undefined,
-        setShowEffects: () => undefined,
-        setShowMetadataEditor: () => undefined,
-        setShowHistogram: () => undefined,
-        setShowMinimap: () => undefined,
-        setMinimapZoom: () => undefined,
-        setMinimapMapType: () => undefined,
-    }
-]);
+const RandomInfoPanelSettingsContext = createContext<RandomInfoPanelSettingsContextValue>();
 
 export const RandomInfoPanelSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

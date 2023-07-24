@@ -12,12 +12,7 @@ export type AppSettingsContextValue = [
     }
 ];
 
-const AppSettingsContext = createContext<AppSettingsContextValue>([
-    defaultAppSettings,
-    {
-        setTheme: () => undefined
-    }
-]);
+const AppSettingsContext = createContext<AppSettingsContextValue>();
 
 export const AppSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

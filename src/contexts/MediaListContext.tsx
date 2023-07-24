@@ -44,24 +44,7 @@ export type MediaListContextValue = [
     }
 ];
 
-const MediaListContext = createContext<MediaListContextValue>([
-    defaultMediaListState,
-    {
-        setActiveRouteDefinition: () => undefined,
-        setItems: () => undefined,
-        setActiveItem: () => undefined,
-        setMediaElement: () => undefined,
-        activeItemIsFirst: () => undefined,
-        activeItemIsLast: () => undefined,
-        getNextItem: () => undefined,
-        getPreviousItem: () => undefined,
-        setGpsOverride: () => undefined,
-        moveFirst: () => undefined,
-        moveNext: () => undefined,
-        movePrevious: () => undefined,
-        moveLast: () => undefined,
-    }
-]);
+const MediaListContext = createContext<MediaListContextValue>();
 
 export const MediaListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultMediaListState);

@@ -16,15 +16,7 @@ export type VideoDetailViewSettingsContextValue = [
     }
 ];
 
-const VideoDetailViewSettingsContext = createContext<VideoDetailViewSettingsContextValue>([
-    defaultVideoDetailViewSettings,
-    {
-        setShowBreadcrumbs: () => undefined,
-        setThumbnailSize: () => undefined,
-        setShowVideoList: () => undefined,
-        setVideoSize: () => undefined,
-    }
-]);
+const VideoDetailViewSettingsContext = createContext<VideoDetailViewSettingsContextValue>();
 
 export const VideoDetailSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

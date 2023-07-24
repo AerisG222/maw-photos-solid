@@ -15,14 +15,7 @@ export type CategoryGridViewSettingsContextValue = [
     }
 ];
 
-const CategoryGridViewSettingsContext = createContext<CategoryGridViewSettingsContextValue>([
-    defaultCategoryGridViewSettings,
-    {
-        setMargin: () => undefined,
-        setShowTitles: () => undefined,
-        setThumbnailSize: () => undefined
-    }
-]);
+const CategoryGridViewSettingsContext = createContext<CategoryGridViewSettingsContextValue>();
 
 export const CategoryGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

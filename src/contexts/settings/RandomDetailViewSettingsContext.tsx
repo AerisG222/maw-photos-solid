@@ -14,14 +14,7 @@ export type RandomDetailViewSettingsContextValue = [
     }
 ];
 
-const RandomDetailViewSettingsContext = createContext<RandomDetailViewSettingsContextValue>([
-    defaultRandomDetailViewSettings,
-    {
-        setShowBreadcrumbs: () => undefined,
-        setThumbnailSize: () => undefined,
-        setShowPhotoList: () => undefined
-    }
-]);
+const RandomDetailViewSettingsContext = createContext<RandomDetailViewSettingsContextValue>();
 
 export const RandomDetailSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

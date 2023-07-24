@@ -14,13 +14,7 @@ export type CategoryListViewSettingsContextValue = [
     }
 ];
 
-const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsContextValue>([
-    defaultCategoryListViewSettings,
-    {
-        setMargin: () => undefined,
-        setThumbnailSize: () => undefined
-    }
-]);
+const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsContextValue>();
 
 export const CategoryListSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

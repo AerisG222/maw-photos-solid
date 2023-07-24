@@ -17,13 +17,7 @@ export type LayoutOptionsContextValue = [
     }
 ];
 
-const LayoutOptionsContext = createContext<LayoutOptionsContextValue>([
-    defaultLayoutOptions,
-    {
-        showXpad: () => undefined,
-        hideXpad: () => undefined
-    }
-]);
+const LayoutOptionsContext = createContext<LayoutOptionsContextValue>();
 
 export const LayoutOptionsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultLayoutOptions);

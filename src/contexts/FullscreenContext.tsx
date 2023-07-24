@@ -16,12 +16,7 @@ export type FullscreenContextValue = [
     }
 ];
 
-const FullscreenContext = createContext<FullscreenContextValue>([
-    defaultFullscreenState,
-    {
-        setFullscreen: () => undefined
-    }
-]);
+const FullscreenContext = createContext<FullscreenContextValue>();
 
 export const FullscreenProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultFullscreenState);

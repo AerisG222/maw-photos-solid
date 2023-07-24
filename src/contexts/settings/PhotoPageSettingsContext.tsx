@@ -13,13 +13,7 @@ export type PhotoPageSettingsContextValue = [
     }
 ];
 
-const PhotoPageSettingsContext = createContext<PhotoPageSettingsContextValue>([
-    defaultPhotoPageSettings,
-    {
-        setViewMode: () => undefined,
-        setSlideshowDisplayDurationSeconds: () => undefined
-    }
-]);
+const PhotoPageSettingsContext = createContext<PhotoPageSettingsContextValue>();
 
 export const PhotoPageSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());

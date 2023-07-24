@@ -23,15 +23,7 @@ export type SlideshowContextValue = [
     }
 ];
 
-const SlideshowContext = createContext<SlideshowContextValue>([
-    {...defaultSlideshowState},
-    {
-        setSlideshowInterval: (interval: number) => undefined,
-        start: () => undefined,
-        stop: () => undefined,
-        toggle: () => undefined
-    }
-]);
+const SlideshowContext = createContext<SlideshowContextValue>();
 
 export const SlideshowProvider: ParentComponent = (props) => {
     let id: number;

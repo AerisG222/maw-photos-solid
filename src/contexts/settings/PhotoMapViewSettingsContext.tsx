@@ -14,13 +14,7 @@ export type PhotoMapViewSettingsContextValue = [
     }
 ];
 
-const PhotoMapViewSettingsContext = createContext<PhotoMapViewSettingsContextValue>([
-    defaultPhotoMapViewSettings,
-    {
-        setMapType: () => undefined,
-        setZoom: () => undefined,
-    }
-]);
+const PhotoMapViewSettingsContext = createContext<PhotoMapViewSettingsContextValue>();
 
 export const PhotoMapSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
