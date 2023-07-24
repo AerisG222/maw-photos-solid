@@ -5,10 +5,10 @@ import { searchCategories } from '../../_api/Search';
 
 const SearchBar: Component = () => {
     const [searchContext, { setSearchTerm, setCategories, clearCategories, setFoundCount }] = useSearchContext();
-    const [term, setTerm] = createSignal("");
+    const [execute, setExecute] = createSignal(false);
 
     const executeSearch = () => {
-        if(searchContext.term) {
+        if(execute()) {
             return searchCategories(searchContext.term, 0);
         }
 
@@ -19,13 +19,13 @@ const SearchBar: Component = () => {
         };
     }
 
-    const [searchResource] = createResource(term, executeSearch);
+    const [searchResource] = createResource(execute, executeSearch);
 
     const onSearch = () => {
         if(!searchContext.term) {
             clearCategories();
         } else {
-            setTerm(searchContext.term);
+            setExecute(true);
         }
     }
 
@@ -39,6 +39,7 @@ const SearchBar: Component = () => {
             batch(() => {
                 setCategories(searchResource().results);
                 setFoundCount(searchResource().totalFound);
+                setExecute(false);
             })
         }
     });
