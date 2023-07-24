@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
-import { getNextThumbnailSize } from '../_models/ThumbnailSize';
+import { defaultGridThumbnailSize, getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { getNextMarginSize } from '../_models/Margin';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
@@ -9,12 +9,24 @@ import ToolbarButton from '../components/toolbar/ToolbarButton';
 const GridToolbar: Component = () => {
     const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] = useSearchGridViewSettingsContext();
 
+    const ensureLargeThumbnails = () => {
+        setThumbnailSize(defaultGridThumbnailSize);
+    };
+
     const onToggleYears = () => {
         setShowYears(!settingsContext.showYears);
+
+        if(settingsContext.showYears) {
+            ensureLargeThumbnails();
+        }
     };
 
     const onToggleTitles = () => {
         setShowTitles(!settingsContext.showTitles);
+
+        if(settingsContext.showTitles) {
+            ensureLargeThumbnails();
+        }
     };
 
     const onToggleThumbnailSize = () => {
@@ -41,6 +53,7 @@ const GridToolbar: Component = () => {
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle Grid Thumbnail Size"
                 clickHandler={onToggleThumbnailSize}
+                disabled={settingsContext.showTitles || settingsContext.showYears}
             />
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"

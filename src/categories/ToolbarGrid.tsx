@@ -11,6 +11,10 @@ const GridToolbar: Component = () => {
 
     const onToggleTitles = () => {
         setShowTitles(!settings.showTitles);
+
+        if(settings.showTitles) {
+            setThumbnailSize(defaultGridThumbnailSize);
+        }
     };
 
     const onToggleThumbnailSize = () => {
@@ -28,13 +32,13 @@ const GridToolbar: Component = () => {
                 name="Show / Hide Category Titles (T)"
                 shortcutKeys={['t']}
                 clickHandler={onToggleTitles}
-                disabled={settings.thumbnailSize !== defaultGridThumbnailSize}
             />
             <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle Grid Thumbnail Size (S)"
                 shortcutKeys={['s']}
                 clickHandler={onToggleThumbnailSize}
+                disabled={settings.showTitles}
             />
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
