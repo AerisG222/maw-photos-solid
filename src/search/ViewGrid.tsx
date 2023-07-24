@@ -7,7 +7,7 @@ import Toolbar from './Toolbar';
 import GridToolbar from './ToolbarGrid';
 import Layout from '../components/layout/Layout';
 import SearchBar from './components/SearchBar';
-import CategoryCard from '../categories/components/CategoryCard';
+import CategoryCard from '../components/categories/CategoryCard';
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();

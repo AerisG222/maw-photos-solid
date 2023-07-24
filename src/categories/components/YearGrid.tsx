@@ -4,7 +4,7 @@ import { useCategoryGridViewSettingsContext } from '../../contexts/settings/Cate
 import { Category } from '../../_models/Category';
 import { defaultGridThumbnailSize } from '../../_models/ThumbnailSize';
 
-import CategoryCard from './CategoryCard';
+import CategoryCard from '../../components/categories/CategoryCard';
 
 type Props = {
     year: number;
