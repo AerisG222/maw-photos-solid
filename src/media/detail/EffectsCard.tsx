@@ -47,7 +47,7 @@ const EffectsCard: Component = () => {
                     <div><input type="range" class="range range-sm" min="0" max="10" step="0.1" value={visualEffectsState.blur} onInput={evt => setBlur(evt.currentTarget.valueAsNumber)} /></div>
                 </div>
 
-                <div></div>
+                <div />
 
                 <div class="w-[100%]">
                     <div>

@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { Photo } from '../../_models/Media';
+import { Media, Photo } from '../../_models/Media';
 import { ThumbnailSizeIdType, getThumbnailClass } from '../../_models/ThumbnailSize';
 import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
 import { getMediaPath } from '../../media/_routes';

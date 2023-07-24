@@ -1,11 +1,13 @@
 import { Component, For } from "solid-js";
 
+import { GpsCoordinate } from '../../_models/Gps';
+
 import InfoCard from '../../components/sidebar/InfoCard';
 import BulkEditFilterCard from './BulkEditFilterCard';
 import BulkEditGpsCard from './BulkEditGpsCard';
 
 type Props = {
-    onSave: (gps: GpsOverride) => void;
+    onSave: (gps: GpsCoordinate) => void;
     onHideMediaWithGps: (hide: boolean) => void;
     onSelectAll: () => void;
     onDeselectAll: () => void;

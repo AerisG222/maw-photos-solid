@@ -1,3 +1,5 @@
+import { Category } from './Category';
+
 export type FilterFunction = {
     name: string;
     filterFn: (a: any) => boolean;

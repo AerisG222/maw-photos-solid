@@ -28,7 +28,7 @@ export const defaultMediaListState = {
 export type MediaListContextValue = [
     state: MediaListState,
     actions: {
-        setActiveRouteDefinition: (def: ActiveRouteDefinition) => void;
+        setActiveRouteDefinition: (def: AppRouteDefinition) => void;
         setItems: (media: Media[]) => void;
         setActiveItem: (id: number) => void;
         setMediaElement: (el: HTMLImageElement | HTMLVideoElement) => void;
