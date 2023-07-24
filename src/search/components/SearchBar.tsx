@@ -4,7 +4,7 @@ import { useSearchContext } from '../contexts/SearchContext';
 import { searchCategories } from '../../_api/Search';
 
 const SearchBar: Component = () => {
-    const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, clearActiveTerm, setCategories, clearCategories, setFoundCount }] = useSearchContext();
+    const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, clearActiveTerm, setCategories, clearSearchResults, setFoundCount }] = useSearchContext();
     const [execute, setExecute] = createSignal(false);
 
     const executeSearch = () => {
@@ -21,8 +21,7 @@ const SearchBar: Component = () => {
 
     const onSearch = () => {
         if(!searchContext.term) {
-            clearCategories();
-            clearActiveTerm();
+            clearSearchResults();
         } else {
             setExecute(true);
         }
@@ -30,8 +29,7 @@ const SearchBar: Component = () => {
 
     const onClearSearch = () => {
         clearSearchTerm();
-        clearActiveTerm();
-        clearCategories();
+        clearSearchResults();
     }
 
     createEffect(() => {

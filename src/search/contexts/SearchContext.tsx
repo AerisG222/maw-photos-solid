@@ -24,7 +24,7 @@ export type SearchContextValue = [
         setSearchTerm: (term: string) => void;
         clearActiveTerm: () => void;
         setActiveTerm: (term: string) => void;
-        clearCategories: () => void;
+        clearSearchResults: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
         setFoundCount: (count: number) => void;
@@ -53,8 +53,12 @@ export const SearchProvider: ParentComponent = (props) => {
         setSearchState({activeTerm});
     }
 
-    const clearCategories = () => {
-        setSearchState({ categories: [] });
+    const clearSearchResults = () => {
+        setSearchState({
+            activeTerm: "",
+            categories: [],
+            foundCount: 0
+        });
     };
 
     const setCategories = (categories: Category[]) => {
@@ -76,7 +80,7 @@ export const SearchProvider: ParentComponent = (props) => {
         setSearchTerm,
         clearActiveTerm,
         setActiveTerm,
-        clearCategories,
+        clearSearchResults,
         setCategories,
         addCategories,
         setFoundCount,
