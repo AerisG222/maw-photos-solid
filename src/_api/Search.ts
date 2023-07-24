@@ -16,7 +16,7 @@ export const searchCategories = async (query: string, start: number): Promise<Se
         name: x.name,
         year: x.year,
         createDate: undefined,
-        teaserImageUrl: x.teaserPhotoSqPath,
+        teaserImageUrl: `${import.meta.env.VITE_WWW_URI}/${x.teaserPhotoSqPath}`,
         latitude: undefined,
         longitude: undefined,
         count: undefined,
