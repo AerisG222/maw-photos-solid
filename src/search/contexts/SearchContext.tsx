@@ -1,12 +1,16 @@
 import { ParentComponent, createContext, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
+import { Category } from '../../_models/Category';
+
 export type SearchState = {
     readonly term: string;
+    readonly categories: Category[];
 };
 
 export const defaultSearchState = {
-    term: ""
+    term: "",
+    categories: []
 };
 
 export type SearchContextValue = [
@@ -14,6 +18,9 @@ export type SearchContextValue = [
     actions: {
         clearSearchTerm: () => void;
         setSearchTerm: (term: string) => void;
+        clearCategories: () => void;
+        setCategories: (categories: Category[]) => void;
+        addCategories: (categories: Category[]) => void;
     }
 ];
 
@@ -30,9 +37,26 @@ export const SearchProvider: ParentComponent = (props) => {
         setSearchState({term});
     }
 
+    const clearCategories = () => {
+        setSearchState({ categories: [] });
+    };
+
+    const setCategories = (categories: Category[]) => {
+        setSearchState({ categories });
+    };
+
+    const addCategories = (categories: Category[]) => {
+        if(categories) {
+            setSearchState(s => ({ categories: [...s.categories, ...categories] }));
+        }
+    };
+
     return <SearchContext.Provider value={[searchState, {
         clearSearchTerm,
-        setSearchTerm
+        setSearchTerm,
+        clearCategories,
+        setCategories,
+        addCategories
     }]}>
         {props.children}
     </SearchContext.Provider>

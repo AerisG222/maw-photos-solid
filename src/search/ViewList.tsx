@@ -1,7 +1,7 @@
 import { Component, For } from "solid-js";
 
 import { useSearchListViewSettingsContext } from '../contexts/settings/SearchListViewSettingsContext';
-import { useCategoryContext } from '../contexts/CategoryContext';
+import { useSearchContext } from './contexts/SearchContext';
 
 import Toolbar from './Toolbar';
 import ListToolbar from './ToolbarList';
@@ -11,7 +11,7 @@ import CategoryListItem from '../categories/components/CategoryListItem';
 
 const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();
-    const [categoryContext] = useCategoryContext();
+    const [searchContext] = useSearchContext();
 
     const toolbar = (
         <Toolbar>
@@ -26,7 +26,7 @@ const ViewList: Component = () => {
             </div>
 
             <div class="my-4">
-                <For each={categoryContext.categories}>{ category =>
+                <For each={searchContext.categories}>{ category =>
                     <CategoryListItem
                         category={category}
                         showYear={true}

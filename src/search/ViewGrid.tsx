@@ -1,17 +1,17 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryContext } from '../contexts/CategoryContext';
+import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
+import { useSearchContext } from './contexts/SearchContext';
 
 import Toolbar from './Toolbar';
 import GridToolbar from './ToolbarGrid';
 import Layout from '../components/layout/Layout';
 import SearchBar from './components/SearchBar';
 import CategoryCard from '../categories/components/CategoryCard';
-import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
-    const [categoryContext] = useCategoryContext();
+    const [searchContext] = useSearchContext();
 
     const toolbar = (
         <Toolbar>
@@ -26,7 +26,7 @@ const ViewGrid: Component = () => {
             </div>
 
             <div class="flex flex-gap-2 flex-wrap place-content-center my-4">
-                <For each={categoryContext.categories}>
+                <For each={searchContext.categories}>
                     { category =>
                         <CategoryCard
                             category={category}
