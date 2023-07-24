@@ -7,7 +7,8 @@ import Toolbar from './Toolbar';
 import ListToolbar from './ToolbarList';
 import Layout from '../components/layout/Layout';
 import SearchBar from './components/SearchBar';
-import CategoryListItem from '../categories/components/CategoryListItem';
+import CategoryListItem from '../components/categories/CategoryListItem';
+import SearchResultStatus from './components/SearchResultStatus';
 
 const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();
@@ -33,6 +34,8 @@ const ViewList: Component = () => {
                         thumbnailSize={settings.thumbnailSize} />
                 }</For>
             </div>
+
+            <SearchResultStatus />
         </Layout>
     );
 };

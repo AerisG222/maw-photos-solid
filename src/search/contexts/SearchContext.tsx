@@ -6,11 +6,13 @@ import { Category } from '../../_models/Category';
 export type SearchState = {
     readonly term: string;
     readonly categories: Category[];
+    readonly foundCount: number;
 };
 
 export const defaultSearchState = {
     term: "",
-    categories: []
+    categories: [],
+    foundCount: 0
 };
 
 export type SearchContextValue = [
@@ -21,6 +23,8 @@ export type SearchContextValue = [
         clearCategories: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
+        setFoundCount: (count: number) => void;
+        moreResultsAvailable: () => boolean;
     }
 ];
 
@@ -51,12 +55,18 @@ export const SearchProvider: ParentComponent = (props) => {
         }
     };
 
+    const setFoundCount = (count: number) => setSearchState({ foundCount: count });
+
+    const moreResultsAvailable = () => searchState.categories.length < searchState.foundCount;
+
     return <SearchContext.Provider value={[searchState, {
         clearSearchTerm,
         setSearchTerm,
         clearCategories,
         setCategories,
-        addCategories
+        addCategories,
+        setFoundCount,
+        moreResultsAvailable
     }]}>
         {props.children}
     </SearchContext.Provider>

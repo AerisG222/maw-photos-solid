@@ -8,6 +8,7 @@ import GridToolbar from './ToolbarGrid';
 import Layout from '../components/layout/Layout';
 import SearchBar from './components/SearchBar';
 import CategoryCard from '../components/categories/CategoryCard';
+import SearchResultStatus from './components/SearchResultStatus';
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
@@ -36,6 +37,8 @@ const ViewGrid: Component = () => {
                     }
                 </For>
             </div>
+
+            <SearchResultStatus />
         </Layout>
     );
 };

@@ -1,10 +1,10 @@
-import { Component, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, batch, createEffect, createResource, createSignal } from 'solid-js';
 
 import { useSearchContext } from '../contexts/SearchContext';
 import { searchCategories } from '../../_api/Search';
 
 const SearchBar: Component = () => {
-    const [searchContext, { setSearchTerm, setCategories, clearCategories }] = useSearchContext();
+    const [searchContext, { setSearchTerm, setCategories, clearCategories, setFoundCount }] = useSearchContext();
     const [term, setTerm] = createSignal("");
 
     const executeSearch = () => {
@@ -36,7 +36,10 @@ const SearchBar: Component = () => {
 
     createEffect(() => {
         if(searchResource.state === "ready") {
-            setCategories(searchResource().results);
+            batch(() => {
+                setCategories(searchResource().results);
+                setFoundCount(searchResource().totalFound);
+            })
         }
     });
 
