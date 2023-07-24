@@ -5,12 +5,14 @@ import { Category } from '../../_models/Category';
 
 export type SearchState = {
     readonly term: string;
+    readonly activeTerm: string;
     readonly categories: Category[];
     readonly foundCount: number;
 };
 
 export const defaultSearchState = {
     term: "",
+    activeTerm: "",
     categories: [],
     foundCount: 0
 };
@@ -20,6 +22,8 @@ export type SearchContextValue = [
     actions: {
         clearSearchTerm: () => void;
         setSearchTerm: (term: string) => void;
+        clearActiveTerm: () => void;
+        setActiveTerm: (term: string) => void;
         clearCategories: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
@@ -39,6 +43,14 @@ export const SearchProvider: ParentComponent = (props) => {
 
     const setSearchTerm = (term: string) => {
         setSearchState({term});
+    }
+
+    const clearActiveTerm = () => {
+        setActiveTerm("");
+    }
+
+    const setActiveTerm = (activeTerm: string) => {
+        setSearchState({activeTerm});
     }
 
     const clearCategories = () => {
@@ -62,6 +74,8 @@ export const SearchProvider: ParentComponent = (props) => {
     return <SearchContext.Provider value={[searchState, {
         clearSearchTerm,
         setSearchTerm,
+        clearActiveTerm,
+        setActiveTerm,
         clearCategories,
         setCategories,
         addCategories,

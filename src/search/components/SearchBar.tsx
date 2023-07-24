@@ -4,19 +4,17 @@ import { useSearchContext } from '../contexts/SearchContext';
 import { searchCategories } from '../../_api/Search';
 
 const SearchBar: Component = () => {
-    const [searchContext, { setSearchTerm, setCategories, clearCategories, setFoundCount }] = useSearchContext();
+    const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, clearActiveTerm, setCategories, clearCategories, setFoundCount }] = useSearchContext();
     const [execute, setExecute] = createSignal(false);
 
     const executeSearch = () => {
-        if(execute()) {
+        if(searchContext.term !== searchContext.activeTerm) {
+            setActiveTerm(searchContext.term);
+
             return searchCategories(searchContext.term, 0);
         }
 
-        return {
-            results: [],
-            totalFound: 0,
-            startIndex: 0
-        };
+        return undefined;
     }
 
     const [searchResource] = createResource(execute, executeSearch);
@@ -24,18 +22,20 @@ const SearchBar: Component = () => {
     const onSearch = () => {
         if(!searchContext.term) {
             clearCategories();
+            clearActiveTerm();
         } else {
             setExecute(true);
         }
     }
 
     const onClearSearch = () => {
-        setSearchTerm("");
+        clearSearchTerm();
+        clearActiveTerm();
         clearCategories();
     }
 
     createEffect(() => {
-        if(searchResource.state === "ready") {
+        if(searchResource.state === "ready" && searchResource()) {
             batch(() => {
                 setCategories(searchResource().results);
                 setFoundCount(searchResource().totalFound);
