@@ -1,9 +1,9 @@
 import { ParentComponent, children, createEffect, createResource } from 'solid-js';
 
-import { categoryTypes } from '../../_models/CategoryTypes';
 import { useMediaListContext } from '../../contexts/MediaListContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { MediaListModeCategory } from '../../_models/Media';
+import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';
 
 const MediaCategoryLoader: ParentComponent = (props) => {
     const [mediaContext] = useMediaListContext();
@@ -18,7 +18,7 @@ const MediaCategoryLoader: ParentComponent = (props) => {
         const cat = categoryContext.activeCategory;
 
         if(cat) {
-            const svc = categoryTypes[cat.type].svc;
+            const svc = getCategoryService(cat.type);
             return svc.loadMedia(cat.id);
         }
 

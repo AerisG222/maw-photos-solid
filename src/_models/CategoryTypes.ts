@@ -1,7 +1,4 @@
-import { ICategoryService } from '../_services/categories/ICategoryService';
 import { CategoryType } from './CategoryType';
-import { photoCategoryService } from '../_services/categories/PhotoCategoryService';
-import { videoCategoryService } from '../_services/categories/VideoCategoryService';
 import { KeyValuePair } from './KeyValuePair';
 import { MediaView, MediaViewAll } from '../media/_routes';
 
@@ -10,7 +7,6 @@ export type CategoryTypeInfo = {
     namePlural: string;
     routePart: string;  // todo: improve naming
     icon: string;
-    svc: ICategoryService;
     views: MediaView[];
     slideshowAvailable: boolean;
 };
@@ -22,7 +18,6 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         namePlural: "Photos",
         routePart: "photos",
         icon: "i-ic-round-camera-alt",
-        svc: photoCategoryService,
         views: MediaViewAll,
         slideshowAvailable: true
     },
@@ -31,7 +26,6 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         namePlural: "Videos",
         routePart: "videos",
         icon: "i-ic-round-videocam",
-        svc: videoCategoryService,
         views: MediaViewAll,
         slideshowAvailable: false
     }
