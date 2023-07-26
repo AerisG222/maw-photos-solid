@@ -25,7 +25,7 @@ const CategoryListItem: Component<Props> = (props) => {
 
             <Show when={props.showYear}>
                 <span class="m-l-4">{props.category.year}</span>
-                <span class="m-l-4 text-6 i-ic-baseline-arrow-right"></span>
+                <span class="m-l-4 text-6 i-ic-baseline-arrow-right" />
             </Show>
 
             <span class="m-l-4">{props.category.name}</span>

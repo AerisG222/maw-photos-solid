@@ -10,7 +10,7 @@ const ViewReleaseNotes: Component = () => {
             <For each={appRoutes.filter(x => x.icon)}>{ route =>
                 <div class="mb-4">
                     <p>
-                        <span class={"text-6 " + route.icon}></span> - {route.name}
+                        <span class={"text-6 " + route.icon} /> - {route.name}
                     </p>
                     <p>
                         {route.helpText}
