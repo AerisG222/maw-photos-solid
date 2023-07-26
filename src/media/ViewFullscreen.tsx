@@ -1,7 +1,7 @@
 import { Component, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from '../contexts/FullscreenContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { categoryFullscreenRoute } from './_routes';
 

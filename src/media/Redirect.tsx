@@ -4,7 +4,7 @@ import { useNavigate } from '@solidjs/router';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaView, getMediaPathByView } from './_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
 
 const Redirect: Component = () => {

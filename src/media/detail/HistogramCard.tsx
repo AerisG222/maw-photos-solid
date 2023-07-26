@@ -1,6 +1,6 @@
 import { Component, createEffect, createSignal } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Histogram = {
     r: number[];

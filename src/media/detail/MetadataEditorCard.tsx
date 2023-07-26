@@ -1,7 +1,7 @@
 import { Component, createEffect, createResource, createSignal } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
-import { useMetadataEditServiceContext } from '../../contexts/MetadataEditServiceContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
 import { GpsOverride, isValidLatLng, parseGps } from '../../_models/utils/GpsUtils';
 
 const MetadataEditorCard: Component = () => {

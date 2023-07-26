@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 import ToolbarButton from '../../components/toolbar/ToolbarButton';
 

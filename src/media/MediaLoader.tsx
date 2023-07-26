@@ -1,6 +1,6 @@
 import { ParentComponent, batch, children, createEffect } from 'solid-js';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
 
 import MediaCategoryLoader from './loader/MediaCategoryLoader';

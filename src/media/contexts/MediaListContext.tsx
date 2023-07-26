@@ -2,11 +2,11 @@ import { ParentComponent, createContext, createEffect, useContext } from 'solid-
 import { useLocation, useNavigate, useParams } from '@solidjs/router';
 import { createStore } from 'solid-js/store';
 
-import { GpsCoordinate } from '../_models/Gps';
-import { AppRouteDefinition } from '../_models/AppRouteDefinition';
-import { Media, MediaListMode, MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
-import { getMediaPath } from '../media/_routes';
-import { CategoryType } from '../_models/CategoryType';
+import { GpsCoordinate } from '../../_models/Gps';
+import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
+import { Media, MediaListMode, MediaListModeCategory, MediaListModeRandom } from '../../_models/Media';
+import { getMediaPath } from '../../media/_routes';
+import { CategoryType } from '../../_models/CategoryType';
 
 export type MediaListState = {
     readonly mode: MediaListMode;

@@ -1,9 +1,9 @@
 import { Component, Show } from "solid-js";
 import { A, useParams } from '@solidjs/router';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { useSlideshowContext } from '../contexts/SlideshowContext';
+import { useSlideshowContext } from './contexts/SlideshowContext';
 import { getMediaPath, categoryGridRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 

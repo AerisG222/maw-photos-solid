@@ -1,6 +1,6 @@
 import { ParentComponent, children, createEffect, createResource } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { MediaListModeCategory } from '../../_models/Media';
 import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';

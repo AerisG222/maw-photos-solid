@@ -2,7 +2,7 @@ import { Component, createEffect, createSignal, onCleanup, onMount } from "solid
 import { useNavigate, useParams } from '@solidjs/router';
 
 import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getMediaPath, categoryMapRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';

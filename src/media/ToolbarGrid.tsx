@@ -4,7 +4,7 @@ import { useParams } from '@solidjs/router';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { CategoryType } from '../_models/CategoryType';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';

@@ -1,10 +1,10 @@
 import { Component } from 'solid-js';
 
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
-import { useVisualEffectsContext } from '../contexts/VisualEffectsContext';
+import { useVisualEffectsContext } from './contexts/VisualEffectsContext';
 
-import MainPhoto from '../components/photos/MainPhoto';
-import MainVideo from '../components/videos/MainVideo';
+import MainPhoto from './photos/MainPhoto';
+import MainVideo from './videos/MainVideo';
 
 type Props = {
     media: Media;

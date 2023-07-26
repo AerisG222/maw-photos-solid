@@ -1,12 +1,12 @@
 import { Component, For } from 'solid-js';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../_models/ThumbnailSize';
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
 import { categoryDetailRoute } from './_routes';
 
-import PhotoLink from '../components/photos/PhotoLink';
-import VideoLink from '../components/videos/VideoLink';
+import PhotoLink from './photos/PhotoLink';
+import VideoLink from './videos/VideoLink';
 
 type Props = {
     thumbnailSize: ThumbnailSizeIdType;

@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
-import { defaultVisualEffects } from '../../contexts/VisualEffectsContext';
-import { useVisualEffectsContext } from '../../contexts/VisualEffectsContext';
+import { defaultVisualEffects } from '../contexts/VisualEffectsContext';
+import { useVisualEffectsContext } from '../contexts/VisualEffectsContext';
 
 import EffectsResetButton from './EffectsResetButton';
 

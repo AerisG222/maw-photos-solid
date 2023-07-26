@@ -1,8 +1,8 @@
 import { Component, For, createEffect, createResource, createSignal } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { getFormattedExif } from '../../_models/utils/ExifUtils';
-import { useExifServiceContext } from '../../contexts/ExifServiceContext';
+import { useExifServiceContext } from '../contexts/ExifServiceContext';
 
 const ExifCard: Component = () => {
     const [fetchExifSignal, setFetchExifSignal] = createSignal({ media: undefined, service: undefined });

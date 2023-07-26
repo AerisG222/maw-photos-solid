@@ -1,7 +1,7 @@
 import { Component } from 'solid-js';
 
 import { Photo } from '../../_models/Media';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     photo: Photo;

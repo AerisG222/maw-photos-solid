@@ -1,7 +1,7 @@
 import { Component, Show, onCleanup } from "solid-js";
 
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../_models/ThumbnailSize';
 import { categoryDetailRoute } from './_routes';

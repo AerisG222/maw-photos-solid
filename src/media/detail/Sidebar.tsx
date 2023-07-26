@@ -2,7 +2,7 @@ import { Component, For, Show, lazy } from "solid-js";
 
 import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
 import { Media, MediaTypePhoto } from '../../_models/Media';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";

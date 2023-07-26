@@ -1,6 +1,6 @@
 import { ParentComponent, children, createEffect, createResource, createSignal, createUniqueId, onCleanup } from 'solid-js';
 
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { getRandomPhotos } from '../../_api/Photos';
 
 const MediaRandomLoader: ParentComponent = (props) => {

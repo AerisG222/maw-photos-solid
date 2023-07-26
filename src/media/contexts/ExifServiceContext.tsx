@@ -1,7 +1,7 @@
 import { useContext } from 'solid-js';
 
-import { buildServiceContext } from '../_models/utils/ServiceContextUtil';
-import { IExifService } from '../_services/media/IExifService';
+import { buildServiceContext } from '../../_models/utils/ServiceContextUtil';
+import { IExifService } from '../../_services/media/IExifService';
 
 export const {
     ServiceContext: ExifServiceContext,

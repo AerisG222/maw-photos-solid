@@ -2,7 +2,7 @@ import { Component } from 'solid-js';
 
 import { Video } from '../../_models/Media';
 import { VideoSizeIdType } from '../../_models/VideoSize';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     video: Video;

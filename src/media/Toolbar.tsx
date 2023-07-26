@@ -1,7 +1,7 @@
 import { ParentComponent, Show, children } from 'solid-js'
 
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute } from './_routes';
 import { isAdmin } from '../auth/auth';

@@ -1,7 +1,7 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from '../_models/Media';
 import { GpsCoordinate } from '../_models/Gps';
 import { MediaViewModeGrid, categoryBulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';

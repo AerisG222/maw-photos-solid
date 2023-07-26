@@ -1,9 +1,9 @@
 import { Component, Show } from 'solid-js';
 
-import { useSlideshowContext } from '../../contexts/SlideshowContext';
+import { useSlideshowContext } from '../contexts/SlideshowContext';
 import { useParams } from '@solidjs/router';
 import { categoryTypes } from '../../_models/CategoryTypes';
-import { useMediaListContext } from '../../contexts/MediaListContext';
+import { useMediaListContext } from '../contexts/MediaListContext';
 import { MediaListMode, MediaListModeCategory, MediaListModeRandom } from '../../_models/Media';
 import { CategoryType } from '../../_models/CategoryType';
 

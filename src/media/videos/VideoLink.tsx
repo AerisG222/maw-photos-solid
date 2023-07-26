@@ -1,23 +1,23 @@
 import { Component } from 'solid-js';
 
-import { Media, Photo } from '../../_models/Media';
-import { ThumbnailSizeIdType, getThumbnailClass } from '../../_models/ThumbnailSize';
 import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
-import { getMediaPath } from '../../media/_routes';
-import { CategoryTypePhotos } from '../../_models/CategoryType';
+import { Video, Media } from '../../_models/Media';
+import { ThumbnailSizeIdType, getThumbnailClass } from '../../_models/ThumbnailSize';
+import { getMediaPath } from '../_routes';
+import { CategoryTypeVideos } from '../../_models/CategoryType';
 
-import MediaLink from '../../media/MediaLink';
+import MediaLink from '../MediaLink';
 
 type Props = {
-    photo: Photo;
+    video: Video;
     thumbnailSize: ThumbnailSizeIdType;
     rounded: boolean;
     isActiveItem: boolean;
-    route: AppRouteDefinition
+    route: AppRouteDefinition;
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
 };
 
-const PhotoLink: Component<Props> = (props) => {
+const VideoLink: Component<Props> = (props) => {
     const getClassList = () => ({
         ...getThumbnailClass(props.thumbnailSize),
         ...{
@@ -26,20 +26,20 @@ const PhotoLink: Component<Props> = (props) => {
         }
     });
 
-    /// todo: make category type dynamic
+    // todo: make category type dynamic?
     return (
         <MediaLink
-            media={props.photo}
+            media={props.video}
             scroll={props.scroll}
-            url={getMediaPath(props.route, CategoryTypePhotos, props.photo.categoryId, props.photo.id)}
+            url={getMediaPath(props.route, CategoryTypeVideos, props.video.categoryId, props.video.id)}
             rounded={props.rounded}
             isActiveItem={props.isActiveItem}>
             <img
-                src={props.photo.imageXsSqUrl}
+                src={props.video.thumbnailSqUrl}
                 classList={getClassList()}
                 loading="lazy" />
         </MediaLink>
     );
 };
 
-export default PhotoLink;
+export default VideoLink;

@@ -2,7 +2,7 @@ import { ParentComponent, children, createEffect } from 'solid-js';
 
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
-import { useCategoryTeaserServiceContext } from '../contexts/CategoryTeaserServiceContext';
+import { useCategoryTeaserServiceContext } from './contexts/CategoryTeaserServiceContext';
 import { photoMediaService } from '../_services/media/PhotoMediaService';
 import { videoMediaService } from '../_services/media/VideoMediaService';
 

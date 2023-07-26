@@ -3,8 +3,8 @@ import { Component, For } from 'solid-js';
 import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
 import { categoryGridRoute } from './_routes';
 
-import PhotoLink from '../components/photos/PhotoLink';
-import VideoLink from '../components/videos/VideoLink';
+import PhotoLink from './photos/PhotoLink';
+import VideoLink from './videos/VideoLink';
 
 type Props = {
     items: Media[];

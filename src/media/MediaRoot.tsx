@@ -1,16 +1,16 @@
 import { Outlet, useParams } from '@solidjs/router';
 import { Component } from 'solid-js';
 
-import { MediaListProvider } from '../contexts/MediaListContext';
+import { MediaListProvider } from './contexts/MediaListContext';
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { CategoryType } from '../_models/CategoryType';
-import { SlideshowProvider } from '../contexts/SlideshowContext';
-import { VisualEffectsProvider } from '../contexts/VisualEffectsContext';
-import { CategoryTeaserServiceProvider } from '../contexts/CategoryTeaserServiceContext';
-import { CommentServiceProvider } from '../contexts/CommentServiceContext';
-import { ExifServiceProvider } from '../contexts/ExifServiceContext';
-import { MetadataEditServiceProvider } from '../contexts/MetadataEditServiceContext';
-import { RatingServiceProvider } from '../contexts/RatingServiceContext';
+import { SlideshowProvider } from './contexts/SlideshowContext';
+import { VisualEffectsProvider } from './contexts/VisualEffectsContext';
+import { CategoryTeaserServiceProvider } from './contexts/CategoryTeaserServiceContext';
+import { CommentServiceProvider } from './contexts/CommentServiceContext';
+import { ExifServiceProvider } from './contexts/ExifServiceContext';
+import { MetadataEditServiceProvider } from './contexts/MetadataEditServiceContext';
+import { RatingServiceProvider } from './contexts/RatingServiceContext';
 
 import AuthGuard from '../components/auth/AuthGuard';
 import MediaLoader from './MediaLoader';

@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from './contexts/MediaListContext';
 import { getMediaPath } from './_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { AppRouteDefinition } from '../_models/AppRouteDefinition';
