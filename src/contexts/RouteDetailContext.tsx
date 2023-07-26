@@ -52,10 +52,6 @@ export const RouteDetailProvider: ParentComponent = (props) => {
         });
     });
 
-    createEffect(() => {
-        console.log(`${state.path} : ${state.area}`);
-    })
-
     return (
         <RouteDetailContext.Provider value={[state, { }]}>
             {props.children}
