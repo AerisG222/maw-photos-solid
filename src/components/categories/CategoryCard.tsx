@@ -3,7 +3,6 @@ import { A } from '@solidjs/router';
 
 import { getThumbnailClass, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
 import { Category } from '../../_models/Category';
-import { useCategoryContext } from '../../contexts/CategoryContext';
 
 type Props = {
     category: Category;
@@ -13,11 +12,8 @@ type Props = {
 };
 
 const CategoryCard: Component<Props> = (props) => {
-    const [, {setActiveCategory}] = useCategoryContext();
-
     return(
         <A href={props.category.route}
-            onClick={evt => setActiveCategory(props.category)}
             class="group bg-secondary-content:6 border-1 rounded-1 border-primaryContent-[10%] cursor-pointer hover:border-primary hover:color-primary">
             <Show when={props.showYears}>
                 <div class="text-center pb-1 max-w-[160px]">{props.category.year}</div>

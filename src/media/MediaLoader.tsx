@@ -1,27 +1,51 @@
-import { ParentComponent, children, createEffect } from 'solid-js';
-import { useParams } from '@solidjs/router';
+import { ParentComponent, batch, children, createEffect } from 'solid-js';
 
-import { categoryTypes } from '../_models/CategoryTypes';
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { ICategoryService } from '../_services/categories/ICategoryService';
+import { MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
+
+import MediaCategoryLoader from './loader/MediaCategoryLoader';
+import MediaRandomLoader from './loader/MediaRandomLoader';
 
 const MediaLoader: ParentComponent = (props) => {
-    const params = useParams();
-    const categoryService = categoryTypes[params.categoryType].svc as ICategoryService;
-    const mediaResource = categoryService.loadMedia(parseInt(params.categoryId, 10));
-    const [, { setItems }] = useMediaListContext();
+    const [mediaContext, { setItems, setActiveItem, }] = useMediaListContext();
+    let lastMode = undefined;
 
     const c = children(() => props.children);
 
+    const getLoader = () => {
+        switch(mediaContext.mode) {
+            case MediaListModeCategory:
+                return (
+                    <MediaCategoryLoader>
+                        {c()}
+                    </MediaCategoryLoader>
+                );
+            case MediaListModeRandom:
+                return (
+                    <MediaRandomLoader>
+                        {c()}
+                    </MediaRandomLoader>
+                );
+            default:
+                return <></>;
+        }
+    }
+
+    // if we switch from one mode to another, we need to manually clear out the set of
+    // media that may have been loaded already
     createEffect(() => {
-        if(!mediaResource.loading && !mediaResource.error) {
-            setItems(mediaResource());
+        if(lastMode !== mediaContext.mode) {
+            batch(() => {
+                lastMode = mediaContext.mode;
+                setActiveItem(undefined);
+                setItems([]);
+            });
         }
     });
 
     return (
         <>
-            {c()}
+            {getLoader()}
         </>
     );
 };

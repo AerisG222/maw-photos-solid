@@ -3,7 +3,7 @@ import { Component, onCleanup } from "solid-js";
 import { useFullscreenContext } from '../contexts/FullscreenContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { fullscreenRoute } from './_routes';
+import { categoryFullscreenRoute } from './_routes';
 
 import FullscreenToolbar from './ToolbarFullscreen';
 import Toolbar from "./Toolbar";
@@ -16,7 +16,7 @@ const ViewFullscreen: Component = () => {
     const [, { setFullscreen }] = useFullscreenContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
 
-    setActiveRouteDefinition(fullscreenRoute);
+    setActiveRouteDefinition(categoryFullscreenRoute);
 
     const toolbar = (
         <Toolbar>
@@ -33,7 +33,7 @@ const ViewFullscreen: Component = () => {
     });
 
     return (
-        <MediaSelectedGuard targetRoute={fullscreenRoute}>
+        <MediaSelectedGuard targetRoute={categoryFullscreenRoute}>
         <Layout toolbar={toolbar}>
             <div class="grid h-[100vh] w-[100%] justify-center">
                 <MediaMainItem media={mediaList.activeItem} />

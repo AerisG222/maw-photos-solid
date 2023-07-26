@@ -4,7 +4,7 @@ import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDet
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../_models/ThumbnailSize';
-import { detailRoute } from './_routes';
+import { categoryDetailRoute } from './_routes';
 
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
@@ -26,7 +26,7 @@ const ViewDetail: Component = () => {
         </Toolbar>
     );
 
-    setActiveRouteDefinition(detailRoute);
+    setActiveRouteDefinition(categoryDetailRoute);
 
     hideXpad();
 
@@ -48,7 +48,7 @@ const ViewDetail: Component = () => {
     };
 
     return (
-        <MediaSelectedGuard targetRoute={detailRoute}>
+        <MediaSelectedGuard targetRoute={categoryDetailRoute}>
         <Layout toolbar={toolbar} sidebar={<Sidebar />}>
             <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
                 <Show when={settings.showBreadcrumbs} fallback={<div />}>

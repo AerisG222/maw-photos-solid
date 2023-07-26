@@ -1,5 +1,3 @@
-import { Resource, createResource } from 'solid-js';
-
 import { getPhotoCategories, getPhotos, setTeaser } from '../../_api/PhotoCategories';
 import { PhotoCategory } from '../../_models/Category';
 import { ICategoryService } from './ICategoryService';
@@ -9,19 +7,12 @@ import { Photo } from '../../_models/Media';
 export class PhotoCategoryService
     implements ICategoryService
 {
-    private getCategories = (isLoggedIn: boolean) =>
-        isLoggedIn ? getPhotoCategories() : undefined;
-
-    load(): Resource<PhotoCategory[]> {
-        const [resource] = createResource(isLoggedIn, this.getCategories);
-
-        return resource;
+    load(): Promise<PhotoCategory[]> {
+        return isLoggedIn() ? getPhotoCategories() : undefined;
     }
 
-    loadMedia(categoryId: number): Resource<Photo[]> {
-        const [resource] = createResource(() => getPhotos(categoryId));
-
-        return resource;
+    loadMedia(categoryId: number): Promise<Photo[]> {
+        return getPhotos(categoryId);
     }
 
     setTeaser(categoryId: number, id: number): Promise<Response> {

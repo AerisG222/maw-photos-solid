@@ -4,7 +4,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from '../_models/Media';
 import { GpsCoordinate } from '../_models/Gps';
-import { MediaViewModeGrid, bulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';
+import { MediaViewModeGrid, categoryBulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 import { IMetadataEditService } from '../_services/media/IMetadataEditService';
 import { photoMediaService } from '../_services/media/PhotoMediaService';
@@ -33,7 +33,7 @@ const ViewBulkEdit: Component = () => {
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 
-    setActiveRouteDefinition(bulkEditRoute);
+    setActiveRouteDefinition(categoryBulkEditRoute);
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,

@@ -3,8 +3,9 @@ import { ParentComponent, Show, children } from 'solid-js'
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from './_routes';
+import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute } from './_routes';
 import { isAdmin } from '../auth/auth';
+import { MediaListModeCategory } from '../_models/Media';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -19,29 +20,30 @@ const Toolbar: ParentComponent = (props) => {
 
     // todo: pull these from url?
     const getRouteParams = () => ({
-        categoryType: categoryState.activeCategory.type,
-        categoryId: categoryState.activeCategory?.id,
+        categoryType: categoryState?.activeCategory?.type,
+        categoryId: categoryState?.activeCategory?.id,
         id: mediaList.activeItem?.id,
     });
 
     return (
-        <Show when={categoryState.activeCategory}>
-            <ToolbarLayout>
-                <ToolbarLink route={gridRoute}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-                <ToolbarLink route={detailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-                <ToolbarLink route={fullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
-                <ToolbarLink route={mapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+        <ToolbarLayout>
+            <ToolbarLink route={categoryGridRoute}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+            <ToolbarLink route={categoryDetailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+            <ToolbarLink route={categoryFullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+
+            <Show when={mediaList.mode === MediaListModeCategory}>
+                <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
 
                 <Show when={isAdmin()}>
-                    <ToolbarLink route={bulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                    <ToolbarLink route={categoryBulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
                 </Show>
+            </Show>
 
-                <Show when={!!c()}>
-                    <Divider />
-                    {c()}
-                </Show>
-            </ToolbarLayout>
-        </Show>
+            <Show when={!!c()}>
+                <Divider />
+                {c()}
+            </Show>
+        </ToolbarLayout>
     );
 };
 

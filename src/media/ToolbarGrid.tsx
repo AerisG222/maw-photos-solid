@@ -5,13 +5,13 @@ import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridV
 import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from '../contexts/MediaListContext';
-import { categoryTypes } from '../_models/CategoryTypes';
+import { CategoryType } from '../_models/CategoryType';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
 import MovePreviousButton from './toolbar/MovePreviousButton';
 import MoveNextButton from './toolbar/MoveNextButton';
-import ToggleSlideshowButton from './toolbar/ToggleSlideshowButton';
+import ToggleSlideshowButton, { showSlideshowButton } from './toolbar/ToggleSlideshowButton';
 import RotateCounterClockwiseButton from './toolbar/RotateCounterClockwiseButton';
 import RotateClockwiseButton from './toolbar/RotateClockwiseButton';
 import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
@@ -43,7 +43,7 @@ const GridToolbar: Component = () => {
                 <MoveNextButton />
             </Show>
 
-            <Show when={state.activeItem || categoryTypes[params.categoryType].slideshowAvailable}>
+            <Show when={state.activeItem || showSlideshowButton(state.mode, params.categoryType as CategoryType)}>
                 <Divider />
             </Show>
 

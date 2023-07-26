@@ -4,7 +4,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { getMediaPath, mapRoute } from './_routes';
+import { getMediaPath, categoryMapRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 
 import MapToolbar from './ToolbarMap';
@@ -21,7 +21,7 @@ const ViewMap: Component = () => {
     const [initialized, setInitialized] = createSignal(false);
     let el: HTMLDivElement | undefined;
 
-    setActiveRouteDefinition(mapRoute);
+    setActiveRouteDefinition(categoryMapRoute);
 
     const toolbar = (
         <Toolbar>
@@ -110,7 +110,7 @@ const ViewMap: Component = () => {
                 const p = mediaList.items.find(x => x.latitude && x.longitude);
 
                 if(p) {
-                    navigate(getMediaPath(mapRoute, params.categoryType as CategoryType, p.categoryId, p.id));
+                    navigate(getMediaPath(categoryMapRoute, params.categoryType as CategoryType, p.categoryId, p.id));
                 }
             }
         }

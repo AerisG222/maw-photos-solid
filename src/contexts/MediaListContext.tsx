@@ -1,14 +1,15 @@
-import { ParentComponent, createContext, useContext } from 'solid-js';
-import { useNavigate, useParams } from '@solidjs/router';
+import { ParentComponent, createContext, createEffect, useContext } from 'solid-js';
+import { useLocation, useNavigate, useParams } from '@solidjs/router';
 import { createStore } from 'solid-js/store';
 
 import { GpsCoordinate } from '../_models/Gps';
 import { AppRouteDefinition } from '../_models/AppRouteDefinition';
-import { Media } from '../_models/Media';
+import { Media, MediaListMode, MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
 import { getMediaPath } from '../media/_routes';
 import { CategoryType } from '../_models/CategoryType';
 
 export type MediaListState = {
+    readonly mode: MediaListMode;
     readonly items: Media[];
     readonly activeItem: Media;
     readonly activeIndex: number;
@@ -17,7 +18,7 @@ export type MediaListState = {
 };
 
 export const defaultMediaListState = {
-    type: undefined,
+    mode: undefined,
     items: [],
     activeItem: undefined,
     activeIndex: undefined,
@@ -30,6 +31,7 @@ export type MediaListContextValue = [
     actions: {
         setActiveRouteDefinition: (def: AppRouteDefinition) => void;
         setItems: (media: Media[]) => void;
+        addItems: (media: Media[]) => void;
         setActiveItem: (id: number) => void;
         setMediaElement: (el: HTMLImageElement | HTMLVideoElement) => void;
         activeItemIsFirst: () => boolean;
@@ -48,8 +50,19 @@ const MediaListContext = createContext<MediaListContextValue>();
 
 export const MediaListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultMediaListState);
+    const location = useLocation();
     const params = useParams();
     const navigate = useNavigate();
+
+    createEffect(() => {
+        let mode = MediaListModeCategory;
+
+        if(location.pathname.startsWith("/random")) {
+            mode = MediaListModeRandom;
+        }
+
+        setState({mode});
+    });
 
     const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
         setState({activeRouteDefinition});
@@ -58,6 +71,12 @@ export const MediaListProvider: ParentComponent = (props) => {
     const setItems = (items: Media[]) => {
         setState({ items });
         setActiveItem(state.activeItem?.id);
+    };
+
+    const addItems = (media: Media[]) => {
+        if(media) {
+            setState(s => ({ items: [...s.items, ...media] }));
+        }
     };
 
     const setActiveItem = (id: number | undefined) => {
@@ -149,6 +168,7 @@ export const MediaListProvider: ParentComponent = (props) => {
         <MediaListContext.Provider value={[state, {
             setActiveRouteDefinition,
             setItems,
+            addItems,
             setActiveItem,
             setMediaElement,
             activeItemIsFirst,

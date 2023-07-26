@@ -17,12 +17,14 @@ import MediaLoader from './MediaLoader';
 import ActiveMediaItem from './ActiveMediaItem';
 import ActiveCategoryMonitor from './ActiveCategoryMonitor';
 
-const MediaCategory: Component = () => {
+const MediaRoot: Component = () => {
     const params = useParams();
     const [, {setActiveCategoryById}] = useCategoryContext();
 
-    // dont monitor this in a reactive context, it will reload with each navigation to new category
-    setActiveCategoryById(params.categoryType as CategoryType, parseInt(params.categoryId, 10));
+    if(params.categoryType && params.categoryId) {
+        // dont monitor this in a reactive context, it will reload with each navigation to new category
+        setActiveCategoryById(params.categoryType as CategoryType, parseInt(params.categoryId, 10));
+    }
 
     return (
         <AuthGuard>
@@ -53,4 +55,4 @@ const MediaCategory: Component = () => {
     );
 }
 
-export default MediaCategory;
+export default MediaRoot;

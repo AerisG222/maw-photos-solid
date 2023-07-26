@@ -4,7 +4,7 @@ import { A, useParams } from '@solidjs/router';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
 import { useSlideshowContext } from '../contexts/SlideshowContext';
-import { getMediaPath, gridRoute } from './_routes';
+import { getMediaPath, categoryGridRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
 
 import GridToolbar from './ToolbarGrid';
@@ -20,7 +20,7 @@ const ViewGrid: Component = () => {
     const [,{ stop }] = useSlideshowContext();
     const params = useParams();
 
-    setActiveRouteDefinition(gridRoute);
+    setActiveRouteDefinition(categoryGridRoute);
 
     const toolbar = (
         <Toolbar>
@@ -34,7 +34,7 @@ const ViewGrid: Component = () => {
                 <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
                     <A
                         class="flex h-100%"
-                        href={getMediaPath(gridRoute, params.categoryType as CategoryType, mediaList.activeItem.categoryId, undefined)}
+                        href={getMediaPath(categoryGridRoute, params.categoryType as CategoryType, mediaList.activeItem.categoryId, undefined)}
                         onClick={stop}>
                         <MediaMainItem media={mediaList.activeItem} />
                     </A>

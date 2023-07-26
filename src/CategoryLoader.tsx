@@ -1,7 +1,8 @@
-import { ParentComponent, children, createEffect } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource } from 'solid-js';
 
 import { useCategoryContext } from './contexts/CategoryContext';
 import { categoryTypes } from './_models/CategoryTypes';
+import { isLoggedIn } from './auth/auth';
 
 const CategoryLoader: ParentComponent = (props) => {
     const [, { addCategories }] = useCategoryContext();
@@ -10,7 +11,7 @@ const CategoryLoader: ParentComponent = (props) => {
 
     for(const categoryTypeInfo in categoryTypes) {
         resources.push({
-            res: categoryTypes[categoryTypeInfo].svc.load(),
+            res: createResource(isLoggedIn, async (isLoggedIn) => isLoggedIn ? categoryTypes[categoryTypeInfo].svc.load() : [])[0],
             processed: false
         });
     }

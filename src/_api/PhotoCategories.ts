@@ -4,8 +4,9 @@ import { PhotoCategory as ApiPhotoCategory } from './models/PhotoCategory';
 import { Photo as ApiPhoto } from './models/Photo';
 import { PhotoCategory } from '../_models/Category';
 import { CategoryTypePhotos } from '../_models/CategoryType';
-import { MediaTypePhoto, Photo } from '../_models/Media';
 import { getCategoryPath } from '../categories/_routes';
+import { toDomainPhoto } from './Photos';
+import { Photo } from '../_models/Media';
 
 export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
     const apiCategories = await internalGetPhotoCategories();
@@ -30,24 +31,7 @@ export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
 export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
     const apiPhotos = await internalGetPhotos(categoryId);
 
-    return apiPhotos.items.map(x => ({
-        kind: MediaTypePhoto,
-        id: x.id,
-        categoryId: x.categoryId,
-        createDate: x.createDate,
-        latitude: x.latitude,
-        longitude: x.longitude,
-        imageXsUrl: x.imageXs.url,
-        imageXsWidth: x.imageXs.width,
-        imageXsSqUrl: x.imageXsSq.url,
-        imageSmUrl: x.imageSm.url,
-        imageSmWidth: x.imageSm.width,
-        imageMdUrl: x.imageMd.url,
-        imageMdWidth: x.imageMd.width,
-        imageLgUrl: x.imageLg.url,
-        imageLgWidth: x.imageLg.width,
-        imagePrtUrl: x.imagePrt.url
-    }));
+    return apiPhotos.items.map(x => toDomainPhoto(x));
 };
 
 const internalGetPhotoCategories = () =>

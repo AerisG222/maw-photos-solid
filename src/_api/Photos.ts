@@ -1,17 +1,18 @@
 import { ApiCollection } from './models/ApiCollection';
-import { Photo } from './models/Photo';
+import { Photo as ApiPhoto } from './models/Photo';
 import { Comment } from './models/Comment';
 import { ExifDetail } from './models/ExifDetail';
 import { ApiGpsDetail } from './models/ApiGpsDetail';
 import { ApiGpsCoordinate } from './models/ApiGpsCoordinate';
 import { patchMawApi, postMawApi, queryMawApi } from './Shared';
 import { Rating } from './models/Rating';
+import { MediaTypePhoto, Photo } from '../_models/Media';
 
-export const getRandomPhoto = () =>
-    queryMawApi<Photo>('photos/random');
+export const getRandomPhotos = async (count: number): Promise<Photo[]> => {
+    const photos = await internalGetRandomPhotos(count);
 
-export const getRandomPhotos = (count: number) =>
-    queryMawApi<ApiCollection<Photo>>(`photos/random/${count}`);
+    return photos.items.map(p => toDomainPhoto(p));
+}
 
 export const getExifData = (photoId: number) =>
     queryMawApi<ExifDetail>(`photos/${photoId}/exif`);
@@ -40,3 +41,25 @@ export const getGpsDetail = (photoId: number) =>
 
 export const setGpsCoordinateOverride = (photoId: number, gps: ApiGpsCoordinate) =>
     patchMawApi(`photos/${photoId}/gps`, gps);
+
+export const toDomainPhoto = (apiPhoto: ApiPhoto): Photo => ({
+    kind: MediaTypePhoto,
+    id: apiPhoto.id,
+    categoryId: apiPhoto.categoryId,
+    createDate: apiPhoto.createDate,
+    latitude: apiPhoto.latitude,
+    longitude: apiPhoto.longitude,
+    imageXsUrl: apiPhoto.imageXs.url,
+    imageXsWidth: apiPhoto.imageXs.width,
+    imageXsSqUrl: apiPhoto.imageXsSq.url,
+    imageSmUrl: apiPhoto.imageSm.url,
+    imageSmWidth: apiPhoto.imageSm.width,
+    imageMdUrl: apiPhoto.imageMd.url,
+    imageMdWidth: apiPhoto.imageMd.width,
+    imageLgUrl: apiPhoto.imageLg.url,
+    imageLgWidth: apiPhoto.imageLg.width,
+    imagePrtUrl: apiPhoto.imagePrt.url
+});
+
+const internalGetRandomPhotos = (count: number) =>
+    queryMawApi<ApiCollection<ApiPhoto>>(`photos/random/${count}`);
