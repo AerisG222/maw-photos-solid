@@ -19,6 +19,7 @@ const categoryTypeIcons = [
 
 // uh oh - now we have the same issue for route icons...
 const allRouteIcons = [
+    "i-ic-round-help-outline",
     "i-ic-outline-apps",
     "i-ic-round-dashboard",
     "i-ic-round-fullscreen",
