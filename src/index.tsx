@@ -10,7 +10,7 @@ import { FullscreenProvider } from './contexts/FullscreenContext';
 import { LayoutOptionsProvider } from './contexts/LayoutOptionsContext';
 
 import App from './App';
-import CategoryLoader from './CategoryLoader';
+import CategoryLoader from './components/categories/CategoryLoader';
 
 render(() =>
         <AllSettingsProvider>
