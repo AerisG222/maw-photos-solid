@@ -79,8 +79,8 @@ const Treemap: Component<Props> = (props) => {
                     }
                 }],
                 allowTraversingTree: true,
-                animationLimit: 1000,
-                turboThreshold: 5000,
+                animationLimit: 10000,
+                turboThreshold: 50000,
                 data: props.data,
             }]
         });
