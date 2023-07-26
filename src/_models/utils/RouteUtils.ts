@@ -1,4 +1,4 @@
-import { AppRouteDefinition } from '../AppRouteDefinition';
+import { AppRouteDefinition, Area, RouteMatch } from '../AppRouteDefinition';
 
 // todo: figure out a better way
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
@@ -57,3 +57,11 @@ export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSea
 
     return path;
 };
+
+export const routeMatch = (locationPath: string, baseRoutePath: string, areaWhenMatched: Area): RouteMatch => {
+    if(locationPath.startsWith(baseRoutePath)) {
+        return [true, areaWhenMatched];
+    }
+
+    return [false, undefined];
+}

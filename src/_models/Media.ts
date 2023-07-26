@@ -47,7 +47,3 @@ export const getMediaTeaserUrl = (media: Media) => {
             return media.thumbnailSqUrl;
     }
 };
-
-export const MediaListModeCategory = "category";
-export const MediaListModeRandom = "random";
-export type MediaListMode = typeof MediaListModeCategory | typeof MediaListModeRandom;

@@ -5,7 +5,8 @@ import { useMediaListContext } from './contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute } from './_routes';
 import { isAdmin } from '../auth/auth';
-import { MediaListModeCategory } from '../_models/Media';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { AreaCategories } from '../_models/AppRouteDefinition';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -14,6 +15,7 @@ import ToolbarLink from '../components/toolbar/ToolbarLink';
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
+    const [routeContext] = useRouteDetailContext();
     const [, { setViewMode }] = usePhotoPageSettingsContext();
 
     const c = children(() => props.children);
@@ -31,7 +33,7 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLink route={categoryDetailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
             <ToolbarLink route={categoryFullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
 
-            <Show when={mediaList.mode === MediaListModeCategory}>
+            <Show when={routeContext.area === AreaCategories}>
                 <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
 
                 <Show when={isAdmin()}>

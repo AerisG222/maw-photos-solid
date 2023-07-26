@@ -1,5 +1,6 @@
 import { lazy } from 'solid-js'
-import { AppRouteDefinition } from '../_models/AppRouteDefinition'
+import { AppRouteDefinition, AreaSettings } from '../_models/AppRouteDefinition'
+import { routeMatch } from '../_models/utils/RouteUtils';
 
 const basePath = "/settings";
 
@@ -63,6 +64,7 @@ export const settings: AppRouteDefinition = {
     helpText: "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
     path: "/settings",
     component: lazy(() => import('./Settings')),
+    doesPathMatch: path => routeMatch(path, basePath, AreaSettings),
     children: [
         settingsRedirect,
         settingsApplication,

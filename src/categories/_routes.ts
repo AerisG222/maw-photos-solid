@@ -1,8 +1,9 @@
 import { lazy } from 'solid-js';
-import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { AppRouteDefinition, AreaCategories } from '../_models/AppRouteDefinition';
 import { equalsIgnoreCase } from '../_models/utils/StringUtils';
 import { CategoryType } from '../_models/CategoryType';
 import { categoryTypes } from '../_models/CategoryTypes';
+import { routeMatch } from '../_models/utils/RouteUtils';
 
 const basePath = '/categories';
 
@@ -35,6 +36,7 @@ export const categories: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import('./Categories')),
+    doesPathMatch: path => routeMatch(path, basePath, AreaCategories),
     children: [
         categoriesRedirect,
         categoriesGrid,

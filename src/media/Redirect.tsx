@@ -4,14 +4,14 @@ import { useNavigate } from '@solidjs/router';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
 import { MediaView, getMediaPathByView } from './_routes';
 import { useCategoryContext } from '../contexts/CategoryContext';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { MediaListModeCategory, MediaListModeRandom } from '../_models/Media';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
 
 const Redirect: Component = () => {
     const navigate = useNavigate();
     const [categoryContext] = useCategoryContext();
     const [settings] = usePhotoPageSettingsContext();
-    const [mediaContext] = useMediaListContext();
+    const [routeContext] = useRouteDetailContext();
 
     const categoryRedirect = () => {
         const cat = categoryContext.activeCategory;
@@ -26,11 +26,11 @@ const Redirect: Component = () => {
     };
 
     createEffect(() => {
-        switch(mediaContext.mode) {
-            case MediaListModeCategory:
+        switch(routeContext.area) {
+            case AreaCategories:
                 categoryRedirect();
                 break;
-            case MediaListModeRandom:
+            case AreaRandom:
                 randomRedirect();
                 break;
         }

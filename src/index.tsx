@@ -11,6 +11,7 @@ import { LayoutOptionsProvider } from './contexts/LayoutOptionsContext';
 
 import App from './App';
 import CategoryLoader from './components/categories/CategoryLoader';
+import { RouteDetailProvider } from './contexts/RouteDetailContext';
 
 render(() =>
         <AllSettingsProvider>
@@ -19,7 +20,9 @@ render(() =>
         <FullscreenProvider>
         <LayoutOptionsProvider>
         <Router>
-            <App />
+            <RouteDetailProvider>
+                <App />
+            </RouteDetailProvider>
         </Router>
         </LayoutOptionsProvider>
         </FullscreenProvider>

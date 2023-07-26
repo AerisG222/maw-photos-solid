@@ -2,16 +2,18 @@ import { ParentComponent, children, createEffect, createResource } from 'solid-j
 
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
-import { MediaListModeCategory } from '../../_models/Media';
 import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';
+import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
+import { AreaCategories } from '../../_models/AppRouteDefinition';
 
 const MediaCategoryLoader: ParentComponent = (props) => {
-    const [mediaContext] = useMediaListContext();
+    const [routeContext] = useRouteDetailContext();
     const [categoryContext] = useCategoryContext();
     const [, { setItems }] = useMediaListContext();
 
     const loadMedia = () => {
-        if(mediaContext.mode !== MediaListModeCategory) {
+        // todo: is this check necessary?
+        if(routeContext.area !== AreaCategories) {
             return;
         }
 

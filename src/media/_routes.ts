@@ -1,7 +1,7 @@
 import { lazy } from 'solid-js';
-import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { AppRouteDefinition, AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
 import { CategoryType } from '../_models/CategoryType';
-import { buildPath } from '../_models/utils/RouteUtils';
+import { buildPath, routeMatch } from '../_models/utils/RouteUtils';
 
 export const MediaViewModeBulkEdit = "bulk-edit";
 export const MediaViewModeDetail = "detail";
@@ -94,6 +94,7 @@ export const categoryMediaRoutes: AppRouteDefinition = {
     path: categoryBasePath,
     absolutePath: categoryBasePath,
     component: lazy(() => import('./MediaRoot')),
+    doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [
         categoryRedirectRoute,
         categoryGridRoute,
@@ -116,6 +117,7 @@ export const randomMediaRoutes: AppRouteDefinition = {
     path: randomBasePath,
     absolutePath: randomBasePath,
     component: lazy(() => import('./MediaRoot')),
+    doesPathMatch: path => routeMatch(path, randomBasePath, AreaRandom),
     children: [
         randomRedirectRoute,
         randomGridRoute,

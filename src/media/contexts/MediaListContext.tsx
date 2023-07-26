@@ -1,15 +1,14 @@
-import { ParentComponent, createContext, createEffect, useContext } from 'solid-js';
-import { useLocation, useNavigate, useParams } from '@solidjs/router';
+import { ParentComponent, createContext, useContext } from 'solid-js';
+import { useNavigate, useParams } from '@solidjs/router';
 import { createStore } from 'solid-js/store';
 
 import { GpsCoordinate } from '../../_models/Gps';
 import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
-import { Media, MediaListMode, MediaListModeCategory, MediaListModeRandom } from '../../_models/Media';
+import { Media } from '../../_models/Media';
 import { getMediaPath } from '../../media/_routes';
 import { CategoryType } from '../../_models/CategoryType';
 
 export type MediaListState = {
-    readonly mode: MediaListMode;
     readonly items: Media[];
     readonly activeItem: Media;
     readonly activeIndex: number;
@@ -18,7 +17,6 @@ export type MediaListState = {
 };
 
 export const defaultMediaListState = {
-    mode: undefined,
     items: [],
     activeItem: undefined,
     activeIndex: undefined,
@@ -50,19 +48,8 @@ const MediaListContext = createContext<MediaListContextValue>();
 
 export const MediaListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultMediaListState);
-    const location = useLocation();
     const params = useParams();
     const navigate = useNavigate();
-
-    createEffect(() => {
-        let mode = MediaListModeCategory;
-
-        if(location.pathname.startsWith("/random")) {
-            mode = MediaListModeRandom;
-        }
-
-        setState({mode});
-    });
 
     const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
         setState({activeRouteDefinition});
