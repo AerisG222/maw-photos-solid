@@ -14,7 +14,7 @@ import Toolbar from "./Toolbar";
 import Layout from '../components/layout/Layout';
 import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
-import AdminGuard from '../auth/AdminGuard';
+import AdminGuard from '../components/auth/AdminGuard';
 
 type SelectableMedia = {
     id: number,

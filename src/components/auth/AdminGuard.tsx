@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
 
-import { isAdmin } from './auth';
+import { isAdmin } from '../../auth/auth';
 
 type Props = {
     redirectRoute?: string;
