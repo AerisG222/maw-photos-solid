@@ -35,3 +35,5 @@ export const categoryTypesOptions: KeyValuePair<string>[] = [
     {id: 'all', name: 'All'},
     ...Object.keys(categoryTypes).map(key => ({id: key, name: categoryTypes[key].namePlural}))
 ];
+
+export const categoryTypeIcons = Object.entries(categoryTypes).map(([key, value]) => value.icon);

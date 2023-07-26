@@ -8,14 +8,7 @@ import { presetDaisy } from 'unocss-preset-daisy';
 import { allThemes } from './src/_models/Theme';
 import { allThumbnailClasses } from './src/_models/ThumbnailSize';
 import { allMarginClasses } from './src/_models/Margin';
-
-// ideally this would be a query against categoryTypes, but due to the imports
-// in that file it can not be used, so we must use the list below to avoid the
-// dependencies there...
-const categoryTypeIcons = [
-    "i-ic-round-camera-alt",
-    "i-ic-round-videocam"
-];
+import { categoryTypeIcons } from './src/_models/CategoryTypes';
 
 // uh oh - now we have the same issue for route icons...
 const allRouteIcons = [
