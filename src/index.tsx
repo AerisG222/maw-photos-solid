@@ -10,10 +10,12 @@ import { FullscreenProvider } from './contexts/FullscreenContext';
 import { LayoutOptionsProvider } from './contexts/LayoutOptionsContext';
 
 import App from './App';
+import CategoryLoader from './CategoryLoader';
 
 render(() =>
         <AllSettingsProvider>
         <CategoryProvider>
+        <CategoryLoader>
         <FullscreenProvider>
         <LayoutOptionsProvider>
         <Router>
@@ -21,6 +23,7 @@ render(() =>
         </Router>
         </LayoutOptionsProvider>
         </FullscreenProvider>
+        </CategoryLoader>
         </CategoryProvider>
         </AllSettingsProvider>
     ,
