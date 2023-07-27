@@ -1,4 +1,4 @@
-import { ParentComponent, children, createEffect } from 'solid-js';
+import { ParentComponent, children, createEffect, onCleanup } from 'solid-js';
 
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
@@ -7,7 +7,7 @@ import { photoMediaService } from '../_services/media/PhotoMediaService';
 import { videoMediaService } from '../_services/media/VideoMediaService';
 
 const ActiveCategoryMonitor: ParentComponent = (props) => {
-    const [categoryContext] = useCategoryContext();
+    const [categoryContext, { setActiveCategory }] = useCategoryContext();
     const [, { setService: setCategoryTeaserService }] = useCategoryTeaserServiceContext();
 
     const c = children(() => props.children);
@@ -21,6 +21,10 @@ const ActiveCategoryMonitor: ParentComponent = (props) => {
                 setCategoryTeaserService(videoMediaService);
                 break;
         }
+    });
+
+    onCleanup(() => {
+        setActiveCategory(undefined);
     });
 
     return (

@@ -1,4 +1,4 @@
-import { ParentComponent, batch, children, createEffect } from 'solid-js';
+import { ParentComponent, batch, children, createEffect, onCleanup } from 'solid-js';
 import { useParams } from '@solidjs/router';
 
 import { useMediaListContext } from './contexts/MediaListContext';
@@ -13,7 +13,7 @@ import { useMetadataEditServiceContext } from './contexts/MetadataEditServiceCon
 // todo: naming...
 const ActiveMediaItem: ParentComponent = (props) => {
     const params = useParams();
-    const [mediaList, { setActiveItem }] = useMediaListContext();
+    const [mediaList, { setActiveItem, setItems }] = useMediaListContext();
     const [, { setService: setCommentService }] = useCommentServiceContext();
     const [, { setService: setRatingService }] = useRatingServiceContext();
     const [, { setService: setExifService }] = useExifServiceContext();
@@ -44,6 +44,13 @@ const ActiveMediaItem: ParentComponent = (props) => {
                     break;
             }
         })
+    });
+
+    onCleanup(() => {
+        batch(() => {
+            setActiveItem(undefined);
+            setItems([]);
+        });
     });
 
     return (
