@@ -17,14 +17,13 @@ const MediaSelectedGuard: ParentComponent<Props> = (props) => {
     const c = children(() => props.children);
 
     createEffect(() => {
-        if(categoryContext.activeCategory &&
-            mediaList.items &&
+        if(mediaList.items &&
             mediaList.items.length > 0 &&
             !mediaList.activeItem) {
             const m = mediaList.items[0];
 
             if(m) {
-                navigate(getMediaPath(props.targetRoute, categoryContext.activeCategory.type, m.categoryId, m.id));
+                navigate(getMediaPath(props.targetRoute, categoryContext.activeCategory?.type, m.categoryId, m.id));
             }
         }
     });

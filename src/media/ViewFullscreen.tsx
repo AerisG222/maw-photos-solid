@@ -45,7 +45,7 @@ const ViewFullscreen: Component = () => {
 
     return (
         <Show when={mediaList.activeRouteDefinition}>
-            <MediaSelectedGuard targetRoute={categoryFullscreenRoute}>
+            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
                 <Layout toolbar={toolbar}>
                     <div class="grid h-[100vh] w-[100%] justify-center">
                         <MediaMainItem media={mediaList.activeItem} />
