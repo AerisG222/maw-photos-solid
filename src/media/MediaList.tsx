@@ -1,8 +1,8 @@
-import { Component, For } from 'solid-js';
+import { Component, For, Match, Switch } from 'solid-js';
 
 import { useMediaListContext } from './contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../_models/ThumbnailSize';
-import { Media, MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
+import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
 import { categoryDetailRoute } from './_routes';
 
 import PhotoLink from './photos/PhotoLink';
@@ -14,31 +14,6 @@ type Props = {
 
 const MediaList: Component<Props> = (props) => {
     const [mediaList] = useMediaListContext();
-
-    const getListItem = (media: Media) => {
-        switch (media.kind) {
-            case MediaTypePhoto:
-                return <PhotoLink
-                    photo={media}
-                    rounded={false}
-                    thumbnailSize={props.thumbnailSize}
-                    isActiveItem={mediaList.activeItem?.id === media.id}
-                    route={categoryDetailRoute}
-                    scroll={scroll} />;
-            case MediaTypeVideo:
-                return <VideoLink
-                    video={media}
-                    rounded={false}
-                    thumbnailSize={props.thumbnailSize}
-                    isActiveItem={mediaList.activeItem?.id === media.id}
-                    route={categoryDetailRoute}
-                    scroll={scroll} />;
-            default:
-                // eslint-disable-next-line no-case-declarations
-                const _exhaustiveCheck: never = media;
-                return _exhaustiveCheck;
-        }
-    };
 
     const scroll = (el: HTMLAnchorElement, media: Media) => {
         if(mediaList.activeItem?.id === media.id) {
@@ -60,8 +35,27 @@ const MediaList: Component<Props> = (props) => {
 
     return (
         <div class="flex flex-nowrap overflow-x-auto">
-            <For each={mediaList.items}>{media =>
-                getListItem(media)
+            <For each={mediaList.items}>{ media =>
+                <Switch>
+                    <Match when={media.kind === MediaTypePhoto}>
+                        <PhotoLink
+                            photo={media as Photo}
+                            rounded={false}
+                            thumbnailSize={props.thumbnailSize}
+                            isActiveItem={mediaList.activeItem?.id === media.id}
+                            route={categoryDetailRoute}
+                            scroll={scroll} />
+                    </Match>
+                    <Match when={media.kind === MediaTypeVideo}>
+                        <VideoLink
+                            video={media as Video}
+                            rounded={false}
+                            thumbnailSize={props.thumbnailSize}
+                            isActiveItem={mediaList.activeItem?.id === media.id}
+                            route={categoryDetailRoute}
+                            scroll={scroll} />
+                    </Match>
+                </Switch>
             }</For>
         </div>
     );
