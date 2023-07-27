@@ -1,18 +1,40 @@
-import { Component } from 'solid-js';
+import { Component, Show } from 'solid-js';
 import { A } from '@solidjs/router';
 
 import { useCategoryContext } from '../../contexts/CategoryContext';
 
-const CategoryBreadcrumb: Component = () => {
+type Props = {
+    showTitleAsLink?: boolean;
+};
+
+const CategoryBreadcrumb: Component<Props> = (props) => {
     const [state] = useCategoryContext();
 
-    // todo: can we make active category more robust so it is not null in some instances?
     return (
-        <div class="text-center">
-            <A class="color-primary" href={`/categories?year=${state.activeCategory?.year}`}>{state.activeCategory?.year}</A>
-            <span class="text-6 i-ic-round-arrow-right" />
-            <span>{state.activeCategory?.name}</span>
-        </div>
+        <Show when={state.activeCategory}>
+            <div class="text-center">
+                <A
+                    class="color-primary"
+                    href={`/categories?year=${state.activeCategory.year}`}
+                >
+                    {state.activeCategory.year}
+                </A>
+
+                <span class="text-6 i-ic-round-arrow-right" />
+
+                <Show when={props.showTitleAsLink}>
+                    <A
+                        class="color-primary"
+                        href={`/categories/${state.activeCategory.type}/${state.activeCategory.id}`}
+                    >
+                        {state.activeCategory.name}
+                    </A>
+                </Show>
+                <Show when={!props.showTitleAsLink}>
+                    <span>{state.activeCategory.name}</span>
+                </Show>
+            </div>
+        </Show>
     );
 };
 
