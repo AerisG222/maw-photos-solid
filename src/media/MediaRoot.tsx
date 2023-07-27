@@ -12,34 +12,34 @@ import { RatingServiceProvider } from './contexts/RatingServiceContext';
 
 import AuthGuard from '../components/auth/AuthGuard';
 import MediaLoader from './MediaLoader';
-import ActiveMediaItem from './ActiveMediaItem';
+import ActiveMediaMonitor from './ActiveMediaMonitor';
 import ActiveCategoryMonitor from './ActiveCategoryMonitor';
 
 const MediaRoot: Component = () => {
     return (
         <AuthGuard>
             <MediaListProvider>
-            <ExifServiceProvider>
-            <RatingServiceProvider>
-            <CommentServiceProvider>
-            <MetadataEditServiceProvider>
-            <CategoryTeaserServiceProvider>
-            <ActiveCategoryMonitor>
-            <ActiveMediaItem>
-            <MediaLoader>
-            <SlideshowProvider>
-            <VisualEffectsProvider>
-                <Outlet />
-            </VisualEffectsProvider>
-            </SlideshowProvider>
-            </MediaLoader>
-            </ActiveMediaItem>
-            </ActiveCategoryMonitor>
-            </CategoryTeaserServiceProvider>
-            </MetadataEditServiceProvider>
-            </CommentServiceProvider>
-            </RatingServiceProvider>
-            </ExifServiceProvider>
+                <ExifServiceProvider>
+                <RatingServiceProvider>
+                <CommentServiceProvider>
+                <MetadataEditServiceProvider>
+                <CategoryTeaserServiceProvider>
+                    <ActiveCategoryMonitor>
+                    <ActiveMediaMonitor>
+                    <MediaLoader>
+                        <SlideshowProvider>
+                        <VisualEffectsProvider>
+                            <Outlet />
+                        </VisualEffectsProvider>
+                        </SlideshowProvider>
+                    </MediaLoader>
+                    </ActiveMediaMonitor>
+                    </ActiveCategoryMonitor>
+                </CategoryTeaserServiceProvider>
+                </MetadataEditServiceProvider>
+                </CommentServiceProvider>
+                </RatingServiceProvider>
+                </ExifServiceProvider>
             </MediaListProvider>
         </AuthGuard>
     );

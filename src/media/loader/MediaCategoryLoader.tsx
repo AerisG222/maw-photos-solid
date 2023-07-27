@@ -1,22 +1,16 @@
-import { ParentComponent, children, createEffect, createResource } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource, createSignal } from 'solid-js';
 
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';
-import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
-import { AreaCategories } from '../../_models/AppRouteDefinition';
 
 const MediaCategoryLoader: ParentComponent = (props) => {
-    const [routeContext] = useRouteDetailContext();
+    const [doFetch, setDoFetch] = createSignal(-1);
     const [categoryContext] = useCategoryContext();
     const [, { setItems }] = useMediaListContext();
+    const c = children(() => props.children);
 
     const loadMedia = () => {
-        // todo: is this check necessary?
-        if(routeContext.area !== AreaCategories) {
-            return;
-        }
-
         const cat = categoryContext.activeCategory;
 
         if(cat) {
@@ -27,9 +21,14 @@ const MediaCategoryLoader: ParentComponent = (props) => {
         return [];
     };
 
-    const [mediaResource] = createResource(categoryContext.activeCategory, loadMedia);
+    // odd - when the first arg was categoryContext.activeCategory, this would fail to load on
+    // the initial display so manually wired up the signal - perhaps related to:
+    // https://github.com/solidjs/solid/issues/1741
+    const [mediaResource] = createResource(doFetch, loadMedia);
 
-    const c = children(() => props.children);
+    createEffect(() => {
+        setDoFetch(categoryContext.activeCategory?.id);
+    });
 
     createEffect(() => {
         if(!mediaResource.loading && !mediaResource.error) {

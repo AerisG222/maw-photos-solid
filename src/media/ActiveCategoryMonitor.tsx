@@ -13,10 +13,11 @@ const ActiveCategoryMonitor: ParentComponent = (props) => {
     const c = children(() => props.children);
     const params = useParams();
 
-    if(params.categoryType && params.categoryId) {
-        // dont monitor this in a reactive context, it will reload with each navigation to new category
-        setActiveCategoryById(params.categoryType as CategoryType, parseInt(params.categoryId, 10));
-    }
+    createEffect(() => {
+        if(params.categoryType && params.categoryId) {
+            setActiveCategoryById(params.categoryType as CategoryType, parseInt(params.categoryId, 10));
+        }
+    });
 
     createEffect(() => {
         switch(categoryContext.activeCategory?.type) {

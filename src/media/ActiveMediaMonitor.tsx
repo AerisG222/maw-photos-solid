@@ -10,8 +10,7 @@ import { useExifServiceContext } from './contexts/ExifServiceContext';
 import { useCommentServiceContext } from './contexts/CommentServiceContext';
 import { useMetadataEditServiceContext } from './contexts/MetadataEditServiceContext';
 
-// todo: naming...
-const ActiveMediaItem: ParentComponent = (props) => {
+const ActiveMediaMonitor: ParentComponent = (props) => {
     const params = useParams();
     const [mediaList, { setActiveItem, setItems }] = useMediaListContext();
     const [, { setService: setCommentService }] = useCommentServiceContext();
@@ -60,4 +59,4 @@ const ActiveMediaItem: ParentComponent = (props) => {
     );
 };
 
-export default ActiveMediaItem;
+export default ActiveMediaMonitor;

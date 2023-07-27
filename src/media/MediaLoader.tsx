@@ -8,7 +8,6 @@ import MediaRandomLoader from './loader/MediaRandomLoader';
 
 const MediaLoader: ParentComponent = (props) => {
     const [routeContext] = useRouteDetailContext()
-
     const c = children(() => props.children);
 
     return (
