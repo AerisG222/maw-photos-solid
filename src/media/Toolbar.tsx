@@ -3,10 +3,10 @@ import { ParentComponent, Show, children } from 'solid-js'
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute } from './_routes';
+import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from './_routes';
 import { isAdmin } from '../auth/auth';
 import { useRouteDetailContext } from '../contexts/RouteDetailContext';
-import { AreaCategories } from '../_models/AppRouteDefinition';
+import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
 
 import Divider from '../components/layout/Divider';
 import ToolbarLayout from '../components/toolbar/ToolbarLayout';
@@ -20,18 +20,30 @@ const Toolbar: ParentComponent = (props) => {
 
     const c = children(() => props.children);
 
-    // todo: pull these from url?
     const getRouteParams = () => ({
         categoryType: categoryState?.activeCategory?.type,
         categoryId: categoryState?.activeCategory?.id,
         id: mediaList.activeItem?.id,
     });
 
+    const getGridRoute = () => getRouteForArea(categoryGridRoute, randomGridRoute);
+    const getDetailRoute = () => getRouteForArea(categoryDetailRoute, randomDetailRoute);
+    const getFullscreenRoute = () => getRouteForArea(categoryFullscreenRoute, randomFullscreenRoute);
+
+    const getRouteForArea = (categoryRoute, randomRoute) => {
+        switch(routeContext.area) {
+            case AreaCategories:
+                return categoryRoute;
+            case AreaRandom:
+                return randomRoute;
+            default:
+        }
+    }
     return (
         <ToolbarLayout>
-            <ToolbarLink route={categoryGridRoute}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-            <ToolbarLink route={categoryDetailRoute}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-            <ToolbarLink route={categoryFullscreenRoute} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+            <ToolbarLink route={getGridRoute()}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+            <ToolbarLink route={getDetailRoute()}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+            <ToolbarLink route={getFullscreenRoute()} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
 
             <Show when={routeContext.area === AreaCategories}>
                 <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
