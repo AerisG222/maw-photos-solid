@@ -3,13 +3,14 @@ import { Component, For, Match, Switch } from 'solid-js';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { ThumbnailSizeIdType } from '../_models/ThumbnailSize';
 import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
-import { categoryDetailRoute } from './_routes';
+import { AppRouteDefinition } from '../_models/AppRouteDefinition';
 
 import PhotoLink from './photos/PhotoLink';
 import VideoLink from './videos/VideoLink';
 
 type Props = {
     thumbnailSize: ThumbnailSizeIdType;
+    activeRoute?: AppRouteDefinition;
 };
 
 const MediaList: Component<Props> = (props) => {
@@ -43,7 +44,7 @@ const MediaList: Component<Props> = (props) => {
                             rounded={false}
                             thumbnailSize={props.thumbnailSize}
                             isActiveItem={mediaList.activeItem?.id === media.id}
-                            route={categoryDetailRoute}
+                            route={props.activeRoute}
                             scroll={scroll} />
                     </Match>
                     <Match when={media.kind === MediaTypeVideo}>
@@ -52,7 +53,7 @@ const MediaList: Component<Props> = (props) => {
                             rounded={false}
                             thumbnailSize={props.thumbnailSize}
                             isActiveItem={mediaList.activeItem?.id === media.id}
-                            route={categoryDetailRoute}
+                            route={props.activeRoute}
                             scroll={scroll} />
                     </Match>
                 </Switch>

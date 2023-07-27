@@ -1,7 +1,7 @@
 import { Component, For, Match, Switch } from 'solid-js';
 
 import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
-import { categoryGridRoute } from './_routes';
+import { AppRouteDefinition } from '../_models/AppRouteDefinition';
 
 import PhotoLink from './photos/PhotoLink';
 import VideoLink from './videos/VideoLink';
@@ -9,6 +9,7 @@ import VideoLink from './videos/VideoLink';
 type Props = {
     items: Media[];
     thumbnailSize: string;
+    activeRoute: AppRouteDefinition;
 };
 
 const MediaGrid: Component<Props> = (props) => {
@@ -21,7 +22,7 @@ const MediaGrid: Component<Props> = (props) => {
                             photo={media as Photo}
                             rounded={true}
                             isActiveItem={false}  // no need to show highlight state in grid view
-                            route={categoryGridRoute}
+                            route={props.activeRoute}
                             thumbnailSize={props.thumbnailSize} />
                     </Match>
                     <Match when={media.kind === MediaTypeVideo}>
@@ -29,7 +30,7 @@ const MediaGrid: Component<Props> = (props) => {
                             video={media as Video}
                             rounded={true}
                             isActiveItem={false}  // no need to show highlight state in grid view
-                            route={categoryGridRoute}
+                            route={props.activeRoute}
                             thumbnailSize={props.thumbnailSize} />
                     </Match>
                 </Switch>

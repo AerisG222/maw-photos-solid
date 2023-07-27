@@ -1,10 +1,12 @@
-import { Component, Show, onCleanup } from "solid-js";
+import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../_models/ThumbnailSize';
-import { categoryDetailRoute } from './_routes';
+import { categoryDetailRoute, randomDetailRoute } from './_routes';
+import { AreaRandom } from '../_models/AppRouteDefinition';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
 
 import DetailToolbar from './ToolbarDetail';
 import Toolbar from "./Toolbar";
@@ -19,6 +21,7 @@ const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [settings] = usePhotoDetailViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
+    const [routeContext] = useRouteDetailContext();
 
     const toolbar = (
         <Toolbar>
@@ -26,7 +29,15 @@ const ViewDetail: Component = () => {
         </Toolbar>
     );
 
-    setActiveRouteDefinition(categoryDetailRoute);
+    createEffect(() => {
+        let route = categoryDetailRoute;
+
+        if(routeContext.area === AreaRandom) {
+            route = randomDetailRoute;
+        }
+
+        setActiveRouteDefinition(route);
+    });
 
     hideXpad();
 
@@ -48,25 +59,29 @@ const ViewDetail: Component = () => {
     };
 
     return (
-        <MediaSelectedGuard targetRoute={categoryDetailRoute}>
-        <Layout toolbar={toolbar} sidebar={<Sidebar />}>
-            <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
-                <Show when={settings.showBreadcrumbs} fallback={<div />}>
-                    <CategoryBreadcrumb />
-                </Show>
+        <Show when={mediaList.activeRouteDefinition}>
+            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
+                <Layout toolbar={toolbar} sidebar={<Sidebar />}>
+                    <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
+                        <Show when={settings.showBreadcrumbs} fallback={<div />}>
+                            <CategoryBreadcrumb />
+                        </Show>
 
-                <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                    <MediaMainItem
-                        media={mediaList.activeItem}
-                        maxHeightStyle={getMaxHeight()} />
-                </div>
+                        <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
+                            <MediaMainItem
+                                media={mediaList.activeItem}
+                                maxHeightStyle={getMaxHeight()} />
+                        </div>
 
-                <Show when={settings.showPhotoList} fallback={<div/>}>
-                    <MediaList thumbnailSize={settings.thumbnailSize} />
-                </Show>
-            </div>
-        </Layout>
-        </MediaSelectedGuard>
+                        <Show when={settings.showPhotoList} fallback={<div/>}>
+                            <MediaList
+                                thumbnailSize={settings.thumbnailSize}
+                                activeRoute={mediaList.activeRouteDefinition} />
+                        </Show>
+                    </div>
+                </Layout>
+            </MediaSelectedGuard>
+        </Show>
     );
 };
 
