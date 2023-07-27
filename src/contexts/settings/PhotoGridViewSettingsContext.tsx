@@ -12,6 +12,7 @@ export type PhotoGridViewSettingsContextValue = [
         setMargin: (margin: MarginIdType) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
+        setShowMainBreadcrumbs: (showBreadcrumbs: boolean) => void;
     }
 ];
 
@@ -23,6 +24,7 @@ export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     const setMargin = (margin: MarginIdType) => updateState({margin: margin});
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
+    const setShowMainBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showMainBreadcrumbs: showBreadcrumbs});
 
     const updateState = (update: Partial<PhotoGridViewSettingsState>) => {
         setState(update);
@@ -30,7 +32,12 @@ export const PhotoGridSettingsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <PhotoGridViewSettingsContext.Provider value={[state, { setMargin, setShowBreadcrumbs, setThumbnailSize }]}>
+        <PhotoGridViewSettingsContext.Provider value={[state, {
+            setMargin,
+            setShowBreadcrumbs,
+            setShowMainBreadcrumbs,
+            setThumbnailSize
+        }]}>
             {props.children}
         </PhotoGridViewSettingsContext.Provider>
     );

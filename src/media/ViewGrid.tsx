@@ -6,6 +6,8 @@ import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridV
 import { useSlideshowContext } from './contexts/SlideshowContext';
 import { getMediaPath, categoryGridRoute, randomGridRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { AreaRandom } from '../_models/AppRouteDefinition';
 
 import GridToolbar from './ToolbarGrid';
 import Toolbar from "./Toolbar";
@@ -13,8 +15,6 @@ import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
 import Layout from '../components/layout/Layout';
 import MediaGrid from '../media/MediaGrid';
 import MediaMainItem from './MediaMainItem';
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
-import { AreaRandom } from '../_models/AppRouteDefinition';
 
 const ViewGrid: Component = () => {
     const [settings] = usePhotoGridViewSettingsContext();
@@ -44,6 +44,10 @@ const ViewGrid: Component = () => {
             <Layout margin={settings.margin} toolbar={toolbar}>
                 <Show when={mediaList.activeItem}>
                     <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
+                        <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
+                            <CategoryBreadcrumb />
+                        </Show>
+
                         <A
                             class="flex h-100%"
                             href={getMediaPath(mediaList.activeRouteDefinition, params.categoryType as CategoryType, mediaList.activeItem.categoryId, undefined)}

@@ -6,7 +6,7 @@ import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { CategoryType } from '../_models/CategoryType';
-import { AreaCategories } from '../_models/AppRouteDefinition';
+import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
 import { useRouteDetailContext } from '../contexts/RouteDetailContext';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
@@ -21,13 +21,17 @@ import FlipVerticalButton from './toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
     const [routeContext] = useRouteDetailContext();
-    const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
+    const [settings, {setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
     const [state] = useMediaListContext();
     const params = useParams();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
     };
+
+    const onToggleMainBreadcrumbs = () => {
+        setShowMainBreadcrumbs(!settings.showMainBreadcrumbs);
+    }
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
@@ -76,6 +80,15 @@ const GridToolbar: Component = () => {
             </Show>
 
             <Show when={state.activeItem}>
+                <Show when={routeContext.area === AreaRandom}>
+                    <ToolbarButton
+                        icon="i-ic-round-title"
+                        name="Show / Hide Category Breadcrumbs (T)"
+                        shortcutKeys={['t']}
+                        clickHandler={onToggleMainBreadcrumbs}
+                    />
+                </Show>
+
                 <RotateCounterClockwiseButton />
                 <RotateClockwiseButton />
                 <FlipHorizontalButton />
