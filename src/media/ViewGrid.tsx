@@ -54,7 +54,7 @@ const ViewGrid: Component = () => {
                 </Show>
 
                 <div>
-                    <Show when={settings.showBreadcrumbs}>
+                    <Show when={settings.showBreadcrumbs && routeContext.area !== AreaRandom}>
                         <CategoryBreadcrumb />
                     </Show>
 

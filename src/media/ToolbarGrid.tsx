@@ -6,6 +6,8 @@ import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { CategoryType } from '../_models/CategoryType';
+import { AreaCategories } from '../_models/AppRouteDefinition';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
 
 import ToolbarButton from '../components/toolbar/ToolbarButton';
 import Divider from '../components/layout/Divider';
@@ -18,6 +20,7 @@ import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
 import FlipVerticalButton from './toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
+    const [routeContext] = useRouteDetailContext();
     const [settings, {setShowBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
     const [state] = useMediaListContext();
     const params = useParams();
@@ -48,18 +51,22 @@ const GridToolbar: Component = () => {
             </Show>
 
             <Show when={!state.activeItem}>
-                <ToolbarButton
-                    icon="i-ic-round-title"
-                    name="Show / Hide Category Breadcrumbs (T)"
-                    shortcutKeys={['t']}
-                    clickHandler={onToggleBreadcrumbs}
-                />
+                <Show when={routeContext.area === AreaCategories}>
+                    <ToolbarButton
+                        icon="i-ic-round-title"
+                        name="Show / Hide Category Breadcrumbs (T)"
+                        shortcutKeys={['t']}
+                        clickHandler={onToggleBreadcrumbs}
+                    />
+                </Show>
+
                 <ToolbarButton
                     icon="i-ic-round-photo-size-select-large"
                     name="Toggle Thumbnail Size (S)"
                     shortcutKeys={['s']}
                     clickHandler={onToggleThumbnailSize}
                 />
+
                 <ToolbarButton
                     icon="i-ic-round-format-indent-increase"
                     name="Toggle Margins (M)"
