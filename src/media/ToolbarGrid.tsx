@@ -46,7 +46,7 @@ const GridToolbar: Component = () => {
                 <MoveNextButton />
             </Show>
 
-            <Show when={state.activeItem || showSlideshowButton(state.mode, params.categoryType as CategoryType)}>
+            <Show when={state.activeItem || showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
                 <Divider />
             </Show>
 
