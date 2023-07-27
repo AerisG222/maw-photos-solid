@@ -3,13 +3,17 @@ import { Component, For, Show, lazy } from "solid-js";
 import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
 import { Media, MediaTypePhoto } from '../../_models/Media';
 import { useMediaListContext } from '../contexts/MediaListContext';
+import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
 
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
 import InfoCard from '../../components/sidebar/InfoCard';
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
+import { AreaRandom } from '../../_models/AppRouteDefinition';
 
 const Sidebar: Component = () => {
+    const [routeContext] = useRouteDetailContext();
+
     const [
         settings,
         {
@@ -140,7 +144,7 @@ const Sidebar: Component = () => {
             icon: "i-ic-round-image-search",
             shortcutKeys: ['k'],
             clickHandler: toggleCategoryTeaserChooser,
-            enable: (media: Media) => true,
+            enable: (media: Media) => routeContext.area !== AreaRandom,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import('./CategoryTeaserCard'))
         }
