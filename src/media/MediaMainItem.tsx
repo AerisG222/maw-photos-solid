@@ -1,7 +1,11 @@
-import { Component, Match, Show, Switch } from 'solid-js';
+import { Component, Match, Show, Switch, createEffect } from 'solid-js';
 
 import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
 import { useVisualEffectsContext } from './contexts/VisualEffectsContext';
+import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { AreaRandom } from '../_models/AppRouteDefinition';
+import { useCategoryContext } from '../contexts/CategoryContext';
+import { CategoryTypePhotos } from '../_models/CategoryType';
 
 import MainPhoto from './photos/MainPhoto';
 import MainVideo from './videos/MainVideo';
@@ -12,7 +16,17 @@ type Props = {
 }
 
 const MediaMainItem: Component<Props> = (props) => {
+    const [, { setActiveCategoryById }] = useCategoryContext();
+    const [routeContext] = useRouteDetailContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
+
+    createEffect(() => {
+        if(routeContext.area === AreaRandom && props.media) {
+            // todo: if we ever mix photos and videos in a new category type, then this will need to
+            // be updated to accomodate as we just assume photo categories today
+            setActiveCategoryById(CategoryTypePhotos, props.media.categoryId);
+        }
+    });
 
     return (
         <Show when={props.media}>
