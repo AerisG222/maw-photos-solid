@@ -1,5 +1,6 @@
 import { createShortcut } from '@solid-primitives/keyboard';
-import { Component } from "solid-js";
+import { Component, createUniqueId, onCleanup } from "solid-js";
+import { useShortcutContext } from '../../contexts/ShortcutContext';
 
 type Props = {
     icon: string;
@@ -12,6 +13,9 @@ type Props = {
 };
 
 const ToolbarButton: Component<Props> = (props) => {
+    const [, { addShortcut, removeShortcut }] = useShortcutContext();
+    let id = undefined;
+
     const handleClick = (data: any, evt: Event) => {
         evt.preventDefault();
 
@@ -20,7 +24,19 @@ const ToolbarButton: Component<Props> = (props) => {
 
     if(props.shortcutKeys) {
         createShortcut(props.shortcutKeys, () => { props.clickHandler() });
+
+        id = createUniqueId();
+
+        addShortcut({
+            id,
+            shortcut: props.shortcutKeys,
+            description: props.name
+        });
     }
+
+    onCleanup(() => {
+        removeShortcut(id);
+    });
 
     return (
         <button

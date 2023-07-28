@@ -1,9 +1,10 @@
-import { Component, onMount } from "solid-js";
+import { Component, createUniqueId, onCleanup, onMount } from "solid-js";
 import { A } from "@solidjs/router";
 import { createShortcut } from '@solid-primitives/keyboard';
 
 import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
 import { buildPath } from '../../_models/utils/RouteUtils';
+import { useShortcutContext } from '../../contexts/ShortcutContext';
 
 type Props = {
     route: AppRouteDefinition;
@@ -13,7 +14,9 @@ type Props = {
 };
 
 const ToolbarLink: Component<Props> = (props) => {
+    let id = undefined;
     let el: HTMLAnchorElement;
+    const [, { addShortcut, removeShortcut }] = useShortcutContext();
 
     const handleClick = () => {
         if(props.clickHandler) {
@@ -23,9 +26,21 @@ const ToolbarLink: Component<Props> = (props) => {
 
     onMount(() => {
         if(props.route.shortcutKeys) {
+            id = createUniqueId();
+
             createShortcut(props.route.shortcutKeys, () => { el.click() });
+
+            addShortcut({
+                id,
+                shortcut: props.route.shortcutKeys,
+                description: props.route.name
+            });
         }
     });
+
+    onCleanup(() => {
+        removeShortcut(id);
+    })
 
     return (
         <A

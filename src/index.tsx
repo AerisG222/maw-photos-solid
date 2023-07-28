@@ -8,12 +8,15 @@ import { AllSettingsProvider } from './contexts/settings/AllSettingsProvider';
 import { CategoryProvider } from './contexts/CategoryContext';
 import { FullscreenProvider } from './contexts/FullscreenContext';
 import { LayoutOptionsProvider } from './contexts/LayoutOptionsContext';
+import { RouteDetailProvider } from './contexts/RouteDetailContext';
+import { ShortcutProvider } from './contexts/ShortcutContext';
 
 import App from './App';
 import CategoryLoader from './components/categories/CategoryLoader';
-import { RouteDetailProvider } from './contexts/RouteDetailContext';
+import ShortcutDialog from './components/shortcuts/ShortcutDialog';
 
 render(() =>
+        <ShortcutProvider>
         <AllSettingsProvider>
         <CategoryProvider>
         <CategoryLoader>
@@ -21,6 +24,7 @@ render(() =>
         <LayoutOptionsProvider>
         <Router>
             <RouteDetailProvider>
+                <ShortcutDialog />
                 <App />
             </RouteDetailProvider>
         </Router>
@@ -29,6 +33,7 @@ render(() =>
         </CategoryLoader>
         </CategoryProvider>
         </AllSettingsProvider>
+        </ShortcutProvider>
     ,
     document.getElementById('root')
 );
