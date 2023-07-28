@@ -38,7 +38,7 @@ const MediaMainItem: Component<Props> = (props) => {
                         <MainPhoto photo={props.media as Photo} />
                     </Match>
                     <Match when={props.media.kind === MediaTypeVideo}>
-                        <MainVideo video={props.media as Video} videoSize={'large'} />
+                        <MainVideo video={props.media as Video} />
                     </Match>
                 </Switch>
             </div>

@@ -1,45 +1,33 @@
-import { Component } from 'solid-js';
+import { Component, createSignal, onMount } from 'solid-js';
 
 import { Video } from '../../_models/Media';
-import { VideoSizeIdType } from '../../_models/VideoSize';
 import { useMediaListContext } from '../contexts/MediaListContext';
 
 type Props = {
     video: Video;
-    videoSize: VideoSizeIdType;
 };
 
 const MainVideo: Component<Props> = (props) => {
-    const [, {setMediaElement}] = useMediaListContext();
+    const [useLarge, setUseLarge] = createSignal(true);
+    const [, { setMediaElement }] = useMediaListContext();
 
-    const getVideoDimensions = (video: Video, videoSize: VideoSizeIdType) => {
-        if(videoSize === 'large') {
-            return {
-                height: `${video.videoFullHeight}px`,
-                width: `${video.videoFullWidth}px`
-            };
-        }
-
-        return {
-            height: `${video.videoScaledHeight}px`,
-            width: `${video.videoScaledWidth}px`
-        };
-    };
-
-    const getVideoUrl = (video: Video, videoSize: VideoSizeIdType) =>
-        videoSize === 'large' ?
+    const getVideoUrl = (video: Video) =>
+        useLarge() ?
             video.videoFullUrl :
             video.videoScaledUrl;
 
-    // todo: add option to restrict video to src size to avoid scaling?
-    // style={getVideoDimensions(props.video, props.videoSize)}
+    onMount(() => {
+        console.log(document.body.clientWidth);
+        setUseLarge(document.body.clientWidth >= 1500);
+    });
+
     return (
         <video
             class="h-100% w-100% center-block m-auto"
             crossorigin='anonymous'  // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls
-            src={getVideoUrl(props.video, props.videoSize)}
+            src={getVideoUrl(props.video)}
             ref={el => setMediaElement(el)}
         />
     );
