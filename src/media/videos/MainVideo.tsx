@@ -39,15 +39,9 @@ const MainVideo: Component<Props> = (props) => {
             crossorigin='anonymous'  // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls
+            src={getVideoUrl(props.video, props.videoSize)}
             ref={el => setMediaElement(el)}
-        >
-            <source
-                src={getVideoUrl(props.video, props.videoSize)}
-                type="video/mp4"
-            />
-            Your browser does not support the
-            <code>video</code> element.
-        </video>
+        />
     );
 };
 
