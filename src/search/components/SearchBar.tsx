@@ -49,6 +49,7 @@ const SearchBar: Component = () => {
                 placeholder="Search Terms"
                 class="input input-bordered input-md w-[400px]"
                 value={searchContext.term}
+                onKeyDown={evt => evt.stopPropagation() }
                 onChange={evt => setSearchTerm(evt.currentTarget.value)} />
 
             <button
