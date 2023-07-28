@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 
 import { useVideoInfoPanelSettingsContext } from '../contexts/settings/VideoInfoPanelSettingsContext';
 import { useVideoDetailViewSettingsContext } from '../contexts/settings/VideoDetailViewSettingsContext';
-import { allVideoSizes } from '../_models/VideoSize';
 import { allThumbnailSizes } from '../_models/ThumbnailSize';
 import { allMapTypes } from '../_models/MapType';
 import { allMapZoomLevels } from '../_models/MapZoomLevel';
@@ -21,7 +20,6 @@ const ViewVideos: Component = () => {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
         setThumbnailSize: setDetailThumbnailSize,
         setShowVideoList: setDetailShowVideoList,
-        setVideoSize: setDetailVideoSize
     }] = useVideoDetailViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
@@ -38,7 +36,6 @@ const ViewVideos: Component = () => {
         <Layout toolbar={<Toolbar />} title="Settings - Videos">
             <PanelContainer>
                 <Panel title="Video Page">
-                    <RadioGroup title="Video Size" groupName='detailVideoSize' itemArray={allVideoSizes} selectedValue={detailSettings.videoSize} onChange={setDetailVideoSize} />
                     <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={setDetailShowBreadcrumbs} />
                     <Toggle title="Show Video List" name="detailShowPhotoList" isSelected={detailSettings.showVideoList} onChange={setDetailShowVideoList} />
                     <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />

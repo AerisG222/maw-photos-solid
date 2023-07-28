@@ -3,7 +3,6 @@ import { createStore } from "solid-js/store";
 
 import { VideoDetailViewSettingsState, defaultVideoDetailViewSettings } from '../../_models/settings';
 import { ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
-import { VideoSizeIdType } from '../../_models/VideoSize';
 import { KEY_SETTINGS_VIDEO_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type VideoDetailViewSettingsContextValue = [
@@ -12,7 +11,6 @@ export type VideoDetailViewSettingsContextValue = [
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowVideoList: (showVideoList: boolean) => void;
-        setVideoSize: (videoSize: VideoSizeIdType) => void;
     }
 ];
 
@@ -24,7 +22,6 @@ export const VideoDetailSettingsProvider: ParentComponent = (props) => {
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
     const setShowVideoList = (showVideoList: boolean) => updateState({showVideoList: showVideoList});
-    const setVideoSize = (videoSize: VideoSizeIdType) => updateState({videoSize: videoSize});
 
     const updateState = (update: Partial<VideoDetailViewSettingsState>) => {
         setState(update);
@@ -35,8 +32,7 @@ export const VideoDetailSettingsProvider: ParentComponent = (props) => {
         <VideoDetailViewSettingsContext.Provider value={[state, {
             setShowBreadcrumbs,
             setThumbnailSize,
-            setShowVideoList,
-            setVideoSize
+            setShowVideoList
         }]}>
             {props.children}
         </VideoDetailViewSettingsContext.Provider>
