@@ -9,7 +9,7 @@ const Panel: ParentComponent<Props> = (props) => {
 
     return (
         <>
-            <div class="border-1 border-primary:50% border-rounded-1 p-1 min-w-300px max-w-500px">
+            <div class="border-1 bg-base-200 border-secondary:20% border-rounded-1 p-1 min-w-300px max-w-500px">
             <h2 class="head2">{props.title}</h2>
                 {c()}
             </div>

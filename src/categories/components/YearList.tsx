@@ -15,8 +15,8 @@ const YearList: Component<Props> = (props) => {
 
     return(
         <>
-            <h3 class="h3">{props.year}</h3>
-            <div class="divider m-y-[.4rem]" />
+            <h3 class="h3 color-secondary">{props.year}</h3>
+            <div class="divider m-y-[.4rem] color-secondary" />
 
             <div>
                 <For each={props.categories}>{ category =>

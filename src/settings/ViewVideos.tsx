@@ -40,7 +40,7 @@ const ViewVideos: Component = () => {
                     <Toggle title="Show Video List" name="detailShowPhotoList" isSelected={detailSettings.showVideoList} onChange={setDetailShowVideoList} />
                     <RadioGroup title="Thumbnail Size" groupName='detailThumbnailSize' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />
 
-                    <h3 class="mt-4">Info Panel</h3>
+                    <h3 class="mt-4 color-secondary">Info Panel</h3>
                     <div>
                         <Checkbox title="Show Info Panel" name="showInfoPanel" isSelected={infoPanelSettings.expandInfoPanel} onChange={setExpandInfoPanel} />
                         <Checkbox title="Show Ratings Panel" name="showRatingsPanel" isSelected={infoPanelSettings.showRatings} onChange={setShowRatings} />
