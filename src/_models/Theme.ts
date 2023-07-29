@@ -17,15 +17,22 @@ const themeDarkBlue: Record<string, string> = {
     'base-200':        '#20202b', // oklch(25% 0.02 284)
     'base-300':        '#2c2d38', // oklch(30% 0.02 284)
     'base-content':    '#8a8b98', // oklch(64% 0.02 284)
+
+    neutral:           '#2c2d38', // oklch(30% 0.02 284)
 };
 
 const themeDarkGray: Record<string, string> = {
-    primary:         '#efb300', //
-    'primary-focus': '#c79512', // oklch(70% 0.14 84)
+    primary:         '#751f1f', // oklch(38% 0.12 25)
+    'primary-focus': '#6e2826', // oklch(38% 0.11 25)
+
+    secondary:       '#c79512', // oklch(70% 0.14 84)
+    accent:          '#c79512', // oklch(70% 0.14 84)
 
     'base-100':      '#161616', // oklch(20% 0.00 0.00)
     'base-200':      '#1f1f1f', // oklch(24% 0.00 0.00)
     'base-300':      '#292929', // oklch(28% 0.00 0.00)
+
+    neutral:         '#292929', // oklch(28% 0.00 0.00)
 };
 
 export const allThemes: Theme[] = [
