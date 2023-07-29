@@ -9,8 +9,8 @@ const InfoCard: ParentComponent<Props> = (props) => {
     const c = children(() => props.children);
 
     return (
-        <div class="bg-primaryContent rounded m-1 p-2 border-1 border-secondary-content:10%">
-            <div class="color-accent">
+        <div class="bg-base-300 rounded m-1 p-2 border-1 border-secondary:20%">
+            <div class="color-secondary">
                 <span class={`m-r-2 text-6 ${props.icon}`} />
                 <strong class="text-3.5">{props.title}</strong>
             </div>

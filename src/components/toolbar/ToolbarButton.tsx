@@ -41,8 +41,8 @@ const ToolbarButton: Component<Props> = (props) => {
     return (
         <button
             disabled={props.disabled}
-            class="px-3 py-1 hover:bg-accent hover:color-accentContent disabled:bg-transparent! disabled:color-secondary-content disabled:opacity-20"
-            classList={{"bg-accent": props.active, "color-accentContent": props.active}}
+            class="px-3 py-1 hover:bg-secondary hover:color-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
+            classList={{"bg-secondary-focus": props.active, "color-secondary-content": props.active}}
             title={props.name}
             onClick={[handleClick, null]}
         >

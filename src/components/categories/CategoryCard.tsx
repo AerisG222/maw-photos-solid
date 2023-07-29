@@ -14,7 +14,7 @@ type Props = {
 const CategoryCard: Component<Props> = (props) => {
     return(
         <A href={props.category.route}
-            class="group bg-secondary-content:6 border-1 rounded-1 border-primaryContent-[10%] cursor-pointer hover:border-primary hover:color-primary">
+            class="group border-1 rounded-1 bg-base-200 border-secondary:20% cursor-pointer hover:bg-base-300 hover:border-primary hover:color-primary">
             <Show when={props.showYears}>
                 <div class="text-center pb-1 max-w-[160px]">{props.category.year}</div>
             </Show>

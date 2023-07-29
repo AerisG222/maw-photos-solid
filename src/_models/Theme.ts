@@ -11,7 +11,6 @@ const themeDarkBlue: Record<string, string> = {
     'primary-content': '#20202b', // oklch(25% 0.02 284)
 
     secondary:         '#7f75b8', // oklch(60% 0.1 290)
-
     accent:            '#7f75b8', // oklch(60% 0.1 290)
 
     'base-100':        '#15151f', // oklch(20% 0.02 284)

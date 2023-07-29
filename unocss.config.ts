@@ -33,7 +33,7 @@ export default defineConfig<Theme>({
         {
             head1: 'font-bold text-xl mb-3 color-primary',
             head2: 'font-bold text-lg mb-3 color-primary',
-            head3: 'font-bold text-lg mt-3 color-accent'
+            head3: 'font-bold text-lg mt-3 color-secondary'
         }
     ]
 });

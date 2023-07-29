@@ -14,7 +14,7 @@ type Props = {
 const CategoryListItem: Component<Props> = (props) => {
     return (
         <A href={props.category.route}
-            class="group block cursor-pointer p-1 bg-secondary-content:6 border-b-1 border-b-secondary-content:10% hover:bg-secondary-content:20 hover:color-primary">
+            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary:10% hover:bg-secondary-content:20 hover:color-primary">
             <span class={`m-x-4 text-6 ${categoryTypes[props.category.type].icon}`} />
 
             <img
