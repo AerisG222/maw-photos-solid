@@ -12,7 +12,7 @@ const PrimaryNavLink: Component<Props> = (props) => {
             href={props.route.path}
             activeClass="color-primary-content bg-primary"
             inactiveClass="color-primary"
-            class="px-4 py-2 hover:color-primary-content hover:bg-primary"
+            class="px-4 py-2 hover:color-primary-content hover:bg-primary-focus"
             title={props.route.name}
         >
             <span class={`text-8 ${props.route.icon}`} />
