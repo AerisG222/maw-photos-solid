@@ -13,7 +13,7 @@ const ViewApplication: Component = () => {
     const [appSettings, { setTheme }] = useAppSettingsContext();
 
     return (
-        <Layout toolbar={<Toolbar />} title="Settings - Application">
+        <Layout toolbar={<Toolbar />} title="Application">
             <PanelContainer>
                 <Panel title="General">
                     <Select title="Theme" itemArray={allThemes} selectedValue={appSettings.theme} onChange={setTheme} />

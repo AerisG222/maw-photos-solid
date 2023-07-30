@@ -30,7 +30,7 @@ const ViewCategories: Component = () => {
     }] = useCategoryListViewSettingsContext()
 
     return (
-        <Layout toolbar={<Toolbar />} title="Settings - Categories">
+        <Layout toolbar={<Toolbar />} title="Categories">
             <PanelContainer>
                 <Panel title="Category Page">
                     <RadioGroup title="Type Filter" itemArray={categoryTypesOptions} groupName='pageTypeFilter' selectedValue={filterSettings.typeFilter} onChange={setTypeFilter} />

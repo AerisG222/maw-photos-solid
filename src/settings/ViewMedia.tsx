@@ -49,7 +49,7 @@ const ViewMedia: Component = () => {
     }] = usePhotoInfoPanelSettingsContext();
 
     return (
-        <Layout toolbar={<Toolbar />} title="Settings - Media">
+        <Layout toolbar={<Toolbar />} title="Media">
             <PanelContainer>
                 <Panel title="Media Page">
                     <RadioGroup title="View" groupName='pageView' itemArray={allPhotoViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
@@ -61,7 +61,7 @@ const ViewMedia: Component = () => {
                     <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={setDetailShowPhotoList} />
                     <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />
 
-                    <h3 class="mt-4">Info Panel</h3>
+                    <h3 class="mt-4 color-secondary">Info Panel</h3>
                     <div>
                         <Checkbox title="Show Info Panel" name="showInfoPanel" isSelected={infoPanelSettings.expandInfoPanel} onChange={setExpandInfoPanel} />
                         <Checkbox title="Show Ratings Panel" name="showRatingsPanel" isSelected={infoPanelSettings.showRatings} onChange={setShowRatings} />

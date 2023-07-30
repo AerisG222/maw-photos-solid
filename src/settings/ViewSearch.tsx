@@ -25,7 +25,7 @@ const ViewSearch: Component = () => {
     }] = useSearchGridViewSettingsContext();
 
     return (
-        <Layout toolbar={<Toolbar />} title="Settings - Search">
+        <Layout toolbar={<Toolbar />} title="Search">
             <PanelContainer>
                 <Panel title="Search Page">
                     <RadioGroup title="View Mode" groupName='pageViewMode' itemArray={allCategoryViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
