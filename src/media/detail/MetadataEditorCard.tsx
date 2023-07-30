@@ -90,7 +90,8 @@ const MetadataEditorCard: Component = () => {
 
     const getButtonClass = () => {
         return {
-            'btn-disabled': !isOverrideValid()
+            'btn-disabled': !isOverrideValid(),
+            'btn-primary': isOverrideValid()
         }
     };
 

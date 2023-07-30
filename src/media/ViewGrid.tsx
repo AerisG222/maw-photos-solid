@@ -43,7 +43,7 @@ const ViewGrid: Component = () => {
         <Show when={mediaList.activeRouteDefinition}>
             <Layout margin={settings.margin} toolbar={toolbar}>
                 <Show when={mediaList.activeItem}>
-                    <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-primaryContent bg-opacity-90">
+                    <div class="w-[calc(100vw-114px)] h-[100vh] position-absolute top-0 left-[114px] z-200 bg-base-100:92%">
                         <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
                             <CategoryBreadcrumb showTitleAsLink={true} />
                         </Show>

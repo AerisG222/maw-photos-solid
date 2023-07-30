@@ -53,7 +53,7 @@ const SearchBar: Component = () => {
                 onChange={evt => setSearchTerm(evt.currentTarget.value)} />
 
             <button
-                class="ml-2 btn btn-outline hover:bg-secondary hover:color-secondary-content"
+                class="ml-2 btn btn-primary btn-outline hover:bg-secondary hover:color-secondary-content"
                 title="Search"
                 onClick={onSearch}
             >
@@ -61,7 +61,7 @@ const SearchBar: Component = () => {
             </button>
 
             <button
-                class="ml-12 btn btn-warning btn-outline hover:bg-secondary hover:color-secondary-content"
+                class="ml-12 btn btn-error btn-outline hover:bg-secondary hover:color-secondary-content"
                 title="Cancel"
                 onClick={onClearSearch}
             >
