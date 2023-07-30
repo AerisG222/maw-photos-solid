@@ -1,10 +1,21 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MarginIdType } from '../../_models/Margin';
-import { CategoryGridViewSettingsState, defaultCategoryGridViewSettings } from '../../_models/settings';
-import { ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
+import { defaultMargin, MarginIdType } from '../../_models/Margin';
+import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
 import { KEY_SETTINGS_CATEGORY_VIEW_GRID, loadJson, saveJson } from './_storage';
+
+export type CategoryGridViewSettingsState = {
+    readonly margin: MarginIdType;
+    readonly showTitles: boolean;
+    readonly thumbnailSize: ThumbnailSizeIdType;
+};
+
+export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
+    margin: defaultMargin,
+    showTitles: true,
+    thumbnailSize: defaultGridThumbnailSize,
+};
 
 export type CategoryGridViewSettingsContextValue = [
     state: CategoryGridViewSettingsState,

@@ -1,9 +1,16 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { CategoryViewModeIdType } from '../../_models/CategoryViewMode';
-import { CategoryPageSettingsState, defaultCategoryPageSettings } from '../../_models/settings';
+import { CategoryViewModeIdType, defaultCategoryViewMode } from '../../_models/CategoryViewMode';
 import { KEY_SETTINGS_CATEGORY_PAGE, loadJson, saveJson } from './_storage';
+
+export type CategoryPageSettingsState = {
+    readonly viewMode: CategoryViewModeIdType;
+};
+
+export const defaultCategoryPageSettings: CategoryPageSettingsState = {
+    viewMode: defaultCategoryViewMode
+};
 
 export type CategoryPageSettingsContextValue = [
     state: CategoryPageSettingsState,

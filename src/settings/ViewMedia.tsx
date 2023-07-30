@@ -1,14 +1,15 @@
 import { Component } from "solid-js";
 
-import { useRandomPageSettingsContext } from '../contexts/settings/RandomPageSettingsContext';
-import { useRandomInfoPanelSettingsContext } from '../contexts/settings/RandomInfoPanelSettingsContext';
-import { useRandomDetailViewSettingsContext } from '../contexts/settings/RandomDetailViewSettingsContext';
-import { useRandomGridViewSettingsContext } from '../contexts/settings/RandomGridViewSettingsContext';
-import { allRandomViewModes } from '../_models/PhotoViewMode';
-import { allMapZoomLevels } from '../_models/MapZoomLevel';
+import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
+import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
+import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
+import { usePhotoInfoPanelSettingsContext } from '../contexts/settings/PhotoInfoPanelSettingsContext';
+import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
 import { allMapTypes } from '../_models/MapType';
-import { allThumbnailSizes } from '../_models/ThumbnailSize';
+import { allMapZoomLevels } from '../_models/MapZoomLevel';
 import { allMargins } from '../_models/Margin';
+import { allPhotoViewModes } from '../_models/PhotoViewMode';
+import { allThumbnailSizes } from '../_models/ThumbnailSize';
 import { allSlideshowDurations } from '../_models/SlideshowDuration';
 
 import Panel from './components/Panel';
@@ -20,18 +21,19 @@ import Toolbar from './Toolbar';
 import Toggle from './components/Toggle';
 import Layout from '../components/layout/Layout';
 
-const ViewRandom: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useRandomPageSettingsContext();
+const ViewMedia: Component = () => {
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettingsContext();
+    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettingsContext();
     const [detailSettings, {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
         setShowPhotoList: setDetailShowPhotoList,
         setThumbnailSize: setDetailThumbnailSize
-    }] = useRandomDetailViewSettingsContext();
+    }] = usePhotoDetailViewSettingsContext();
     const [gridSettings, {
+        setMargin: setGridMargin,
         setShowBreadcrumbs: setGridShowBreadcrumbs,
-        setThumbnailSize: setGridThumbnailSize,
-        setMargin: setGridMargin
-    }] = useRandomGridViewSettingsContext();
+        setThumbnailSize: setGridThumbnailSize
+    }] = usePhotoGridViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -43,14 +45,14 @@ const ViewRandom: Component = () => {
         setShowHistogram,
         setShowMinimap,
         setMinimapZoom,
-        setMinimapMapType
-    }] = useRandomInfoPanelSettingsContext();
+        setMinimapMapType: setInfoPanelMapType
+    }] = usePhotoInfoPanelSettingsContext();
 
     return (
-        <Layout toolbar={<Toolbar />} title="Settings - Random">
+        <Layout toolbar={<Toolbar />} title="Settings - Media">
             <PanelContainer>
-                <Panel title="Random Page">
-                    <RadioGroup title="View Mode" groupName='pageViewMode' itemArray={allRandomViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
+                <Panel title="Media Page">
+                    <RadioGroup title="View" groupName='pageView' itemArray={allPhotoViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
                     <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={pageSettings.slideshowDisplayDurationSeconds} onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))} />
                 </Panel>
 
@@ -72,18 +74,23 @@ const ViewRandom: Component = () => {
                         <Checkbox title="Show Category Teaser Chooser Panel" name="showCategoryTeaserChooserPanel" isSelected={infoPanelSettings.showCategoryTeaserChooser} onChange={setShowCategoryTeaserChooser} />
                     </div>
 
-                    <RadioGroup title="Map Type" groupName='detailMapType' itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapType} onChange={setMinimapMapType} />
+                    <RadioGroup title="Map Type" groupName='detailMapType' itemArray={allMapTypes} selectedValue={infoPanelSettings.minimapMapType} onChange={setInfoPanelMapType} />
                     <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={infoPanelSettings.minimapZoom} onChange={val => setMinimapZoom(parseInt(val))} />
                 </Panel>
 
-                <Panel title="GridView">
+                <Panel title="Grid View">
                     <Toggle title="Show Breadcrumbs" name="gridShowBreadcrumbs" isSelected={gridSettings.showBreadcrumbs} onChange={setGridShowBreadcrumbs} />
-                    <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.marginId} onChange={setGridMargin} />
+                    <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.margin} onChange={setGridMargin} />
                     <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSize} onChange={setGridThumbnailSize} />
+                </Panel>
+
+                <Panel title="Map View">
+                    <RadioGroup title="Map Type" groupName='mapMapType' itemArray={allMapTypes} selectedValue={mapSettings.mapType} onChange={setMapMapType} />
+                    <Select title="Map Zoom Level" itemArray={allMapZoomLevels} selectedValue={mapSettings.zoom} onChange={val => setMapZoom(parseInt(val))} />
                 </Panel>
             </PanelContainer>
         </Layout>
     );
 };
 
-export default ViewRandom;
+export default ViewMedia;

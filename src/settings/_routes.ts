@@ -26,20 +26,12 @@ export const settingsCategories: AppRouteDefinition = {
     component: lazy(() => import('./ViewCategories'))
 };
 
-export const settingsPhotos: AppRouteDefinition = {
+export const settingsMedia: AppRouteDefinition = {
     icon: "i-ic-round-image",
-    name: "Photos",
-    path: '/photos',
-    absolutePath: `${basePath}/photos`,
-    component: lazy(() => import('./ViewPhotos'))
-};
-
-export const settingsVideos: AppRouteDefinition = {
-    icon: "i-ic-round-videocam",
-    name: "Videos",
-    path: '/videos',
-    absolutePath: `${basePath}/videos`,
-    component: lazy(() => import('./ViewVideos'))
+    name: "Media",
+    path: '/media',
+    absolutePath: `${basePath}/media`,
+    component: lazy(() => import('./ViewMedia'))
 };
 
 export const settingsSearch: AppRouteDefinition = {
@@ -48,14 +40,6 @@ export const settingsSearch: AppRouteDefinition = {
     path: '/search',
     absolutePath: `${basePath}/search`,
     component: lazy(() => import('./ViewSearch'))
-};
-
-export const settingsRandom: AppRouteDefinition = {
-    icon: "i-ic-round-shuffle",
-    name: "Random",
-    path: '/random',
-    absolutePath: `${basePath}/random`,
-    component: lazy(() => import('./ViewRandom'))
 };
 
 export const settings: AppRouteDefinition = {
@@ -69,9 +53,7 @@ export const settings: AppRouteDefinition = {
         settingsRedirect,
         settingsApplication,
         settingsCategories,
-        settingsPhotos,
-        settingsVideos,
-        settingsSearch,
-        settingsRandom
+        settingsMedia,
+        settingsSearch
     ]
 };

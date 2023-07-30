@@ -1,10 +1,38 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MapTypeIdType } from '../../_models/MapType';
-import { PhotoInfoPanelSettingsState, defaultPhotoInfoPanelSettings } from '../../_models/settings';
+import { defaultMapType, MapTypeIdType } from '../../_models/MapType';
 import { KEY_SETTINGS_PHOTO_INFO_PANEL, loadJson, saveJson } from './_storage';
-import { MapZoomLevelIdType } from '../../_models/MapZoomLevel';
+import { defaultMapZoomLevel, MapZoomLevelIdType } from '../../_models/MapZoomLevel';
+
+export type PhotoInfoPanelSettingsState = {
+    expandInfoPanel: boolean;
+    showRatings: boolean;
+    showCategoryTeaserChooser: boolean;
+    showComments: boolean;
+    showExif: boolean;
+    showEffects: boolean;
+    showMetadataEditor: boolean;
+    showHistogram: boolean;
+    showMinimap: boolean;
+    minimapZoom: MapZoomLevelIdType;
+    minimapMapType: MapTypeIdType;
+};
+
+export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
+    expandInfoPanel: false,
+    showRatings: true,
+    showCategoryTeaserChooser: false,
+    showComments: true,
+    showExif: false,
+    showEffects: false,
+    showHistogram: false,
+    showMetadataEditor: false,
+    showMinimap: false,
+    minimapMapType: defaultMapType,
+    minimapZoom: defaultMapZoomLevel,
+};
+
 
 export type PhotoInfoPanelSettingsContextValue = [
     state: PhotoInfoPanelSettingsState,

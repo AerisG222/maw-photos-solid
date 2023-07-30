@@ -1,9 +1,18 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { PhotoViewModeIdType } from '../../_models/PhotoViewMode';
-import { PhotoPageSettingsState, defaultPhotoPageSettings } from '../../_models/settings';
+import { defaultPhotoViewMode, PhotoViewModeIdType } from '../../_models/PhotoViewMode';
 import { KEY_SETTINGS_PHOTO_PAGE, loadJson, saveJson } from './_storage';
+
+export type PhotoPageSettingsState = {
+    readonly viewMode: PhotoViewModeIdType;
+    readonly slideshowDisplayDurationSeconds: number;
+};
+
+export const defaultPhotoPageSettings: PhotoPageSettingsState = {
+    viewMode: defaultPhotoViewMode,
+    slideshowDisplayDurationSeconds: 2,
+};
 
 export type PhotoPageSettingsContextValue = [
     state: PhotoPageSettingsState,

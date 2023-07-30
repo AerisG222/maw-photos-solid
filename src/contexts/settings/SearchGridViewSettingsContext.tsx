@@ -1,10 +1,23 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { MarginIdType } from '../../_models/Margin';
-import { SearchGridViewSettingsState, defaultSearchGridViewSettings } from '../../_models/settings';
-import { ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
+import { defaultMargin, MarginIdType } from '../../_models/Margin';
+import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
 import { KEY_SETTINGS_SEARCH_VIEW_GRID, loadJson, saveJson } from './_storage';
+
+export type SearchGridViewSettingsState = {
+    margin: MarginIdType;
+    showTitles: boolean;
+    showYears: boolean;
+    thumbnailSize: ThumbnailSizeIdType;
+};
+
+export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
+    margin: defaultMargin,
+    showTitles: true,
+    showYears: true,
+    thumbnailSize: defaultGridThumbnailSize,
+};
 
 export type SearchGridViewSettingsContextValue = [
     state: SearchGridViewSettingsState,

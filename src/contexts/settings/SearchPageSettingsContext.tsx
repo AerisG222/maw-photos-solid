@@ -1,9 +1,17 @@
 import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { CategoryViewModeIdType } from '../../_models/CategoryViewMode';
-import { SearchPageSettingsState, defaultSearchPageSettings } from '../../_models/settings';
+import { CategoryViewModeIdType, defaultCategoryViewMode } from '../../_models/CategoryViewMode';
 import { KEY_SETTINGS_SEARCH_PAGE, loadJson, saveJson } from './_storage';
+
+export type SearchPageSettingsState = {
+    readonly viewMode: CategoryViewModeIdType;
+};
+
+export const defaultSearchPageSettings: SearchPageSettingsState = {
+    viewMode: defaultCategoryViewMode,
+};
+
 
 export type SearchPageSettingsContextValue = [
     state: SearchPageSettingsState,
