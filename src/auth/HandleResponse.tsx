@@ -16,9 +16,7 @@ const HandleResponse: Component = () => {
         }
     });
 
-    return (
-        <></>
-    );
+    return <></>;
 };
 
 export default HandleResponse;

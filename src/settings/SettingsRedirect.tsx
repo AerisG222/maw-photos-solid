@@ -8,7 +8,7 @@ const Settings: Component = () => {
 
     navigate(settingsApplication.absolutePath);
 
-    return (<></>);
+    return <></>;
 };
 
 export default Settings;

@@ -10,7 +10,7 @@ const SearchRedirect: Component = () => {
 
     navigate(getPathForViewMode(settings.viewMode));
 
-    return (<></>);
+    return <></>;
 };
 
 export default SearchRedirect;

@@ -17,11 +17,9 @@ const ViewCombined: Component = () => {
     const [search] = useSearchParams();
     const [state, { getAllYears, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
     const toolbar = (
-        <>
-            <Toolbar>
-                <CombinedToolbar />
-            </Toolbar>
-        </>
+        <Toolbar>
+            <CombinedToolbar />
+        </Toolbar>
     );
 
     const getStats = () => getCombinedStatsChartData(getAggFuncs(search.mode).agg);

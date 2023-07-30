@@ -37,13 +37,11 @@ const CategoryTypeFilter: Component = () => {
     const onChangeFilter = (val: string) => setSearchParams({type: val});
 
     return (
-        <>
-            <Select
-                title='Category Type'
-                itemArray={categoryTypesOptions}
-                selectedValue={filter.typeFilter}
-                onChange={onChangeFilter} />
-        </>
+        <Select
+            title='Category Type'
+            itemArray={categoryTypesOptions}
+            selectedValue={filter.typeFilter}
+            onChange={onChangeFilter} />
     );
 };
 

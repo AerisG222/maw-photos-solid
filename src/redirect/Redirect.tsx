@@ -10,7 +10,7 @@ const Redirect: Component = () => {
         navigate(categories.absolutePath, { replace: true });
     });
 
-    return (<></>);
+    return <></>;
 };
 
 export default Redirect;
