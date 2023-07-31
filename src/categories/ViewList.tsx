@@ -13,14 +13,14 @@ const ListView: Component = () => {
     const [, { getFilteredYears, getFilteredCategoriesForYear }] = useCategoryContext();
     const [settings] = useCategoryListViewSettingsContext();
 
-    const toolbar = (
-        <Toolbar>
-            <ListToolbar />
-        </Toolbar>
-    );
-
     return (
-        <Layout toolbar={toolbar} margin={settings.margin}>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <ListToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}>
             <Suspense fallback={<p>Loading...</p>}>
                 <CategoryFilterBar />
 

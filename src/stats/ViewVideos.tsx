@@ -16,17 +16,15 @@ import StatLayout from './components/StatLayout';
 const ViewVideos: Component = () => {
     const [search] = useSearchParams();
     const [, { getVideoCategories, getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useCategoryContext();
-    const toolbar = (
-        <Toolbar>
-            <ToolbarVideo />
-        </Toolbar>
-    );
-
     const getVideoStats = () => getVideoStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
-        <Layout toolbar={toolbar}>
+        <Layout toolbar={
+            <Toolbar>
+                <ToolbarVideo />
+            </Toolbar>
+        }>
             <StatLayout>
                 <div class="m-y-2">
                     <StatBar>

@@ -107,16 +107,15 @@ const ViewBulkEdit: Component = () => {
         setMedia(mediaList.items.map(buildSelectableMedia));
     })
 
-    const toolbar = <Toolbar />;
-    const sidebar = <BulkEditSidebar
-        onSave={onSave}
-        onSelectAll={() => setAll(true)}
-        onDeselectAll={() => setAll(false)}
-        onHideMediaWithGps={onHideMediaWithGps} />;
-
     return (
         <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, params.categoryType as CategoryType, categoryId)}>
-        <Layout toolbar={toolbar} sidebar={sidebar}>
+        <Layout toolbar={<Toolbar />} sidebar={
+            <BulkEditSidebar
+                onSave={onSave}
+                onSelectAll={() => setAll(true)}
+                onDeselectAll={() => setAll(false)}
+                onHideMediaWithGps={onHideMediaWithGps} />
+        }>
             <CategoryBreadcrumb />
 
             <div class="flex flex-wrap flex-gap-2 mx-8 flex-justify-center">

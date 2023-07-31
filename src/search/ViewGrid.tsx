@@ -14,14 +14,14 @@ const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
     const [searchContext] = useSearchContext();
 
-    const toolbar = (
-        <Toolbar>
-            <GridToolbar />
-        </Toolbar>
-    );
-
     return (
-        <Layout toolbar={toolbar} margin={settings.margin}>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <GridToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}>
             <div class="mt-4">
                 <SearchBar />
             </div>

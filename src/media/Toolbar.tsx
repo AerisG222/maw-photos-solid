@@ -38,7 +38,8 @@ const Toolbar: ParentComponent = (props) => {
                 return randomRoute;
             default:
         }
-    }
+    };
+
     return (
         <ToolbarLayout>
             <ToolbarLink route={getGridRoute()}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />

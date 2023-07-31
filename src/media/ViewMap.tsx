@@ -23,12 +23,6 @@ const ViewMap: Component = () => {
 
     setActiveRouteDefinition(categoryMapRoute);
 
-    const toolbar = (
-        <Toolbar>
-            <MapToolbar />
-        </Toolbar>
-    );
-
     const defaultMapOptions = {
         controlSize: 24,
         center: { lat: 0, lng: 0 },
@@ -117,7 +111,11 @@ const ViewMap: Component = () => {
     });
 
     return (
-        <Layout toolbar={toolbar}>
+        <Layout toolbar={
+            <Toolbar>
+                <MapToolbar />
+            </Toolbar>
+        }>
             <div class="h-[100vh] w-[100%]" ref={el} />
         </Layout>
     );

@@ -16,17 +16,15 @@ import Treemap from './components/Treemap';
 const ViewCombined: Component = () => {
     const [search] = useSearchParams();
     const [state, { getAllYears, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
-    const toolbar = (
-        <Toolbar>
-            <CombinedToolbar />
-        </Toolbar>
-    );
-
     const getStats = () => getCombinedStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
-        <Layout toolbar={toolbar}>
+        <Layout toolbar={
+            <Toolbar>
+                <CombinedToolbar />
+            </Toolbar>
+        }>
             <StatLayout>
                 <div class="m-y-2">
                     <StatBar>

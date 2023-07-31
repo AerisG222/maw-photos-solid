@@ -14,14 +14,14 @@ const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();
     const [searchContext] = useSearchContext();
 
-    const toolbar = (
-        <Toolbar>
-            <ListToolbar />
-        </Toolbar>
-    );
-
     return (
-        <Layout toolbar={toolbar} margin={settings.margin}>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <ListToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}>
             <div class="mt-4">
                 <SearchBar />
             </div>

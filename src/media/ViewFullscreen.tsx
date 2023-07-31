@@ -29,12 +29,6 @@ const ViewFullscreen: Component = () => {
         setActiveRouteDefinition(route);
     });
 
-    const toolbar = (
-        <Toolbar>
-            <FullscreenToolbar />
-        </Toolbar>
-    );
-
     hideXpad();
     setFullscreen(true);
 
@@ -46,7 +40,12 @@ const ViewFullscreen: Component = () => {
     return (
         <Show when={mediaList.activeRouteDefinition}>
             <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout toolbar={toolbar}>
+                <Layout
+                    toolbar={
+                        <Toolbar>
+                            <FullscreenToolbar />
+                        </Toolbar>
+                    }>
                     <div class="grid h-[100vh] w-[100%] justify-center">
                         <MediaMainItem media={mediaList.activeItem} />
                     </div>

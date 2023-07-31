@@ -16,17 +16,15 @@ import StatLayout from './components/StatLayout';
 const ViewPhotos: Component = () => {
     const [search] = useSearchParams();
     const [, { getPhotoCategories, getPhotoCategoryYears, getPhotoCount, getPhotoFileSize, getPhotoStatsChartData }] = useCategoryContext();
-    const toolbar = (
-        <Toolbar>
-            <ToolbarPhotos />
-        </Toolbar>
-    );
-
     const getPhotoStats = () => getPhotoStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
-        <Layout toolbar={toolbar}>
+        <Layout toolbar={
+            <Toolbar>
+                <ToolbarPhotos />
+            </Toolbar>
+        }>
             <StatLayout>
                 <div class="m-y-2">
                     <StatBar>

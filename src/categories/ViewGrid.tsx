@@ -13,14 +13,14 @@ const GridView: Component = () => {
     const [, { getFilteredCategoriesForYear, getFilteredYears }] = useCategoryContext();
     const [settings] = useCategoryGridViewSettingsContext();
 
-    const toolbar = (
-        <Toolbar>
-            <GridToolbar />
-        </Toolbar>
-    );
-
     return (
-        <Layout toolbar={toolbar} margin={settings.margin}>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <GridToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}>
             <Suspense fallback={<p>Loading...</p>}>
                 <CategoryFilterBar />
 

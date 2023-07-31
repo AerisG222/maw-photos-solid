@@ -23,12 +23,6 @@ const ViewDetail: Component = () => {
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
 
-    const toolbar = (
-        <Toolbar>
-            <DetailToolbar />
-        </Toolbar>
-    );
-
     createEffect(() => {
         let route = categoryDetailRoute;
 
@@ -61,7 +55,13 @@ const ViewDetail: Component = () => {
     return (
         <Show when={mediaList.activeRouteDefinition}>
             <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout toolbar={toolbar} sidebar={<Sidebar />}>
+                <Layout
+                    toolbar={
+                        <Toolbar>
+                            <DetailToolbar />
+                        </Toolbar>
+                    }
+                    sidebar={<Sidebar />}>
                     <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
                         <Show when={settings.showBreadcrumbs} fallback={<div />}>
                             <CategoryBreadcrumb showTitleAsLink={routeContext.area === AreaRandom} />

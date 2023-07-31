@@ -5,10 +5,8 @@ import Toolbar from './Toolbar';
 import Layout from '../components/layout/Layout';
 
 const AboutLayout: Component = () => {
-    const toolbar = <Toolbar />;
-
     return (
-        <Layout toolbar={toolbar}>
+        <Layout toolbar={<Toolbar />}>
             <div class="text-center m-y-8">
                 <img src="/icon.svg" class="display-inline w-[156px] h-[156px] mb-2" />
                 <br/>
