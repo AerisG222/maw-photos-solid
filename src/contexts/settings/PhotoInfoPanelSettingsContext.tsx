@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { defaultMapType, MapTypeIdType } from '../../_models/MapType';
-import { KEY_SETTINGS_PHOTO_INFO_PANEL, loadJson, saveJson } from './_storage';
+import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from './_storage';
 import { defaultMapZoomLevel, MapZoomLevelIdType } from '../../_models/MapZoomLevel';
 
 export type PhotoInfoPanelSettingsState = {
@@ -95,9 +95,9 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
 export const usePhotoInfoPanelSettingsContext = () => useContext(PhotoInfoPanelSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_PHOTO_INFO_PANEL, defaultPhotoInfoPanelSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultPhotoInfoPanelSettings);
 }
 
 function saveState(state: PhotoInfoPanelSettingsState) {
-    saveJson(KEY_SETTINGS_PHOTO_INFO_PANEL, state);
+    saveJson(KEY_SETTINGS_MEDIA_INFO_PANEL, state);
 }

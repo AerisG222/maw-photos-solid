@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 
 import { defaultMargin, MarginIdType } from '../../_models/Margin';
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
-import { KEY_SETTINGS_PHOTO_VIEW_GRID, loadJson, saveJson } from './_storage';
+import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from './_storage';
 
 export type PhotoGridViewSettingsState = {
     margin: MarginIdType;
@@ -60,9 +60,9 @@ export const PhotoGridSettingsProvider: ParentComponent = (props) => {
 export const usePhotoGridViewSettingsContext = () => useContext(PhotoGridViewSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_PHOTO_VIEW_GRID, defaultPhotoGridViewSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultPhotoGridViewSettings);
 }
 
 function saveState(state: PhotoGridViewSettingsState) {
-    saveJson(KEY_SETTINGS_PHOTO_VIEW_GRID, state);
+    saveJson(KEY_SETTINGS_MEDIA_VIEW_GRID, state);
 }

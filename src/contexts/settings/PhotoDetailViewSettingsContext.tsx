@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
-import { KEY_SETTINGS_PHOTO_VIEW_DETAIL, loadJson, saveJson } from './_storage';
+import { KEY_SETTINGS_MEDIA_VIEW_DETAIL, loadJson, saveJson } from './_storage';
 
 export type PhotoDetailViewSettingsState = {
     showBreadcrumbs: boolean;
@@ -49,9 +49,9 @@ export const PhotoDetailSettingsProvider: ParentComponent = (props) => {
 export const usePhotoDetailViewSettingsContext = () => useContext(PhotoDetailViewSettingsContext);
 
 function loadPhotoDetailViewSettings() {
-    return loadJson(KEY_SETTINGS_PHOTO_VIEW_DETAIL, defaultPhotoDetailViewSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, defaultPhotoDetailViewSettings);
 }
 
 function saveState(state: PhotoDetailViewSettingsState) {
-    saveJson(KEY_SETTINGS_PHOTO_VIEW_DETAIL, state);
+    saveJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, state);
 }

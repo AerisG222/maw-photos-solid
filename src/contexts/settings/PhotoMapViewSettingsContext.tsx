@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { defaultMapType, MapTypeIdType } from '../../_models/MapType';
-import { KEY_SETTINGS_PHOTO_VIEW_MAP, loadJson, saveJson } from './_storage';
+import { KEY_SETTINGS_MEDIA_VIEW_MAP, loadJson, saveJson } from './_storage';
 import { defaultMapZoomLevel, MapZoomLevelIdType } from '../../_models/MapZoomLevel';
 
 export type PhotoMapViewSettingsState = {
@@ -46,9 +46,9 @@ export const PhotoMapSettingsProvider: ParentComponent = (props) => {
 export const usePhotoMapViewSettingsContext = () => useContext(PhotoMapViewSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_PHOTO_VIEW_MAP, defaultPhotoMapViewSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_VIEW_MAP, defaultPhotoMapViewSettings);
 }
 
 function saveState(state: PhotoMapViewSettingsState) {
-    saveJson(KEY_SETTINGS_PHOTO_VIEW_MAP, state);
+    saveJson(KEY_SETTINGS_MEDIA_VIEW_MAP, state);
 }

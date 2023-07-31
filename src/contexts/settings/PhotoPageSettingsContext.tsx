@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
 import { defaultPhotoViewMode, PhotoViewModeIdType } from '../../_models/PhotoViewMode';
-import { KEY_SETTINGS_PHOTO_PAGE, loadJson, saveJson } from './_storage';
+import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from './_storage';
 
 export type PhotoPageSettingsState = {
     readonly viewMode: PhotoViewModeIdType;
@@ -45,9 +45,9 @@ export const PhotoPageSettingsProvider: ParentComponent = (props) => {
 export const usePhotoPageSettingsContext = () => useContext(PhotoPageSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_PHOTO_PAGE, defaultPhotoPageSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_PAGE, defaultPhotoPageSettings);
 }
 
 function saveState(state: PhotoPageSettingsState) {
-    saveJson(KEY_SETTINGS_PHOTO_PAGE, state);
+    saveJson(KEY_SETTINGS_MEDIA_PAGE, state);
 }
