@@ -1,6 +1,6 @@
-import { Component, createEffect, createSignal } from 'solid-js';
+import { Component, createEffect, createSignal } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from "../contexts/MediaListContext";
 
 type Histogram = {
     r: number[];
@@ -10,26 +10,33 @@ type Histogram = {
 };
 
 const HistogramCard: Component = () => {
-    const _rgb = 'rgb';
-    const _r = 'r';
-    const _g = 'g';
-    const _b = 'b';
-    const _lum = 'lum';
+    const _rgb = "rgb";
+    const _r = "r";
+    const _g = "g";
+    const _b = "b";
+    const _lum = "lum";
 
     const [state] = useMediaListContext();
     const [channel, setChannel] = createSignal(_rgb);
-    const [histogram, setHistogram] = createSignal({r: [], g: [], b: [], lum: []});
+    const [histogram, setHistogram] = createSignal({
+        r: [],
+        g: [],
+        b: [],
+        lum: [],
+    });
 
     let histogramCanvas: HTMLCanvasElement = undefined;
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d", {
+        willReadFrequently: true,
+    }) as CanvasRenderingContext2D;
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
-        if(!histogramCanvas) {
+        if (!histogramCanvas) {
             return;
         }
 
-        if(histogram) {
+        if (histogram) {
             const maxCount = getMaxCount(channel, histogram);
 
             drawHistogram(channel, histogram, maxCount);
@@ -41,20 +48,27 @@ const HistogramCard: Component = () => {
         tempCanvas.height = img.height;
         tempCtx.drawImage(img, 0, 0);
 
-        const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
+        const data = tempCtx.getImageData(
+            0,
+            0,
+            tempCanvas.width,
+            tempCanvas.height
+        ).data;
 
         setHistogram(calcHistogram(data));
-    }
+    };
 
     const updateHistogramFromVideoFrame = async (timestamp, frame) => {
         const bitmap = await createImageBitmap(state.mediaElement);
 
         updateHistogramFromImage(bitmap);
 
-        if(!state.mediaElement.ended) {
-            state.mediaElement.requestVideoFrameCallback(updateHistogramFromVideoFrame);
+        if (!state.mediaElement.ended) {
+            state.mediaElement.requestVideoFrameCallback(
+                updateHistogramFromVideoFrame
+            );
         }
-    }
+    };
 
     const getMaxCount = (channel: string, histogram: Histogram): number => {
         let maxCount = 0;
@@ -72,7 +86,7 @@ const HistogramCard: Component = () => {
                 maxCount = histogram.b[i];
             }
 
-            if (channel === 'lum' && histogram.lum[i] > maxCount) {
+            if (channel === "lum" && histogram.lum[i] > maxCount) {
                 maxCount = histogram.lum[i];
             }
         }
@@ -80,9 +94,12 @@ const HistogramCard: Component = () => {
         return maxCount;
     };
 
-    const includeR = (channel: string): boolean => channel === _rgb || channel === _r;
-    const includeG = (channel: string): boolean => channel === _rgb || channel === _g;
-    const includeB = (channel: string): boolean => channel === _rgb || channel === _b;
+    const includeR = (channel: string): boolean =>
+        channel === _rgb || channel === _r;
+    const includeG = (channel: string): boolean =>
+        channel === _rgb || channel === _g;
+    const includeB = (channel: string): boolean =>
+        channel === _rgb || channel === _b;
 
     const getLuma = (r: number, g: number, b: number): number => {
         // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
@@ -123,29 +140,31 @@ const HistogramCard: Component = () => {
         histogram: Histogram,
         maxCount: number
     ): void => {
-        const ctx = histogramCanvas.getContext('2d') as CanvasRenderingContext2D;
+        const ctx = histogramCanvas.getContext(
+            "2d"
+        ) as CanvasRenderingContext2D;
 
         ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
 
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = "lighter";
 
         if (includeR(channel)) {
-            drawHistogramChannel(ctx, '#f00', maxCount, histogram.r);
+            drawHistogramChannel(ctx, "#f00", maxCount, histogram.r);
         }
 
         if (includeG(channel)) {
-            drawHistogramChannel(ctx, '#0f0', maxCount, histogram.g);
+            drawHistogramChannel(ctx, "#0f0", maxCount, histogram.g);
         }
 
         if (includeB(channel)) {
-            drawHistogramChannel(ctx, '#00f', maxCount, histogram.b);
+            drawHistogramChannel(ctx, "#00f", maxCount, histogram.b);
         }
 
-        if (channel === 'lum') {
-            drawHistogramChannel(ctx, '#777', maxCount, histogram.lum);
+        if (channel === "lum") {
+            drawHistogramChannel(ctx, "#777", maxCount, histogram.lum);
         }
 
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalCompositeOperation = "source-over";
     };
 
     const drawHistogramChannel = (
@@ -179,16 +198,24 @@ const HistogramCard: Component = () => {
     createEffect(() => {
         const el = state.mediaElement;
 
-        if(!el) {
+        if (!el) {
             return;
         }
 
-        if(el.nodeName === 'IMG') {
-            (el as HTMLImageElement).onload = () => updateHistogramFromImage(el);
+        if (el.nodeName === "IMG") {
+            const img = el as HTMLImageElement;
+
+            img.onload = async () => {
+                await img.decode();
+
+                updateHistogramFromImage(el);
+            }
         }
 
-        if(el.nodeName === 'VIDEO') {
-            (el as HTMLVideoElement).requestVideoFrameCallback(updateHistogramFromVideoFrame);
+        if (el.nodeName === "VIDEO") {
+            (el as HTMLVideoElement).requestVideoFrameCallback(
+                updateHistogramFromVideoFrame
+            );
         }
     });
 
@@ -200,28 +227,63 @@ const HistogramCard: Component = () => {
         <>
             <form class="flex justify-around">
                 <label class="label cursor-pointer">
-                    <input type="radio" name="channel" class="radio mr-2" checked={channel() === _rgb} onInput={() => setChannel(_rgb)} />
+                    <input
+                        type="radio"
+                        name="channel"
+                        class="radio mr-2"
+                        checked={channel() === _rgb}
+                        onInput={() => setChannel(_rgb)}
+                    />
                     <span class="label-text">RGB</span>
                 </label>
                 <label class="label cursor-pointer">
-                    <input type="radio" name="channel" class="radio mr-2" checked={channel() === _r} onInput={() => setChannel(_r)} />
+                    <input
+                        type="radio"
+                        name="channel"
+                        class="radio mr-2"
+                        checked={channel() === _r}
+                        onInput={() => setChannel(_r)}
+                    />
                     <span class="label-text">R</span>
                 </label>
                 <label class="label cursor-pointer">
-                    <input type="radio" name="channel" class="radio mr-2" checked={channel() === _g} onInput={() => setChannel(_g)} />
+                    <input
+                        type="radio"
+                        name="channel"
+                        class="radio mr-2"
+                        checked={channel() === _g}
+                        onInput={() => setChannel(_g)}
+                    />
                     <span class="label-text">G</span>
                 </label>
                 <label class="label cursor-pointer">
-                    <input type="radio" name="channel" class="radio mr-2" checked={channel() === _b} onInput={() => setChannel(_b)} />
+                    <input
+                        type="radio"
+                        name="channel"
+                        class="radio mr-2"
+                        checked={channel() === _b}
+                        onInput={() => setChannel(_b)}
+                    />
                     <span class="label-text">B</span>
                 </label>
                 <label class="label cursor-pointer">
-                    <input type="radio" name="channel" class="radio mr-2" checked={channel() === _lum} onInput={() => setChannel(_lum)} />
+                    <input
+                        type="radio"
+                        name="channel"
+                        class="radio mr-2"
+                        checked={channel() === _lum}
+                        onInput={() => setChannel(_lum)}
+                    />
                     <span class="label-text">Luminance</span>
                 </label>
             </form>
             <div>
-                <canvas class="histogram" width="473px" height="200px" ref={histogramCanvas} />
+                <canvas
+                    class="histogram"
+                    width="473px"
+                    height="200px"
+                    ref={histogramCanvas}
+                />
             </div>
         </>
     );
