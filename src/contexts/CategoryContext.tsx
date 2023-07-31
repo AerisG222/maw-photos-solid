@@ -206,7 +206,6 @@ export const CategoryProvider: ParentComponent = (props) => {
     const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) =>
         buildStatsData(getAllYears(), state.categories, valueFunc);
 
-    // todo - trying to update the teaser for the active category is not showing the updated teaser in the category teaser chooser
     const updateTeaser = (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => {
         setState(
             "categories",

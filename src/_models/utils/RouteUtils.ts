@@ -1,6 +1,5 @@
 import { AppRouteDefinition, Area, RouteMatch } from '../AppRouteDefinition';
 
-// todo: figure out a better way
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     if(!routeParams) {
         return route.absolutePath;
@@ -48,9 +47,6 @@ const buildSearch = (routeSearch?: any) => {
 };
 
 export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSearch?: any) => {
-    // todo: update all other routes to include absolute path if this works
-    if(!route.absolutePath) { return route.path; }
-
     let path = buildRootPath(route, routeParams);
 
     path += buildSearch(routeSearch);

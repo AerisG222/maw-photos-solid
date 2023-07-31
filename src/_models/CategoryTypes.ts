@@ -5,7 +5,7 @@ import { MediaView, MediaViewAll } from '../media/_routes';
 export type CategoryTypeInfo = {
     nameSingular: string;
     namePlural: string;
-    routePart: string;  // todo: improve naming
+    routeSlug: string;
     icon: string;
     views: MediaView[];
     slideshowAvailable: boolean;
@@ -16,7 +16,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
     photos: {
         nameSingular: "Photo",
         namePlural: "Photos",
-        routePart: "photos",
+        routeSlug: "photos",
         icon: "i-ic-round-camera-alt",
         views: MediaViewAll,
         slideshowAvailable: true
@@ -24,7 +24,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
     videos: {
         nameSingular: "Video",
         namePlural: "Videos",
-        routePart: "videos",
+        routeSlug: "videos",
         icon: "i-ic-round-videocam",
         views: MediaViewAll,
         slideshowAvailable: false

@@ -23,11 +23,11 @@ export type RouteMatch = [boolean, Area];
 
 export type AppRouteDefinition =
     RouteDefinition & {
+        absolutePath: string;
         icon?: string;
         name?: string;
         tooltip?: string;
         shortcutKeys?: string[];
-        absolutePath?: string;
         helpText?: string;
         doesPathMatch?: (path: string) => RouteMatch;
     };

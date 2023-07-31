@@ -56,4 +56,4 @@ export const buildSearch = (year?: number, type?: CategoryType) => {
     return {year: year, type: type};
 };
 
-export const getCategoryPath = (categoryType: CategoryType, categoryId: number) => `${basePath}/${categoryTypes[categoryType].routePart}/${categoryId}`;
+export const getCategoryPath = (categoryType: CategoryType, categoryId: number) => `${basePath}/${categoryTypes[categoryType].routeSlug}/${categoryId}`;
