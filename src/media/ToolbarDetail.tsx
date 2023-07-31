@@ -21,7 +21,7 @@ import DownloadPhotoHighResButton from './toolbar/DownloadPhotoHighResButton';
 import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouchedButton';
 
 const DetailToolbar: Component = () => {
-    const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
+    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
     const params = useParams();
 
     const onToggleBreadcrumbs = () => {
@@ -29,7 +29,7 @@ const DetailToolbar: Component = () => {
     };
 
     const onTogglePhotoList = () => {
-        setShowPhotoList(!settings.showMediaList);
+        setShowMediaList(!settings.showMediaList);
     };
 
     const onToggleThumbnailSize = () => {
