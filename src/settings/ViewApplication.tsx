@@ -5,7 +5,7 @@ import { allThemes } from '../_models/Theme';
 
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
-import Select from './components/Select';
+import Select from '../components/input/Select';
 import Toolbar from './Toolbar';
 import Layout from '../components/layout/Layout';
 

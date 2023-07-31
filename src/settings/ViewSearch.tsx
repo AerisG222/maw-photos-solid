@@ -9,9 +9,9 @@ import { allCategoryViewModes } from '../_models/CategoryViewMode';
 
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
-import RadioGroup from './components/RadioGroup';
+import RadioGroup from '../components/input/RadioGroup';
 import Toolbar from './Toolbar';
-import Toggle from './components/Toggle';
+import Toggle from '../components/input/Toggle';
 import Layout from '../components/layout/Layout';
 
 const ViewSearch: Component = () => {

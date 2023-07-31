@@ -4,7 +4,7 @@ import { useSearchParams } from '@solidjs/router';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 
-import Select from '../../settings/components/Select';
+import Select from '../../components/input/Select';
 import { Category } from '../../_models/Category';
 
 const YearFilter: Component = () => {

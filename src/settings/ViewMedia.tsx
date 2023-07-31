@@ -14,11 +14,11 @@ import { allSlideshowDurations } from '../_models/SlideshowDuration';
 
 import Panel from './components/Panel';
 import PanelContainer from './components/PanelContainer';
-import Select from './components/Select';
-import RadioGroup from './components/RadioGroup';
-import Checkbox from './components/Checkbox';
+import Select from '../components/input/Select';
+import RadioGroup from '../components/input/RadioGroup';
+import Checkbox from '../components/input/Checkbox';
 import Toolbar from './Toolbar';
-import Toggle from './components/Toggle';
+import Toggle from '../components/input/Toggle';
 import Layout from '../components/layout/Layout';
 
 const ViewMedia: Component = () => {

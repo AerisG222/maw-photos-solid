@@ -1,6 +1,6 @@
 import { Component } from 'solid-js';
 
-import Checkbox from '../../settings/components/Checkbox';
+import Checkbox from '../../components/input/Checkbox';
 import { useCategoryContext } from '../../contexts/CategoryContext';
 import { Category } from '../../_models/Category';
 

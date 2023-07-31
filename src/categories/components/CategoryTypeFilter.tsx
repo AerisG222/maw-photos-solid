@@ -6,7 +6,7 @@ import { useCategoryContext } from '../../contexts/CategoryContext';
 import { Category } from '../../_models/Category';
 import { categoryTypesOptions } from '../../_models/CategoryTypes';
 
-import Select from '../../settings/components/Select';
+import Select from '../../components/input/Select';
 
 const CategoryTypeFilter: Component = () => {
     const TYPE_FILTER = "CategoryTypeFilter_Type";
