@@ -1,7 +1,7 @@
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useNavigate, useParams } from '@solidjs/router';
 
-import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
+import { useMediaMapViewSettingsContext } from '../contexts/settings/MediaMapViewSettingsContext';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getMediaPath, categoryMapRoute } from './_routes';
@@ -14,7 +14,7 @@ import { getMediaTeaserUrl } from '../_models/Media';
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
-    const [state, { setMapType, setZoom }] = usePhotoMapViewSettingsContext();
+    const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const navigate = useNavigate();
     const params = useParams();

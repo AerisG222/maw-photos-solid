@@ -1,6 +1,6 @@
 import { Component, For, Show, lazy } from "solid-js";
 
-import { usePhotoInfoPanelSettingsContext } from "../../contexts/settings/PhotoInfoPanelSettingsContext";
+import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
 import { Media, MediaTypePhoto } from '../../_models/Media';
 import { useMediaListContext } from '../contexts/MediaListContext';
 import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
@@ -27,7 +27,7 @@ const Sidebar: Component = () => {
             setShowMetadataEditor,
             setShowCategoryTeaserChooser,
         },
-    ] = usePhotoInfoPanelSettingsContext();
+    ] = useMediaInfoPanelSettingsContext();
 
     const [mediaList] = useMediaListContext();
 

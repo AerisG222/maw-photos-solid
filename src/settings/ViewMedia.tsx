@@ -1,14 +1,14 @@
 import { Component } from "solid-js";
 
-import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
-import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
-import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
-import { usePhotoInfoPanelSettingsContext } from '../contexts/settings/PhotoInfoPanelSettingsContext';
-import { usePhotoMapViewSettingsContext } from '../contexts/settings/PhotoMapViewSettingsContext';
+import { useMediaPageSettingsContext } from '../contexts/settings/MediaPageSettingsContext';
+import { useMediaGridViewSettingsContext } from '../contexts/settings/MediaGridViewSettingsContext';
+import { useMediaDetailViewSettingsContext } from '../contexts/settings/MediaDetailViewSettingsContext';
+import { useMediaInfoPanelSettingsContext } from '../contexts/settings/MediaInfoPanelSettingsContext';
+import { useMediaMapViewSettingsContext } from '../contexts/settings/MediaMapViewSettingsContext';
 import { allMapTypes } from '../_models/MapType';
 import { allMapZoomLevels } from '../_models/MapZoomLevel';
 import { allMargins } from '../_models/Margin';
-import { allPhotoViewModes } from '../_models/PhotoViewMode';
+import { allMediaViewModes } from '../_models/MediaViewMode';
 import { allThumbnailSizes } from '../_models/ThumbnailSize';
 import { allSlideshowDurations } from '../_models/SlideshowDuration';
 
@@ -22,18 +22,18 @@ import Toggle from '../components/input/Toggle';
 import Layout from '../components/layout/Layout';
 
 const ViewMedia: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = usePhotoPageSettingsContext();
-    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = usePhotoMapViewSettingsContext();
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useMediaPageSettingsContext();
+    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = useMediaMapViewSettingsContext();
     const [detailSettings, {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
         setShowPhotoList: setDetailShowPhotoList,
         setThumbnailSize: setDetailThumbnailSize
-    }] = usePhotoDetailViewSettingsContext();
+    }] = useMediaDetailViewSettingsContext();
     const [gridSettings, {
         setMargin: setGridMargin,
         setShowBreadcrumbs: setGridShowBreadcrumbs,
         setThumbnailSize: setGridThumbnailSize
-    }] = usePhotoGridViewSettingsContext();
+    }] = useMediaGridViewSettingsContext();
     const [infoPanelSettings, {
         setExpandInfoPanel,
         setShowRatings,
@@ -46,19 +46,19 @@ const ViewMedia: Component = () => {
         setShowMinimap,
         setMinimapZoom,
         setMinimapMapType: setInfoPanelMapType
-    }] = usePhotoInfoPanelSettingsContext();
+    }] = useMediaInfoPanelSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
             <PanelContainer>
                 <Panel title="Media Page">
-                    <RadioGroup title="View" groupName='pageView' itemArray={allPhotoViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
+                    <RadioGroup title="View" groupName='pageView' itemArray={allMediaViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
                     <Select title="Slideshow Display Duration" itemArray={allSlideshowDurations} selectedValue={pageSettings.slideshowDisplayDurationSeconds} onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))} />
                 </Panel>
 
                 <Panel title="Detail View">
                     <Toggle title="Show Breadcrumbs" name="detailShowBreadcrumbs" isSelected={detailSettings.showBreadcrumbs} onChange={setDetailShowBreadcrumbs} />
-                    <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showPhotoList} onChange={setDetailShowPhotoList} />
+                    <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showMediaList} onChange={setDetailShowPhotoList} />
                     <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />
 
                     <h3 class="mt-4 color-secondary">Info Panel</h3>

@@ -1,7 +1,7 @@
 import { Component, Show } from 'solid-js';
 import { useParams } from '@solidjs/router';
 
-import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
+import { useMediaDetailViewSettingsContext } from '../contexts/settings/MediaDetailViewSettingsContext';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { CategoryTypePhotos } from '../_models/CategoryType';
 
@@ -21,7 +21,7 @@ import DownloadPhotoHighResButton from './toolbar/DownloadPhotoHighResButton';
 import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouchedButton';
 
 const DetailToolbar: Component = () => {
-    const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = usePhotoDetailViewSettingsContext();
+    const [settings, { setShowBreadcrumbs, setShowPhotoList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
     const params = useParams();
 
     const onToggleBreadcrumbs = () => {
@@ -29,7 +29,7 @@ const DetailToolbar: Component = () => {
     };
 
     const onTogglePhotoList = () => {
-        setShowPhotoList(!settings.showPhotoList);
+        setShowPhotoList(!settings.showMediaList);
     };
 
     const onToggleThumbnailSize = () => {

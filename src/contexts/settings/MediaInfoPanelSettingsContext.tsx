@@ -5,7 +5,7 @@ import { defaultMapType, MapTypeIdType } from '../../_models/MapType';
 import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from './_storage';
 import { defaultMapZoomLevel, MapZoomLevelIdType } from '../../_models/MapZoomLevel';
 
-export type PhotoInfoPanelSettingsState = {
+export type MediaInfoPanelSettingsState = {
     expandInfoPanel: boolean;
     showRatings: boolean;
     showCategoryTeaserChooser: boolean;
@@ -19,7 +19,7 @@ export type PhotoInfoPanelSettingsState = {
     minimapMapType: MapTypeIdType;
 };
 
-export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
+export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
     expandInfoPanel: false,
     showRatings: true,
     showCategoryTeaserChooser: false,
@@ -34,8 +34,8 @@ export const defaultPhotoInfoPanelSettings: PhotoInfoPanelSettingsState = {
 };
 
 
-export type PhotoInfoPanelSettingsContextValue = [
-    state: PhotoInfoPanelSettingsState,
+export type MediaInfoPanelSettingsContextValue = [
+    state: MediaInfoPanelSettingsState,
     actions: {
         setExpandInfoPanel: (expandInfoPanel: boolean) => void;
         setShowRatings: (showRatings: boolean) => void;
@@ -51,30 +51,30 @@ export type PhotoInfoPanelSettingsContextValue = [
     }
 ];
 
-const PhotoInfoPanelSettingsContext = createContext<PhotoInfoPanelSettingsContextValue>();
+const MediaInfoPanelSettingsContext = createContext<MediaInfoPanelSettingsContextValue>();
 
-export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
+export const MediaInfoPanelSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({expandInfoPanel: expandInfoPanel});
-    const setShowRatings = (showRatings: boolean) => updateState({showRatings: showRatings});
-    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => updateState({showCategoryTeaserChooser: showCategoryTeaserChooser});
-    const setShowComments = (showComments: boolean) => updateState({showComments: showComments});
-    const setShowExif = (showExif: boolean) => updateState({showExif: showExif});
-    const setShowEffects = (showEffects: boolean) => updateState({showEffects: showEffects});
-    const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor: showMetadataEditor});
-    const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram: showHistogram});
-    const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap: showMinimap});
-    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom: minimapZoom});
-    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType: minimapMapType});
+    const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({expandInfoPanel});
+    const setShowRatings = (showRatings: boolean) => updateState({showRatings});
+    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => updateState({showCategoryTeaserChooser});
+    const setShowComments = (showComments: boolean) => updateState({showComments});
+    const setShowExif = (showExif: boolean) => updateState({showExif});
+    const setShowEffects = (showEffects: boolean) => updateState({showEffects});
+    const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor});
+    const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram});
+    const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap});
+    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom});
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType});
 
-    const updateState = (update: Partial<PhotoInfoPanelSettingsState>) => {
+    const updateState = (update: Partial<MediaInfoPanelSettingsState>) => {
         setState(update);
         saveState(state);
     };
 
     return (
-        <PhotoInfoPanelSettingsContext.Provider value={[state, {
+        <MediaInfoPanelSettingsContext.Provider value={[state, {
             setExpandInfoPanel,
             setShowRatings,
             setShowCategoryTeaserChooser,
@@ -88,16 +88,16 @@ export const PhotoInfoPanelSettingsProvider: ParentComponent = (props) => {
             setMinimapMapType
         }]}>
             {props.children}
-        </PhotoInfoPanelSettingsContext.Provider>
+        </MediaInfoPanelSettingsContext.Provider>
     );
 };
 
-export const usePhotoInfoPanelSettingsContext = () => useContext(PhotoInfoPanelSettingsContext);
+export const useMediaInfoPanelSettingsContext = () => useContext(MediaInfoPanelSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultPhotoInfoPanelSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultMediaInfoPanelSettings);
 }
 
-function saveState(state: PhotoInfoPanelSettingsState) {
+function saveState(state: MediaInfoPanelSettingsState) {
     saveJson(KEY_SETTINGS_MEDIA_INFO_PANEL, state);
 }

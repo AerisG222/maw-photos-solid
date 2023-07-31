@@ -5,11 +5,11 @@ import { CategoryFilterSettingsProvider } from './CategoryFilterSettingsContext'
 import { CategoryGridSettingsProvider } from './CategoryGridViewSettingsContext';
 import { CategoryListSettingsProvider } from './CategoryListViewSettingsContext';
 import { CategoryPageSettingsProvider } from './CategoryPageSettingsContext';
-import { PhotoDetailSettingsProvider } from './PhotoDetailViewSettingsContext';
-import { PhotoGridSettingsProvider } from './PhotoGridViewSettingsContext';
-import { PhotoInfoPanelSettingsProvider } from './PhotoInfoPanelSettingsContext';
-import { PhotoMapSettingsProvider } from './PhotoMapViewSettingsContext';
-import { PhotoPageSettingsProvider } from './PhotoPageSettingsContext';
+import { MediaDetailSettingsProvider } from './MediaDetailViewSettingsContext';
+import { MediaGridSettingsProvider } from './MediaGridViewSettingsContext';
+import { MediaInfoPanelSettingsProvider } from './MediaInfoPanelSettingsContext';
+import { MediaMapSettingsProvider } from './MediaMapViewSettingsContext';
+import { MediaPageSettingsProvider } from './MediaPageSettingsContext';
 import { SearchGridSettingsProvider } from './SearchGridViewSettingsContext';
 import { SearchListSettingsProvider } from './SearchListViewSettingsContext';
 import { SearchPageSettingsProvider } from './SearchPageSettingsContext';
@@ -21,11 +21,11 @@ export const AllSettingsProvider: ParentComponent = (props) => {
         <CategoryGridSettingsProvider>
         <CategoryListSettingsProvider>
         <CategoryPageSettingsProvider>
-        <PhotoDetailSettingsProvider>
-        <PhotoGridSettingsProvider>
-        <PhotoInfoPanelSettingsProvider>
-        <PhotoMapSettingsProvider>
-        <PhotoPageSettingsProvider>
+        <MediaDetailSettingsProvider>
+        <MediaGridSettingsProvider>
+        <MediaInfoPanelSettingsProvider>
+        <MediaMapSettingsProvider>
+        <MediaPageSettingsProvider>
         <SearchGridSettingsProvider>
         <SearchListSettingsProvider>
         <SearchPageSettingsProvider>
@@ -33,11 +33,11 @@ export const AllSettingsProvider: ParentComponent = (props) => {
         </SearchPageSettingsProvider>
         </SearchListSettingsProvider>
         </SearchGridSettingsProvider>
-        </PhotoPageSettingsProvider>
-        </PhotoMapSettingsProvider>
-        </PhotoInfoPanelSettingsProvider>
-        </PhotoGridSettingsProvider>
-        </PhotoDetailSettingsProvider>
+        </MediaPageSettingsProvider>
+        </MediaMapSettingsProvider>
+        </MediaInfoPanelSettingsProvider>
+        </MediaGridSettingsProvider>
+        </MediaDetailSettingsProvider>
         </CategoryPageSettingsProvider>
         </CategoryListSettingsProvider>
         </CategoryGridSettingsProvider>

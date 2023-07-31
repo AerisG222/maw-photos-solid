@@ -1,6 +1,6 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
-import { usePhotoDetailViewSettingsContext } from '../contexts/settings/PhotoDetailViewSettingsContext';
+import { useMediaDetailViewSettingsContext } from '../contexts/settings/MediaDetailViewSettingsContext';
 import { useMediaListContext } from './contexts/MediaListContext';
 import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
 import { getThumbnailSize } from '../_models/ThumbnailSize';
@@ -19,7 +19,7 @@ import MediaSelectedGuard from './MediaSelectedGuard';
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
-    const [settings] = usePhotoDetailViewSettingsContext();
+    const [settings] = useMediaDetailViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
 
@@ -50,7 +50,7 @@ const ViewDetail: Component = () => {
 
         reservedHeight += settings.showBreadcrumbs ? 28 : 0;
 
-        if(settings.showPhotoList) {
+        if(settings.showMediaList) {
             // 20 => rough approximation for scrollbar height
             reservedHeight += getThumbnailSize(settings.thumbnailSize).height + 20;
         }
@@ -73,7 +73,7 @@ const ViewDetail: Component = () => {
                                 maxHeightStyle={getMaxHeight()} />
                         </div>
 
-                        <Show when={settings.showPhotoList} fallback={<div/>}>
+                        <Show when={settings.showMediaList} fallback={<div/>}>
                             <MediaList
                                 thumbnailSize={settings.thumbnailSize}
                                 activeRoute={mediaList.activeRouteDefinition} />

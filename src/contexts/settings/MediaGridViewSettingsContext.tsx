@@ -5,14 +5,14 @@ import { defaultMargin, MarginIdType } from '../../_models/Margin';
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
 import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from './_storage';
 
-export type PhotoGridViewSettingsState = {
+export type MediaGridViewSettingsState = {
     margin: MarginIdType;
     showBreadcrumbs: boolean;
     showMainBreadcrumbs: boolean;
     thumbnailSize: ThumbnailSizeIdType;
 };
 
-export const defaultPhotoGridViewSettings: PhotoGridViewSettingsState = {
+export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
     margin: defaultMargin,
     showBreadcrumbs: true,
     showMainBreadcrumbs: true,
@@ -20,8 +20,8 @@ export const defaultPhotoGridViewSettings: PhotoGridViewSettingsState = {
 };
 
 
-export type PhotoGridViewSettingsContextValue = [
-    state: PhotoGridViewSettingsState,
+export type MediaGridViewSettingsContextValue = [
+    state: MediaGridViewSettingsState,
     actions: {
         setMargin: (margin: MarginIdType) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
@@ -30,39 +30,39 @@ export type PhotoGridViewSettingsContextValue = [
     }
 ];
 
-const PhotoGridViewSettingsContext = createContext<PhotoGridViewSettingsContextValue>();
+const MediaGridViewSettingsContext = createContext<MediaGridViewSettingsContextValue>();
 
-export const PhotoGridSettingsProvider: ParentComponent = (props) => {
+export const MediaGridSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs: showBreadcrumbs});
+    const setMargin = (margin: MarginIdType) => updateState({margin});
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize});
+    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs});
     const setShowMainBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showMainBreadcrumbs: showBreadcrumbs});
 
-    const updateState = (update: Partial<PhotoGridViewSettingsState>) => {
+    const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);
         saveState(state);
     };
 
     return (
-        <PhotoGridViewSettingsContext.Provider value={[state, {
+        <MediaGridViewSettingsContext.Provider value={[state, {
             setMargin,
             setShowBreadcrumbs,
             setShowMainBreadcrumbs,
             setThumbnailSize
         }]}>
             {props.children}
-        </PhotoGridViewSettingsContext.Provider>
+        </MediaGridViewSettingsContext.Provider>
     );
 };
 
-export const usePhotoGridViewSettingsContext = () => useContext(PhotoGridViewSettingsContext);
+export const useMediaGridViewSettingsContext = () => useContext(MediaGridViewSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultPhotoGridViewSettings);
+    return loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultMediaGridViewSettings);
 }
 
-function saveState(state: PhotoGridViewSettingsState) {
+function saveState(state: MediaGridViewSettingsState) {
     saveJson(KEY_SETTINGS_MEDIA_VIEW_GRID, state);
 }

@@ -1,7 +1,7 @@
 import { Component, Show } from 'solid-js';
 import { useParams } from '@solidjs/router';
 
-import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
+import { useMediaGridViewSettingsContext } from '../contexts/settings/MediaGridViewSettingsContext';
 import { getNextMarginSize } from '../_models/Margin';
 import { getNextThumbnailSize } from '../_models/ThumbnailSize';
 import { useMediaListContext } from './contexts/MediaListContext';
@@ -21,7 +21,7 @@ import FlipVerticalButton from './toolbar/FlipVerticalButton';
 
 const GridToolbar: Component = () => {
     const [routeContext] = useRouteDetailContext();
-    const [settings, {setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin}] = usePhotoGridViewSettingsContext();
+    const [settings, {setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin}] = useMediaGridViewSettingsContext();
     const [state] = useMediaListContext();
     const params = useParams();
 

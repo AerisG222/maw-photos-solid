@@ -2,7 +2,7 @@ import { ParentComponent, Show, children } from 'solid-js'
 
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { useMediaListContext } from './contexts/MediaListContext';
-import { usePhotoPageSettingsContext } from '../contexts/settings/PhotoPageSettingsContext';
+import { useMediaPageSettingsContext } from '../contexts/settings/MediaPageSettingsContext';
 import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from './_routes';
 import { isAdmin } from '../auth/auth';
 import { useRouteDetailContext } from '../contexts/RouteDetailContext';
@@ -16,7 +16,7 @@ const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
-    const [, { setViewMode }] = usePhotoPageSettingsContext();
+    const [, { setViewMode }] = useMediaPageSettingsContext();
 
     const c = children(() => props.children);
 

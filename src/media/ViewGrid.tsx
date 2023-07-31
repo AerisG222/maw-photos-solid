@@ -2,7 +2,7 @@ import { Component, Show, createEffect } from "solid-js";
 import { A, useParams } from '@solidjs/router';
 
 import { useMediaListContext } from './contexts/MediaListContext';
-import { usePhotoGridViewSettingsContext } from '../contexts/settings/PhotoGridViewSettingsContext';
+import { useMediaGridViewSettingsContext } from '../contexts/settings/MediaGridViewSettingsContext';
 import { useSlideshowContext } from './contexts/SlideshowContext';
 import { getMediaPath, categoryGridRoute, randomGridRoute } from './_routes';
 import { CategoryType } from '../_models/CategoryType';
@@ -17,7 +17,7 @@ import MediaGrid from '../media/MediaGrid';
 import MediaMainItem from './MediaMainItem';
 
 const ViewGrid: Component = () => {
-    const [settings] = usePhotoGridViewSettingsContext();
+    const [settings] = useMediaGridViewSettingsContext();
     const [routeContext] = useRouteDetailContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [,{ stop }] = useSlideshowContext();
