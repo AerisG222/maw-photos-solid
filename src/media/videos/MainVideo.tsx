@@ -17,7 +17,6 @@ const MainVideo: Component<Props> = (props) => {
             video.videoScaledUrl;
 
     onMount(() => {
-        console.log(document.body.clientWidth);
         setUseLarge(document.body.clientWidth >= 1500);
     });
 

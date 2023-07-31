@@ -12,6 +12,7 @@ const authSettings: UserManagerSettings = {
     loadUserInfo: true
 };
 
+import.meta.env.DEV ? Log.setLevel(Log.DEBUG) : Log.setLevel(Log.NONE);
 Log.setLogger(console);
 
 const mgr = new UserManager(authSettings);
@@ -22,7 +23,6 @@ export async function initiateAuthPopup() {
     try {
         const u = await mgr.signinPopup();
 
-        console.log("successfully completed authentication via popup");
         mgr.startSilentRenew();
         setUser(u);
     } catch(err) {
@@ -43,7 +43,6 @@ export async function completeAuth() {
         const u = await mgr.signinCallback();
 
         if(u) {
-            console.log("successfully completed authentication");
             mgr.startSilentRenew();
             setUser(u);
         }

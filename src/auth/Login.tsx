@@ -7,7 +7,6 @@ const Login: Component = () => {
 
     createEffect(() => {
         if(isLoggedIn()) {
-            console.log('user already logged in!');
             navigate('/');
         } else {
             initiateAuthPopup();

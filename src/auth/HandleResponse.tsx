@@ -12,7 +12,7 @@ const HandleResponse: Component = () => {
         if(isLoggedIn()) {
             navigate('/');
         } else {
-            console.log('not logged in');
+            // swallow
         }
     });
 
