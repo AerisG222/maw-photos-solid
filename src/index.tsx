@@ -14,7 +14,7 @@ import { ShortcutProvider } from './contexts/ShortcutContext';
 import App from './App';
 import CategoryLoader from './components/categories/CategoryLoader';
 import ShortcutDialog from './components/shortcuts/ShortcutDialog';
-import ThemeWrapper from './components/theme/Theme';
+import ThemeWrapper from './components/theme/ThemeWrapper';
 
 render(() =>
     <ShortcutProvider>
