@@ -19,6 +19,7 @@ import DownloadPhotoLowResButton from './toolbar/DownloadPhotoLowResButton';
 import DownloadPhotoMediumResButton from './toolbar/DownloadPhotoMediumResButton';
 import DownloadPhotoHighResButton from './toolbar/DownloadPhotoHighResButton';
 import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouchedButton';
+import ShareButton from './toolbar/ShareButton';
 
 const DetailToolbar: Component = () => {
     const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
@@ -61,6 +62,12 @@ const DetailToolbar: Component = () => {
                 <DownloadPhotoMediumResButton />
                 <DownloadPhotoHighResButton />
                 <DownloadPhotoHighUntouchedButton />
+
+                <Divider />
+            </Show>
+
+            <Show when={navigator?.canShare}>
+                <ShareButton />
 
                 <Divider />
             </Show>

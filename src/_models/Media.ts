@@ -47,3 +47,12 @@ export const getMediaTeaserUrl = (media: Media) => {
             return media.thumbnailSqUrl;
     }
 };
+
+export const getMediaShareUrl = (media: Media) => {
+    switch(media.kind) {
+        case MediaTypePhoto:
+            return media.imageMdUrl;
+        case MediaTypeVideo:
+            return media.videoScaledUrl;
+    }
+};
