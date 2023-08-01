@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { useSearchParams } from '@solidjs/router';
 import numbro from 'numbro';
 
-import { useCategoryContext } from '../contexts/CategoryContext';
+import { useStatContext } from './contexts/StatContext';
 import { getAggFuncs } from './_funcs';
 
 import Toolbar from './Toolbar';
@@ -15,7 +15,7 @@ import StatLayout from './components/StatLayout';
 
 const ViewPhotos: Component = () => {
     const [search] = useSearchParams();
-    const [, { getPhotoCategories, getPhotoCategoryYears, getPhotoCount, getPhotoFileSize, getPhotoStatsChartData }] = useCategoryContext();
+    const [, { getPhotoCategories, getPhotoCategoryYears, getPhotoCount, getPhotoFileSize, getPhotoStatsChartData }] = useStatContext();
     const getPhotoStats = () => getPhotoStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 

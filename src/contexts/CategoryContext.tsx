@@ -1,9 +1,8 @@
 import { createContext, createMemo, ParentComponent, useContext } from 'solid-js';
 import { createStore } from "solid-js/store";
 
-import { Category, PhotoCategory, VideoCategory } from '../_models/Category';
-import { buildStatsData } from '../_models/utils/ChartUtils';
-import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
+import { Category } from '../_models/Category';
+import { CategoryType } from '../_models/CategoryType';
 import { FilterFunction, SortFunction } from '../_models/UtilityTypes';
 
 export type CategoryState = {
@@ -46,22 +45,6 @@ export type CategoryContextValue = [
 
         setActiveCategory: (category: Category) => void;
         setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
-
-        // todo: move these to components or stat context?
-        getPhotoCategories: () => PhotoCategory[],
-        getPhotoCategoryYears: () => number[],
-        getVideoCategories: () => VideoCategory[],
-        getVideoCategoryYears: () => number[],
-        getPhotoCount: () => number;
-        getPhotoFileSize: () => number;
-        getVideoCount: () => number;
-        getVideoFileSize: () => number;
-        getVideoDuration: () => number;
-        getCombinedCount: () => number;
-        getCombinedFileSize: () => number;
-        getPhotoStatsChartData: (valueFunc: (cat: PhotoCategory) => number) => any;
-        getVideoStatsChartData: (valueFunc: (cat: VideoCategory) => number) => any;
-        getCombinedStatsChartData: (valueFunc: (cat: Category) => number) => any;
 
         updateTeaser: (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => void;
     }
@@ -161,40 +144,6 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const getFilteredCategoriesForYear = (year: number) => getFilteredAndSortedCategories().filter(c => c.year === year);
 
-    const getPhotoCategories = createMemo(() => state.categories.filter(c => c.type === CategoryTypePhotos) as PhotoCategory[]);
-    const getVideoCategories = createMemo(() => state.categories.filter(c => c.type === CategoryTypeVideos) as VideoCategory[]);
-
-    const getPhotoCategoryYears = createMemo(() => [... new Set(getPhotoCategories().map(c => c.year))]);
-    const getVideoCategoryYears = createMemo(() => [... new Set(getVideoCategories().map(c => c.year))]);
-
-    const getPhotoCount = createMemo(() =>
-        getPhotoCategories().reduce<number>((prev, category) => prev + category.count, 0)
-    );
-
-    const getVideoCount = createMemo(() =>
-        getVideoCategories().reduce<number>((prev, category) => prev + category.count, 0)
-    );
-
-    const getCombinedCount = createMemo(() =>
-        getPhotoCount() + getVideoCount()
-    );
-
-    const getPhotoFileSize = createMemo(() =>
-        getPhotoCategories().reduce<number>((prev, category) => prev + category.totalSize, 0)
-    );
-
-    const getVideoFileSize = createMemo(() =>
-        getVideoCategories().reduce<number>((prev, category) => prev + category.totalSize, 0)
-    );
-
-    const getCombinedFileSize = createMemo(() =>
-        getPhotoFileSize() + getVideoFileSize()
-    );
-
-    const getVideoDuration = createMemo(() =>
-        getVideoCategories().reduce<number>((prev, category) => prev + category.totalDuration, 0)
-    );
-
     const setActiveCategory = (category: Category) => {
         setState({ activeCategory: category })
     };
@@ -204,15 +153,6 @@ export const CategoryProvider: ParentComponent = (props) => {
 
         setActiveCategory(cat);
     };
-
-    const getPhotoStatsChartData = (valueFunc: (cat: PhotoCategory) => number) =>
-        buildStatsData(getPhotoCategoryYears(), getPhotoCategories(), valueFunc);
-
-    const getVideoStatsChartData = (valueFunc: (cat: VideoCategory) => number) =>
-        buildStatsData(getVideoCategoryYears(), getVideoCategories(), valueFunc);
-
-    const getCombinedStatsChartData = (valueFunc: (cat: Category) => number) =>
-        buildStatsData(getAllYears(), state.categories, valueFunc);
 
     const updateTeaser = (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => {
         setState(
@@ -245,21 +185,6 @@ export const CategoryProvider: ParentComponent = (props) => {
 
             setActiveCategory,
             setActiveCategoryById,
-
-            getPhotoCategories,
-            getPhotoCategoryYears,
-            getVideoCategories,
-            getVideoCategoryYears,
-            getPhotoCount,
-            getPhotoFileSize,
-            getVideoCount,
-            getVideoFileSize,
-            getVideoDuration,
-            getCombinedCount,
-            getCombinedFileSize,
-            getPhotoStatsChartData,
-            getVideoStatsChartData,
-            getCombinedStatsChartData,
 
             updateTeaser
         }]}>

@@ -4,6 +4,7 @@ import numbro from 'numbro';
 
 import { useCategoryContext } from '../contexts/CategoryContext';
 import { getAggFuncs } from './_funcs';
+import { useStatContext } from './contexts/StatContext';
 
 import Toolbar from './Toolbar';
 import Layout from '../components/layout/Layout';
@@ -15,7 +16,8 @@ import Treemap from './components/Treemap';
 
 const ViewCombined: Component = () => {
     const [search] = useSearchParams();
-    const [state, { getAllYears, getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useCategoryContext();
+    const [state, { getAllYears }] = useCategoryContext();
+    const [, { getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useStatContext();
     const getStats = () => getCombinedStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 

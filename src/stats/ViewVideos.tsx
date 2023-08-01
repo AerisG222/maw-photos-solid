@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { useSearchParams } from '@solidjs/router';
 import numbro from 'numbro';
 
-import { useCategoryContext } from '../contexts/CategoryContext';
+import { useStatContext } from './contexts/StatContext';
 import { getAggFuncs } from './_funcs';
 
 import Toolbar from './Toolbar';
@@ -15,7 +15,7 @@ import StatLayout from './components/StatLayout';
 
 const ViewVideos: Component = () => {
     const [search] = useSearchParams();
-    const [, { getVideoCategories, getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useCategoryContext();
+    const [, { getVideoCategories, getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useStatContext();
     const getVideoStats = () => getVideoStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
