@@ -2,13 +2,16 @@ import { ParentComponent, children, createEffect, createResource, createSignal, 
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { getRandomPhotos } from "../../_api/Photos";
+import { useMediaPageSettingsContext } from '../../contexts/settings/MediaPageSettingsContext';
 
 const MediaRandomLoader: ParentComponent = (props) => {
-    const [fetchTrigger, setFetchTrigger] = createSignal(createUniqueId());
-    const [mediaContext, { addItems }] = useMediaListContext();
+    const [fetchTrigger, setFetchTrigger] = createSignal({ id: createUniqueId(), count: 24 });
+    const [mediaSettings] = useMediaPageSettingsContext();
+    const [, { addItems, activeItemIsLast }] = useMediaListContext();
     const c = children(() => props.children);
+    let intervalId = -1;
 
-    const fetchRandomMedia = () => getRandomPhotos(mediaContext.items.length === 0 ? 24 : 1);
+    const fetchRandomMedia = (trigger) => getRandomPhotos(trigger.count);
 
     const [randomResource] = createResource(fetchTrigger, fetchRandomMedia);
 
@@ -18,10 +21,22 @@ const MediaRandomLoader: ParentComponent = (props) => {
         }
     });
 
-    const intervalId = setInterval(
-        () => setFetchTrigger(createUniqueId()),
-        20000
-    );
+    createEffect(() => {
+        if(intervalId !== -1) {
+            clearInterval(intervalId);
+        }
+
+        intervalId = setInterval(
+            () => setFetchTrigger({ id: createUniqueId(), count: 1 }),
+            mediaSettings.slideshowDisplayDurationSeconds * 1000
+        );
+    })
+
+    createEffect(() => {
+        if(activeItemIsLast()) {
+            setFetchTrigger({ id: createUniqueId(), count: 5 });
+        }
+    });
 
     onCleanup(() => {
         clearInterval(intervalId);

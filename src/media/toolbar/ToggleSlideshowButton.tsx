@@ -14,17 +14,13 @@ const ToggleSlideshowButton: Component = () => {
     const [routeContext] = useRouteDetailContext();
     const params = useParams();
 
-    const onToggleSlideshow = () => {
-        toggle();
-    };
-
     return (
         <Show when={showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
             <ToolbarButton
                 icon={state.isPlaying ? "i-ic-round-stop" : "i-ic-round-play-arrow"}
                 name="Start / Stop Slideshow (P)"
                 shortcutKeys={["p"]}
-                clickHandler={onToggleSlideshow}
+                clickHandler={toggle}
             />
         </Show>
     );

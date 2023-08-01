@@ -2,21 +2,19 @@ import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { useMediaListContext } from "./MediaListContext";
+import { useMediaPageSettingsContext } from '../../contexts/settings/MediaPageSettingsContext';
 
 export type SlideshowState = {
-    intervalSeconds: number,
     isPlaying: boolean;
 };
 
 const defaultSlideshowState = {
-    intervalSeconds: 2.5,
     isPlaying: false
 };
 
 export type SlideshowContextValue = [
     state: SlideshowState,
     actions: {
-        setSlideshowInterval: (interval: number) => void,
         start: () => void;
         stop: () => void;
         toggle: () => void;
@@ -26,12 +24,11 @@ export type SlideshowContextValue = [
 const SlideshowContext = createContext<SlideshowContextValue>();
 
 export const SlideshowProvider: ParentComponent = (props) => {
-    let id: number;
-
     const [state, setState] = createStore({...defaultSlideshowState});
     const [mediaList, {activeItemIsLast, moveFirst, moveNext}] = useMediaListContext();
+    const [mediaPageSettings] = useMediaPageSettingsContext();
 
-    const setSlideshowInterval = (interval: number) => setState({intervalSeconds: interval});
+    let intervalId: number;
 
     const start = () => {
         setState({isPlaying: true});
@@ -40,25 +37,26 @@ export const SlideshowProvider: ParentComponent = (props) => {
             moveFirst();
         }
 
-        if(id) {
-            clearInterval(id);
+        if(intervalId) {
+            clearInterval(intervalId);
         }
 
-        id = setInterval(() => {
+        intervalId = setInterval(() => {
             if(activeItemIsLast()) {
                 stop();
                 return;
             }
 
             moveNext();
-        }, state.intervalSeconds * 1000);
+        }, mediaPageSettings.slideshowDisplayDurationSeconds * 1000);
     };
 
     const stop = () => {
         setState({isPlaying: false});
 
-        if(id) {
-            clearInterval(id);
+        if(intervalId) {
+            clearInterval(intervalId);
+            intervalId = undefined;
         }
     };
 
@@ -72,7 +70,6 @@ export const SlideshowProvider: ParentComponent = (props) => {
 
     return (
         <SlideshowContext.Provider value={[state, {
-            setSlideshowInterval,
             start,
             stop,
             toggle
