@@ -25,7 +25,7 @@ const Layout: ParentComponent<Props> = (props) => {
                 {toolbar()}
             </Show>
 
-            <div class="overflow-y-auto" classList={{'px-2': layoutOptions.xPad}}>
+            <div class="overflow-y-auto scrollable" classList={{'px-2': layoutOptions.xPad}}>
                 <div classList={getMarginClass(props.margin)}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>

@@ -25,6 +25,7 @@
         "jsdom": "^22.1.0",
         "typescript": "^5.1.6",
         "unocss-preset-daisy": "^6.0.0",
+        "unocss-preset-scrollbar": "^0.2.1",
         "vite": "^4.4.7",
         "vite-plugin-solid": "^2.7.0",
         "vitest": "^0.33.0"

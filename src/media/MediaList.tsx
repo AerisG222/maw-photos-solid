@@ -35,7 +35,7 @@ const MediaList: Component<Props> = (props) => {
     };
 
     return (
-        <div class="flex flex-nowrap overflow-x-auto">
+        <div class="flex flex-nowrap overflow-x-auto scrollable">
             <For each={mediaList.items}>{ media =>
                 <Switch>
                     <Match when={media.kind === MediaTypePhoto}>

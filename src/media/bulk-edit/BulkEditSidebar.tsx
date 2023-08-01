@@ -32,7 +32,7 @@ const BulkEditSidebar: Component<Props> = (props) => {
 
     return (
         <div class="flex">
-            <div class="w-[500px] bg-secondary-content:6 border-l-1 border-l-secondary-content:10% overflow-y-auto overflow-x-hidden">
+            <div class="w-[500px] bg-secondary-content:6 border-l-1 border-l-secondary-content:10% overflow-y-auto overflow-x-hidden scrollable">
                 <For each={cards}>{ card =>
                     <InfoCard title={card.title} icon={card.icon}>
                         {card.component}
