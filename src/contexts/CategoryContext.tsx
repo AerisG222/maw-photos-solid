@@ -7,6 +7,7 @@ import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../_models
 import { FilterFunction, SortFunction } from '../_models/UtilityTypes';
 
 export type CategoryState = {
+    readonly initialized: boolean;
     readonly categories: Category[];
     readonly filters: FilterFunction[];
     readonly sort?: SortFunction;
@@ -14,6 +15,7 @@ export type CategoryState = {
 };
 
 export const defaultCategoryState: CategoryState = {
+    initialized: false,
     categories: [],
     filters: [],
     sort: undefined,
@@ -23,6 +25,8 @@ export const defaultCategoryState: CategoryState = {
 export type CategoryContextValue = [
     state: CategoryState,
     actions: {
+        setInitialized: (isInitialized: boolean) => void;
+
         clearCategories: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
@@ -43,7 +47,7 @@ export type CategoryContextValue = [
         setActiveCategory: (category: Category) => void;
         setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
 
-        // hmmm... move these to components or stat context?
+        // todo: move these to components or stat context?
         getPhotoCategories: () => PhotoCategory[],
         getPhotoCategoryYears: () => number[],
         getVideoCategories: () => VideoCategory[],
@@ -67,6 +71,10 @@ const CategoryContext = createContext<CategoryContextValue>();
 
 export const CategoryProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultCategoryState);
+
+    const setInitialized = (isInitialized: boolean) => {
+        setState({initialized: isInitialized});
+    };
 
     const clearCategories = () => {
         setState({ categories: [] });
@@ -217,6 +225,8 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     return (
         <CategoryContext.Provider value={[state, {
+            setInitialized,
+
             clearCategories,
             setCategories,
             addCategories,

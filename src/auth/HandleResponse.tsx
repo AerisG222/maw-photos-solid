@@ -1,22 +1,13 @@
-import { useNavigate } from '@solidjs/router';
-import { Component, createEffect } from "solid-js";
-import { completeAuth, isLoggedIn } from './auth';
+import { Component } from "solid-js";
+
+import { completeAuth } from './auth';
+
+import SuccessfulLoginMonitor from './SuccessfulLoginMonitor';
 
 const HandleResponse: Component = () => {
-    const navigate = useNavigate();
-
     completeAuth();
 
-    // todo: can we centralize this between here and login?
-    createEffect(() => {
-        if(isLoggedIn()) {
-            navigate('/');
-        } else {
-            // swallow
-        }
-    });
-
-    return <></>;
+    return <SuccessfulLoginMonitor />;
 };
 
 export default HandleResponse;

@@ -7,7 +7,7 @@ import { getCategoryService } from '../../_services/categories/CategoryServiceLo
 import { CategoryType } from '../../_models/CategoryType';
 
 const CategoryLoader: ParentComponent = (props) => {
-    const [, { addCategories }] = useCategoryContext();
+    const [, { setInitialized, addCategories }] = useCategoryContext();
 
     const resources = [];
 
@@ -20,12 +20,17 @@ const CategoryLoader: ParentComponent = (props) => {
 
     const c = children(() => props.children);
 
+    const checkInitializationStatus = () => {
+        setInitialized(resources.find(r => !r.processed) === undefined);
+    };
+
     createEffect(() => {
         resources
             .filter(r => r.res.state === "ready" && !r.processed)
             .map(r => {
                 r.processed = true;
                 addCategories(r.res());
+                checkInitializationStatus();
             });
     });
 
