@@ -14,26 +14,29 @@ import { ShortcutProvider } from './contexts/ShortcutContext';
 import App from './App';
 import CategoryLoader from './components/categories/CategoryLoader';
 import ShortcutDialog from './components/shortcuts/ShortcutDialog';
+import ThemeWrapper from './components/theme/Theme';
 
 render(() =>
-        <ShortcutProvider>
-        <AllSettingsProvider>
-        <CategoryProvider>
-        <CategoryLoader>
-        <FullscreenProvider>
-        <LayoutOptionsProvider>
-        <Router>
-            <RouteDetailProvider>
-                <ShortcutDialog />
-                <App />
-            </RouteDetailProvider>
-        </Router>
-        </LayoutOptionsProvider>
-        </FullscreenProvider>
-        </CategoryLoader>
-        </CategoryProvider>
-        </AllSettingsProvider>
-        </ShortcutProvider>
+    <ShortcutProvider>
+    <AllSettingsProvider>
+        <ThemeWrapper>
+            <CategoryProvider>
+            <CategoryLoader>
+            <FullscreenProvider>
+            <LayoutOptionsProvider>
+            <Router>
+                <RouteDetailProvider>
+                    <ShortcutDialog />
+                    <App />
+                </RouteDetailProvider>
+            </Router>
+            </LayoutOptionsProvider>
+            </FullscreenProvider>
+            </CategoryLoader>
+            </CategoryProvider>
+        </ThemeWrapper>
+    </AllSettingsProvider>
+    </ShortcutProvider>
     ,
     document.getElementById('root')
 );
