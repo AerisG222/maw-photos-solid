@@ -26,9 +26,9 @@ const themeDark: Record<string, string> = {
     'base-300':      '#292929',
     'base-content':  '#bbaaaa',
 
-    primary:         '#fb1729',
-    secondary:       '#efb300',
-    accent:          '#efb300',
+    primary:         '#c03113',
+    secondary:       '#e39f22',
+    accent:          '#e39f22',
     neutral:         '#292929',
 };
 
@@ -38,9 +38,9 @@ const themeLight: Record<string, string> = {
     'base-300':      '#f1f1f7',
     'base-content':  '#444444',
 
-    primary:         '#00acdc',
-    secondary:       '#d4669b',
-    accent:          '#d4669b',
+    primary:         '#eb4927',
+    secondary:       '#ffb842',
+    accent:          '#ffb842',
     neutral:         '#dfdfdf',
 };
 
