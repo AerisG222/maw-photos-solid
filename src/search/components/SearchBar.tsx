@@ -4,7 +4,7 @@ import { useSearchContext } from '../contexts/SearchContext';
 import { searchCategories } from '../../_api/Search';
 
 const SearchBar: Component = () => {
-    const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, clearActiveTerm, setCategories, clearSearchResults, setFoundCount }] = useSearchContext();
+    const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, setCategories, clearSearchResults, setFoundCount }] = useSearchContext();
     const [execute, setExecute] = createSignal(false);
 
     const executeSearch = () => {
