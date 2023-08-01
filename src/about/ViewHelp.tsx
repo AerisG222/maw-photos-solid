@@ -9,7 +9,7 @@ const ViewReleaseNotes: Component = () => {
 
             <For each={appRoutes.filter(x => x.icon)}>{ route =>
                 <div class="mb-4">
-                    <p>
+                    <p class="head3">
                         <span class={"text-6 " + route.icon} /> - {route.name}
                     </p>
                     <p>
@@ -19,7 +19,7 @@ const ViewReleaseNotes: Component = () => {
             }</For>
 
             <div class="my-8">
-                <span class="text-6">Keyboard Shortcuts</span>
+                <h3 class="head3">Keyboard Shortcuts</h3>
                 <p>
                     Throughout the app, toolbars and other controls can often be controlled via the keyboard
                     in addition to clicking the on screen buttons. To view the available keyboard shortcuts

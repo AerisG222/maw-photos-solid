@@ -5,7 +5,7 @@ const ViewApplication: Component = () => {
         <>
             <h1 class="head1">Release Notes</h1>
 
-            <h1 class="head1">Angular Version</h1>
+            <h1 class="head2">Angular Version</h1>
             <h3 class="head3"><span class="version">v2.0.7</span> : <span class="date">2023-01-08</span></h3>
             <p>Upgrade to Angular 15</p>
 

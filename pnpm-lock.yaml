@@ -46,6 +46,9 @@ devDependencies:
   '@unocss/preset-icons':
     specifier: ^0.54.1
     version: 0.54.1
+  '@unocss/preset-web-fonts':
+    specifier: ^0.54.1
+    version: 0.54.1
   '@unocss/reset':
     specifier: ^0.54.1
     version: 0.54.1
@@ -1285,6 +1288,13 @@ packages:
     resolution: {integrity: sha512-IWswKHaqD6A7baTQxdt01lkFKe7qDpt6OzRMRgrCF9fDV4gsD7mJdpQOGFE9HolDbEHJbxS2NObzXXZChI/u2w==}
     dependencies:
       '@unocss/core': 0.53.6
+      ofetch: 1.1.1
+    dev: true
+
+  /@unocss/preset-web-fonts@0.54.1:
+    resolution: {integrity: sha512-Z3R7KqF6WuIna0Wz5+KbwS7HXF1N+r/n31H4U+VphSdXcbeC8VLQxwgi+5fvxe1/aaQAyylHrVXPx9+bZfJ8NA==}
+    dependencies:
+      '@unocss/core': 0.54.1
       ofetch: 1.1.1
     dev: true
 

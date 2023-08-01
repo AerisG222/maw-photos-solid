@@ -12,7 +12,7 @@ const Select: Component<Props<string|number>> = (props) => {
     return(
         <div class="form-control max-w-16rem">
             <label class="label">
-                <span class="label-text color-secondary">{props.title}</span>
+                <span class="label-text color-secondary font-bold">{props.title}</span>
             </label>
             <select name="theme" class="select select-sm select-bordered min-w-12rem" value={props.selectedValue} onChange={evt => props.onChange(evt.currentTarget.value)}>
                 <For each={props.itemArray}>{ item =>

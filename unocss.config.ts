@@ -4,6 +4,7 @@ import { presetUno } from '@unocss/preset-uno';
 import { presetIcons } from '@unocss/preset-icons';
 import { presetDaisy } from 'unocss-preset-daisy';
 import { presetScrollbar } from 'unocss-preset-scrollbar';
+import presetWebFonts from '@unocss/preset-web-fonts';
 
 import { allRouteIcons } from './src/routes';
 import { getThemesForUno } from './src/_models/Theme';
@@ -20,6 +21,12 @@ export default defineConfig<Theme>({
             }
         }),
         presetUno(),
+        presetWebFonts({
+            provider: 'google',
+            fonts: {
+                sans: 'Nunito Sans'
+            }
+        }),
         presetDaisy({
             themes: getThemesForUno()
         }),
@@ -38,9 +45,9 @@ export default defineConfig<Theme>({
     ],
     shortcuts: [
         {
-            head1: 'font-bold text-xl mb-3 color-primary',
-            head2: 'font-bold text-lg mb-3 color-primary',
-            head3: 'font-bold text-lg mt-3 color-secondary',
+            head1: 'font-bold text-lg mt-2 mb-2 color-primary',
+            head2: 'font-bold mt-1 mb-1 color-primary',
+            head3: 'font-bold text-sm mt-1 mb-1 color-secondary',
             scrollable: 'scrollbar scrollbar-rounded scrollbar-track-color-[hsl(var(--b3))] scrollbar-thumb-color-[hsl(var(--bc))]'
         }
     ]

@@ -4,6 +4,7 @@ import { useCategoryListViewSettingsContext } from '../../contexts/settings/Cate
 import { Category } from '../../_models/Category';
 
 import CategoryListItem from '../../components/categories/CategoryListItem';
+import YearHeading from './YearHeading';
 
 type Props = {
     year: number;
@@ -15,8 +16,7 @@ const YearList: Component<Props> = (props) => {
 
     return(
         <>
-            <h3 class="h3 color-secondary">{props.year}</h3>
-            <div class="divider m-y-[.4rem] color-secondary" />
+            <YearHeading year={props.year} />
 
             <div>
                 <For each={props.categories}>{ category =>

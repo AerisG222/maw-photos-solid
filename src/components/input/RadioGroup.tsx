@@ -12,7 +12,7 @@ type Props<T> = {
 const RadioGroup: Component<Props<string|number>> = (props) => {
     return(
         <>
-            <h3 class="color-secondary">{props.title}</h3>
+            <h3 class="head3">{props.title}</h3>
             <For each={props.itemArray}>{ item =>
                 <div class="form-control">
                     <label class="label cursor-pointer justify-start">

@@ -26,7 +26,7 @@ const ViewMedia: Component = () => {
     const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = useMediaMapViewSettingsContext();
     const [detailSettings, {
         setShowBreadcrumbs: setDetailShowBreadcrumbs,
-        setShowPhotoList: setDetailShowPhotoList,
+        setShowMediaList: setDetailShowPhotoList,
         setThumbnailSize: setDetailThumbnailSize
     }] = useMediaDetailViewSettingsContext();
     const [gridSettings, {
@@ -61,7 +61,7 @@ const ViewMedia: Component = () => {
                     <Toggle title="Show Photo List" name="detailShowPhotoList" isSelected={detailSettings.showMediaList} onChange={setDetailShowPhotoList} />
                     <RadioGroup title="Thumbnail Size" groupName='detailThumbnails' itemArray={allThumbnailSizes} selectedValue={detailSettings.thumbnailSize} onChange={setDetailThumbnailSize} />
 
-                    <h3 class="mt-4 color-secondary">Info Panel</h3>
+                    <h3 class="head3 mt-4 color-secondary">Info Panel</h3>
                     <div>
                         <Checkbox title="Show Info Panel" name="showInfoPanel" isSelected={infoPanelSettings.expandInfoPanel} onChange={setExpandInfoPanel} />
                         <Checkbox title="Show Ratings Panel" name="showRatingsPanel" isSelected={infoPanelSettings.showRatings} onChange={setShowRatings} />

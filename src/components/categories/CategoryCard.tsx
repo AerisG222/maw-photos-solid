@@ -16,7 +16,7 @@ const CategoryCard: Component<Props> = (props) => {
         <A href={props.category.route}
             class="group border-1 rounded-1 bg-base-200 border-secondary:20% cursor-pointer hover:bg-base-300 hover:border-primary hover:color-primary">
             <Show when={props.showYears}>
-                <div class="text-center pb-1 max-w-[160px]">{props.category.year}</div>
+                <div class="text-center max-w-[160px]">{props.category.year}</div>
             </Show>
 
             <img
@@ -26,7 +26,7 @@ const CategoryCard: Component<Props> = (props) => {
                 loading="lazy" />
 
             <Show when={props.showTitles}>
-                <div class="text-center pb-1 max-w-[160px]">{props.category.name}</div>
+                <div class="text-center max-w-[160px]">{props.category.name}</div>
             </Show>
         </A>
     );

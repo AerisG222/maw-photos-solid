@@ -5,6 +5,7 @@ import { Category } from '../../_models/Category';
 import { defaultGridThumbnailSize } from '../../_models/ThumbnailSize';
 
 import CategoryCard from '../../components/categories/CategoryCard';
+import YearHeading from './YearHeading';
 
 type Props = {
     year: number;
@@ -16,8 +17,7 @@ const YearGrid: Component<Props> = (props) => {
 
     return(
         <>
-            <h3 class="h3 color-secondary">{props.year}</h3>
-            <div class="divider m-y-[.4rem]" />
+            <YearHeading year={props.year} />
 
             <div class="flex flex-gap-2 flex-wrap place-content-center mb-4">
                 <For each={props.categories}>{ category =>
