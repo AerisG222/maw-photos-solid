@@ -1,13 +1,13 @@
-import { Component, Show } from 'solid-js';
+import { Component, Show } from "solid-js";
 
-import { useSlideshowContext } from '../contexts/SlideshowContext';
-import { useParams } from '@solidjs/router';
-import { categoryTypes } from '../../_models/CategoryTypes';
-import { CategoryType } from '../../_models/CategoryType';
-import { Area, AreaCategories, AreaRandom } from '../../_models/AppRouteDefinition';
-import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
+import { useSlideshowContext } from "../contexts/SlideshowContext";
+import { useParams } from "@solidjs/router";
+import { categoryTypes } from "../../_models/CategoryTypes";
+import { CategoryType } from "../../_models/CategoryType";
+import { Area, AreaCategories, AreaRandom } from "../../_models/AppRouteDefinition";
+import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
 
-import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const ToggleSlideshowButton: Component = () => {
     const [state, { toggle }] = useSlideshowContext();
@@ -21,9 +21,9 @@ const ToggleSlideshowButton: Component = () => {
     return (
         <Show when={showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
             <ToolbarButton
-                icon={state.isPlaying ? 'i-ic-round-stop' : 'i-ic-round-play-arrow'}
+                icon={state.isPlaying ? "i-ic-round-stop" : "i-ic-round-play-arrow"}
                 name="Start / Stop Slideshow (P)"
-                shortcutKeys={['p']}
+                shortcutKeys={["p"]}
                 clickHandler={onToggleSlideshow}
             />
         </Show>

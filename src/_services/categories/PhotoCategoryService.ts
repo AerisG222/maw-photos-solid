@@ -1,8 +1,8 @@
-import { getPhotoCategories, getPhotos, setTeaser } from '../../_api/PhotoCategories';
-import { PhotoCategory } from '../../_models/Category';
-import { ICategoryService } from './ICategoryService';
-import { isLoggedIn } from '../../auth/auth';
-import { Photo } from '../../_models/Media';
+import { getPhotoCategories, getPhotos, setTeaser } from "../../_api/PhotoCategories";
+import { PhotoCategory } from "../../_models/Category";
+import { ICategoryService } from "./ICategoryService";
+import { isLoggedIn } from "../../auth/auth";
+import { Photo } from "../../_models/Media";
 
 export class PhotoCategoryService
     implements ICategoryService

@@ -1,4 +1,4 @@
-import numbro from 'numbro';
+import numbro from "numbro";
 
 const sizeAgg = d => d.totalSize;
 const sizeFmt = v => numbro(v).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true});
@@ -10,14 +10,14 @@ const durationAgg = d => d.totalDuration;
 const durationFmt = v => numbro(v).format({output: "time"});
 
 export const getAggFuncs = (mode: string) => {
-    if(mode === 'size') {
+    if(mode === "size") {
         return {
             agg: sizeAgg,
             fmt: sizeFmt
         }
     }
 
-    if(mode === 'duration') {
+    if(mode === "duration") {
         return {
             agg: durationAgg,
             fmt: durationFmt

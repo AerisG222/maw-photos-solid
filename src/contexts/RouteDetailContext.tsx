@@ -1,9 +1,9 @@
-import { useLocation } from '@solidjs/router';
-import { ParentComponent, createContext, createEffect, useContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { useLocation } from "@solidjs/router";
+import { ParentComponent, createContext, createEffect, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
 
-import { Area } from '../_models/AppRouteDefinition';
-import { appRoutes } from '../routes';
+import { Area } from "../_models/AppRouteDefinition";
+import { appRoutes } from "../routes";
 
 export type RouteDetailState = {
     readonly path?: string;

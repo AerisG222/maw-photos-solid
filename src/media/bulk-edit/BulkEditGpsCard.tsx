@@ -1,7 +1,7 @@
-import { Component, createSignal } from 'solid-js';
+import { Component, createSignal } from "solid-js";
 
-import { GpsOverride, isValidLatLng, parseGps } from '../../_models/utils/GpsUtils';
-import { GpsCoordinate } from '../../_models/Gps';
+import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
+import { GpsCoordinate } from "../../_models/Gps";
 
 type Props = {
     onSave: (gps: GpsCoordinate) => void;
@@ -12,7 +12,7 @@ const BulkEditGpsCard: Component<Props> = (props) => {
 
     const onPaste = (evt: ClipboardEvent) => {
         const clipboardData = evt.clipboardData;
-        const pastedText = clipboardData?.getData('text');
+        const pastedText = clipboardData?.getData("text");
 
         if (pastedText) {
             const latLng = parseGps(pastedText);
@@ -36,13 +36,13 @@ const BulkEditGpsCard: Component<Props> = (props) => {
         const nullOrEmpty = val === undefined || val === "";
 
         return {
-            'input-error': nullOrEmpty ? false : !isValidLatLng(val)
+            "input-error": nullOrEmpty ? false : !isValidLatLng(val)
         };
     };
 
     const getButtonClass = () => {
         return {
-            'btn-disabled': !isOverrideValid()
+            "btn-disabled": !isOverrideValid()
         }
     };
 

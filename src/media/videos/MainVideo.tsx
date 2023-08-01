@@ -1,7 +1,7 @@
-import { Component, createSignal, onMount } from 'solid-js';
+import { Component, createSignal, onMount } from "solid-js";
 
-import { Video } from '../../_models/Media';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { Video } from "../../_models/Media";
+import { useMediaListContext } from "../contexts/MediaListContext";
 
 type Props = {
     video: Video;
@@ -23,7 +23,7 @@ const MainVideo: Component<Props> = (props) => {
     return (
         <video
             class="h-100% w-100% center-block m-auto"
-            crossorigin='anonymous'  // this is required for the histogram (maybe only in dev?)
+            crossorigin="anonymous"  // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls
             src={getVideoUrl(props.video)}

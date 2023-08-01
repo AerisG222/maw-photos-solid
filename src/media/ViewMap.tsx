@@ -1,16 +1,16 @@
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { useNavigate, useParams } from '@solidjs/router';
+import { useNavigate, useParams } from "@solidjs/router";
 
-import { useMediaMapViewSettingsContext } from '../contexts/settings/MediaMapViewSettingsContext';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { getMediaPath, categoryMapRoute } from './_routes';
-import { CategoryType } from '../_models/CategoryType';
+import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
+import { getMediaPath, categoryMapRoute } from "./_routes";
+import { CategoryType } from "../_models/CategoryType";
 
-import MapToolbar from './ToolbarMap';
+import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
-import Layout from '../components/layout/Layout';
-import { getMediaTeaserUrl } from '../_models/Media';
+import Layout from "../components/layout/Layout";
+import { getMediaTeaserUrl } from "../_models/Media";
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
@@ -28,7 +28,7 @@ const ViewMap: Component = () => {
         center: { lat: 0, lng: 0 },
         fullscreenControl: true,
         mapTypeControl: true,
-        mapId: 'af11584565f27198',
+        mapId: "af11584565f27198",
         mapTypeId: state.mapType,
         zoom: state.zoom
     };
@@ -47,8 +47,8 @@ const ViewMap: Component = () => {
 
         if(el) {
             map = new Map(el, defaultMapOptions);
-            map.addListener('zoom_changed', () => setZoom(map.getZoom()));
-            map.addListener('maptypeid_changed', () => setMapType(map.getMapTypeId()));
+            map.addListener("zoom_changed", () => setZoom(map.getZoom()));
+            map.addListener("maptypeid_changed", () => setMapType(map.getMapTypeId()));
 
             infoWindow = new InfoWindow({ content: "" });
 
@@ -82,7 +82,7 @@ const ViewMap: Component = () => {
             map.panTo(pos);
 
             const marker = markers[mediaList.activeItem.id];
-            mapEvent.trigger(marker, 'click');
+            mapEvent.trigger(marker, "click");
         }
     };
 

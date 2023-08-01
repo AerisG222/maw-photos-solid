@@ -1,20 +1,20 @@
-import { lazy } from 'solid-js';
+import { lazy } from "solid-js";
 
-import { AppRouteDefinition, AreaAuth } from '../_models/AppRouteDefinition';
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { AppRouteDefinition, AreaAuth } from "../_models/AppRouteDefinition";
+import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/login";
 
 export const loginPage: AppRouteDefinition = {
-    path: '/',
+    path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./Login'))
+    component: lazy(() => import("./Login"))
 };
 
 export const handleResponse: AppRouteDefinition = {
-    path: '/handle-response',
+    path: "/handle-response",
     absolutePath: `${basePath}/handle-response`,
-    component: lazy(() => import('./HandleResponse'))
+    component: lazy(() => import("./HandleResponse"))
 };
 
 export const login: AppRouteDefinition = {

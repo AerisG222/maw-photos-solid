@@ -1,13 +1,13 @@
-import { lazy } from 'solid-js'
-import { AppRouteDefinition, AreaStats } from '../_models/AppRouteDefinition'
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js"
+import { AppRouteDefinition, AreaStats } from "../_models/AppRouteDefinition"
+import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/stats";
 
 export const statsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./StatsRedirect'))
+    component: lazy(() => import("./StatsRedirect"))
 };
 
 export const statsPhotos: AppRouteDefinition = {
@@ -15,7 +15,7 @@ export const statsPhotos: AppRouteDefinition = {
     name: "Photo Stats",
     path: "/photos",
     absolutePath: `${basePath}/photos`,
-    component: lazy(() => import('./ViewPhotos'))
+    component: lazy(() => import("./ViewPhotos"))
 };
 
 export const statsVideos: AppRouteDefinition = {
@@ -23,7 +23,7 @@ export const statsVideos: AppRouteDefinition = {
     name: "Video Stats",
     path: "/videos",
     absolutePath: `${basePath}/videos`,
-    component: lazy(() => import('./ViewVideos'))
+    component: lazy(() => import("./ViewVideos"))
 };
 
 export const statsCombined: AppRouteDefinition = {
@@ -31,7 +31,7 @@ export const statsCombined: AppRouteDefinition = {
     name: "Combined Stats",
     path: "/combined",
     absolutePath: `${basePath}/combined`,
-    component: lazy(() => import('./ViewCombined'))
+    component: lazy(() => import("./ViewCombined"))
 };
 
 export const stats: AppRouteDefinition = {
@@ -40,7 +40,7 @@ export const stats: AppRouteDefinition = {
     helpText: "View statistics for all photos and videos.",
     absolutePath: basePath,
     path: basePath,
-    component: lazy(() => import('./Stats')),
+    component: lazy(() => import("./Stats")),
     doesPathMatch: path => routeMatch(path, basePath, AreaStats),
     children: [
         statsRedirect,

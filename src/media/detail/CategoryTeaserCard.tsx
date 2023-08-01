@@ -1,9 +1,9 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useCategoryTeaserServiceContext } from '../contexts/CategoryTeaserServiceContext';
-import { getMediaTeaserUrl } from '../../_models/Media';
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { useCategoryTeaserServiceContext } from "../contexts/CategoryTeaserServiceContext";
+import { getMediaTeaserUrl } from "../../_models/Media";
 
 const CategoryTeaserCard: Component = () => {
     const [teaserServiceContext] = useCategoryTeaserServiceContext();

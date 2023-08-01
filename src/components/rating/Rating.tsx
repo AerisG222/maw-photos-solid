@@ -1,4 +1,4 @@
-import { Component, For, createEffect, createSignal } from 'solid-js';
+import { Component, For, createEffect, createSignal } from "solid-js";
 
 type Props = {
     editable: boolean;
@@ -13,9 +13,9 @@ const Rating: Component<Props> = (props) => {
 
     const getClassList = (star: boolean) => {
         return {
-            'cursor-pointer': props.editable,
-            'i-ic-round-star': star,
-            'i-ic-round-star-outline': !star,
+            "cursor-pointer": props.editable,
+            "i-ic-round-star": star,
+            "i-ic-round-star-outline": !star,
         }
     };
 

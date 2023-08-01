@@ -1,10 +1,10 @@
-import { Component, For, Match, Switch } from 'solid-js';
+import { Component, For, Match, Switch } from "solid-js";
 
-import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
-import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
-import PhotoLink from './photos/PhotoLink';
-import VideoLink from './videos/VideoLink';
+import PhotoLink from "./photos/PhotoLink";
+import VideoLink from "./videos/VideoLink";
 
 type Props = {
     items: Media[];

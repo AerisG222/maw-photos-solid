@@ -1,7 +1,7 @@
-import { ParentComponent, createContext, useContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { ParentComponent, createContext, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
 
-import { Category } from '../../_models/Category';
+import { Category } from "../../_models/Category";
 
 export type SearchState = {
     readonly term: string;

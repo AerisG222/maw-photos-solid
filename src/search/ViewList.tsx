@@ -1,14 +1,14 @@
 import { Component, For } from "solid-js";
 
-import { useSearchListViewSettingsContext } from '../contexts/settings/SearchListViewSettingsContext';
-import { useSearchContext } from './contexts/SearchContext';
+import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
+import { useSearchContext } from "./contexts/SearchContext";
 
-import Toolbar from './Toolbar';
-import ListToolbar from './ToolbarList';
-import Layout from '../components/layout/Layout';
-import SearchBar from './components/SearchBar';
-import CategoryListItem from '../components/categories/CategoryListItem';
-import SearchResultStatus from './components/SearchResultStatus';
+import Toolbar from "./Toolbar";
+import ListToolbar from "./ToolbarList";
+import Layout from "../components/layout/Layout";
+import SearchBar from "./components/SearchBar";
+import CategoryListItem from "../components/categories/CategoryListItem";
+import SearchResultStatus from "./components/SearchResultStatus";
 
 const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();

@@ -1,11 +1,11 @@
-import { ParentComponent, children, createEffect, onCleanup } from 'solid-js';
+import { ParentComponent, children, createEffect, onCleanup } from "solid-js";
 
-import { useCategoryContext } from '../contexts/CategoryContext';
-import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
-import { useCategoryTeaserServiceContext } from './contexts/CategoryTeaserServiceContext';
-import { photoMediaService } from '../_services/media/PhotoMediaService';
-import { videoMediaService } from '../_services/media/VideoMediaService';
-import { useParams } from '@solidjs/router';
+import { useCategoryContext } from "../contexts/CategoryContext";
+import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from "../_models/CategoryType";
+import { useCategoryTeaserServiceContext } from "./contexts/CategoryTeaserServiceContext";
+import { photoMediaService } from "../_services/media/PhotoMediaService";
+import { videoMediaService } from "../_services/media/VideoMediaService";
+import { useParams } from "@solidjs/router";
 
 const ActiveCategoryMonitor: ParentComponent = (props) => {
     const [categoryContext, { setActiveCategory, setActiveCategoryById }] = useCategoryContext();

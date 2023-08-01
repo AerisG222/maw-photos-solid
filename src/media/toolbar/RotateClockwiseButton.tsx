@@ -1,8 +1,8 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useVisualEffectsContext } from '../contexts/VisualEffectsContext';
+import { useVisualEffectsContext } from "../contexts/VisualEffectsContext";
 
-import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const RotateClockwiseButton: Component = () => {
     const [, { rotateClockwise }] = useVisualEffectsContext();
@@ -15,7 +15,7 @@ const RotateClockwiseButton: Component = () => {
         <ToolbarButton
             icon="i-ic-round-rotate-right"
             name="Rotate Right (D)"
-            shortcutKeys={['d']}
+            shortcutKeys={["d"]}
             clickHandler={onRotateClockwise}
         />
     );

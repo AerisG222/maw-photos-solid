@@ -1,45 +1,45 @@
-import { lazy } from 'solid-js'
-import { AppRouteDefinition, AreaSettings } from '../_models/AppRouteDefinition'
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js"
+import { AppRouteDefinition, AreaSettings } from "../_models/AppRouteDefinition"
+import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/settings";
 
 export const settingsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./SettingsRedirect'))
+    component: lazy(() => import("./SettingsRedirect"))
 };
 
 export const settingsApplication: AppRouteDefinition = {
     icon: "i-ic-round-home",
     name: "Application",
-    path: '/application',
+    path: "/application",
     absolutePath: `${basePath}/application`,
-    component: lazy(() => import('./ViewApplication'))
+    component: lazy(() => import("./ViewApplication"))
 };
 
 export const settingsCategories: AppRouteDefinition = {
     icon: "i-ic-round-collections",
     name: "Categories",
-    path: '/categories',
+    path: "/categories",
     absolutePath: `${basePath}/categories`,
-    component: lazy(() => import('./ViewCategories'))
+    component: lazy(() => import("./ViewCategories"))
 };
 
 export const settingsMedia: AppRouteDefinition = {
     icon: "i-ic-round-image",
     name: "Media",
-    path: '/media',
+    path: "/media",
     absolutePath: `${basePath}/media`,
-    component: lazy(() => import('./ViewMedia'))
+    component: lazy(() => import("./ViewMedia"))
 };
 
 export const settingsSearch: AppRouteDefinition = {
     icon: "i-ic-round-search",
     name: "Search",
-    path: '/search',
+    path: "/search",
     absolutePath: `${basePath}/search`,
-    component: lazy(() => import('./ViewSearch'))
+    component: lazy(() => import("./ViewSearch"))
 };
 
 export const settings: AppRouteDefinition = {
@@ -48,7 +48,7 @@ export const settings: AppRouteDefinition = {
     helpText: "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
     absolutePath: basePath,
     path: basePath,
-    component: lazy(() => import('./Settings')),
+    component: lazy(() => import("./Settings")),
     doesPathMatch: path => routeMatch(path, basePath, AreaSettings),
     children: [
         settingsRedirect,

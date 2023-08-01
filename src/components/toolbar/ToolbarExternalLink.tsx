@@ -1,4 +1,4 @@
-import { Component, mergeProps } from 'solid-js';
+import { Component, mergeProps } from "solid-js";
 
 type Props = {
     title: string;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 const ToolbarExternalLink: Component<Props> = (props) => {
-    props = mergeProps({textClassList: {'text-6': true}}, props);
+    props = mergeProps({textClassList: {"text-6": true}}, props);
 
     return (
         <a

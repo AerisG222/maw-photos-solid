@@ -1,25 +1,25 @@
-import { Component, Show } from 'solid-js';
-import { useParams } from '@solidjs/router';
+import { Component, Show } from "solid-js";
+import { useParams } from "@solidjs/router";
 
-import { useMediaDetailViewSettingsContext } from '../contexts/settings/MediaDetailViewSettingsContext';
-import { getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { CategoryTypePhotos } from '../_models/CategoryType';
+import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
+import { getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { CategoryTypePhotos } from "../_models/CategoryType";
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/layout/Divider';
-import ToggleSlideshowButton from './toolbar/ToggleSlideshowButton';
-import MovePreviousButton from './toolbar/MovePreviousButton';
-import MoveNextButton from './toolbar/MoveNextButton';
-import RotateCounterClockwiseButton from './toolbar/RotateCounterClockwiseButton';
-import RotateClockwiseButton from './toolbar/RotateClockwiseButton';
-import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
-import FlipVerticalButton from './toolbar/FlipVerticalButton';
-import DownloadCategoryButton from './toolbar/DownloadCategoryButton';
-import DownloadPhotoLowResButton from './toolbar/DownloadPhotoLowResButton';
-import DownloadPhotoMediumResButton from './toolbar/DownloadPhotoMediumResButton';
-import DownloadPhotoHighResButton from './toolbar/DownloadPhotoHighResButton';
-import DownloadPhotoHighUntouchedButton from './toolbar/DownloadPhotoHighUntouchedButton';
-import ShareButton from './toolbar/ShareButton';
+import ToolbarButton from "../components/toolbar/ToolbarButton";
+import Divider from "../components/layout/Divider";
+import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
+import MovePreviousButton from "./toolbar/MovePreviousButton";
+import MoveNextButton from "./toolbar/MoveNextButton";
+import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton";
+import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
+import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
+import FlipVerticalButton from "./toolbar/FlipVerticalButton";
+import DownloadCategoryButton from "./toolbar/DownloadCategoryButton";
+import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
+import DownloadPhotoMediumResButton from "./toolbar/DownloadPhotoMediumResButton";
+import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
+import DownloadPhotoHighUntouchedButton from "./toolbar/DownloadPhotoHighUntouchedButton";
+import ShareButton from "./toolbar/ShareButton";
 
 const DetailToolbar: Component = () => {
     const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
@@ -75,19 +75,19 @@ const DetailToolbar: Component = () => {
             <ToolbarButton
                 icon="i-ic-round-title"
                 name="Show / Hide Category Breadcrumbs (T)"
-                shortcutKeys={['t']}
+                shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
             />
             <ToolbarButton
                 icon="i-ic-round-remove-red-eye"
                 name="Show / Hide Photo List (L)"
-                shortcutKeys={['l']}
+                shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
             />
             <ToolbarButton
                 icon="i-mdi-image-size-select-large"
                 name="Toggle Photo List Thumbnail Size"
-                shortcutKeys={['s']}
+                shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
             />
         </>

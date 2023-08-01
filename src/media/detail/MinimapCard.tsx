@@ -1,6 +1,6 @@
-import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { useMediaInfoPanelSettingsContext } from '../../contexts/settings/MediaInfoPanelSettingsContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
+import { useMediaListContext } from "../contexts/MediaListContext";
 
 const MinimapCard: Component = () => {
     const [infoState, { setMinimapMapType, setMinimapZoom } ] = useMediaInfoPanelSettingsContext();
@@ -11,7 +11,7 @@ const MinimapCard: Component = () => {
         center: { lat: 0, lng: 0 },
         fullscreenControl: false,
         mapTypeControl: true,
-        mapId: 'dd8322a8b42d6496',
+        mapId: "dd8322a8b42d6496",
         mapTypeId: infoState.minimapMapType,
         zoom: infoState.minimapZoom
     };
@@ -27,8 +27,8 @@ const MinimapCard: Component = () => {
 
         if(el) {
             map = new Map(el, defaultMapOptions);
-            map.addListener('zoom_changed', () => setMinimapZoom(map.getZoom()));
-            map.addListener('maptypeid_changed', () => setMinimapMapType(map.getMapTypeId()));
+            map.addListener("zoom_changed", () => setMinimapZoom(map.getZoom()));
+            map.addListener("maptypeid_changed", () => setMinimapMapType(map.getMapTypeId()));
 
             marker = new AdvancedMarkerElement({map, position: defaultMapOptions.center});
 
@@ -46,9 +46,9 @@ const MinimapCard: Component = () => {
             map.setCenter(pos);
             marker.position = pos;
 
-            el.style.visibility = 'visible';
+            el.style.visibility = "visible";
         } else {
-            el.style.visibility = 'hidden';
+            el.style.visibility = "hidden";
             marker.position = null;
         }
     };

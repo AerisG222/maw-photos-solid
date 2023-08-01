@@ -1,10 +1,10 @@
-import { Component, For } from 'solid-js';
+import { Component, For } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from '../../contexts/settings/CategoryListViewSettingsContext';
-import { Category } from '../../_models/Category';
+import { useCategoryListViewSettingsContext } from "../../contexts/settings/CategoryListViewSettingsContext";
+import { Category } from "../../_models/Category";
 
-import CategoryListItem from '../../components/categories/CategoryListItem';
-import YearHeading from './YearHeading';
+import CategoryListItem from "../../components/categories/CategoryListItem";
+import YearHeading from "./YearHeading";
 
 type Props = {
     year: number;

@@ -2,7 +2,7 @@ import { Component, Show } from "solid-js";
 import { useRoutes } from "@solidjs/router";
 
 import { appRoutes } from "./routes";
-import { useFullscreenContext } from './contexts/FullscreenContext';
+import { useFullscreenContext } from "./contexts/FullscreenContext";
 
 import PrimaryNav from "./components/primary-nav/PrimaryNav";
 

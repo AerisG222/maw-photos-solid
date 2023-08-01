@@ -1,5 +1,5 @@
-import { ParentComponent, createContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { ParentComponent, createContext } from "solid-js";
+import { createStore } from "solid-js/store";
 
 export const buildServiceContext = <T,>() => {
     type ServiceState = {

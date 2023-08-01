@@ -1,10 +1,10 @@
 import { Component, For } from "solid-js";
 
-import { GpsCoordinate } from '../../_models/Gps';
+import { GpsCoordinate } from "../../_models/Gps";
 
-import InfoCard from '../../components/sidebar/InfoCard';
-import BulkEditFilterCard from './BulkEditFilterCard';
-import BulkEditGpsCard from './BulkEditGpsCard';
+import InfoCard from "../../components/sidebar/InfoCard";
+import BulkEditFilterCard from "./BulkEditFilterCard";
+import BulkEditGpsCard from "./BulkEditGpsCard";
 
 type Props = {
     onSave: (gps: GpsCoordinate) => void;

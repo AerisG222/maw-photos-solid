@@ -1,16 +1,16 @@
-import { lazy } from 'solid-js';
-import { AppRouteDefinition, AreaCategories } from '../_models/AppRouteDefinition';
-import { equalsIgnoreCase } from '../_models/utils/StringUtils';
-import { CategoryType } from '../_models/CategoryType';
-import { categoryTypes } from '../_models/CategoryTypes';
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js";
+import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
+import { equalsIgnoreCase } from "../_models/utils/StringUtils";
+import { CategoryType } from "../_models/CategoryType";
+import { categoryTypes } from "../_models/CategoryTypes";
+import { routeMatch } from "../_models/utils/RouteUtils";
 
-const basePath = '/categories';
+const basePath = "/categories";
 
 export const categoriesRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./CategoriesRedirect'))
+    component: lazy(() => import("./CategoriesRedirect"))
 };
 
 export const categoriesGrid: AppRouteDefinition = {
@@ -18,7 +18,7 @@ export const categoriesGrid: AppRouteDefinition = {
     name: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
-    component: lazy(() => import('./ViewGrid'))
+    component: lazy(() => import("./ViewGrid"))
 };
 
 export const categoriesList: AppRouteDefinition = {
@@ -26,7 +26,7 @@ export const categoriesList: AppRouteDefinition = {
     name: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
-    component: lazy(() => import('./ViewList'))
+    component: lazy(() => import("./ViewList"))
 };
 
 export const categories: AppRouteDefinition = {
@@ -35,7 +35,7 @@ export const categories: AppRouteDefinition = {
     helpText: "Browse by year and category.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import('./Categories')),
+    component: lazy(() => import("./Categories")),
     doesPathMatch: path => routeMatch(path, basePath, AreaCategories),
     children: [
         categoriesRedirect,
@@ -45,7 +45,7 @@ export const categories: AppRouteDefinition = {
 };
 
 export const getRouteForViewMode = (mode: string) => {
-    if(equalsIgnoreCase('list', mode)) {
+    if(equalsIgnoreCase("list", mode)) {
         return categoriesList;
     }
 

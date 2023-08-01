@@ -1,7 +1,7 @@
-import { lazy } from 'solid-js';
-import { AppRouteDefinition, AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
-import { CategoryType } from '../_models/CategoryType';
-import { buildPath, routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js";
+import { AppRouteDefinition, AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
+import { CategoryType } from "../_models/CategoryType";
+import { buildPath, routeMatch } from "../_models/utils/RouteUtils";
 
 export const MediaViewModeBulkEdit = "bulk-edit";
 export const MediaViewModeDetail = "detail";
@@ -28,59 +28,59 @@ const categoryBasePath = "/categories/:categoryType/:categoryId";
 const randomBasePath = "/random";
 
 const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
-    path: '/',
+    path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./Redirect'))
+    component: lazy(() => import("./Redirect"))
 });
 
 const buildGridRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-outline-apps",
     name: "Grid View",
     tooltip: "Grid View (G)",
-    shortcutKeys: ['g'],
+    shortcutKeys: ["g"],
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
-    component: lazy(() => import('./ViewGrid'))
+    component: lazy(() => import("./ViewGrid"))
 });
 
 const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-dashboard",
     name: "Detail View",
     tooltip: "Detail View (W)",
-    shortcutKeys: ['w'],
-    path: '/detail/:id?',
+    shortcutKeys: ["w"],
+    path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
-    component: lazy(() => import('./ViewDetail'))
+    component: lazy(() => import("./ViewDetail"))
 });
 
 const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
     tooltip: "Fullscreen View (F)",
-    shortcutKeys: ['f'],
-    path: '/fullscreen/:id?',
+    shortcutKeys: ["f"],
+    path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,
-    component: lazy(() => import('./ViewFullscreen'))
+    component: lazy(() => import("./ViewFullscreen"))
 });
 
 const buildMapRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-map",
     name: "Map View",
     tooltip: "Map View (Z)",
-    shortcutKeys: ['z'],
-    path: '/map/:id?',
+    shortcutKeys: ["z"],
+    path: "/map/:id?",
     absolutePath: `${basePath}/map/:id?`,
-    component: lazy(() => import('./ViewMap'))
+    component: lazy(() => import("./ViewMap"))
 });
 
 const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-collections",
     name: "Bulk Edit View",
     tooltip: "Bulk Edit View (B)",
-    shortcutKeys: ['b'],
-    path: '/bulk-edit',
+    shortcutKeys: ["b"],
+    path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
-    component: lazy(() => import('./ViewBulkEdit'))
+    component: lazy(() => import("./ViewBulkEdit"))
 });
 
 const categoryRedirectRoute = buildRedirectRoute(categoryBasePath);
@@ -93,7 +93,7 @@ export const categoryBulkEditRoute = buildBulkEditRoute(categoryBasePath);
 export const categoryMediaRoutes: AppRouteDefinition = {
     path: categoryBasePath,
     absolutePath: categoryBasePath,
-    component: lazy(() => import('./MediaRoot')),
+    component: lazy(() => import("./MediaRoot")),
     doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [
         categoryRedirectRoute,
@@ -116,7 +116,7 @@ export const randomMediaRoutes: AppRouteDefinition = {
     helpText: "Play though an unending list of random photos.",
     path: randomBasePath,
     absolutePath: randomBasePath,
-    component: lazy(() => import('./MediaRoot')),
+    component: lazy(() => import("./MediaRoot")),
     doesPathMatch: path => routeMatch(path, randomBasePath, AreaRandom),
     children: [
         randomRedirectRoute,

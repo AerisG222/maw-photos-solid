@@ -1,18 +1,18 @@
 import { Component } from "solid-js";
 
-import { useSearchPageSettingsContext } from '../contexts/settings/SearchPageSettingsContext';
-import { useSearchGridViewSettingsContext } from '../contexts/settings/SearchGridViewSettingsContext';
-import { useSearchListViewSettingsContext } from '../contexts/settings/SearchListViewSettingsContext';
-import { allThumbnailSizes } from '../_models/ThumbnailSize';
-import { allMargins } from '../_models/Margin';
-import { allCategoryViewModes } from '../_models/CategoryViewMode';
+import { useSearchPageSettingsContext } from "../contexts/settings/SearchPageSettingsContext";
+import { useSearchGridViewSettingsContext } from "../contexts/settings/SearchGridViewSettingsContext";
+import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
+import { allThumbnailSizes } from "../_models/ThumbnailSize";
+import { allMargins } from "../_models/Margin";
+import { allCategoryViewModes } from "../_models/CategoryViewMode";
 
-import Panel from './components/Panel';
-import PanelContainer from './components/PanelContainer';
-import RadioGroup from '../components/input/RadioGroup';
-import Toolbar from './Toolbar';
-import Toggle from '../components/input/Toggle';
-import Layout from '../components/layout/Layout';
+import Panel from "./components/Panel";
+import PanelContainer from "./components/PanelContainer";
+import RadioGroup from "../components/input/RadioGroup";
+import Toolbar from "./Toolbar";
+import Toggle from "../components/input/Toggle";
+import Layout from "../components/layout/Layout";
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
@@ -28,19 +28,52 @@ const ViewSearch: Component = () => {
         <Layout toolbar={<Toolbar />} title="Search">
             <PanelContainer>
                 <Panel title="Search Page">
-                    <RadioGroup title="View Mode" groupName='pageViewMode' itemArray={allCategoryViewModes} selectedValue={pageSettings.viewMode} onChange={setViewMode} />
+                    <RadioGroup
+                        title="View Mode"
+                        groupName="pageViewMode"
+                        itemArray={allCategoryViewModes}
+                        selectedValue={pageSettings.viewMode}
+                        onChange={setViewMode} />
                 </Panel>
 
                 <Panel title="Grid View">
-                    <Toggle title="Show Category Titles" name="gridShowTitles" isSelected={gridSettings.showTitles} onChange={setGridShowTitles} />
-                    <Toggle title="Show Category Years" name="gridShowYears" isSelected={gridSettings.showYears} onChange={setGridShowYears} />
-                    <RadioGroup title="Margins" groupName='gridMargin' itemArray={allMargins} selectedValue={gridSettings.margin} onChange={setGridMargin} />
-                    <RadioGroup title="Thumbnail Size" groupName='gridThumbnails' itemArray={allThumbnailSizes} selectedValue={gridSettings.thumbnailSize} onChange={setGridThumbnailSize} />
+                    <Toggle
+                        title="Show Category Titles"
+                        name="gridShowTitles"
+                        isSelected={gridSettings.showTitles}
+                        onChange={setGridShowTitles} />
+                    <Toggle
+                        title="Show Category Years"
+                        name="gridShowYears"
+                        isSelected={gridSettings.showYears}
+                        onChange={setGridShowYears} />
+                    <RadioGroup
+                        title="Margins"
+                        groupName="gridMargin"
+                        itemArray={allMargins}
+                        selectedValue={gridSettings.margin}
+                        onChange={setGridMargin} />
+                    <RadioGroup
+                        title="Thumbnail Size"
+                        groupName="gridThumbnails"
+                        itemArray={allThumbnailSizes}
+                        selectedValue={gridSettings.thumbnailSize}
+                        onChange={setGridThumbnailSize} />
                 </Panel>
 
                 <Panel title="List View">
-                    <RadioGroup title="Margins" groupName='listMargin' itemArray={allMargins} selectedValue={listSettings.margin} onChange={setListMargin} />
-                    <RadioGroup title="Thumbnail Size" groupName='listThumbnails' itemArray={allThumbnailSizes} selectedValue={listSettings.thumbnailSize} onChange={setListThumbnailSize} />
+                    <RadioGroup
+                        title="Margins"
+                        groupName="listMargin"
+                        itemArray={allMargins}
+                        selectedValue={listSettings.margin}
+                        onChange={setListMargin} />
+                    <RadioGroup
+                        title="Thumbnail Size"
+                        groupName="listThumbnails"
+                        itemArray={allThumbnailSizes}
+                        selectedValue={listSettings.thumbnailSize}
+                        onChange={setListThumbnailSize} />
                 </Panel>
             </PanelContainer>
         </Layout>

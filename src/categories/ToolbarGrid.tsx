@@ -1,10 +1,10 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
-import { defaultGridThumbnailSize, getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { getNextMarginSize } from '../_models/Margin';
+import { useCategoryGridViewSettingsContext } from "../contexts/settings/CategoryGridViewSettingsContext";
+import { defaultGridThumbnailSize, getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { getNextMarginSize } from "../_models/Margin";
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
+import ToolbarButton from "../components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
     const [settings, { setShowTitles, setMargin, setThumbnailSize }] = useCategoryGridViewSettingsContext();
@@ -30,20 +30,20 @@ const GridToolbar: Component = () => {
             <ToolbarButton
                 icon="i-ic-round-title"
                 name="Show / Hide Category Titles (T)"
-                shortcutKeys={['t']}
+                shortcutKeys={["t"]}
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle Grid Thumbnail Size (S)"
-                shortcutKeys={['s']}
+                shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles}
             />
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
                 name="Toggle Category Margins (M)"
-                shortcutKeys={['m']}
+                shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />
         </>

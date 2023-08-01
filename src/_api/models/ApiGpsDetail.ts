@@ -1,4 +1,4 @@
-import { ApiGpsCoordinate } from './ApiGpsCoordinate';
+import { ApiGpsCoordinate } from "./ApiGpsCoordinate";
 
 export type ApiGpsDetail = {
     source: ApiGpsCoordinate;

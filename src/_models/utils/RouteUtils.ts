@@ -1,4 +1,4 @@
-import { AppRouteDefinition, Area, RouteMatch } from '../AppRouteDefinition';
+import { AppRouteDefinition, Area, RouteMatch } from "../AppRouteDefinition";
 
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     if(!routeParams) {
@@ -15,13 +15,13 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     }
 
     // remove params that may remain [this will remove all interior params]
-    path = path.replaceAll(/:.*?\//g, '');
+    path = path.replaceAll(/:.*?\//g, "");
 
     // remove params that may remain at the end of the path
-    path = path.replaceAll(/:.*\??/g, '');
+    path = path.replaceAll(/:.*\??/g, "");
 
     // do not end w/ trailing slash
-    if(path.endsWith('/')) {
+    if(path.endsWith("/")) {
         path = path.slice(0, -1);
     }
 
@@ -29,7 +29,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
 };
 
 const buildSearch = (routeSearch?: any) => {
-    let search = '';
+    let search = "";
 
     if(!routeSearch) {
         return search;
@@ -38,7 +38,7 @@ const buildSearch = (routeSearch?: any) => {
     let isFirst = true;
 
     for(let [key, value] of Object.entries(routeSearch)) {
-        search += isFirst ? '?' : '&'
+        search += isFirst ? "?" : "&"
         search += `${key}=${value}`;
         isFirst = false;
     }

@@ -1,14 +1,14 @@
-import { ParentComponent, batch, children, createEffect, onCleanup } from 'solid-js';
-import { useParams } from '@solidjs/router';
+import { ParentComponent, batch, children, createEffect, onCleanup } from "solid-js";
+import { useParams } from "@solidjs/router";
 
-import { useMediaListContext } from './contexts/MediaListContext';
-import { MediaTypePhoto, MediaTypeVideo } from '../_models/Media';
-import { photoMediaService } from '../_services/media/PhotoMediaService';
-import { videoMediaService } from '../_services/media/VideoMediaService';
-import { useRatingServiceContext } from './contexts/RatingServiceContext';
-import { useExifServiceContext } from './contexts/ExifServiceContext';
-import { useCommentServiceContext } from './contexts/CommentServiceContext';
-import { useMetadataEditServiceContext } from './contexts/MetadataEditServiceContext';
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { MediaTypePhoto, MediaTypeVideo } from "../_models/Media";
+import { photoMediaService } from "../_services/media/PhotoMediaService";
+import { videoMediaService } from "../_services/media/VideoMediaService";
+import { useRatingServiceContext } from "./contexts/RatingServiceContext";
+import { useExifServiceContext } from "./contexts/ExifServiceContext";
+import { useCommentServiceContext } from "./contexts/CommentServiceContext";
+import { useMetadataEditServiceContext } from "./contexts/MetadataEditServiceContext";
 
 const ActiveMediaMonitor: ParentComponent = (props) => {
     const params = useParams();

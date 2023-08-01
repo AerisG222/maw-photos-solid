@@ -1,4 +1,4 @@
-import { accessToken } from '../auth/auth';
+import { accessToken } from "../auth/auth";
 
 const buildAbsoluteUrl = (relativeUrl: string): string =>
     `${import.meta.env.VITE_API_URI}/${relativeUrl}`;
@@ -6,16 +6,16 @@ const buildAbsoluteUrl = (relativeUrl: string): string =>
 export const queryMawApi = async <T>(relativeUrl: string, content?: any) => {
     relativeUrl = content ? `${relativeUrl}?${getQueryParams(content)}` : relativeUrl;
 
-    var result = await callMawApi('GET', relativeUrl, undefined);
+    var result = await callMawApi("GET", relativeUrl, undefined);
 
     return result ? result.json() as T : undefined;
 };
 
 export const patchMawApi = (relativeUrl: string, content: any) =>
-    callMawApi('PATCH', relativeUrl, content);
+    callMawApi("PATCH", relativeUrl, content);
 
 export const postMawApi = (relativeUrl: string, content: any) =>
-    callMawApi('POST', relativeUrl, content);
+    callMawApi("POST", relativeUrl, content);
 
 const getQueryParams = (content: any) => new URLSearchParams(content).toString();
 
@@ -29,7 +29,7 @@ const callMawApi = async (method: string, relativeUrl: string, content: any) => 
             body: content ? JSON.stringify(content) : null,
             headers: {
                 "Authorization": `Bearer ${accessToken()}`,
-                "Content-Type": 'application/json'
+                "Content-Type": "application/json"
             },
             referrerPolicy: "no-referrer"
         }

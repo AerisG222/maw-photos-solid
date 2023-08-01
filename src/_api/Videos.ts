@@ -1,9 +1,9 @@
-import { ApiCollection } from './models/ApiCollection';
-import { Comment } from './models/Comment';
-import { ApiGpsCoordinate } from './models/ApiGpsCoordinate';
-import { ApiGpsDetail } from './models/ApiGpsDetail';
-import { Rating } from './models/Rating';
-import { patchMawApi, postMawApi, queryMawApi } from './Shared';
+import { ApiCollection } from "./models/ApiCollection";
+import { Comment } from "./models/Comment";
+import { ApiGpsCoordinate } from "./models/ApiGpsCoordinate";
+import { ApiGpsDetail } from "./models/ApiGpsDetail";
+import { Rating } from "./models/Rating";
+import { patchMawApi, postMawApi, queryMawApi } from "./Shared";
 
 export const getRating = (videoId: number) =>
     queryMawApi<Rating>(`videos/${videoId}/rating`);

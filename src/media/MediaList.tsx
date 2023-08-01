@@ -1,12 +1,12 @@
-import { Component, For, Match, Switch } from 'solid-js';
+import { Component, For, Match, Switch } from "solid-js";
 
-import { useMediaListContext } from './contexts/MediaListContext';
-import { ThumbnailSizeIdType } from '../_models/ThumbnailSize';
-import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from '../_models/Media';
-import { AppRouteDefinition } from '../_models/AppRouteDefinition';
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
+import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
-import PhotoLink from './photos/PhotoLink';
-import VideoLink from './videos/VideoLink';
+import PhotoLink from "./photos/PhotoLink";
+import VideoLink from "./videos/VideoLink";
 
 type Props = {
     thumbnailSize: ThumbnailSizeIdType;
@@ -29,7 +29,7 @@ const MediaList: Component<Props> = (props) => {
                     el.offsetLeft - startingOffset - parentMiddle + imgMiddle
                 );
 
-                parent.scrollTo({ top: 0, left: newLeft, behavior: 'smooth' });
+                parent.scrollTo({ top: 0, left: newLeft, behavior: "smooth" });
             }
         }
     };

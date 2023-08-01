@@ -1,9 +1,9 @@
-import { Component, Suspense, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, Suspense, createEffect, createResource, createSignal } from "solid-js";
 
-import { useRatingServiceContext } from '../contexts/RatingServiceContext';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useRatingServiceContext } from "../contexts/RatingServiceContext";
+import { useMediaListContext } from "../contexts/MediaListContext";
 
-import Rating from '../../components/rating/Rating';
+import Rating from "../../components/rating/Rating";
 
 const RatingsCard: Component = () => {
     const [mediaList] = useMediaListContext();

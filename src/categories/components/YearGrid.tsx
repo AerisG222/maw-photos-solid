@@ -1,11 +1,11 @@
-import { Component, For } from 'solid-js';
+import { Component, For } from "solid-js";
 
-import { useCategoryGridViewSettingsContext } from '../../contexts/settings/CategoryGridViewSettingsContext';
-import { Category } from '../../_models/Category';
-import { defaultGridThumbnailSize } from '../../_models/ThumbnailSize';
+import { useCategoryGridViewSettingsContext } from "../../contexts/settings/CategoryGridViewSettingsContext";
+import { Category } from "../../_models/Category";
+import { defaultGridThumbnailSize } from "../../_models/ThumbnailSize";
 
-import CategoryCard from '../../components/categories/CategoryCard';
-import YearHeading from './YearHeading';
+import CategoryCard from "../../components/categories/CategoryCard";
+import YearHeading from "./YearHeading";
 
 type Props = {
     year: number;

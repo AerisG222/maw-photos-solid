@@ -1,4 +1,4 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 export type FullscreenState = {

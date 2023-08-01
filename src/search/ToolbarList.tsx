@@ -1,10 +1,10 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useSearchListViewSettingsContext } from '../contexts/settings/SearchListViewSettingsContext';
-import { getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { getNextMarginSize } from '../_models/Margin';
+import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
+import { getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { getNextMarginSize } from "../_models/Margin";
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
+import ToolbarButton from "../components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
     const [settingsContext, { setMargin, setThumbnailSize }] = useSearchListViewSettingsContext();

@@ -1,6 +1,6 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useSearchContext } from '../contexts/SearchContext';
+import { useSearchContext } from "../contexts/SearchContext";
 
 const SearchCount: Component = () => {
     const [searchContext] = useSearchContext();

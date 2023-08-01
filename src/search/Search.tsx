@@ -1,9 +1,9 @@
-import { Outlet } from '@solidjs/router';
+import { Outlet } from "@solidjs/router";
 import { Component } from "solid-js";
 
-import { SearchProvider } from './contexts/SearchContext';
+import { SearchProvider } from "./contexts/SearchContext";
 
-import AuthGuard from '../components/auth/AuthGuard';
+import AuthGuard from "../components/auth/AuthGuard";
 
 const Search: Component = () => {
     return (

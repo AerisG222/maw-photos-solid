@@ -1,6 +1,6 @@
-import { CategoryType } from './CategoryType';
-import { KeyValuePair } from './KeyValuePair';
-import { MediaView, MediaViewAll } from '../media/_routes';
+import { CategoryType } from "./CategoryType";
+import { KeyValuePair } from "./KeyValuePair";
+import { MediaView, MediaViewAll } from "../media/_routes";
 
 export type CategoryTypeInfo = {
     nameSingular: string;
@@ -32,7 +32,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
 };
 
 export const categoryTypesOptions: KeyValuePair<string>[] = [
-    {id: 'all', name: 'All'},
+    {id: "all", name: "All"},
     ...Object.entries(categoryTypes).map(([key, value]) => ({id: key, name: value.namePlural}))
 ];
 

@@ -7,5 +7,5 @@ export const equalsIgnoreCase = (a: string, b: string): boolean => {
         return false;
     }
 
-    return a.localeCompare(b, undefined, { sensitivity: 'accent' }) === 0;
+    return a.localeCompare(b, undefined, { sensitivity: "accent" }) === 0;
 };

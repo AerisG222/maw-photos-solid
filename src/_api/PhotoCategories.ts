@@ -1,12 +1,12 @@
-import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from './models/ApiCollection';
-import { PhotoCategory as ApiPhotoCategory } from './models/PhotoCategory';
-import { Photo as ApiPhoto } from './models/Photo';
-import { PhotoCategory } from '../_models/Category';
-import { CategoryTypePhotos } from '../_models/CategoryType';
-import { getCategoryPath } from '../categories/_routes';
-import { toDomainPhoto } from './Photos';
-import { Photo } from '../_models/Media';
+import { patchMawApi, queryMawApi } from "./Shared";
+import { ApiCollection } from "./models/ApiCollection";
+import { PhotoCategory as ApiPhotoCategory } from "./models/PhotoCategory";
+import { Photo as ApiPhoto } from "./models/Photo";
+import { PhotoCategory } from "../_models/Category";
+import { CategoryTypePhotos } from "../_models/CategoryType";
+import { getCategoryPath } from "../categories/_routes";
+import { toDomainPhoto } from "./Photos";
+import { Photo } from "../_models/Media";
 
 export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
     const apiCategories = await internalGetPhotoCategories();
@@ -35,7 +35,7 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
 };
 
 const internalGetPhotoCategories = () =>
-    queryMawApi<ApiCollection<ApiPhotoCategory>>('photo-categories');
+    queryMawApi<ApiCollection<ApiPhotoCategory>>("photo-categories");
 
 const internalGetPhotos = (categoryId: number) =>
     queryMawApi<ApiCollection<ApiPhoto>>(`photo-categories/${categoryId}/photos`);

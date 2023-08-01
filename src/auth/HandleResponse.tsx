@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-import { completeAuth } from './auth';
+import { completeAuth } from "./auth";
 
-import SuccessfulLoginMonitor from './SuccessfulLoginMonitor';
+import SuccessfulLoginMonitor from "./SuccessfulLoginMonitor";
 
 const HandleResponse: Component = () => {
     completeAuth();

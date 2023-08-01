@@ -1,8 +1,8 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useVisualEffectsContext } from '../contexts/VisualEffectsContext';
+import { useVisualEffectsContext } from "../contexts/VisualEffectsContext";
 
-import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const FlipVerticalButton: Component = () => {
     const [, { flipVertical }] = useVisualEffectsContext();

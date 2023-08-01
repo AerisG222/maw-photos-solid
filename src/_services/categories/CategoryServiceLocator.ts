@@ -1,7 +1,7 @@
-import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../../_models/CategoryType';
-import { ICategoryService } from './ICategoryService';
-import { photoCategoryService } from './PhotoCategoryService';
-import { videoCategoryService } from './VideoCategoryService';
+import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from "../../_models/CategoryType";
+import { ICategoryService } from "./ICategoryService";
+import { photoCategoryService } from "./PhotoCategoryService";
+import { videoCategoryService } from "./VideoCategoryService";
 
 export const getCategoryService = (type: CategoryType): ICategoryService => {
     switch(type) {

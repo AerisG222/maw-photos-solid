@@ -1,18 +1,18 @@
 import { Component } from "solid-js";
-import { useSearchParams } from '@solidjs/router';
-import numbro from 'numbro';
+import { useSearchParams } from "@solidjs/router";
+import numbro from "numbro";
 
-import { useCategoryContext } from '../contexts/CategoryContext';
-import { getAggFuncs } from './_funcs';
-import { useStatContext } from './contexts/StatContext';
+import { useCategoryContext } from "../contexts/CategoryContext";
+import { getAggFuncs } from "./_funcs";
+import { useStatContext } from "./contexts/StatContext";
 
-import Toolbar from './Toolbar';
-import Layout from '../components/layout/Layout';
-import StatBar from './components/StatBar';
-import StatBox from './components/StatBox';
-import CombinedToolbar from './ToolbarCombined';
-import StatLayout from './components/StatLayout';
-import Treemap from './components/Treemap';
+import Toolbar from "./Toolbar";
+import Layout from "../components/layout/Layout";
+import StatBar from "./components/StatBar";
+import StatBox from "./components/StatBox";
+import CombinedToolbar from "./ToolbarCombined";
+import StatLayout from "./components/StatLayout";
+import Treemap from "./components/Treemap";
 
 const ViewCombined: Component = () => {
     const [search] = useSearchParams();
@@ -37,7 +37,7 @@ const ViewCombined: Component = () => {
                     </StatBar>
                 </div>
                 <div class="m-y-2">
-                    <Treemap seriesName='Combined' data={getStats()} formatFunc={getFmtFunc()} />
+                    <Treemap seriesName="Combined" data={getStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>
         </Layout>

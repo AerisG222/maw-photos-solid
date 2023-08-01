@@ -1,9 +1,9 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { defaultMargin, MarginIdType } from '../../_models/Margin';
-import { defaultListThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
-import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson,saveJson } from './_storage';
+import { defaultMargin, MarginIdType } from "../../_models/Margin";
+import { defaultListThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson,saveJson } from "./_storage";
 
 export type CategoryListViewSettingsState = {
     readonly margin: MarginIdType;

@@ -1,8 +1,8 @@
-import { VideoCategory } from '../../_models/Category';
-import { ICategoryService } from './ICategoryService';
-import { isLoggedIn } from '../../auth/auth';
-import { getVideoCategories, getVideos, setTeaser } from '../../_api/VideoCategories';
-import { Video } from '../../_models/Media';
+import { VideoCategory } from "../../_models/Category";
+import { ICategoryService } from "./ICategoryService";
+import { isLoggedIn } from "../../auth/auth";
+import { getVideoCategories, getVideos, setTeaser } from "../../_api/VideoCategories";
+import { Video } from "../../_models/Media";
 
 class VideoCategoryService
     implements ICategoryService

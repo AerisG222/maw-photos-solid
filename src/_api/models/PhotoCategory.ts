@@ -1,4 +1,4 @@
-import { MultimediaAsset } from './MultimediaAsset';
+import { MultimediaAsset } from "./MultimediaAsset";
 
 export type PhotoCategory = {
     id: number;

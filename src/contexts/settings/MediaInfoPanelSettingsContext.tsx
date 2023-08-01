@@ -1,9 +1,9 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { defaultMapType, MapTypeIdType } from '../../_models/MapType';
-import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from './_storage';
-import { defaultMapZoomLevel, MapZoomLevelIdType } from '../../_models/MapZoomLevel';
+import { defaultMapType, MapTypeIdType } from "../../_models/MapType";
+import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from "./_storage";
+import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
 
 export type MediaInfoPanelSettingsState = {
     expandInfoPanel: boolean;

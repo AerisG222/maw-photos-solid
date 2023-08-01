@@ -1,6 +1,6 @@
-import { Component, createEffect } from 'solid-js';
-import * as Highcharts from 'highcharts';
-import HighchartsTreemap from 'highcharts/modules/treemap';
+import { Component, createEffect } from "solid-js";
+import * as Highcharts from "highcharts";
+import HighchartsTreemap from "highcharts/modules/treemap";
 
 type Props = {
     data: any;
@@ -16,7 +16,7 @@ const Treemap: Component<Props> = (props) => {
     const labelFormat = (x: Highcharts.PointLabelObject) => `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
 
     createEffect(() =>{
-        Highcharts.chart('chart', {
+        Highcharts.chart("chart", {
             accessibility: {
                 enabled: false,
             },
@@ -24,13 +24,13 @@ const Treemap: Component<Props> = (props) => {
             chart: {
                 height: el.parentElement.clientHeight,
                 margin: 0,
-                backgroundColor: '#333'
+                backgroundColor: "#333"
             },
             plotOptions: {
                 treemap: {
                     events: {
                         setRootNode: function(evt) {
-                            if(evt.newRootId === '') {
+                            if(evt.newRootId === "") {
                                 evt.series.options.levels[0].dataLabels.enabled = true;
                                 evt.series.options.levels[1].dataLabels.enabled = false;
                             } else {
@@ -46,35 +46,35 @@ const Treemap: Component<Props> = (props) => {
             },
             series: [{
                 name: props.seriesName,
-                type: 'treemap',
-                layoutAlgorithm: 'squarified',
+                type: "treemap",
+                layoutAlgorithm: "squarified",
                 borderWidth: 1,
-                borderColor: '#ffffff22',
+                borderColor: "#ffffff22",
                 dataLabels: {
                     enabled: true,
                     style: {
-                        fontSize: '14px',
-                        fontWeight: 'normal',
-                        textOutline: 'none',
+                        fontSize: "14px",
+                        fontWeight: "normal",
+                        textOutline: "none",
                     }
                 },
                 levels: [{
                     level: 1,
                     dataLabels: {
                         enabled: true,
-                        align: 'left',
-                        verticalAlign: 'top',
+                        align: "left",
+                        verticalAlign: "top",
                         formatter: function () { return labelFormat(this); },
                     }
                 }, {
                     level: 2,
                     dataLabels: {
                         enabled: false,
-                        align: 'left',
-                        verticalAlign: 'top',
+                        align: "left",
+                        verticalAlign: "top",
                         formatter: function () { return labelFormat(this); },
                         style: {
-                            fontSize: '11px',
+                            fontSize: "11px",
                         }
                     }
                 }],

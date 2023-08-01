@@ -1,7 +1,7 @@
-import { ParentComponent, children, createEffect, createResource, createSignal, createUniqueId, onCleanup } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource, createSignal, createUniqueId, onCleanup } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { getRandomPhotos } from '../../_api/Photos';
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { getRandomPhotos } from "../../_api/Photos";
 
 const MediaRandomLoader: ParentComponent = (props) => {
     const [fetchTrigger, setFetchTrigger] = createSignal(createUniqueId());

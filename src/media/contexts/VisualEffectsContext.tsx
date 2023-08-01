@@ -1,4 +1,4 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 export type VisualEffectsState = {
@@ -110,10 +110,10 @@ export const VisualEffectsProvider: ParentComponent = (props) => {
         }
 
         if(style.length > 0) {
-            return `filter: ${style.join(' ')};`;
+            return `filter: ${style.join(" ")};`;
         }
 
-        return '';
+        return "";
     };
 
     const rotateClockwise = () => setState(s => ({...s, rotation: s.rotation + 90}));
@@ -129,18 +129,18 @@ export const VisualEffectsProvider: ParentComponent = (props) => {
         }
 
         if(state.flipHorizontal) {
-            style.push('scaleX(-1)')
+            style.push("scaleX(-1)")
         }
 
         if(state.flipVertical) {
-            style.push('scaleY(-1)')
+            style.push("scaleY(-1)")
         }
 
         if(style.length > 0) {
-            return `transform: ${style.join(' ')};`;
+            return `transform: ${style.join(" ")};`;
         }
 
-        return '';
+        return "";
     };
 
     return (

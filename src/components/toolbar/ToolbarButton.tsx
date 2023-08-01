@@ -1,6 +1,6 @@
-import { createShortcut } from '@solid-primitives/keyboard';
+import { createShortcut } from "@solid-primitives/keyboard";
 import { Component, createUniqueId, onCleanup } from "solid-js";
-import { useShortcutContext } from '../../contexts/ShortcutContext';
+import { useShortcutContext } from "../../contexts/ShortcutContext";
 
 type Props = {
     icon: string;

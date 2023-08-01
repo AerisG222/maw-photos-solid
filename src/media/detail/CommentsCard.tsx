@@ -1,7 +1,7 @@
-import { Component, For, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, For, createEffect, createResource, createSignal } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useCommentServiceContext } from '../contexts/CommentServiceContext';
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { useCommentServiceContext } from "../contexts/CommentServiceContext";
 
 const CommentsCard: Component = () => {
     const [fetchCommentSignal, setFetchCommentSignal] = createSignal({ media: undefined, service: undefined });

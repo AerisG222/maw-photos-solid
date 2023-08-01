@@ -1,9 +1,9 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { defaultMargin, MarginIdType } from '../../_models/Margin';
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from '../../_models/ThumbnailSize';
-import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from './_storage';
+import { defaultMargin, MarginIdType } from "../../_models/Margin";
+import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from "./_storage";
 
 export type SearchListViewSettingsState = {
     readonly margin: MarginIdType;

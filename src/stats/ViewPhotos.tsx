@@ -1,17 +1,17 @@
 import { Component } from "solid-js";
-import { useSearchParams } from '@solidjs/router';
-import numbro from 'numbro';
+import { useSearchParams } from "@solidjs/router";
+import numbro from "numbro";
 
-import { useStatContext } from './contexts/StatContext';
-import { getAggFuncs } from './_funcs';
+import { useStatContext } from "./contexts/StatContext";
+import { getAggFuncs } from "./_funcs";
 
-import Toolbar from './Toolbar';
-import Layout from '../components/layout/Layout';
-import StatBox from './components/StatBox';
-import StatBar from './components/StatBar';
-import ToolbarPhotos from './ToolbarPhotos';
-import Treemap from './components/Treemap';
-import StatLayout from './components/StatLayout';
+import Toolbar from "./Toolbar";
+import Layout from "../components/layout/Layout";
+import StatBox from "./components/StatBox";
+import StatBar from "./components/StatBar";
+import ToolbarPhotos from "./ToolbarPhotos";
+import Treemap from "./components/Treemap";
+import StatLayout from "./components/StatLayout";
 
 const ViewPhotos: Component = () => {
     const [search] = useSearchParams();
@@ -35,7 +35,7 @@ const ViewPhotos: Component = () => {
                     </StatBar>
                 </div>
                 <div class="m-y-2">
-                    <Treemap seriesName='Photos' data={getPhotoStats()} formatFunc={getFmtFunc()} />
+                    <Treemap seriesName="Photos" data={getPhotoStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>
         </Layout>

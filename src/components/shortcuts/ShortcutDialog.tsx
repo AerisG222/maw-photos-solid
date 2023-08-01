@@ -1,9 +1,9 @@
-import { Component, For, createEffect, createSignal, createUniqueId, onCleanup, onMount } from 'solid-js';
+import { Component, For, createEffect, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
 
-import { useShortcutContext } from '../../contexts/ShortcutContext';
-import { createShortcut } from '@solid-primitives/keyboard';
+import { useShortcutContext } from "../../contexts/ShortcutContext";
+import { createShortcut } from "@solid-primitives/keyboard";
 
-import ShortcutKey from './ShortcutKey';
+import ShortcutKey from "./ShortcutKey";
 
 const ShortcutDialog: Component = () => {
     const [dialog, setDialog] = createSignal<HTMLDialogElement>();
@@ -24,7 +24,7 @@ const ShortcutDialog: Component = () => {
         addShortcut({
             id: id,
             shortcut: ["?"],
-            description: 'Show this help dialog'
+            description: "Show this help dialog"
         });
 
         createShortcut(["Shift", "?"], () => { setShowDialog(true); });

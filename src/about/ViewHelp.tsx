@@ -1,6 +1,6 @@
 import { Component, For } from "solid-js";
 
-import { appRoutes } from '../routes';
+import { appRoutes } from "../routes";
 
 const ViewReleaseNotes: Component = () => {
     return (

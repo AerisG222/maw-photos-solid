@@ -1,8 +1,8 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from './_storage';
-import { CategoryType } from '../../_models/CategoryType';
+import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from "./_storage";
+import { CategoryType } from "../../_models/CategoryType";
 
 export type CategoryFilterSettingsState = {
     readonly typeFilter?: CategoryType;

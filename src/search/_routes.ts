@@ -1,14 +1,14 @@
-import { lazy } from 'solid-js'
-import { AppRouteDefinition, AreaSearch } from '../_models/AppRouteDefinition'
-import { equalsIgnoreCase } from '../_models/utils/StringUtils'
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js"
+import { AppRouteDefinition, AreaSearch } from "../_models/AppRouteDefinition"
+import { equalsIgnoreCase } from "../_models/utils/StringUtils"
+import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/search";
 
 export const searchRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./SearchRedirect'))
+    component: lazy(() => import("./SearchRedirect"))
 };
 
 export const searchGrid: AppRouteDefinition = {
@@ -16,7 +16,7 @@ export const searchGrid: AppRouteDefinition = {
     name: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
-    component: lazy(() => import('./ViewGrid'))
+    component: lazy(() => import("./ViewGrid"))
 };
 
 export const searchList: AppRouteDefinition = {
@@ -24,7 +24,7 @@ export const searchList: AppRouteDefinition = {
     name: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
-    component: lazy(() => import('./ViewList'))
+    component: lazy(() => import("./ViewList"))
 };
 
 export const search: AppRouteDefinition = {
@@ -33,7 +33,7 @@ export const search: AppRouteDefinition = {
     helpText: "Search photo and video categories.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import('./Search')),
+    component: lazy(() => import("./Search")),
     doesPathMatch: path => routeMatch(path, basePath, AreaSearch),
     children: [
         searchRedirect,
@@ -43,11 +43,11 @@ export const search: AppRouteDefinition = {
 };
 
 export const getPathForViewMode = (mode: string): string => {
-    if(equalsIgnoreCase('grid', mode)) {
+    if(equalsIgnoreCase("grid", mode)) {
         return searchGrid.absolutePath;
     }
 
-    if(equalsIgnoreCase('list', mode)) {
+    if(equalsIgnoreCase("list", mode)) {
         return searchList.absolutePath;
     }
 

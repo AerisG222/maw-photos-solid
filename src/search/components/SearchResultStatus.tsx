@@ -1,9 +1,9 @@
-import { Component, Show } from 'solid-js';
+import { Component, Show } from "solid-js";
 
-import { useSearchContext } from '../contexts/SearchContext';
+import { useSearchContext } from "../contexts/SearchContext";
 
-import SearchCount from './SearchCount';
-import SearchMoreButton from './SearchMoreButton';
+import SearchCount from "./SearchCount";
+import SearchMoreButton from "./SearchMoreButton";
 
 const SearchResultStatus: Component = () => {
     const [searchContext, { moreResultsAvailable }] = useSearchContext();

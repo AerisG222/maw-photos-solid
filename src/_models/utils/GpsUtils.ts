@@ -1,4 +1,4 @@
-import { GpsCoordinate } from '../Gps';
+import { GpsCoordinate } from "../Gps";
 
 export type GpsOverride = {
     lat: string | undefined,
@@ -12,11 +12,11 @@ export const isValidLatLng = (val: string) => {
 export const parseGps = (val: string): GpsCoordinate | undefined => {
     const parts = val
         .trim()
-        .replace('[', '')
-        .replace(']', '')
-        .replace('(', '')
-        .replace(')', '')
-        .split(',');
+        .replace("[", "")
+        .replace("]", "")
+        .replace("(", "")
+        .replace(")", "")
+        .split(",");
 
     if (parts.length !== 2) {
         return undefined;

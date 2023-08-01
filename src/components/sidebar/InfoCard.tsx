@@ -1,4 +1,4 @@
-import { ParentComponent, children } from 'solid-js';
+import { ParentComponent, children } from "solid-js";
 
 type Props = {
     icon: string;

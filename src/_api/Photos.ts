@@ -1,12 +1,12 @@
-import { ApiCollection } from './models/ApiCollection';
-import { Photo as ApiPhoto } from './models/Photo';
-import { Comment } from './models/Comment';
-import { ExifDetail } from './models/ExifDetail';
-import { ApiGpsDetail } from './models/ApiGpsDetail';
-import { ApiGpsCoordinate } from './models/ApiGpsCoordinate';
-import { patchMawApi, postMawApi, queryMawApi } from './Shared';
-import { Rating } from './models/Rating';
-import { MediaTypePhoto, Photo } from '../_models/Media';
+import { ApiCollection } from "./models/ApiCollection";
+import { Photo as ApiPhoto } from "./models/Photo";
+import { Comment } from "./models/Comment";
+import { ExifDetail } from "./models/ExifDetail";
+import { ApiGpsDetail } from "./models/ApiGpsDetail";
+import { ApiGpsCoordinate } from "./models/ApiGpsCoordinate";
+import { patchMawApi, postMawApi, queryMawApi } from "./Shared";
+import { Rating } from "./models/Rating";
+import { MediaTypePhoto, Photo } from "../_models/Media";
 
 export const getRandomPhotos = async (count: number): Promise<Photo[]> => {
     const photos = await internalGetRandomPhotos(count);

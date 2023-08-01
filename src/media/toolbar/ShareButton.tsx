@@ -1,9 +1,9 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { getMediaShareUrl } from '../../_models/Media';
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { getMediaShareUrl } from "../../_models/Media";
 
-import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const ShareButton: Component = () => {
     const [mediaContext] = useMediaListContext();
@@ -12,7 +12,7 @@ const ShareButton: Component = () => {
         try {
             navigator.share({ url: getMediaShareUrl(mediaContext.activeItem) });
         } catch {
-            console.error('Error sharing media');
+            console.error("Error sharing media");
         }
     };
 

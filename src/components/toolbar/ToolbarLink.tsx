@@ -1,10 +1,10 @@
 import { Component, createUniqueId, onCleanup, onMount } from "solid-js";
 import { A } from "@solidjs/router";
-import { createShortcut } from '@solid-primitives/keyboard';
+import { createShortcut } from "@solid-primitives/keyboard";
 
-import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
-import { buildPath } from '../../_models/utils/RouteUtils';
-import { useShortcutContext } from '../../contexts/ShortcutContext';
+import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { buildPath } from "../../_models/utils/RouteUtils";
+import { useShortcutContext } from "../../contexts/ShortcutContext";
 
 type Props = {
     route: AppRouteDefinition;

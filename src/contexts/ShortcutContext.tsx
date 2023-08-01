@@ -1,5 +1,5 @@
-import { ParentComponent, createContext, useContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { ParentComponent, createContext, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
 
 export type ShortcutInfo = {
     id: string;

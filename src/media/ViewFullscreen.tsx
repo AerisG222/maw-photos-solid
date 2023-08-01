@@ -1,17 +1,17 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
-import { useFullscreenContext } from '../contexts/FullscreenContext';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { categoryFullscreenRoute, randomFullscreenRoute } from './_routes';
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
-import { AreaRandom } from '../_models/AppRouteDefinition';
+import { useFullscreenContext } from "../contexts/FullscreenContext";
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
+import { categoryFullscreenRoute, randomFullscreenRoute } from "./_routes";
+import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { AreaRandom } from "../_models/AppRouteDefinition";
 
-import FullscreenToolbar from './ToolbarFullscreen';
+import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
-import Layout from '../components/layout/Layout';
-import MediaMainItem from './MediaMainItem';
-import MediaSelectedGuard from './MediaSelectedGuard';
+import Layout from "../components/layout/Layout";
+import MediaMainItem from "./MediaMainItem";
+import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewFullscreen: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();

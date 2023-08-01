@@ -1,7 +1,7 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createContext, ParentComponent, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
 
-import { useMediaListContext } from './MediaListContext';
+import { useMediaListContext } from "./MediaListContext";
 
 export type SlideshowState = {
     intervalSeconds: number,

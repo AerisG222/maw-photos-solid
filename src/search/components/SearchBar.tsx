@@ -1,7 +1,7 @@
-import { Component, batch, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, batch, createEffect, createResource, createSignal } from "solid-js";
 
-import { useSearchContext } from '../contexts/SearchContext';
-import { searchCategories } from '../../_api/Search';
+import { useSearchContext } from "../contexts/SearchContext";
+import { searchCategories } from "../../_api/Search";
 
 const SearchBar: Component = () => {
     const [searchContext, { setSearchTerm, clearSearchTerm, setActiveTerm, setCategories, clearSearchResults, setFoundCount }] = useSearchContext();

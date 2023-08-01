@@ -1,4 +1,4 @@
-import { RouteDefinition } from '@solidjs/router'
+import { RouteDefinition } from "@solidjs/router"
 
 export const AreaAbout = "about";
 export const AreaAuth = "auth";

@@ -1,4 +1,4 @@
-import { ParentComponent, children } from 'solid-js'
+import { ParentComponent, children } from "solid-js"
 
 const ToolbarLayout: ParentComponent = (props) => {
     const c = children(() => props.children);

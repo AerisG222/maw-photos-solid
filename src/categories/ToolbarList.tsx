@@ -1,10 +1,10 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from '../contexts/settings/CategoryListViewSettingsContext';
-import { getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { getNextMarginSize } from '../_models/Margin';
+import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
+import { getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { getNextMarginSize } from "../_models/Margin";
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
+import ToolbarButton from "../components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
     const [settings, { setThumbnailSize, setMargin }] = useCategoryListViewSettingsContext();
@@ -22,13 +22,13 @@ const ListToolbar: Component = () => {
             <ToolbarButton
                 icon="i-ic-round-photo-size-select-large"
                 name="Toggle List Thumbnail Size (S)"
-                shortcutKeys={['s']}
+                shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnail}
             />
             <ToolbarButton
                 icon="i-ic-round-format-indent-increase"
                 name="Toggle Category Margins (M)"
-                shortcutKeys={['m']}
+                shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />
         </>

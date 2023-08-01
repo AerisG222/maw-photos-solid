@@ -1,7 +1,7 @@
-import { Component, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, createEffect, createResource, createSignal } from "solid-js";
 
-import { searchCategories } from '../../_api/Search';
-import { useSearchContext } from '../contexts/SearchContext';
+import { searchCategories } from "../../_api/Search";
+import { useSearchContext } from "../contexts/SearchContext";
 
 const SearchMoreButton: Component = () => {
     const [searchSignal, setSearchSignal] = createSignal(false);

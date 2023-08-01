@@ -1,7 +1,7 @@
-import { useContext } from 'solid-js';
+import { useContext } from "solid-js";
 
-import { ICategoryTeaserService } from '../../_services/media/ICategoryTeaserService';
-import { buildServiceContext } from '../../_models/utils/ServiceContextUtil';
+import { ICategoryTeaserService } from "../../_services/media/ICategoryTeaserService";
+import { buildServiceContext } from "../../_models/utils/ServiceContextUtil";
 
 export const {
     ServiceContext: CategoryTeaserServiceContext,

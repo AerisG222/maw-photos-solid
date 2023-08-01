@@ -1,15 +1,15 @@
 import { Component, For, Show, lazy } from "solid-js";
 
 import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
-import { Media, MediaTypePhoto } from '../../_models/Media';
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useRouteDetailContext } from '../../contexts/RouteDetailContext';
+import { Media, MediaTypePhoto } from "../../_models/Media";
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
 
 import Divider from "../../components/layout/Divider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
-import InfoCard from '../../components/sidebar/InfoCard';
+import InfoCard from "../../components/sidebar/InfoCard";
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
-import { AreaRandom } from '../../_models/AppRouteDefinition';
+import { AreaRandom } from "../../_models/AppRouteDefinition";
 
 const Sidebar: Component = () => {
     const [routeContext] = useRouteDetailContext();
@@ -72,81 +72,81 @@ const Sidebar: Component = () => {
             title: "Ratings",
             tooltip: "Ratings (R)",
             icon: "i-ic-round-star",
-            shortcutKeys: ['r'],
+            shortcutKeys: ["r"],
             clickHandler: toggleRatings,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showRatings,
-            component: lazy(() => import('./RatingsCard'))
+            component: lazy(() => import("./RatingsCard"))
         },
         {
             title: "Comments",
             tooltip: "Comments (C)",
             icon: "i-ic-round-comment",
-            shortcutKeys: ['c'],
+            shortcutKeys: ["c"],
             clickHandler: toggleComments,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showComments,
-            component: lazy(() => import('./CommentsCard'))
+            component: lazy(() => import("./CommentsCard"))
         },
         {
             title: "EXIF Data",
             tooltip: "EXIF Data (X)",
             icon: "i-ic-round-tune",
-            shortcutKeys: ['x'],
+            shortcutKeys: ["x"],
             clickHandler: toggleExif,
             enable: (media: Media) => media?.kind === MediaTypePhoto,
             active: () => settings.expandInfoPanel && settings.showExif,
-            component: lazy(() => import('./ExifCard'))
+            component: lazy(() => import("./ExifCard"))
         },
         {
             title: "Effects",
             tooltip: "Effects (E)",
             icon: "i-ic-round-photo-filter",
-            shortcutKeys: ['e'],
+            shortcutKeys: ["e"],
             clickHandler: toggleEffects,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showEffects,
-            component: lazy(() => import('./EffectsCard'))
+            component: lazy(() => import("./EffectsCard"))
         },
         {
             title: "Histogram",
             tooltip: "Histogram (H)",
             icon: "i-ic-round-color-lens",
-            shortcutKeys: ['h'],
+            shortcutKeys: ["h"],
             clickHandler: toggleHistogram,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showHistogram,
-            component: lazy(() => import('./HistogramCard'))
+            component: lazy(() => import("./HistogramCard"))
         },
         {
             title: "MiniMap",
             tooltip: "MiniMap (V)",
             icon: "i-ic-round-map",
-            shortcutKeys: ['v'],
+            shortcutKeys: ["v"],
             clickHandler: toggleMinimap,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showMinimap,
-            component: lazy(() => import('./MinimapCard'))
+            component: lazy(() => import("./MinimapCard"))
         },
         {
             title: "Metadata Editor",
             tooltip: "Metadata Editor (N)",
             icon: "i-ic-round-edit",
-            shortcutKeys: ['n'],
+            shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
-            component: lazy(() => import('./MetadataEditorCard'))
+            component: lazy(() => import("./MetadataEditorCard"))
         },
         {
             title: "Category Teaser Chooser",
             tooltip: "Category Teaser Chooser (K)",
             icon: "i-ic-round-image-search",
-            shortcutKeys: ['k'],
+            shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaserChooser,
             enable: (media: Media) => routeContext.area !== AreaRandom,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
-            component: lazy(() => import('./CategoryTeaserCard'))
+            component: lazy(() => import("./CategoryTeaserCard"))
         }
     ];
 
@@ -172,7 +172,7 @@ const Sidebar: Component = () => {
                             ? "i-ic-chevron-right"
                             : "i-ic-chevron-left"
                     }
-                    shortcutKeys={['i']}
+                    shortcutKeys={["i"]}
                     clickHandler={toggleExpandedState}
                 />
 

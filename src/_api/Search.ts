@@ -1,8 +1,8 @@
-import { Category } from '../_models/Category';
-import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from '../_models/CategoryType';
-import { getCategoryPath } from '../categories/_routes';
-import { queryMawApi } from './Shared';
-import { SearchCategory, SearchResult } from './models/SearchResult';
+import { Category } from "../_models/Category";
+import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from "../_models/CategoryType";
+import { getCategoryPath } from "../categories/_routes";
+import { queryMawApi } from "./Shared";
+import { SearchCategory, SearchResult } from "./models/SearchResult";
 
 export const searchCategories = async (query: string, start: number): Promise<SearchResult<Category>> => {
     const searchCategories = await internalSearchCategories(query, start);
@@ -33,4 +33,4 @@ export const searchCategories = async (query: string, start: number): Promise<Se
 };
 
 const internalSearchCategories = (query: string, start: number) =>
-    queryMawApi<SearchResult<SearchCategory>>('search/multimedia-categories', { query, start });
+    queryMawApi<SearchResult<SearchCategory>>("search/multimedia-categories", { query, start });

@@ -1,12 +1,12 @@
-import { Component, batch, createEffect, untrack } from 'solid-js';
-import { useSearchParams } from '@solidjs/router';
+import { Component, batch, createEffect, untrack } from "solid-js";
+import { useSearchParams } from "@solidjs/router";
 
-import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { Category } from '../../_models/Category';
-import { categoryTypesOptions } from '../../_models/CategoryTypes';
+import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { Category } from "../../_models/Category";
+import { categoryTypesOptions } from "../../_models/CategoryTypes";
 
-import Select from '../../components/input/Select';
+import Select from "../../components/input/Select";
 
 const CategoryTypeFilter: Component = () => {
     const TYPE_FILTER = "CategoryTypeFilter_Type";
@@ -23,7 +23,7 @@ const CategoryTypeFilter: Component = () => {
 
                     removeFilter(TYPE_FILTER);
 
-                    if(searchParams.type !== 'all') {
+                    if(searchParams.type !== "all") {
                         addFilter({
                             name: TYPE_FILTER,
                             filterFn: (c: Category) => c.type === searchParams.type
@@ -38,7 +38,7 @@ const CategoryTypeFilter: Component = () => {
 
     return (
         <Select
-            title='Category Type'
+            title="Category Type"
             itemArray={categoryTypesOptions}
             selectedValue={filter.typeFilter}
             onChange={onChangeFilter} />

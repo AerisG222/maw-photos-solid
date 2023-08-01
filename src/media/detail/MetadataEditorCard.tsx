@@ -1,8 +1,8 @@
-import { Component, createEffect, createResource, createSignal } from 'solid-js';
+import { Component, createEffect, createResource, createSignal } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useMetadataEditServiceContext } from '../contexts/MetadataEditServiceContext';
-import { GpsOverride, isValidLatLng, parseGps } from '../../_models/utils/GpsUtils';
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { useMetadataEditServiceContext } from "../contexts/MetadataEditServiceContext";
+import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 
 const MetadataEditorCard: Component = () => {
     const [metadataEditorContext] = useMetadataEditServiceContext();
@@ -35,7 +35,7 @@ const MetadataEditorCard: Component = () => {
 
     const onPaste = (evt: ClipboardEvent) => {
         const clipboardData = evt.clipboardData;
-        const pastedText = clipboardData?.getData('text');
+        const pastedText = clipboardData?.getData("text");
 
         if (pastedText) {
             const latLng = parseGps(pastedText);
@@ -84,14 +84,14 @@ const MetadataEditorCard: Component = () => {
         const nullOrEmpty = val === undefined || val === "";
 
         return {
-            'input-error': nullOrEmpty ? false : !isValidLatLng(val)
+            "input-error": nullOrEmpty ? false : !isValidLatLng(val)
         };
     };
 
     const getButtonClass = () => {
         return {
-            'btn-disabled': !isOverrideValid(),
-            'btn-primary': isOverrideValid()
+            "btn-disabled": !isOverrideValid(),
+            "btn-primary": isOverrideValid()
         }
     };
 

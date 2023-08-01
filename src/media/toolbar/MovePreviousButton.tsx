@@ -1,8 +1,8 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { useMediaListContext } from "../contexts/MediaListContext";
 
-import ToolbarButton from '../../components/toolbar/ToolbarButton';
+import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const MovePreviousButton: Component = () => {
     const [state, {activeItemIsFirst, movePrevious}] = useMediaListContext();
@@ -12,7 +12,7 @@ const MovePreviousButton: Component = () => {
             disabled={activeItemIsFirst()}
             icon="i-ic-round-chevron-left"
             name="Move Previous (&larr;)"
-            shortcutKeys={['arrowleft']}
+            shortcutKeys={["arrowleft"]}
             clickHandler={movePrevious}
         />
     );

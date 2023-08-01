@@ -1,8 +1,8 @@
-import { ParentComponent, children, createEffect, createResource, createSignal } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource, createSignal } from "solid-js";
 
-import { useMediaListContext } from '../contexts/MediaListContext';
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';
+import { useMediaListContext } from "../contexts/MediaListContext";
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { getCategoryService } from "../../_services/categories/CategoryServiceLocator";
 
 const MediaCategoryLoader: ParentComponent = (props) => {
     const [doFetch, setDoFetch] = createSignal(-1);

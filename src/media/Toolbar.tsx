@@ -1,16 +1,16 @@
-import { ParentComponent, Show, children } from 'solid-js'
+import { ParentComponent, Show, children } from "solid-js"
 
-import { useCategoryContext } from '../contexts/CategoryContext';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { useMediaPageSettingsContext } from '../contexts/settings/MediaPageSettingsContext';
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from './_routes';
-import { isAdmin } from '../auth/auth';
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
-import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
+import { useCategoryContext } from "../contexts/CategoryContext";
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
+import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from "./_routes";
+import { isAdmin } from "../auth/auth";
+import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 
-import Divider from '../components/layout/Divider';
-import ToolbarLayout from '../components/toolbar/ToolbarLayout';
-import ToolbarLink from '../components/toolbar/ToolbarLink';
+import Divider from "../components/layout/Divider";
+import ToolbarLayout from "../components/toolbar/ToolbarLayout";
+import ToolbarLink from "../components/toolbar/ToolbarLink";
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();

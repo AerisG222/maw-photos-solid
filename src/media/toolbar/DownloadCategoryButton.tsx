@@ -1,10 +1,10 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { PhotoCategory } from '../../_models/Category';
-import { CategoryTypePhotos } from '../../_models/CategoryType';
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { PhotoCategory } from "../../_models/Category";
+import { CategoryTypePhotos } from "../../_models/CategoryType";
 
-import ToolbarExternalLink from '../../components/toolbar/ToolbarExternalLink';
+import ToolbarExternalLink from "../../components/toolbar/ToolbarExternalLink";
 
 const DownloadCategoryButton: Component = () => {
     const [categoryState] = useCategoryContext();
@@ -14,14 +14,14 @@ const DownloadCategoryButton: Component = () => {
             return (categoryState.activeCategory as PhotoCategory).downloadLink;
         }
 
-        return '';
+        return "";
     };
 
     return (
         <ToolbarExternalLink
             title="Download All Photos in Category (.zip)"
             url={getLink()}
-            iconClass='i-ic-outline-file-download' />
+            iconClass="i-ic-outline-file-download" />
     );
 }
 

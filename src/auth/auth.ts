@@ -1,5 +1,5 @@
-import { createSignal } from 'solid-js';
-import { Log, User, UserManager, UserManagerSettings } from 'oidc-client-ts';
+import { createSignal } from "solid-js";
+import { Log, User, UserManager, UserManagerSettings } from "oidc-client-ts";
 
 export const [user, setUser] = createSignal(undefined as User|undefined);
 export const [redirectUrl, setRedirectUrl] = createSignal(undefined as string);
@@ -61,5 +61,5 @@ export function isLoggedIn() {
 export function isAdmin() {
     const u = user();
 
-    return (u?.profile?.role as Array<string>|undefined)?.findIndex(r => r === 'admin') >= 0;
+    return (u?.profile?.role as Array<string>|undefined)?.findIndex(r => r === "admin") >= 0;
 }

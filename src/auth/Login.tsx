@@ -1,8 +1,8 @@
 import { Component, createEffect } from "solid-js";
 
-import { initiateAuthInline, initiateAuthPopup, isLoggedIn } from './auth';
+import { initiateAuthInline, initiateAuthPopup, isLoggedIn } from "./auth";
 
-import SuccessfulLoginMonitor from './SuccessfulLoginMonitor';
+import SuccessfulLoginMonitor from "./SuccessfulLoginMonitor";
 
 const Login: Component = () => {
     createEffect(() => {

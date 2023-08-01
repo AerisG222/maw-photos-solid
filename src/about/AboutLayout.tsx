@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
-import { Outlet } from '@solidjs/router';
+import { Outlet } from "@solidjs/router";
 
-import Toolbar from './Toolbar';
-import Layout from '../components/layout/Layout';
+import Toolbar from "./Toolbar";
+import Layout from "../components/layout/Layout";
 
 const AboutLayout: Component = () => {
     return (

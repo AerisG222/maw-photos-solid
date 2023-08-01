@@ -1,11 +1,11 @@
-import { patchMawApi, queryMawApi } from './Shared';
-import { ApiCollection } from './models/ApiCollection';
-import { VideoCategory as ApiVideoCategory } from './models/VideoCategory';
-import { Video as ApiVideo } from './models/Video';
-import { VideoCategory } from '../_models/Category';
-import { MediaTypeVideo, Video } from '../_models/Media';
-import { CategoryTypeVideos } from '../_models/CategoryType';
-import { getCategoryPath } from '../categories/_routes';
+import { patchMawApi, queryMawApi } from "./Shared";
+import { ApiCollection } from "./models/ApiCollection";
+import { VideoCategory as ApiVideoCategory } from "./models/VideoCategory";
+import { Video as ApiVideo } from "./models/Video";
+import { VideoCategory } from "../_models/Category";
+import { MediaTypeVideo, Video } from "../_models/Media";
+import { CategoryTypeVideos } from "../_models/CategoryType";
+import { getCategoryPath } from "../categories/_routes";
 
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     const videoCategories = await internalGetVideoCategories();
@@ -48,7 +48,7 @@ export const getVideos = async (categoryId: number): Promise<Video[]> => {
 };
 
 const internalGetVideoCategories = () =>
-    queryMawApi<ApiCollection<ApiVideoCategory>>('video-categories');
+    queryMawApi<ApiCollection<ApiVideoCategory>>("video-categories");
 
 const internalGetVideos = (categoryId: number) =>
     queryMawApi<ApiCollection<ApiVideo>>(`video-categories/${categoryId}/videos`);

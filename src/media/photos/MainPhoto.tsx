@@ -1,7 +1,7 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import { Photo } from '../../_models/Media';
-import { useMediaListContext } from '../contexts/MediaListContext';
+import { Photo } from "../../_models/Media";
+import { useMediaListContext } from "../contexts/MediaListContext";
 
 type Props = {
     photo: Photo;
@@ -20,12 +20,12 @@ const MainPhoto: Component<Props> = (props) => {
             set.push(`${props.photo.imageLgUrl} ${props.photo.imageLgWidth}w`);
         }
 
-        return set.join(', ');
+        return set.join(", ");
     };
 
     return (
         <img src={props.photo?.imageMdUrl}
-            crossorigin='anonymous'  // this is required for the histogram (maybe only in dev?)
+            crossorigin="anonymous"  // this is required for the histogram (maybe only in dev?)
             class="h-100% w-100% max-h-100vh max-w-100% object-contain"
             srcset={getSrcset()}
             sizes="100vw"

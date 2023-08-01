@@ -1,20 +1,20 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
-import { useNavigate, useParams } from '@solidjs/router';
+import { useNavigate, useParams } from "@solidjs/router";
 
-import { useMediaListContext } from './contexts/MediaListContext';
-import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from '../_models/Media';
-import { GpsCoordinate } from '../_models/Gps';
-import { MediaViewModeGrid, categoryBulkEditRoute, getMediaCategoryPath, getMediaPathByView } from './_routes';
-import { CategoryType } from '../_models/CategoryType';
-import { IMetadataEditService } from '../_services/media/IMetadataEditService';
-import { photoMediaService } from '../_services/media/PhotoMediaService';
-import { videoMediaService } from '../_services/media/VideoMediaService';
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from "../_models/Media";
+import { GpsCoordinate } from "../_models/Gps";
+import { MediaViewModeGrid, categoryBulkEditRoute, getMediaCategoryPath, getMediaPathByView } from "./_routes";
+import { CategoryType } from "../_models/CategoryType";
+import { IMetadataEditService } from "../_services/media/IMetadataEditService";
+import { photoMediaService } from "../_services/media/PhotoMediaService";
+import { videoMediaService } from "../_services/media/VideoMediaService";
 
 import Toolbar from "./Toolbar";
-import Layout from '../components/layout/Layout';
-import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import BulkEditSidebar from './bulk-edit/BulkEditSidebar';
-import AdminGuard from '../components/auth/AdminGuard';
+import Layout from "../components/layout/Layout";
+import CategoryBreadcrumb from "../components/categories/CategoryBreadcrumb";
+import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
+import AdminGuard from "../components/auth/AdminGuard";
 
 type SelectableMedia = {
     id: number,

@@ -1,8 +1,8 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { defaultMediaViewMode, MediaViewModeIdType } from '../../_models/MediaViewMode';
-import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from './_storage';
+import { defaultMediaViewMode, MediaViewModeIdType } from "../../_models/MediaViewMode";
+import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from "./_storage";
 
 export type MediaPageSettingsState = {
     readonly viewMode: MediaViewModeIdType;

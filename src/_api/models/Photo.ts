@@ -1,4 +1,4 @@
-import { PhotoMultimediaAsset } from './PhotoMultimediaAsset';
+import { PhotoMultimediaAsset } from "./PhotoMultimediaAsset";
 
 export type Photo = {
     id: number;

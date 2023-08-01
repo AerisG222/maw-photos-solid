@@ -1,8 +1,8 @@
-import { createContext, ParentComponent, useContext } from 'solid-js';
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { KEY_SETTINGS_APP, loadJson, saveJson } from './_storage';
-import { ThemeIdType, defaultTheme } from '../../_models/Theme';
+import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
+import { ThemeIdType, defaultTheme } from "../../_models/Theme";
 
 export type AppSettingsState = {
     readonly theme: ThemeIdType;

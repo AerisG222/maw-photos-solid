@@ -1,5 +1,5 @@
-import { Category } from '../../_models/Category';
-import { Media } from '../../_models/Media';
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
 
 export interface ICategoryService {
     load: () => Promise<Category[]>;

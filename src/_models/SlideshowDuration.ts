@@ -1,4 +1,4 @@
-import { KeyValuePair } from './KeyValuePair';
+import { KeyValuePair } from "./KeyValuePair";
 
 export type SlideshowDurationIdType = number;
 export type SlideshowDuration = KeyValuePair<SlideshowDurationIdType>;

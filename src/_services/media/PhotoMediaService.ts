@@ -1,10 +1,10 @@
-import { setTeaser } from '../../_api/PhotoCategories';
-import { addComment, getComments, getExifData, getGpsDetail, getRating, ratePhoto, setGpsCoordinateOverride } from '../../_api/Photos';
-import { IRatingService } from './IRatingService';
-import { ICommentService } from './ICommentService';
-import { IExifService } from './IExifService';
-import { ICategoryTeaserService } from './ICategoryTeaserService';
-import { IMetadataEditService } from './IMetadataEditService';
+import { setTeaser } from "../../_api/PhotoCategories";
+import { addComment, getComments, getExifData, getGpsDetail, getRating, ratePhoto, setGpsCoordinateOverride } from "../../_api/Photos";
+import { IRatingService } from "./IRatingService";
+import { ICommentService } from "./ICommentService";
+import { IExifService } from "./IExifService";
+import { ICategoryTeaserService } from "./ICategoryTeaserService";
+import { IMetadataEditService } from "./IMetadataEditService";
 
 export class PhotoMediaService
     implements

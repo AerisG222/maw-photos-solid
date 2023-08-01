@@ -1,10 +1,10 @@
-import { Match, ParentComponent, Switch, children } from 'solid-js';
+import { Match, ParentComponent, Switch, children } from "solid-js";
 
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
-import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
+import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 
-import MediaCategoryLoader from './loader/MediaCategoryLoader';
-import MediaRandomLoader from './loader/MediaRandomLoader';
+import MediaCategoryLoader from "./loader/MediaCategoryLoader";
+import MediaRandomLoader from "./loader/MediaRandomLoader";
 
 const MediaLoader: ParentComponent = (props) => {
     const [routeContext] = useRouteDetailContext()

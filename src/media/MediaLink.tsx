@@ -1,7 +1,7 @@
-import { ParentComponent, children } from 'solid-js';
-import { A } from '@solidjs/router';
+import { ParentComponent, children } from "solid-js";
+import { A } from "@solidjs/router";
 
-import { Media } from '../_models/Media';
+import { Media } from "../_models/Media";
 
 type Props = {
     url: string;
@@ -16,16 +16,16 @@ const MediaLink: ParentComponent<Props> = (props) => {
 
     const getClassList = () => {
         return ({
-            'cursor-pointer': true,
-            'mr-[0.1rem]': true,
-            'saturate-20': true,
-            'hover:saturate-100': true,
-            'border-1': true,
-            'border-transparent': true,
-            'hover:border-primary': true,
-            'rounded-1': props.rounded,
-            'saturate-100!': props.isActiveItem,
-            'border-primary!': props.isActiveItem
+            "cursor-pointer": true,
+            "mr-[0.1rem]": true,
+            "saturate-20": true,
+            "hover:saturate-100": true,
+            "border-1": true,
+            "border-transparent": true,
+            "hover:border-primary": true,
+            "rounded-1": props.rounded,
+            "saturate-100!": props.isActiveItem,
+            "border-primary!": props.isActiveItem
         });
     };
 

@@ -1,11 +1,11 @@
-import { Component, batch, createEffect, untrack } from 'solid-js';
-import { useSearchParams } from '@solidjs/router';
+import { Component, batch, createEffect, untrack } from "solid-js";
+import { useSearchParams } from "@solidjs/router";
 
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
 
-import Select from '../../components/input/Select';
-import { Category } from '../../_models/Category';
+import Select from "../../components/input/Select";
+import { Category } from "../../_models/Category";
 
 const YearFilter: Component = () => {
     const YEAR_FILTER = "YearFilter_Year";
@@ -17,7 +17,7 @@ const YearFilter: Component = () => {
         if(searchParams.year) {
             untrack(() => {
                 batch(() => {
-                    const yearFilter = searchParams.year === 'all' ? undefined : parseInt(searchParams.year);
+                    const yearFilter = searchParams.year === "all" ? undefined : parseInt(searchParams.year);
 
                     setYearFilter(yearFilter)
 
@@ -37,7 +37,7 @@ const YearFilter: Component = () => {
     const onChangeFilter = (val: string) => setSearchParams({year: val});
 
     const toKvp = (allYears: number[]) => !allYears ? [] : [
-        { id: 'all', name: 'All' },
+        { id: "all", name: "All" },
         ...allYears.map(y => {
             return {
                 id: y,
@@ -48,9 +48,9 @@ const YearFilter: Component = () => {
 
     return (
         <Select
-            title='Year'
+            title="Year"
             itemArray={toKvp(getAllYears())}
-            selectedValue={filter.yearFilter ?? 'all'}
+            selectedValue={filter.yearFilter ?? "all"}
             onChange={onChangeFilter} />
     );
 };

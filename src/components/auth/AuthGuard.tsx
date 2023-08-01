@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect } from "solid-js";
-import { useIsRouting, useLocation, useNavigate } from '@solidjs/router';
+import { useIsRouting, useLocation, useNavigate } from "@solidjs/router";
 
-import { isLoggedIn, setRedirectUrl } from '../../auth/auth';
+import { isLoggedIn, setRedirectUrl } from "../../auth/auth";
 
 const AuthGuard: ParentComponent = (props) => {
     const location = useLocation();

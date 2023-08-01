@@ -1,23 +1,23 @@
-import { Component, Show } from 'solid-js';
-import { useParams } from '@solidjs/router';
+import { Component, Show } from "solid-js";
+import { useParams } from "@solidjs/router";
 
-import { useMediaGridViewSettingsContext } from '../contexts/settings/MediaGridViewSettingsContext';
-import { getNextMarginSize } from '../_models/Margin';
-import { getNextThumbnailSize } from '../_models/ThumbnailSize';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { CategoryType } from '../_models/CategoryType';
-import { AreaCategories, AreaRandom } from '../_models/AppRouteDefinition';
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { useMediaGridViewSettingsContext } from "../contexts/settings/MediaGridViewSettingsContext";
+import { getNextMarginSize } from "../_models/Margin";
+import { getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { CategoryType } from "../_models/CategoryType";
+import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
+import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 
-import ToolbarButton from '../components/toolbar/ToolbarButton';
-import Divider from '../components/layout/Divider';
-import MovePreviousButton from './toolbar/MovePreviousButton';
-import MoveNextButton from './toolbar/MoveNextButton';
-import ToggleSlideshowButton, { showSlideshowButton } from './toolbar/ToggleSlideshowButton';
-import RotateCounterClockwiseButton from './toolbar/RotateCounterClockwiseButton';
-import RotateClockwiseButton from './toolbar/RotateClockwiseButton';
-import FlipHorizontalButton from './toolbar/FlipHorizontalButton';
-import FlipVerticalButton from './toolbar/FlipVerticalButton';
+import ToolbarButton from "../components/toolbar/ToolbarButton";
+import Divider from "../components/layout/Divider";
+import MovePreviousButton from "./toolbar/MovePreviousButton";
+import MoveNextButton from "./toolbar/MoveNextButton";
+import ToggleSlideshowButton, { showSlideshowButton } from "./toolbar/ToggleSlideshowButton";
+import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton";
+import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
+import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
+import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 
 const GridToolbar: Component = () => {
     const [routeContext] = useRouteDetailContext();
@@ -59,7 +59,7 @@ const GridToolbar: Component = () => {
                     <ToolbarButton
                         icon="i-ic-round-title"
                         name="Show / Hide Category Breadcrumbs (T)"
-                        shortcutKeys={['t']}
+                        shortcutKeys={["t"]}
                         clickHandler={onToggleBreadcrumbs}
                     />
                 </Show>
@@ -67,14 +67,14 @@ const GridToolbar: Component = () => {
                 <ToolbarButton
                     icon="i-ic-round-photo-size-select-large"
                     name="Toggle Thumbnail Size (S)"
-                    shortcutKeys={['s']}
+                    shortcutKeys={["s"]}
                     clickHandler={onToggleThumbnailSize}
                 />
 
                 <ToolbarButton
                     icon="i-ic-round-format-indent-increase"
                     name="Toggle Margins (M)"
-                    shortcutKeys={['m']}
+                    shortcutKeys={["m"]}
                     clickHandler={onToggleMargins}
                 />
             </Show>
@@ -84,7 +84,7 @@ const GridToolbar: Component = () => {
                     <ToolbarButton
                         icon="i-ic-round-title"
                         name="Show / Hide Category Breadcrumbs (T)"
-                        shortcutKeys={['t']}
+                        shortcutKeys={["t"]}
                         clickHandler={onToggleMainBreadcrumbs}
                     />
                 </Show>

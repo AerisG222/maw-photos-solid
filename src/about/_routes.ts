@@ -1,13 +1,13 @@
-import { lazy } from 'solid-js';
-import { AppRouteDefinition, AreaAbout } from '../_models/AppRouteDefinition';
-import { routeMatch } from '../_models/utils/RouteUtils';
+import { lazy } from "solid-js";
+import { AppRouteDefinition, AreaAbout } from "../_models/AppRouteDefinition";
+import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/about";
 
 export const aboutRedirect: AppRouteDefinition = {
-    path: '/',
+    path: "/",
     absolutePath: basePath,
-    component: lazy(() => import('./AboutRedirect'))
+    component: lazy(() => import("./AboutRedirect"))
 };
 
 export const aboutHelp: AppRouteDefinition = {
@@ -15,7 +15,7 @@ export const aboutHelp: AppRouteDefinition = {
     name: "Help",
     path: "/help",
     absolutePath: `${basePath}/help`,
-    component: lazy(() => import('./ViewHelp'))
+    component: lazy(() => import("./ViewHelp"))
 };
 
 export const aboutReleaseNotes: AppRouteDefinition = {
@@ -23,7 +23,7 @@ export const aboutReleaseNotes: AppRouteDefinition = {
     name: "Release Notes",
     path: "/release-notes",
     absolutePath: `${basePath}/release-notes`,
-    component: lazy(() => import('./ViewReleaseNotes'))
+    component: lazy(() => import("./ViewReleaseNotes"))
 };
 
 export const aboutAndroid: AppRouteDefinition = {
@@ -31,7 +31,7 @@ export const aboutAndroid: AppRouteDefinition = {
     name: "Android Application",
     path: "/android",
     absolutePath: `${basePath}/android`,
-    component: lazy(() => import('./ViewAndroid'))
+    component: lazy(() => import("./ViewAndroid"))
 };
 
 export const about: AppRouteDefinition = {
@@ -40,7 +40,7 @@ export const about: AppRouteDefinition = {
     helpText: "View help and release notes for this application.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import('./AboutLayout')),
+    component: lazy(() => import("./AboutLayout")),
     doesPathMatch: path => routeMatch(path, basePath, AreaAbout),
     children: [
         aboutRedirect,

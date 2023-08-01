@@ -1,21 +1,21 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
-import { useMediaDetailViewSettingsContext } from '../contexts/settings/MediaDetailViewSettingsContext';
-import { useMediaListContext } from './contexts/MediaListContext';
-import { useLayoutOptionsContext } from '../contexts/LayoutOptionsContext';
-import { getThumbnailSize } from '../_models/ThumbnailSize';
-import { categoryDetailRoute, randomDetailRoute } from './_routes';
-import { AreaRandom } from '../_models/AppRouteDefinition';
-import { useRouteDetailContext } from '../contexts/RouteDetailContext';
+import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
+import { useMediaListContext } from "./contexts/MediaListContext";
+import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
+import { getThumbnailSize } from "../_models/ThumbnailSize";
+import { categoryDetailRoute, randomDetailRoute } from "./_routes";
+import { AreaRandom } from "../_models/AppRouteDefinition";
+import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 
-import DetailToolbar from './ToolbarDetail';
+import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
-import CategoryBreadcrumb from '../components/categories/CategoryBreadcrumb';
-import Sidebar from './detail/Sidebar';
-import Layout from '../components/layout/Layout';
-import MediaList from './MediaList';
-import MediaMainItem from './MediaMainItem';
-import MediaSelectedGuard from './MediaSelectedGuard';
+import CategoryBreadcrumb from "../components/categories/CategoryBreadcrumb";
+import Sidebar from "./detail/Sidebar";
+import Layout from "../components/layout/Layout";
+import MediaList from "./MediaList";
+import MediaMainItem from "./MediaMainItem";
+import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewDetail: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();

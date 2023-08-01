@@ -1,9 +1,9 @@
-import { createContext, createMemo, ParentComponent, useContext } from 'solid-js';
+import { createContext, createMemo, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { Category } from '../_models/Category';
-import { CategoryType } from '../_models/CategoryType';
-import { FilterFunction, SortFunction } from '../_models/UtilityTypes';
+import { Category } from "../_models/Category";
+import { CategoryType } from "../_models/CategoryType";
+import { FilterFunction, SortFunction } from "../_models/UtilityTypes";
 
 export type CategoryState = {
     readonly initialized: boolean;

@@ -1,7 +1,7 @@
-import { useNavigate } from '@solidjs/router';
+import { useNavigate } from "@solidjs/router";
 import { Component, onMount } from "solid-js";
 
-import { categories } from '../categories/_routes';
+import { categories } from "../categories/_routes";
 
 const Redirect: Component = () => {
     const navigate = useNavigate();

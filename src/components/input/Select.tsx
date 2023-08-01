@@ -1,5 +1,5 @@
-import { Component, For } from 'solid-js'
-import { KeyValuePair } from '../../_models/KeyValuePair';
+import { Component, For } from "solid-js"
+import { KeyValuePair } from "../../_models/KeyValuePair";
 
 type Props<T> = {
     title: string;

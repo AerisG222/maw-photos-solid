@@ -1,10 +1,10 @@
-import { ParentComponent, children, createEffect, createResource } from 'solid-js';
+import { ParentComponent, children, createEffect, createResource } from "solid-js";
 
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { categoryTypes } from '../../_models/CategoryTypes';
-import { isLoggedIn } from '../../auth/auth';
-import { getCategoryService } from '../../_services/categories/CategoryServiceLocator';
-import { CategoryType } from '../../_models/CategoryType';
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { categoryTypes } from "../../_models/CategoryTypes";
+import { isLoggedIn } from "../../auth/auth";
+import { getCategoryService } from "../../_services/categories/CategoryServiceLocator";
+import { CategoryType } from "../../_models/CategoryType";
 
 const CategoryLoader: ParentComponent = (props) => {
     const [, { setInitialized, addCategories }] = useCategoryContext();

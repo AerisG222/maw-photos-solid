@@ -1,9 +1,9 @@
-import { ParentComponent } from 'solid-js';
+import { ParentComponent } from "solid-js";
 
-import { settingsApplication, settingsCategories, settingsMedia, settingsSearch } from './_routes';
+import { settingsApplication, settingsCategories, settingsMedia, settingsSearch } from "./_routes";
 
-import ToolbarLayout from '../components/toolbar/ToolbarLayout';
-import ToolbarLink from '../components/toolbar/ToolbarLink';
+import ToolbarLayout from "../components/toolbar/ToolbarLayout";
+import ToolbarLink from "../components/toolbar/ToolbarLink";
 
 const Toolbar: ParentComponent = () => {
     return (

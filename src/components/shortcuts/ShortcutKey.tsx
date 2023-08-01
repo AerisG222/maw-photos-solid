@@ -1,6 +1,6 @@
-import { Component, For } from 'solid-js';
+import { Component, For } from "solid-js";
 
-import { ShortcutInfo } from '../../contexts/ShortcutContext';
+import { ShortcutInfo } from "../../contexts/ShortcutContext";
 
 type Props = {
     shortcut: ShortcutInfo;
@@ -8,11 +8,11 @@ type Props = {
 
 const ShortcutKey: Component<Props> = (props) => {
     const getDisplayIcon = (key: string) => {
-        if(key === 'arrowright') {
+        if(key === "arrowright") {
             return "i-ic:round-arrow-right-alt";
         }
 
-        if(key === 'arrowleft') {
+        if(key === "arrowleft") {
             return "i-ic:round-arrow-right-alt rotate-180";
         }
 

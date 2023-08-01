@@ -1,7 +1,7 @@
-import { ParentComponent, children, createEffect } from 'solid-js';
-import { useNavigate } from '@solidjs/router';
+import { ParentComponent, children, createEffect } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
-import { isAdmin } from '../../auth/auth';
+import { isAdmin } from "../../auth/auth";
 
 type Props = {
     redirectRoute?: string;
@@ -13,7 +13,7 @@ const AdminGuard: ParentComponent<Props> = (props) => {
 
     createEffect(() => {
         if(!isAdmin()) {
-            navigate(props.redirectRoute ?? '/');
+            navigate(props.redirectRoute ?? "/");
         }
     });
 

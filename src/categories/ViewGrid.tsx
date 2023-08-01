@@ -1,13 +1,13 @@
 import { Component, For, Suspense } from "solid-js";
 
-import { useCategoryGridViewSettingsContext } from '../contexts/settings/CategoryGridViewSettingsContext';
-import { useCategoryContext } from '../contexts/CategoryContext';
+import { useCategoryGridViewSettingsContext } from "../contexts/settings/CategoryGridViewSettingsContext";
+import { useCategoryContext } from "../contexts/CategoryContext";
 
 import Toolbar from "./Toolbar";
-import GridToolbar from './ToolbarGrid';
-import YearGrid from './components/YearGrid';
-import CategoryFilterBar from './components/CategoryFilterBar';
-import Layout from '../components/layout/Layout';
+import GridToolbar from "./ToolbarGrid";
+import YearGrid from "./components/YearGrid";
+import CategoryFilterBar from "./components/CategoryFilterBar";
+import Layout from "../components/layout/Layout";
 
 const GridView: Component = () => {
     const [, { getFilteredCategoriesForYear, getFilteredYears }] = useCategoryContext();

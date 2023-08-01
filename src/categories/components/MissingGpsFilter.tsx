@@ -1,8 +1,8 @@
-import { Component } from 'solid-js';
+import { Component } from "solid-js";
 
-import Checkbox from '../../components/input/Checkbox';
-import { useCategoryContext } from '../../contexts/CategoryContext';
-import { Category } from '../../_models/Category';
+import Checkbox from "../../components/input/Checkbox";
+import { useCategoryContext } from "../../contexts/CategoryContext";
+import { Category } from "../../_models/Category";
 
 const MissingGpsFilter: Component = () => {
     const GPS_FILTER = "gps-filter";
