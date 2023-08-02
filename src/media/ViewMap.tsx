@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
@@ -111,13 +111,15 @@ const ViewMap: Component = () => {
     });
 
     return (
-        <Layout toolbar={
-            <Toolbar>
-                <MapToolbar />
-            </Toolbar>
-        }>
-            <div class="h-[100vh] w-[100%]" ref={el} />
-        </Layout>
+        <Show when={mediaList.activeRouteDefinition}>
+            <Layout toolbar={
+                <Toolbar>
+                    <MapToolbar />
+                </Toolbar>
+            }>
+                <div class="h-[100vh] w-[100%]" ref={el} />
+            </Layout>
+        </Show>
     );
 };
 
