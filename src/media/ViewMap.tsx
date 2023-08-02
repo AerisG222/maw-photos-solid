@@ -9,18 +9,22 @@ import { Media, getMediaTeaserUrl } from "../_models/Media";
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
+import MediaSelectedGuard from './MediaSelectedGuard';
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
-    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition, navigateToItem }] = useMediaListContext();
+    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition }] = useMediaListContext();
     const [initialized, setInitialized] = createSignal(false);
+    const [mapReady, setMapReady] = createSignal(false);
+
     let el: HTMLDivElement | undefined;
 
+    hideXpad();
     setActiveRouteDefinition(categoryMapRoute);
 
     setFilter((media: Media) => {
-        if(media.latitude && media.longitude) {
+        if(media?.latitude && media?.longitude) {
             return true;
         } else {
             return false;
@@ -38,41 +42,42 @@ const ViewMap: Component = () => {
     };
 
     let map: google.maps.Map;
-    let mapEvent: google.maps.event;
     let infoWindow: google.maps.InfoWindow;
     const markers = new Map();
 
     async function initMap(): Promise<void> {
-        const { event } = await google.maps.importLibrary("core");
         const { InfoWindow, Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-
-        mapEvent = event;
 
         if(el) {
             map = new Map(el, defaultMapOptions);
             map.addListener("zoom_changed", () => setZoom(map.getZoom()));
             map.addListener("maptypeid_changed", () => setMapType(map.getMapTypeId()));
 
+            google.maps.event.addListenerOnce(map, 'idle', () => setMapReady(true));
+
             infoWindow = new InfoWindow({ content: "" });
-
-            for(const item of getFilteredMedia()) {
-                const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
-
-                marker.addListener("click", () => {
-                    infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
-                    infoWindow.open({
-                        anchor: marker,
-                        map
-                    });
-                });
-
-                markers[item.id] = marker;
-            }
 
             setInitialized(true);
         }
     }
+
+    const addMarkers = async () => {
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+        for(const item of getFilteredMedia()) {
+            const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
+
+            marker.addListener("click", () => {
+                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
+                infoWindow.open({
+                    anchor: marker,
+                    map
+                });
+            });
+
+            markers[item.id] = marker;
+        }
+    };
 
     const updateMap = () => {
         if(mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
@@ -84,7 +89,7 @@ const ViewMap: Component = () => {
             map.panTo(pos);
 
             const marker = markers[mediaList.activeItem.id];
-            mapEvent.trigger(marker, "click");
+            google.maps.event.trigger(marker, "click");
         }
     };
 
@@ -92,39 +97,34 @@ const ViewMap: Component = () => {
         initMap();
     });
 
-    hideXpad();
-
     onCleanup(() => {
         showXpad();
         clearFilter();
     });
 
     createEffect(() => {
-        if(initialized()) {
+        if(initialized() && getFilteredMedia().length > 0) {
+            addMarkers();
+        }
+    });
+
+    createEffect(() => {
+        if(mapReady()) {
             updateMap();
-
-            // the selected item guard will ensure a default media item is selected, however,
-            // that does not care if the item has gps data or not.  the check below ensures we
-            // move to an item w/ gps data (if there is any)
-            if(!mediaList.activeItem || !mediaList.activeItem.latitude || !mediaList.activeItem.longitude) {
-                const media = getFilteredMedia();
-
-                if(media.length > 0) {
-                    navigateToItem(media[0]);
-                }
-            }
         }
     });
 
     return (
         <Show when={mediaList.activeRouteDefinition}>
-            <Layout toolbar={
-                <Toolbar>
-                    <MapToolbar />
-                </Toolbar>
-            }>
-                <div class="h-[100vh] w-[100%]" ref={el} />
-            </Layout>
+            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
+                <Layout toolbar={
+                    <Toolbar>
+                        <MapToolbar />
+                    </Toolbar>
+                }>
+                    <div class="h-[100vh] w-[100%]" ref={el} />
+                </Layout>
+            </MediaSelectedGuard>
         </Show>
     );
 };
