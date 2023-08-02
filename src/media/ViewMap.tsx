@@ -1,27 +1,31 @@
 import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
-import { getMediaPath, categoryMapRoute } from "./_routes";
-import { CategoryType } from "../_models/CategoryType";
+import { categoryMapRoute } from "./_routes";
+import { Media, getMediaTeaserUrl } from "../_models/Media";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
-import { getMediaTeaserUrl } from "../_models/Media";
 
 const ViewMap: Component = () => {
     const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
-    const navigate = useNavigate();
-    const params = useParams();
+    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition, navigateToItem }] = useMediaListContext();
     const [initialized, setInitialized] = createSignal(false);
     let el: HTMLDivElement | undefined;
 
     setActiveRouteDefinition(categoryMapRoute);
+
+    setFilter((media: Media) => {
+        if(media.latitude && media.longitude) {
+            return true;
+        } else {
+            return false;
+        }
+    });
 
     const defaultMapOptions = {
         controlSize: 24,
@@ -52,20 +56,18 @@ const ViewMap: Component = () => {
 
             infoWindow = new InfoWindow({ content: "" });
 
-            for(const item of mediaList.items) {
-                if(item.latitude && item.longitude) {
-                    const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
+            for(const item of getFilteredMedia()) {
+                const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
 
-                    marker.addListener("click", () => {
-                        infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
-                        infoWindow.open({
-                            anchor: marker,
-                            map
-                        });
+                marker.addListener("click", () => {
+                    infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
+                    infoWindow.open({
+                        anchor: marker,
+                        map
                     });
+                });
 
-                    markers[item.id] = marker;
-                }
+                markers[item.id] = marker;
             }
 
             setInitialized(true);
@@ -94,17 +96,21 @@ const ViewMap: Component = () => {
 
     onCleanup(() => {
         showXpad();
+        clearFilter();
     });
 
     createEffect(() => {
         if(initialized()) {
             updateMap();
 
-            if(!params.id) {
-                const p = mediaList.items.find(x => x.latitude && x.longitude);
+            // the selected item guard will ensure a default media item is selected, however,
+            // that does not care if the item has gps data or not.  the check below ensures we
+            // move to an item w/ gps data (if there is any)
+            if(!mediaList.activeItem || !mediaList.activeItem.latitude || !mediaList.activeItem.longitude) {
+                const media = getFilteredMedia();
 
-                if(p) {
-                    navigate(getMediaPath(categoryMapRoute, params.categoryType as CategoryType, p.categoryId, p.id));
+                if(media.length > 0) {
+                    navigateToItem(media[0]);
                 }
             }
         }

@@ -1,4 +1,4 @@
-import { ParentComponent, createContext, useContext } from "solid-js";
+import { ParentComponent, createContext, createMemo, createSignal, useContext } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
@@ -27,6 +27,9 @@ export const defaultMediaListState = {
 export type MediaListContextValue = [
     state: MediaListState,
     actions: {
+        clearFilter: () => void;
+        setFilter: (predicate: (media: Media) => boolean) => void;
+        getFilteredMedia: () => Media[];
         setActiveRouteDefinition: (def: AppRouteDefinition) => void;
         setItems: (media: Media[]) => void;
         addItems: (media: Media[]) => void;
@@ -41,6 +44,7 @@ export type MediaListContextValue = [
         moveNext: () => void;
         movePrevious: () => void;
         moveLast: () => void;
+        navigateToItem: (media: Media) => void;
     }
 ];
 
@@ -50,6 +54,16 @@ export const MediaListProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(defaultMediaListState);
     const params = useParams();
     const navigate = useNavigate();
+    const nonFilter = { filter: (media: Media) => true };
+    const [filterSignal, setFilterSignal] = createSignal(nonFilter);
+
+    const clearFilter = () => setFilterSignal(nonFilter);
+
+    const setFilter = (predicate: (media: Media) => boolean) =>
+        setFilterSignal({ filter: predicate });
+
+    const getFilteredMedia = createMemo(() =>
+        state.items.filter(filterSignal().filter));
 
     const setActiveRouteDefinition = (activeRouteDefinition: AppRouteDefinition) => {
         setState({activeRouteDefinition});
@@ -78,8 +92,25 @@ export const MediaListProvider: ParentComponent = (props) => {
 
     const setMediaElement = (el: HTMLImageElement | HTMLVideoElement) => setState({mediaElement: el});
 
-    const activeItemIsFirst = () => state.activeIndex === 0;
-    const activeItemIsLast = () => state.activeIndex === state.items.length - 1;
+    const activeItemIsFirst = () => {
+        const media = getFilteredMedia();
+
+        if(media.length === 0) {
+            return false;
+        } else {
+            return media[0].id === state.activeItem?.id;
+        }
+    };
+
+    const activeItemIsLast = () => {
+        const media = getFilteredMedia();
+
+        if(media.length === 0) {
+            return false;
+        } else {
+            return media[media.length - 1].id === state.activeItem?.id;
+        }
+    }
 
     const unsetActiveItem = () => {
         setState({
@@ -105,7 +136,10 @@ export const MediaListProvider: ParentComponent = (props) => {
             return undefined;
         }
 
-        return state.items[state.activeIndex + 1];
+        const media = getFilteredMedia();
+        const currIdx = media.findIndex(m => m.id === state.activeItem.id);
+
+        return media[currIdx + 1];
     };
 
     const getPreviousItem = () => {
@@ -113,7 +147,10 @@ export const MediaListProvider: ParentComponent = (props) => {
             return undefined;
         }
 
-        return state.items[state.activeIndex - 1];
+        const media = getFilteredMedia();
+        const currIdx = media.findIndex(m => m.id === state.activeItem.id);
+
+        return media[currIdx - 1];
     };
 
     const navigateToItem = (media: Media) => {
@@ -123,7 +160,11 @@ export const MediaListProvider: ParentComponent = (props) => {
     };
 
     const moveFirst = () => {
-        navigateToItem(state.items[0]);
+        const media = getFilteredMedia();
+
+        if(media.length > 0) {
+            navigateToItem(media[0]);
+        }
     };
 
     const moveNext = () => {
@@ -135,7 +176,11 @@ export const MediaListProvider: ParentComponent = (props) => {
     };
 
     const moveLast = () => {
-        navigateToItem(state.items[state.items.length - 1]);
+        const media = getFilteredMedia();
+
+        if(media.length > 0) {
+            navigateToItem(media[media.length - 1]);
+        }
     };
 
     const setGpsOverride = (id: number, coord: GpsCoordinate) => {
@@ -153,6 +198,9 @@ export const MediaListProvider: ParentComponent = (props) => {
 
     return (
         <MediaListContext.Provider value={[state, {
+            clearFilter,
+            setFilter,
+            getFilteredMedia,
             setActiveRouteDefinition,
             setItems,
             addItems,
@@ -166,7 +214,8 @@ export const MediaListProvider: ParentComponent = (props) => {
             moveFirst,
             moveNext,
             movePrevious,
-            moveLast
+            moveLast,
+            navigateToItem
         }]}>
             {props.children}
         </MediaListContext.Provider>
