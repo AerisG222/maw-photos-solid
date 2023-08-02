@@ -40,25 +40,31 @@ const Toolbar: ParentComponent = (props) => {
         }
     };
 
+    const isValidArea = () =>
+        routeContext.area === AreaCategories ||
+        routeContext.area === AreaRandom;
+
     return (
-        <ToolbarLayout>
-            <ToolbarLink route={getGridRoute()}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-            <ToolbarLink route={getDetailRoute()}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-            <ToolbarLink route={getFullscreenRoute()} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+        <Show when={isValidArea()}>
+            <ToolbarLayout>
+                <ToolbarLink route={getGridRoute()}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
+                <ToolbarLink route={getDetailRoute()}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                <ToolbarLink route={getFullscreenRoute()} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
 
-            <Show when={routeContext.area === AreaCategories}>
-                <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+                <Show when={routeContext.area === AreaCategories}>
+                    <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
 
-                <Show when={isAdmin()}>
-                    <ToolbarLink route={categoryBulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                    <Show when={isAdmin()}>
+                        <ToolbarLink route={categoryBulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                    </Show>
                 </Show>
-            </Show>
 
-            <Show when={!!c()}>
-                <Divider />
-                {c()}
-            </Show>
-        </ToolbarLayout>
+                <Show when={!!c()}>
+                    <Divider />
+                    {c()}
+                </Show>
+            </ToolbarLayout>
+        </Show>
     );
 };
 
