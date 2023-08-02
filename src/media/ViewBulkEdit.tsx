@@ -99,10 +99,6 @@ const ViewBulkEdit: Component = () => {
         );
     };
 
-    if(!mediaList.items || mediaList.items.length === 0) {
-        navigate(getMediaCategoryPath(params.categoryType as CategoryType, categoryId));
-    }
-
     createEffect(() => {
         setMedia(mediaList.items.map(buildSelectableMedia));
     })
