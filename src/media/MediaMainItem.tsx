@@ -6,6 +6,10 @@ import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoryContext } from "../contexts/CategoryContext";
 import { CategoryTypePhotos } from "../_models/CategoryType";
+import { useMediaListContext } from './contexts/MediaListContext';
+import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from '../directives/SwipeDirective';
+
+false && swipe;
 
 import MainPhoto from "./photos/MainPhoto";
 import MainVideo from "./videos/MainVideo";
@@ -17,6 +21,7 @@ type Props = {
 
 const MediaMainItem: Component<Props> = (props) => {
     const [, { setActiveCategoryById }] = useCategoryContext();
+    const [, { movePrevious, moveNext }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
 
@@ -28,9 +33,17 @@ const MediaMainItem: Component<Props> = (props) => {
         }
     });
 
+    const handleSwipe = (direction) => {
+        if(direction === SWIPE_LEFT) {
+            movePrevious();
+        } else if (direction === SWIPE_RIGHT) {
+            moveNext();
+        }
+    };
+
     return (
         <Show when={props.media}>
-            <div
+            <div use:swipe={handleSwipe}
                 class="h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}>
                 <Switch>
