@@ -12,15 +12,15 @@ type Props = {
 
 const MediaSelectedGuard: ParentComponent<Props> = (props) => {
     const [categoryContext] = useCategoryContext();
-    const [mediaList] = useMediaListContext();
+    const [mediaList, { getFilteredMedia }] = useMediaListContext();
     const navigate = useNavigate();
     const c = children(() => props.children);
 
     createEffect(() => {
-        if(mediaList.items &&
-            mediaList.items.length > 0 &&
-            !mediaList.activeItem) {
-            const m = mediaList.items[0];
+        const media = getFilteredMedia();
+
+        if(media.length > 0 && !mediaList.activeItem) {
+            const m = media[0];
 
             if(m) {
                 navigate(getMediaPath(props.targetRoute, categoryContext.activeCategory?.type, m.categoryId, m.id));
