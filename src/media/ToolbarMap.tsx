@@ -3,7 +3,7 @@ import { Component } from "solid-js";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 
-const FullscreenToolbar: Component = () => {
+const MapToolbar: Component = () => {
     return (
         <>
             <MovePreviousButton />
@@ -12,4 +12,4 @@ const FullscreenToolbar: Component = () => {
     );
 };
 
-export default FullscreenToolbar;
+export default MapToolbar;
