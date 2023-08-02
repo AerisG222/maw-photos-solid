@@ -1,4 +1,4 @@
-import { ParentComponent, createContext, createMemo, createSignal, useContext } from "solid-js";
+import { ParentComponent, batch, createContext, createMemo, createSignal, useContext } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
@@ -59,8 +59,15 @@ export const MediaListProvider: ParentComponent = (props) => {
 
     const clearFilter = () => setFilterSignal(nonFilter);
 
-    const setFilter = (predicate: (media: Media) => boolean) =>
-        setFilterSignal({ filter: predicate });
+    const setFilter = (predicate: (media: Media) => boolean) => {
+        batch(() => {
+            if(!predicate(state.activeItem)) {
+                unsetActiveItem();
+            }
+
+            setFilterSignal({ filter: predicate });
+        });
+    }
 
     const getFilteredMedia = createMemo(() =>
         state.items.filter(filterSignal().filter));
