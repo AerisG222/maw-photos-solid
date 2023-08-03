@@ -23,7 +23,9 @@ const ActiveMediaMonitor: ParentComponent = (props) => {
     // note: wanted to simply put this in the top level category, but we need this to be defined
     // in an element/component that is a child of the mediaListContext...
     createEffect(() => {
-        setActiveItem(params.id ? parseInt(params.id, 10) : undefined);
+        if(mediaList.items && mediaList.items.length > 0) {
+            setActiveItem(params.id ? parseInt(params.id, 10) : undefined);
+        }
     });
 
     createEffect(() => {
