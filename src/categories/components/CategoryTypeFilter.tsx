@@ -8,7 +8,11 @@ import { categoryTypesOptions } from "../../_models/CategoryTypes";
 
 import Select from "../../components/input/Select";
 
-const CategoryTypeFilter: Component = () => {
+type Props = {
+    horizontal: boolean;
+}
+
+const CategoryTypeFilter: Component<Props> = (props) => {
     const TYPE_FILTER = "CategoryTypeFilter_Type";
     const [searchParams, setSearchParams] = useSearchParams();
     const [filter, { setTypeFilter }] = useCategoryFilterSettingsContext();
@@ -38,6 +42,7 @@ const CategoryTypeFilter: Component = () => {
 
     return (
         <Select
+            horizontal={props.horizontal}
             title="Category Type"
             itemArray={categoryTypesOptions}
             selectedValue={filter.typeFilter}

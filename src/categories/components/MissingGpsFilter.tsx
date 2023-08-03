@@ -4,7 +4,11 @@ import Checkbox from "../../components/input/Checkbox";
 import { useCategoryContext } from "../../contexts/CategoryContext";
 import { Category } from "../../_models/Category";
 
-const MissingGpsFilter: Component = () => {
+type Props = {
+    horizontal: boolean;
+}
+
+const MissingGpsFilter: Component<Props> = (props) => {
     const GPS_FILTER = "gps-filter";
     const [, { addFilter, removeFilter }] = useCategoryContext();
 

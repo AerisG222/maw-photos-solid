@@ -21,7 +21,10 @@ export const defaultMediaBreakpointState: MediaBreakpointState = {
 
 export type MediaBreakpointContextValue = [
     state: MediaBreakpointState,
-    actions: { }
+    actions: {
+        gteMd: () => boolean;
+        ltMd: () => boolean;
+    }
 ];
 
 const MediaBreakpointContext = createContext<MediaBreakpointContextValue>();
@@ -50,8 +53,11 @@ export const MediaBreakpointProvider: ParentComponent = (props) => {
         });
     });
 
+    const gteMd = () => state.md;
+    const ltMd = () => !state.md;
+
     return (
-        <MediaBreakpointContext.Provider value={[state, { }]}>
+        <MediaBreakpointContext.Provider value={[state, { gteMd, ltMd }]}>
             {props.children}
         </MediaBreakpointContext.Provider>
     );

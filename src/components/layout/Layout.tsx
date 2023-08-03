@@ -18,7 +18,8 @@ const Layout: ParentComponent<Props> = (props) => {
 
     return (
         <div class="grid
-            grid-rows-[max-content_auto_max-content] grid-cols-[100vw]
+            w-100vw max-w-100vw h-100vh max-h-100vh
+            grid-rows-[max-content_auto_0] grid-cols-[100vw]
             md:grid-rows-[100vh] md:grid-cols-[max-content_auto_max-content]"
         >
             <Show when={toolbar()} fallback={<div />}>

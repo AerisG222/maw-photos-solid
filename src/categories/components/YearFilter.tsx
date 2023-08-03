@@ -7,7 +7,11 @@ import { useCategoryFilterSettingsContext } from "../../contexts/settings/Catego
 import Select from "../../components/input/Select";
 import { Category } from "../../_models/Category";
 
-const YearFilter: Component = () => {
+type Props = {
+    horizontal: boolean;
+}
+
+const YearFilter: Component<Props> = (props) => {
     const YEAR_FILTER = "YearFilter_Year";
     const [, { getAllYears, addFilter, removeFilter }] = useCategoryContext();
     const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
@@ -48,6 +52,7 @@ const YearFilter: Component = () => {
 
     return (
         <Select
+            horizontal={props.horizontal}
             title="Year"
             itemArray={toKvp(getAllYears())}
             selectedValue={filter.yearFilter ?? "all"}
