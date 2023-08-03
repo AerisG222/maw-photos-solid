@@ -6,7 +6,7 @@ import { statsPhotos } from "./_routes";
 const StatsRedirect: Component = () => {
     const navigate = useNavigate();
 
-    navigate(statsPhotos.absolutePath);
+    navigate(statsPhotos.absolutePath, { replace: true });
 
     return <></>;
 };

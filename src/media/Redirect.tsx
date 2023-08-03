@@ -17,12 +17,12 @@ const Redirect: Component = () => {
         const cat = categoryContext.activeCategory;
 
         if(cat) {
-            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id));
+            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id), { replace: true });
         }
     };
 
     const randomRedirect = () => {
-        navigate("/random/grid");
+        navigate("/random/grid", { replace: true });
     };
 
     createEffect(() => {

@@ -8,7 +8,7 @@ const SearchRedirect: Component = () => {
     const [settings] = useSearchPageSettingsContext();
     const navigate = useNavigate();
 
-    navigate(getPathForViewMode(settings.viewMode));
+    navigate(getPathForViewMode(settings.viewMode), { replace: true });
 
     return <></>;
 };

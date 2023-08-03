@@ -13,7 +13,7 @@ const AdminGuard: ParentComponent<Props> = (props) => {
 
     createEffect(() => {
         if(!isAdmin()) {
-            navigate(props.redirectRoute ?? "/");
+            navigate(props.redirectRoute ?? "/", { replace: true });
         }
     });
 

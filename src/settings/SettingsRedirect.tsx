@@ -6,7 +6,7 @@ import { settingsApplication } from "./_routes";
 const Settings: Component = () => {
     const navigate = useNavigate();
 
-    navigate(settingsApplication.absolutePath);
+    navigate(settingsApplication.absolutePath, { replace: true });
 
     return <></>;
 };

@@ -6,7 +6,7 @@ import { aboutHelp } from "./_routes";
 const AboutRedirect: Component = () => {
     const navigate = useNavigate();
 
-    navigate(aboutHelp.absolutePath);
+    navigate(aboutHelp.absolutePath, { replace: true });
 
     return <></>;
 };
