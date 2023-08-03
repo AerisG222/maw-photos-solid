@@ -2,7 +2,6 @@ import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../contexts/FullscreenContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
 import { categoryFullscreenRoute, randomFullscreenRoute } from "./_routes";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
@@ -14,7 +13,6 @@ import MediaMainItem from "./MediaMainItem";
 import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewFullscreen: Component = () => {
-    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [, { setFullscreen }] = useFullscreenContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
@@ -29,18 +27,17 @@ const ViewFullscreen: Component = () => {
         setActiveRouteDefinition(route);
     });
 
-    hideXpad();
     setFullscreen(true);
 
     onCleanup(() => {
         setFullscreen(false)
-        showXpad();
     });
 
     return (
         <Show when={mediaList.activeRouteDefinition}>
             <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
                 <Layout
+                    xPad={false}
                     toolbar={
                         <Toolbar>
                             <FullscreenToolbar />

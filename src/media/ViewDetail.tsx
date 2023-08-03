@@ -1,8 +1,7 @@
-import { Component, Show, createEffect, onCleanup } from "solid-js";
+import { Component, Show, createEffect } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
 import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { categoryDetailRoute, randomDetailRoute } from "./_routes";
 import { AreaRandom } from "../_models/AppRouteDefinition";
@@ -18,7 +17,6 @@ import MediaMainItem from "./MediaMainItem";
 import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewDetail: Component = () => {
-    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [settings] = useMediaDetailViewSettingsContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
@@ -31,12 +29,6 @@ const ViewDetail: Component = () => {
         }
 
         setActiveRouteDefinition(route);
-    });
-
-    hideXpad();
-
-    onCleanup(() => {
-        showXpad();
     });
 
     const getMaxHeight = () => {
@@ -56,6 +48,7 @@ const ViewDetail: Component = () => {
         <Show when={mediaList.activeRouteDefinition}>
             <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
                 <Layout
+                    xPad={false}
                     toolbar={
                         <Toolbar>
                             <DetailToolbar />

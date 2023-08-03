@@ -2,7 +2,6 @@ import { Component, Show, createEffect, createSignal, onCleanup, onMount } from 
 
 import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { useLayoutOptionsContext } from "../contexts/LayoutOptionsContext";
 import { categoryMapRoute } from "./_routes";
 import { Media, getMediaTeaserUrl } from "../_models/Media";
 
@@ -12,7 +11,6 @@ import Layout from "../components/layout/Layout";
 import MediaSelectedGuard from './MediaSelectedGuard';
 
 const ViewMap: Component = () => {
-    const [, { showXpad, hideXpad }] = useLayoutOptionsContext();
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
     const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition }] = useMediaListContext();
     const [initialized, setInitialized] = createSignal(false);
@@ -20,7 +18,6 @@ const ViewMap: Component = () => {
 
     let el: HTMLDivElement | undefined;
 
-    hideXpad();
     setActiveRouteDefinition(categoryMapRoute);
 
     setFilter((media: Media) => {
@@ -98,7 +95,6 @@ const ViewMap: Component = () => {
     });
 
     onCleanup(() => {
-        showXpad();
         clearFilter();
     });
 
@@ -117,10 +113,12 @@ const ViewMap: Component = () => {
     return (
         <Show when={mediaList.activeRouteDefinition}>
             <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout toolbar={
-                    <Toolbar>
-                        <MapToolbar />
-                    </Toolbar>
+                <Layout
+                    xPad={false}
+                    toolbar={
+                        <Toolbar>
+                            <MapToolbar />
+                        </Toolbar>
                 }>
                     <div class="h-[100vh] w-[100%]" ref={el} />
                 </Layout>
