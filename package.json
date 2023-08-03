@@ -33,6 +33,7 @@
     },
     "dependencies": {
         "@solid-primitives/keyboard": "^1.2.3",
+        "@solid-primitives/media": "^2.2.3",
         "@solidjs/router": "^0.8.2",
         "@unocss/preset-uno": "^0.54.1",
         "highcharts": "^11.1.0",

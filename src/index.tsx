@@ -10,6 +10,7 @@ import { FullscreenProvider } from "./contexts/FullscreenContext";
 import { LayoutOptionsProvider } from "./contexts/LayoutOptionsContext";
 import { RouteDetailProvider } from "./contexts/RouteDetailContext";
 import { ShortcutProvider } from "./contexts/ShortcutContext";
+import { MediaBreakpointProvider } from './contexts/MediaBreakpointContext';
 
 import App from "./App";
 import CategoryLoader from "./components/categories/CategoryLoader";
@@ -17,6 +18,7 @@ import ShortcutDialog from "./components/shortcuts/ShortcutDialog";
 import ThemeWrapper from "./components/theme/ThemeWrapper";
 
 render(() =>
+    <MediaBreakpointProvider>
     <ShortcutProvider>
     <AllSettingsProvider>
         <ThemeWrapper>
@@ -37,6 +39,7 @@ render(() =>
         </ThemeWrapper>
     </AllSettingsProvider>
     </ShortcutProvider>
+    </MediaBreakpointProvider>
     ,
     document.getElementById("root")
 );
