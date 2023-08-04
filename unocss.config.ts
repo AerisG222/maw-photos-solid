@@ -24,7 +24,8 @@ export default defineConfig<Theme>({
         presetWebFonts({
             provider: "google",
             fonts: {
-                sans: "Nunito Sans"
+                sans: "Nunito Sans",
+                brand: "Tangerine"
             }
         }),
         presetDaisy({
