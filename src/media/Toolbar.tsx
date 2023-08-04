@@ -8,7 +8,7 @@ import { isAdmin } from "../auth/auth";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
 
@@ -60,7 +60,7 @@ const Toolbar: ParentComponent = (props) => {
                 </Show>
 
                 <Show when={!!c()}>
-                    <Divider />
+                    <ToolbarDivider />
                     {c()}
                 </Show>
             </ToolbarLayout>

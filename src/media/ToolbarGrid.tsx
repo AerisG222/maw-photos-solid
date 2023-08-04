@@ -10,7 +10,7 @@ import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 
 import ToolbarButton from "../components/toolbar/ToolbarButton";
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import ToggleSlideshowButton, { showSlideshowButton } from "./toolbar/ToggleSlideshowButton";
@@ -51,7 +51,7 @@ const GridToolbar: Component = () => {
             </Show>
 
             <Show when={state.activeItem || showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
-                <Divider />
+                <ToolbarDivider />
             </Show>
 
             <Show when={!state.activeItem}>

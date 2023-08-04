@@ -6,7 +6,7 @@ import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { CategoryTypePhotos } from "../_models/CategoryType";
 
 import ToolbarButton from "../components/toolbar/ToolbarButton";
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import MoveNextButton from "./toolbar/MoveNextButton";
@@ -43,11 +43,11 @@ const DetailToolbar: Component = () => {
             <MovePreviousButton />
             <MoveNextButton />
 
-            <Divider />
+            <ToolbarDivider />
 
             <Show when={params.categoryType === CategoryTypePhotos}>
                 <DownloadCategoryButton />
-                <Divider />
+                <ToolbarDivider />
             </Show>
 
             <RotateCounterClockwiseButton />
@@ -55,7 +55,7 @@ const DetailToolbar: Component = () => {
             <FlipHorizontalButton />
             <FlipVerticalButton />
 
-            <Divider />
+            <ToolbarDivider />
 
             <Show when={params.categoryType === CategoryTypePhotos}>
                 <DownloadPhotoLowResButton />
@@ -63,13 +63,13 @@ const DetailToolbar: Component = () => {
                 <DownloadPhotoHighResButton />
                 <DownloadPhotoHighUntouchedButton />
 
-                <Divider />
+                <ToolbarDivider />
             </Show>
 
             <Show when={navigator?.canShare}>
                 <ShareButton />
 
-                <Divider />
+                <ToolbarDivider />
             </Show>
 
             <ToolbarButton

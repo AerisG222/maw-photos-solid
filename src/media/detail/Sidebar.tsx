@@ -5,7 +5,7 @@ import { Media, MediaTypePhoto } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
 
-import Divider from "../../components/layout/Divider";
+import ToolbarDivider from "../../components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../components/sidebar/SidebarLayout";
 import InfoCard from "../../components/sidebar/InfoCard";
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
@@ -176,7 +176,7 @@ const Sidebar: Component = () => {
                     clickHandler={toggleExpandedState}
                 />
 
-                <Divider />
+                <ToolbarDivider />
 
                 <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
                     <ToolbarButton

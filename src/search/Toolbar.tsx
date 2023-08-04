@@ -2,7 +2,7 @@ import { ParentComponent, Show, children } from "solid-js"
 
 import { searchGrid, searchList } from "./_routes";
 
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
 
@@ -15,7 +15,7 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLink route={searchList} />
 
             <Show when={!!c()}>
-                <Divider />
+                <ToolbarDivider />
 
                 {c()}
             </Show>

@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
@@ -16,7 +16,7 @@ const FullscreenToolbar: Component = () => {
             <MovePreviousButton />
             <MoveNextButton />
 
-            <Divider />
+            <ToolbarDivider />
 
             <RotateCounterClockwiseButton />
             <RotateClockwiseButton />

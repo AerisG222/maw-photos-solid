@@ -4,7 +4,7 @@ import { statsCombined, statsPhotos, statsVideos } from "./_routes";
 
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
-import Divider from "../components/layout/Divider";
+import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 
 const Toolbar: ParentComponent = (props) => {
     const c = children(() => props.children);
@@ -16,7 +16,7 @@ const Toolbar: ParentComponent = (props) => {
             <ToolbarLink route={statsCombined} />
 
             <Show when={!!c()}>
-                <Divider />
+                <ToolbarDivider />
                 {c()}
             </Show>
         </ToolbarLayout>
