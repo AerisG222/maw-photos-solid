@@ -17,10 +17,9 @@ const Layout: ParentComponent<Props> = (props) => {
     const sidebar = children(() => props.sidebar);
 
     return (
-        <div class="grid
-            w-100vw max-w-100vw h-100vh max-h-100vh
-            grid-rows-[max-content_auto_0] grid-cols-[100vw]
-            md:grid-rows-[100vh] md:grid-cols-[max-content_auto_max-content]"
+        <div class="grid w-100% h-[calc(100vh-48px)]
+            grid-rows-[max-content_auto_0] grid-cols-[100%]
+            md:h-[100vh] md:grid-rows-[100%] md:grid-cols-[max-content_auto_max-content]"
         >
             <Show when={toolbar()} fallback={<div />}>
                 {toolbar()}
