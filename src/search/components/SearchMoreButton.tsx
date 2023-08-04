@@ -34,7 +34,7 @@ const SearchMoreButton: Component = () => {
 
     return (
         <div class="flex justify-center my-3">
-            <button class="btn btn-outline" onClick={triggerSearch}>
+            <button class="btn btn-primary btn-outline" onClick={triggerSearch}>
                 <span class="text-6 i-ic-round-keyboard-arrow-down" /> Show More
             </button>
         </div>

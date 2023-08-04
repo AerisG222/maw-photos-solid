@@ -61,7 +61,7 @@ const SearchBar: Component = () => {
             </button>
 
             <button
-                class="ml-12 btn btn-error btn-outline hover:bg-secondary hover:color-secondary-content"
+                class="ml-6 btn btn-error btn-outline hover:bg-secondary hover:color-secondary-content"
                 title="Cancel"
                 onClick={onClearSearch}
             >
