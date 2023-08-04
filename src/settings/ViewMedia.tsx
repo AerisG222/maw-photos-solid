@@ -87,47 +87,47 @@ const ViewMedia: Component = () => {
                     <h3 class="head3 mt-4 color-secondary">Info Panel</h3>
                     <div>
                         <Checkbox
-                            title="Show Info Panel"
+                            title="Show Expanded Panel"
                             name="showInfoPanel"
                             isSelected={infoPanelSettings.expandInfoPanel}
                             onChange={setExpandInfoPanel} />
                         <Checkbox
-                            title="Show Ratings Panel"
+                            title="Show Ratings"
                             name="showRatingsPanel"
                             isSelected={infoPanelSettings.showRatings}
                             onChange={setShowRatings} />
                         <Checkbox
-                            title="Show Comments Panel"
+                            title="Show Comments"
                             name="showCommentsPanel"
                             isSelected={infoPanelSettings.showComments}
                             onChange={setShowComments} />
                         <Checkbox
-                            title="Show EXIF Panel"
+                            title="Show EXIF"
                             name="showExifPanel"
                             isSelected={infoPanelSettings.showExif}
                             onChange={setShowExif} />
                         <Checkbox
-                            title="Show Histogram Panel"
+                            title="Show Histogram"
                             name="showHistogramPanel"
                             isSelected={infoPanelSettings.showHistogram}
                             onChange={setShowHistogram} />
                         <Checkbox
-                            title="Show Effects Panel"
+                            title="Show Effects"
                             name="showEffectsPanel"
                             isSelected={infoPanelSettings.showEffects}
                             onChange={setShowEffects} />
                         <Checkbox
-                            title="Show Mini-map Panel"
+                            title="Show Mini-map"
                             name="showMiniMapPanel"
                             isSelected={infoPanelSettings.showMinimap}
                             onChange={setShowMinimap} />
                         <Checkbox
-                            title="Show Metadata Editor Panel"
+                            title="Show Metadata Editor"
                             name="showMetadataEditorPanel"
                             isSelected={infoPanelSettings.showMetadataEditor}
                             onChange={setShowMetadataEditor} />
                         <Checkbox
-                            title="Show Category Teaser Chooser Panel"
+                            title="Show Category Teaser Chooser"
                             name="showCategoryTeaserChooserPanel"
                             isSelected={infoPanelSettings.showCategoryTeaserChooser}
                             onChange={setShowCategoryTeaserChooser} />
