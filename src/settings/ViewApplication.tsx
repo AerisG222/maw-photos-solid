@@ -17,6 +17,7 @@ const ViewApplication: Component = () => {
             <PanelContainer>
                 <Panel title="General">
                     <Select
+                        horizontal={false}
                         title="Theme"
                         itemArray={allThemes}
                         selectedValue={appSettings.theme}
