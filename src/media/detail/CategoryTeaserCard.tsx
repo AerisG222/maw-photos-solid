@@ -27,7 +27,7 @@ const CategoryTeaserCard: Component = () => {
             <div class="text-center">
                 <img class="mt-2 mx-auto center" src={categoryState.activeCategory?.teaserImageUrl} />
 
-                <button class="btn btn-sm mt-2" onClick={onSetTeaser}>
+                <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>
                     Replace with Active Photo
                 </button>
             </div>
