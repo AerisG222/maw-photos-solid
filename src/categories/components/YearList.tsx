@@ -18,7 +18,7 @@ const YearList: Component<Props> = (props) => {
         <>
             <YearHeading year={props.year} />
 
-            <div>
+            <div class="mb-4">
                 <For each={props.categories}>{ category =>
                     <CategoryListItem category={category} thumbnailSize={settings.thumbnailSize} />
                 }</For>
