@@ -44,8 +44,9 @@ const HistogramCard: Component = () => {
     };
 
     const updateHistogramFromImage = (img): void => {
-        tempCanvas.width = img.width;
-        tempCanvas.height = img.height;
+        tempCanvas.width = img.naturalWidth ? img.naturalWidth : img.width;
+        tempCanvas.height = img.naturalHeight ? img.naturalHeight : img.height;
+
         tempCtx.drawImage(img, 0, 0);
 
         const data = tempCtx.getImageData(
