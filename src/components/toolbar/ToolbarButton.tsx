@@ -23,28 +23,44 @@ const ToolbarButton: Component<Props> = (props) => {
         props.clickHandler();
     };
 
+    const clearShortcut = () => {
+        if(id) {
+            removeShortcut(id);
+            id = undefined;
+        }
+    };
+
+    const registerShortcut = () => {
+        if(id) {
+            return;
+        }
+
+        id = createUniqueId();
+
+        createShortcut(props.shortcutKeys, () => { props.clickHandler() });
+
+        addShortcut({
+            id,
+            shortcut: props.shortcutKeys,
+            description: props.name
+        });
+    };
+
     createEffect(() => {
-        if(props.shortcutKeys) {
-            if(props.disabled) {
-                if(id) {
-                    removeShortcut(id);
-                }
-            } else {
-                createShortcut(props.shortcutKeys, () => { props.clickHandler() });
+        if(!props.shortcutKeys) {
+            clearShortcut();
+            return;
+        }
 
-                id = createUniqueId();
-
-                addShortcut({
-                    id,
-                    shortcut: props.shortcutKeys,
-                    description: props.name
-                });
-            }
+        if(props.disabled) {
+            clearShortcut();
+        } else if(!props.disabled && !id) {
+            registerShortcut();
         }
     })
 
     onCleanup(() => {
-        removeShortcut(id);
+        clearShortcut();
     });
 
     return (
