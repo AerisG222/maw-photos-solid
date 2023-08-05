@@ -180,6 +180,7 @@ const Sidebar: Component = () => {
 
                 <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
                     <ToolbarButton
+                        disabled={!settings.expandInfoPanel}
                         name={card.tooltip}
                         icon={card.icon}
                         shortcutKeys={card.shortcutKeys}
