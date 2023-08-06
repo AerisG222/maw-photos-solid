@@ -37,7 +37,7 @@ const ToolbarButton: Component<Props> = (props) => {
 
         id = createUniqueId();
 
-        createShortcut(props.shortcutKeys, () => { props.clickHandler() });
+        // createShortcut(props.shortcutKeys, () => { props.clickHandler() });
 
         addShortcut({
             id,
@@ -46,18 +46,19 @@ const ToolbarButton: Component<Props> = (props) => {
         });
     };
 
-    createEffect(() => {
-        if(!props.shortcutKeys) {
-            clearShortcut();
-            return;
-        }
+    // todo: not sure why, but this is unhappy if it runs in createEffect,
+    // so we are leaving this here for now...
+    if(props.shortcutKeys) {
+        createShortcut(props.shortcutKeys, () => props.clickHandler());
+    }
 
-        if(props.disabled) {
+    createEffect(() => {
+        if(!props.shortcutKeys || props.disabled) {
             clearShortcut();
-        } else if(!props.disabled && !id) {
+        } else if(!id) {
             registerShortcut();
         }
-    })
+    });
 
     onCleanup(() => {
         clearShortcut();
