@@ -8,8 +8,10 @@ import { useCategoryContext } from "../contexts/CategoryContext";
 import { CategoryTypePhotos } from "../_models/CategoryType";
 import { useMediaListContext } from './contexts/MediaListContext';
 import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from '../directives/SwipeDirective';
+import { tap } from "../directives/TapDirective";
 
 false && swipe;
+false && tap;
 
 import MainPhoto from "./photos/MainPhoto";
 import MainVideo from "./videos/MainVideo";
@@ -24,6 +26,8 @@ const MediaMainItem: Component<Props> = (props) => {
     const [, { movePrevious, moveNext }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
+
+    let el: HTMLDivElement = undefined;
 
     createEffect(() => {
         if(routeContext.area === AreaRandom && props.media) {
@@ -41,9 +45,18 @@ const MediaMainItem: Component<Props> = (props) => {
         }
     };
 
+    // video elements were not recognizing click events when on mobile, so we
+    // try to and handle this here by listening for taps instead
+    const handleTap = () => {
+        el?.click();
+    }
+
     return (
         <Show when={props.media}>
-            <div use:swipe={handleSwipe}
+            <div
+                ref={el}
+                use:swipe={handleSwipe}
+                use:tap={handleTap}
                 class="h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}>
                 <Switch>
