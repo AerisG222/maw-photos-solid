@@ -11,7 +11,7 @@ const MoveNextButton: Component = () => {
         <ToolbarButton
             disabled={activeItemIsLast()}
             icon="i-ic-round-chevron-right"
-            name="Move Next (&rarr;)"
+            name="Move Next"
             shortcutKeys={["arrowright"]}
             clickHandler={moveNext}
         />

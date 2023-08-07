@@ -70,7 +70,7 @@ const Sidebar: Component = () => {
     const cards = [
         {
             title: "Ratings",
-            tooltip: "Ratings (R)",
+            tooltip: "Sidebar: Ratings",
             icon: "i-ic-round-star",
             shortcutKeys: ["r"],
             clickHandler: toggleRatings,
@@ -80,7 +80,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "Comments",
-            tooltip: "Comments (C)",
+            tooltip: "Sidebar: Comments",
             icon: "i-ic-round-comment",
             shortcutKeys: ["c"],
             clickHandler: toggleComments,
@@ -90,7 +90,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "EXIF Data",
-            tooltip: "EXIF Data (X)",
+            tooltip: "Sidebar: EXIF Data",
             icon: "i-ic-round-tune",
             shortcutKeys: ["x"],
             clickHandler: toggleExif,
@@ -100,7 +100,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "Effects",
-            tooltip: "Effects (E)",
+            tooltip: "Sidebar: Effects",
             icon: "i-ic-round-photo-filter",
             shortcutKeys: ["e"],
             clickHandler: toggleEffects,
@@ -110,7 +110,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "Histogram",
-            tooltip: "Histogram (H)",
+            tooltip: "Sidebar: Histogram",
             icon: "i-ic-round-color-lens",
             shortcutKeys: ["h"],
             clickHandler: toggleHistogram,
@@ -120,7 +120,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "MiniMap",
-            tooltip: "MiniMap (V)",
+            tooltip: "Sidebar: MiniMap",
             icon: "i-ic-round-map",
             shortcutKeys: ["v"],
             clickHandler: toggleMinimap,
@@ -130,7 +130,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "Metadata Editor",
-            tooltip: "Metadata Editor (N)",
+            tooltip: "Sidebar: Metadata Editor",
             icon: "i-ic-round-edit",
             shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
@@ -140,7 +140,7 @@ const Sidebar: Component = () => {
         },
         {
             title: "Category Teaser Chooser",
-            tooltip: "Category Teaser Chooser (K)",
+            tooltip: "Sidebar: Category Teaser Chooser",
             icon: "i-ic-round-image-search",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaserChooser,
@@ -166,7 +166,7 @@ const Sidebar: Component = () => {
 
             <SidebarLayout>
                 <ToolbarButton
-                    name="Expand / Collapse (I)"
+                    name="Sidebar: Expand / Collapse"
                     icon={
                         settings.expandInfoPanel
                             ? "i-ic-chevron-right"

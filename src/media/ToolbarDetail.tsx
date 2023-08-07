@@ -74,13 +74,13 @@ const DetailToolbar: Component = () => {
 
             <ToolbarButton
                 icon="i-ic-round-title"
-                name="Show / Hide Category Breadcrumbs (T)"
+                name="Show / Hide Category Breadcrumbs"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
             />
             <ToolbarButton
                 icon="i-ic-round-remove-red-eye"
-                name="Show / Hide Photo List (L)"
+                name="Show / Hide Photo List"
                 shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
             />

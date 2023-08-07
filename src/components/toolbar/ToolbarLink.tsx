@@ -5,6 +5,7 @@ import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { buildPath } from "../../_models/utils/RouteUtils";
 
 import ShortcutWrapper from './ShortcutWrapper';
+import { getNameWithShortcut } from './_util';
 
 type Props = {
     route: AppRouteDefinition;
@@ -36,7 +37,7 @@ const ToolbarLink: Component<Props> = (props) => {
                 activeClass="color-primary-content bg-primary m-r[-1px]"
                 inactiveClass="color-primary"
                 class="px-3 py-1 hover:color-primary-content hover:bg-primary-focus hover:m-r[-1px]"
-                title={props.route.tooltip}
+                title={getNameWithShortcut(props.route.tooltip, props.route.shortcutKeys)}
                 ref={el}
             >
                 <span class={`text-6 ${props.route.icon}`} />

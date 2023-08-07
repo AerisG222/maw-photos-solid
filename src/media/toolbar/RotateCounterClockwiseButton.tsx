@@ -14,7 +14,7 @@ const RotateCounterClockwiseButton: Component = () => {
     return (
         <ToolbarButton
             icon="i-ic-round-rotate-left"
-            name="Rotate Counter-Clockwise (A)"
+            name="Rotate Counter-Clockwise"
             shortcutKeys={["a"]}
             clickHandler={onRotateCounterClockwise}
         />

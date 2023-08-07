@@ -36,7 +36,7 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
 const buildGridRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-outline-apps",
     name: "Grid View",
-    tooltip: "Grid View (G)",
+    tooltip: "Grid View",
     shortcutKeys: ["g"],
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
@@ -46,7 +46,7 @@ const buildGridRoute = (basePath: string): AppRouteDefinition => ({
 const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-dashboard",
     name: "Detail View",
-    tooltip: "Detail View (W)",
+    tooltip: "Detail View",
     shortcutKeys: ["w"],
     path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
@@ -56,7 +56,7 @@ const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
 const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-fullscreen",
     name: "Fullscreen View",
-    tooltip: "Fullscreen View (F)",
+    tooltip: "Fullscreen View",
     shortcutKeys: ["f"],
     path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,
@@ -66,7 +66,7 @@ const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
 const buildMapRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-map",
     name: "Map View",
-    tooltip: "Map View (Z)",
+    tooltip: "Map View",
     shortcutKeys: ["z"],
     path: "/map/:id?",
     absolutePath: `${basePath}/map/:id?`,
@@ -76,7 +76,7 @@ const buildMapRoute = (basePath: string): AppRouteDefinition => ({
 const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
     icon: "i-ic-round-collections",
     name: "Bulk Edit View",
-    tooltip: "Bulk Edit View (B)",
+    tooltip: "Bulk Edit View",
     shortcutKeys: ["b"],
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
