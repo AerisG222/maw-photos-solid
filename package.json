@@ -11,8 +11,8 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "@iconify-json/ic": "^1.1.13",
-        "@iconify-json/mdi": "^1.1.53",
+        "@iconify-json/ic": "^1.1.14",
+        "@iconify-json/mdi": "^1.1.54",
         "@solidjs/testing-library": "^0.8.4",
         "@types/google.maps": "^3.53.6",
         "@typescript-eslint/parser": "^6.2.1",
@@ -27,7 +27,7 @@
         "typescript": "^5.1.6",
         "unocss-preset-daisy": "^6.0.0",
         "unocss-preset-scrollbar": "^0.2.1",
-        "vite": "^4.4.8",
+        "vite": "^4.4.9",
         "vite-plugin-solid": "^2.7.0",
         "vitest": "^0.34.1"
     },
