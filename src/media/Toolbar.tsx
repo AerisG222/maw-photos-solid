@@ -11,12 +11,14 @@ import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
+import { useMediaBreakpointContext } from '../contexts/MediaBreakpointContext';
 
 const Toolbar: ParentComponent = (props) => {
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
     const [, { setViewMode }] = useMediaPageSettingsContext();
+    const [, {gteMd}] = useMediaBreakpointContext();
 
     const c = children(() => props.children);
 
@@ -47,15 +49,33 @@ const Toolbar: ParentComponent = (props) => {
     return (
         <Show when={isValidArea()}>
             <ToolbarLayout>
-                <ToolbarLink route={getGridRoute()}       routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeGrid)} />
-                <ToolbarLink route={getDetailRoute()}     routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeDetail)} />
-                <ToolbarLink route={getFullscreenRoute()} routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+                <ToolbarLink
+                    route={getGridRoute()}
+                    routeParams={getRouteParams()}
+                    clickHandler={() => setViewMode(MediaViewModeGrid)} />
 
-                <Show when={routeContext.area === AreaCategories}>
-                    <ToolbarLink route={categoryMapRoute}        routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeMap)} />
+                <Show when={gteMd()}>
+                    <ToolbarLink
+                        route={getDetailRoute()}
+                        routeParams={getRouteParams()}
+                        clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                    <ToolbarLink
+                        route={getFullscreenRoute()}
+                        routeParams={getRouteParams()}
+                        clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
 
-                    <Show when={isAdmin()}>
-                        <ToolbarLink route={categoryBulkEditRoute}   routeParams={getRouteParams()} clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                    <Show when={routeContext.area === AreaCategories}>
+                        <ToolbarLink
+                            route={categoryMapRoute}
+                            routeParams={getRouteParams()}
+                            clickHandler={() => setViewMode(MediaViewModeMap)} />
+
+                        <Show when={isAdmin()}>
+                            <ToolbarLink
+                                route={categoryBulkEditRoute}
+                                routeParams={getRouteParams()}
+                                clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                        </Show>
                     </Show>
                 </Show>
 
