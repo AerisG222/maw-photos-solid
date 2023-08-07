@@ -7,8 +7,8 @@ import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoryContext } from "../contexts/CategoryContext";
 import { CategoryTypePhotos } from "../_models/CategoryType";
 import { useMediaListContext } from './contexts/MediaListContext';
-import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from '../directives/SwipeDirective';
-import { tap } from "../directives/TapDirective";
+import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from '../directives/Swipe';
+import { tap } from "../directives/Tap";
 
 false && swipe;
 false && tap;
