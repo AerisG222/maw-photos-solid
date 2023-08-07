@@ -1,6 +1,6 @@
 import { Component, For, createEffect, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
 
-import { useShortcutContext } from "../../contexts/ShortcutContext";
+import { ShortcutInfo, useShortcutContext } from "../../contexts/ShortcutContext";
 import { createShortcut } from "@solid-primitives/keyboard";
 
 import ShortcutKey from "./ShortcutKey";
@@ -34,13 +34,21 @@ const ShortcutDialog: Component = () => {
         removeShortcut(id);
     });
 
+    const sortShortcuts = (a: ShortcutInfo, b: ShortcutInfo) => {
+        return ('' + a.shortcut[0]).localeCompare(b.shortcut[0]);
+    }
+
+    const getShortcuts = () => {
+        return [...shortcutContext.shortcuts].sort(sortShortcuts);
+    };
+
     return (
         <dialog class="modal" ref={setDialog}>
             <form method="dialog" class="modal-box">
                 <h3 class="font-bold text-lg mb-4">Active Shortcuts</h3>
 
                 <div class="max-h-[400px] overflow-y-auto scrollable">
-                    <For each={shortcutContext.shortcuts}>{shortcut =>
+                    <For each={getShortcuts()}>{shortcut =>
                         <ShortcutKey shortcut={shortcut} />
                     }</For>
                 </div>
