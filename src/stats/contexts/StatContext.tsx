@@ -1,6 +1,6 @@
 import { ParentComponent, createContext, createMemo, useContext } from "solid-js";
 
-import { PhotoCategory, VideoCategory } from "../../_models/Category";
+import { Category, PhotoCategory, VideoCategory } from "../../_models/Category";
 import { createStore } from "solid-js/store";
 import { useCategoryContext } from "../../contexts/CategoryContext";
 import { buildStatsData } from "../../_models/utils/ChartUtils";

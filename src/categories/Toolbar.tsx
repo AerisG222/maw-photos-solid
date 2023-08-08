@@ -9,7 +9,7 @@ import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
 
 const Toolbar: ParentComponent = (props) => {
-    const [settings, { setViewMode }] = useCategoryPageSettingsContext();
+    const [, { setViewMode }] = useCategoryPageSettingsContext();
     const [filterState] = useCategoryFilterSettingsContext();
     const c = children(() => props.children);
 

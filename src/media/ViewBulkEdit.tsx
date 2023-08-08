@@ -1,10 +1,10 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
-import { useNavigate, useParams } from "@solidjs/router";
+import { useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from "../_models/Media";
 import { GpsCoordinate } from "../_models/Gps";
-import { MediaViewModeGrid, categoryBulkEditRoute, getMediaCategoryPath, getMediaPathByView } from "./_routes";
+import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
 import { CategoryType } from "../_models/CategoryType";
 import { IMetadataEditService } from "../_services/media/IMetadataEditService";
 import { photoMediaService } from "../_services/media/PhotoMediaService";
@@ -29,7 +29,6 @@ const ViewBulkEdit: Component = () => {
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
     const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
     const [mediaList, { setActiveRouteDefinition, setGpsOverride }] = useMediaListContext();
-    const navigate = useNavigate();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 

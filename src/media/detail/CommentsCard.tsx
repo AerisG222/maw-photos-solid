@@ -15,7 +15,7 @@ const CommentsCard: Component = () => {
         }
     }
 
-    const [commentResource, { mutate, refetch }] = createResource(fetchCommentSignal, getComments);
+    const [commentResource, { refetch }] = createResource(fetchCommentSignal, getComments);
 
     const addComment = async (comment: string) => {
         await commentContext.service.addComment(mediaList.activeItem?.id, comment);
