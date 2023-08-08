@@ -21,8 +21,12 @@ const CategoryCard: Component<Props> = (props) => {
 
             <img
                 src={props.category.teaserImageUrl}
-                class="rounded-t-1 saturate-50 group-hover:saturate-100"
-                classList={getThumbnailClass(props.thumbnailSize)}
+                class=" saturate-50 group-hover:saturate-100"
+                classList={{
+                    ...getThumbnailClass(props.thumbnailSize),
+                    'rounded-t-1': !props.showYears,
+                    'rounded-b-1': !props.showTitles
+                }}
                 loading="lazy" />
 
             <Show when={props.showTitles}>
