@@ -53,4 +53,10 @@ export const allThemes: Theme[] = [
 export const getThemesForUno = (): Record<string, Record<string, string>>[] =>
     allThemes.map(t => ({ [t.id]: t.def }));
 
+export const getTheme = (id: string) => {
+    const theme = allThemes.find(t => t.id === id);
+
+    return theme ? theme : allThemes.find(t => t.id === defaultTheme);
+}
+
 export const defaultTheme: ThemeIdType = "dusk";
