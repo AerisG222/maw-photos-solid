@@ -12,9 +12,26 @@ const CategoriesRedirect: Component = () => {
     const [settings] = useCategoryPageSettingsContext();
     const [filterState] = useCategoryFilterSettingsContext();
 
+    const updateSearchFromUrl = (search: any, querystring: string) => {
+        const searchParams = new URLSearchParams(querystring);
+
+        if(searchParams.has("year") && !isNaN(searchParams.get("year"))) {
+            search["year"] = parseInt(searchParams.get("year"), 10);
+        }
+
+        if(searchParams.has("type")) {
+            search["type"] = searchParams.get("type");
+        }
+    };
+
     if(location.pathname.endsWith("/categories")) {
         const route = getRouteForViewMode(settings.viewMode);
         const search = buildSearch(filterState.yearFilter, filterState.typeFilter);
+
+        if(location.search) {
+            updateSearchFromUrl(search, location.search);
+        }
+
         navigate(buildPath(route, undefined, search));
     }
 
