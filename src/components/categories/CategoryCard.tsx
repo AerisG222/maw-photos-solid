@@ -19,19 +19,28 @@ const CategoryCard: Component<Props> = (props) => {
                 <div class="text-center max-w-[160px]">{props.category.year}</div>
             </Show>
 
-            <img
-                src={props.category.teaserImageUrl}
-                class=" saturate-50 group-hover:saturate-100"
-                classList={{
-                    ...getThumbnailClass(props.thumbnailSize),
-                    'rounded-t-1': !props.showYears,
-                    'rounded-b-1': !props.showTitles
-                }}
-                loading="lazy" />
+            <div class="position-relative">
+                <Show when={props.category.type === 'videos'}>
+                    <div class="z-10 position-absolute top-[1px] left-[1px] px-[3px] badge badge-sm bg-base-100:72 group-hover:color-primary">
+                        <span class="i-ic-round-videocam" />
+                    </div>
+                </Show>
 
-            <Show when={props.showTitles}>
-                <div class="text-center max-w-[160px]">{props.category.name}</div>
-            </Show>
+                <img
+                    src={props.category.teaserImageUrl}
+                    class=" saturate-50 group-hover:saturate-100"
+                    classList={{
+                        ...getThumbnailClass(props.thumbnailSize),
+                        'rounded-t-1': !props.showYears,
+                        'rounded-b-1': !props.showTitles
+                    }}
+                    loading="lazy" />
+
+                <Show when={props.showTitles}>
+                    <div class="text-center max-w-[160px]">{props.category.name}</div>
+                </Show>
+            </div>
+
         </A>
     );
 };
