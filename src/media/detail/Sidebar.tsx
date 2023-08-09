@@ -184,7 +184,7 @@ const Sidebar: Component = () => {
                         name={card.tooltip}
                         icon={card.icon}
                         shortcutKeys={card.shortcutKeys}
-                        clickHandler={card.clickHandler}
+                        clickHandler={() => settings.expandInfoPanel ? card.clickHandler() : {}}
                         active={card.active()}
                     />
                 }</For>
