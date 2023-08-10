@@ -13,11 +13,16 @@ export type CategoryState = {
     readonly activeCategory?: Category;
 };
 
+const sortByIdDesc = {
+    name: "sortByIdDesc",
+    sortFn: (a: Category, b: Category) => b.id - a.id
+};
+
 export const defaultCategoryState: CategoryState = {
     initialized: false,
     categories: [],
     filters: [],
-    sort: undefined,
+    sort: sortByIdDesc,
     activeCategory: undefined
 };
 
