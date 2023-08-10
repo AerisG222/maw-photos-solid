@@ -137,7 +137,7 @@ export const CategoryProvider: ParentComponent = (props) => {
         const filteredCategories = getFilteredCategories();
 
         return state.sort ?
-            filteredCategories.sort(state.sort.sortFn) :
+            [...filteredCategories].sort(state.sort.sortFn) :
             filteredCategories;
     });
 
