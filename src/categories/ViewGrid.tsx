@@ -1,4 +1,4 @@
-import { Component, For, Suspense } from "solid-js";
+import { Component, For } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoryContext } from "../contexts/CategoryContext";
@@ -20,14 +20,13 @@ const GridView: Component = () => {
                     <GridToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}>
-            <Suspense fallback={<p>Loading...</p>}>
-                <CategoryFilterBar />
+            margin={settings.margin}
+        >
+            <CategoryFilterBar />
 
-                <For each={getFilteredYears()}>{ year =>
-                    <YearGrid year={year} categories={getFilteredCategoriesForYear(year)}/>
-                }</For>
-            </Suspense>
+            <For each={getFilteredYears()}>{ year =>
+                <YearGrid year={year} categories={getFilteredCategoriesForYear(year)}/>
+            }</For>
         </Layout>
     );
 };

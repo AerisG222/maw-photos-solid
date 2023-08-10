@@ -1,4 +1,4 @@
-import { Component, Suspense, createEffect, createResource, createSignal } from "solid-js";
+import { Component, createEffect, createResource, createSignal } from "solid-js";
 
 import { useRatingServiceContext } from "../contexts/RatingServiceContext";
 import { useMediaListContext } from "../contexts/MediaListContext";
@@ -34,7 +34,6 @@ const RatingsCard: Component = () => {
     });
 
     return (
-        <Suspense>
         <table class="m-x-8">
             <tbody>
                 <tr>
@@ -58,7 +57,6 @@ const RatingsCard: Component = () => {
                 </tr>
             </tbody>
         </table>
-        </Suspense>
     );
 };
 

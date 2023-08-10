@@ -1,4 +1,4 @@
-import { Component, For, Suspense } from "solid-js";
+import { Component, For } from "solid-js";
 
 import { useCategoryContext } from "../contexts/CategoryContext";
 import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
@@ -20,14 +20,13 @@ const ListView: Component = () => {
                     <ListToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}>
-            <Suspense fallback={<p>Loading...</p>}>
-                <CategoryFilterBar />
+            margin={settings.margin}
+        >
+            <CategoryFilterBar />
 
-                <For each={getFilteredYears()}>{ year =>
-                    <YearList year={year} categories={getFilteredCategoriesForYear(year)}/>
-                }</For>
-            </Suspense>
+            <For each={getFilteredYears()}>{ year =>
+                <YearList year={year} categories={getFilteredCategoriesForYear(year)}/>
+            }</For>
         </Layout>
     );
 };
