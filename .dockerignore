@@ -1,0 +1,11 @@
+dist
+node_modules
+.dockerignore
+.git
+.gitignore
+.vscode
+Dockerfile*
+npm-debug.log
+obj
+README.md
+**/stats-es2015.json
