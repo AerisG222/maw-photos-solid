@@ -13,7 +13,8 @@ type Props = {
     thumbnailSize: ThumbnailSizeIdType;
     rounded: boolean;
     isActiveItem: boolean;
-    route: AppRouteDefinition
+    route: AppRouteDefinition;
+    eager: boolean;
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
 };
 
@@ -37,7 +38,7 @@ const PhotoLink: Component<Props> = (props) => {
             <img
                 src={props.photo.imageXsSqUrl}
                 classList={getClassList()}
-                loading="lazy" />
+                loading={props.eager ? "eager" : "lazy"} />
         </MediaLink>
     );
 };

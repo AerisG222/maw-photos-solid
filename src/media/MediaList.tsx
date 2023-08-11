@@ -4,6 +4,7 @@ import { useMediaListContext } from "./contexts/MediaListContext";
 import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { EAGER_THRESHOLD } from '../_models/utils/Constants';
 
 import PhotoLink from "./photos/PhotoLink";
 import VideoLink from "./videos/VideoLink";
@@ -43,7 +44,7 @@ const MediaList: Component<Props> = (props) => {
 
     return (
         <div class="flex flex-nowrap overflow-x-auto scrollable">
-            <For each={mediaList.items}>{ media =>
+            <For each={mediaList.items}>{ (media, idx) =>
                 <Switch>
                     <Match when={media.kind === MediaTypePhoto}>
                         <PhotoLink
@@ -52,7 +53,8 @@ const MediaList: Component<Props> = (props) => {
                             thumbnailSize={props.thumbnailSize}
                             isActiveItem={mediaList.activeItem?.id === media.id}
                             route={props.activeRoute}
-                            scroll={scroll} />
+                            scroll={scroll}
+                            eager={idx() <= EAGER_THRESHOLD} />
                     </Match>
                     <Match when={media.kind === MediaTypeVideo}>
                         <VideoLink
@@ -61,7 +63,8 @@ const MediaList: Component<Props> = (props) => {
                             thumbnailSize={props.thumbnailSize}
                             isActiveItem={mediaList.activeItem?.id === media.id}
                             route={props.activeRoute}
-                            scroll={scroll} />
+                            scroll={scroll}
+                            eager={idx() <= EAGER_THRESHOLD} />
                     </Match>
                 </Switch>
             }</For>

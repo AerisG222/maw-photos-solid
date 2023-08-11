@@ -14,6 +14,7 @@ type Props = {
     rounded: boolean;
     isActiveItem: boolean;
     route: AppRouteDefinition;
+    eager: boolean;
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
 };
 
@@ -37,7 +38,7 @@ const VideoLink: Component<Props> = (props) => {
             <img
                 src={props.video.thumbnailSqUrl}
                 classList={getClassList()}
-                loading="lazy" />
+                loading={props.eager ? "eager" : "lazy"} />
         </MediaLink>
     );
 };
