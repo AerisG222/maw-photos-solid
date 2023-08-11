@@ -8,7 +8,6 @@ import presetWebFonts from "@unocss/preset-web-fonts";
 
 import { allRouteIcons } from "./src/routes";
 import { getThemesForUno } from "./src/_models/Theme";
-import { allThumbnailClasses } from "./src/_models/ThumbnailSize";
 import { allMarginClasses } from "./src/_models/Margin";
 import { categoryTypeIcons } from "./src/_models/CategoryTypes";
 
@@ -41,7 +40,6 @@ export default defineConfig<Theme>({
     safelist: [
         ...allRouteIcons,
         ...allMarginClasses,
-        ...allThumbnailClasses,
         ...categoryTypeIcons
     ],
     shortcuts: [

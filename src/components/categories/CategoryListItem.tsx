@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { getThumbnailClass, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { categoryTypes } from "../../_models/CategoryTypes";
 
@@ -20,7 +20,8 @@ const CategoryListItem: Component<Props> = (props) => {
 
             <img
                 src={props.category.teaserImageUrl}
-                classList={getThumbnailClass(props.thumbnailSize)}
+                width={getThumbnailSize(props.thumbnailSize).width}
+                height={getThumbnailSize(props.thumbnailSize).height}
                 class="inline saturate-50 group-hover:saturate-100"
                 loading={props.eager ? "eager" : "lazy"} />
 

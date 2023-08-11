@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Video, Media } from "../../_models/Media";
-import { ThumbnailSizeIdType, getThumbnailClass } from "../../_models/ThumbnailSize";
+import { ThumbnailSizeIdType, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { getMediaPath } from "../_routes";
 import { CategoryTypeVideos } from "../../_models/CategoryType";
 
@@ -20,11 +20,8 @@ type Props = {
 
 const VideoLink: Component<Props> = (props) => {
     const getClassList = () => ({
-        ...getThumbnailClass(props.thumbnailSize),
-        ...{
-            "max-w-none": true,
-            "rounded-1": props.rounded
-        }
+        "max-w-none": true,
+        "rounded-1": props.rounded
     });
 
     // todo: make category type dynamic?
@@ -37,6 +34,8 @@ const VideoLink: Component<Props> = (props) => {
             isActiveItem={props.isActiveItem}>
             <img
                 src={props.video.thumbnailSqUrl}
+                width={getThumbnailSize(props.thumbnailSize).width}
+                height={getThumbnailSize(props.thumbnailSize).height}
                 classList={getClassList()}
                 loading={props.eager ? "eager" : "lazy"} />
         </MediaLink>
