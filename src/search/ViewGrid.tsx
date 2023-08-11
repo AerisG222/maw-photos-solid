@@ -2,6 +2,7 @@ import { Component, For } from "solid-js";
 
 import { useSearchGridViewSettingsContext } from "../contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
+import { EAGER_THRESHOLD } from '../_models/utils/Constants';
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -28,12 +29,14 @@ const ViewGrid: Component = () => {
 
             <div class="flex flex-gap-2 flex-wrap place-content-center my-4">
                 <For each={searchContext.categories}>
-                    { category =>
+                    { (category, idx) =>
                         <CategoryCard
                             category={category}
                             showTitles={settings.showTitles}
                             thumbnailSize={settings.thumbnailSize}
-                            showYears={settings.showYears} />
+                            showYears={settings.showYears}
+                            eager={idx() <= EAGER_THRESHOLD}
+                        />
                     }
                 </For>
             </div>

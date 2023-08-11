@@ -24,8 +24,12 @@ const GridView: Component = () => {
         >
             <CategoryFilterBar />
 
-            <For each={getFilteredYears()}>{ year =>
-                <YearGrid year={year} categories={getFilteredCategoriesForYear(year)}/>
+            <For each={getFilteredYears()}>{ (year, idx) =>
+                <YearGrid
+                    year={year}
+                    categories={getFilteredCategoriesForYear(year)}
+                    enableEagerLoading={idx() === 0}
+                />
             }</For>
         </Layout>
     );

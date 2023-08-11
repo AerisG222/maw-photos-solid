@@ -24,8 +24,12 @@ const ListView: Component = () => {
         >
             <CategoryFilterBar />
 
-            <For each={getFilteredYears()}>{ year =>
-                <YearList year={year} categories={getFilteredCategoriesForYear(year)}/>
+            <For each={getFilteredYears()}>{ (year, idx) =>
+                <YearList
+                    year={year}
+                    categories={getFilteredCategoriesForYear(year)}
+                    enableEagerLoading={idx() === 0}
+                />
             }</For>
         </Layout>
     );

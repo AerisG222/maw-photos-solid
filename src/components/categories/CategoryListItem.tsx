@@ -8,6 +8,7 @@ import { categoryTypes } from "../../_models/CategoryTypes";
 type Props = {
     category: Category;
     thumbnailSize: ThumbnailSizeIdType;
+    eager: boolean;
     showYear?: boolean;
 };
 
@@ -21,7 +22,7 @@ const CategoryListItem: Component<Props> = (props) => {
                 src={props.category.teaserImageUrl}
                 classList={getThumbnailClass(props.thumbnailSize)}
                 class="inline saturate-50 group-hover:saturate-100"
-                loading="lazy" />
+                loading={props.eager ? "eager" : "lazy"} />
 
             <Show when={props.showYear}>
                 <span class="m-l-2 md:m-l-4">{props.category.year}</span>

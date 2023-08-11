@@ -9,6 +9,7 @@ type Props = {
     showTitles: boolean;
     showYears: boolean;
     thumbnailSize: ThumbnailSizeIdType;
+    eager: boolean;
 };
 
 const CategoryCard: Component<Props> = (props) => {
@@ -34,7 +35,7 @@ const CategoryCard: Component<Props> = (props) => {
                         'rounded-t-1': !props.showYears,
                         'rounded-b-1': !props.showTitles
                     }}
-                    loading="lazy" />
+                    loading={props.eager ? "eager" : "lazy"} />
 
                 <Show when={props.showTitles}>
                     <div class="text-center max-w-[160px]">{props.category.name}</div>
