@@ -5,7 +5,7 @@ const ViewApplication: Component = () => {
         <>
             <h1 class="head1">Release Notes</h1>
 
-            <h3 class="head3"><span class="version">v3.0.0</span> : <span class="date">2023-08-??</span></h3>
+            <h3 class="head3"><span class="version">v3.0.0</span> : <span class="date">2023-08-12</span></h3>
             <p>
                 Application re-write using <a href="https://www.solidjs.com/" class="text-primary">SOLID <strong>JS</strong></a>.
                 The drivers for this effort include:
