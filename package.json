@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "vite --mode dev",
         "lint": "eslint --ext '.ts,.tsx' .",
-        "build": "vite build",
+        "build": "vite build --mode prod",
         "serve": "vite preview",
         "test": "vitest",
         "build_test": "vite build --mode test"
