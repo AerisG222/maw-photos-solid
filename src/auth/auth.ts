@@ -60,6 +60,15 @@ export function isLoggedIn() {
 
 export function isAdmin() {
     const u = user();
+    const role = u?.profile?.role;
 
-    return (u?.profile?.role as Array<string>|undefined)?.findIndex(r => r === "admin") >= 0;
+    if(!role) {
+        return false;
+    }
+
+    if(Array.isArray(role)) {
+        return role.findIndex(r => r === "admin") >= 0;
+    } else {
+        return role === "admin";
+    }
 }
