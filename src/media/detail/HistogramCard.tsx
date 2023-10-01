@@ -33,6 +33,7 @@ const HistogramCard: Component = () => {
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
         if (!histogramCanvas) {
+            console.log("x")
             return;
         }
 
@@ -40,6 +41,8 @@ const HistogramCard: Component = () => {
             const maxCount = getMaxCount(channel, histogram);
 
             drawHistogram(channel, histogram, maxCount);
+        } else {
+            console.log('histogram null');
         }
     };
 
@@ -223,6 +226,11 @@ const HistogramCard: Component = () => {
     createEffect(() => {
         renderHistogram(histogram(), channel());
     });
+
+    // render the histogram if the image is already loaded
+    if(state.mediaElement?.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
+        updateHistogramFromImage(state.mediaElement);
+    }
 
     return (
         <>
