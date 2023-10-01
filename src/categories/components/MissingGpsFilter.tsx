@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import Checkbox from "../../components/input/Checkbox";
 import { useCategoryContext } from "../../contexts/CategoryContext";
 import { Category } from "../../_models/Category";
+import { useCategoryFilterSettingsContext } from '../../contexts/settings/CategoryFilterSettingsContext';
 
 type Props = {
     horizontal: boolean;
@@ -11,8 +12,10 @@ type Props = {
 const MissingGpsFilter: Component<Props> = (props) => {
     const GPS_FILTER = "gps-filter";
     const [, { addFilter, removeFilter }] = useCategoryContext();
+    const [filter, { setMissingGpsFilter }] = useCategoryFilterSettingsContext();
 
     const updateFilter = (enableFilter: boolean) => {
+        setMissingGpsFilter(enableFilter);
         removeFilter(GPS_FILTER);
 
         if(enableFilter) {
@@ -28,7 +31,7 @@ const MissingGpsFilter: Component<Props> = (props) => {
             <Checkbox
                 title="Missing GPS"
                 name="missing_gps"
-                isSelected={false}
+                isSelected={filter.missingGpsFilter}
                 onChange={updateFilter} />
         </div>
     )
