@@ -63,12 +63,13 @@ const HistogramCard: Component = () => {
     };
 
     const updateHistogramFromVideoFrame = async (timestamp, frame) => {
-        const bitmap = await createImageBitmap(state.mediaElement);
+        const video = state.mediaElement as HTMLVideoElement;
+        const bitmap = await createImageBitmap(video);
 
         updateHistogramFromImage(bitmap);
 
-        if (!state.mediaElement.ended) {
-            state.mediaElement.requestVideoFrameCallback(
+        if (!video.ended) {
+            video.requestVideoFrameCallback(
                 updateHistogramFromVideoFrame
             );
         }
@@ -227,9 +228,15 @@ const HistogramCard: Component = () => {
         renderHistogram(histogram(), channel());
     });
 
-    // render the histogram if the image is already loaded
-    if(state.mediaElement?.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
-        updateHistogramFromImage(state.mediaElement);
+    // render the initial histogram if media is already loaded
+    if(state.mediaElement) {
+        const el = state.mediaElement;
+
+        if(el.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
+            updateHistogramFromImage(state.mediaElement);
+        } else if(el.nodeName === "VIDEO") {
+            updateHistogramFromVideoFrame(null, null);
+        }
     }
 
     return (
