@@ -1,9 +1,10 @@
-import { createContext, createMemo, ParentComponent, useContext } from "solid-js";
+import { batch, createContext, createEffect, createMemo, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { Category } from "../_models/Category";
 import { CategoryType } from "../_models/CategoryType";
 import { FilterFunction, SortFunction } from "../_models/UtilityTypes";
+import { useCategoryFilterSettingsContext } from './settings/CategoryFilterSettingsContext';
 
 export type CategoryState = {
     readonly initialized: boolean;
@@ -34,10 +35,6 @@ export type CategoryContextValue = [
         clearCategories: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
-
-        clearFilters: () => void;
-        addFilter: (filter: FilterFunction) => void;
-        removeFilter: (name: string) => void;
 
         clearSort: () => void;
         setSort: (sort: SortFunction) => void;
@@ -168,6 +165,36 @@ export const CategoryProvider: ParentComponent = (props) => {
         );
     };
 
+    const YEAR_FILTER = "YearFilter_Year";
+    const TYPE_FILTER = "CategoryTypeFilter_Type";
+    const [filter] = useCategoryFilterSettingsContext();
+
+    createEffect(() => {
+        batch(() => {
+            removeFilter(YEAR_FILTER);
+
+            if(filter.yearFilter) {
+                addFilter({
+                    name: YEAR_FILTER,
+                    filterFn: (c: Category) => c.year === filter.yearFilter
+                });
+            }
+        })
+    });
+
+    createEffect(() => {
+        batch(() => {
+            removeFilter(TYPE_FILTER);
+
+            if(filter.typeFilter !== "all") {
+                addFilter({
+                    name: TYPE_FILTER,
+                    filterFn: (c: Category) => c.type === filter.typeFilter
+                });
+            }
+        });
+    });
+
     return (
         <CategoryContext.Provider value={[state, {
             setInitialized,
@@ -175,10 +202,6 @@ export const CategoryProvider: ParentComponent = (props) => {
             clearCategories,
             setCategories,
             addCategories,
-
-            clearFilters,
-            addFilter,
-            removeFilter,
 
             clearSort,
             setSort,

@@ -1,9 +1,7 @@
-import { Component, batch, createEffect, untrack } from "solid-js";
+import { Component, createEffect, untrack } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
 import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
-import { useCategoryContext } from "../../contexts/CategoryContext";
-import { Category } from "../../_models/Category";
 import { categoryTypesOptions } from "../../_models/CategoryTypes";
 
 import Select from "../../components/input/Select";
@@ -13,27 +11,13 @@ type Props = {
 }
 
 const CategoryTypeFilter: Component<Props> = (props) => {
-    const TYPE_FILTER = "CategoryTypeFilter_Type";
     const [searchParams, setSearchParams] = useSearchParams();
     const [filter, { setTypeFilter }] = useCategoryFilterSettingsContext();
-    const [, { addFilter, removeFilter }] = useCategoryContext();
 
     createEffect(() => {
         if(searchParams.type) {
-            // not fully sure why untrack is required, but the addFilter call seems to cause this to recurse otherwise
             untrack(() => {
-                batch(() => {
-                    setTypeFilter(searchParams.type);
-
-                    removeFilter(TYPE_FILTER);
-
-                    if(searchParams.type !== "all") {
-                        addFilter({
-                            name: TYPE_FILTER,
-                            filterFn: (c: Category) => c.type === searchParams.type
-                        });
-                    }
-                });
+                setTypeFilter(searchParams.type);
             });
         }
     });
