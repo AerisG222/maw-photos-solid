@@ -1,4 +1,4 @@
-import { Component, createEffect, untrack } from "solid-js";
+import { Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
 import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
@@ -8,21 +8,20 @@ import Select from "../../components/input/Select";
 
 type Props = {
     horizontal: boolean;
-}
+};
 
 const CategoryTypeFilter: Component<Props> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filter, { setTypeFilter }] = useCategoryFilterSettingsContext();
 
-    createEffect(() => {
-        if(searchParams.type) {
-            untrack(() => {
-                setTypeFilter(searchParams.type);
-            });
-        }
-    });
+    const onChangeFilter = (val: string) => {
+        setTypeFilter(val);
+        setSearchParams({type: val});
+    };
 
-    const onChangeFilter = (val: string) => setSearchParams({type: val});
+    if(searchParams.type) {
+        onChangeFilter(searchParams.type);
+    }
 
     return (
         <Select

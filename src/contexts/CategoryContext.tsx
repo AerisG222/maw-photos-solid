@@ -1,4 +1,4 @@
-import { batch, createContext, createEffect, createMemo, ParentComponent, useContext } from "solid-js";
+import { batch, createContext, createEffect, createMemo, on, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { Category } from "../_models/Category";
@@ -167,33 +167,45 @@ export const CategoryProvider: ParentComponent = (props) => {
 
     const YEAR_FILTER = "YearFilter_Year";
     const TYPE_FILTER = "CategoryTypeFilter_Type";
+    const GPS_FILTER = "gps-filter";
     const [filter] = useCategoryFilterSettingsContext();
 
-    createEffect(() => {
+    createEffect(on(() => filter.yearFilter, (yearFilter) => {
         batch(() => {
             removeFilter(YEAR_FILTER);
 
-            if(filter.yearFilter) {
+            if(yearFilter !== "all") {
                 addFilter({
                     name: YEAR_FILTER,
-                    filterFn: (c: Category) => c.year === filter.yearFilter
+                    filterFn: (c: Category) => c.year === yearFilter
                 });
             }
         })
-    });
+    }));
 
-    createEffect(() => {
+    createEffect(on(() => filter.typeFilter, (typeFilter) => {
         batch(() => {
             removeFilter(TYPE_FILTER);
 
-            if(filter.typeFilter !== "all") {
+            if(typeFilter !== "all") {
                 addFilter({
                     name: TYPE_FILTER,
-                    filterFn: (c: Category) => c.type === filter.typeFilter
+                    filterFn: (c: Category) => c.type === typeFilter
                 });
             }
         });
-    });
+    }));
+
+    createEffect(on(() => filter.missingGpsFilter, (missingGpsFilter) => {
+        removeFilter(GPS_FILTER);
+
+        if(missingGpsFilter) {
+            addFilter({
+                name: GPS_FILTER,
+                filterFn: (c: Category) => c.isMissingGpsData
+            });
+        }
+    }));
 
     return (
         <CategoryContext.Provider value={[state, {

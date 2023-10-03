@@ -16,10 +16,20 @@ const YearFilter: Component<Props> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const onChangeFilter = (val: string) => {
-        const yearFilter = val === "all" ? undefined : parseInt(searchParams.year);
+        let yearFilter: number | "all";
+
+        if(val === "all") {
+            yearFilter = "all";
+        } else {
+            yearFilter = parseInt(val, 10);
+
+            if(isNaN(yearFilter)) {
+                yearFilter = "all";
+            }
+        }
 
         setYearFilter(yearFilter);
-        setSearchParams({year: val});
+        setSearchParams({year: yearFilter.toString()});
     };
 
     const toKvp = (allYears: number[]) => !allYears ? [] : [
