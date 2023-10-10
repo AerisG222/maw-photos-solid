@@ -26,7 +26,7 @@ const ViewPhotos: Component = () => {
             </Toolbar>
         }>
             <StatLayout>
-                <div class="m-y-2">
+                <div class="my-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getPhotoCategoryYears().length).format({thousandSeparated: true})} />
                         <StatBox title="Categories" value={numbro(getPhotoCategories().length).format({thousandSeparated: true})} />
@@ -34,7 +34,7 @@ const ViewPhotos: Component = () => {
                         <StatBox title="File Size" value={numbro(getPhotoFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
                     </StatBar>
                 </div>
-                <div class="m-y-2">
+                <div class="my-2">
                     <Treemap seriesName="Photos" data={getPhotoStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>

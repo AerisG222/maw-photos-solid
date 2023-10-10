@@ -34,10 +34,10 @@ const RatingsCard: Component = () => {
     });
 
     return (
-        <table class="m-x-8">
+        <table class="mx-8">
             <tbody>
                 <tr>
-                    <td class="p-r-6">Your Rating</td>
+                    <td class="pr-6">Your Rating</td>
                     <td>
                         <Rating
                             editable={true}
@@ -47,7 +47,7 @@ const RatingsCard: Component = () => {
                     </td>
                 </tr>
                 <tr>
-                    <td class="p-r-6">Average Rating</td>
+                    <td class="pr-6">Average Rating</td>
                     <td>
                         <Rating
                             editable={false}

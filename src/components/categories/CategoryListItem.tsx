@@ -16,7 +16,7 @@ const CategoryListItem: Component<Props> = (props) => {
     return (
         <A href={props.category.route}
             class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary:10% hover:bg-secondary-content:20 hover:color-primary">
-            <span class={`m-l-1 m-r-2 md:m-x-4 text-6 ${categoryTypes[props.category.type].icon}`} />
+            <span class={`ml-1 mr-2 md:mx-4 text-6 ${categoryTypes[props.category.type].icon}`} />
 
             <img
                 src={props.category.teaserImageUrl}
@@ -26,11 +26,11 @@ const CategoryListItem: Component<Props> = (props) => {
                 loading={props.eager ? "eager" : "lazy"} />
 
             <Show when={props.showYear}>
-                <span class="m-l-2 md:m-l-4">{props.category.year}</span>
-                <span class="m-r-[-0.5rem] md:m-r-0 md:m-l-4 text-6 i-ic-baseline-arrow-right" />
+                <span class="ml-2 md:ml-4">{props.category.year}</span>
+                <span class="mr-[-0.5rem] md:mr-0 md:ml-4 text-6 i-ic-baseline-arrow-right" />
             </Show>
 
-            <span class="m-l-2 md:m-l-4">{props.category.name}</span>
+            <span class="ml-2 md:ml-4">{props.category.name}</span>
         </A>
     );
 };

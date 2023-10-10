@@ -20,16 +20,16 @@ const CategoryCard: Component<Props> = (props) => {
                 <div class="text-center max-w-[160px]">{props.category.year}</div>
             </Show>
 
-            <div class="position-relative">
+            <div class="relative">
                 <Show when={props.category.type === 'videos'}>
-                    <div class="z-10 position-absolute top-[1px] left-[1px] px-[3px] badge badge-sm bg-base-100:72 group-hover:color-primary">
+                    <div class="z-10 absolute top-[1px] left-[1px] px-[3px] badge badge-sm bg-base-100:72 group-hover:color-primary">
                         <span class="i-ic-round-videocam" />
                     </div>
                 </Show>
 
                 <img
                     src={props.category.teaserImageUrl}
-                    class=" saturate-50 group-hover:saturate-100"
+                    class="saturate-50 group-hover:saturate-100"
                     classList={{
                         'rounded-t-1': !props.showYears,
                         'rounded-b-1': !props.showTitles

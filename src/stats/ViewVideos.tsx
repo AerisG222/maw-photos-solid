@@ -26,7 +26,7 @@ const ViewVideos: Component = () => {
             </Toolbar>
         }>
             <StatLayout>
-                <div class="m-y-2">
+                <div class="my-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getVideoCategoryYears().length).format({thousandSeparated: true})} />
                         <StatBox title="Categories" value={numbro(getVideoCategories().length).format({thousandSeparated: true})} />
@@ -35,7 +35,7 @@ const ViewVideos: Component = () => {
                         <StatBox title="Duration" value={numbro(getVideoDuration()).format({output: "time"})} />
                     </StatBar>
                 </div>
-                <div class="m-y-2">
+                <div class="my-2">
                     <Treemap seriesName="Videos" data={getVideoStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>

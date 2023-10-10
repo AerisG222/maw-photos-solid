@@ -28,7 +28,7 @@ const ViewCombined: Component = () => {
             </Toolbar>
         }>
             <StatLayout>
-                <div class="m-y-2">
+                <div class="my-2">
                     <StatBar>
                         <StatBox title="Years" value={numbro(getAllYears().length).format({thousandSeparated: true})} />
                         <StatBox title="Categories" value={numbro(state.categories.length).format({thousandSeparated: true})} />
@@ -36,7 +36,7 @@ const ViewCombined: Component = () => {
                         <StatBox title="File Size" value={numbro(getCombinedFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
                     </StatBar>
                 </div>
-                <div class="m-y-2">
+                <div class="my-2">
                     <Treemap seriesName="Combined" data={getStats()} formatFunc={getFmtFunc()} />
                 </div>
             </StatLayout>
