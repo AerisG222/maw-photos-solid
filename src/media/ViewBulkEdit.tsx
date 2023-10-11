@@ -10,6 +10,8 @@ import { IMetadataEditService } from "../_services/media/IMetadataEditService";
 import { photoMediaService } from "../_services/media/PhotoMediaService";
 import { videoMediaService } from "../_services/media/VideoMediaService";
 import { ThumbnailSizeDefault, getThumbnailSize } from '../_models/ThumbnailSize';
+import { useCategoryContext } from '../contexts/CategoryContext';
+import { getCategoryService } from '../_services/categories/CategoryServiceLocator';
 
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
@@ -30,6 +32,7 @@ const ViewBulkEdit: Component = () => {
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
     const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
     const [mediaList, { setActiveRouteDefinition, setGpsOverride }] = useMediaListContext();
+    const [categoryState, { updateCategory }] = useCategoryContext();
     const params = useParams();
     const categoryId = parseInt(params.categoryId);
 
@@ -68,6 +71,14 @@ const ViewBulkEdit: Component = () => {
                 setGpsOverride(media.id, gps);
             }
         }
+
+        const categoryService = getCategoryService(categoryState.activeCategory.type);
+
+        if(categoryService && categoryState.activeCategory) {
+            var category = await categoryService.loadSingle(categoryState.activeCategory.id);
+
+            updateCategory(category);
+        }
     };
 
     const setAll = (doSelect: boolean) => {
@@ -101,7 +112,7 @@ const ViewBulkEdit: Component = () => {
 
     createEffect(() => {
         setMedia(mediaList.items.map(buildSelectableMedia));
-    })
+    });
 
     return (
         <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, params.categoryType as CategoryType, categoryId)}>

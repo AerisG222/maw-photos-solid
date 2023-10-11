@@ -1,5 +1,5 @@
 import { batch, createContext, createEffect, createMemo, on, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, reconcile } from "solid-js/store";
 
 import { Category } from "../_models/Category";
 import { CategoryType } from "../_models/CategoryType";
@@ -35,6 +35,7 @@ export type CategoryContextValue = [
         clearCategories: () => void;
         setCategories: (categories: Category[]) => void;
         addCategories: (categories: Category[]) => void;
+        updateCategory: (category: Category) => void;
 
         clearSort: () => void;
         setSort: (sort: SortFunction) => void;
@@ -72,6 +73,16 @@ export const CategoryProvider: ParentComponent = (props) => {
     const addCategories = (categories: Category[]) => {
         if(categories) {
             setState(s => ({ categories: [...s.categories, ...categories] }));
+        }
+    };
+
+    const updateCategory = (category: Category) => {
+        if(category) {
+            setState(
+                "categories",
+                cat => cat.id === category.id && cat.type === category.type,
+                reconcile(category)
+            );
         }
     };
 
@@ -214,6 +225,7 @@ export const CategoryProvider: ParentComponent = (props) => {
             clearCategories,
             setCategories,
             addCategories,
+            updateCategory,
 
             clearSort,
             setSort,

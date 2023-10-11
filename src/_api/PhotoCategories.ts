@@ -8,24 +8,32 @@ import { getCategoryPath } from "../categories/_routes";
 import { toDomainPhoto } from "./Photos";
 import { Photo } from "../_models/Media";
 
+const mapApiPhotoCategory = (cat: ApiPhotoCategory): PhotoCategory => ({
+    id: cat.id,
+    type: CategoryTypePhotos,
+    name: cat.name,
+    year: cat.year,
+    createDate: cat.createDate,
+    teaserImageUrl: cat.teaserImageSq.url,
+    latitude: cat.latitude,
+    longitude: cat.longitude,
+    count: cat.photoCount,
+    totalSize: cat.totalSize,
+    isMissingGpsData: cat.isMissingGpsData,
+    route: getCategoryPath(CategoryTypePhotos, cat.id),
+    downloadLink: cat.downloadLink
+});
+
 export const getPhotoCategories = async (): Promise<PhotoCategory[]> => {
     const apiCategories = await internalGetPhotoCategories();
 
-    return apiCategories.items.map(x => ({
-        id: x.id,
-        type: CategoryTypePhotos,
-        name: x.name,
-        year: x.year,
-        createDate: x.createDate,
-        teaserImageUrl: x.teaserImageSq.url,
-        latitude: x.latitude,
-        longitude: x.longitude,
-        count: x.photoCount,
-        totalSize: x.totalSize,
-        isMissingGpsData: x.isMissingGpsData,
-        route: getCategoryPath(CategoryTypePhotos, x.id),
-        downloadLink: x.downloadLink
-    }));
+    return apiCategories.items.map(mapApiPhotoCategory);
+};
+
+export const getPhotoCategory = async (categoryId: number): Promise<PhotoCategory> => {
+    const category = await internalGetPhotoCategory(categoryId);
+
+    return mapApiPhotoCategory(category);
 };
 
 export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
@@ -36,6 +44,9 @@ export const getPhotos = async (categoryId: number): Promise<Photo[]> => {
 
 const internalGetPhotoCategories = () =>
     queryMawApi<ApiCollection<ApiPhotoCategory>>("photo-categories");
+
+const internalGetPhotoCategory = (categoryId: number) =>
+    queryMawApi<ApiPhotoCategory>(`photo-categories/${categoryId}`);
 
 const internalGetPhotos = (categoryId: number) =>
     queryMawApi<ApiCollection<ApiPhoto>>(`photo-categories/${categoryId}/photos`);

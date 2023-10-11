@@ -1,4 +1,4 @@
-import { getPhotoCategories, getPhotos, setTeaser } from "../../_api/PhotoCategories";
+import { getPhotoCategories, getPhotoCategory, getPhotos, setTeaser } from "../../_api/PhotoCategories";
 import { PhotoCategory } from "../../_models/Category";
 import { ICategoryService } from "./ICategoryService";
 import { isLoggedIn } from "../../auth/auth";
@@ -9,6 +9,10 @@ export class PhotoCategoryService
 {
     load(): Promise<PhotoCategory[]> {
         return isLoggedIn() ? getPhotoCategories() : undefined;
+    }
+
+    loadSingle(categoryId: number): Promise<PhotoCategory> {
+        return getPhotoCategory(categoryId);
     }
 
     loadMedia(categoryId: number): Promise<Photo[]> {

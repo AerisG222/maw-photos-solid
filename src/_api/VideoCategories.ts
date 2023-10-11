@@ -7,24 +7,32 @@ import { MediaTypeVideo, Video } from "../_models/Media";
 import { CategoryTypeVideos } from "../_models/CategoryType";
 import { getCategoryPath } from "../categories/_routes";
 
+const mapApiVideoCategory = (cat: ApiVideoCategory): VideoCategory => ({
+    id: cat.id,
+    type: CategoryTypeVideos,
+    name: cat.name,
+    year: cat.year,
+    createDate: cat.createDate,
+    teaserImageUrl: cat.teaserImageSq.url,
+    latitude: cat.latitude,
+    longitude: cat.longitude,
+    count: cat.videoCount,
+    totalSize: cat.totalSize,
+    isMissingGpsData: cat.isMissingGpsData,
+    route: getCategoryPath(CategoryTypeVideos, cat.id),
+    totalDuration: cat.totalDuration
+});
+
 export const getVideoCategories = async (): Promise<VideoCategory[]> => {
     const videoCategories = await internalGetVideoCategories();
 
-    return videoCategories.items.map(x => ({
-        id: x.id,
-        type: CategoryTypeVideos,
-        name: x.name,
-        year: x.year,
-        createDate: x.createDate,
-        teaserImageUrl: x.teaserImageSq.url,
-        latitude: x.latitude,
-        longitude: x.longitude,
-        count: x.videoCount,
-        totalSize: x.totalSize,
-        isMissingGpsData: x.isMissingGpsData,
-        route: getCategoryPath(CategoryTypeVideos, x.id),
-        totalDuration: x.totalDuration
-    }));
+    return videoCategories.items.map(mapApiVideoCategory);
+};
+
+export const getVideoCategory = async (categoryId: number): Promise<VideoCategory> => {
+    const category = await internalGetVideoCategory(categoryId);
+
+    return mapApiVideoCategory(category);
 };
 
 export const getVideos = async (categoryId: number): Promise<Video[]> => {
@@ -49,6 +57,9 @@ export const getVideos = async (categoryId: number): Promise<Video[]> => {
 
 const internalGetVideoCategories = () =>
     queryMawApi<ApiCollection<ApiVideoCategory>>("video-categories");
+
+const internalGetVideoCategory = (categoryId: number) =>
+    queryMawApi<ApiVideoCategory>(`video-categories/${categoryId}`);
 
 const internalGetVideos = (categoryId: number) =>
     queryMawApi<ApiCollection<ApiVideo>>(`video-categories/${categoryId}/videos`);
