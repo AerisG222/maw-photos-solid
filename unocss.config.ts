@@ -33,7 +33,7 @@ export default defineConfig<Theme>({
         presetScrollbar({
             scrollbarWidth: "10px",
             scrollbarHeight: "10px",
-            scrollbarTrackRadius: 0,
+            scrollbarTrackRadius: "0px",
             scrollbarThumbRadius: "5px",
         }),
     ],
@@ -47,7 +47,7 @@ export default defineConfig<Theme>({
             head1: "font-bold text-lg mt-2 mb-2 color-primary",
             head2: "font-bold mt-1 mb-1 color-primary",
             head3: "font-bold text-sm mt-1 mb-1 color-secondary",
-            scrollable: "scrollbar scrollbar-rounded scrollbar-track-color-[hsl(var(--b3))] scrollbar-thumb-color-[hsl(var(--bc))]"
+            scrollable: "scrollbar scrollbar-rounded scrollbar-track-color-[hsla(var(--b3))] scrollbar-thumb-color-[hsla(var(--bc))]"
         }
     ]
 });
