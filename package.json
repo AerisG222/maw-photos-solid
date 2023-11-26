@@ -12,8 +12,8 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "@iconify-json/ic": "^1.1.14",
-        "@iconify-json/mdi": "^1.1.55",
+        "@iconify-json/ic": "^1.1.15",
+        "@iconify-json/mdi": "^1.1.56",
         "@solidjs/testing-library": "^0.8.4",
         "@types/google.maps": "^3.54.9",
         "@typescript-eslint/parser": "^6.12.0",
