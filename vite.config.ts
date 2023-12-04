@@ -5,8 +5,8 @@ import UnocssPlugin from "@unocss/vite";
 export default defineConfig({
     envDir: "environments",
     plugins: [
-        solidPlugin(),
         UnocssPlugin(),
+        solidPlugin(),
     ],
     server: {
         host: "dev.photos.mikeandwan.us",

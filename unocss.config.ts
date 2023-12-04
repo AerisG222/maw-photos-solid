@@ -11,22 +11,6 @@ import { getThemesForUno } from "./src/_models/Theme";
 import { allMarginClasses } from "./src/_models/Margin";
 import { categoryTypeIcons } from "./src/_models/CategoryTypes";
 
-// **
-// when updating from vite-plugin-solid@2.7.0 to something newer, some styles were lost / missing
-// by uno.  Interestingly, if we add a space after the name where it is used in the class, then
-// it seems to work oddly enough.  alternatively, adding these here to the following list will
-// add them to the safelist below to ensure they are present, w/o the space hack that likely
-// will be deleted in the future when i forget about that hack and why it is there
-// **
-const LOST_STYLES = [
-    "head1",   // lost on settings and help pages
-    "head2",   // lost on settings pages
-    "head3",   // added for good measure
-    "mt-4",     // margin above search term input box
-    "mt-auto",  // see missing gps filter checkbox
-    "relative"  // see video icon on category grid view
-];
-
 export default defineConfig<Theme>({
     presets: [
         presetIcons({
@@ -57,7 +41,6 @@ export default defineConfig<Theme>({
         ...allRouteIcons,
         ...allMarginClasses,
         ...categoryTypeIcons,
-        ...LOST_STYLES
     ],
     shortcuts: [
         {
