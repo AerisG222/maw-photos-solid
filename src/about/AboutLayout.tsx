@@ -1,10 +1,9 @@
-import { Component } from "solid-js";
-import { Outlet } from "@solidjs/router";
+import { ParentComponent } from "solid-js";
 
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
 
-const AboutLayout: Component = () => {
+const AboutLayout: ParentComponent = (props) => {
     return (
         <Layout toolbar={<Toolbar />}>
             <div class="font-brand text-6xl text-center mt-4 md:my-8">
@@ -14,7 +13,7 @@ const AboutLayout: Component = () => {
                 <h2 class="text-secondary mt-[-1rem]">v{import.meta.env.VITE_APP_VERSION}</h2>
             </div>
             <div class="mx-4 md:mx-10%">
-                <Outlet />
+                { props.children }
             </div>
         </Layout>
     );

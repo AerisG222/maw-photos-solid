@@ -1,8 +1,11 @@
-import { Outlet } from "@solidjs/router";
-import { Component } from "solid-js";
+import { ParentComponent } from "solid-js";
 
-const Settings: Component = () => {
-    return (<Outlet />);
+const Settings: ParentComponent = (props) => {
+    return (
+        <>
+            { props.children }
+        </>
+    );
 };
 
 export default Settings;

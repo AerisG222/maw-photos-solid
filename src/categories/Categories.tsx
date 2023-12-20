@@ -1,12 +1,11 @@
-import { Outlet } from "@solidjs/router";
-import { Component } from "solid-js";
+import { ParentComponent } from "solid-js";
 
 import AuthGuard from "../components/auth/AuthGuard";
 
-const Categories: Component = () => {
+const Categories: ParentComponent = (props) => {
     return (
         <AuthGuard>
-            <Outlet />
+            { props.children }
         </AuthGuard>
     );
 };

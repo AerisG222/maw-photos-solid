@@ -2,8 +2,8 @@
     "name": "maw-photos",
     "version": "3.0.2",
     "description": "Interactive application to view photos",
-    "private":true,
-    "type":"module",
+    "private": true,
+    "type": "module",
     "scripts": {
         "dev": "vite --mode dev",
         "lint": "eslint --ext '.ts,.tsx' .",
@@ -37,7 +37,7 @@
     "dependencies": {
         "@solid-primitives/keyboard": "^1.2.5",
         "@solid-primitives/media": "^2.2.5",
-        "@solidjs/router": "^0.9.1",
+        "@solidjs/router": "^0.10.4",
         "@unocss/preset-uno": "^0.58.0",
         "highcharts": "^11.2.0",
         "numbro": "^2.4.0",

@@ -1,15 +1,14 @@
-import { Outlet } from "@solidjs/router";
-import { Component } from "solid-js";
+import { ParentComponent } from "solid-js";
 
 import { SearchProvider } from "./contexts/SearchContext";
 
 import AuthGuard from "../components/auth/AuthGuard";
 
-const Search: Component = () => {
+const Search: ParentComponent = (props) => {
     return (
         <AuthGuard>
         <SearchProvider>
-            <Outlet />
+            { props.children }
         </SearchProvider>
         </AuthGuard>
     );

@@ -1,5 +1,4 @@
-import { Outlet } from "@solidjs/router";
-import { Component } from "solid-js";
+import { ParentComponent } from "solid-js";
 
 import { MediaListProvider } from "./contexts/MediaListContext";
 import { SlideshowProvider } from "./contexts/SlideshowContext";
@@ -15,7 +14,7 @@ import MediaLoader from "./MediaLoader";
 import ActiveMediaMonitor from "./ActiveMediaMonitor";
 import ActiveCategoryMonitor from "./ActiveCategoryMonitor";
 
-const MediaRoot: Component = () => {
+const MediaRoot: ParentComponent = (props) => {
     return (
         <AuthGuard>
             <MediaListProvider>
@@ -29,7 +28,7 @@ const MediaRoot: Component = () => {
                     <MediaLoader>
                         <SlideshowProvider>
                         <VisualEffectsProvider>
-                            <Outlet />
+                            { props.children }
                         </VisualEffectsProvider>
                         </SlideshowProvider>
                     </MediaLoader>
