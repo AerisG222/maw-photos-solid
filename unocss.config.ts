@@ -2,7 +2,7 @@ import { defineConfig } from "@unocss/vite";
 import type { Theme } from "@unocss/preset-uno";
 import { presetUno } from "@unocss/preset-uno";
 import { presetIcons } from "@unocss/preset-icons";
-import { presetDaisy } from "unocss-preset-daisy";
+import { presetDaisy } from "@logs404/unocss-preset-daisy";
 import { presetScrollbar } from "unocss-preset-scrollbar";
 import presetWebFonts from "@unocss/preset-web-fonts";
 
