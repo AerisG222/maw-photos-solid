@@ -10,14 +10,6 @@ export const settingsRedirect: AppRouteDefinition = {
     component: lazy(() => import("./SettingsRedirect"))
 };
 
-export const settingsApplication: AppRouteDefinition = {
-    icon: "icon-[ic--round-home]",
-    name: "Application",
-    path: "/application",
-    absolutePath: `${basePath}/application`,
-    component: lazy(() => import("./ViewApplication"))
-};
-
 export const settingsCategories: AppRouteDefinition = {
     icon: "icon-[ic--round-collections]",
     name: "Categories",
@@ -52,7 +44,6 @@ export const settings: AppRouteDefinition = {
     doesPathMatch: path => routeMatch(path, basePath, AreaSettings),
     children: [
         settingsRedirect,
-        settingsApplication,
         settingsCategories,
         settingsMedia,
         settingsSearch

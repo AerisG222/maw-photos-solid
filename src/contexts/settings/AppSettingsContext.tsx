@@ -2,20 +2,19 @@ import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
-import { ThemeIdType, defaultTheme } from "../../_models/Theme";
 
 export type AppSettingsState = {
-    readonly theme: ThemeIdType;
+    readonly theme: string;
 };
 
 export const defaultAppSettings: AppSettingsState = {
-    theme: defaultTheme
+    theme: "dark"
 };
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,
     actions: {
-        setTheme: (theme: string) => void;
+        toggleTheme: () => void;
     }
 ];
 
@@ -24,13 +23,14 @@ const AppSettingsContext = createContext<AppSettingsContextValue>();
 export const AppSettingsProvider: ParentComponent = (props) => {
     const [state, setState] = createStore(loadState());
 
-    const setTheme = (theme: ThemeIdType) => {
-        setState({theme: theme});
+    const toggleTheme = () => {
+        const newTheme = state.theme === "dark" ? "light" : "dark";
+        setState({theme: newTheme});
         saveState(state);
     };
 
     return (
-        <AppSettingsContext.Provider value={[state, { setTheme }]}>
+        <AppSettingsContext.Provider value={[state, { toggleTheme }]}>
             {props.children}
         </AppSettingsContext.Provider>
     );
@@ -39,7 +39,16 @@ export const AppSettingsProvider: ParentComponent = (props) => {
 export const useAppSettingsContext = () => useContext(AppSettingsContext);
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_APP, defaultAppSettings);
+    var state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
+
+    // handle legacy theme
+    if(state.theme === "dusk") {
+        return {
+            theme: "dark"
+        };
+    }
+
+    return state;
 }
 
 function saveState(state: AppSettingsState) {

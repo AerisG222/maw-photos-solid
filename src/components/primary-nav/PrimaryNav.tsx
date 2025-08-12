@@ -8,6 +8,7 @@ import { about } from "../../about/_routes";
 import { settings } from "../../settings/_routes";
 
 import PrimaryNavLink from "./PrimaryNavLink";
+import ThemeSelector from './ThemeSelector';
 
 const PrimaryNav: Component = () => {
     return (
@@ -19,6 +20,7 @@ const PrimaryNav: Component = () => {
 
             <span class="flex-grow" />
 
+            <ThemeSelector />
             <PrimaryNavLink route={about} />
             <PrimaryNavLink route={settings} />
         </div>

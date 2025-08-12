@@ -3,7 +3,6 @@ import * as Highcharts from "highcharts";
 import HighchartsTreemap from "highcharts/modules/treemap";
 
 import { useAppSettingsContext } from '../../contexts/settings/AppSettingsContext';
-import { getTheme } from '../../_models/Theme';
 
 type Props = {
     data: any;
@@ -15,13 +14,16 @@ const Treemap: Component<Props> = (props) => {
     const[settings] = useAppSettingsContext();
     HighchartsTreemap(Highcharts);
 
+    const themeBase200 = "";
+    const themeBase300 = "";
+    const themePrimary = "";
+    const themeSecondary = "";
+
     let el;
 
     const labelFormat = (x: Highcharts.PointLabelObject) => `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
 
     createEffect(() =>{
-        const themeInfo = getTheme(settings.theme);
-
         Highcharts.chart("chart", {
             accessibility: {
                 enabled: false,
@@ -30,7 +32,7 @@ const Treemap: Component<Props> = (props) => {
             chart: {
                 height: el.parentElement.clientHeight,
                 margin: 0,
-                backgroundColor: themeInfo.def["base-300"],
+                backgroundColor: themeBase300,
                 style: {
                     "fontFamily": "Nunito Sans,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
                 }
@@ -43,7 +45,7 @@ const Treemap: Component<Props> = (props) => {
                     buttonTheme: {
                         style: {
                             "font-weight": 700,
-                            color: themeInfo.def["primary"],
+                            color: themePrimary,
                         }
                     }
                 }
@@ -109,17 +111,15 @@ const Treemap: Component<Props> = (props) => {
     });
 
     const getStyle = () => {
-        const themeInfo = getTheme(settings.theme);
-
         return `
             .highcharts-button-hover rect
-                { fill: ${themeInfo.def["base-200"]} !important; }
+                { fill: ${themeBase200} !important; }
 
             .highcharts-button-hover text
-                { fill: ${themeInfo.def["primary"]} !important; }
+                { fill: ${themePrimary} !important; }
 
             .highcharts-button-pressed text
-                { fill: ${themeInfo.def["secondary"]} !important; }
+                { fill: ${themeSecondary} !important; }
 
             .highcharts-button-normal text,
             .highcharts-button-hover text,
