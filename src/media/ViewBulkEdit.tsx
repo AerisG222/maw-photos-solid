@@ -126,7 +126,7 @@ const ViewBulkEdit: Component = () => {
                 }>
                     <CategoryBreadcrumb />
 
-                    <div class="flex flex-wrap flex-gap-2 mx-8 mb-2 flex-justify-center">
+                    <div class="flex flex-wrap gap-2 mx-8 mb-2 flex-justify-center">
                         <For each={media()}>{ m =>
                             <Show when={hideMediaWithGps() ? !m.latitude && !m.longitude : true}>
                                 <div class="border-1 border-text-primary:40 hover:border-text-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(m)}>

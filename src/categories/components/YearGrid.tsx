@@ -21,7 +21,7 @@ const YearGrid: Component<Props> = (props) => {
         <>
             <YearHeading year={props.year} />
 
-            <div class="flex flex-gap-2 flex-wrap place-content-center mb-4">
+            <div class="flex gap-2 flex-wrap place-content-center mb-4">
                 <For each={props.categories}>{ (category, idx) =>
                     <CategoryCard
                         category={category}

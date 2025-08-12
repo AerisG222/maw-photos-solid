@@ -20,7 +20,7 @@ const EffectsCard: Component = () => {
 
     return (
         <>
-            <div class="flex flex-gap-2">
+            <div class="flex gap-2">
                 <div class="w-[100%]">
                     <div>
                         Grayscale ({visualEffectsState.grayscale})

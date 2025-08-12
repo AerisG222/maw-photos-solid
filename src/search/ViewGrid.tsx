@@ -27,7 +27,7 @@ const ViewGrid: Component = () => {
                 <SearchBar />
             </div>
 
-            <div class="flex flex-gap-2 flex-wrap place-content-center my-4">
+            <div class="flex gap-2 flex-wrap place-content-center my-4">
                 <For each={searchContext.categories}>
                     { (category, idx) =>
                         <CategoryCard

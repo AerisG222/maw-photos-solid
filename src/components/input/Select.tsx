@@ -11,7 +11,7 @@ type Props<T> = {
 
 const Select: Component<Props<string|number>> = (props) => {
     return(
-        <div class="form-control max-w-16rem"
+        <div class="form-control max-w-[16rem]"
             classList={{
                 "flex-row": props.horizontal,
                 "w-full": props.horizontal,

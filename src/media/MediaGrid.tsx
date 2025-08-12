@@ -15,7 +15,7 @@ type Props = {
 
 const MediaGrid: Component<Props> = (props) => {
     return (
-        <div class="flex flex-gap-2 flex-wrap place-content-center mb-4">
+        <div class="flex gap-2 flex-wrap place-content-center mb-4">
             <For each={props.items}>{ (media, idx) =>
                 <Switch>
                     <Match when={media.kind === MediaTypePhoto}>

@@ -12,8 +12,8 @@ const CategoryFilterBar: Component = () => {
 
     return (
         <div class="flex w-full flex-items-center
-                    flex-col flex-gap-1 mt-2
-                    md:flex-row md:flex-gap-8 md:justify-center md:mt-0">
+                    flex-col gap-1 mt-2
+                    md:flex-row md:gap-8 md:justify-center md:mt-0">
             <YearFilter horizontal={ltMd()} />
             <CategoryTypeFilter horizontal={ltMd()} />
 
