@@ -17,7 +17,7 @@ const BulkEditSidebar: Component<Props> = (props) => {
     const cards = [
         {
             title: "Filter/Selection Tools",
-            icon: "i-ic-round-filter-list",
+            icon: "icon-[ic--round-filter-list]",
             component: <BulkEditFilterCard
                 onSelectAll={props.onSelectAll}
                 onDeselectAll={props.onDeselectAll}
@@ -25,7 +25,7 @@ const BulkEditSidebar: Component<Props> = (props) => {
         },
         {
             title: "GPS",
-            icon: "i-ic-round-place",
+            icon: "icon-[ic--round-place]",
             component: <BulkEditGpsCard onSave={props.onSave}/>
         }
     ];

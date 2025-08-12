@@ -1,12 +1,11 @@
-import "@unocss/reset/tailwind.css"
-import "uno.css";
-
 import { render } from "solid-js/web";
 import { Router } from "@solidjs/router";
 
 import { appRoutes } from './routes';
 
 import AppContext from './components/app-context/AppContext';
+
+import "./index.css";
 import App from './App';
 
 render(() =>
@@ -17,5 +16,5 @@ render(() =>
     }>
         { appRoutes }
     </Router>,
-    document.getElementById("root")
+    document.getElementById("root")!
 );

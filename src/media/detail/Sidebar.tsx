@@ -71,7 +71,7 @@ const Sidebar: Component = () => {
         {
             title: "Ratings",
             tooltip: "Sidebar: Ratings",
-            icon: "i-ic-round-star",
+            icon: "icon-[ic--round-star]",
             shortcutKeys: ["r"],
             clickHandler: toggleRatings,
             enable: (media: Media) => true,
@@ -81,7 +81,7 @@ const Sidebar: Component = () => {
         {
             title: "Comments",
             tooltip: "Sidebar: Comments",
-            icon: "i-ic-round-comment",
+            icon: "icon-[ic--round-comment]",
             shortcutKeys: ["c"],
             clickHandler: toggleComments,
             enable: (media: Media) => true,
@@ -91,7 +91,7 @@ const Sidebar: Component = () => {
         {
             title: "EXIF Data",
             tooltip: "Sidebar: EXIF Data",
-            icon: "i-ic-round-tune",
+            icon: "icon-[ic--round-tune]",
             shortcutKeys: ["x"],
             clickHandler: toggleExif,
             enable: (media: Media) => media?.kind === MediaTypePhoto,
@@ -101,7 +101,7 @@ const Sidebar: Component = () => {
         {
             title: "Effects",
             tooltip: "Sidebar: Effects",
-            icon: "i-ic-round-photo-filter",
+            icon: "icon-[ic--round-photo-filter]",
             shortcutKeys: ["e"],
             clickHandler: toggleEffects,
             enable: (media: Media) => true,
@@ -111,7 +111,7 @@ const Sidebar: Component = () => {
         {
             title: "Histogram",
             tooltip: "Sidebar: Histogram",
-            icon: "i-ic-round-color-lens",
+            icon: "icon-[ic--round-color-lens]",
             shortcutKeys: ["h"],
             clickHandler: toggleHistogram,
             enable: (media: Media) => true,
@@ -121,7 +121,7 @@ const Sidebar: Component = () => {
         {
             title: "MiniMap",
             tooltip: "Sidebar: MiniMap",
-            icon: "i-ic-round-map",
+            icon: "icon-[ic--round-map]",
             shortcutKeys: ["v"],
             clickHandler: toggleMinimap,
             enable: (media: Media) => true,
@@ -131,7 +131,7 @@ const Sidebar: Component = () => {
         {
             title: "Metadata Editor",
             tooltip: "Sidebar: Metadata Editor",
-            icon: "i-ic-round-edit",
+            icon: "icon-[ic--round-edit]",
             shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
             enable: (media: Media) => true,
@@ -141,7 +141,7 @@ const Sidebar: Component = () => {
         {
             title: "Category Teaser Chooser",
             tooltip: "Sidebar: Category Teaser Chooser",
-            icon: "i-ic-round-image-search",
+            icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaserChooser,
             enable: (media: Media) => routeContext.area !== AreaRandom,
@@ -169,8 +169,8 @@ const Sidebar: Component = () => {
                     name="Sidebar: Expand / Collapse"
                     icon={
                         settings.expandInfoPanel
-                            ? "i-ic-chevron-right"
-                            : "i-ic-chevron-left"
+                            ? "icon-[ic--chevron-right]"
+                            : "icon-[ic--chevron-left]"
                     }
                     shortcutKeys={["i"]}
                     clickHandler={toggleExpandedState}

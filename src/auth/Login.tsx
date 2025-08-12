@@ -32,7 +32,7 @@ const Login: Component = () => {
                     type="submit"
                     onClick={async () => await initiateAuthInline()}
                 >
-                    <span class="i-ic-round-security" /> Login
+                    <span class="icon-[ic--round-security]" /> Login
                 </button>
             </div>
         </>

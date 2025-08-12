@@ -10,7 +10,7 @@ const MovePreviousButton: Component = () => {
     return (
         <ToolbarButton
             disabled={activeItemIsFirst()}
-            icon="i-ic-round-chevron-left"
+            icon="icon-[ic--round-chevron-left]"
             name="Move Previous"
             shortcutKeys={["arrowleft"]}
             clickHandler={movePrevious}

@@ -24,8 +24,8 @@ const ToolbarButton: Component<Props> = (props) => {
         <ShortcutWrapper {...props}>
             <button
                 disabled={props.disabled}
-                class="px-3 py-1 hover:bg-secondary hover:color-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
-                classList={{"bg-secondary-focus": props.active, "color-secondary-content": props.active}}
+                class="px-3 py-1 hover:bg-secondary hover:text-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
+                classList={{"bg-secondary-focus": props.active, "text-secondary-content": props.active}}
                 title={getNameWithShortcut(props.name, props.shortcutKeys)}
                 onClick={[handleClick, null]}
             >

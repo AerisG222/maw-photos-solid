@@ -8,7 +8,7 @@ type Props = {
 const EffectsResetButton: Component<Props> = (props) => {
     return (
         <Show when={props.enabled}>
-            <span class="ml-2 cursor-pointer i-ic-baseline-remove-circle" onClick={() => props.handleClick()}/>
+            <span class="ml-2 cursor-pointer icon-[ic--baseline-remove-circle]" onClick={() => props.handleClick()}/>
         </Show>
     );
 };

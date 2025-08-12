@@ -11,7 +11,7 @@ export const aboutRedirect: AppRouteDefinition = {
 };
 
 export const aboutHelp: AppRouteDefinition = {
-    icon: "i-ic-round-help",
+    icon: "icon-[ic--round-help]",
     name: "Help",
     path: "/help",
     absolutePath: `${basePath}/help`,
@@ -19,7 +19,7 @@ export const aboutHelp: AppRouteDefinition = {
 };
 
 export const aboutReleaseNotes: AppRouteDefinition = {
-    icon: "i-ic-round-info",
+    icon: "icon-[ic--round-info]",
     name: "Release Notes",
     path: "/release-notes",
     absolutePath: `${basePath}/release-notes`,
@@ -27,7 +27,7 @@ export const aboutReleaseNotes: AppRouteDefinition = {
 };
 
 export const aboutAndroid: AppRouteDefinition = {
-    icon: "i-ic-android",
+    icon: "icon-[ic--android]",
     name: "Android Application",
     path: "/android",
     absolutePath: `${basePath}/android`,
@@ -35,7 +35,7 @@ export const aboutAndroid: AppRouteDefinition = {
 };
 
 export const about: AppRouteDefinition = {
-    icon: "i-ic-round-help-outline",
+    icon: "icon-[ic--round-help-outline]",
     name: "About",
     helpText: "View help and release notes for this application.",
     path: basePath,

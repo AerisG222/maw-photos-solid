@@ -129,7 +129,7 @@ const ViewBulkEdit: Component = () => {
                     <div class="flex flex-wrap flex-gap-2 mx-8 mb-2 flex-justify-center">
                         <For each={media()}>{ m =>
                             <Show when={hideMediaWithGps() ? !m.latitude && !m.longitude : true}>
-                                <div class="border-1 border-color-primary:40 hover:border-color-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(m)}>
+                                <div class="border-1 border-text-primary:40 hover:border-text-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(m)}>
                                     <input type="checkbox" class="checkbox checkbox-sm mt-1" checked={m.isSelected} onInput={evt => m.isSelected = evt.currentTarget.checked} />
                                     <img
                                         src={m.imageUrl}

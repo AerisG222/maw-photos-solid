@@ -17,7 +17,7 @@ const ToggleSlideshowButton: Component = () => {
     return (
         <Show when={showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
             <ToolbarButton
-                icon={state.isPlaying ? "i-ic-round-stop" : "i-ic-round-play-arrow"}
+                icon={state.isPlaying ? "icon-[ic--round-stop" : "i-ic-round-play-arrow]"}
                 name="Start / Stop Slideshow"
                 shortcutKeys={["p"]}
                 clickHandler={toggle}

@@ -14,8 +14,8 @@ const Rating: Component<Props> = (props) => {
     const getClassList = (star: boolean) => {
         return {
             "cursor-pointer": props.editable,
-            "i-ic-round-star": star,
-            "i-ic-round-star-outline": !star,
+            "icon-[ic--round-star]": star,
+            "icon-[ic--round-star-outline]": !star,
         }
     };
 

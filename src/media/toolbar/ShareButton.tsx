@@ -18,7 +18,7 @@ const ShareButton: Component = () => {
 
     return (
         <ToolbarButton
-            icon="i-ic-baseline-share"
+            icon="icon-[ic--baseline-share]"
             name="Share"
             clickHandler={onShare}
         />

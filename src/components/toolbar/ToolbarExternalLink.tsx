@@ -14,7 +14,7 @@ const ToolbarExternalLink: Component<Props> = (props) => {
         <a
             title={props.title}
             href={props.url}
-            class="flex flex-col py-auto h-[34.14px] w-[48px] cursor-pointer hover:bg-secondary hover:color-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
+            class="flex flex-col py-auto h-[34.14px] w-[48px] cursor-pointer hover:bg-secondary hover:text-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
             classList={props.textClassList}
             target="blank">
             <span class={`m-auto ${props.iconClass}`} />

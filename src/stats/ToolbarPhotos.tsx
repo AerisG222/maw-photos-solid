@@ -14,13 +14,13 @@ const PhotosToolbar: Component = () => {
         <>
             <ToolbarButton
                 active={search?.mode === "count"}
-                icon="i-mdi-file-multiple"
+                icon="icon-[mdi--file-multiple]"
                 name="File Count"
                 clickHandler={() => selectMode("count")}
             />
             <ToolbarButton
                 active={search?.mode === "size"}
-                icon="i-mdi-weight"
+                icon="icon-[mdi--weight]"
                 name="File Size"
                 clickHandler={() => selectMode("size")}
             />

@@ -14,17 +14,17 @@ const CategoryBreadcrumb: Component<Props> = (props) => {
         <Show when={state.activeCategory}>
             <div class="text-center">
                 <A
-                    class="color-primary"
+                    class="text-primary"
                     href={`/categories?year=${state.activeCategory.year}`}
                 >
                     {state.activeCategory.year}
                 </A>
 
-                <span class="text-6 i-ic-round-arrow-right" />
+                <span class="text-6 icon-[ic--round-arrow-right]" />
 
                 <Show when={props.showTitleAsLink}>
                     <A
-                        class="color-primary"
+                        class="text-primary"
                         href={`/categories/${state.activeCategory.type}/${state.activeCategory.id}`}
                     >
                         {state.activeCategory.name}

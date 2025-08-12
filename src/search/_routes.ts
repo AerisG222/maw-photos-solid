@@ -12,7 +12,7 @@ export const searchRedirect: AppRouteDefinition = {
 };
 
 export const searchGrid: AppRouteDefinition = {
-    icon: "i-ic-outline-apps",
+    icon: "icon-[ic--outline-apps]",
     name: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
@@ -20,7 +20,7 @@ export const searchGrid: AppRouteDefinition = {
 };
 
 export const searchList: AppRouteDefinition = {
-    icon: "i-ic-round-format-list-bulleted",
+    icon: "icon-[ic--round-format-list-bulleted]",
     name: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
@@ -28,7 +28,7 @@ export const searchList: AppRouteDefinition = {
 };
 
 export const search: AppRouteDefinition = {
-    icon: "i-ic-round-search",
+    icon: "icon-[ic--round-search]",
     name: "Search",
     helpText: "Search photo and video categories.",
     path: basePath,

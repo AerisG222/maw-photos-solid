@@ -15,7 +15,7 @@ type Props = {
 const CategoryListItem: Component<Props> = (props) => {
     return (
         <A href={props.category.route}
-            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary:10% hover:bg-secondary-content:20 hover:color-primary">
+            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary:10% hover:bg-secondary-content:20 hover:text-primary">
             <span class={`ml-1 mr-2 md:mx-4 text-6 ${categoryTypes[props.category.type].icon}`} />
 
             <img
@@ -27,7 +27,7 @@ const CategoryListItem: Component<Props> = (props) => {
 
             <Show when={props.showYear}>
                 <span class="ml-2 md:ml-4">{props.category.year}</span>
-                <span class="mr-[-0.5rem] md:mr-0 md:ml-4 text-6 i-ic-baseline-arrow-right" />
+                <span class="mr-[-0.5rem] md:mr-0 md:ml-4 text-6 icon-[ic--baseline-arrow-right]" />
             </Show>
 
             <span class="ml-2 md:ml-4">{props.category.name}</span>

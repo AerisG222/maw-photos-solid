@@ -11,7 +11,7 @@ export const statsRedirect: AppRouteDefinition = {
 };
 
 export const statsPhotos: AppRouteDefinition = {
-    icon: "i-ic-outline-photo-camera",
+    icon: "icon-[ic--outline-photo-camera]",
     name: "Photo Stats",
     path: "/photos",
     absolutePath: `${basePath}/photos`,
@@ -19,7 +19,7 @@ export const statsPhotos: AppRouteDefinition = {
 };
 
 export const statsVideos: AppRouteDefinition = {
-    icon: "i-ic-round-videocam",
+    icon: "icon-[ic--round-videocam]",
     name: "Video Stats",
     path: "/videos",
     absolutePath: `${basePath}/videos`,
@@ -27,7 +27,7 @@ export const statsVideos: AppRouteDefinition = {
 };
 
 export const statsCombined: AppRouteDefinition = {
-    icon: "i-ic-round-functions",
+    icon: "icon-[ic--round-functions]",
     name: "Combined Stats",
     path: "/combined",
     absolutePath: `${basePath}/combined`,
@@ -35,7 +35,7 @@ export const statsCombined: AppRouteDefinition = {
 };
 
 export const stats: AppRouteDefinition = {
-    icon: "i-ic-round-bar-chart",
+    icon: "icon-[ic--round-bar-chart]",
     name: "Statistics",
     helpText: "View statistics for all photos and videos.",
     absolutePath: basePath,

@@ -34,9 +34,9 @@ const ToolbarLink: Component<Props> = (props) => {
                 href={buildPath(props.route, props.routeParams, props.routeSearch)}
                 onClick={evt => handleClick()}
                 end={false}
-                activeClass="color-primary-content bg-primary mr[-1px]"
-                inactiveClass="color-primary"
-                class="px-3 py-1 hover:color-primary-content hover:bg-primary-focus hover:mr[-1px]"
+                activeClass="text-primary-content bg-primary mr[-1px]"
+                inactiveClass="text-primary"
+                class="px-3 py-1 hover:text-primary-content hover:bg-primary hover:mr[-1px]"
                 title={getNameWithShortcut(props.route.tooltip, props.route.shortcutKeys)}
                 ref={el}
             >

@@ -34,7 +34,7 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const buildGridRoute = (basePath: string): AppRouteDefinition => ({
-    icon: "i-ic-outline-apps",
+    icon: "icon-[ic--outline-apps]",
     name: "Grid View",
     tooltip: "Grid View",
     shortcutKeys: ["g"],
@@ -44,7 +44,7 @@ const buildGridRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
-    icon: "i-ic-round-dashboard",
+    icon: "icon-[ic--round-dashboard]",
     name: "Detail View",
     tooltip: "Detail View",
     shortcutKeys: ["w"],
@@ -54,7 +54,7 @@ const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
-    icon: "i-ic-round-fullscreen",
+    icon: "icon-[ic--round-fullscreen]",
     name: "Fullscreen View",
     tooltip: "Fullscreen View",
     shortcutKeys: ["f"],
@@ -64,7 +64,7 @@ const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const buildMapRoute = (basePath: string): AppRouteDefinition => ({
-    icon: "i-ic-round-map",
+    icon: "icon-[ic--round-map]",
     name: "Map View",
     tooltip: "Map View",
     shortcutKeys: ["z"],
@@ -74,7 +74,7 @@ const buildMapRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
-    icon: "i-ic-round-collections",
+    icon: "icon-[ic--round-collections]",
     name: "Bulk Edit View",
     tooltip: "Bulk Edit View",
     shortcutKeys: ["b"],
@@ -111,7 +111,7 @@ export const randomDetailRoute = buildDetailRoute(randomBasePath);
 export const randomFullscreenRoute = buildFullscreenRoute(randomBasePath);
 
 export const randomMediaRoutes: AppRouteDefinition = {
-    icon: "i-ic-round-shuffle",
+    icon: "icon-[ic--round-shuffle]",
     name: "Random",
     helpText: "Play though an unending list of random photos.",
     path: randomBasePath,

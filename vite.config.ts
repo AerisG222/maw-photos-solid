@@ -1,13 +1,13 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
+import tailwindcssPlugin from "@tailwindcss/vite";
 import basicSsl from '@vitejs/plugin-basic-ssl'
-import UnocssPlugin from "@unocss/vite";
 
 export default defineConfig({
     envDir: "environments",
     plugins: [
-        UnocssPlugin(),
         solidPlugin(),
+        tailwindcssPlugin(),
         basicSsl()
     ],
     server: {

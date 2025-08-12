@@ -73,19 +73,19 @@ const DetailToolbar: Component = () => {
             </Show>
 
             <ToolbarButton
-                icon="i-ic-round-title"
+                icon="icon-[ic--round-title]"
                 name="Show / Hide Category Breadcrumbs"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
             />
             <ToolbarButton
-                icon="i-ic-round-remove-red-eye"
+                icon="icon-[ic--round-remove-red-eye]"
                 name="Show / Hide Photo List"
                 shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
             />
             <ToolbarButton
-                icon="i-mdi-image-size-select-large"
+                icon="icon-[mdi--image-size-select-large]"
                 name="Toggle Photo List Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}

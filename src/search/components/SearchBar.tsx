@@ -53,19 +53,19 @@ const SearchBar: Component = () => {
                 onChange={evt => setSearchTerm(evt.currentTarget.value)} />
 
             <button
-                class="ml-2 btn btn-primary btn-outline hover:bg-secondary hover:color-secondary-content"
+                class="ml-2 btn btn-primary btn-outline hover:bg-secondary hover:text-secondary-content"
                 title="Search"
                 onClick={onSearch}
             >
-                <span class="text-6 i-ic-round-search" />
+                <span class="text-6 icon-[ic--round-search]" />
             </button>
 
             <button
-                class="ml-6 btn btn-error btn-outline hover:bg-secondary hover:color-secondary-content"
+                class="ml-6 btn btn-error btn-outline hover:bg-secondary hover:text-secondary-content"
                 title="Cancel"
                 onClick={onClearSearch}
             >
-                <span class="text-6 i-ic-round-close" />
+                <span class="text-6 icon-[ic--round-close]" />
             </button>
         </div>
     )

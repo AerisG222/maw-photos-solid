@@ -59,7 +59,7 @@ const GridToolbar: Component = () => {
             <Show when={!state.activeItem}>
                 <Show when={routeContext.area === AreaCategories}>
                     <ToolbarButton
-                        icon="i-ic-round-title"
+                        icon="icon-[ic--round-title]"
                         name="Show / Hide Category Breadcrumbs"
                         shortcutKeys={["t"]}
                         clickHandler={onToggleBreadcrumbs}
@@ -67,14 +67,14 @@ const GridToolbar: Component = () => {
                 </Show>
 
                 <ToolbarButton
-                    icon="i-ic-round-photo-size-select-large"
+                    icon="icon-[ic--round-photo-size-select-large]"
                     name="Toggle Thumbnail Size"
                     shortcutKeys={["s"]}
                     clickHandler={onToggleThumbnailSize}
                 />
 
                 <ToolbarButton
-                    icon="i-ic-round-format-indent-increase"
+                    icon="icon-[ic--round-format-indent-increase]"
                     name="Toggle Margins"
                     shortcutKeys={["m"]}
                     clickHandler={onToggleMargins}
@@ -84,7 +84,7 @@ const GridToolbar: Component = () => {
             <Show when={state.activeItem}>
                 <Show when={routeContext.area === AreaRandom}>
                     <ToolbarButton
-                        icon="i-ic-round-title"
+                        icon="icon-[ic--round-title]"
                         name="Show / Hide Category Breadcrumbs"
                         shortcutKeys={["t"]}
                         clickHandler={onToggleMainBreadcrumbs}

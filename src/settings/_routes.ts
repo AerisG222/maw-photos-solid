@@ -11,7 +11,7 @@ export const settingsRedirect: AppRouteDefinition = {
 };
 
 export const settingsApplication: AppRouteDefinition = {
-    icon: "i-ic-round-home",
+    icon: "icon-[ic--round-home]",
     name: "Application",
     path: "/application",
     absolutePath: `${basePath}/application`,
@@ -19,7 +19,7 @@ export const settingsApplication: AppRouteDefinition = {
 };
 
 export const settingsCategories: AppRouteDefinition = {
-    icon: "i-ic-round-collections",
+    icon: "icon-[ic--round-collections]",
     name: "Categories",
     path: "/categories",
     absolutePath: `${basePath}/categories`,
@@ -27,7 +27,7 @@ export const settingsCategories: AppRouteDefinition = {
 };
 
 export const settingsMedia: AppRouteDefinition = {
-    icon: "i-ic-round-image",
+    icon: "icon-[ic--round-image]",
     name: "Media",
     path: "/media",
     absolutePath: `${basePath}/media`,
@@ -35,7 +35,7 @@ export const settingsMedia: AppRouteDefinition = {
 };
 
 export const settingsSearch: AppRouteDefinition = {
-    icon: "i-ic-round-search",
+    icon: "icon-[ic--round-search]",
     name: "Search",
     path: "/search",
     absolutePath: `${basePath}/search`,
@@ -43,7 +43,7 @@ export const settingsSearch: AppRouteDefinition = {
 };
 
 export const settings: AppRouteDefinition = {
-    icon: "i-ic-baseline-settings",
+    icon: "icon-[ic--baseline-settings]",
     name: "Settings",
     helpText: "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
     absolutePath: basePath,

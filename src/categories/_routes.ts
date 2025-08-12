@@ -14,7 +14,7 @@ export const categoriesRedirect: AppRouteDefinition = {
 };
 
 export const categoriesGrid: AppRouteDefinition = {
-    icon: "i-ic-outline-apps",
+    icon: "icon-[ic--outline-apps]",
     name: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
@@ -22,7 +22,7 @@ export const categoriesGrid: AppRouteDefinition = {
 };
 
 export const categoriesList: AppRouteDefinition = {
-    icon: "i-ic-round-format-list-bulleted",
+    icon: "icon-[ic--round-format-list-bulleted]",
     name: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
@@ -30,7 +30,7 @@ export const categoriesList: AppRouteDefinition = {
 };
 
 export const categories: AppRouteDefinition = {
-    icon: "i-ic-round-home",
+    icon: "icon-[ic--round-home]",
     name: "Categories",
     helpText: "Browse by year and category.",
     path: basePath,

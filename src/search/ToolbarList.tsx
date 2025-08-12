@@ -20,12 +20,12 @@ const ListToolbar: Component = () => {
     return (
         <>
             <ToolbarButton
-                icon="i-ic-round-photo-size-select-large"
+                icon="icon-[ic--round-photo-size-select-large]"
                 name="Toggle Grid Thumbnail Size"
                 clickHandler={onToggleThumbnailSize}
             />
             <ToolbarButton
-                icon="i-ic-round-format-indent-increase"
+                icon="icon-[ic--round-format-indent-increase]"
                 name="Toggle Category Margins"
                 clickHandler={onToggleMargins}
             />

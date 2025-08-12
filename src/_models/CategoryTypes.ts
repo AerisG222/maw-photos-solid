@@ -17,7 +17,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         nameSingular: "Photo",
         namePlural: "Photos",
         routeSlug: "photos",
-        icon: "i-ic-round-camera-alt",
+        icon: "icon-[ic--round-camera-alt]",
         views: MediaViewAll,
         slideshowAvailable: true
     },
@@ -25,7 +25,7 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
         nameSingular: "Video",
         namePlural: "Videos",
         routeSlug: "videos",
-        icon: "i-ic-round-videocam",
+        icon: "icon-[ic--round-videocam]",
         views: MediaViewAll,
         slideshowAvailable: false
     }
