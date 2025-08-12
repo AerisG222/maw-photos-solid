@@ -29,7 +29,7 @@ const ToolbarButton: Component<Props> = (props) => {
                 title={getNameWithShortcut(props.name, props.shortcutKeys)}
                 onClick={[handleClick, null]}
             >
-                <span class={`text-6 ${props.icon}`} classList={{"rotate-90": props.rotate90}} />
+                <span class={`text-lg ${props.icon}`} classList={{"rotate-90": props.rotate90}} />
             </button>
         </ShortcutWrapper>
     );

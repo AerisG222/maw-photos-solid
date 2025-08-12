@@ -40,7 +40,7 @@ const ToolbarLink: Component<Props> = (props) => {
                 title={getNameWithShortcut(props.route.tooltip, props.route.shortcutKeys)}
                 ref={el}
             >
-                <span class={`text-6 ${props.route.icon}`} />
+                <span class={`text-lg ${props.route.icon}`} />
             </A>
         </ShortcutWrapper>
     );

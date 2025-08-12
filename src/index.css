@@ -37,4 +37,30 @@
             background-color: var(--color-primary);
         }
     }
+
+    .head1 {
+        font-size: var(--text-lg);
+        font-weight: bold;
+        color: var(--color-primary);
+
+        margin-top: calc(var(--spacing) * 2);
+        margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .head2 {
+        font-weight: bold;
+        color: var(--color-primary);
+
+        margin-top: calc(var(--spacing));
+        margin-bottom: calc(var(--spacing));
+    }
+
+    .head3 {
+        font-size: var(--text-sm);
+        font-weight: bold;
+        color: var(--color-secondary);
+
+        margin-top: calc(var(--spacing));
+        margin-bottom: calc(var(--spacing));
+    }
 }

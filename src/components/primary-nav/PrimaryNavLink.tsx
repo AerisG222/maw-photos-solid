@@ -16,7 +16,7 @@ const PrimaryNavLink: Component<Props> = (props) => {
             class="primary-nav-link"
             title={props.route.name}
         >
-            <Icon classes={`text-8 ${props.route.icon}`} />
+            <Icon classes={props.route.icon!} />
         </A>
     );
 };
