@@ -11,7 +11,7 @@ export default defineConfig({
         basicSsl()
     ],
     server: {
-        host: "dev.photos.mikeandwan.us",
+        host: "dev-photos.mikeandwan.us",
         port: 3000,
     },
     build: {
