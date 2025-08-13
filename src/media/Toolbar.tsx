@@ -4,16 +4,17 @@ import { useCategoryContext } from "../contexts/CategoryContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
 import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from "./_routes";
-import { isAdmin } from "../auth/auth";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
+import { useMediaBreakpointContext } from '../contexts/MediaBreakpointContext';
+import { useAuthContext } from '../contexts/AuthContext';
 
 import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
-import { useMediaBreakpointContext } from '../contexts/MediaBreakpointContext';
 
 const Toolbar: ParentComponent = (props) => {
+    const [, { isAdmin }] = useAuthContext();
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();

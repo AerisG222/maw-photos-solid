@@ -1,6 +1,5 @@
 import { VideoCategory } from "../../_models/Category";
 import { ICategoryService } from "./ICategoryService";
-import { isLoggedIn } from "../../auth/auth";
 import { getVideoCategories, getVideoCategory, getVideos, setTeaser } from "../../_api/VideoCategories";
 import { Video } from "../../_models/Media";
 
@@ -8,7 +7,9 @@ class VideoCategoryService
     implements ICategoryService
 {
     load(): Promise<VideoCategory[]> {
-        return isLoggedIn() ? getVideoCategories() : null;
+        // TODO: add this check back?
+        // return isLoggedIn() ? getVideoCategories() : null;
+        return getVideoCategories();
     }
 
     loadSingle(categoryId: number): Promise<VideoCategory> {

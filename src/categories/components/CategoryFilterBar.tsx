@@ -1,13 +1,14 @@
 import { Component, Show } from "solid-js";
 
-import { isAdmin } from "../../auth/auth";
 import { useMediaBreakpointContext } from '../../contexts/MediaBreakpointContext';
 
 import CategoryTypeFilter from "./CategoryTypeFilter";
 import YearFilter from "./YearFilter";
 import MissingGpsFilter from "./MissingGpsFilter";
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const CategoryFilterBar: Component = () => {
+    const [, { isAdmin }] = useAuthContext();
     const [,{ ltMd }] = useMediaBreakpointContext();
 
     return (

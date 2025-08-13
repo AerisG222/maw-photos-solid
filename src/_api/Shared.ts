@@ -1,5 +1,3 @@
-import { accessToken } from "../auth/auth";
-
 const buildAbsoluteUrl = (relativeUrl: string): string =>
     `${import.meta.env.VITE_API_URI}/${relativeUrl}`;
 
@@ -20,6 +18,7 @@ export const postMawApi = (relativeUrl: string, content: any) =>
 const getQueryParams = (content: any) => new URLSearchParams(content).toString();
 
 const callMawApi = async (method: string, relativeUrl: string, content: any) => {
+    // TODO: how to get acccess token?
     const response = fetch(
         buildAbsoluteUrl(relativeUrl),
         {
@@ -28,7 +27,7 @@ const callMawApi = async (method: string, relativeUrl: string, content: any) => 
             cache: "no-cache",
             body: content ? JSON.stringify(content) : null,
             headers: {
-                "Authorization": `Bearer ${accessToken()}`,
+                // "Authorization": `Bearer ${accessToken()}`,
                 "Content-Type": "application/json"
             },
             referrerPolicy: "no-referrer"

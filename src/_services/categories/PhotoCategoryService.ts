@@ -1,14 +1,15 @@
 import { getPhotoCategories, getPhotoCategory, getPhotos, setTeaser } from "../../_api/PhotoCategories";
 import { PhotoCategory } from "../../_models/Category";
 import { ICategoryService } from "./ICategoryService";
-import { isLoggedIn } from "../../auth/auth";
 import { Photo } from "../../_models/Media";
 
 export class PhotoCategoryService
     implements ICategoryService
 {
-    load(): Promise<PhotoCategory[]> {
-        return isLoggedIn() ? getPhotoCategories() : undefined;
+    async load(): Promise<PhotoCategory[]> {
+        // TODO: add this check back?
+        // return await isLoggedIn() ? getPhotoCategories() : undefined;
+        return await getPhotoCategories();
     }
 
     loadSingle(categoryId: number): Promise<PhotoCategory> {

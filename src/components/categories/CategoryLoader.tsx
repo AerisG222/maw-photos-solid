@@ -2,18 +2,19 @@ import { ParentComponent, children, createEffect, createResource } from "solid-j
 
 import { useCategoryContext } from "../../contexts/CategoryContext";
 import { categoryTypes } from "../../_models/CategoryTypes";
-import { isLoggedIn } from "../../auth/auth";
 import { getCategoryService } from "../../_services/categories/CategoryServiceLocator";
 import { CategoryType } from "../../_models/CategoryType";
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const CategoryLoader: ParentComponent = (props) => {
+    const [authContext] = useAuthContext();
     const [, { setInitialized, addCategories }] = useCategoryContext();
 
     const resources = [];
 
     for(const categoryTypeInfo in categoryTypes) {
         resources.push({
-            res: createResource(isLoggedIn, async (isLoggedIn) => isLoggedIn ?  getCategoryService(categoryTypeInfo as CategoryType).load() : [])[0],
+            res: createResource(authContext.isLoggedIn, (isLoggedIn) => isLoggedIn ?  getCategoryService(categoryTypeInfo as CategoryType).load() : [])[0],
             processed: false
         });
     }

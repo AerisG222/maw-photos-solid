@@ -1,20 +1,16 @@
-import { Component, createEffect } from "solid-js";
+import { Component } from "solid-js";
 
-import { initiateAuthInline, initiateAuthPopup, isLoggedIn } from "./auth";
-
-import SuccessfulLoginMonitor from "./SuccessfulLoginMonitor";
+import { useAuthContext } from '../contexts/AuthContext';
 
 const Login: Component = () => {
-    createEffect(() => {
-        if(!isLoggedIn()) {
-            initiateAuthPopup();
-        }
-    });
+    const [authState, { login }] = useAuthContext();
+
+    if(!authState.isLoggedIn) {
+        login();
+    }
 
     return (
         <>
-            <SuccessfulLoginMonitor />
-
             <div class="text-center">
                 <img src="/icon-192x192.png" class="inline mt-12 mb-8" />
 
@@ -30,7 +26,7 @@ const Login: Component = () => {
                 <button
                     class="btn btn-primary btn-outline gap-2 mt-8"
                     type="submit"
-                    onClick={async () => await initiateAuthInline()}
+                    onClick={async () => login()}
                 >
                     <span class="icon-[ic--round-security]" /> Login
                 </button>
