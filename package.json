@@ -37,6 +37,6 @@
         "@solidjs/router": "^0.15.3",
         "highcharts": "^12.3.0",
         "numbro": "^2.5.0",
-        "solid-js": "^1.9.1"
+        "solid-js": "^1.9.9"
     }
 }
