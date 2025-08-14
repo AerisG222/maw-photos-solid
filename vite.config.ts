@@ -1,14 +1,17 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import tailwindcssPlugin from "@tailwindcss/vite";
-import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig({
     envDir: "environments",
-    plugins: [solidPlugin(), tailwindcssPlugin(), basicSsl()],
+    plugins: [solidPlugin(), tailwindcssPlugin()],
     server: {
         host: "dev-photos.mikeandwan.us",
-        port: 3000
+        port: 3000,
+        https: {
+            key: '/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.pem',
+            cert: '/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.crt'
+        }
     },
     build: {
         target: "esnext"
