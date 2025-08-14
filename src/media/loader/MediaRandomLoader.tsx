@@ -1,28 +1,36 @@
-import { ParentComponent, children, createEffect, createResource, createSignal, createUniqueId, onCleanup } from "solid-js";
+import {
+    ParentComponent,
+    children,
+    createEffect,
+    createResource,
+    createSignal,
+    createUniqueId,
+    onCleanup
+} from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { getRandomPhotos } from "../../_api/Photos";
-import { useMediaPageSettingsContext } from '../../contexts/settings/MediaPageSettingsContext';
+import { useMediaPageSettingsContext } from "../../contexts/settings/MediaPageSettingsContext";
 
-const MediaRandomLoader: ParentComponent = (props) => {
+const MediaRandomLoader: ParentComponent = props => {
     const [fetchTrigger, setFetchTrigger] = createSignal({ id: createUniqueId(), count: 24 });
     const [mediaSettings] = useMediaPageSettingsContext();
     const [, { addItems, activeItemIsLast }] = useMediaListContext();
     const c = children(() => props.children);
     let intervalId = -1;
 
-    const fetchRandomMedia = (trigger) => getRandomPhotos(trigger.count);
+    const fetchRandomMedia = trigger => getRandomPhotos(trigger.count);
 
     const [randomResource] = createResource(fetchTrigger, fetchRandomMedia);
 
     createEffect(() => {
-        if(!randomResource.loading && !randomResource.error) {
+        if (!randomResource.loading && !randomResource.error) {
             addItems(randomResource());
         }
     });
 
     createEffect(() => {
-        if(intervalId !== -1) {
+        if (intervalId !== -1) {
             clearInterval(intervalId);
         }
 
@@ -30,10 +38,10 @@ const MediaRandomLoader: ParentComponent = (props) => {
             () => setFetchTrigger({ id: createUniqueId(), count: 1 }),
             mediaSettings.slideshowDisplayDurationSeconds * 1000
         );
-    })
+    });
 
     createEffect(() => {
-        if(activeItemIsLast()) {
+        if (activeItemIsLast()) {
             setFetchTrigger({ id: createUniqueId(), count: 5 });
         }
     });
@@ -42,11 +50,7 @@ const MediaRandomLoader: ParentComponent = (props) => {
         clearInterval(intervalId);
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default MediaRandomLoader;

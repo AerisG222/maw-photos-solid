@@ -7,8 +7,8 @@ type Props = {
     photo: Photo;
 };
 
-const MainPhoto: Component<Props> = (props) => {
-    const [, {setMediaElement}] = useMediaListContext();
+const MainPhoto: Component<Props> = props => {
+    const [, { setMediaElement }] = useMediaListContext();
 
     const getSrcset = () => {
         const set = [];
@@ -24,14 +24,16 @@ const MainPhoto: Component<Props> = (props) => {
     };
 
     return (
-        <img src={props.photo?.imageMdUrl}
-            crossorigin="anonymous"  // this is required for the histogram (maybe only in dev?)
+        <img
+            src={props.photo?.imageMdUrl}
+            crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
             class="h-100% w-100% max-h-100vh max-w-100% object-contain"
             srcset={getSrcset()}
             sizes="100vw"
             loading="eager"
-            ref={el => setMediaElement(el)} />
+            ref={el => setMediaElement(el)}
+        />
     );
-}
+};
 
 export default MainPhoto;

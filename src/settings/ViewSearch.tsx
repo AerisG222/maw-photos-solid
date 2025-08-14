@@ -3,7 +3,11 @@ import { Component, batch } from "solid-js";
 import { useSearchPageSettingsContext } from "../contexts/settings/SearchPageSettingsContext";
 import { useSearchGridViewSettingsContext } from "../contexts/settings/SearchGridViewSettingsContext";
 import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
-import { ThumbnailSizeDefault, ThumbnailSizeIdType, allThumbnailSizes } from "../_models/ThumbnailSize";
+import {
+    ThumbnailSizeDefault,
+    ThumbnailSizeIdType,
+    allThumbnailSizes
+} from "../_models/ThumbnailSize";
 import { allMargins } from "../_models/Margin";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 
@@ -16,19 +20,23 @@ import Layout from "../components/layout/Layout";
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
-    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] = useSearchListViewSettingsContext();
-    const [gridSettings, {
-        setShowTitles: setGridShowTitles,
-        setShowYears: setGridShowYears,
-        setMargin: setGridMargin,
-        setThumbnailSize: setGridThumbnailSize
-    }] = useSearchGridViewSettingsContext();
+    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] =
+        useSearchListViewSettingsContext();
+    const [
+        gridSettings,
+        {
+            setShowTitles: setGridShowTitles,
+            setShowYears: setGridShowYears,
+            setMargin: setGridMargin,
+            setThumbnailSize: setGridThumbnailSize
+        }
+    ] = useSearchGridViewSettingsContext();
 
     const gridSetShowTitles = (doShow: boolean) => {
         batch(() => {
             setGridShowTitles(doShow);
 
-            if(doShow) {
+            if (doShow) {
                 setGridThumbnailSize(ThumbnailSizeDefault);
             }
         });
@@ -38,7 +46,7 @@ const ViewSearch: Component = () => {
         batch(() => {
             setGridShowYears(doShow);
 
-            if(doShow) {
+            if (doShow) {
                 setGridThumbnailSize(ThumbnailSizeDefault);
             }
         });
@@ -48,7 +56,7 @@ const ViewSearch: Component = () => {
         batch(() => {
             setGridThumbnailSize(thumbnailSize);
 
-            if(thumbnailSize !== ThumbnailSizeDefault) {
+            if (thumbnailSize !== ThumbnailSizeDefault) {
                 setGridShowTitles(false);
                 setGridShowYears(false);
             }
@@ -64,7 +72,8 @@ const ViewSearch: Component = () => {
                         groupName="pageViewMode"
                         itemArray={allCategoryViewModes}
                         selectedValue={pageSettings.viewMode}
-                        onChange={setViewMode} />
+                        onChange={setViewMode}
+                    />
                 </Panel>
 
                 <Panel title="Grid View">
@@ -72,24 +81,28 @@ const ViewSearch: Component = () => {
                         title="Show Category Titles"
                         name="gridShowTitles"
                         isSelected={gridSettings.showTitles}
-                        onChange={gridSetShowTitles} />
+                        onChange={gridSetShowTitles}
+                    />
                     <Toggle
                         title="Show Category Years"
                         name="gridShowYears"
                         isSelected={gridSettings.showYears}
-                        onChange={gridSetShowYears} />
+                        onChange={gridSetShowYears}
+                    />
                     <RadioGroup
                         title="Margins"
                         groupName="gridMargin"
                         itemArray={allMargins}
                         selectedValue={gridSettings.margin}
-                        onChange={setGridMargin} />
+                        onChange={setGridMargin}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="gridThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={gridSettings.thumbnailSize}
-                        onChange={gridSetThumbnailSize} />
+                        onChange={gridSetThumbnailSize}
+                    />
                 </Panel>
 
                 <Panel title="List View">
@@ -98,13 +111,15 @@ const ViewSearch: Component = () => {
                         groupName="listMargin"
                         itemArray={allMargins}
                         selectedValue={listSettings.margin}
-                        onChange={setListMargin} />
+                        onChange={setListMargin}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="listThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={listSettings.thumbnailSize}
-                        onChange={setListThumbnailSize} />
+                        onChange={setListThumbnailSize}
+                    />
                 </Panel>
             </PanelContainer>
         </Layout>

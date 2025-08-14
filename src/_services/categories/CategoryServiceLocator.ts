@@ -4,7 +4,7 @@ import { photoCategoryService } from "./PhotoCategoryService";
 import { videoCategoryService } from "./VideoCategoryService";
 
 export const getCategoryService = (type: CategoryType): ICategoryService => {
-    switch(type) {
+    switch (type) {
         case CategoryTypePhotos:
             return photoCategoryService;
         case CategoryTypeVideos:

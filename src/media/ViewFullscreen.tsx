@@ -20,7 +20,7 @@ const ViewFullscreen: Component = () => {
     createEffect(() => {
         let route = categoryFullscreenRoute;
 
-        if(routeContext.area === AreaRandom) {
+        if (routeContext.area === AreaRandom) {
             route = randomFullscreenRoute;
         }
 
@@ -30,7 +30,7 @@ const ViewFullscreen: Component = () => {
     setFullscreen(true);
 
     onCleanup(() => {
-        setFullscreen(false)
+        setFullscreen(false);
     });
 
     return (
@@ -42,7 +42,8 @@ const ViewFullscreen: Component = () => {
                         <Toolbar>
                             <FullscreenToolbar />
                         </Toolbar>
-                    }>
+                    }
+                >
                     <div class="grid h-[100vh] w-[100%] justify-center">
                         <MediaMainItem media={mediaList.activeItem} />
                     </div>

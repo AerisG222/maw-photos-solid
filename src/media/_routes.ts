@@ -10,18 +10,18 @@ export const MediaViewModeGrid = "grid";
 export const MediaViewModeMap = "map";
 
 export type MediaView =
-    typeof MediaViewModeBulkEdit |
-    typeof MediaViewModeDetail |
-    typeof MediaViewModeFullscreen |
-    typeof MediaViewModeGrid |
-    typeof MediaViewModeMap;
+    | typeof MediaViewModeBulkEdit
+    | typeof MediaViewModeDetail
+    | typeof MediaViewModeFullscreen
+    | typeof MediaViewModeGrid
+    | typeof MediaViewModeMap;
 
 export const MediaViewAll: MediaView[] = [
     MediaViewModeBulkEdit,
     MediaViewModeDetail,
     MediaViewModeFullscreen,
     MediaViewModeGrid,
-    MediaViewModeMap,
+    MediaViewModeMap
 ];
 
 const categoryBasePath = "/categories/:categoryType/:categoryId";
@@ -101,7 +101,7 @@ export const categoryMediaRoutes: AppRouteDefinition = {
         categoryDetailRoute,
         categoryFullscreenRoute,
         categoryMapRoute,
-        categoryBulkEditRoute,
+        categoryBulkEditRoute
     ]
 };
 
@@ -118,25 +118,28 @@ export const randomMediaRoutes: AppRouteDefinition = {
     absolutePath: randomBasePath,
     component: lazy(() => import("./MediaRoot")),
     doesPathMatch: path => routeMatch(path, randomBasePath, AreaRandom),
-    children: [
-        randomRedirectRoute,
-        randomGridRoute,
-        randomDetailRoute,
-        randomFullscreenRoute,
-    ]
+    children: [randomRedirectRoute, randomGridRoute, randomDetailRoute, randomFullscreenRoute]
 };
 
 export const getMediaCategoryPath = (categoryType: CategoryType, categoryId: number): string =>
-    buildPath(categoryMediaRoutes, {categoryType, categoryId});
+    buildPath(categoryMediaRoutes, { categoryType, categoryId });
 
-export const getMediaPathByView = (viewMode: MediaView, categoryType: CategoryType, categoryId: number, id?: number): string =>
-    getMediaPath(getRouteForViewMode(viewMode), categoryType, categoryId, id);
+export const getMediaPathByView = (
+    viewMode: MediaView,
+    categoryType: CategoryType,
+    categoryId: number,
+    id?: number
+): string => getMediaPath(getRouteForViewMode(viewMode), categoryType, categoryId, id);
 
-export const getMediaPath = (route: AppRouteDefinition, categoryType: CategoryType, categoryId: number, id?: number): string =>
-    buildPath(route, {categoryType, categoryId, id});
+export const getMediaPath = (
+    route: AppRouteDefinition,
+    categoryType: CategoryType,
+    categoryId: number,
+    id?: number
+): string => buildPath(route, { categoryType, categoryId, id });
 
 const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => {
-    switch(mode) {
+    switch (mode) {
         case MediaViewModeBulkEdit:
             return categoryBulkEditRoute;
         case MediaViewModeDetail:

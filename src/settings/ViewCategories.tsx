@@ -6,7 +6,11 @@ import { useCategoryGridViewSettingsContext } from "../contexts/settings/Categor
 import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 import { allMargins } from "../_models/Margin";
-import { ThumbnailSizeDefault, ThumbnailSizeIdType, allThumbnailSizes } from "../_models/ThumbnailSize";
+import {
+    ThumbnailSizeDefault,
+    ThumbnailSizeIdType,
+    allThumbnailSizes
+} from "../_models/ThumbnailSize";
 import { categoryTypesOptions } from "../_models/CategoryTypes";
 
 import Panel from "./components/Panel";
@@ -19,21 +23,22 @@ import Layout from "../components/layout/Layout";
 const ViewCategories: Component = () => {
     const [filterSettings, { setTypeFilter }] = useCategoryFilterSettingsContext();
     const [pageSettings, { setViewMode }] = useCategoryPageSettingsContext();
-    const [gridSettings, {
-        setShowTitles: setGridShowTitles,
-        setMargin: setGridMargin,
-        setThumbnailSize: setGridThumbnailSize
-    }] = useCategoryGridViewSettingsContext();
-    const [listSettings, {
-        setMargin: setListMargin,
-        setThumbnailSize: setListThumbnailSize
-    }] = useCategoryListViewSettingsContext()
+    const [
+        gridSettings,
+        {
+            setShowTitles: setGridShowTitles,
+            setMargin: setGridMargin,
+            setThumbnailSize: setGridThumbnailSize
+        }
+    ] = useCategoryGridViewSettingsContext();
+    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] =
+        useCategoryListViewSettingsContext();
 
     const gridSetShowTitles = (doShow: boolean) => {
         batch(() => {
             setGridShowTitles(doShow);
 
-            if(doShow) {
+            if (doShow) {
                 setGridThumbnailSize(ThumbnailSizeDefault);
             }
         });
@@ -43,7 +48,7 @@ const ViewCategories: Component = () => {
         batch(() => {
             setGridThumbnailSize(thumbnailSize);
 
-            if(thumbnailSize !== ThumbnailSizeDefault) {
+            if (thumbnailSize !== ThumbnailSizeDefault) {
                 setGridShowTitles(false);
             }
         });
@@ -58,13 +63,15 @@ const ViewCategories: Component = () => {
                         itemArray={categoryTypesOptions}
                         groupName="pageTypeFilter"
                         selectedValue={filterSettings.typeFilter}
-                        onChange={setTypeFilter} />
+                        onChange={setTypeFilter}
+                    />
                     <RadioGroup
                         title="View"
                         itemArray={allCategoryViewModes}
                         groupName="pageView"
                         selectedValue={pageSettings.viewMode}
-                        onChange={setViewMode} />
+                        onChange={setViewMode}
+                    />
                 </Panel>
 
                 <Panel title="Grid View">
@@ -72,19 +79,22 @@ const ViewCategories: Component = () => {
                         title="Show Titles"
                         name="gridTitles"
                         isSelected={gridSettings.showTitles}
-                        onChange={gridSetShowTitles} />
+                        onChange={gridSetShowTitles}
+                    />
                     <RadioGroup
                         title="Margins"
                         groupName="gridMargins"
                         itemArray={allMargins}
                         selectedValue={gridSettings.margin}
-                        onChange={setGridMargin} />
+                        onChange={setGridMargin}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="gridThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={gridSettings.thumbnailSize}
-                        onChange={gridSetThumbnailSize} />
+                        onChange={gridSetThumbnailSize}
+                    />
                 </Panel>
 
                 <Panel title="List View">
@@ -93,13 +103,15 @@ const ViewCategories: Component = () => {
                         groupName="listMargins"
                         itemArray={allMargins}
                         selectedValue={listSettings.margin}
-                        onChange={setListMargin} />
+                        onChange={setListMargin}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="listThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={listSettings.thumbnailSize}
-                        onChange={setListThumbnailSize} />
+                        onChange={setListThumbnailSize}
+                    />
                 </Panel>
             </PanelContainer>
         </Layout>

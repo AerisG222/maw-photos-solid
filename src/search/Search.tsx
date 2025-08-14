@@ -4,12 +4,10 @@ import { SearchProvider } from "./contexts/SearchContext";
 
 import AuthGuard from "../components/auth/AuthGuard";
 
-const Search: ParentComponent = (props) => {
+const Search: ParentComponent = props => {
     return (
         <AuthGuard>
-        <SearchProvider>
-            { props.children }
-        </SearchProvider>
+            <SearchProvider>{props.children}</SearchProvider>
         </AuthGuard>
     );
 };

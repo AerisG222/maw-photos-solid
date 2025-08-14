@@ -60,19 +60,19 @@ export type VisualEffectsContextValue = [
 
 const VisualEffectsContext = createContext<VisualEffectsContextValue>();
 
-export const VisualEffectsProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore({...defaultVisualEffects});
+export const VisualEffectsProvider: ParentComponent = props => {
+    const [state, setState] = createStore({ ...defaultVisualEffects });
 
-    const reset = () => setState({...defaultVisualEffects});
+    const reset = () => setState({ ...defaultVisualEffects });
 
-    const setGrayscale = (value: number) => setState({grayscale: value});
-    const setBrightness = (value: number) => setState({brightness: value});
-    const setContrast = (value: number) => setState({contrast: value});
-    const setBlur = (value: number) => setState({blur: value});
-    const setSepia = (value: number) => setState({sepia: value});
-    const setSaturation = (value: number) => setState({saturation: value});
-    const setInvert = (value: number) => setState({invert: value});
-    const setHueRotate = (value: number) => setState({hueRotate: value});
+    const setGrayscale = (value: number) => setState({ grayscale: value });
+    const setBrightness = (value: number) => setState({ brightness: value });
+    const setContrast = (value: number) => setState({ contrast: value });
+    const setBlur = (value: number) => setState({ blur: value });
+    const setSepia = (value: number) => setState({ sepia: value });
+    const setSaturation = (value: number) => setState({ saturation: value });
+    const setInvert = (value: number) => setState({ invert: value });
+    const setHueRotate = (value: number) => setState({ hueRotate: value });
 
     const getFilterStyles = () => {
         const style: string[] = [];
@@ -109,34 +109,34 @@ export const VisualEffectsProvider: ParentComponent = (props) => {
             style.push(`invert(${state.invert}%)`);
         }
 
-        if(style.length > 0) {
+        if (style.length > 0) {
             return `filter: ${style.join(" ")};`;
         }
 
         return "";
     };
 
-    const rotateClockwise = () => setState(s => ({...s, rotation: s.rotation + 90}));
-    const rotateCounterClockwise = () => setState(s => ({...s, rotation: s.rotation - 90}));
-    const flipHorizontal = () => setState(s => ({...s, flipHorizontal: !s.flipHorizontal}));
-    const flipVertical = () => setState(s => ({...s, flipVertical: !s.flipVertical}));
+    const rotateClockwise = () => setState(s => ({ ...s, rotation: s.rotation + 90 }));
+    const rotateCounterClockwise = () => setState(s => ({ ...s, rotation: s.rotation - 90 }));
+    const flipHorizontal = () => setState(s => ({ ...s, flipHorizontal: !s.flipHorizontal }));
+    const flipVertical = () => setState(s => ({ ...s, flipVertical: !s.flipVertical }));
 
     const getTransformStyles = () => {
         const style: string[] = [];
 
-        if(state.rotation !== 0) {
-            style.push(`rotate(${state.rotation}deg)`)
+        if (state.rotation !== 0) {
+            style.push(`rotate(${state.rotation}deg)`);
         }
 
-        if(state.flipHorizontal) {
-            style.push("scaleX(-1)")
+        if (state.flipHorizontal) {
+            style.push("scaleX(-1)");
         }
 
-        if(state.flipVertical) {
-            style.push("scaleY(-1)")
+        if (state.flipVertical) {
+            style.push("scaleY(-1)");
         }
 
-        if(style.length > 0) {
+        if (style.length > 0) {
             return `transform: ${style.join(" ")};`;
         }
 
@@ -144,23 +144,28 @@ export const VisualEffectsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <VisualEffectsContext.Provider value={[state, {
-            reset,
-            setGrayscale,
-            setBrightness,
-            setContrast,
-            setBlur,
-            setSepia,
-            setSaturation,
-            setInvert,
-            setHueRotate,
-            getFilterStyles,
-            rotateClockwise,
-            rotateCounterClockwise,
-            flipHorizontal,
-            flipVertical,
-            getTransformStyles
-        }]}>
+        <VisualEffectsContext.Provider
+            value={[
+                state,
+                {
+                    reset,
+                    setGrayscale,
+                    setBrightness,
+                    setContrast,
+                    setBlur,
+                    setSepia,
+                    setSaturation,
+                    setInvert,
+                    setHueRotate,
+                    getFilterStyles,
+                    rotateClockwise,
+                    rotateCounterClockwise,
+                    flipHorizontal,
+                    flipVertical,
+                    getTransformStyles
+                }
+            ]}
+        >
             {props.children}
         </VisualEffectsContext.Provider>
     );

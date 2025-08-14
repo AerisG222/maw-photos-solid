@@ -15,25 +15,22 @@ export const defaultRouteDetailState: RouteDetailState = {
     area: undefined
 };
 
-export type RouteDetailContextValue = [
-    state: RouteDetailState,
-    actions: { }
-];
+export type RouteDetailContextValue = [state: RouteDetailState, actions: {}];
 
 const RouteDetailContext = createContext<RouteDetailContextValue>();
 
-export const RouteDetailProvider: ParentComponent = (props) => {
+export const RouteDetailProvider: ParentComponent = props => {
     const [state, setState] = createStore(defaultRouteDetailState);
     const location = useLocation();
 
     const getActiveArea = (path: string): Area | undefined => {
         let routeArea = undefined;
 
-        for(const route of appRoutes) {
-            if(route.doesPathMatch) {
+        for (const route of appRoutes) {
+            if (route.doesPathMatch) {
                 const [matches, area] = route.doesPathMatch(path);
 
-                if(matches) {
+                if (matches) {
                     routeArea = area;
                     break;
                 }
@@ -53,7 +50,7 @@ export const RouteDetailProvider: ParentComponent = (props) => {
     });
 
     return (
-        <RouteDetailContext.Provider value={[state, { }]}>
+        <RouteDetailContext.Provider value={[state, {}]}>
             {props.children}
         </RouteDetailContext.Provider>
     );

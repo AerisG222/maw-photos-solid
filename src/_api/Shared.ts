@@ -6,7 +6,7 @@ export const queryMawApi = async <T>(relativeUrl: string, content?: any) => {
 
     var result = await callMawApi("GET", relativeUrl, undefined);
 
-    return result ? result.json() as T : undefined;
+    return result ? (result.json() as T) : undefined;
 };
 
 export const patchMawApi = (relativeUrl: string, content: any) =>
@@ -19,20 +19,17 @@ const getQueryParams = (content: any) => new URLSearchParams(content).toString()
 
 const callMawApi = async (method: string, relativeUrl: string, content: any) => {
     // TODO: how to get acccess token?
-    const response = fetch(
-        buildAbsoluteUrl(relativeUrl),
-        {
-            method: method,
-            mode: "cors",
-            cache: "no-cache",
-            body: content ? JSON.stringify(content) : null,
-            headers: {
-                // "Authorization": `Bearer ${accessToken()}`,
-                "Content-Type": "application/json"
-            },
-            referrerPolicy: "no-referrer"
-        }
-    ).catch(err => console.log(err));
+    const response = fetch(buildAbsoluteUrl(relativeUrl), {
+        method: method,
+        mode: "cors",
+        cache: "no-cache",
+        body: content ? JSON.stringify(content) : null,
+        headers: {
+            // "Authorization": `Bearer ${accessToken()}`,
+            "Content-Type": "application/json"
+        },
+        referrerPolicy: "no-referrer"
+    }).catch(err => console.log(err));
 
     return await response;
-}
+};

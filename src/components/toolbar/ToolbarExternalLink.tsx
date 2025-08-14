@@ -7,8 +7,8 @@ type Props = {
     textClassList?: {};
 };
 
-const ToolbarExternalLink: Component<Props> = (props) => {
-    props = mergeProps({textClassList: {"text-6": true}}, props);
+const ToolbarExternalLink: Component<Props> = props => {
+    props = mergeProps({ textClassList: { "text-6": true } }, props);
 
     return (
         <a
@@ -16,10 +16,11 @@ const ToolbarExternalLink: Component<Props> = (props) => {
             href={props.url}
             class="flex flex-col py-auto h-[34.14px] w-[48px] cursor-pointer hover:bg-secondary hover:text-secondary-content disabled:bg-transparent! disabled:color-base-content:20%"
             classList={props.textClassList}
-            target="blank">
+            target="blank"
+        >
             <span class={`m-auto ${props.iconClass}`} />
         </a>
     );
-}
+};
 
 export default ToolbarExternalLink;

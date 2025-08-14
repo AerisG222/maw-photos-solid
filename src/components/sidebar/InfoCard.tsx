@@ -5,7 +5,7 @@ type Props = {
     title: string;
 };
 
-const InfoCard: ParentComponent<Props> = (props) => {
+const InfoCard: ParentComponent<Props> = props => {
     const c = children(() => props.children);
 
     return (
@@ -15,9 +15,7 @@ const InfoCard: ParentComponent<Props> = (props) => {
                 <span class="block text-sm font-bold">{props.title}</span>
             </div>
 
-            <div class="mt-2">
-                {c()}
-            </div>
+            <div class="mt-2">{c()}</div>
         </div>
     );
 };

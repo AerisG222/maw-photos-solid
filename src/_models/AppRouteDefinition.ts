@@ -1,4 +1,4 @@
-import { RouteDefinition } from "@solidjs/router"
+import { RouteDefinition } from "@solidjs/router";
 
 export const AreaAbout = "about";
 export const AreaAuth = "auth";
@@ -10,24 +10,23 @@ export const AreaSettings = "settings";
 export const AreaStats = "stats";
 
 export type Area =
-    typeof AreaAbout |
-    typeof AreaAuth |
-    typeof AreaCategories |
-    typeof AreaMedia |
-    typeof AreaRandom |
-    typeof AreaSearch |
-    typeof AreaSettings |
-    typeof AreaStats;
+    | typeof AreaAbout
+    | typeof AreaAuth
+    | typeof AreaCategories
+    | typeof AreaMedia
+    | typeof AreaRandom
+    | typeof AreaSearch
+    | typeof AreaSettings
+    | typeof AreaStats;
 
 export type RouteMatch = [boolean, Area];
 
-export type AppRouteDefinition =
-    RouteDefinition & {
-        absolutePath: string;
-        icon?: string;
-        name?: string;
-        tooltip?: string;
-        shortcutKeys?: string[];
-        helpText?: string;
-        doesPathMatch?: (path: string) => RouteMatch;
-    };
+export type AppRouteDefinition = RouteDefinition & {
+    absolutePath: string;
+    icon?: string;
+    name?: string;
+    tooltip?: string;
+    shortcutKeys?: string[];
+    helpText?: string;
+    doesPathMatch?: (path: string) => RouteMatch;
+};

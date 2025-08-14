@@ -12,7 +12,7 @@ export type SearchListViewSettingsState = {
 
 export const defaultSearchListViewSettings: SearchListViewSettingsState = {
     margin: defaultMargin,
-    thumbnailSize: defaultGridThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize
 };
 
 export type SearchListViewSettingsContextValue = [
@@ -25,11 +25,12 @@ export type SearchListViewSettingsContextValue = [
 
 const SearchListViewSettingsContext = createContext<SearchListViewSettingsContextValue>();
 
-export const SearchListSettingsProvider: ParentComponent = (props) => {
+export const SearchListSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({margin: margin});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize: thumbnailSize});
+    const setMargin = (margin: MarginIdType) => updateState({ margin: margin });
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) =>
+        updateState({ thumbnailSize: thumbnailSize });
 
     const updateState = (update: Partial<SearchListViewSettingsState>) => {
         setState(update);

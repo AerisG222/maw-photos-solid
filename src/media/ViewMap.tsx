@@ -8,11 +8,12 @@ import { Media, getMediaTeaserUrl } from "../_models/Media";
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
-import MediaSelectedGuard from './MediaSelectedGuard';
+import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewMap: Component = () => {
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
-    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition }] = useMediaListContext();
+    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition }] =
+        useMediaListContext();
     const [initialized, setInitialized] = createSignal(false);
     const [mapReady, setMapReady] = createSignal(false);
 
@@ -21,7 +22,7 @@ const ViewMap: Component = () => {
     setActiveRouteDefinition(categoryMapRoute);
 
     setFilter((media: Media) => {
-        if(media?.latitude && media?.longitude) {
+        if (media?.latitude && media?.longitude) {
             return true;
         } else {
             return false;
@@ -43,14 +44,16 @@ const ViewMap: Component = () => {
     const markers = new Map();
 
     async function initMap(): Promise<void> {
-        const { InfoWindow, Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
+        const { InfoWindow, Map } = (await google.maps.importLibrary(
+            "maps"
+        )) as google.maps.MapsLibrary;
 
-        if(el) {
+        if (el) {
             map = new Map(el, defaultMapOptions);
             map.addListener("zoom_changed", () => setZoom(map.getZoom()));
             map.addListener("maptypeid_changed", () => setMapType(map.getMapTypeId()));
 
-            google.maps.event.addListenerOnce(map, 'idle', () => setMapReady(true));
+            google.maps.event.addListenerOnce(map, "idle", () => setMapReady(true));
 
             infoWindow = new InfoWindow({ content: "" });
 
@@ -59,10 +62,15 @@ const ViewMap: Component = () => {
     }
 
     const addMarkers = async () => {
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+        const { AdvancedMarkerElement } = (await google.maps.importLibrary(
+            "marker"
+        )) as google.maps.MarkerLibrary;
 
-        for(const item of getFilteredMedia()) {
-            const marker = new AdvancedMarkerElement({map, position: { lat: item.latitude, lng: item.longitude}});
+        for (const item of getFilteredMedia()) {
+            const marker = new AdvancedMarkerElement({
+                map,
+                position: { lat: item.latitude, lng: item.longitude }
+            });
 
             marker.addListener("click", () => {
                 infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
@@ -77,7 +85,7 @@ const ViewMap: Component = () => {
     };
 
     const updateMap = () => {
-        if(mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
+        if (mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
             const pos = {
                 lat: mediaList.activeItem?.latitude,
                 lng: mediaList.activeItem?.longitude
@@ -99,13 +107,13 @@ const ViewMap: Component = () => {
     });
 
     createEffect(() => {
-        if(initialized() && getFilteredMedia().length > 0) {
+        if (initialized() && getFilteredMedia().length > 0) {
             addMarkers();
         }
     });
 
     createEffect(() => {
-        if(mapReady()) {
+        if (mapReady()) {
             updateMap();
         }
     });
@@ -119,7 +127,8 @@ const ViewMap: Component = () => {
                         <Toolbar>
                             <MapToolbar />
                         </Toolbar>
-                }>
+                    }
+                >
                     <div class="h-[100vh] w-[100%]" ref={el} />
                 </Layout>
             </MediaSelectedGuard>

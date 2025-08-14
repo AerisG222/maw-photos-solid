@@ -16,9 +16,8 @@ export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
     margin: defaultMargin,
     showBreadcrumbs: true,
     showMainBreadcrumbs: true,
-    thumbnailSize: defaultGridThumbnailSize,
+    thumbnailSize: defaultGridThumbnailSize
 };
-
 
 export type MediaGridViewSettingsContextValue = [
     state: MediaGridViewSettingsState,
@@ -32,13 +31,14 @@ export type MediaGridViewSettingsContextValue = [
 
 const MediaGridViewSettingsContext = createContext<MediaGridViewSettingsContextValue>();
 
-export const MediaGridSettingsProvider: ParentComponent = (props) => {
+export const MediaGridSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({margin});
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({thumbnailSize});
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showBreadcrumbs});
-    const setShowMainBreadcrumbs = (showBreadcrumbs: boolean) => updateState({showMainBreadcrumbs: showBreadcrumbs});
+    const setMargin = (margin: MarginIdType) => updateState({ margin });
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
+    const setShowMainBreadcrumbs = (showBreadcrumbs: boolean) =>
+        updateState({ showMainBreadcrumbs: showBreadcrumbs });
 
     const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);
@@ -46,12 +46,17 @@ export const MediaGridSettingsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <MediaGridViewSettingsContext.Provider value={[state, {
-            setMargin,
-            setShowBreadcrumbs,
-            setShowMainBreadcrumbs,
-            setThumbnailSize
-        }]}>
+        <MediaGridViewSettingsContext.Provider
+            value={[
+                state,
+                {
+                    setMargin,
+                    setShowBreadcrumbs,
+                    setShowMainBreadcrumbs,
+                    setThumbnailSize
+                }
+            ]}
+        >
             {props.children}
         </MediaGridViewSettingsContext.Provider>
     );

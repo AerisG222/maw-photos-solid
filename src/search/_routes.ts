@@ -1,6 +1,6 @@
-import { lazy } from "solid-js"
-import { AppRouteDefinition, AreaSearch } from "../_models/AppRouteDefinition"
-import { equalsIgnoreCase } from "../_models/utils/StringUtils"
+import { lazy } from "solid-js";
+import { AppRouteDefinition, AreaSearch } from "../_models/AppRouteDefinition";
+import { equalsIgnoreCase } from "../_models/utils/StringUtils";
 import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/search";
@@ -35,19 +35,15 @@ export const search: AppRouteDefinition = {
     absolutePath: basePath,
     component: lazy(() => import("./Search")),
     doesPathMatch: path => routeMatch(path, basePath, AreaSearch),
-    children: [
-        searchRedirect,
-        searchGrid,
-        searchList
-    ]
+    children: [searchRedirect, searchGrid, searchList]
 };
 
 export const getPathForViewMode = (mode: string): string => {
-    if(equalsIgnoreCase("grid", mode)) {
+    if (equalsIgnoreCase("grid", mode)) {
         return searchGrid.absolutePath;
     }
 
-    if(equalsIgnoreCase("list", mode)) {
+    if (equalsIgnoreCase("list", mode)) {
         return searchList.absolutePath;
     }
 

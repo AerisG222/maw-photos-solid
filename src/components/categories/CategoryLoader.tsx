@@ -4,17 +4,19 @@ import { useCategoryContext } from "../../contexts/CategoryContext";
 import { categoryTypes } from "../../_models/CategoryTypes";
 import { getCategoryService } from "../../_services/categories/CategoryServiceLocator";
 import { CategoryType } from "../../_models/CategoryType";
-import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from "../../contexts/AuthContext";
 
-const CategoryLoader: ParentComponent = (props) => {
+const CategoryLoader: ParentComponent = props => {
     const [authContext] = useAuthContext();
     const [, { setInitialized, addCategories }] = useCategoryContext();
 
     const resources = [];
 
-    for(const categoryTypeInfo in categoryTypes) {
+    for (const categoryTypeInfo in categoryTypes) {
         resources.push({
-            res: createResource(authContext.isLoggedIn, (isLoggedIn) => isLoggedIn ?  getCategoryService(categoryTypeInfo as CategoryType).load() : [])[0],
+            res: createResource(authContext.isLoggedIn, isLoggedIn =>
+                isLoggedIn ? getCategoryService(categoryTypeInfo as CategoryType).load() : []
+            )[0],
             processed: false
         });
     }
@@ -35,11 +37,7 @@ const CategoryLoader: ParentComponent = (props) => {
             });
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default CategoryLoader;

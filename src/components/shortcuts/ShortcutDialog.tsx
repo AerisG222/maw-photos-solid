@@ -1,4 +1,12 @@
-import { Component, For, createEffect, createSignal, createUniqueId, onCleanup, onMount } from "solid-js";
+import {
+    Component,
+    For,
+    createEffect,
+    createSignal,
+    createUniqueId,
+    onCleanup,
+    onMount
+} from "solid-js";
 
 import { ShortcutInfo, useShortcutContext } from "../../contexts/ShortcutContext";
 import { createShortcut } from "@solid-primitives/keyboard";
@@ -11,7 +19,7 @@ const ShortcutDialog: Component = () => {
     const id = createUniqueId();
 
     createEffect(() => {
-        if(shortcutContext.showDialog) {
+        if (shortcutContext.showDialog) {
             dialog().showModal();
         } else {
             dialog().close();
@@ -27,7 +35,9 @@ const ShortcutDialog: Component = () => {
             description: "Show this help dialog"
         });
 
-        createShortcut(["Shift", "?"], () => { setShowDialog(true); });
+        createShortcut(["Shift", "?"], () => {
+            setShowDialog(true);
+        });
     });
 
     onCleanup(() => {
@@ -35,8 +45,8 @@ const ShortcutDialog: Component = () => {
     });
 
     const sortShortcuts = (a: ShortcutInfo, b: ShortcutInfo) => {
-        return ('' + a.shortcut[0]).localeCompare(b.shortcut[0]);
-    }
+        return ("" + a.shortcut[0]).localeCompare(b.shortcut[0]);
+    };
 
     const getShortcuts = () => {
         return [...shortcutContext.shortcuts].sort(sortShortcuts);
@@ -48,13 +58,15 @@ const ShortcutDialog: Component = () => {
                 <h3 class="font-bold text-lg mb-4">Active Shortcuts</h3>
 
                 <div class="max-h-[400px] overflow-y-auto scrollable">
-                    <For each={getShortcuts()}>{shortcut =>
-                        <ShortcutKey shortcut={shortcut} />
-                    }</For>
+                    <For each={getShortcuts()}>
+                        {shortcut => <ShortcutKey shortcut={shortcut} />}
+                    </For>
                 </div>
 
                 <div class="modal-action">
-                    <button class="btn btn-sm" onClick={() => setShowDialog(false)}>Close</button>
+                    <button class="btn btn-sm" onClick={() => setShowDialog(false)}>
+                        Close
+                    </button>
                 </div>
             </form>
         </dialog>

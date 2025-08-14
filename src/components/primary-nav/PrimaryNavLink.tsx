@@ -2,13 +2,13 @@ import { Component } from "solid-js";
 import { A } from "@solidjs/router";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 
-import Icon from '../icon/Icon';
+import Icon from "../icon/Icon";
 
 type Props = {
     route: AppRouteDefinition;
 };
 
-const PrimaryNavLink: Component<Props> = (props) => {
+const PrimaryNavLink: Component<Props> = props => {
     return (
         <A
             href={props.route.path}

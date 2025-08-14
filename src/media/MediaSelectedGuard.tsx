@@ -10,7 +10,7 @@ type Props = {
     targetRoute: AppRouteDefinition;
 };
 
-const MediaSelectedGuard: ParentComponent<Props> = (props) => {
+const MediaSelectedGuard: ParentComponent<Props> = props => {
     const [categoryContext] = useCategoryContext();
     const [mediaList, { getFilteredMedia }] = useMediaListContext();
     const navigate = useNavigate();
@@ -20,28 +20,32 @@ const MediaSelectedGuard: ParentComponent<Props> = (props) => {
     createEffect(() => {
         const media = getFilteredMedia();
 
-        if(media.length > 0 && !mediaList.activeItem) {
+        if (media.length > 0 && !mediaList.activeItem) {
             // when first loading the site from a deep link, we might not have the media list
             // loaded yet, which means that the active item was not able to be properly set. we
             // perform the check below so we can see if the id field is set in the url, which
             // should then get picked up by the active media monitor once the list is populated
-            if(media.findIndex(m => m.id.toString() === params.id) >= 0) {
+            if (media.findIndex(m => m.id.toString() === params.id) >= 0) {
                 return;
             }
 
             const m = media[0];
 
-            if(m) {
-                navigate(getMediaPath(props.targetRoute, categoryContext.activeCategory?.type, m.categoryId, m.id), { replace: true });
+            if (m) {
+                navigate(
+                    getMediaPath(
+                        props.targetRoute,
+                        categoryContext.activeCategory?.type,
+                        m.categoryId,
+                        m.id
+                    ),
+                    { replace: true }
+                );
             }
         }
     });
 
-    return(
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default MediaSelectedGuard;

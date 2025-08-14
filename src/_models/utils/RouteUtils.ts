@@ -1,15 +1,15 @@
 import { AppRouteDefinition, Area, RouteMatch } from "../AppRouteDefinition";
 
 const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
-    if(!routeParams) {
+    if (!routeParams) {
         return route.absolutePath;
     }
 
     let path = route.absolutePath;
 
     // apply provided replacements
-    for(let [key, value] of Object.entries(routeParams)) {
-        if(value) {
+    for (let [key, value] of Object.entries(routeParams)) {
+        if (value) {
             path = path.replace(new RegExp(`:${key}\\??`), value);
         }
     }
@@ -21,7 +21,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     path = path.replaceAll(/:.*\??/g, "");
 
     // do not end w/ trailing slash
-    if(path.endsWith("/")) {
+    if (path.endsWith("/")) {
         path = path.slice(0, -1);
     }
 
@@ -31,14 +31,14 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
 const buildSearch = (routeSearch?: any) => {
     let search = "";
 
-    if(!routeSearch) {
+    if (!routeSearch) {
         return search;
     }
 
     let isFirst = true;
 
-    for(let [key, value] of Object.entries(routeSearch)) {
-        search += isFirst ? "?" : "&"
+    for (let [key, value] of Object.entries(routeSearch)) {
+        search += isFirst ? "?" : "&";
         search += `${key}=${value}`;
         isFirst = false;
     }
@@ -54,10 +54,14 @@ export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSea
     return path;
 };
 
-export const routeMatch = (locationPath: string, baseRoutePath: string, areaWhenMatched: Area): RouteMatch => {
-    if(locationPath.startsWith(baseRoutePath)) {
+export const routeMatch = (
+    locationPath: string,
+    baseRoutePath: string,
+    areaWhenMatched: Area
+): RouteMatch => {
+    if (locationPath.startsWith(baseRoutePath)) {
         return [true, areaWhenMatched];
     }
 
     return [false, undefined];
-}
+};

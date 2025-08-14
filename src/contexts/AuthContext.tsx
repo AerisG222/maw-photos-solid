@@ -1,12 +1,6 @@
-import {
-    createContext,
-    createResource,
-    ParentComponent,
-    Show,
-    useContext,
-} from "solid-js";
+import { createContext, createResource, ParentComponent, Show, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import { createAuth0Client, User } from '@auth0/auth0-spa-js';
+import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 
 export type AuthState = {
     readonly isLoggedIn: boolean;
@@ -24,14 +18,14 @@ export type AuthContextValue = [
         login: () => Promise<boolean>;
         logout: () => void;
         isAdmin: () => boolean;
-        getToken: () => Promise<string|undefined>;
+        getToken: () => Promise<string | undefined>;
     }
 ];
 
 const AuthContext = createContext<AuthContextValue>();
 
 // inspiration: https://github.com/rturnq/solid-auth0/blob/master/src/components.tsx
-export const AuthProvider: ParentComponent = (props) => {
+export const AuthProvider: ParentComponent = props => {
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
@@ -45,13 +39,13 @@ export const AuthProvider: ParentComponent = (props) => {
 
         if (isRedirect(url)) {
             const response = await client.handleRedirectCallback(url);
-            window.history.replaceState(undefined, '', redirectUrl);
+            window.history.replaceState(undefined, "", redirectUrl);
         }
 
-        setState({isLoggedIn: await client.isAuthenticated()});
+        setState({ isLoggedIn: await client.isAuthenticated() });
 
         if (state.isLoggedIn) {
-            setState({user: await client.getUser()});
+            setState({ user: await client.getUser() });
         }
 
         return client;
@@ -64,11 +58,11 @@ export const AuthProvider: ParentComponent = (props) => {
                     redirect_uri: redirectUrl
                 }
             });
-        } catch(err) {
+        } catch (err) {
             console.error(err);
         }
     };
-    const logout = () => { }
+    const logout = () => {};
     const isAdmin = () => false;
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
@@ -82,7 +76,7 @@ export const AuthProvider: ParentComponent = (props) => {
                         logout,
                         isAdmin,
                         getToken
-                    },
+                    }
                 ]}
             >
                 {props.children}
@@ -102,6 +96,6 @@ export const useAuthContext = () => {
 };
 
 function isRedirect(url: string) {
-    const [, query] = url.split('?');
-    return query && query.includes('code=') && query.includes('state=');
+    const [, query] = url.split("?");
+    return query && query.includes("code=") && query.includes("state=");
 }

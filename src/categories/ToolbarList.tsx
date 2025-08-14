@@ -10,7 +10,7 @@ const ListToolbar: Component = () => {
     const [settings, { setThumbnailSize, setMargin }] = useCategoryListViewSettingsContext();
 
     const onToggleThumbnail = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
     };
 
     const onToggleMargins = () => {

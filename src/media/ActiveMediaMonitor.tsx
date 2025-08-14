@@ -10,7 +10,7 @@ import { useExifServiceContext } from "./contexts/ExifServiceContext";
 import { useCommentServiceContext } from "./contexts/CommentServiceContext";
 import { useMetadataEditServiceContext } from "./contexts/MetadataEditServiceContext";
 
-const ActiveMediaMonitor: ParentComponent = (props) => {
+const ActiveMediaMonitor: ParentComponent = props => {
     const params = useParams();
     const [mediaList, { setActiveItem, setItems }] = useMediaListContext();
     const [, { setService: setCommentService }] = useCommentServiceContext();
@@ -23,14 +23,14 @@ const ActiveMediaMonitor: ParentComponent = (props) => {
     // note: wanted to simply put this in the top level category, but we need this to be defined
     // in an element/component that is a child of the mediaListContext...
     createEffect(() => {
-        if(mediaList.items && mediaList.items.length > 0) {
+        if (mediaList.items && mediaList.items.length > 0) {
             setActiveItem(params.id ? parseInt(params.id, 10) : undefined);
         }
     });
 
     createEffect(() => {
         batch(() => {
-            switch(mediaList.activeItem?.kind) {
+            switch (mediaList.activeItem?.kind) {
                 case MediaTypePhoto:
                     setRatingService(photoMediaService);
                     setCommentService(photoMediaService);
@@ -44,7 +44,7 @@ const ActiveMediaMonitor: ParentComponent = (props) => {
                     setExifService(undefined);
                     break;
             }
-        })
+        });
     });
 
     onCleanup(() => {
@@ -54,11 +54,7 @@ const ActiveMediaMonitor: ParentComponent = (props) => {
         });
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default ActiveMediaMonitor;

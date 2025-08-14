@@ -1,11 +1,14 @@
 import { VideoCategory } from "../../_models/Category";
 import { ICategoryService } from "./ICategoryService";
-import { getVideoCategories, getVideoCategory, getVideos, setTeaser } from "../../_api/VideoCategories";
+import {
+    getVideoCategories,
+    getVideoCategory,
+    getVideos,
+    setTeaser
+} from "../../_api/VideoCategories";
 import { Video } from "../../_models/Media";
 
-class VideoCategoryService
-    implements ICategoryService
-{
+class VideoCategoryService implements ICategoryService {
     load(): Promise<VideoCategory[]> {
         // TODO: add this check back?
         // return isLoggedIn() ? getVideoCategories() : null;

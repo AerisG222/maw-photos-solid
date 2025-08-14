@@ -24,7 +24,7 @@ const ViewDetail: Component = () => {
     createEffect(() => {
         let route = categoryDetailRoute;
 
-        if(routeContext.area === AreaRandom) {
+        if (routeContext.area === AreaRandom) {
             route = randomDetailRoute;
         }
 
@@ -36,7 +36,7 @@ const ViewDetail: Component = () => {
 
         reservedHeight += settings.showBreadcrumbs ? 28 : 0;
 
-        if(settings.showMediaList) {
+        if (settings.showMediaList) {
             // 20 => rough approximation for scrollbar height
             reservedHeight += getThumbnailSize(settings.thumbnailSize).height + 20;
         }
@@ -54,22 +54,27 @@ const ViewDetail: Component = () => {
                             <DetailToolbar />
                         </Toolbar>
                     }
-                    sidebar={<Sidebar />}>
+                    sidebar={<Sidebar />}
+                >
                     <div class="flex flex-col flex-[max-content_auto_max-content] h-100vh --val-[100px]">
                         <Show when={settings.showBreadcrumbs} fallback={<div />}>
-                            <CategoryBreadcrumb showTitleAsLink={routeContext.area === AreaRandom} />
+                            <CategoryBreadcrumb
+                                showTitleAsLink={routeContext.area === AreaRandom}
+                            />
                         </Show>
 
                         <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
                             <MediaMainItem
                                 media={mediaList.activeItem}
-                                maxHeightStyle={getMaxHeight()} />
+                                maxHeightStyle={getMaxHeight()}
+                            />
                         </div>
 
-                        <Show when={settings.showMediaList} fallback={<div/>}>
+                        <Show when={settings.showMediaList} fallback={<div />}>
                             <MediaList
                                 thumbnailSize={settings.thumbnailSize}
-                                activeRoute={mediaList.activeRouteDefinition} />
+                                activeRoute={mediaList.activeRouteDefinition}
+                            />
                         </Show>
                     </div>
                 </Layout>

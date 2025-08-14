@@ -2,16 +2,22 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { Media, MediaTypePhoto, MediaTypeVideo, MediaTypes, getMediaTeaserUrl } from "../_models/Media";
+import {
+    Media,
+    MediaTypePhoto,
+    MediaTypeVideo,
+    MediaTypes,
+    getMediaTeaserUrl
+} from "../_models/Media";
 import { GpsCoordinate } from "../_models/Gps";
 import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
 import { CategoryType } from "../_models/CategoryType";
 import { IMetadataEditService } from "../_services/media/IMetadataEditService";
 import { photoMediaService } from "../_services/media/PhotoMediaService";
 import { videoMediaService } from "../_services/media/VideoMediaService";
-import { ThumbnailSizeDefault, getThumbnailSize } from '../_models/ThumbnailSize';
-import { useCategoryContext } from '../contexts/CategoryContext';
-import { getCategoryService } from '../_services/categories/CategoryServiceLocator';
+import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
+import { useCategoryContext } from "../contexts/CategoryContext";
+import { getCategoryService } from "../_services/categories/CategoryServiceLocator";
 
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
@@ -20,12 +26,12 @@ import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../components/auth/AdminGuard";
 
 type SelectableMedia = {
-    id: number,
-    kind: MediaTypes,
-    isSelected: boolean,
-    imageUrl: string,
-    latitude?: number,
-    longitude?: number
+    id: number;
+    kind: MediaTypes;
+    isSelected: boolean;
+    imageUrl: string;
+    latitude?: number;
+    longitude?: number;
 };
 
 const ViewBulkEdit: Component = () => {
@@ -54,10 +60,10 @@ const ViewBulkEdit: Component = () => {
         // participating in a future edit
         setAll(false);
 
-        for(const media of mediaToUpdate) {
+        for (const media of mediaToUpdate) {
             let svc: IMetadataEditService = undefined;
 
-            switch(media.kind) {
+            switch (media.kind) {
                 case MediaTypePhoto:
                     svc = photoMediaService;
                     break;
@@ -66,7 +72,7 @@ const ViewBulkEdit: Component = () => {
                     break;
             }
 
-            if(svc) {
+            if (svc) {
                 await svc.setGpsCoordinateOverride(media.id, gps);
                 setGpsOverride(media.id, gps);
             }
@@ -74,7 +80,7 @@ const ViewBulkEdit: Component = () => {
 
         const categoryService = getCategoryService(categoryState.activeCategory.type);
 
-        if(categoryService && categoryState.activeCategory) {
+        if (categoryService && categoryState.activeCategory) {
             var category = await categoryService.loadSingle(categoryState.activeCategory.id);
 
             updateCategory(category);
@@ -84,13 +90,13 @@ const ViewBulkEdit: Component = () => {
     const setAll = (doSelect: boolean) => {
         setMedia(media =>
             media.map(m => {
-                if(m.isSelected === doSelect) {
+                if (m.isSelected === doSelect) {
                     return m;
                 }
 
-                return {...m, isSelected: doSelect}
+                return { ...m, isSelected: doSelect };
             })
-        )
+        );
     };
 
     const onHideMediaWithGps = (hide: boolean) => {
@@ -101,8 +107,8 @@ const ViewBulkEdit: Component = () => {
     const toggle = (media: SelectableMedia) => {
         setMedia(prev =>
             prev.map(m => {
-                if(m.imageUrl === media.imageUrl) {
-                    return {...m, isSelected: !m.isSelected };
+                if (m.imageUrl === media.imageUrl) {
+                    return { ...m, isSelected: !m.isSelected };
                 }
 
                 return m;
@@ -115,29 +121,54 @@ const ViewBulkEdit: Component = () => {
     });
 
     return (
-        <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, params.categoryType as CategoryType, categoryId)}>
+        <AdminGuard
+            redirectRoute={getMediaPathByView(
+                MediaViewModeGrid,
+                params.categoryType as CategoryType,
+                categoryId
+            )}
+        >
             <Show when={mediaList.activeRouteDefinition}>
-                <Layout toolbar={<Toolbar />} sidebar={
-                    <BulkEditSidebar
-                        onSave={onSave}
-                        onSelectAll={() => setAll(true)}
-                        onDeselectAll={() => setAll(false)}
-                        onHideMediaWithGps={onHideMediaWithGps} />
-                }>
+                <Layout
+                    toolbar={<Toolbar />}
+                    sidebar={
+                        <BulkEditSidebar
+                            onSave={onSave}
+                            onSelectAll={() => setAll(true)}
+                            onDeselectAll={() => setAll(false)}
+                            onHideMediaWithGps={onHideMediaWithGps}
+                        />
+                    }
+                >
                     <CategoryBreadcrumb />
 
                     <div class="flex flex-wrap gap-2 mx-8 mb-2 flex-justify-center">
-                        <For each={media()}>{ m =>
-                            <Show when={hideMediaWithGps() ? !m.latitude && !m.longitude : true}>
-                                <div class="border-1 border-text-primary:40 hover:border-text-primary cursor-pointer text-center bg-secondary-content:6" onClick={() => toggle(m)}>
-                                    <input type="checkbox" class="checkbox checkbox-sm mt-1" checked={m.isSelected} onInput={evt => m.isSelected = evt.currentTarget.checked} />
-                                    <img
-                                        src={m.imageUrl}
-                                        width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                        height={getThumbnailSize(ThumbnailSizeDefault).height} />
-                                </div>
-                            </Show>
-                        }</For>
+                        <For each={media()}>
+                            {m => (
+                                <Show
+                                    when={hideMediaWithGps() ? !m.latitude && !m.longitude : true}
+                                >
+                                    <div
+                                        class="border-1 border-text-primary:40 hover:border-text-primary cursor-pointer text-center bg-secondary-content:6"
+                                        onClick={() => toggle(m)}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm mt-1"
+                                            checked={m.isSelected}
+                                            onInput={evt =>
+                                                (m.isSelected = evt.currentTarget.checked)
+                                            }
+                                        />
+                                        <img
+                                            src={m.imageUrl}
+                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                        />
+                                    </div>
+                                </Show>
+                            )}
+                        </For>
                     </div>
                 </Layout>
             </Show>

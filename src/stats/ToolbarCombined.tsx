@@ -7,7 +7,7 @@ const CombinedToolbar: Component = () => {
     const [search, setSearchParams] = useSearchParams();
 
     const selectMode = (mode: string) => {
-        setSearchParams({mode});
+        setSearchParams({ mode });
     };
 
     return (

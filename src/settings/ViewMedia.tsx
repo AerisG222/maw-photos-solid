@@ -22,31 +22,42 @@ import Toggle from "../components/input/Toggle";
 import Layout from "../components/layout/Layout";
 
 const ViewMedia: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] = useMediaPageSettingsContext();
-    const [mapSettings, {setMapType: setMapMapType, setZoom: setMapZoom}] = useMediaMapViewSettingsContext();
-    const [detailSettings, {
-        setShowBreadcrumbs: setDetailShowBreadcrumbs,
-        setShowMediaList: setDetailShowMediaList,
-        setThumbnailSize: setDetailThumbnailSize
-    }] = useMediaDetailViewSettingsContext();
-    const [gridSettings, {
-        setMargin: setGridMargin,
-        setShowBreadcrumbs: setGridShowBreadcrumbs,
-        setThumbnailSize: setGridThumbnailSize
-    }] = useMediaGridViewSettingsContext();
-    const [infoPanelSettings, {
-        setExpandInfoPanel,
-        setShowRatings,
-        setShowCategoryTeaserChooser,
-        setShowComments,
-        setShowExif,
-        setShowEffects,
-        setShowMetadataEditor,
-        setShowHistogram,
-        setShowMinimap,
-        setMinimapZoom,
-        setMinimapMapType: setInfoPanelMapType
-    }] = useMediaInfoPanelSettingsContext();
+    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] =
+        useMediaPageSettingsContext();
+    const [mapSettings, { setMapType: setMapMapType, setZoom: setMapZoom }] =
+        useMediaMapViewSettingsContext();
+    const [
+        detailSettings,
+        {
+            setShowBreadcrumbs: setDetailShowBreadcrumbs,
+            setShowMediaList: setDetailShowMediaList,
+            setThumbnailSize: setDetailThumbnailSize
+        }
+    ] = useMediaDetailViewSettingsContext();
+    const [
+        gridSettings,
+        {
+            setMargin: setGridMargin,
+            setShowBreadcrumbs: setGridShowBreadcrumbs,
+            setThumbnailSize: setGridThumbnailSize
+        }
+    ] = useMediaGridViewSettingsContext();
+    const [
+        infoPanelSettings,
+        {
+            setExpandInfoPanel,
+            setShowRatings,
+            setShowCategoryTeaserChooser,
+            setShowComments,
+            setShowExif,
+            setShowEffects,
+            setShowMetadataEditor,
+            setShowHistogram,
+            setShowMinimap,
+            setMinimapZoom,
+            setMinimapMapType: setInfoPanelMapType
+        }
+    ] = useMediaInfoPanelSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
@@ -57,13 +68,15 @@ const ViewMedia: Component = () => {
                         groupName="pageView"
                         itemArray={allMediaViewModes}
                         selectedValue={pageSettings.viewMode}
-                        onChange={setViewMode} />
+                        onChange={setViewMode}
+                    />
                     <Select
                         horizontal={false}
                         title="Slideshow Display Duration"
                         itemArray={allSlideshowDurations}
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
-                        onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))} />
+                        onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
+                    />
                 </Panel>
 
                 <Panel title="Detail View">
@@ -71,18 +84,21 @@ const ViewMedia: Component = () => {
                         title="Show Breadcrumbs"
                         name="detailShowBreadcrumbs"
                         isSelected={detailSettings.showBreadcrumbs}
-                        onChange={setDetailShowBreadcrumbs} />
+                        onChange={setDetailShowBreadcrumbs}
+                    />
                     <Toggle
                         title="Show Media List"
                         name="detailShowMediaList"
                         isSelected={detailSettings.showMediaList}
-                        onChange={setDetailShowMediaList} />
+                        onChange={setDetailShowMediaList}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="detailThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={detailSettings.thumbnailSize}
-                        onChange={setDetailThumbnailSize} />
+                        onChange={setDetailThumbnailSize}
+                    />
 
                     <h3 class="head3 mt-4 color-secondary">Info Panel</h3>
                     <div>
@@ -90,47 +106,56 @@ const ViewMedia: Component = () => {
                             title="Show Expanded Panel"
                             name="showInfoPanel"
                             isSelected={infoPanelSettings.expandInfoPanel}
-                            onChange={setExpandInfoPanel} />
+                            onChange={setExpandInfoPanel}
+                        />
                         <Checkbox
                             title="Show Ratings"
                             name="showRatingsPanel"
                             isSelected={infoPanelSettings.showRatings}
-                            onChange={setShowRatings} />
+                            onChange={setShowRatings}
+                        />
                         <Checkbox
                             title="Show Comments"
                             name="showCommentsPanel"
                             isSelected={infoPanelSettings.showComments}
-                            onChange={setShowComments} />
+                            onChange={setShowComments}
+                        />
                         <Checkbox
                             title="Show EXIF"
                             name="showExifPanel"
                             isSelected={infoPanelSettings.showExif}
-                            onChange={setShowExif} />
+                            onChange={setShowExif}
+                        />
                         <Checkbox
                             title="Show Histogram"
                             name="showHistogramPanel"
                             isSelected={infoPanelSettings.showHistogram}
-                            onChange={setShowHistogram} />
+                            onChange={setShowHistogram}
+                        />
                         <Checkbox
                             title="Show Effects"
                             name="showEffectsPanel"
                             isSelected={infoPanelSettings.showEffects}
-                            onChange={setShowEffects} />
+                            onChange={setShowEffects}
+                        />
                         <Checkbox
                             title="Show Mini-map"
                             name="showMiniMapPanel"
                             isSelected={infoPanelSettings.showMinimap}
-                            onChange={setShowMinimap} />
+                            onChange={setShowMinimap}
+                        />
                         <Checkbox
                             title="Show Metadata Editor"
                             name="showMetadataEditorPanel"
                             isSelected={infoPanelSettings.showMetadataEditor}
-                            onChange={setShowMetadataEditor} />
+                            onChange={setShowMetadataEditor}
+                        />
                         <Checkbox
                             title="Show Category Teaser Chooser"
                             name="showCategoryTeaserChooserPanel"
                             isSelected={infoPanelSettings.showCategoryTeaserChooser}
-                            onChange={setShowCategoryTeaserChooser} />
+                            onChange={setShowCategoryTeaserChooser}
+                        />
                     </div>
 
                     <RadioGroup
@@ -138,13 +163,15 @@ const ViewMedia: Component = () => {
                         groupName="detailMapType"
                         itemArray={allMapTypes}
                         selectedValue={infoPanelSettings.minimapMapType}
-                        onChange={setInfoPanelMapType} />
+                        onChange={setInfoPanelMapType}
+                    />
                     <Select
                         horizontal={false}
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
                         selectedValue={infoPanelSettings.minimapZoom}
-                        onChange={val => setMinimapZoom(parseInt(val))} />
+                        onChange={val => setMinimapZoom(parseInt(val))}
+                    />
                 </Panel>
 
                 <Panel title="Grid View">
@@ -152,19 +179,22 @@ const ViewMedia: Component = () => {
                         title="Show Breadcrumbs"
                         name="gridShowBreadcrumbs"
                         isSelected={gridSettings.showBreadcrumbs}
-                        onChange={setGridShowBreadcrumbs} />
+                        onChange={setGridShowBreadcrumbs}
+                    />
                     <RadioGroup
                         title="Margins"
                         groupName="gridMargin"
                         itemArray={allMargins}
                         selectedValue={gridSettings.margin}
-                        onChange={setGridMargin} />
+                        onChange={setGridMargin}
+                    />
                     <RadioGroup
                         title="Thumbnail Size"
                         groupName="gridThumbnails"
                         itemArray={allThumbnailSizes}
                         selectedValue={gridSettings.thumbnailSize}
-                        onChange={setGridThumbnailSize} />
+                        onChange={setGridThumbnailSize}
+                    />
                 </Panel>
 
                 <Panel title="Map View">
@@ -173,13 +203,15 @@ const ViewMedia: Component = () => {
                         groupName="mapMapType"
                         itemArray={allMapTypes}
                         selectedValue={mapSettings.mapType}
-                        onChange={setMapMapType} />
+                        onChange={setMapMapType}
+                    />
                     <Select
                         horizontal={false}
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
                         selectedValue={mapSettings.zoom}
-                        onChange={val => setMapZoom(parseInt(val))} />
+                        onChange={val => setMapZoom(parseInt(val))}
+                    />
                 </Panel>
             </PanelContainer>
         </Layout>

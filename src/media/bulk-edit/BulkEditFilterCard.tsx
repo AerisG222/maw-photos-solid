@@ -8,7 +8,7 @@ type Props = {
     onDeselectAll: () => void;
 };
 
-const BulkEditFilterCard: Component<Props> = (props) => {
+const BulkEditFilterCard: Component<Props> = props => {
     const onSelectAll = (evt: Event) => {
         evt.preventDefault();
 
@@ -33,8 +33,12 @@ const BulkEditFilterCard: Component<Props> = (props) => {
             </div>
 
             <div class="mt-4">
-                <button class="btn btn-sm mr-2" onClick={onSelectAll}>Select All</button>
-                <button class="btn btn-sm" onClick={onDeselectAll}>Deselect All</button>
+                <button class="btn btn-sm mr-2" onClick={onSelectAll}>
+                    Select All
+                </button>
+                <button class="btn btn-sm" onClick={onDeselectAll}>
+                    Deselect All
+                </button>
             </div>
         </div>
     );

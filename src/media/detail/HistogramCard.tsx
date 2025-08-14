@@ -22,18 +22,18 @@ const HistogramCard: Component = () => {
         r: [],
         g: [],
         b: [],
-        lum: [],
+        lum: []
     });
 
     let histogramCanvas: HTMLCanvasElement = undefined;
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d", {
-        willReadFrequently: true,
+        willReadFrequently: true
     }) as CanvasRenderingContext2D;
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
         if (!histogramCanvas) {
-            console.log("x")
+            console.log("x");
             return;
         }
 
@@ -42,7 +42,7 @@ const HistogramCard: Component = () => {
 
             drawHistogram(channel, histogram, maxCount);
         } else {
-            console.log('histogram null');
+            console.log("histogram null");
         }
     };
 
@@ -52,12 +52,7 @@ const HistogramCard: Component = () => {
 
         tempCtx.drawImage(img, 0, 0);
 
-        const data = tempCtx.getImageData(
-            0,
-            0,
-            tempCanvas.width,
-            tempCanvas.height
-        ).data;
+        const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
 
         setHistogram(calcHistogram(data));
     };
@@ -69,9 +64,7 @@ const HistogramCard: Component = () => {
         updateHistogramFromImage(bitmap);
 
         if (!video.ended) {
-            video.requestVideoFrameCallback(
-                updateHistogramFromVideoFrame
-            );
+            video.requestVideoFrameCallback(updateHistogramFromVideoFrame);
         }
     };
 
@@ -99,12 +92,9 @@ const HistogramCard: Component = () => {
         return maxCount;
     };
 
-    const includeR = (channel: string): boolean =>
-        channel === _rgb || channel === _r;
-    const includeG = (channel: string): boolean =>
-        channel === _rgb || channel === _g;
-    const includeB = (channel: string): boolean =>
-        channel === _rgb || channel === _b;
+    const includeR = (channel: string): boolean => channel === _rgb || channel === _r;
+    const includeG = (channel: string): boolean => channel === _rgb || channel === _g;
+    const includeB = (channel: string): boolean => channel === _rgb || channel === _b;
 
     const getLuma = (r: number, g: number, b: number): number => {
         // https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
@@ -140,14 +130,8 @@ const HistogramCard: Component = () => {
         return { r, g, b, lum };
     };
 
-    const drawHistogram = (
-        channel: string,
-        histogram: Histogram,
-        maxCount: number
-    ): void => {
-        const ctx = histogramCanvas.getContext(
-            "2d"
-        ) as CanvasRenderingContext2D;
+    const drawHistogram = (channel: string, histogram: Histogram, maxCount: number): void => {
+        const ctx = histogramCanvas.getContext("2d") as CanvasRenderingContext2D;
 
         ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
 
@@ -214,13 +198,11 @@ const HistogramCard: Component = () => {
                 await img.decode();
 
                 updateHistogramFromImage(el);
-            }
+            };
         }
 
         if (el.nodeName === "VIDEO") {
-            (el as HTMLVideoElement).requestVideoFrameCallback(
-                updateHistogramFromVideoFrame
-            );
+            (el as HTMLVideoElement).requestVideoFrameCallback(updateHistogramFromVideoFrame);
         }
     });
 
@@ -229,12 +211,12 @@ const HistogramCard: Component = () => {
     });
 
     // render the initial histogram if media is already loaded
-    if(state.mediaElement) {
+    if (state.mediaElement) {
         const el = state.mediaElement;
 
-        if(el.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
+        if (el.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
             updateHistogramFromImage(state.mediaElement);
-        } else if(el.nodeName === "VIDEO") {
+        } else if (el.nodeName === "VIDEO") {
             updateHistogramFromVideoFrame(null, null);
         }
     }
@@ -294,12 +276,7 @@ const HistogramCard: Component = () => {
                 </label>
             </form>
             <div>
-                <canvas
-                    class="histogram"
-                    width="473px"
-                    height="200px"
-                    ref={histogramCanvas}
-                />
+                <canvas class="histogram" width="473px" height="200px" ref={histogramCanvas} />
             </div>
         </>
     );

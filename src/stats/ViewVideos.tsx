@@ -15,24 +15,60 @@ import StatLayout from "./components/StatLayout";
 
 const ViewVideos: Component = () => {
     const [search] = useSearchParams();
-    const [, { getVideoCategories, getVideoCategoryYears, getVideoCount, getVideoFileSize, getVideoDuration, getVideoStatsChartData }] = useStatContext();
+    const [
+        ,
+        {
+            getVideoCategories,
+            getVideoCategoryYears,
+            getVideoCount,
+            getVideoFileSize,
+            getVideoDuration,
+            getVideoStatsChartData
+        }
+    ] = useStatContext();
     const getVideoStats = () => getVideoStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
-        <Layout toolbar={
-            <Toolbar>
-                <ToolbarVideo />
-            </Toolbar>
-        }>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <ToolbarVideo />
+                </Toolbar>
+            }
+        >
             <StatLayout>
                 <div class="my-2">
                     <StatBar>
-                        <StatBox title="Years" value={numbro(getVideoCategoryYears().length).format({thousandSeparated: true})} />
-                        <StatBox title="Categories" value={numbro(getVideoCategories().length).format({thousandSeparated: true})} />
-                        <StatBox title="Videos" value={numbro(getVideoCount()).format({thousandSeparated: true})} />
-                        <StatBox title="File Size" value={numbro(getVideoFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
-                        <StatBox title="Duration" value={numbro(getVideoDuration()).format({output: "time"})} />
+                        <StatBox
+                            title="Years"
+                            value={numbro(getVideoCategoryYears().length).format({
+                                thousandSeparated: true
+                            })}
+                        />
+                        <StatBox
+                            title="Categories"
+                            value={numbro(getVideoCategories().length).format({
+                                thousandSeparated: true
+                            })}
+                        />
+                        <StatBox
+                            title="Videos"
+                            value={numbro(getVideoCount()).format({ thousandSeparated: true })}
+                        />
+                        <StatBox
+                            title="File Size"
+                            value={numbro(getVideoFileSize()).format({
+                                output: "byte",
+                                base: "decimal",
+                                mantissa: 2,
+                                spaceSeparated: true
+                            })}
+                        />
+                        <StatBox
+                            title="Duration"
+                            value={numbro(getVideoDuration()).format({ output: "time" })}
+                        />
                     </StatBar>
                 </div>
                 <div class="my-2">

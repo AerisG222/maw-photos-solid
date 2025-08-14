@@ -1,8 +1,8 @@
 import { ParentComponent, children, createEffect } from "solid-js";
 import { useIsRouting, useLocation, useNavigate } from "@solidjs/router";
-import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from "../../contexts/AuthContext";
 
-const AuthGuard: ParentComponent = (props) => {
+const AuthGuard: ParentComponent = props => {
     const [authContext] = useAuthContext();
     const location = useLocation();
     const isRouting = useIsRouting();
@@ -10,22 +10,18 @@ const AuthGuard: ParentComponent = (props) => {
     const c = children(() => props.children);
 
     createEffect(async () => {
-        if(isRouting()) {
+        if (isRouting()) {
             return;
         }
 
-        if(!authContext.isLoggedIn) {
+        if (!authContext.isLoggedIn) {
             // todo: redirect to orig dest after login
             //setRedirectUrl(`${location.pathname}${location.search}`);
             navigate("/login", { replace: true });
         }
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default AuthGuard;

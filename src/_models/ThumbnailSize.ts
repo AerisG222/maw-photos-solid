@@ -6,14 +6,14 @@ export const ThumbnailSizeVerySmall = "verySmall";
 export const ThumbnailSizeTiny = "tiny";
 
 export type ThumbnailSizeIdType =
-    typeof ThumbnailSizeDefault |
-    typeof ThumbnailSizeSmall |
-    typeof ThumbnailSizeVerySmall |
-    typeof ThumbnailSizeTiny;
+    | typeof ThumbnailSizeDefault
+    | typeof ThumbnailSizeSmall
+    | typeof ThumbnailSizeVerySmall
+    | typeof ThumbnailSizeTiny;
 
 export type ThumbnailSize = KeyValuePair<ThumbnailSizeIdType> & {
-    width: number,
-    height: number
+    width: number;
+    height: number;
 };
 
 const thumbnailSizes: Record<ThumbnailSizeIdType, ThumbnailSize> = {
@@ -43,12 +43,15 @@ const thumbnailSizes: Record<ThumbnailSizeIdType, ThumbnailSize> = {
     }
 };
 
-export const allThumbnailSizes = Object.entries(thumbnailSizes).map(([key, value]) => ({id: key, name: value.name}));
+export const allThumbnailSizes = Object.entries(thumbnailSizes).map(([key, value]) => ({
+    id: key,
+    name: value.name
+}));
 export const defaultGridThumbnailSize = ThumbnailSizeDefault;
 export const defaultListThumbnailSize = ThumbnailSizeVerySmall;
 
 export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
-    switch(thumbnailSize) {
+    switch (thumbnailSize) {
         case ThumbnailSizeDefault:
             return thumbnailSizes[ThumbnailSizeSmall];
         case ThumbnailSizeSmall:
@@ -63,7 +66,7 @@ export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
 };
 
 export const getThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
-    switch(thumbnailSize) {
+    switch (thumbnailSize) {
         case ThumbnailSizeDefault:
             return thumbnailSizes[ThumbnailSizeDefault];
         case ThumbnailSizeSmall:

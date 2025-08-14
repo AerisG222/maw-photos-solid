@@ -1,40 +1,55 @@
-import { ParentComponent, Show, children } from "solid-js"
+import { ParentComponent, Show, children } from "solid-js";
 
 import { useCategoryContext } from "../contexts/CategoryContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap, categoryBulkEditRoute, categoryDetailRoute, categoryFullscreenRoute, categoryGridRoute, categoryMapRoute, randomDetailRoute, randomFullscreenRoute, randomGridRoute } from "./_routes";
+import {
+    MediaViewModeBulkEdit,
+    MediaViewModeDetail,
+    MediaViewModeFullscreen,
+    MediaViewModeGrid,
+    MediaViewModeMap,
+    categoryBulkEditRoute,
+    categoryDetailRoute,
+    categoryFullscreenRoute,
+    categoryGridRoute,
+    categoryMapRoute,
+    randomDetailRoute,
+    randomFullscreenRoute,
+    randomGridRoute
+} from "./_routes";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
-import { useMediaBreakpointContext } from '../contexts/MediaBreakpointContext';
-import { useAuthContext } from '../contexts/AuthContext';
+import { useMediaBreakpointContext } from "../contexts/MediaBreakpointContext";
+import { useAuthContext } from "../contexts/AuthContext";
 
 import ToolbarDivider from "../components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../components/toolbar/ToolbarLayout";
 import ToolbarLink from "../components/toolbar/ToolbarLink";
 
-const Toolbar: ParentComponent = (props) => {
+const Toolbar: ParentComponent = props => {
     const [, { isAdmin }] = useAuthContext();
     const [categoryState] = useCategoryContext();
     const [mediaList] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
     const [, { setViewMode }] = useMediaPageSettingsContext();
-    const [, {gteMd}] = useMediaBreakpointContext();
+    const [, { gteMd }] = useMediaBreakpointContext();
 
     const c = children(() => props.children);
 
     const getRouteParams = () => ({
         categoryType: categoryState?.activeCategory?.type,
         categoryId: categoryState?.activeCategory?.id,
-        id: mediaList.activeItem?.id,
+        id: mediaList.activeItem?.id
     });
 
     const getGridRoute = () => getRouteForArea(categoryGridRoute, randomGridRoute);
     const getDetailRoute = () => getRouteForArea(categoryDetailRoute, randomDetailRoute);
-    const getFullscreenRoute = () => getRouteForArea(categoryFullscreenRoute, randomFullscreenRoute);
+    const getFullscreenRoute = () =>
+        getRouteForArea(categoryFullscreenRoute, randomFullscreenRoute);
 
     const getRouteForArea = (categoryRoute, randomRoute) => {
-        switch(routeContext.area) {
+        switch (routeContext.area) {
             case AreaCategories:
                 return categoryRoute;
             case AreaRandom:
@@ -44,8 +59,7 @@ const Toolbar: ParentComponent = (props) => {
     };
 
     const isValidArea = () =>
-        routeContext.area === AreaCategories ||
-        routeContext.area === AreaRandom;
+        routeContext.area === AreaCategories || routeContext.area === AreaRandom;
 
     return (
         <Show when={isValidArea()}>
@@ -53,29 +67,34 @@ const Toolbar: ParentComponent = (props) => {
                 <ToolbarLink
                     route={getGridRoute()}
                     routeParams={getRouteParams()}
-                    clickHandler={() => setViewMode(MediaViewModeGrid)} />
+                    clickHandler={() => setViewMode(MediaViewModeGrid)}
+                />
 
                 <Show when={gteMd()}>
                     <ToolbarLink
                         route={getDetailRoute()}
                         routeParams={getRouteParams()}
-                        clickHandler={() => setViewMode(MediaViewModeDetail)} />
+                        clickHandler={() => setViewMode(MediaViewModeDetail)}
+                    />
                     <ToolbarLink
                         route={getFullscreenRoute()}
                         routeParams={getRouteParams()}
-                        clickHandler={() => setViewMode(MediaViewModeFullscreen)} />
+                        clickHandler={() => setViewMode(MediaViewModeFullscreen)}
+                    />
 
                     <Show when={routeContext.area === AreaCategories}>
                         <ToolbarLink
                             route={categoryMapRoute}
                             routeParams={getRouteParams()}
-                            clickHandler={() => setViewMode(MediaViewModeMap)} />
+                            clickHandler={() => setViewMode(MediaViewModeMap)}
+                        />
 
                         <Show when={isAdmin()}>
                             <ToolbarLink
                                 route={categoryBulkEditRoute}
                                 routeParams={getRouteParams()}
-                                clickHandler={() => setViewMode(MediaViewModeBulkEdit)} />
+                                clickHandler={() => setViewMode(MediaViewModeBulkEdit)}
+                            />
                         </Show>
                     </Show>
                 </Show>

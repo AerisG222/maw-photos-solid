@@ -32,8 +32,8 @@ export const categoryTypes: Record<CategoryType, CategoryTypeInfo> = {
 };
 
 export const categoryTypesOptions: KeyValuePair<string>[] = [
-    {id: "all", name: "All"},
-    ...Object.entries(categoryTypes).map(([key, value]) => ({id: key, name: value.namePlural}))
+    { id: "all", name: "All" },
+    ...Object.entries(categoryTypes).map(([key, value]) => ({ id: key, name: value.namePlural }))
 ];
 
 export const categoryTypeIcons = Object.entries(categoryTypes).map(([key, value]) => value.icon);

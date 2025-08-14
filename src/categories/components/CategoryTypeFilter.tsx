@@ -10,16 +10,16 @@ type Props = {
     horizontal: boolean;
 };
 
-const CategoryTypeFilter: Component<Props> = (props) => {
+const CategoryTypeFilter: Component<Props> = props => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [filter, { setTypeFilter }] = useCategoryFilterSettingsContext();
 
     const onChangeFilter = (val: string) => {
         setTypeFilter(val);
-        setSearchParams({type: val});
+        setSearchParams({ type: val });
     };
 
-    if(searchParams.type) {
+    if (searchParams.type) {
         onChangeFilter(searchParams.type);
     }
 
@@ -29,7 +29,8 @@ const CategoryTypeFilter: Component<Props> = (props) => {
             title="Category Type"
             itemArray={categoryTypesOptions}
             selectedValue={filter.typeFilter}
-            onChange={onChangeFilter} />
+            onChange={onChangeFilter}
+        />
     );
 };
 

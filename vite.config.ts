@@ -1,24 +1,20 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import tailwindcssPlugin from "@tailwindcss/vite";
-import basicSsl from '@vitejs/plugin-basic-ssl'
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig({
     envDir: "environments",
-    plugins: [
-        solidPlugin(),
-        tailwindcssPlugin(),
-        basicSsl()
-    ],
+    plugins: [solidPlugin(), tailwindcssPlugin(), basicSsl()],
     server: {
         host: "dev-photos.mikeandwan.us",
-        port: 3000,
+        port: 3000
     },
     build: {
-        target: "esnext",
+        target: "esnext"
     },
     resolve: {
-        conditions: ["development", "browser"],
+        conditions: ["development", "browser"]
     },
     test: {
         environment: "jsdom",
@@ -26,6 +22,6 @@ export default defineConfig({
         transformMode: { web: [/\.tsx?$/] },
         deps: { registerNodeLoader: true },
         threads: false,
-        isolate: false,
+        isolate: false
     }
 });

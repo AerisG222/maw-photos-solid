@@ -24,21 +24,26 @@ export const buildServiceContext = <T,>() => {
         }
     ]);
 
-    const ServiceProvider: ParentComponent = (props) => {
+    const ServiceProvider: ParentComponent = props => {
         const [state, setState] = createStore(defaultServiceState);
 
         const setService = (service?: T) => {
-            setState({service});
-        }
+            setState({ service });
+        };
 
         return (
-            <ServiceContext.Provider value={[state, {
-                setService
-            }]}>
+            <ServiceContext.Provider
+                value={[
+                    state,
+                    {
+                        setService
+                    }
+                ]}
+            >
                 {props.children}
             </ServiceContext.Provider>
         );
     };
 
-    return {ServiceContext, ServiceProvider};
-}
+    return { ServiceContext, ServiceProvider };
+};

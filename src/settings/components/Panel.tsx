@@ -2,9 +2,9 @@ import { ParentComponent, children } from "solid-js";
 
 type Props = {
     title: string;
-}
+};
 
-const Panel: ParentComponent<Props> = (props) => {
+const Panel: ParentComponent<Props> = props => {
     const c = children(() => props.children);
 
     return (

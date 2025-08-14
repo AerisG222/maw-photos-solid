@@ -8,13 +8,16 @@ import Rating from "../../components/rating/Rating";
 const RatingsCard: Component = () => {
     const [mediaList] = useMediaListContext();
     const [ratingContext] = useRatingServiceContext();
-    const [fetchRatingSignal, setFetchRatingSignal] = createSignal({ media: undefined, service: undefined });
+    const [fetchRatingSignal, setFetchRatingSignal] = createSignal({
+        media: undefined,
+        service: undefined
+    });
 
     // option 1: use below approach to make sure we have a valid service configured
     // option 2: change to define functions that take the media type and id, and have that function
     //           call the right service based on type?
     const getRatings = () => {
-        if(ratingContext.service && mediaList.activeItem) {
+        if (ratingContext.service && mediaList.activeItem) {
             return ratingContext.service.fetchRating(mediaList.activeItem.id);
         }
     };
@@ -43,7 +46,8 @@ const RatingsCard: Component = () => {
                             editable={true}
                             clickHandler={rate}
                             numberStars={5}
-                            value={ratingResource()?.userRating} />
+                            value={ratingResource()?.userRating}
+                        />
                     </td>
                 </tr>
                 <tr>
@@ -52,7 +56,8 @@ const RatingsCard: Component = () => {
                         <Rating
                             editable={false}
                             numberStars={5}
-                            value={ratingResource()?.averageRating} />
+                            value={ratingResource()?.averageRating}
+                        />
                     </td>
                 </tr>
             </tbody>

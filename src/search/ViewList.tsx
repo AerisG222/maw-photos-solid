@@ -2,7 +2,7 @@ import { Component, For } from "solid-js";
 
 import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
-import { EAGER_THRESHOLD } from '../_models/utils/Constants';
+import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import Toolbar from "./Toolbar";
 import ListToolbar from "./ToolbarList";
@@ -22,20 +22,23 @@ const ViewList: Component = () => {
                     <ListToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}>
+            margin={settings.margin}
+        >
             <div class="mt-4">
                 <SearchBar />
             </div>
 
             <div class="my-4">
-                <For each={searchContext.categories}>{ (category, idx) =>
-                    <CategoryListItem
-                        category={category}
-                        showYear={true}
-                        thumbnailSize={settings.thumbnailSize}
-                        eager={idx() <= EAGER_THRESHOLD}
-                    />
-                }</For>
+                <For each={searchContext.categories}>
+                    {(category, idx) => (
+                        <CategoryListItem
+                            category={category}
+                            showYear={true}
+                            thumbnailSize={settings.thumbnailSize}
+                            eager={idx() <= EAGER_THRESHOLD}
+                        />
+                    )}
+                </For>
             </div>
 
             <SearchResultStatus />

@@ -11,7 +11,8 @@ const DownloadPhotoHighUntouchedButton: Component = () => {
         <ToolbarExternalLink
             title="High Res Download (untouched)"
             url={photoListState.activeItem?.imagePrtUrl}
-            iconClass="icon-[ic--round-image]" />
+            iconClass="icon-[ic--round-image]"
+        />
     );
 };
 

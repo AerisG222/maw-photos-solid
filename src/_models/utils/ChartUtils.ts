@@ -20,10 +20,14 @@ export const chartColors = [
     "#845cbe"
 ];
 
-export const buildStatsData = (years: number[], categories: Category[], valueFunc: (cat: Category) => number) => {
+export const buildStatsData = (
+    years: number[],
+    categories: Category[],
+    valueFunc: (cat: Category) => number
+) => {
     const result = [];
 
-    for(const year of years) {
+    for (const year of years) {
         const yearId = `year-${year}`;
         const categoriesInYear = categories.filter(x => x.year === year);
 
@@ -36,13 +40,13 @@ export const buildStatsData = (years: number[], categories: Category[], valueFun
 
         result.push(yearPoint);
 
-        for(const cat of categoriesInYear) {
+        for (const cat of categoriesInYear) {
             result.push({
                 id: `year-${year}-${cat.id}`,
                 parent: yearId,
                 name: cat.name,
                 value: valueFunc(cat)
-            })
+            });
 
             yearPoint.value += valueFunc(cat);
         }

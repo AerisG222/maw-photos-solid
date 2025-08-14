@@ -21,11 +21,11 @@ export type CategoryPageSettingsContextValue = [
 
 const CategoryPageSettingsContext = createContext<CategoryPageSettingsContextValue>();
 
-export const CategoryPageSettingsProvider: ParentComponent = (props) => {
+export const CategoryPageSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
     const setViewMode = (viewMode: CategoryViewModeIdType) => {
-        setState({viewMode: viewMode});
+        setState({ viewMode: viewMode });
         saveState(state);
     };
 

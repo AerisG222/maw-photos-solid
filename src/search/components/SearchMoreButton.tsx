@@ -8,7 +8,7 @@ const SearchMoreButton: Component = () => {
     const [searchContext, { addCategories }] = useSearchContext();
 
     const continueSearch = () => {
-        if(searchSignal()) {
+        if (searchSignal()) {
             return searchCategories(searchContext.term, searchContext.categories.length);
         }
 
@@ -17,16 +17,16 @@ const SearchMoreButton: Component = () => {
             totalFound: 0,
             startIndex: 0
         };
-    }
+    };
 
     const triggerSearch = () => {
         setSearchSignal(true);
-    }
+    };
 
     const [searchResource] = createResource(searchSignal, continueSearch);
 
     createEffect(() => {
-        if(searchResource.state === "ready") {
+        if (searchResource.state === "ready") {
             addCategories(searchResource().results);
             setSearchSignal(false);
         }
@@ -38,7 +38,7 @@ const SearchMoreButton: Component = () => {
                 <span class="text-6 icon-[ic--round-keyboard-arrow-down]" /> Show More
             </button>
         </div>
-    )
-}
+    );
+};
 
 export default SearchMoreButton;

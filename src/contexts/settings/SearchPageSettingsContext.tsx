@@ -9,9 +9,8 @@ export type SearchPageSettingsState = {
 };
 
 export const defaultSearchPageSettings: SearchPageSettingsState = {
-    viewMode: defaultCategoryViewMode,
+    viewMode: defaultCategoryViewMode
 };
-
 
 export type SearchPageSettingsContextValue = [
     state: SearchPageSettingsState,
@@ -22,11 +21,11 @@ export type SearchPageSettingsContextValue = [
 
 const SearchPageSettingsContext = createContext<SearchPageSettingsContextValue>();
 
-export const SearchPageSettingsProvider: ParentComponent = (props) => {
+export const SearchPageSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
     const setViewMode = (viewMode: CategoryViewModeIdType) => {
-        setState({viewMode: viewMode});
+        setState({ viewMode: viewMode });
         saveState(state);
     };
 

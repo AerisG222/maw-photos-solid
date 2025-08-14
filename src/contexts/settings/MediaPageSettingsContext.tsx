@@ -11,7 +11,7 @@ export type MediaPageSettingsState = {
 
 export const defaultMediaPageSettings: MediaPageSettingsState = {
     viewMode: defaultMediaViewMode,
-    slideshowDisplayDurationSeconds: 2,
+    slideshowDisplayDurationSeconds: 2
 };
 
 export type MediaPageSettingsContextValue = [
@@ -24,11 +24,12 @@ export type MediaPageSettingsContextValue = [
 
 const MediaPageSettingsContext = createContext<MediaPageSettingsContextValue>();
 
-export const MediaPageSettingsProvider: ParentComponent = (props) => {
+export const MediaPageSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setViewMode = (viewMode: MediaViewModeIdType) => updateState({viewMode});
-    const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) => updateState({slideshowDisplayDurationSeconds});
+    const setViewMode = (viewMode: MediaViewModeIdType) => updateState({ viewMode });
+    const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) =>
+        updateState({ slideshowDisplayDurationSeconds });
 
     const updateState = (update: Partial<MediaPageSettingsState>) => {
         setState(update);
@@ -36,7 +37,9 @@ export const MediaPageSettingsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <MediaPageSettingsContext.Provider value={[state, { setViewMode, setSlideshowDisplayDurationSeconds }]}>
+        <MediaPageSettingsContext.Provider
+            value={[state, { setViewMode, setSlideshowDisplayDurationSeconds }]}
+        >
             {props.children}
         </MediaPageSettingsContext.Provider>
     );

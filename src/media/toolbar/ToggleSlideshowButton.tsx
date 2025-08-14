@@ -29,7 +29,7 @@ const ToggleSlideshowButton: Component = () => {
 export default ToggleSlideshowButton;
 
 export const showSlideshowButton = (area: Area, categoryType?: CategoryType) => {
-    switch(area) {
+    switch (area) {
         case AreaCategories:
             return categoryType ? categoryTypes[categoryType].slideshowAvailable : false;
         case AreaRandom:

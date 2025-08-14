@@ -18,7 +18,7 @@ type Props = {
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
 };
 
-const PhotoLink: Component<Props> = (props) => {
+const PhotoLink: Component<Props> = props => {
     const getClassList = () => ({
         "max-w-none": true,
         "rounded-1": props.rounded
@@ -29,15 +29,22 @@ const PhotoLink: Component<Props> = (props) => {
         <MediaLink
             media={props.photo}
             scroll={props.scroll}
-            url={getMediaPath(props.route, CategoryTypePhotos, props.photo.categoryId, props.photo.id)}
+            url={getMediaPath(
+                props.route,
+                CategoryTypePhotos,
+                props.photo.categoryId,
+                props.photo.id
+            )}
             rounded={props.rounded}
-            isActiveItem={props.isActiveItem}>
+            isActiveItem={props.isActiveItem}
+        >
             <img
                 src={props.photo.imageXsSqUrl}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
                 classList={getClassList()}
-                loading={props.eager ? "eager" : "lazy"} />
+                loading={props.eager ? "eager" : "lazy"}
+            />
         </MediaLink>
     );
 };

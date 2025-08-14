@@ -7,7 +7,8 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
-    const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] = useSearchGridViewSettingsContext();
+    const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] =
+        useSearchGridViewSettingsContext();
 
     const ensureLargeThumbnails = () => {
         setThumbnailSize(defaultGridThumbnailSize);
@@ -16,7 +17,7 @@ const GridToolbar: Component = () => {
     const onToggleYears = () => {
         setShowYears(!settingsContext.showYears);
 
-        if(settingsContext.showYears) {
+        if (settingsContext.showYears) {
             ensureLargeThumbnails();
         }
     };
@@ -24,7 +25,7 @@ const GridToolbar: Component = () => {
     const onToggleTitles = () => {
         setShowTitles(!settingsContext.showTitles);
 
-        if(settingsContext.showTitles) {
+        if (settingsContext.showTitles) {
             ensureLargeThumbnails();
         }
     };

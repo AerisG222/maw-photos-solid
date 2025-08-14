@@ -1,4 +1,4 @@
-import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js"
+import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
 
 import { MarginIdType, getMarginClass } from "../../_models/Margin";
 
@@ -10,14 +10,15 @@ type Props = {
     sidebar?: JSXElement;
 };
 
-const Layout: ParentComponent<Props> = (props) => {
-    const merged = mergeProps({ xPad: true}, props);
+const Layout: ParentComponent<Props> = props => {
+    const merged = mergeProps({ xPad: true }, props);
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
 
     return (
-        <div class="grid w-100% h-[calc(100vh-48px)]
+        <div
+            class="grid w-100% h-[calc(100vh-48px)]
             grid-rows-[max-content_auto_0] grid-cols-[100%]
             md:h-[100vh] md:grid-rows-[100%] md:grid-cols-[max-content_auto_max-content]"
         >
@@ -25,7 +26,7 @@ const Layout: ParentComponent<Props> = (props) => {
                 {toolbar()}
             </Show>
 
-            <div class="overflow-y-auto scrollable" classList={{"px-2": merged.xPad}}>
+            <div class="overflow-y-auto scrollable" classList={{ "px-2": merged.xPad }}>
                 <div classList={getMarginClass(props.margin)}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>

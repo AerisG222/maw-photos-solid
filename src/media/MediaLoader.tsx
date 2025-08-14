@@ -6,21 +6,17 @@ import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 import MediaCategoryLoader from "./loader/MediaCategoryLoader";
 import MediaRandomLoader from "./loader/MediaRandomLoader";
 
-const MediaLoader: ParentComponent = (props) => {
-    const [routeContext] = useRouteDetailContext()
+const MediaLoader: ParentComponent = props => {
+    const [routeContext] = useRouteDetailContext();
     const c = children(() => props.children);
 
     return (
         <Switch>
             <Match when={routeContext.area === AreaCategories}>
-                <MediaCategoryLoader>
-                    {c()}
-                </MediaCategoryLoader>
+                <MediaCategoryLoader>{c()}</MediaCategoryLoader>
             </Match>
             <Match when={routeContext.area === AreaRandom}>
-                <MediaRandomLoader>
-                    {c()}
-                </MediaRandomLoader>
+                <MediaRandomLoader>{c()}</MediaRandomLoader>
             </Match>
         </Switch>
     );

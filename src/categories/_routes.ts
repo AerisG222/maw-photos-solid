@@ -37,15 +37,11 @@ export const categories: AppRouteDefinition = {
     absolutePath: basePath,
     component: lazy(() => import("./Categories")),
     doesPathMatch: path => routeMatch(path, basePath, AreaCategories),
-    children: [
-        categoriesRedirect,
-        categoriesGrid,
-        categoriesList
-    ]
+    children: [categoriesRedirect, categoriesGrid, categoriesList]
 };
 
 export const getRouteForViewMode = (mode: string) => {
-    if(equalsIgnoreCase("list", mode)) {
+    if (equalsIgnoreCase("list", mode)) {
         return categoriesList;
     }
 
@@ -53,7 +49,8 @@ export const getRouteForViewMode = (mode: string) => {
 };
 
 export const buildSearch = (year?: number, type?: CategoryType) => {
-    return {year: year, type: type};
+    return { year: year, type: type };
 };
 
-export const getCategoryPath = (categoryType: CategoryType, categoryId: number) => `${basePath}/${categoryTypes[categoryType].routeSlug}/${categoryId}`;
+export const getCategoryPath = (categoryType: CategoryType, categoryId: number) =>
+    `${basePath}/${categoryTypes[categoryType].routeSlug}/${categoryId}`;

@@ -19,6 +19,6 @@ const SearchResultStatus: Component = () => {
             </Show>
         </>
     );
-}
+};
 
 export default SearchResultStatus;

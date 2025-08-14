@@ -14,34 +14,34 @@ import MediaLoader from "./MediaLoader";
 import ActiveMediaMonitor from "./ActiveMediaMonitor";
 import ActiveCategoryMonitor from "./ActiveCategoryMonitor";
 
-const MediaRoot: ParentComponent = (props) => {
+const MediaRoot: ParentComponent = props => {
     return (
         <AuthGuard>
             <MediaListProvider>
                 <ExifServiceProvider>
-                <RatingServiceProvider>
-                <CommentServiceProvider>
-                <MetadataEditServiceProvider>
-                <CategoryTeaserServiceProvider>
-                    <ActiveCategoryMonitor>
-                    <ActiveMediaMonitor>
-                    <MediaLoader>
-                        <SlideshowProvider>
-                        <VisualEffectsProvider>
-                            { props.children }
-                        </VisualEffectsProvider>
-                        </SlideshowProvider>
-                    </MediaLoader>
-                    </ActiveMediaMonitor>
-                    </ActiveCategoryMonitor>
-                </CategoryTeaserServiceProvider>
-                </MetadataEditServiceProvider>
-                </CommentServiceProvider>
-                </RatingServiceProvider>
+                    <RatingServiceProvider>
+                        <CommentServiceProvider>
+                            <MetadataEditServiceProvider>
+                                <CategoryTeaserServiceProvider>
+                                    <ActiveCategoryMonitor>
+                                        <ActiveMediaMonitor>
+                                            <MediaLoader>
+                                                <SlideshowProvider>
+                                                    <VisualEffectsProvider>
+                                                        {props.children}
+                                                    </VisualEffectsProvider>
+                                                </SlideshowProvider>
+                                            </MediaLoader>
+                                        </ActiveMediaMonitor>
+                                    </ActiveCategoryMonitor>
+                                </CategoryTeaserServiceProvider>
+                            </MetadataEditServiceProvider>
+                        </CommentServiceProvider>
+                    </RatingServiceProvider>
                 </ExifServiceProvider>
             </MediaListProvider>
         </AuthGuard>
     );
-}
+};
 
 export default MediaRoot;

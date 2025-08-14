@@ -18,12 +18,13 @@ import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton
 import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
-import { useMediaBreakpointContext } from '../contexts/MediaBreakpointContext';
+import { useMediaBreakpointContext } from "../contexts/MediaBreakpointContext";
 
 const GridToolbar: Component = () => {
     const [routeContext] = useRouteDetailContext();
-    const [settings, {setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin}] = useMediaGridViewSettingsContext();
-    const [, {ltMd}] = useMediaBreakpointContext();
+    const [settings, { setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin }] =
+        useMediaGridViewSettingsContext();
+    const [, { ltMd }] = useMediaBreakpointContext();
     const [state] = useMediaListContext();
     const params = useParams();
 
@@ -33,7 +34,7 @@ const GridToolbar: Component = () => {
 
     const onToggleMainBreadcrumbs = () => {
         setShowMainBreadcrumbs(!settings.showMainBreadcrumbs);
-    }
+    };
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
@@ -52,7 +53,12 @@ const GridToolbar: Component = () => {
                 <MoveNextButton />
             </Show>
 
-            <Show when={(state.activeItem && !ltMd()) || showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
+            <Show
+                when={
+                    (state.activeItem && !ltMd()) ||
+                    showSlideshowButton(routeContext.area, params.categoryType as CategoryType)
+                }
+            >
                 <ToolbarDivider />
             </Show>
 

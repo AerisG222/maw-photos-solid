@@ -2,7 +2,7 @@ import { Component, createEffect } from "solid-js";
 import * as Highcharts from "highcharts";
 import HighchartsTreemap from "highcharts/modules/treemap";
 
-import { useAppSettingsContext } from '../../contexts/settings/AppSettingsContext';
+import { useAppSettingsContext } from "../../contexts/settings/AppSettingsContext";
 
 type Props = {
     data: any;
@@ -10,8 +10,8 @@ type Props = {
     formatFunc: (value: number) => string;
 };
 
-const Treemap: Component<Props> = (props) => {
-    const[settings] = useAppSettingsContext();
+const Treemap: Component<Props> = props => {
+    const [settings] = useAppSettingsContext();
     HighchartsTreemap(Highcharts);
 
     const themeBase200 = "";
@@ -21,12 +21,13 @@ const Treemap: Component<Props> = (props) => {
 
     let el;
 
-    const labelFormat = (x: Highcharts.PointLabelObject) => `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
+    const labelFormat = (x: Highcharts.PointLabelObject) =>
+        `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
 
-    createEffect(() =>{
+    createEffect(() => {
         Highcharts.chart("chart", {
             accessibility: {
-                enabled: false,
+                enabled: false
             },
             title: undefined,
             chart: {
@@ -34,18 +35,19 @@ const Treemap: Component<Props> = (props) => {
                 margin: 0,
                 backgroundColor: themeBase300,
                 style: {
-                    "fontFamily": "Nunito Sans,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
+                    fontFamily:
+                        "Nunito Sans,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
                 }
             },
             navigation: {
                 breadcrumbs: {
                     position: {
-                        y: -30,
+                        y: -30
                     },
                     buttonTheme: {
                         style: {
                             "font-weight": 700,
-                            color: themePrimary,
+                            color: themePrimary
                         }
                     }
                 }
@@ -53,8 +55,8 @@ const Treemap: Component<Props> = (props) => {
             plotOptions: {
                 treemap: {
                     events: {
-                        setRootNode: function(evt) {
-                            if(evt.newRootId === "") {
+                        setRootNode: function (evt) {
+                            if (evt.newRootId === "") {
                                 evt.series.options.levels[0].dataLabels.enabled = true;
                                 evt.series.options.levels[1].dataLabels.enabled = false;
                             } else {
@@ -64,49 +66,60 @@ const Treemap: Component<Props> = (props) => {
                         }
                     },
                     tooltip: {
-                        pointFormatter: function () { return `<b>${this.name}</b>: ${props.formatFunc(this.value)}`; }
+                        pointFormatter: function () {
+                            return `<b>${this.name}</b>: ${props.formatFunc(this.value)}`;
+                        }
                     }
                 }
             },
-            series: [{
-                name: props.seriesName,
-                type: "treemap",
-                layoutAlgorithm: "squarified",
-                borderWidth: 1,
-                borderColor: "#ffffff22",
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        fontSize: "14px",
-                        fontWeight: "normal",
-                        textOutline: "none",
-                    }
-                },
-                levels: [{
-                    level: 1,
+            series: [
+                {
+                    name: props.seriesName,
+                    type: "treemap",
+                    layoutAlgorithm: "squarified",
+                    borderWidth: 1,
+                    borderColor: "#ffffff22",
                     dataLabels: {
                         enabled: true,
-                        align: "left",
-                        verticalAlign: "top",
-                        formatter: function () { return labelFormat(this); },
-                    }
-                }, {
-                    level: 2,
-                    dataLabels: {
-                        enabled: false,
-                        align: "left",
-                        verticalAlign: "top",
-                        formatter: function () { return labelFormat(this); },
                         style: {
-                            fontSize: "11px",
+                            fontSize: "14px",
+                            fontWeight: "normal",
+                            textOutline: "none"
                         }
-                    }
-                }],
-                allowTraversingTree: true,
-                animationLimit: 10000,
-                turboThreshold: 50000,
-                data: props.data,
-            }]
+                    },
+                    levels: [
+                        {
+                            level: 1,
+                            dataLabels: {
+                                enabled: true,
+                                align: "left",
+                                verticalAlign: "top",
+                                formatter: function () {
+                                    return labelFormat(this);
+                                }
+                            }
+                        },
+                        {
+                            level: 2,
+                            dataLabels: {
+                                enabled: false,
+                                align: "left",
+                                verticalAlign: "top",
+                                formatter: function () {
+                                    return labelFormat(this);
+                                },
+                                style: {
+                                    fontSize: "11px"
+                                }
+                            }
+                        }
+                    ],
+                    allowTraversingTree: true,
+                    animationLimit: 10000,
+                    turboThreshold: 50000,
+                    data: props.data
+                }
+            ]
         });
     });
 
@@ -126,13 +139,11 @@ const Treemap: Component<Props> = (props) => {
             .highcharts-button-pressed text
                 { font-weight: bold !important; }
         `;
-    }
+    };
 
     return (
         <>
-            <style>
-                {getStyle()}
-            </style>
+            <style>{getStyle()}</style>
 
             <div id="chart" ref={el} />
         </>

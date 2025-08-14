@@ -6,13 +6,13 @@ type Props = {
     shortcut: ShortcutInfo;
 };
 
-const ShortcutKey: Component<Props> = (props) => {
+const ShortcutKey: Component<Props> = props => {
     const getDisplayIcon = (key: string) => {
-        if(key === "arrowright") {
+        if (key === "arrowright") {
             return "i-ic:round-arrow-right-alt";
         }
 
-        if(key === "arrowleft") {
+        if (key === "arrowleft") {
             return "i-ic:round-arrow-right-alt rotate-180";
         }
 
@@ -20,7 +20,7 @@ const ShortcutKey: Component<Props> = (props) => {
     };
 
     const getDisplayKey = (key: string) => {
-        if(getDisplayIcon(key) !== "") {
+        if (getDisplayIcon(key) !== "") {
             return "";
         }
 
@@ -29,13 +29,13 @@ const ShortcutKey: Component<Props> = (props) => {
 
     return (
         <div class="mb-2">
-            <For each={props.shortcut.shortcut}>{ key =>
-                <kbd class={`kbd`}>
-                    <span class={getDisplayIcon(key)}>
-                        {getDisplayKey(key)}
-                    </span>
-                </kbd>
-            }</For>
+            <For each={props.shortcut.shortcut}>
+                {key => (
+                    <kbd class={`kbd`}>
+                        <span class={getDisplayIcon(key)}>{getDisplayKey(key)}</span>
+                    </kbd>
+                )}
+            </For>
 
             <span> - </span>
 

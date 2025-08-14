@@ -5,7 +5,7 @@ import { useMediaListContext } from "../contexts/MediaListContext";
 import ToolbarButton from "../../components/toolbar/ToolbarButton";
 
 const MoveNextButton: Component = () => {
-    const [state, {activeItemIsLast, moveNext}] = useMediaListContext();
+    const [state, { activeItemIsLast, moveNext }] = useMediaListContext();
 
     return (
         <ToolbarButton

@@ -30,9 +30,8 @@ export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
     showMetadataEditor: false,
     showMinimap: false,
     minimapMapType: defaultMapType,
-    minimapZoom: defaultMapZoomLevel,
+    minimapZoom: defaultMapZoomLevel
 };
-
 
 export type MediaInfoPanelSettingsContextValue = [
     state: MediaInfoPanelSettingsState,
@@ -53,20 +52,22 @@ export type MediaInfoPanelSettingsContextValue = [
 
 const MediaInfoPanelSettingsContext = createContext<MediaInfoPanelSettingsContextValue>();
 
-export const MediaInfoPanelSettingsProvider: ParentComponent = (props) => {
+export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({expandInfoPanel});
-    const setShowRatings = (showRatings: boolean) => updateState({showRatings});
-    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) => updateState({showCategoryTeaserChooser});
-    const setShowComments = (showComments: boolean) => updateState({showComments});
-    const setShowExif = (showExif: boolean) => updateState({showExif});
-    const setShowEffects = (showEffects: boolean) => updateState({showEffects});
-    const setShowMetadataEditor = (showMetadataEditor: boolean) => updateState({showMetadataEditor});
-    const setShowHistogram = (showHistogram: boolean) => updateState({showHistogram});
-    const setShowMinimap = (showMinimap: boolean) => updateState({showMinimap});
-    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({minimapZoom});
-    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({minimapMapType});
+    const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({ expandInfoPanel });
+    const setShowRatings = (showRatings: boolean) => updateState({ showRatings });
+    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) =>
+        updateState({ showCategoryTeaserChooser });
+    const setShowComments = (showComments: boolean) => updateState({ showComments });
+    const setShowExif = (showExif: boolean) => updateState({ showExif });
+    const setShowEffects = (showEffects: boolean) => updateState({ showEffects });
+    const setShowMetadataEditor = (showMetadataEditor: boolean) =>
+        updateState({ showMetadataEditor });
+    const setShowHistogram = (showHistogram: boolean) => updateState({ showHistogram });
+    const setShowMinimap = (showMinimap: boolean) => updateState({ showMinimap });
+    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({ minimapZoom });
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({ minimapMapType });
 
     const updateState = (update: Partial<MediaInfoPanelSettingsState>) => {
         setState(update);
@@ -74,19 +75,24 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = (props) => {
     };
 
     return (
-        <MediaInfoPanelSettingsContext.Provider value={[state, {
-            setExpandInfoPanel,
-            setShowRatings,
-            setShowCategoryTeaserChooser,
-            setShowComments,
-            setShowExif,
-            setShowEffects,
-            setShowMetadataEditor,
-            setShowHistogram,
-            setShowMinimap,
-            setMinimapZoom,
-            setMinimapMapType
-        }]}>
+        <MediaInfoPanelSettingsContext.Provider
+            value={[
+                state,
+                {
+                    setExpandInfoPanel,
+                    setShowRatings,
+                    setShowCategoryTeaserChooser,
+                    setShowComments,
+                    setShowExif,
+                    setShowEffects,
+                    setShowMetadataEditor,
+                    setShowHistogram,
+                    setShowMinimap,
+                    setMinimapZoom,
+                    setMinimapMapType
+                }
+            ]}
+        >
             {props.children}
         </MediaInfoPanelSettingsContext.Provider>
     );

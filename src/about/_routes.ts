@@ -42,10 +42,5 @@ export const about: AppRouteDefinition = {
     absolutePath: basePath,
     component: lazy(() => import("./AboutLayout")),
     doesPathMatch: path => routeMatch(path, basePath, AreaAbout),
-    children: [
-        aboutRedirect,
-        aboutHelp,
-        aboutReleaseNotes,
-        aboutAndroid,
-    ]
+    children: [aboutRedirect, aboutHelp, aboutReleaseNotes, aboutAndroid]
 };

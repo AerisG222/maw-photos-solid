@@ -1,24 +1,25 @@
-import { onCleanup } from 'solid-js';
+import { onCleanup } from "solid-js";
 
 export const SWIPE_LEFT = "swipe_left";
 export const SWIPE_RIGHT = "swipe_right";
 export const SWIPE_UP = "swipe_up";
 export const SWIPE_DOWN = "swipe_down";
 export type SWIPE_DIRECTION =
-    typeof SWIPE_LEFT |
-    typeof SWIPE_RIGHT |
-    typeof SWIPE_DOWN |
-    typeof SWIPE_UP;
+    | typeof SWIPE_LEFT
+    | typeof SWIPE_RIGHT
+    | typeof SWIPE_DOWN
+    | typeof SWIPE_UP;
 
 declare module "solid-js" {
     namespace JSX {
-        interface Directives {  // use:model
+        interface Directives {
+            // use:model
             swipe: () => void;
         }
     }
 }
 
-type Position = { x?: number, y?: number };
+type Position = { x?: number; y?: number };
 
 // inspiration: https://stackoverflow.com/a/69617795
 export const swipe = (el: HTMLElement, accessor) => {
@@ -26,16 +27,16 @@ export const swipe = (el: HTMLElement, accessor) => {
     let start: Position;
 
     const onTouchStart = (evt: TouchEvent) =>
-        start = {
+        (start = {
             x: evt.changedTouches[0].screenX,
             y: evt.changedTouches[0].screenY
-        };
+        });
 
     const onDragStart = (evt: DragEvent) =>
-            start = {
-                x: evt.screenX,
-                y: evt.screenY
-            };
+        (start = {
+            x: evt.screenX,
+            y: evt.screenY
+        });
 
     const onTouchEnd = (evt: TouchEvent) =>
         checkSwipe({
@@ -73,22 +74,22 @@ export const swipe = (el: HTMLElement, accessor) => {
             }
         }
 
-        if(direction) {
+        if (direction) {
             accessor?.()(direction);
         }
     };
 
-    el.addEventListener('touchstart', onTouchStart);
-    el.addEventListener('touchend', onTouchEnd);
+    el.addEventListener("touchstart", onTouchStart);
+    el.addEventListener("touchend", onTouchEnd);
 
-    el.addEventListener('dragstart', onDragStart);
-    el.addEventListener('dragend', onDragEnd);
+    el.addEventListener("dragstart", onDragStart);
+    el.addEventListener("dragend", onDragEnd);
 
     onCleanup(() => {
-        el.removeEventListener('touchstart', onTouchStart);
-        el.removeEventListener('touchend', onTouchEnd);
+        el.removeEventListener("touchstart", onTouchStart);
+        el.removeEventListener("touchend", onTouchEnd);
 
-        el.removeEventListener('dragstart', onDragStart);
-        el.removeEventListener('dragend', onDragEnd);
-    })
+        el.removeEventListener("dragstart", onDragStart);
+        el.removeEventListener("dragend", onDragEnd);
+    });
 };

@@ -10,7 +10,10 @@ const DownloadCategoryButton: Component = () => {
     const [categoryState] = useCategoryContext();
 
     const getLink = () => {
-        if(categoryState.activeCategory && categoryState.activeCategory.type === CategoryTypePhotos){
+        if (
+            categoryState.activeCategory &&
+            categoryState.activeCategory.type === CategoryTypePhotos
+        ) {
             return (categoryState.activeCategory as PhotoCategory).downloadLink;
         }
 
@@ -21,8 +24,9 @@ const DownloadCategoryButton: Component = () => {
         <ToolbarExternalLink
             title="Download All Photos in Category (.zip)"
             url={getLink()}
-            iconClass="icon-[ic--outline-file-download]" />
+            iconClass="icon-[ic--outline-file-download]"
+        />
     );
-}
+};
 
 export default DownloadCategoryButton;

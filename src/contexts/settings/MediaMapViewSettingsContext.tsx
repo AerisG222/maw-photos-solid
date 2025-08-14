@@ -12,7 +12,7 @@ export type MediaMapViewSettingsState = {
 
 export const defaultMediaMapViewSettings: MediaMapViewSettingsState = {
     mapType: defaultMapType,
-    zoom: defaultMapZoomLevel,
+    zoom: defaultMapZoomLevel
 };
 
 export type MediaMapViewSettingsContextValue = [
@@ -25,11 +25,11 @@ export type MediaMapViewSettingsContextValue = [
 
 const MediaMapViewSettingsContext = createContext<MediaMapViewSettingsContextValue>();
 
-export const MediaMapSettingsProvider: ParentComponent = (props) => {
+export const MediaMapSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMapType = (mapType: MapTypeIdType) => updateState({mapType});
-    const setZoom = (zoom: MapZoomLevelIdType) => updateState({zoom});
+    const setMapType = (mapType: MapTypeIdType) => updateState({ mapType });
+    const setZoom = (zoom: MapZoomLevelIdType) => updateState({ zoom });
 
     const updateState = (update: Partial<MediaMapViewSettingsState>) => {
         setState(update);

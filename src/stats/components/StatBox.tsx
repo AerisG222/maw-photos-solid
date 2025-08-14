@@ -5,7 +5,7 @@ type Props = {
     value: string;
 };
 
-const StatBox: Component<Props> = (props) => {
+const StatBox: Component<Props> = props => {
     return (
         <div class="stat place-items-center bg-secondary-content:12">
             <div class="stat-title text-secondary">{props.title}</div>

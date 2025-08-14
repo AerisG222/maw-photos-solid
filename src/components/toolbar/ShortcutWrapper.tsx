@@ -1,4 +1,4 @@
-import { ParentComponent, children, createEffect, createUniqueId, onCleanup } from 'solid-js';
+import { ParentComponent, children, createEffect, createUniqueId, onCleanup } from "solid-js";
 import { createShortcut } from "@solid-primitives/keyboard";
 
 import { useShortcutContext } from "../../contexts/ShortcutContext";
@@ -10,20 +10,20 @@ type Props = {
     clickHandler: () => void;
 };
 
-const ShortcutWrapper: ParentComponent<Props> = (props) => {
+const ShortcutWrapper: ParentComponent<Props> = props => {
     const c = children(() => props.children);
     const [, { addShortcut, removeShortcut }] = useShortcutContext();
     let id = undefined;
 
     const clearShortcut = () => {
-        if(id) {
+        if (id) {
             removeShortcut(id);
             id = undefined;
         }
     };
 
     const registerShortcut = () => {
-        if(id) {
+        if (id) {
             return;
         }
 
@@ -40,14 +40,14 @@ const ShortcutWrapper: ParentComponent<Props> = (props) => {
 
     // todo: not sure why, but this is unhappy if it runs in createEffect,
     // so we are leaving this here for now...
-    if(props.shortcutKeys) {
+    if (props.shortcutKeys) {
         createShortcut(props.shortcutKeys, () => props.clickHandler());
     }
 
     createEffect(() => {
-        if(!props.shortcutKeys || props.disabled) {
+        if (!props.shortcutKeys || props.disabled) {
             clearShortcut();
-        } else if(!id) {
+        } else if (!id) {
             registerShortcut();
         }
     });
@@ -56,11 +56,7 @@ const ShortcutWrapper: ParentComponent<Props> = (props) => {
         clearShortcut();
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    )
-}
+    return <>{c()}</>;
+};
 
 export default ShortcutWrapper;

@@ -4,7 +4,7 @@ import { useMediaListContext } from "../contexts/MediaListContext";
 import { useCategoryContext } from "../../contexts/CategoryContext";
 import { getCategoryService } from "../../_services/categories/CategoryServiceLocator";
 
-const MediaCategoryLoader: ParentComponent = (props) => {
+const MediaCategoryLoader: ParentComponent = props => {
     const [doFetch, setDoFetch] = createSignal(-1);
     const [categoryContext] = useCategoryContext();
     const [, { setItems }] = useMediaListContext();
@@ -13,7 +13,7 @@ const MediaCategoryLoader: ParentComponent = (props) => {
     const loadMedia = () => {
         const cat = categoryContext.activeCategory;
 
-        if(cat) {
+        if (cat) {
             const svc = getCategoryService(cat.type);
             return svc.loadMedia(cat.id);
         }
@@ -31,16 +31,12 @@ const MediaCategoryLoader: ParentComponent = (props) => {
     });
 
     createEffect(() => {
-        if(!mediaResource.loading && !mediaResource.error) {
+        if (!mediaResource.loading && !mediaResource.error) {
             setItems(mediaResource());
         }
     });
 
-    return (
-        <>
-            {c()}
-        </>
-    );
+    return <>{c()}</>;
 };
 
 export default MediaCategoryLoader;

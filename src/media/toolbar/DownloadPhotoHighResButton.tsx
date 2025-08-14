@@ -11,7 +11,8 @@ const DownloadPhotoHighResButton: Component = () => {
         <ToolbarExternalLink
             title="High Res Download"
             url={photoListState.activeItem?.imageLgUrl}
-            iconClass="icon-[ic--round-image]" />
+            iconClass="icon-[ic--round-image]"
+        />
     );
 };
 

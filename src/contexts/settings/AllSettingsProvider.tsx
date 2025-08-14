@@ -14,34 +14,34 @@ import { SearchGridSettingsProvider } from "./SearchGridViewSettingsContext";
 import { SearchListSettingsProvider } from "./SearchListViewSettingsContext";
 import { SearchPageSettingsProvider } from "./SearchPageSettingsContext";
 
-export const AllSettingsProvider: ParentComponent = (props) => {
+export const AllSettingsProvider: ParentComponent = props => {
     return (
         <AppSettingsProvider>
-        <CategoryFilterSettingsProvider>
-        <CategoryGridSettingsProvider>
-        <CategoryListSettingsProvider>
-        <CategoryPageSettingsProvider>
-        <MediaDetailSettingsProvider>
-        <MediaGridSettingsProvider>
-        <MediaInfoPanelSettingsProvider>
-        <MediaMapSettingsProvider>
-        <MediaPageSettingsProvider>
-        <SearchGridSettingsProvider>
-        <SearchListSettingsProvider>
-        <SearchPageSettingsProvider>
-            {props.children}
-        </SearchPageSettingsProvider>
-        </SearchListSettingsProvider>
-        </SearchGridSettingsProvider>
-        </MediaPageSettingsProvider>
-        </MediaMapSettingsProvider>
-        </MediaInfoPanelSettingsProvider>
-        </MediaGridSettingsProvider>
-        </MediaDetailSettingsProvider>
-        </CategoryPageSettingsProvider>
-        </CategoryListSettingsProvider>
-        </CategoryGridSettingsProvider>
-        </CategoryFilterSettingsProvider>
+            <CategoryFilterSettingsProvider>
+                <CategoryGridSettingsProvider>
+                    <CategoryListSettingsProvider>
+                        <CategoryPageSettingsProvider>
+                            <MediaDetailSettingsProvider>
+                                <MediaGridSettingsProvider>
+                                    <MediaInfoPanelSettingsProvider>
+                                        <MediaMapSettingsProvider>
+                                            <MediaPageSettingsProvider>
+                                                <SearchGridSettingsProvider>
+                                                    <SearchListSettingsProvider>
+                                                        <SearchPageSettingsProvider>
+                                                            {props.children}
+                                                        </SearchPageSettingsProvider>
+                                                    </SearchListSettingsProvider>
+                                                </SearchGridSettingsProvider>
+                                            </MediaPageSettingsProvider>
+                                        </MediaMapSettingsProvider>
+                                    </MediaInfoPanelSettingsProvider>
+                                </MediaGridSettingsProvider>
+                            </MediaDetailSettingsProvider>
+                        </CategoryPageSettingsProvider>
+                    </CategoryListSettingsProvider>
+                </CategoryGridSettingsProvider>
+            </CategoryFilterSettingsProvider>
         </AppSettingsProvider>
     );
 };

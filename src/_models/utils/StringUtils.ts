@@ -1,9 +1,9 @@
 export const equalsIgnoreCase = (a: string, b: string): boolean => {
-    if(!a && !b) {
+    if (!a && !b) {
         return true;
     }
 
-    if(!a || !b) {
+    if (!a || !b) {
         return false;
     }
 

@@ -25,8 +25,8 @@ const Sidebar: Component = () => {
             setShowHistogram,
             setShowMinimap,
             setShowMetadataEditor,
-            setShowCategoryTeaserChooser,
-        },
+            setShowCategoryTeaserChooser
+        }
     ] = useMediaInfoPanelSettingsContext();
 
     const [mediaList] = useMediaListContext();
@@ -154,13 +154,15 @@ const Sidebar: Component = () => {
         <div class="flex">
             <Show when={settings.expandInfoPanel}>
                 <div class="w-[500px] bg-base-200 border-l-1 border-l-base-content:30% overflow-y-auto overflow-x-hidden scrollable">
-                    <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
-                        <Show when={card.active()}>
-                            <InfoCard title={card.title} icon={card.icon}>
-                                {card.component}
-                            </InfoCard>
-                        </Show>
-                    }</For>
+                    <For each={cards.filter(card => card.enable(mediaList.activeItem))}>
+                        {card => (
+                            <Show when={card.active()}>
+                                <InfoCard title={card.title} icon={card.icon}>
+                                    {card.component}
+                                </InfoCard>
+                            </Show>
+                        )}
+                    </For>
                 </div>
             </Show>
 
@@ -178,16 +180,20 @@ const Sidebar: Component = () => {
 
                 <ToolbarDivider />
 
-                <For each={cards.filter(card => card.enable(mediaList.activeItem))}>{ card =>
-                    <ToolbarButton
-                        disabled={!settings.expandInfoPanel}
-                        name={card.tooltip}
-                        icon={card.icon}
-                        shortcutKeys={card.shortcutKeys}
-                        clickHandler={() => settings.expandInfoPanel ? card.clickHandler() : {}}
-                        active={card.active()}
-                    />
-                }</For>
+                <For each={cards.filter(card => card.enable(mediaList.activeItem))}>
+                    {card => (
+                        <ToolbarButton
+                            disabled={!settings.expandInfoPanel}
+                            name={card.tooltip}
+                            icon={card.icon}
+                            shortcutKeys={card.shortcutKeys}
+                            clickHandler={() =>
+                                settings.expandInfoPanel ? card.clickHandler() : {}
+                            }
+                            active={card.active()}
+                        />
+                    )}
+                </For>
             </SidebarLayout>
         </div>
     );

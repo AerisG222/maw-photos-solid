@@ -11,11 +11,11 @@ type Props = {
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
 };
 
-const MediaLink: ParentComponent<Props> = (props) => {
+const MediaLink: ParentComponent<Props> = props => {
     const c = children(() => props.children);
 
     const getClassList = () => {
-        return ({
+        return {
             "cursor-pointer": true,
             "mr-[0.1rem]": true,
             "saturate-20": true,
@@ -26,15 +26,16 @@ const MediaLink: ParentComponent<Props> = (props) => {
             "rounded-1": props.rounded,
             "saturate-100!": props.isActiveItem,
             "border-primary!": props.isActiveItem
-        });
+        };
     };
 
     return (
         <A
             classList={getClassList()}
             href={props.url}
-            ref={el => props.scroll ? props.scroll(el, props.media) : ()=>{}}>
-                {c()}
+            ref={el => (props.scroll ? props.scroll(el, props.media) : () => {})}
+        >
+            {c()}
         </A>
     );
 };

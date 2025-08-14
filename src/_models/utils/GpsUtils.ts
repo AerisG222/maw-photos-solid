@@ -1,8 +1,8 @@
 import { GpsCoordinate } from "../Gps";
 
 export type GpsOverride = {
-    lat: string | undefined,
-    lng: string | undefined
+    lat: string | undefined;
+    lng: string | undefined;
 };
 
 export const isValidLatLng = (val: string) => {
@@ -31,6 +31,6 @@ export const parseGps = (val: string): GpsCoordinate | undefined => {
 
     return {
         latitude: lat,
-        longitude: lng,
+        longitude: lng
     };
 };

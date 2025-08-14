@@ -34,24 +34,24 @@ export type SearchContextValue = [
 
 const SearchContext = createContext<SearchContextValue>();
 
-export const SearchProvider: ParentComponent = (props) => {
+export const SearchProvider: ParentComponent = props => {
     const [searchState, setSearchState] = createStore(defaultSearchState);
 
     const clearSearchTerm = () => {
         setSearchTerm("");
-    }
+    };
 
     const setSearchTerm = (term: string) => {
-        setSearchState({term});
-    }
+        setSearchState({ term });
+    };
 
     const clearActiveTerm = () => {
         setActiveTerm("");
-    }
+    };
 
     const setActiveTerm = (activeTerm: string) => {
-        setSearchState({activeTerm});
-    }
+        setSearchState({ activeTerm });
+    };
 
     const clearSearchResults = () => {
         setSearchState({
@@ -66,7 +66,7 @@ export const SearchProvider: ParentComponent = (props) => {
     };
 
     const addCategories = (categories: Category[]) => {
-        if(categories) {
+        if (categories) {
             setSearchState(s => ({ categories: [...s.categories, ...categories] }));
         }
     };
@@ -75,19 +75,26 @@ export const SearchProvider: ParentComponent = (props) => {
 
     const moreResultsAvailable = () => searchState.categories.length < searchState.foundCount;
 
-    return <SearchContext.Provider value={[searchState, {
-        clearSearchTerm,
-        setSearchTerm,
-        clearActiveTerm,
-        setActiveTerm,
-        clearSearchResults,
-        setCategories,
-        addCategories,
-        setFoundCount,
-        moreResultsAvailable
-    }]}>
-        {props.children}
-    </SearchContext.Provider>
-}
+    return (
+        <SearchContext.Provider
+            value={[
+                searchState,
+                {
+                    clearSearchTerm,
+                    setSearchTerm,
+                    clearActiveTerm,
+                    setActiveTerm,
+                    clearSearchResults,
+                    setCategories,
+                    addCategories,
+                    setFoundCount,
+                    moreResultsAvailable
+                }
+            ]}
+        >
+            {props.children}
+        </SearchContext.Provider>
+    );
+};
 
 export const useSearchContext = () => useContext(SearchContext);

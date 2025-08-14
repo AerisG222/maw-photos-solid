@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { useMediaListContext } from "./MediaListContext";
-import { useMediaPageSettingsContext } from '../../contexts/settings/MediaPageSettingsContext';
+import { useMediaPageSettingsContext } from "../../contexts/settings/MediaPageSettingsContext";
 
 export type SlideshowState = {
     isPlaying: boolean;
@@ -23,26 +23,26 @@ export type SlideshowContextValue = [
 
 const SlideshowContext = createContext<SlideshowContextValue>();
 
-export const SlideshowProvider: ParentComponent = (props) => {
-    const [state, setState] = createStore({...defaultSlideshowState});
-    const [mediaList, {activeItemIsLast, moveFirst, moveNext}] = useMediaListContext();
+export const SlideshowProvider: ParentComponent = props => {
+    const [state, setState] = createStore({ ...defaultSlideshowState });
+    const [mediaList, { activeItemIsLast, moveFirst, moveNext }] = useMediaListContext();
     const [mediaPageSettings] = useMediaPageSettingsContext();
 
     let intervalId: number;
 
     const start = () => {
-        setState({isPlaying: true});
+        setState({ isPlaying: true });
 
-        if(!mediaList.activeItem) {
+        if (!mediaList.activeItem) {
             moveFirst();
         }
 
-        if(intervalId) {
+        if (intervalId) {
             clearInterval(intervalId);
         }
 
         intervalId = setInterval(() => {
-            if(activeItemIsLast()) {
+            if (activeItemIsLast()) {
                 stop();
                 return;
             }
@@ -52,16 +52,16 @@ export const SlideshowProvider: ParentComponent = (props) => {
     };
 
     const stop = () => {
-        setState({isPlaying: false});
+        setState({ isPlaying: false });
 
-        if(intervalId) {
+        if (intervalId) {
             clearInterval(intervalId);
             intervalId = undefined;
         }
     };
 
     const toggle = () => {
-        if(state.isPlaying) {
+        if (state.isPlaying) {
             stop();
         } else {
             start();
@@ -69,11 +69,16 @@ export const SlideshowProvider: ParentComponent = (props) => {
     };
 
     return (
-        <SlideshowContext.Provider value={[state, {
-            start,
-            stop,
-            toggle
-        }]}>
+        <SlideshowContext.Provider
+            value={[
+                state,
+                {
+                    start,
+                    stop,
+                    toggle
+                }
+            ]}
+        >
             {props.children}
         </SlideshowContext.Provider>
     );

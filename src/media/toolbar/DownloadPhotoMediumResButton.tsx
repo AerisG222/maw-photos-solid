@@ -12,7 +12,8 @@ const DownloadPhotoMediumResButton: Component = () => {
             title="High Res Download (untouched)"
             url={photoListState.activeItem?.imageMdUrl}
             iconClass="icon-[ic--round-image]"
-            textClassList={{"text-lg": true}} />
+            textClassList={{ "text-lg": true }}
+        />
     );
 };
 

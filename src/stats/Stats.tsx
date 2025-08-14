@@ -5,20 +5,18 @@ import { StatProvider } from "./contexts/StatContext";
 
 import AuthGuard from "../components/auth/AuthGuard";
 
-const Stats: ParentComponent = (props) => {
+const Stats: ParentComponent = props => {
     const [search, setSearchParams] = useSearchParams();
 
     createEffect(() => {
-        if(!search.mode) {
-            setSearchParams({mode: "count"});
+        if (!search.mode) {
+            setSearchParams({ mode: "count" });
         }
     });
 
     return (
         <AuthGuard>
-            <StatProvider>
-                { props.children }
-            </StatProvider>
+            <StatProvider>{props.children}</StatProvider>
         </AuthGuard>
     );
 };

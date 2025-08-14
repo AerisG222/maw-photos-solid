@@ -4,7 +4,10 @@ import { getCategoryPath } from "../categories/_routes";
 import { queryMawApi } from "./Shared";
 import { SearchCategory, SearchResult } from "./models/SearchResult";
 
-export const searchCategories = async (query: string, start: number): Promise<SearchResult<Category>> => {
+export const searchCategories = async (
+    query: string,
+    start: number
+): Promise<SearchResult<Category>> => {
     const searchCategories = await internalSearchCategories(query, start);
 
     const translateCategoryType = (multimediaType: string) =>
@@ -22,7 +25,7 @@ export const searchCategories = async (query: string, start: number): Promise<Se
         count: undefined,
         totalSize: undefined,
         isMissingGpsData: undefined,
-        route: getCategoryPath(translateCategoryType(x.multimediaType), x.id),
+        route: getCategoryPath(translateCategoryType(x.multimediaType), x.id)
     }));
 
     return {

@@ -7,12 +7,13 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
-    const [settings, { setShowTitles, setMargin, setThumbnailSize }] = useCategoryGridViewSettingsContext();
+    const [settings, { setShowTitles, setMargin, setThumbnailSize }] =
+        useCategoryGridViewSettingsContext();
 
     const onToggleTitles = () => {
         setShowTitles(!settings.showTitles);
 
-        if(settings.showTitles) {
+        if (settings.showTitles) {
             setThumbnailSize(defaultGridThumbnailSize);
         }
     };

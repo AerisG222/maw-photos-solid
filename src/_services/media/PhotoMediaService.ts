@@ -1,5 +1,13 @@
 import { setTeaser } from "../../_api/PhotoCategories";
-import { addComment, getComments, getExifData, getGpsDetail, getRating, ratePhoto, setGpsCoordinateOverride } from "../../_api/Photos";
+import {
+    addComment,
+    getComments,
+    getExifData,
+    getGpsDetail,
+    getRating,
+    ratePhoto,
+    setGpsCoordinateOverride
+} from "../../_api/Photos";
 import { IRatingService } from "./IRatingService";
 import { ICommentService } from "./ICommentService";
 import { IExifService } from "./IExifService";
@@ -12,7 +20,8 @@ export class PhotoMediaService
         ICommentService,
         IExifService,
         ICategoryTeaserService,
-        IMetadataEditService {
+        IMetadataEditService
+{
     fetchRating = getRating;
     setRating = ratePhoto;
     fetchComments = getComments;

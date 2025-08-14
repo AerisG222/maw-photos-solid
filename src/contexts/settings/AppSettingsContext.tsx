@@ -20,12 +20,12 @@ export type AppSettingsContextValue = [
 
 const AppSettingsContext = createContext<AppSettingsContextValue>();
 
-export const AppSettingsProvider: ParentComponent = (props) => {
+export const AppSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
     const toggleTheme = () => {
         const newTheme = state.theme === "dark" ? "light" : "dark";
-        setState({theme: newTheme});
+        setState({ theme: newTheme });
         saveState(state);
     };
 
@@ -42,7 +42,7 @@ function loadState() {
     var state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
 
     // handle legacy theme
-    if(state.theme === "dusk") {
+    if (state.theme === "dusk") {
         return {
             theme: "dark"
         };

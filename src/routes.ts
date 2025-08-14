@@ -23,7 +23,7 @@ export const appRoutes = [
 const getAllIcons = (routes: AppRouteDefinition[]) => {
     const icons = [];
 
-    for(const route of routes) {
+    for (const route of routes) {
         getIcons(route, icons);
     }
 
@@ -31,13 +31,13 @@ const getAllIcons = (routes: AppRouteDefinition[]) => {
 };
 
 const getIcons = (route: AppRouteDefinition, icons: string[]) => {
-    if(route.children) {
-        for(const childRoute of route.children) {
+    if (route.children) {
+        for (const childRoute of route.children) {
             getIcons(childRoute, icons);
         }
     }
 
-    if(route.icon) {
+    if (route.icon) {
         icons.push(route.icon);
     }
 

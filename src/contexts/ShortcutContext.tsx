@@ -10,7 +10,7 @@ export type ShortcutInfo = {
 export type ShortcutState = {
     readonly shortcuts: ShortcutInfo[];
     readonly showDialog: false;
-}
+};
 
 export const defaultShortcutState = {
     shortcuts: [],
@@ -28,29 +28,29 @@ export type ShortcutContextValue = [
 
 const ShortcutContext = createContext<ShortcutContextValue>();
 
-export const ShortcutProvider: ParentComponent = (props) => {
+export const ShortcutProvider: ParentComponent = props => {
     const [state, setState] = createStore(defaultShortcutState);
 
     const addShortcut = (shortcutInfo: ShortcutInfo) => {
-        if(shortcutInfo) {
-            setState(s => ({ shortcuts: [...s.shortcuts, shortcutInfo]}));
+        if (shortcutInfo) {
+            setState(s => ({ shortcuts: [...s.shortcuts, shortcutInfo] }));
         }
     };
 
     const removeShortcut = (id: string) => {
-        if(!id) {
+        if (!id) {
             return;
         }
 
         const idx = state.shortcuts.findIndex(s => s.id === id);
 
-        if(idx >= 0) {
-            setState(s => ({ shortcuts: s.shortcuts.toSpliced(idx, 1)}));
+        if (idx >= 0) {
+            setState(s => ({ shortcuts: s.shortcuts.toSpliced(idx, 1) }));
         }
     };
 
     const setShowDialog = (doShow: boolean) => {
-        setState({showDialog: doShow});
+        setState({ showDialog: doShow });
     };
 
     return (

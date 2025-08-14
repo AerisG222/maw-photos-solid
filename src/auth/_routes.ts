@@ -15,7 +15,5 @@ export const login: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     doesPathMatch: path => routeMatch(path, basePath, AreaAuth),
-    children: [
-        loginPage
-    ]
+    children: [loginPage]
 };

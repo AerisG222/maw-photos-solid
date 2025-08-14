@@ -7,16 +7,13 @@ type Props = {
     showTitleAsLink?: boolean;
 };
 
-const CategoryBreadcrumb: Component<Props> = (props) => {
+const CategoryBreadcrumb: Component<Props> = props => {
     const [state] = useCategoryContext();
 
     return (
         <Show when={state.activeCategory}>
             <div class="text-center">
-                <A
-                    class="text-primary"
-                    href={`/categories?year=${state.activeCategory.year}`}
-                >
+                <A class="text-primary" href={`/categories?year=${state.activeCategory.year}`}>
                     {state.activeCategory.year}
                 </A>
 

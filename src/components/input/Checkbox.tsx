@@ -1,4 +1,4 @@
-import { Component } from "solid-js"
+import { Component } from "solid-js";
 
 type Props = {
     title: string;
@@ -7,11 +7,16 @@ type Props = {
     onChange: (isSelected: boolean) => void;
 };
 
-const Select: Component<Props> = (props) => {
-    return(
+const Select: Component<Props> = props => {
+    return (
         <div class="form-control">
             <label class="label cursor-pointer justify-start">
-                <input type="checkbox" checked={props.isSelected} class="checkbox mr-3" onChange={evt => props.onChange(evt.currentTarget.checked)} />
+                <input
+                    type="checkbox"
+                    checked={props.isSelected}
+                    class="checkbox mr-3"
+                    onChange={evt => props.onChange(evt.currentTarget.checked)}
+                />
                 <span class="label-text">{props.title}</span>
             </label>
         </div>

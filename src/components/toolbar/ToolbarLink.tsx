@@ -4,8 +4,8 @@ import { A } from "@solidjs/router";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { buildPath } from "../../_models/utils/RouteUtils";
 
-import ShortcutWrapper from './ShortcutWrapper';
-import { getNameWithShortcut } from './_util';
+import ShortcutWrapper from "./ShortcutWrapper";
+import { getNameWithShortcut } from "./_util";
 
 type Props = {
     route: AppRouteDefinition;
@@ -14,11 +14,11 @@ type Props = {
     clickHandler?: () => void;
 };
 
-const ToolbarLink: Component<Props> = (props) => {
+const ToolbarLink: Component<Props> = props => {
     let el: HTMLAnchorElement;
 
     const handleClick = () => {
-        if(props.clickHandler) {
+        if (props.clickHandler) {
             props.clickHandler();
         }
     };

@@ -7,7 +7,7 @@ type Props = {
     clickHandler?: (rating: number) => void;
 };
 
-const Rating: Component<Props> = (props) => {
+const Rating: Component<Props> = props => {
     const [stars, setStars] = createSignal([]);
     const [hoverStar, setHoverStar] = createSignal(0);
 
@@ -15,12 +15,12 @@ const Rating: Component<Props> = (props) => {
         return {
             "cursor-pointer": props.editable,
             "icon-[ic--round-star]": star,
-            "icon-[ic--round-star-outline]": !star,
-        }
+            "icon-[ic--round-star-outline]": !star
+        };
     };
 
     const handleClick = (rating: number) => {
-        if(props.editable && props.clickHandler) {
+        if (props.editable && props.clickHandler) {
             const ratingValue = rating === props.value ? -1 : rating;
 
             props.clickHandler(ratingValue);
@@ -31,8 +31,8 @@ const Rating: Component<Props> = (props) => {
         var highlightedStars = hoverStar() > 0 ? hoverStar() : props.value;
         var stars = Array(props.numberStars);
 
-        for(let i = 0; i < stars.length; i++) {
-            stars[i] = highlightedStars > i
+        for (let i = 0; i < stars.length; i++) {
+            stars[i] = highlightedStars > i;
         }
 
         return stars;
@@ -41,15 +41,27 @@ const Rating: Component<Props> = (props) => {
     createEffect(() => setStars(getStarsArray()));
 
     return (
-        <div onMouseLeave={() => { if(props.editable) { setHoverStar(0) }} }>
-            <For each={stars()}>{ (star, i) =>
-                <span
-                    class="text-6"
-                    classList={getClassList(star)}
-                    onClick={() => handleClick(i() + 1)}
-                    onMouseEnter={() => {if(props.editable) { setHoverStar(i() + 1) }}}
-                />
-            }</For>
+        <div
+            onMouseLeave={() => {
+                if (props.editable) {
+                    setHoverStar(0);
+                }
+            }}
+        >
+            <For each={stars()}>
+                {(star, i) => (
+                    <span
+                        class="text-6"
+                        classList={getClassList(star)}
+                        onClick={() => handleClick(i() + 1)}
+                        onMouseEnter={() => {
+                            if (props.editable) {
+                                setHoverStar(i() + 1);
+                            }
+                        }}
+                    />
+                )}
+            </For>
         </div>
     );
 };

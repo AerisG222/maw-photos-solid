@@ -20,13 +20,13 @@ const ViewGrid: Component = () => {
     const [settings] = useMediaGridViewSettingsContext();
     const [routeContext] = useRouteDetailContext();
     const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
-    const [,{ stop }] = useSlideshowContext();
+    const [, { stop }] = useSlideshowContext();
     const params = useParams();
 
     createEffect(() => {
         let route = categoryGridRoute;
 
-        if(routeContext.area === AreaRandom) {
+        if (routeContext.area === AreaRandom) {
             route = randomGridRoute;
         }
 
@@ -35,24 +35,36 @@ const ViewGrid: Component = () => {
 
     return (
         <Show when={mediaList.activeRouteDefinition}>
-            <Layout margin={settings.margin}
+            <Layout
+                margin={settings.margin}
                 toolbar={
                     <Toolbar>
                         <GridToolbar />
                     </Toolbar>
-                }>
+                }
+            >
                 <Show when={mediaList.activeItem}>
-                    <div class="position-absolute z-200 bg-base-100:92%
+                    <div
+                        class="position-absolute z-200 bg-base-100:92%
                             top-82px left-0 h-[calc(100vh-82px)]
-                            md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]">
-                        <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
+                            md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]"
+                    >
+                        <Show
+                            when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}
+                        >
                             <CategoryBreadcrumb showTitleAsLink={true} />
                         </Show>
 
                         <A
                             class="flex h-100%"
-                            href={getMediaPath(mediaList.activeRouteDefinition, params.categoryType as CategoryType, mediaList.activeItem.categoryId, undefined)}
-                            onClick={stop}>
+                            href={getMediaPath(
+                                mediaList.activeRouteDefinition,
+                                params.categoryType as CategoryType,
+                                mediaList.activeItem.categoryId,
+                                undefined
+                            )}
+                            onClick={stop}
+                        >
                             <MediaMainItem media={mediaList.activeItem} />
                         </A>
                     </div>

@@ -1,10 +1,18 @@
-import { batch, createContext, createEffect, createMemo, on, ParentComponent, useContext } from "solid-js";
+import {
+    batch,
+    createContext,
+    createEffect,
+    createMemo,
+    on,
+    ParentComponent,
+    useContext
+} from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 
 import { Category } from "../_models/Category";
 import { CategoryType } from "../_models/CategoryType";
 import { FilterFunction, SortFunction } from "../_models/UtilityTypes";
-import { useCategoryFilterSettingsContext } from './settings/CategoryFilterSettingsContext';
+import { useCategoryFilterSettingsContext } from "./settings/CategoryFilterSettingsContext";
 
 export type CategoryState = {
     readonly initialized: boolean;
@@ -49,17 +57,21 @@ export type CategoryContextValue = [
         setActiveCategory: (category: Category) => void;
         setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
 
-        updateTeaser: (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => void;
+        updateTeaser: (
+            categoryType: CategoryType,
+            categoryId: number,
+            teaserImageUrl: string
+        ) => void;
     }
 ];
 
 const CategoryContext = createContext<CategoryContextValue>();
 
-export const CategoryProvider: ParentComponent = (props) => {
+export const CategoryProvider: ParentComponent = props => {
     const [state, setState] = createStore(defaultCategoryState);
 
     const setInitialized = (isInitialized: boolean) => {
-        setState({initialized: isInitialized});
+        setState({ initialized: isInitialized });
     };
 
     const clearCategories = () => {
@@ -71,13 +83,13 @@ export const CategoryProvider: ParentComponent = (props) => {
     };
 
     const addCategories = (categories: Category[]) => {
-        if(categories) {
+        if (categories) {
             setState(s => ({ categories: [...s.categories, ...categories] }));
         }
     };
 
     const updateCategory = (category: Category) => {
-        if(category) {
+        if (category) {
             setState(
                 "categories",
                 cat => cat.id === category.id && cat.type === category.type,
@@ -91,14 +103,14 @@ export const CategoryProvider: ParentComponent = (props) => {
     };
 
     const addFilter = (filter: FilterFunction) => {
-        setState({ filters: [...state.filters, filter ]});
+        setState({ filters: [...state.filters, filter] });
     };
 
     const removeFilter = (filterName: string) => {
         const idx = state.filters.findIndex(f => f.name === filterName);
 
-        if(idx >= 0) {
-            setState(s => ({ filters: s.filters.toSpliced(idx, 1) }))
+        if (idx >= 0) {
+            setState(s => ({ filters: s.filters.toSpliced(idx, 1) }));
         }
     };
 
@@ -110,30 +122,28 @@ export const CategoryProvider: ParentComponent = (props) => {
         setState({ sort });
     };
 
-    const getAllYears = createMemo(() => [
-            ...new Set(state.categories.map(c => c.year))
-        ].sort()
-        .reverse()
+    const getAllYears = createMemo(() =>
+        [...new Set(state.categories.map(c => c.year))].sort().reverse()
     );
 
     const getFilteredCategories = createMemo(() => {
-        if(state.filters.length === 0) {
+        if (state.filters.length === 0) {
             return state.categories;
         }
 
         const filtered = [];
 
-        for(const category of state.categories) {
+        for (const category of state.categories) {
             let include = true;
 
-            for(const filter of state.filters) {
-                if(!filter.filterFn(category)) {
+            for (const filter of state.filters) {
+                if (!filter.filterFn(category)) {
                     include = false;
                     break;
                 }
             }
 
-            if(include) {
+            if (include) {
                 filtered.push(category);
             }
         }
@@ -144,21 +154,18 @@ export const CategoryProvider: ParentComponent = (props) => {
     const getFilteredAndSortedCategories = createMemo(() => {
         const filteredCategories = getFilteredCategories();
 
-        return state.sort ?
-            [...filteredCategories].sort(state.sort.sortFn) :
-            filteredCategories;
+        return state.sort ? [...filteredCategories].sort(state.sort.sortFn) : filteredCategories;
     });
 
-    const getFilteredYears = createMemo(() => [
-            ...new Set(getFilteredCategories().map(c => c.year))
-        ].sort()
-        .reverse()
+    const getFilteredYears = createMemo(() =>
+        [...new Set(getFilteredCategories().map(c => c.year))].sort().reverse()
     );
 
-    const getFilteredCategoriesForYear = (year: number) => getFilteredAndSortedCategories().filter(c => c.year === year);
+    const getFilteredCategoriesForYear = (year: number) =>
+        getFilteredAndSortedCategories().filter(c => c.year === year);
 
     const setActiveCategory = (category: Category) => {
-        setState({ activeCategory: category })
+        setState({ activeCategory: category });
     };
 
     const setActiveCategoryById = (categoryType: CategoryType, categoryId: number) => {
@@ -167,7 +174,11 @@ export const CategoryProvider: ParentComponent = (props) => {
         setActiveCategory(cat);
     };
 
-    const updateTeaser = (categoryType: CategoryType, categoryId: number, teaserImageUrl: string) => {
+    const updateTeaser = (
+        categoryType: CategoryType,
+        categoryId: number,
+        teaserImageUrl: string
+    ) => {
         setState(
             "categories",
             cat => cat.type === categoryType && cat.id === categoryId,
@@ -181,65 +192,85 @@ export const CategoryProvider: ParentComponent = (props) => {
     const GPS_FILTER = "gps-filter";
     const [filter] = useCategoryFilterSettingsContext();
 
-    createEffect(on(() => filter.yearFilter, (yearFilter) => {
-        batch(() => {
-            removeFilter(YEAR_FILTER);
+    createEffect(
+        on(
+            () => filter.yearFilter,
+            yearFilter => {
+                batch(() => {
+                    removeFilter(YEAR_FILTER);
 
-            if(yearFilter !== "all") {
-                addFilter({
-                    name: YEAR_FILTER,
-                    filterFn: (c: Category) => c.year === yearFilter
+                    if (yearFilter !== "all") {
+                        addFilter({
+                            name: YEAR_FILTER,
+                            filterFn: (c: Category) => c.year === yearFilter
+                        });
+                    }
                 });
             }
-        })
-    }));
+        )
+    );
 
-    createEffect(on(() => filter.typeFilter, (typeFilter) => {
-        batch(() => {
-            removeFilter(TYPE_FILTER);
+    createEffect(
+        on(
+            () => filter.typeFilter,
+            typeFilter => {
+                batch(() => {
+                    removeFilter(TYPE_FILTER);
 
-            if(typeFilter !== "all") {
-                addFilter({
-                    name: TYPE_FILTER,
-                    filterFn: (c: Category) => c.type === typeFilter
+                    if (typeFilter !== "all") {
+                        addFilter({
+                            name: TYPE_FILTER,
+                            filterFn: (c: Category) => c.type === typeFilter
+                        });
+                    }
                 });
             }
-        });
-    }));
+        )
+    );
 
-    createEffect(on(() => filter.missingGpsFilter, (missingGpsFilter) => {
-        removeFilter(GPS_FILTER);
+    createEffect(
+        on(
+            () => filter.missingGpsFilter,
+            missingGpsFilter => {
+                removeFilter(GPS_FILTER);
 
-        if(missingGpsFilter) {
-            addFilter({
-                name: GPS_FILTER,
-                filterFn: (c: Category) => c.isMissingGpsData
-            });
-        }
-    }));
+                if (missingGpsFilter) {
+                    addFilter({
+                        name: GPS_FILTER,
+                        filterFn: (c: Category) => c.isMissingGpsData
+                    });
+                }
+            }
+        )
+    );
 
     return (
-        <CategoryContext.Provider value={[state, {
-            setInitialized,
+        <CategoryContext.Provider
+            value={[
+                state,
+                {
+                    setInitialized,
 
-            clearCategories,
-            setCategories,
-            addCategories,
-            updateCategory,
+                    clearCategories,
+                    setCategories,
+                    addCategories,
+                    updateCategory,
 
-            clearSort,
-            setSort,
+                    clearSort,
+                    setSort,
 
-            getAllYears,
-            getFilteredYears,
-            getFilteredAndSortedCategories,
-            getFilteredCategoriesForYear,
+                    getAllYears,
+                    getFilteredYears,
+                    getFilteredAndSortedCategories,
+                    getFilteredCategoriesForYear,
 
-            setActiveCategory,
-            setActiveCategoryById,
+                    setActiveCategory,
+                    setActiveCategoryById,
 
-            updateTeaser
-        }]}>
+                    updateTeaser
+                }
+            ]}
+        >
             {props.children}
         </CategoryContext.Provider>
     );

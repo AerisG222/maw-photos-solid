@@ -16,8 +16,10 @@ const Redirect: Component = () => {
     const categoryRedirect = () => {
         const cat = categoryContext.activeCategory;
 
-        if(cat) {
-            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id), { replace: true });
+        if (cat) {
+            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id), {
+                replace: true
+            });
         }
     };
 
@@ -26,7 +28,7 @@ const Redirect: Component = () => {
     };
 
     createEffect(() => {
-        switch(routeContext.area) {
+        switch (routeContext.area) {
             case AreaCategories:
                 categoryRedirect();
                 break;

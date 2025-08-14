@@ -13,7 +13,7 @@ export type MediaBreakpointState = {
 
 export const defaultMediaBreakpointState: MediaBreakpointState = {
     // sm: true,
-    md: false,
+    md: false
     // lg: false,
     // xl: false,
     // xxl: false
@@ -29,13 +29,13 @@ export type MediaBreakpointContextValue = [
 
 const MediaBreakpointContext = createContext<MediaBreakpointContextValue>();
 
-export const MediaBreakpointProvider: ParentComponent = (props) => {
+export const MediaBreakpointProvider: ParentComponent = props => {
     const [state, setState] = createStore(defaultMediaBreakpointState);
 
     // https://tailwindcss.com/docs/screens
     const breakpoints = {
         // sm: "640px",
-        md: "768px",
+        md: "768px"
         // lg: "1024px",
         // xl: "1280px",
         // xxl: "1536px"
@@ -46,7 +46,7 @@ export const MediaBreakpointProvider: ParentComponent = (props) => {
     createEffect(() => {
         setState({
             // sm: matches.sm,
-            md: matches.md,
+            md: matches.md
             // lg: matches.lg,
             // xl: matches.xl,
             // xxl: matches.xxl

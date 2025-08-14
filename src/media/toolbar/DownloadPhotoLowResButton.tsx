@@ -12,7 +12,8 @@ const DownloadPhotoLowResButton: Component = () => {
             title="High Res Download (untouched)"
             url={photoListState.activeItem?.imageSmUrl}
             iconClass="icon-[ic--round-image]"
-            textClassList={{"text-sm": true}} />
+            textClassList={{ "text-sm": true }}
+        />
     );
 };
 

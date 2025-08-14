@@ -17,23 +17,45 @@ import Treemap from "./components/Treemap";
 const ViewCombined: Component = () => {
     const [search] = useSearchParams();
     const [state, { getAllYears }] = useCategoryContext();
-    const [, { getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] = useStatContext();
+    const [, { getCombinedCount, getCombinedFileSize, getCombinedStatsChartData }] =
+        useStatContext();
     const getStats = () => getCombinedStatsChartData(getAggFuncs(search.mode).agg);
     const getFmtFunc = () => getAggFuncs(search.mode).fmt;
 
     return (
-        <Layout toolbar={
-            <Toolbar>
-                <CombinedToolbar />
-            </Toolbar>
-        }>
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <CombinedToolbar />
+                </Toolbar>
+            }
+        >
             <StatLayout>
                 <div class="my-2">
                     <StatBar>
-                        <StatBox title="Years" value={numbro(getAllYears().length).format({thousandSeparated: true})} />
-                        <StatBox title="Categories" value={numbro(state.categories.length).format({thousandSeparated: true})} />
-                        <StatBox title="Photos &amp; Videos" value={numbro(getCombinedCount()).format({thousandSeparated: true})} />
-                        <StatBox title="File Size" value={numbro(getCombinedFileSize()).format({output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true})} />
+                        <StatBox
+                            title="Years"
+                            value={numbro(getAllYears().length).format({ thousandSeparated: true })}
+                        />
+                        <StatBox
+                            title="Categories"
+                            value={numbro(state.categories.length).format({
+                                thousandSeparated: true
+                            })}
+                        />
+                        <StatBox
+                            title="Photos &amp; Videos"
+                            value={numbro(getCombinedCount()).format({ thousandSeparated: true })}
+                        />
+                        <StatBox
+                            title="File Size"
+                            value={numbro(getCombinedFileSize()).format({
+                                output: "byte",
+                                base: "decimal",
+                                mantissa: 2,
+                                spaceSeparated: true
+                            })}
+                        />
                     </StatBar>
                 </div>
                 <div class="my-2">

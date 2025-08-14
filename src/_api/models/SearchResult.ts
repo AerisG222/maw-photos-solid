@@ -4,7 +4,7 @@ export type SearchResult<T> = {
     startIndex: number;
 };
 
-export type SearchCategory  = {
+export type SearchCategory = {
     solrId: string;
     id: number;
     year: number;

@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
 
-import { useAuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from "../contexts/AuthContext";
 
 const Login: Component = () => {
     const [authState, { login }] = useAuthContext();
 
-    if(!authState.isLoggedIn) {
+    if (!authState.isLoggedIn) {
         login();
     }
 
@@ -16,10 +16,7 @@ const Login: Component = () => {
 
                 <p>Welcome to photos.mikeandwan.us</p>
 
-                <p>
-                    Please login via the popup window (and make sure the popup was not
-                    blocked).
-                </p>
+                <p>Please login via the popup window (and make sure the popup was not blocked).</p>
 
                 <p>Otherwise, please click the button below to initiate the login.</p>
 

@@ -22,7 +22,8 @@ import DownloadPhotoHighUntouchedButton from "./toolbar/DownloadPhotoHighUntouch
 import ShareButton from "./toolbar/ShareButton";
 
 const DetailToolbar: Component = () => {
-    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize}] = useMediaDetailViewSettingsContext();
+    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize }] =
+        useMediaDetailViewSettingsContext();
     const params = useParams();
 
     const onToggleBreadcrumbs = () => {
