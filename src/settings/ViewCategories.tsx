@@ -1,6 +1,5 @@
 import { Component, batch } from "solid-js";
 
-import { useCategoryFilterSettingsContext } from "../contexts/settings/CategoryFilterSettingsContext";
 import { useCategoryPageSettingsContext } from "../contexts/settings/CategoryPageSettingsContext";
 import { useCategoryGridViewSettingsContext } from "../contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
@@ -11,7 +10,6 @@ import {
     ThumbnailSizeIdType,
     allThumbnailSizes
 } from "../_models/ThumbnailSize";
-import { categoryTypesOptions } from "../_models/CategoryTypes";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
@@ -21,7 +19,6 @@ import Toggle from "../components/input/Toggle";
 import Layout from "../components/layout/Layout";
 
 const ViewCategories: Component = () => {
-    const [filterSettings, { setTypeFilter }] = useCategoryFilterSettingsContext();
     const [pageSettings, { setViewMode }] = useCategoryPageSettingsContext();
     const [
         gridSettings,
@@ -58,13 +55,6 @@ const ViewCategories: Component = () => {
         <Layout toolbar={<Toolbar />} title="Categories">
             <PanelContainer>
                 <Panel title="Category Page">
-                    <RadioGroup
-                        title="Type Filter"
-                        itemArray={categoryTypesOptions}
-                        groupName="pageTypeFilter"
-                        selectedValue={filterSettings.typeFilter}
-                        onChange={setTypeFilter}
-                    />
                     <RadioGroup
                         title="View"
                         itemArray={allCategoryViewModes}

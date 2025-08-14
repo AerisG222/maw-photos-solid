@@ -1,15 +1,16 @@
 import { Component, For, Match, Switch } from "solid-js";
 
-import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
+import { Media } from "../_models/Media";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import PhotoLink from "./photos/PhotoLink";
 import VideoLink from "./videos/VideoLink";
+import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 
 type Props = {
     items: Media[];
-    thumbnailSize: string;
+    thumbnailSize: ThumbnailSizeIdType;
     activeRoute: AppRouteDefinition;
 };
 
@@ -19,9 +20,9 @@ const MediaGrid: Component<Props> = props => {
             <For each={props.items}>
                 {(media, idx) => (
                     <Switch>
-                        <Match when={media.kind === MediaTypePhoto}>
+                        <Match when={media.type === "photo"}>
                             <PhotoLink
-                                photo={media as Photo}
+                                media={media}
                                 rounded={true}
                                 isActiveItem={false} // no need to show highlight state in grid view
                                 route={props.activeRoute}
@@ -29,9 +30,9 @@ const MediaGrid: Component<Props> = props => {
                                 eager={idx() <= EAGER_THRESHOLD}
                             />
                         </Match>
-                        <Match when={media.kind === MediaTypeVideo}>
+                        <Match when={media.type === "video"}>
                             <VideoLink
-                                video={media as Video}
+                                media={media}
                                 rounded={true}
                                 isActiveItem={false} // no need to show highlight state in grid view
                                 route={props.activeRoute}

@@ -1,4 +1,4 @@
-export type ApiGpsCoordinate = {
+export type GpsCoordinate = {
     latitude: number;
     longitude: number;
 };

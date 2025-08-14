@@ -25,7 +25,7 @@ const RatingsCard: Component = () => {
     const [ratingResource, { refetch }] = createResource(fetchRatingSignal, getRatings);
 
     const rate = async (rating: number) => {
-        await ratingContext.service.setRating(mediaList.activeItem?.id, rating);
+        await ratingContext.service.setIsFavorite(mediaList.activeItem?.id, rating);
         refetch();
     };
 

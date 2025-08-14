@@ -3,7 +3,6 @@ import { useParams } from "@solidjs/router";
 
 import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
-import { CategoryTypePhotos } from "../_models/CategoryType";
 
 import ToolbarButton from "../components/toolbar/ToolbarButton";
 import ToolbarDivider from "../components/toolbar/ToolbarDivider";
@@ -46,10 +45,9 @@ const DetailToolbar: Component = () => {
 
             <ToolbarDivider />
 
-            <Show when={params.categoryType === CategoryTypePhotos}>
-                <DownloadCategoryButton />
-                <ToolbarDivider />
-            </Show>
+            <DownloadCategoryButton />
+
+            <ToolbarDivider />
 
             <RotateCounterClockwiseButton />
             <RotateClockwiseButton />
@@ -58,14 +56,12 @@ const DetailToolbar: Component = () => {
 
             <ToolbarDivider />
 
-            <Show when={params.categoryType === CategoryTypePhotos}>
-                <DownloadPhotoLowResButton />
-                <DownloadPhotoMediumResButton />
-                <DownloadPhotoHighResButton />
-                <DownloadPhotoHighUntouchedButton />
+            <DownloadPhotoLowResButton />
+            <DownloadPhotoMediumResButton />
+            <DownloadPhotoHighResButton />
+            <DownloadPhotoHighUntouchedButton />
 
-                <ToolbarDivider />
-            </Show>
+            <ToolbarDivider />
 
             <Show when={navigator?.canShare}>
                 <ShareButton />

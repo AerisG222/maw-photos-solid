@@ -1,29 +1,26 @@
-import { setTeaser } from "../../_api/PhotoCategories";
+import { setTeaser } from "../../_api/Categories";
 import {
     addComment,
     getComments,
     getExifData,
     getGpsDetail,
-    getRating,
-    ratePhoto,
+    setIsFavorite,
     setGpsCoordinateOverride
-} from "../../_api/Photos";
-import { IRatingService } from "./IRatingService";
+} from "../../_api/Media";
+import { IFavoriteService } from "./IFavoriteService";
 import { ICommentService } from "./ICommentService";
 import { IExifService } from "./IExifService";
 import { ICategoryTeaserService } from "./ICategoryTeaserService";
 import { IMetadataEditService } from "./IMetadataEditService";
 
-export class PhotoMediaService
+export class MediaService
     implements
-        IRatingService,
-        ICommentService,
-        IExifService,
-        ICategoryTeaserService,
-        IMetadataEditService
-{
-    fetchRating = getRating;
-    setRating = ratePhoto;
+    IFavoriteService,
+    ICommentService,
+    IExifService,
+    ICategoryTeaserService,
+    IMetadataEditService {
+    setIsFavorite = setIsFavorite;
     fetchComments = getComments;
     addComment = addComment;
     fetchExif = getExifData;
@@ -32,4 +29,4 @@ export class PhotoMediaService
     setGpsCoordinateOverride = setGpsCoordinateOverride;
 }
 
-export const photoMediaService = new PhotoMediaService();
+export const mediaService = new MediaService();

@@ -1,7 +1,7 @@
 import { Component, For, Show, lazy } from "solid-js";
 
 import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
-import { Media, MediaTypePhoto } from "../../_models/Media";
+import { Media } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
 
@@ -94,7 +94,7 @@ const Sidebar: Component = () => {
             icon: "icon-[ic--round-tune]",
             shortcutKeys: ["x"],
             clickHandler: toggleExif,
-            enable: (media: Media) => media?.kind === MediaTypePhoto,
+            enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showExif,
             component: lazy(() => import("./ExifCard"))
         },

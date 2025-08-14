@@ -1,6 +1,5 @@
 import { lazy } from "solid-js";
 import { AppRouteDefinition, AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
-import { CategoryType } from "../_models/CategoryType";
 import { buildPath, routeMatch } from "../_models/utils/RouteUtils";
 
 export const MediaViewModeBulkEdit = "bulk-edit";
@@ -121,22 +120,20 @@ export const randomMediaRoutes: AppRouteDefinition = {
     children: [randomRedirectRoute, randomGridRoute, randomDetailRoute, randomFullscreenRoute]
 };
 
-export const getMediaCategoryPath = (categoryType: CategoryType, categoryId: number): string =>
-    buildPath(categoryMediaRoutes, { categoryType, categoryId });
+export const getMediaCategoryPath = (categoryId: Uuid): string =>
+    buildPath(categoryMediaRoutes, { categoryId });
 
 export const getMediaPathByView = (
     viewMode: MediaView,
-    categoryType: CategoryType,
-    categoryId: number,
-    id?: number
-): string => getMediaPath(getRouteForViewMode(viewMode), categoryType, categoryId, id);
+    categoryId: Uuid,
+    id?: Uuid
+): string => getMediaPath(getRouteForViewMode(viewMode), categoryId, id);
 
 export const getMediaPath = (
     route: AppRouteDefinition,
-    categoryType: CategoryType,
-    categoryId: number,
-    id?: number
-): string => buildPath(route, { categoryType, categoryId, id });
+    categoryId: Uuid,
+    id?: Uuid
+): string => buildPath(route, { categoryId, id });
 
 const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => {
     switch (mode) {

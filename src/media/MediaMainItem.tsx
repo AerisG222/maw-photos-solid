@@ -1,11 +1,10 @@
 import { Component, Match, Show, Switch, createEffect } from "solid-js";
 
-import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
+import { Media } from "../_models/Media";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
 import { useRouteDetailContext } from "../contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoryContext } from "../contexts/CategoryContext";
-import { CategoryTypePhotos } from "../_models/CategoryType";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../directives/Swipe";
 import { tap } from "../directives/Tap";
@@ -61,11 +60,11 @@ const MediaMainItem: Component<Props> = props => {
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}
             >
                 <Switch>
-                    <Match when={props.media.kind === MediaTypePhoto}>
-                        <MainPhoto photo={props.media as Photo} />
+                    <Match when={props.media.type === "photo"}>
+                        <MainPhoto media={props.media} />
                     </Match>
-                    <Match when={props.media.kind === MediaTypeVideo}>
-                        <MainVideo video={props.media as Video} />
+                    <Match when={props.media.type === "video"}>
+                        <MainVideo media={props.media} />
                     </Match>
                 </Switch>
             </div>

@@ -1,15 +1,14 @@
 import { Component } from "solid-js";
 
-import { Media, Photo } from "../../_models/Media";
+import { Media } from "../../_models/Media";
 import { ThumbnailSizeIdType, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { getMediaPath } from "../_routes";
-import { CategoryTypePhotos } from "../../_models/CategoryType";
 
 import MediaLink from "../MediaLink";
 
 type Props = {
-    photo: Photo;
+    media: Media;
     thumbnailSize: ThumbnailSizeIdType;
     rounded: boolean;
     isActiveItem: boolean;
@@ -27,19 +26,14 @@ const PhotoLink: Component<Props> = props => {
     /// todo: make category type dynamic
     return (
         <MediaLink
-            media={props.photo}
+            media={props.media}
             scroll={props.scroll}
-            url={getMediaPath(
-                props.route,
-                CategoryTypePhotos,
-                props.photo.categoryId,
-                props.photo.id
-            )}
+            url={getMediaPath(props.route, props.media.categoryId, props.media.id)}
             rounded={props.rounded}
             isActiveItem={props.isActiveItem}
         >
             <img
-                src={props.photo.imageXsSqUrl}
+                src={"TODO" /*props.media.imageXsSqUrl*/}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
                 classList={getClassList()}

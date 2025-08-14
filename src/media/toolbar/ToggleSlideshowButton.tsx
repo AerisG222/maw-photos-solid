@@ -2,8 +2,6 @@ import { Component, Show } from "solid-js";
 
 import { useSlideshowContext } from "../contexts/SlideshowContext";
 import { useParams } from "@solidjs/router";
-import { categoryTypes } from "../../_models/CategoryTypes";
-import { CategoryType } from "../../_models/CategoryType";
 import { Area, AreaCategories, AreaRandom } from "../../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
 
@@ -15,7 +13,7 @@ const ToggleSlideshowButton: Component = () => {
     const params = useParams();
 
     return (
-        <Show when={showSlideshowButton(routeContext.area, params.categoryType as CategoryType)}>
+        <Show when={showSlideshowButton(routeContext.area)}>
             <ToolbarButton
                 icon={state.isPlaying ? "icon-[ic--round-stop" : "i-ic-round-play-arrow]"}
                 name="Start / Stop Slideshow"
@@ -28,10 +26,10 @@ const ToggleSlideshowButton: Component = () => {
 
 export default ToggleSlideshowButton;
 
-export const showSlideshowButton = (area: Area, categoryType?: CategoryType) => {
+export const showSlideshowButton = (area: Area) => {
     switch (area) {
         case AreaCategories:
-            return categoryType ? categoryTypes[categoryType].slideshowAvailable : false;
+            return true; //categoryType ? categoryTypes[categoryType].slideshowAvailable : false;
         case AreaRandom:
             return true;
         default:

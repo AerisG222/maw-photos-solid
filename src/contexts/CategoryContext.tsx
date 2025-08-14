@@ -10,9 +10,9 @@ import {
 import { createStore, reconcile } from "solid-js/store";
 
 import { Category } from "../_models/Category";
-import { CategoryType } from "../_models/CategoryType";
 import { FilterFunction, SortFunction } from "../_models/UtilityTypes";
 import { useCategoryFilterSettingsContext } from "./settings/CategoryFilterSettingsContext";
+import { Media } from "../_models/Media";
 
 export type CategoryState = {
     readonly initialized: boolean;
@@ -24,7 +24,7 @@ export type CategoryState = {
 
 const sortByIdDesc = {
     name: "sortByIdDesc",
-    sortFn: (a: Category, b: Category) => b.id - a.id
+    sortFn: (a: Category, b: Category) => b.effectiveDate.getTime() - a.effectiveDate.getTime()
 };
 
 export const defaultCategoryState: CategoryState = {
@@ -55,13 +55,9 @@ export type CategoryContextValue = [
         getFilteredCategoriesForYear: (year: number) => Category[];
 
         setActiveCategory: (category: Category) => void;
-        setActiveCategoryById: (categoryType: CategoryType, categoryId: number) => void;
+        setActiveCategoryById: (categoryId: Uuid) => void;
 
-        updateTeaser: (
-            categoryType: CategoryType,
-            categoryId: number,
-            teaserImageUrl: string
-        ) => void;
+        updateTeaser: (categoryId: Uuid, media: Media) => void;
     }
 ];
 
@@ -90,11 +86,7 @@ export const CategoryProvider: ParentComponent = props => {
 
     const updateCategory = (category: Category) => {
         if (category) {
-            setState(
-                "categories",
-                cat => cat.id === category.id && cat.type === category.type,
-                reconcile(category)
-            );
+            setState("categories", cat => cat.id === category.id, reconcile(category));
         }
     };
 
@@ -123,7 +115,7 @@ export const CategoryProvider: ParentComponent = props => {
     };
 
     const getAllYears = createMemo(() =>
-        [...new Set(state.categories.map(c => c.year))].sort().reverse()
+        [...new Set(state.categories.map(c => c.effectiveDate.getFullYear()))].sort().reverse()
     );
 
     const getFilteredCategories = createMemo(() => {
@@ -158,33 +150,26 @@ export const CategoryProvider: ParentComponent = props => {
     });
 
     const getFilteredYears = createMemo(() =>
-        [...new Set(getFilteredCategories().map(c => c.year))].sort().reverse()
+        [...new Set(getFilteredCategories().map(c => c.effectiveDate.getFullYear()))]
+            .sort()
+            .reverse()
     );
 
     const getFilteredCategoriesForYear = (year: number) =>
-        getFilteredAndSortedCategories().filter(c => c.year === year);
+        getFilteredAndSortedCategories().filter(c => c.effectiveDate.getFullYear() === year);
 
-    const setActiveCategory = (category: Category) => {
+    const setActiveCategory = (category: Category | undefined) => {
         setState({ activeCategory: category });
     };
 
-    const setActiveCategoryById = (categoryType: CategoryType, categoryId: number) => {
-        const cat = state.categories.find(c => c.type === categoryType && c.id === categoryId);
+    const setActiveCategoryById = (categoryId: Uuid) => {
+        const cat = state.categories.find(c => c.id === categoryId);
 
         setActiveCategory(cat);
     };
 
-    const updateTeaser = (
-        categoryType: CategoryType,
-        categoryId: number,
-        teaserImageUrl: string
-    ) => {
-        setState(
-            "categories",
-            cat => cat.type === categoryType && cat.id === categoryId,
-            "teaserImageUrl",
-            teaserImageUrl
-        );
+    const updateTeaser = (categoryId: Uuid, media: Media) => {
+        setState("categories", cat => cat.id === categoryId, "teaser", media);
     };
 
     const YEAR_FILTER = "YearFilter_Year";
@@ -202,7 +187,7 @@ export const CategoryProvider: ParentComponent = props => {
                     if (yearFilter !== "all") {
                         addFilter({
                             name: YEAR_FILTER,
-                            filterFn: (c: Category) => c.year === yearFilter
+                            filterFn: (c: Category) => c.effectiveDate.getFullYear() === yearFilter
                         });
                     }
                 });
@@ -220,7 +205,7 @@ export const CategoryProvider: ParentComponent = props => {
                     if (typeFilter !== "all") {
                         addFilter({
                             name: TYPE_FILTER,
-                            filterFn: (c: Category) => c.type === typeFilter
+                            filterFn: (c: Category) => c.effectiveDate.getFullYear() === typeFilter
                         });
                     }
                 });
@@ -235,10 +220,10 @@ export const CategoryProvider: ParentComponent = props => {
                 removeFilter(GPS_FILTER);
 
                 if (missingGpsFilter) {
-                    addFilter({
-                        name: GPS_FILTER,
-                        filterFn: (c: Category) => c.isMissingGpsData
-                    });
+                    // addFilter({
+                    //     name: GPS_FILTER,
+                    //     filterFn: (c: Category) => c.isMissingGpsData
+                    // });
                 }
             }
         )

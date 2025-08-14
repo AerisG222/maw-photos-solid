@@ -40,13 +40,13 @@ export type MediaListContextValue = [
         setActiveRouteDefinition: (def: AppRouteDefinition) => void;
         setItems: (media: Media[]) => void;
         addItems: (media: Media[]) => void;
-        setActiveItem: (id: number) => void;
+        setActiveItem: (id: Uuid) => void;
         setMediaElement: (el: HTMLImageElement | HTMLVideoElement) => void;
         activeItemIsFirst: () => boolean;
         activeItemIsLast: () => boolean;
         getNextItem: () => Media | undefined;
         getPreviousItem: () => Media | undefined;
-        setGpsOverride: (id: number, coord: GpsCoordinate) => void;
+        setGpsOverride: (id: Uuid, coord: GpsCoordinate) => void;
         moveFirst: () => void;
         moveNext: () => void;
         movePrevious: () => void;
@@ -93,7 +93,7 @@ export const MediaListProvider: ParentComponent = props => {
         }
     };
 
-    const setActiveItem = (id: number | undefined) => {
+    const setActiveItem = (id: Uuid | undefined) => {
         if (id) {
             const idx = state.items.findIndex(x => x.id === id);
 
@@ -204,7 +204,7 @@ export const MediaListProvider: ParentComponent = props => {
         }
     };
 
-    const setGpsOverride = (id: number, coord: GpsCoordinate) => {
+    const setGpsOverride = (id: Uuid, coord: GpsCoordinate) => {
         const idx = state.items.findIndex(p => p.id === id);
 
         setState("items", idx, {

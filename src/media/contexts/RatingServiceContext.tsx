@@ -1,9 +1,9 @@
 import { useContext } from "solid-js";
 
 import { buildServiceContext } from "../../_models/utils/ServiceContextUtil";
-import { IRatingService } from "../../_services/media/IRatingService";
+import { IFavoriteService } from "../../_services/media/IFavoriteService";
 
 export const { ServiceContext: RatingServiceContext, ServiceProvider: RatingServiceProvider } =
-    buildServiceContext<IRatingService>();
+    buildServiceContext<IFavoriteService>();
 
 export const useRatingServiceContext = () => useContext(RatingServiceContext);

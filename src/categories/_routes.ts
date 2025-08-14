@@ -1,8 +1,6 @@
 import { lazy } from "solid-js";
 import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
 import { equalsIgnoreCase } from "../_models/utils/StringUtils";
-import { CategoryType } from "../_models/CategoryType";
-import { categoryTypes } from "../_models/CategoryTypes";
 import { routeMatch } from "../_models/utils/RouteUtils";
 
 const basePath = "/categories";
@@ -48,9 +46,9 @@ export const getRouteForViewMode = (mode: string) => {
     return categoriesGrid;
 };
 
-export const buildSearch = (year?: number, type?: CategoryType) => {
-    return { year: year, type: type };
+export const buildSearch = (year?: number) => {
+    return { year: year };
 };
 
-export const getCategoryPath = (categoryType: CategoryType, categoryId: number) =>
-    `${basePath}/${categoryTypes[categoryType].routeSlug}/${categoryId}`;
+export const getCategoryPath = (categoryId: Uuid) =>
+    `${basePath}/${categoryId}`;

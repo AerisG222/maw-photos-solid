@@ -1,3 +1,3 @@
 export interface ICategoryTeaserService {
-    setTeaser: (categoryId: number, id: number) => Promise<Response>;
+    setTeaser: (categoryId: Uuid, id: Uuid) => Promise<Response | undefined>;
 }

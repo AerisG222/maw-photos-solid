@@ -2,7 +2,7 @@ import { Component, For, Match, Switch, createEffect, createSignal } from "solid
 
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
-import { Media, MediaTypePhoto, MediaTypeVideo, Photo, Video } from "../_models/Media";
+import { Media } from "../_models/Media";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
@@ -44,24 +44,24 @@ const MediaList: Component<Props> = props => {
             <For each={mediaList.items}>
                 {(media, idx) => (
                     <Switch>
-                        <Match when={media.kind === MediaTypePhoto}>
+                        <Match when={media.type === "photo"}>
                             <PhotoLink
-                                photo={media as Photo}
+                                media={media}
                                 rounded={false}
                                 thumbnailSize={props.thumbnailSize}
                                 isActiveItem={mediaList.activeItem?.id === media.id}
-                                route={props.activeRoute}
+                                route={props.activeRoute!}
                                 scroll={scroll}
                                 eager={idx() <= EAGER_THRESHOLD}
                             />
                         </Match>
-                        <Match when={media.kind === MediaTypeVideo}>
+                        <Match when={media.type === "video"}>
                             <VideoLink
-                                video={media as Video}
+                                media={media}
                                 rounded={false}
                                 thumbnailSize={props.thumbnailSize}
                                 isActiveItem={mediaList.activeItem?.id === media.id}
-                                route={props.activeRoute}
+                                route={props.activeRoute!}
                                 scroll={scroll}
                                 eager={idx() <= EAGER_THRESHOLD}
                             />

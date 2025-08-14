@@ -1,10 +1,8 @@
 import { ParentComponent, children, createEffect, onCleanup } from "solid-js";
 
 import { useCategoryContext } from "../contexts/CategoryContext";
-import { CategoryType, CategoryTypePhotos, CategoryTypeVideos } from "../_models/CategoryType";
 import { useCategoryTeaserServiceContext } from "./contexts/CategoryTeaserServiceContext";
-import { photoMediaService } from "../_services/media/PhotoMediaService";
-import { videoMediaService } from "../_services/media/VideoMediaService";
+import { mediaService } from "../_services/media/MediaService";
 import { useParams } from "@solidjs/router";
 
 const ActiveCategoryMonitor: ParentComponent = props => {
@@ -14,24 +12,12 @@ const ActiveCategoryMonitor: ParentComponent = props => {
     const params = useParams();
 
     createEffect(() => {
-        if (params.categoryType && params.categoryId) {
-            setActiveCategoryById(
-                params.categoryType as CategoryType,
-                parseInt(params.categoryId, 10)
-            );
+        if (params.categoryId) {
+            setActiveCategoryById(params.categoryId);
         }
     });
 
-    createEffect(() => {
-        switch (categoryContext.activeCategory?.type) {
-            case CategoryTypePhotos:
-                setCategoryTeaserService(photoMediaService);
-                break;
-            case CategoryTypeVideos:
-                setCategoryTeaserService(videoMediaService);
-                break;
-        }
-    });
+    setCategoryTeaserService(mediaService);
 
     onCleanup(() => {
         setActiveCategory(undefined);

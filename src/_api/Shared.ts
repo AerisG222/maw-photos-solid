@@ -31,5 +31,5 @@ const callMawApi = async (method: string, relativeUrl: string, content: any) => 
         referrerPolicy: "no-referrer"
     }).catch(err => console.log(err));
 
-    return await response;
+    return await response ?? undefined;
 };

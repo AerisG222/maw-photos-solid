@@ -1,17 +1,17 @@
 import { Component, createSignal, onMount } from "solid-js";
 
-import { Video } from "../../_models/Media";
+import { Media } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
 
 type Props = {
-    video: Video;
+    media: Media;
 };
 
 const MainVideo: Component<Props> = props => {
     const [useLarge, setUseLarge] = createSignal(true);
     const [, { setMediaElement }] = useMediaListContext();
 
-    const getVideoUrl = (video: Video) => (useLarge() ? video.videoFullUrl : video.videoScaledUrl);
+    const getVideoUrl = (video: Media) => "TODO"; //(useLarge() ? video.videoFullUrl : video.videoScaledUrl);
 
     onMount(() => {
         setUseLarge(document.body.clientWidth >= 1500);
@@ -23,7 +23,7 @@ const MainVideo: Component<Props> = props => {
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls
-            src={getVideoUrl(props.video)}
+            src={getVideoUrl(props.media)}
             ref={el => setMediaElement(el)}
         />
     );

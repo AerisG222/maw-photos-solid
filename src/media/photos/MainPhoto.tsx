@@ -1,31 +1,31 @@
 import { Component } from "solid-js";
 
-import { Photo } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
+import { Media } from "../../_models/Media";
 
 type Props = {
-    photo: Photo;
+    media: Media;
 };
 
 const MainPhoto: Component<Props> = props => {
     const [, { setMediaElement }] = useMediaListContext();
 
     const getSrcset = () => {
-        const set = [];
+        const set: string[] = [];
 
-        if (props.photo) {
-            set.push(`${props.photo.imageXsUrl} ${props.photo.imageXsWidth}w`);
-            set.push(`${props.photo.imageSmUrl} ${props.photo.imageSmWidth}w`);
-            set.push(`${props.photo.imageMdUrl} ${props.photo.imageMdWidth}w`);
-            set.push(`${props.photo.imageLgUrl} ${props.photo.imageLgWidth}w`);
-        }
+        // if (props.media) {
+        //     set.push(`${props.media.imageXsUrl} ${props.media.imageXsWidth}w`);
+        //     set.push(`${props.media.imageSmUrl} ${props.media.imageSmWidth}w`);
+        //     set.push(`${props.media.imageMdUrl} ${props.media.imageMdWidth}w`);
+        //     set.push(`${props.media.imageLgUrl} ${props.media.imageLgWidth}w`);
+        // }
 
         return set.join(", ");
     };
 
     return (
         <img
-            src={props.photo?.imageMdUrl}
+            src={"TODO" /*props.media?.imageMdUrl*/}
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
             class="h-100% w-100% max-h-100vh max-w-100% object-contain"
             srcset={getSrcset()}

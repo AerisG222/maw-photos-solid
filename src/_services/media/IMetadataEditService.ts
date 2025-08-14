@@ -1,6 +1,7 @@
-import { GpsCoordinate, GpsDetail } from "../../_models/Gps";
+import { GpsCoordinate } from '../../_models/GpsCoordinate';
+import { GpsDetail } from '../../_models/GpsDetail';
 
 export interface IMetadataEditService {
-    fetchGpsDetail: (id: number) => Promise<GpsDetail>;
-    setGpsCoordinateOverride: (id: number, gps: GpsCoordinate) => Promise<Response>;
+    fetchGpsDetail: (id: Uuid) => Promise<GpsDetail | undefined>;
+    setGpsCoordinateOverride: (id: Uuid, gps: GpsCoordinate) => Promise<Response | undefined>;
 }

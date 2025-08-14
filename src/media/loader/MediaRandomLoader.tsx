@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { getRandomPhotos } from "../../_api/Photos";
+import { getRandomMedia } from "../../_api/Media";
 import { useMediaPageSettingsContext } from "../../contexts/settings/MediaPageSettingsContext";
 
 const MediaRandomLoader: ParentComponent = props => {
@@ -19,7 +19,7 @@ const MediaRandomLoader: ParentComponent = props => {
     const c = children(() => props.children);
     let intervalId = -1;
 
-    const fetchRandomMedia = trigger => getRandomPhotos(trigger.count);
+    const fetchRandomMedia = trigger => getRandomMedia(trigger.count);
 
     const [randomResource] = createResource(fetchTrigger, fetchRandomMedia);
 

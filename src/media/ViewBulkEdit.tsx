@@ -2,22 +2,13 @@ import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
-import {
-    Media,
-    MediaTypePhoto,
-    MediaTypeVideo,
-    MediaTypes,
-    getMediaTeaserUrl
-} from "../_models/Media";
+import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/Gps";
 import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
-import { CategoryType } from "../_models/CategoryType";
-import { IMetadataEditService } from "../_services/media/IMetadataEditService";
-import { photoMediaService } from "../_services/media/PhotoMediaService";
-import { videoMediaService } from "../_services/media/VideoMediaService";
+import { mediaService } from "../_services/media/MediaService";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
 import { useCategoryContext } from "../contexts/CategoryContext";
-import { getCategoryService } from "../_services/categories/CategoryServiceLocator";
+import { categoryService } from "../_services/categories/CategoryService";
 
 import Toolbar from "./Toolbar";
 import Layout from "../components/layout/Layout";
@@ -26,8 +17,7 @@ import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../components/auth/AdminGuard";
 
 type SelectableMedia = {
-    id: number;
-    kind: MediaTypes;
+    id: Uuid;
     isSelected: boolean;
     imageUrl: string;
     latitude?: number;
@@ -40,16 +30,16 @@ const ViewBulkEdit: Component = () => {
     const [mediaList, { setActiveRouteDefinition, setGpsOverride }] = useMediaListContext();
     const [categoryState, { updateCategory }] = useCategoryContext();
     const params = useParams();
-    const categoryId = parseInt(params.categoryId);
+    const categoryId = params.categoryId as Uuid;
 
     setActiveRouteDefinition(categoryBulkEditRoute);
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
-        kind: media.kind,
-        imageUrl: getMediaTeaserUrl(media),
-        latitude: media.latitude,
-        longitude: media.longitude,
+        kind: "kind",
+        imageUrl: "todo", //getMediaTeaserUrl(media),
+        latitude: 0, //media.latitude,
+        longitude: 0, //media.longitude,
         isSelected: false
     });
 
@@ -61,24 +51,9 @@ const ViewBulkEdit: Component = () => {
         setAll(false);
 
         for (const media of mediaToUpdate) {
-            let svc: IMetadataEditService = undefined;
-
-            switch (media.kind) {
-                case MediaTypePhoto:
-                    svc = photoMediaService;
-                    break;
-                case MediaTypeVideo:
-                    svc = videoMediaService;
-                    break;
-            }
-
-            if (svc) {
-                await svc.setGpsCoordinateOverride(media.id, gps);
-                setGpsOverride(media.id, gps);
-            }
+            await mediaService.setGpsCoordinateOverride(media.id, gps);
+            setGpsOverride(media.id, gps);
         }
-
-        const categoryService = getCategoryService(categoryState.activeCategory.type);
 
         if (categoryService && categoryState.activeCategory) {
             var category = await categoryService.loadSingle(categoryState.activeCategory.id);
@@ -121,13 +96,7 @@ const ViewBulkEdit: Component = () => {
     });
 
     return (
-        <AdminGuard
-            redirectRoute={getMediaPathByView(
-                MediaViewModeGrid,
-                params.categoryType as CategoryType,
-                categoryId
-            )}
-        >
+        <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, categoryId)}>
             <Show when={mediaList.activeRouteDefinition}>
                 <Layout
                     toolbar={<Toolbar />}

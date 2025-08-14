@@ -2,9 +2,7 @@ import { ParentComponent, batch, children, createEffect, onCleanup } from "solid
 import { useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { MediaTypePhoto, MediaTypeVideo } from "../_models/Media";
-import { photoMediaService } from "../_services/media/PhotoMediaService";
-import { videoMediaService } from "../_services/media/VideoMediaService";
+import { mediaService } from "../_services/media/MediaService";
 import { useRatingServiceContext } from "./contexts/RatingServiceContext";
 import { useExifServiceContext } from "./contexts/ExifServiceContext";
 import { useCommentServiceContext } from "./contexts/CommentServiceContext";
@@ -20,31 +18,17 @@ const ActiveMediaMonitor: ParentComponent = props => {
 
     const c = children(() => props.children);
 
+    setRatingService(mediaService);
+    setCommentService(mediaService);
+    setExifService(mediaService);
+    setMetadataEditService(mediaService);
+
     // note: wanted to simply put this in the top level category, but we need this to be defined
     // in an element/component that is a child of the mediaListContext...
     createEffect(() => {
         if (mediaList.items && mediaList.items.length > 0) {
             setActiveItem(params.id ? parseInt(params.id, 10) : undefined);
         }
-    });
-
-    createEffect(() => {
-        batch(() => {
-            switch (mediaList.activeItem?.kind) {
-                case MediaTypePhoto:
-                    setRatingService(photoMediaService);
-                    setCommentService(photoMediaService);
-                    setExifService(photoMediaService);
-                    setMetadataEditService(photoMediaService);
-                    break;
-                case MediaTypeVideo:
-                    setRatingService(videoMediaService);
-                    setCommentService(videoMediaService);
-                    setMetadataEditService(videoMediaService);
-                    setExifService(undefined);
-                    break;
-            }
-        });
     });
 
     onCleanup(() => {

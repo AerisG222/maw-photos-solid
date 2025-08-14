@@ -1,11 +1,10 @@
 import { Component, Show } from "solid-js";
 
 import { useMediaBreakpointContext } from "../../contexts/MediaBreakpointContext";
+import { useAuthContext } from "../../contexts/AuthContext";
 
-import CategoryTypeFilter from "./CategoryTypeFilter";
 import YearFilter from "./YearFilter";
 import MissingGpsFilter from "./MissingGpsFilter";
-import { useAuthContext } from "../../contexts/AuthContext";
 
 const CategoryFilterBar: Component = () => {
     const [, { isAdmin }] = useAuthContext();
@@ -18,7 +17,6 @@ const CategoryFilterBar: Component = () => {
                     md:flex-row md:gap-8 md:justify-center md:mt-0"
         >
             <YearFilter horizontal={ltMd()} />
-            <CategoryTypeFilter horizontal={ltMd()} />
 
             <Show when={isAdmin()}>
                 <MissingGpsFilter horizontal={ltMd()} />
