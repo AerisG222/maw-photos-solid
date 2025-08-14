@@ -15,11 +15,12 @@ import { IMetadataEditService } from "./IMetadataEditService";
 
 export class MediaService
     implements
-    IFavoriteService,
-    ICommentService,
-    IExifService,
-    ICategoryTeaserService,
-    IMetadataEditService {
+        IFavoriteService,
+        ICommentService,
+        IExifService,
+        ICategoryTeaserService,
+        IMetadataEditService
+{
     setIsFavorite = setIsFavorite;
     fetchComments = getComments;
     addComment = addComment;

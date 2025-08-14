@@ -50,5 +50,4 @@ export const buildSearch = (year?: number) => {
     return { year: year };
 };
 
-export const getCategoryPath = (categoryId: Uuid) =>
-    `${basePath}/${categoryId}`;
+export const getCategoryPath = (categoryId: Uuid) => `${basePath}/${categoryId}`;

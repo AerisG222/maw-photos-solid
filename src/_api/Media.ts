@@ -1,10 +1,11 @@
 import { patchMawApi, postMawApi, queryMawApi } from "./Shared";
 import { Comment } from "../_models/Comment";
 import { Media } from "../_models/Media";
-import { GpsDetail } from '../_models/GpsDetail';
-import { GpsCoordinate } from '../_models/GpsCoordinate';
+import { GpsDetail } from "../_models/GpsDetail";
+import { GpsCoordinate } from "../_models/GpsCoordinate";
 
-export const getRandomMedia = async (count: number): Promise<Media[]> => await internalGetRandomMedia(count);
+export const getRandomMedia = async (count: number): Promise<Media[]> =>
+    await internalGetRandomMedia(count);
 
 export const getExifData = (mediaId: Uuid) => queryMawApi<object>(`media/${mediaId}/metadata`);
 

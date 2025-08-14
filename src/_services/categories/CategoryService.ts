@@ -1,12 +1,7 @@
-import {
-    getCategories,
-    getCategory,
-    getMedia,
-    setTeaser
-} from "../../_api/Categories";
+import { getCategories, getCategory, getMedia, setTeaser } from "../../_api/Categories";
 import { ICategoryService } from "./ICategoryService";
 import { Media } from "../../_models/Media";
-import { Category } from '../../_models/Category';
+import { Category } from "../../_models/Category";
 
 export class CategoryService implements ICategoryService {
     async load(): Promise<Category[]> {

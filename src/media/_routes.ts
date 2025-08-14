@@ -123,17 +123,11 @@ export const randomMediaRoutes: AppRouteDefinition = {
 export const getMediaCategoryPath = (categoryId: Uuid): string =>
     buildPath(categoryMediaRoutes, { categoryId });
 
-export const getMediaPathByView = (
-    viewMode: MediaView,
-    categoryId: Uuid,
-    id?: Uuid
-): string => getMediaPath(getRouteForViewMode(viewMode), categoryId, id);
+export const getMediaPathByView = (viewMode: MediaView, categoryId: Uuid, id?: Uuid): string =>
+    getMediaPath(getRouteForViewMode(viewMode), categoryId, id);
 
-export const getMediaPath = (
-    route: AppRouteDefinition,
-    categoryId: Uuid,
-    id?: Uuid
-): string => buildPath(route, { categoryId, id });
+export const getMediaPath = (route: AppRouteDefinition, categoryId: Uuid, id?: Uuid): string =>
+    buildPath(route, { categoryId, id });
 
 const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => {
     switch (mode) {

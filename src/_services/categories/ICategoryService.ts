@@ -1,4 +1,4 @@
-import { Category } from '../../_models/Category';
+import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 
 export interface ICategoryService {
