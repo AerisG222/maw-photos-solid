@@ -1,20 +1,17 @@
 import { patchMawApi, queryMawApi } from "./Shared";
-import { Category } from '../_models/Category';
+import { Category } from "../_models/Category";
 import { Media } from "../_models/Media";
 
-export const getCategories = async (): Promise<Category[]> => await internalGetCategories();
+export const getYears = async (): Promise<number[]> =>
+    (await queryMawApi<number[]>("categories/years")) ?? [];
 
-export const getCategory = async (categoryId: Uuid): Promise<Category | undefined> => await internalGetCategory(categoryId);
-
-export const getMedia = async (categoryId: Uuid): Promise<Media[]> => await internalGetMedia(categoryId);
-
-const internalGetCategories = async () =>
+export const getCategories = async (): Promise<Category[]> =>
     (await queryMawApi<Category[]>("categories")) ?? [];
 
-const internalGetCategory = (categoryId: Uuid) =>
+export const getCategory = async (categoryId: Uuid): Promise<Category | undefined> =>
     queryMawApi<Category>(`categories/${categoryId}`);
 
-const internalGetMedia = async (categoryId: Uuid) =>
+export const getMedia = async (categoryId: Uuid): Promise<Media[]> =>
     (await queryMawApi<Media[]>(`categories/${categoryId}/media`)) ?? [];
 
 export const setTeaser = (categoryId: Uuid, mediaId: Uuid) =>
