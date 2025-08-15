@@ -1,8 +1,8 @@
 import { ParentComponent, Show, children } from "solid-js";
 
-import { useCategoryContext } from "../contexts/CategoryContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
+import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import {
     MediaViewModeBulkEdit,
     MediaViewModeDetail,
@@ -18,14 +18,14 @@ import {
     randomFullscreenRoute,
     randomGridRoute
 } from "./_routes";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
-import { useMediaBreakpointContext } from "../contexts/MediaBreakpointContext";
-import { useAuthContext } from "../contexts/AuthContext";
+import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
+import { useAuthContext } from "../_contexts/AuthContext";
 
-import ToolbarDivider from "../components/toolbar/ToolbarDivider";
-import ToolbarLayout from "../components/toolbar/ToolbarLayout";
-import ToolbarLink from "../components/toolbar/ToolbarLink";
+import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
+import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
+import ToolbarLink from "../_components/toolbar/ToolbarLink";
 
 const Toolbar: ParentComponent = props => {
     const [, { isAdmin }] = useAuthContext();

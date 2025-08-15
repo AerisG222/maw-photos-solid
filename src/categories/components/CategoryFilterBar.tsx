@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js";
 
-import { useMediaBreakpointContext } from "../../contexts/MediaBreakpointContext";
-import { useAuthContext } from "../../contexts/AuthContext";
+import { useMediaBreakpointContext } from "../../_contexts/MediaBreakpointContext";
+import { useAuthContext } from "../../_contexts/AuthContext";
 
 import YearFilter from "./YearFilter";
 import MissingGpsFilter from "./MissingGpsFilter";

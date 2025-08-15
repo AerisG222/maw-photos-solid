@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 
-import ToolbarButton from "../../components/toolbar/ToolbarButton";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 const MovePreviousButton: Component = () => {
     const [, { activeItemIsFirst, movePrevious }] = useMediaListContext();

@@ -1,6 +1,6 @@
 import { ParentComponent, children, createEffect } from "solid-js";
 import { useIsRouting, useLocation, useNavigate } from "@solidjs/router";
-import { useAuthContext } from "../../contexts/AuthContext";
+import { useAuthContext } from "../../_contexts/AuthContext";
 
 const AuthGuard: ParentComponent = props => {
     const [authContext] = useAuthContext();

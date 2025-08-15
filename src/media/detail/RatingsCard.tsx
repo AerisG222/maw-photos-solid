@@ -3,7 +3,7 @@ import { Component, createEffect, createResource, createSignal } from "solid-js"
 import { useRatingServiceContext } from "../contexts/RatingServiceContext";
 import { useMediaListContext } from "../contexts/MediaListContext";
 
-import Rating from "../../components/rating/Rating";
+import Rating from "../../_components/rating/Rating";
 
 const RatingsCard: Component = () => {
     const [mediaList] = useMediaListContext();

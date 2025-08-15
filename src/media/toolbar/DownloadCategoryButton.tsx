@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-import { useCategoryContext } from "../../contexts/CategoryContext";
+import { useCategoryContext } from "../../_contexts/CategoryContext";
 
-import ToolbarExternalLink from "../../components/toolbar/ToolbarExternalLink";
+import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
 const DownloadCategoryButton: Component = () => {
     const [categoryState] = useCategoryContext();

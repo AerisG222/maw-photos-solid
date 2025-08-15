@@ -1,8 +1,8 @@
 import { Component, batch } from "solid-js";
 
-import { useCategoryPageSettingsContext } from "../contexts/settings/CategoryPageSettingsContext";
-import { useCategoryGridViewSettingsContext } from "../contexts/settings/CategoryGridViewSettingsContext";
-import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
+import { useCategoryPageSettingsContext } from "../_contexts/settings/CategoryPageSettingsContext";
+import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
+import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 import { allMargins } from "../_models/Margin";
 import {
@@ -13,10 +13,10 @@ import {
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
-import RadioGroup from "../components/input/RadioGroup";
+import RadioGroup from "../_components/input/RadioGroup";
 import Toolbar from "./Toolbar";
-import Toggle from "../components/input/Toggle";
-import Layout from "../components/layout/Layout";
+import Toggle from "../_components/input/Toggle";
+import Layout from "../_components/layout/Layout";
 
 const ViewCategories: Component = () => {
     const [pageSettings, { setViewMode }] = useCategoryPageSettingsContext();

@@ -1,10 +1,10 @@
 import { Component, createEffect } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 
-import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
+import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { MediaView, getMediaPathByView } from "./_routes";
-import { useCategoryContext } from "../contexts/CategoryContext";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 
 const Redirect: Component = () => {

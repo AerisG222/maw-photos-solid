@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { useAuthContext } from "../contexts/AuthContext";
+import { useAuthContext } from "../_contexts/AuthContext";
 
 const Login: Component = () => {
     const [authState, { login }] = useAuthContext();

@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import ToolbarDivider from "../components/toolbar/ToolbarDivider";
+import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";

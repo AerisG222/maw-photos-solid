@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 
-import ToolbarExternalLink from "../../components/toolbar/ToolbarExternalLink";
+import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
 const DownloadPhotoHighResButton: Component = () => {
     const [photoListState] = useMediaListContext();

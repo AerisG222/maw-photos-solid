@@ -1,14 +1,14 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
-import { useFullscreenContext } from "../contexts/FullscreenContext";
+import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { categoryFullscreenRoute, randomFullscreenRoute } from "./_routes";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 import MediaMainItem from "./MediaMainItem";
 import MediaSelectedGuard from "./MediaSelectedGuard";
 

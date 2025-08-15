@@ -2,12 +2,12 @@ import { Component, Match, Show, Switch, createEffect } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
-import { useCategoryContext } from "../contexts/CategoryContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../directives/Swipe";
-import { tap } from "../directives/Tap";
+import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
+import { tap } from "../_directives/Tap";
 
 false && swipe;
 false && tap;

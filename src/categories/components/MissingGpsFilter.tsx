@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 
-import Checkbox from "../../components/input/Checkbox";
-import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
+import Checkbox from "../../_components/input/Checkbox";
+import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
 type Props = {
     horizontal: boolean;

@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
-import ToolbarButton from "../components/toolbar/ToolbarButton";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const PhotosToolbar: Component = () => {
     const [search, setSearchParams] = useSearchParams();

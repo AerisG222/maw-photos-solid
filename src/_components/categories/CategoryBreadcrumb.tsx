@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { useCategoryContext } from "../../contexts/CategoryContext";
+import { useCategoryContext } from "../../_contexts/CategoryContext";
 
 type Props = {
     showTitleAsLink?: boolean;

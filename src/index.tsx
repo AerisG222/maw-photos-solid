@@ -3,7 +3,7 @@ import { Router } from "@solidjs/router";
 
 import { appRoutes } from "./routes";
 
-import AppContext from "./components/app-context/AppContext";
+import AppContext from "./_components/app-context/AppContext";
 
 import "./index.css";
 import App from "./App";

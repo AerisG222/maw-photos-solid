@@ -2,12 +2,12 @@ import { Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import numbro from "numbro";
 
-import { useCategoryContext } from "../contexts/CategoryContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
 import { getAggFuncs } from "./_funcs";
 import { useStatContext } from "./contexts/StatContext";
 
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 import StatBar from "./components/StatBar";
 import StatBox from "./components/StatBox";
 import CombinedToolbar from "./ToolbarCombined";

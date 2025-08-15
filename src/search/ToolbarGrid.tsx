@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { useSearchGridViewSettingsContext } from "../contexts/settings/SearchGridViewSettingsContext";
+import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { defaultGridThumbnailSize, getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { getNextMarginSize } from "../_models/Margin";
 
-import ToolbarButton from "../components/toolbar/ToolbarButton";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
     const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] =

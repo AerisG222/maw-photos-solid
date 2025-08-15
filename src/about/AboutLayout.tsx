@@ -1,7 +1,7 @@
 import { ParentComponent } from "solid-js";
 
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 
 const AboutLayout: ParentComponent = props => {
     return (

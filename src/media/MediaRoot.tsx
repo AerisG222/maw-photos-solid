@@ -9,7 +9,7 @@ import { ExifServiceProvider } from "./contexts/ExifServiceContext";
 import { MetadataEditServiceProvider } from "./contexts/MetadataEditServiceContext";
 import { RatingServiceProvider } from "./contexts/RatingServiceContext";
 
-import AuthGuard from "../components/auth/AuthGuard";
+import AuthGuard from "../_components/auth/AuthGuard";
 import MediaLoader from "./MediaLoader";
 import ActiveMediaMonitor from "./ActiveMediaMonitor";
 import ActiveCategoryMonitor from "./ActiveCategoryMonitor";

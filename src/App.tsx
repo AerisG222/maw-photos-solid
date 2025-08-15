@@ -1,9 +1,9 @@
 import { ParentComponent, Show } from "solid-js";
 
-import { useFullscreenContext } from "./contexts/FullscreenContext";
+import { useFullscreenContext } from "./_contexts/FullscreenContext";
 
-import PrimaryNav from "./components/primary-nav/PrimaryNav";
-import ShortcutDialog from "./components/shortcuts/ShortcutDialog";
+import PrimaryNav from "./_components/primary-nav/PrimaryNav";
+import ShortcutDialog from "./_components/shortcuts/ShortcutDialog";
 
 const App: ParentComponent = props => {
     const [fullscreen] = useFullscreenContext();

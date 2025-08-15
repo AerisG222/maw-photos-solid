@@ -1,17 +1,17 @@
 import { Component, Show, createEffect } from "solid-js";
 
-import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
+import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { categoryDetailRoute, randomDetailRoute } from "./_routes";
 import { AreaRandom } from "../_models/AppRouteDefinition";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
-import CategoryBreadcrumb from "../components/categories/CategoryBreadcrumb";
+import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Sidebar from "./detail/Sidebar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MediaMainItem from "./MediaMainItem";
 import MediaSelectedGuard from "./MediaSelectedGuard";

@@ -10,7 +10,7 @@ import {
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { getRandomMedia } from "../../_api/Media";
-import { useMediaPageSettingsContext } from "../../contexts/settings/MediaPageSettingsContext";
+import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 
 const MediaRandomLoader: ParentComponent = props => {
     const [fetchTrigger, setFetchTrigger] = createSignal({ id: createUniqueId(), count: 24 });

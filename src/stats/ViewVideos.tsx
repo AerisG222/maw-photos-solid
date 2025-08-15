@@ -6,7 +6,7 @@ import { useStatContext } from "./contexts/StatContext";
 import { getAggFuncs } from "./_funcs";
 
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 import StatBar from "./components/StatBar";
 import StatBox from "./components/StatBox";
 import ToolbarVideo from "./ToolbarVideo";

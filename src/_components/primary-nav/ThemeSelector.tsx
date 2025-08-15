@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { useAppSettingsContext } from "../../contexts/settings/AppSettingsContext";
+import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 const ThemeSelector: Component = () => {
     const [, { toggleTheme }] = useAppSettingsContext();

@@ -1,4 +1,4 @@
-import { GpsCoordinate } from "../Gps";
+import { GpsCoordinate } from "../GpsCoordinate";
 
 export type GpsOverride = {
     lat: string | undefined;

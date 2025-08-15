@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect, createResource, createSignal } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { useCategoryContext } from "../../contexts/CategoryContext";
+import { useCategoryContext } from "../../_contexts/CategoryContext";
 import { categoryService } from "../../_services/categories/CategoryService";
 
 const MediaCategoryLoader: ParentComponent = props => {

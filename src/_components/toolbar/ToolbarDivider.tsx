@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { useMediaBreakpointContext } from "../../contexts/MediaBreakpointContext";
+import { useMediaBreakpointContext } from "../../_contexts/MediaBreakpointContext";
 
 const ToolbarDivider: Component = () => {
     const [, { ltMd, gteMd }] = useMediaBreakpointContext();

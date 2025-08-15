@@ -1,13 +1,13 @@
 import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
-import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
+import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { categoryMapRoute } from "./_routes";
 import { Media, getMediaTeaserUrl } from "../_models/Media";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewMap: Component = () => {

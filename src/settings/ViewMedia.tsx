@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { useMediaPageSettingsContext } from "../contexts/settings/MediaPageSettingsContext";
-import { useMediaGridViewSettingsContext } from "../contexts/settings/MediaGridViewSettingsContext";
-import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
-import { useMediaInfoPanelSettingsContext } from "../contexts/settings/MediaInfoPanelSettingsContext";
-import { useMediaMapViewSettingsContext } from "../contexts/settings/MediaMapViewSettingsContext";
+import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
+import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
+import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
+import { useMediaInfoPanelSettingsContext } from "../_contexts/settings/MediaInfoPanelSettingsContext";
+import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { allMapTypes } from "../_models/MapType";
 import { allMapZoomLevels } from "../_models/MapZoomLevel";
 import { allMargins } from "../_models/Margin";
@@ -14,12 +14,12 @@ import { allSlideshowDurations } from "../_models/SlideshowDuration";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
-import Select from "../components/input/Select";
-import RadioGroup from "../components/input/RadioGroup";
-import Checkbox from "../components/input/Checkbox";
+import Select from "../_components/input/Select";
+import RadioGroup from "../_components/input/RadioGroup";
+import Checkbox from "../_components/input/Checkbox";
 import Toolbar from "./Toolbar";
-import Toggle from "../components/input/Toggle";
-import Layout from "../components/layout/Layout";
+import Toggle from "../_components/input/Toggle";
+import Layout from "../_components/layout/Layout";
 
 const ViewMedia: Component = () => {
     const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] =

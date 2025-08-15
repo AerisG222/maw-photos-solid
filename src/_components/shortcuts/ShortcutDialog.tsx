@@ -8,7 +8,7 @@ import {
     onMount
 } from "solid-js";
 
-import { ShortcutInfo, useShortcutContext } from "../../contexts/ShortcutContext";
+import { ShortcutInfo, useShortcutContext } from "../../_contexts/ShortcutContext";
 import { createShortcut } from "@solid-primitives/keyboard";
 
 import ShortcutKey from "./ShortcutKey";

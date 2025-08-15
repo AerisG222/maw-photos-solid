@@ -1,7 +1,7 @@
 import { ParentComponent, Show, children, createResource, createSignal } from "solid-js";
 
-import { useCategoryContext } from "../../contexts/CategoryContext";
-import { useAuthContext } from "../../contexts/AuthContext";
+import { useCategoryContext } from "../../_contexts/CategoryContext";
+import { useAuthContext } from "../../_contexts/AuthContext";
 import { categoryService } from "../../_services/categories/CategoryService";
 
 const CategoryLoader: ParentComponent = props => {

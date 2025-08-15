@@ -2,17 +2,16 @@ import { Component, Show, createEffect } from "solid-js";
 import { A, useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
-import { useMediaGridViewSettingsContext } from "../contexts/settings/MediaGridViewSettingsContext";
+import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useSlideshowContext } from "./contexts/SlideshowContext";
 import { getMediaPath, categoryGridRoute, randomGridRoute } from "./_routes";
-import { CategoryType } from "../_models/CategoryType";
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
-import CategoryBreadcrumb from "../components/categories/CategoryBreadcrumb";
-import Layout from "../components/layout/Layout";
+import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
+import Layout from "../_components/layout/Layout";
 import MediaGrid from "../media/MediaGrid";
 import MediaMainItem from "./MediaMainItem";
 
@@ -59,7 +58,6 @@ const ViewGrid: Component = () => {
                             class="flex h-100%"
                             href={getMediaPath(
                                 mediaList.activeRouteDefinition,
-                                params.categoryType as CategoryType,
                                 mediaList.activeItem.categoryId,
                                 undefined
                             )}

@@ -1,11 +1,11 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryGridViewSettingsContext } from "../../contexts/settings/CategoryGridViewSettingsContext";
+import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/CategoryGridViewSettingsContext";
 import { Category } from "../../_models/Category";
 import { defaultGridThumbnailSize } from "../../_models/ThumbnailSize";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 
-import CategoryCard from "../../components/categories/CategoryCard";
+import CategoryCard from "../../_components/categories/CategoryCard";
 import YearHeading from "./YearHeading";
 
 type Props = {

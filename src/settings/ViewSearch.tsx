@@ -1,8 +1,8 @@
 import { Component, batch } from "solid-js";
 
-import { useSearchPageSettingsContext } from "../contexts/settings/SearchPageSettingsContext";
-import { useSearchGridViewSettingsContext } from "../contexts/settings/SearchGridViewSettingsContext";
-import { useSearchListViewSettingsContext } from "../contexts/settings/SearchListViewSettingsContext";
+import { useSearchPageSettingsContext } from "../_contexts/settings/SearchPageSettingsContext";
+import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
+import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
 import {
     ThumbnailSizeDefault,
     ThumbnailSizeIdType,
@@ -13,10 +13,10 @@ import { allCategoryViewModes } from "../_models/CategoryViewMode";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
-import RadioGroup from "../components/input/RadioGroup";
+import RadioGroup from "../_components/input/RadioGroup";
 import Toolbar from "./Toolbar";
-import Toggle from "../components/input/Toggle";
-import Layout from "../components/layout/Layout";
+import Toggle from "../_components/input/Toggle";
+import Layout from "../_components/layout/Layout";
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();

@@ -1,15 +1,15 @@
 import { ParentComponent } from "solid-js";
 
-import { AllSettingsProvider } from "../../contexts/settings/AllSettingsProvider";
-import { AuthProvider } from "../../contexts/AuthContext";
-import { CategoryProvider } from "../../contexts/CategoryContext";
-import { FullscreenProvider } from "../../contexts/FullscreenContext";
-import { ShortcutProvider } from "../../contexts/ShortcutContext";
-import { MediaBreakpointProvider } from "../../contexts/MediaBreakpointContext";
-import { RouteDetailProvider } from "../../contexts/RouteDetailContext";
+import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
+import { AuthProvider } from "../../_contexts/AuthContext";
+import { CategoryProvider } from "../../_contexts/CategoryContext";
+import { FullscreenProvider } from "../../_contexts/FullscreenContext";
+import { ShortcutProvider } from "../../_contexts/ShortcutContext";
+import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
+import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
 
-import CategoryLoader from "../../components/categories/CategoryLoader";
-import ThemeWrapper from "../../components/theme/ThemeWrapper";
+import CategoryLoader from "../../_components/categories/CategoryLoader";
+import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 
 const AppContext: ParentComponent = props => {
     return (

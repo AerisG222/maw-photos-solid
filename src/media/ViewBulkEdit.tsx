@@ -3,18 +3,18 @@ import { useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { Media } from "../_models/Media";
-import { GpsCoordinate } from "../_models/Gps";
+import { GpsCoordinate } from "../_models/GpsCoordinate";
 import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
 import { mediaService } from "../_services/media/MediaService";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
-import { useCategoryContext } from "../contexts/CategoryContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
 import { categoryService } from "../_services/categories/CategoryService";
 
 import Toolbar from "./Toolbar";
-import Layout from "../components/layout/Layout";
-import CategoryBreadcrumb from "../components/categories/CategoryBreadcrumb";
+import Layout from "../_components/layout/Layout";
+import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
-import AdminGuard from "../components/auth/AdminGuard";
+import AdminGuard from "../_components/auth/AdminGuard";
 
 type SelectableMedia = {
     id: Uuid;

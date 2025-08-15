@@ -9,11 +9,10 @@ import {
 import { useNavigate, useParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
-import { GpsCoordinate } from "../../_models/Gps";
+import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Media } from "../../_models/Media";
 import { getMediaPath } from "../../media/_routes";
-import { CategoryType } from "../../_models/CategoryType";
 
 export type MediaListState = {
     readonly items: Media[];
@@ -170,12 +169,7 @@ export const MediaListProvider: ParentComponent = props => {
     const navigateToItem = (media: Media) => {
         if (media && state.activeRouteDefinition) {
             navigate(
-                getMediaPath(
-                    state.activeRouteDefinition,
-                    params.categoryType as CategoryType,
-                    parseInt(params.categoryId, 10),
-                    media.id
-                )
+                getMediaPath(state.activeRouteDefinition, params.categoryId as Uuid, media.id)
             );
         }
     };

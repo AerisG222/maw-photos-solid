@@ -2,7 +2,7 @@ import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { useMediaListContext } from "./MediaListContext";
-import { useMediaPageSettingsContext } from "../../contexts/settings/MediaPageSettingsContext";
+import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 
 export type SlideshowState = {
     isPlaying: boolean;

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { getMediaPath } from "./_routes";
-import { useCategoryContext } from "../contexts/CategoryContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
 type Props = {

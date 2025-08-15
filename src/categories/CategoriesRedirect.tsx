@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "@solidjs/router";
 import { Component } from "solid-js";
 
 import { buildPath } from "../_models/utils/RouteUtils";
-import { useCategoryPageSettingsContext } from "../contexts/settings/CategoryPageSettingsContext";
-import { useCategoryFilterSettingsContext } from "../contexts/settings/CategoryFilterSettingsContext";
+import { useCategoryPageSettingsContext } from "../_contexts/settings/CategoryPageSettingsContext";
+import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
 import { buildSearch, getRouteForViewMode } from "./_routes";
 
 const CategoriesRedirect: Component = () => {

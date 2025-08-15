@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
-import { useCategoryContext } from "../../contexts/CategoryContext";
-import { useCategoryFilterSettingsContext } from "../../contexts/settings/CategoryFilterSettingsContext";
+import { useCategoryContext } from "../../_contexts/CategoryContext";
+import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
-import Select from "../../components/input/Select";
+import Select from "../../_components/input/Select";
 
 type Props = {
     horizontal: boolean;

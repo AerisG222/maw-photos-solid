@@ -1,6 +1,6 @@
 import { Match, ParentComponent, Switch, children } from "solid-js";
 
-import { useRouteDetailContext } from "../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 
 import MediaCategoryLoader from "./loader/MediaCategoryLoader";

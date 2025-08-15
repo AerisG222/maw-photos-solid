@@ -1,8 +1,8 @@
 import { Component, For } from "solid-js";
 
-import { GpsCoordinate } from "../../_models/Gps";
+import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
-import InfoCard from "../../components/sidebar/InfoCard";
+import InfoCard from "../../_components/sidebar/InfoCard";
 import BulkEditFilterCard from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
 

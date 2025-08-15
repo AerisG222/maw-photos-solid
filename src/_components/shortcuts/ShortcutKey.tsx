@@ -1,6 +1,6 @@
 import { Component, For } from "solid-js";
 
-import { ShortcutInfo } from "../../contexts/ShortcutContext";
+import { ShortcutInfo } from "../../_contexts/ShortcutContext";
 
 type Props = {
     shortcut: ShortcutInfo;

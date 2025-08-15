@@ -1,13 +1,13 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryContext } from "../contexts/CategoryContext";
-import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
+import { useCategoryContext } from "../_contexts/CategoryContext";
+import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 
 import Toolbar from "./Toolbar";
 import ListToolbar from "./ToolbarList";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
-import Layout from "../components/layout/Layout";
+import Layout from "../_components/layout/Layout";
 
 const ListView: Component = () => {
     const [, { getFilteredYears, getFilteredCategoriesForYear }] = useCategoryContext();

@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from "../contexts/settings/CategoryListViewSettingsContext";
+import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { getNextMarginSize } from "../_models/Margin";
 
-import ToolbarButton from "../components/toolbar/ToolbarButton";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
     const [settings, { setThumbnailSize, setMargin }] = useCategoryListViewSettingsContext();

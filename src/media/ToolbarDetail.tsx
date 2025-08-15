@@ -1,11 +1,11 @@
 import { Component, Show } from "solid-js";
 import { useParams } from "@solidjs/router";
 
-import { useMediaDetailViewSettingsContext } from "../contexts/settings/MediaDetailViewSettingsContext";
+import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 
-import ToolbarButton from "../components/toolbar/ToolbarButton";
-import ToolbarDivider from "../components/toolbar/ToolbarDivider";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import MoveNextButton from "./toolbar/MoveNextButton";

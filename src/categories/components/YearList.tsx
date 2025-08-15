@@ -1,10 +1,10 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from "../../contexts/settings/CategoryListViewSettingsContext";
+import { useCategoryListViewSettingsContext } from "../../_contexts/settings/CategoryListViewSettingsContext";
 import { Category } from "../../_models/Category";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 
-import CategoryListItem from "../../components/categories/CategoryListItem";
+import CategoryListItem from "../../_components/categories/CategoryListItem";
 import YearHeading from "./YearHeading";
 
 type Props = {

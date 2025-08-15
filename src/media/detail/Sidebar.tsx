@@ -1,14 +1,14 @@
 import { Component, For, Show, lazy } from "solid-js";
 
-import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
+import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Media } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
 
-import ToolbarDivider from "../../components/toolbar/ToolbarDivider";
-import SidebarLayout from "../../components/sidebar/SidebarLayout";
-import InfoCard from "../../components/sidebar/InfoCard";
-import ToolbarButton from "../../components/toolbar/ToolbarButton";
+import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
+import SidebarLayout from "../../_components/sidebar/SidebarLayout";
+import InfoCard from "../../_components/sidebar/InfoCard";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import { AreaRandom } from "../../_models/AppRouteDefinition";
 
 const Sidebar: Component = () => {

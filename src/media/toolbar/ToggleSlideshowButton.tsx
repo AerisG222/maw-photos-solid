@@ -3,9 +3,9 @@ import { Component, Show } from "solid-js";
 import { useSlideshowContext } from "../contexts/SlideshowContext";
 import { useParams } from "@solidjs/router";
 import { Area, AreaCategories, AreaRandom } from "../../_models/AppRouteDefinition";
-import { useRouteDetailContext } from "../../contexts/RouteDetailContext";
+import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
 
-import ToolbarButton from "../../components/toolbar/ToolbarButton";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 const ToggleSlideshowButton: Component = () => {
     const [state, { toggle }] = useSlideshowContext();

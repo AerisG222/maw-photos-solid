@@ -1,7 +1,7 @@
 import { ParentComponent, children, createEffect, createUniqueId, onCleanup } from "solid-js";
 import { createShortcut } from "@solid-primitives/keyboard";
 
-import { useShortcutContext } from "../../contexts/ShortcutContext";
+import { useShortcutContext } from "../../_contexts/ShortcutContext";
 
 type Props = {
     name: string;

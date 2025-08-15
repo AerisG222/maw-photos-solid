@@ -2,7 +2,7 @@ import { Component, createEffect } from "solid-js";
 import * as Highcharts from "highcharts";
 import HighchartsTreemap from "highcharts/modules/treemap";
 
-import { useAppSettingsContext } from "../../contexts/settings/AppSettingsContext";
+import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 type Props = {
     data: any;

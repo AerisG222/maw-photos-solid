@@ -1,6 +1,6 @@
 import { ParentComponent, children } from "solid-js";
 
-import { useAppSettingsContext } from "../../contexts/settings/AppSettingsContext";
+import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 const ThemeWrapper: ParentComponent = props => {
     const [appSettings] = useAppSettingsContext();

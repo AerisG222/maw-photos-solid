@@ -3,7 +3,7 @@ import { ParentComponent, createEffect } from "solid-js";
 
 import { StatProvider } from "./contexts/StatContext";
 
-import AuthGuard from "../components/auth/AuthGuard";
+import AuthGuard from "../_components/auth/AuthGuard";
 
 const Stats: ParentComponent = props => {
     const [search, setSearchParams] = useSearchParams();

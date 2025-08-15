@@ -3,7 +3,7 @@ import { Component } from "solid-js";
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { getMediaShareUrl } from "../../_models/Media";
 
-import ToolbarButton from "../../components/toolbar/ToolbarButton";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 const ShareButton: Component = () => {
     const [mediaContext] = useMediaListContext();

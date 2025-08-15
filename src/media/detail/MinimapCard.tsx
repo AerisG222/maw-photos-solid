@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
-import { useMediaInfoPanelSettingsContext } from "../../contexts/settings/MediaInfoPanelSettingsContext";
+import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { useMediaListContext } from "../contexts/MediaListContext";
 
 const MinimapCard: Component = () => {
