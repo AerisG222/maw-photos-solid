@@ -171,4 +171,12 @@ export const VisualEffectsProvider: ParentComponent = props => {
     );
 };
 
-export const useVisualEffectsContext = () => useContext(VisualEffectsContext);
+export const useVisualEffectsContext = () => {
+    const ctx = useContext(VisualEffectsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("VisualEffects context not provided by ancestor component!");
+};

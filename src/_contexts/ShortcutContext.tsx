@@ -60,4 +60,12 @@ export const ShortcutProvider: ParentComponent = props => {
     );
 };
 
-export const useShortcutContext = () => useContext(ShortcutContext);
+export const useShortcutContext = () => {
+    const ctx = useContext(ShortcutContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Shortcut context not provided by ancestor component!");
+};

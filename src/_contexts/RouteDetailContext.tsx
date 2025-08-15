@@ -56,4 +56,12 @@ export const RouteDetailProvider: ParentComponent = props => {
     );
 };
 
-export const useRouteDetailContext = () => useContext(RouteDetailContext);
+export const useRouteDetailContext = () => {
+    const ctx = useContext(RouteDetailContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("RouteDetail context not provided by ancestor component!");
+};

@@ -97,4 +97,12 @@ export const SearchProvider: ParentComponent = props => {
     );
 };
 
-export const useSearchContext = () => useContext(SearchContext);
+export const useSearchContext = () => {
+    const ctx = useContext(SearchContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Search context not provided by ancestor component!");
+};

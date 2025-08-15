@@ -8,4 +8,12 @@ export const {
     ServiceProvider: MetadataEditServiceProvider
 } = buildServiceContext<IMetadataEditService>();
 
-export const useMetadataEditServiceContext = () => useContext(MetadataEditServiceContext);
+export const useMetadataEditServiceContext = () => {
+    const ctx = useContext(MetadataEditServiceContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MetadataEditService context not provided by ancestor component!");
+};

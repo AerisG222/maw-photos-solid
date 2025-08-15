@@ -6,4 +6,12 @@ import { IExifService } from "../../_services/media/IExifService";
 export const { ServiceContext: ExifServiceContext, ServiceProvider: ExifServiceProvider } =
     buildServiceContext<IExifService>();
 
-export const useExifServiceContext = () => useContext(ExifServiceContext);
+export const useExifServiceContext = () => {
+    const ctx = useContext(ExifServiceContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("ExifService context not provided by ancestor component!");
+};

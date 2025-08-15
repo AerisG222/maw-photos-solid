@@ -84,4 +84,12 @@ export const SlideshowProvider: ParentComponent = props => {
     );
 };
 
-export const useSlideshowContext = () => useContext(SlideshowContext);
+export const useSlideshowContext = () => {
+    const ctx = useContext(SlideshowContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Slideshow context not provided by ancestor component!");
+};

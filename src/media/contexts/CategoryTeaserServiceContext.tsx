@@ -8,4 +8,12 @@ export const {
     ServiceProvider: CategoryTeaserServiceProvider
 } = buildServiceContext<ICategoryTeaserService>();
 
-export const useCategoryTeaserServiceContext = () => useContext(CategoryTeaserServiceContext);
+export const useCategoryTeaserServiceContext = () => {
+    const ctx = useContext(CategoryTeaserServiceContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("CategoryTeaserService context not provided by ancestor component!");
+};

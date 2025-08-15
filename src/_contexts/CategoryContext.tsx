@@ -261,4 +261,12 @@ export const CategoryProvider: ParentComponent = props => {
     );
 };
 
-export const useCategoryContext = () => useContext(CategoryContext);
+export const useCategoryContext = () => {
+    const ctx = useContext(CategoryContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Category context not provided by ancestor component!");
+};

@@ -63,4 +63,12 @@ export const MediaBreakpointProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaBreakpointContext = () => useContext(MediaBreakpointContext);
+export const useMediaBreakpointContext = () => {
+    const ctx = useContext(MediaBreakpointContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaBreakpoint context not provided by ancestor component!");
+};

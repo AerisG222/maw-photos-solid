@@ -8,6 +8,7 @@ import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
+import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
 import CategoryLoader from "../../_components/categories/CategoryLoader";
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
@@ -15,25 +16,27 @@ import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 const AppContext: ParentComponent = props => {
     return (
         <AuthProvider>
-            <MediaBreakpointProvider>
-                <ShortcutProvider>
-                    <AllSettingsProvider>
-                        <ThemeWrapper>
-                            <ConfigProvider>
-                                <CategoryProvider>
-                                    <CategoryLoader>
-                                        <FullscreenProvider>
-                                            <RouteDetailProvider>
-                                                {props.children}
-                                            </RouteDetailProvider>
-                                        </FullscreenProvider>
-                                    </CategoryLoader>
-                                </CategoryProvider>
-                            </ConfigProvider>
-                        </ThemeWrapper>
-                    </AllSettingsProvider>
-                </ShortcutProvider>
-            </MediaBreakpointProvider>
+            <WindowSizeProvider>
+                <MediaBreakpointProvider>
+                    <ShortcutProvider>
+                        <AllSettingsProvider>
+                            <ThemeWrapper>
+                                <ConfigProvider>
+                                    <CategoryProvider>
+                                        <CategoryLoader>
+                                            <FullscreenProvider>
+                                                <RouteDetailProvider>
+                                                    {props.children}
+                                                </RouteDetailProvider>
+                                            </FullscreenProvider>
+                                        </CategoryLoader>
+                                    </CategoryProvider>
+                                </ConfigProvider>
+                            </ThemeWrapper>
+                        </AllSettingsProvider>
+                    </ShortcutProvider>
+                </MediaBreakpointProvider>
+            </WindowSizeProvider>
         </AuthProvider>
     );
 };

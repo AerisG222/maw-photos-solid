@@ -238,4 +238,12 @@ export const MediaListProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaListContext = () => useContext(MediaListContext);
+export const useMediaListContext = () => {
+    const ctx = useContext(MediaListContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaList context not provided by ancestor component!");
+};

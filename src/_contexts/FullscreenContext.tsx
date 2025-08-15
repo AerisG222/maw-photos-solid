@@ -29,4 +29,12 @@ export const FullscreenProvider: ParentComponent = props => {
     );
 };
 
-export const useFullscreenContext = () => useContext(FullscreenContext);
+export const useFullscreenContext = () => {
+    const ctx = useContext(FullscreenContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Fullscreen context not provided by ancestor component!");
+};
