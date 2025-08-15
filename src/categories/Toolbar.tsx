@@ -17,12 +17,12 @@ const Toolbar: ParentComponent = props => {
         <ToolbarLayout>
             <ToolbarLink
                 route={categoriesGrid}
-                routeSearch={buildSearch(filterState.yearFilter, filterState.typeFilter)}
+                routeSearch={buildSearch(filterState.yearFilter)}
                 clickHandler={() => setViewMode("grid")}
             />
             <ToolbarLink
                 route={categoriesList}
-                routeSearch={buildSearch(filterState.yearFilter, filterState.typeFilter)}
+                routeSearch={buildSearch(filterState.yearFilter)}
                 clickHandler={() => setViewMode("list")}
             />
 

@@ -3,6 +3,7 @@ import { ParentComponent } from "solid-js";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
 import { CategoryProvider } from "../../_contexts/CategoryContext";
+import { ConfigProvider } from "../../_contexts/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
@@ -18,13 +19,17 @@ const AppContext: ParentComponent = props => {
                 <ShortcutProvider>
                     <AllSettingsProvider>
                         <ThemeWrapper>
-                            <CategoryProvider>
-                                <CategoryLoader>
-                                    <FullscreenProvider>
-                                        <RouteDetailProvider>{props.children}</RouteDetailProvider>
-                                    </FullscreenProvider>
-                                </CategoryLoader>
-                            </CategoryProvider>
+                            <ConfigProvider>
+                                <CategoryProvider>
+                                    <CategoryLoader>
+                                        <FullscreenProvider>
+                                            <RouteDetailProvider>
+                                                {props.children}
+                                            </RouteDetailProvider>
+                                        </FullscreenProvider>
+                                    </CategoryLoader>
+                                </CategoryProvider>
+                            </ConfigProvider>
                         </ThemeWrapper>
                     </AllSettingsProvider>
                 </ShortcutProvider>

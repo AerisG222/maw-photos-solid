@@ -15,7 +15,7 @@ const defaultAuth: AuthState = {
 export type AuthContextValue = [
     state: AuthState,
     actions: {
-        login: () => Promise<boolean>;
+        login: () => Promise<void>;
         logout: () => void;
         isAdmin: () => boolean;
         getToken: () => Promise<string | undefined>;
@@ -29,10 +29,29 @@ export const AuthProvider: ParentComponent = props => {
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
+    const scopes = [
+        "openid",
+        "email",
+        "profile",
+        "offline_access",
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/media:read`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/media:write`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:read`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:write`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/stats:read`
+    ];
+
+    const authParams = {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        redirect_uri: redirectUrl,
+        scope: scopes.join(" ")
+    };
+
     const [auth0Client] = createResource(async () => {
         var client = await createAuth0Client({
             domain: import.meta.env.VITE_AUTH0_DOMAIN,
-            clientId: import.meta.env.VITE_AUTH0_CLIENT_ID
+            clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+            authorizationParams: authParams
         });
 
         const url = window.location.href;
@@ -64,9 +83,7 @@ export const AuthProvider: ParentComponent = props => {
     const login = async () => {
         try {
             await auth0Client()!.loginWithRedirect({
-                authorizationParams: {
-                    redirect_uri: redirectUrl
-                }
+                authorizationParams: authParams
             });
         } catch (err) {
             console.error(err);
