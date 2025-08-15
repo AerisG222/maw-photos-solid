@@ -45,6 +45,16 @@ export const AuthProvider: ParentComponent = props => {
         setState({ isLoggedIn: await client.isAuthenticated() });
 
         if (state.isLoggedIn) {
+            // https://steven-giesel.com/blogPost/caa09b13-83e4-452e-899f-598c66181e63
+            // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+            // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
+            navigator.serviceWorker.addEventListener("message", async event => {
+                if (event.data === "requestToken") {
+                    const token = await client.getTokenSilently();
+                    event.ports[0].postMessage(token);
+                }
+            });
+
             setState({ user: await client.getUser() });
         }
 
