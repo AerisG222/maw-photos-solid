@@ -43,7 +43,15 @@ export const MediaMapSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaMapViewSettingsContext = () => useContext(MediaMapViewSettingsContext);
+export const useMediaMapViewSettingsContext = () => {
+    const ctx = useContext(MediaMapViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaMapViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_MEDIA_VIEW_MAP, defaultMediaMapViewSettings);

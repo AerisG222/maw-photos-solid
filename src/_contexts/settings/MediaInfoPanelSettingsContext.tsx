@@ -98,7 +98,15 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaInfoPanelSettingsContext = () => useContext(MediaInfoPanelSettingsContext);
+export const useMediaInfoPanelSettingsContext = () => {
+    const ctx = useContext(MediaInfoPanelSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaInfoPanelSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultMediaInfoPanelSettings);

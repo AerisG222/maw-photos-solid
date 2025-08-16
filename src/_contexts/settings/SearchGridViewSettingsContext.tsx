@@ -53,7 +53,15 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useSearchGridViewSettingsContext = () => useContext(SearchGridViewSettingsContext);
+export const useSearchGridViewSettingsContext = () => {
+    const ctx = useContext(SearchGridViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("SearchGridViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_SEARCH_VIEW_GRID, defaultSearchGridViewSettings);

@@ -44,7 +44,15 @@ export const SearchListSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useSearchListViewSettingsContext = () => useContext(SearchListViewSettingsContext);
+export const useSearchListViewSettingsContext = () => {
+    const ctx = useContext(SearchListViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("SearchListViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings);

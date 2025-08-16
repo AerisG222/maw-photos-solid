@@ -36,7 +36,15 @@ export const SearchPageSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useSearchPageSettingsContext = () => useContext(SearchPageSettingsContext);
+export const useSearchPageSettingsContext = () => {
+    const ctx = useContext(SearchPageSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("SearchPageSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_SEARCH_PAGE, defaultSearchPageSettings);

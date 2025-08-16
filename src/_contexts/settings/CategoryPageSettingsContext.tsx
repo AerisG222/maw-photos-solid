@@ -36,7 +36,15 @@ export const CategoryPageSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useCategoryPageSettingsContext = () => useContext(CategoryPageSettingsContext);
+export const useCategoryPageSettingsContext = () => {
+    const ctx = useContext(CategoryPageSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("CategoryPageSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_PAGE, defaultCategoryPageSettings);

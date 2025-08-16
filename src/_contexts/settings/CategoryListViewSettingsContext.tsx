@@ -44,7 +44,15 @@ export const CategoryListSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useCategoryListViewSettingsContext = () => useContext(CategoryListViewSettingsContext);
+export const useCategoryListViewSettingsContext = () => {
+    const ctx = useContext(CategoryListViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("CategoryListViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings);

@@ -44,7 +44,15 @@ export const CategoryFilterSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useCategoryFilterSettingsContext = () => useContext(CategoryFilterSettingsContext);
+export const useCategoryFilterSettingsContext = () => {
+    const ctx = useContext(CategoryFilterSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("CategoryFilterSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings);

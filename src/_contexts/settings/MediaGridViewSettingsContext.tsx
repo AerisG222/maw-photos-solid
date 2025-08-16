@@ -62,7 +62,15 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaGridViewSettingsContext = () => useContext(MediaGridViewSettingsContext);
+export const useMediaGridViewSettingsContext = () => {
+    const ctx = useContext(MediaGridViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaGridViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultMediaGridViewSettings);

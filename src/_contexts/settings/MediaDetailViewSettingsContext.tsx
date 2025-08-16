@@ -48,7 +48,15 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaDetailViewSettingsContext = () => useContext(MediaDetailViewSettingsContext);
+export const useMediaDetailViewSettingsContext = () => {
+    const ctx = useContext(MediaDetailViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaDetailViewSettings context not provided by ancestor component!");
+};
 
 function loadMediaDetailViewSettings() {
     return loadJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, defaultMediaDetailViewSettings);

@@ -50,7 +50,15 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useCategoryGridViewSettingsContext = () => useContext(CategoryGridViewSettingsContext);
+export const useCategoryGridViewSettingsContext = () => {
+    const ctx = useContext(CategoryGridViewSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("CategoryGridViewSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, defaultCategoryGridViewSettings);

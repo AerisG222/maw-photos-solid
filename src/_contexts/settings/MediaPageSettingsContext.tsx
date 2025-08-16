@@ -45,7 +45,15 @@ export const MediaPageSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useMediaPageSettingsContext = () => useContext(MediaPageSettingsContext);
+export const useMediaPageSettingsContext = () => {
+    const ctx = useContext(MediaPageSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("MediaPageSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     return loadJson(KEY_SETTINGS_MEDIA_PAGE, defaultMediaPageSettings);

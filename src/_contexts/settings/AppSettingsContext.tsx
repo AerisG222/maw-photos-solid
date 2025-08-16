@@ -36,7 +36,15 @@ export const AppSettingsProvider: ParentComponent = props => {
     );
 };
 
-export const useAppSettingsContext = () => useContext(AppSettingsContext);
+export const useAppSettingsContext = () => {
+    const ctx = useContext(AppSettingsContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("AppSettings context not provided by ancestor component!");
+};
 
 function loadState() {
     var state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
