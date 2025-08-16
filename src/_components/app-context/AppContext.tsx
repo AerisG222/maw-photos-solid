@@ -10,7 +10,6 @@ import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext"
 import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
-import CategoryLoader from "../../_components/categories/CategoryLoader";
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 
 const AppContext: ParentComponent = props => {
@@ -23,13 +22,11 @@ const AppContext: ParentComponent = props => {
                             <ThemeWrapper>
                                 <ConfigProvider>
                                     <CategoryProvider>
-                                        <CategoryLoader>
-                                            <FullscreenProvider>
-                                                <RouteDetailProvider>
-                                                    {props.children}
-                                                </RouteDetailProvider>
-                                            </FullscreenProvider>
-                                        </CategoryLoader>
+                                        <FullscreenProvider>
+                                            <RouteDetailProvider>
+                                                {props.children}
+                                            </RouteDetailProvider>
+                                        </FullscreenProvider>
                                     </CategoryProvider>
                                 </ConfigProvider>
                             </ThemeWrapper>
