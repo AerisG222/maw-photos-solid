@@ -20,7 +20,7 @@ type Props = {
 const VideoLink: Component<Props> = props => {
     const getClassList = () => ({
         "max-w-none": true,
-        "rounded-1": props.rounded
+        "rounded-md": props.rounded
     });
 
     // todo: make category type dynamic?

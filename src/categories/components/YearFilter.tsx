@@ -48,7 +48,7 @@ const YearFilter: Component<Props> = props => {
     const years = yearsQuery();
 
     if (searchParams.year) {
-        onChangeFilter(searchParams.year);
+        onChangeFilter(searchParams.year as string);
     }
 
     return (

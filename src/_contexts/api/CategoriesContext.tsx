@@ -58,7 +58,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoriesForYearQuery = (year: Accessor<number>) =>
         useQuery(() => ({
-            queryKey: ["categories", "year", year],
+            queryKey: ["categories", "year", year()],
             queryFn: () => fetchCategoriesForYear(year()),
             enabled: authContext.isLoggedIn,
             staleTime: 1 * 60 * 1000
@@ -66,7 +66,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoryQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["categories", id],
+            queryKey: ["categories", id()],
             queryFn: () => fetchCategory(id()),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
@@ -74,7 +74,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoryMediaQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["categories", id, "media"],
+            queryKey: ["categories", id(), "media"],
             queryFn: () => fetchCategoryMedia(id()),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
@@ -82,7 +82,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categorySearchQuery = (query: Accessor<string>, startOffset: Accessor<number>) =>
         useQuery(() => ({
-            queryKey: ["categories", "search", query, startOffset],
+            queryKey: ["categories", "search", query(), startOffset()],
             queryFn: () => fetchCategorySearch(query(), startOffset()),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000

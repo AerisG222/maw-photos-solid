@@ -23,7 +23,7 @@ const MediaLink: ParentComponent<Props> = props => {
             "border-1": true,
             "border-transparent": true,
             "hover:border-primary": true,
-            "rounded-1": props.rounded,
+            "rounded-md": props.rounded,
             "saturate-100!": props.isActiveItem,
             "border-primary!": props.isActiveItem
         };

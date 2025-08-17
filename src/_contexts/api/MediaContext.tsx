@@ -53,7 +53,7 @@ export const MediaProvider: ParentComponent = props => {
 
     const metadataQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id, "metadata"],
+            queryKey: ["media", id(), "metadata"],
             queryFn: () => fetchMetadata(id()),
             enabled: authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -61,14 +61,14 @@ export const MediaProvider: ParentComponent = props => {
 
     const commentsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id, "comments"],
+            queryKey: ["media", id(), "comments"],
             queryFn: () => fetchComments(id()),
             enabled: authContext.isLoggedIn
         }));
 
     const gpsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id, "gps"],
+            queryKey: ["media", id(), "gps"],
             queryFn: () => fetchGps(id()),
             enabled: authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
