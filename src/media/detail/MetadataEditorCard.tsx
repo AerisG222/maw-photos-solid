@@ -1,11 +1,9 @@
 import { Component, createEffect, createResource, createSignal } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { useMetadataEditServiceContext } from "../contexts/MetadataEditServiceContext";
 import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 
 const MetadataEditorCard: Component = () => {
-    const [metadataEditorContext] = useMetadataEditServiceContext();
     const [fetchMetadataEditSignal, setFetchMetadataEditSignal] = createSignal({
         media: undefined,
         service: undefined
@@ -15,33 +13,32 @@ const MetadataEditorCard: Component = () => {
     const [mediaList, { moveNext }] = useMediaListContext();
 
     const fetchGpsData = () => {
-        if (metadataEditorContext.service && mediaList.activeItem) {
-            return metadataEditorContext.service.fetchGpsDetail(mediaList.activeItem.id);
-        }
+        // if (metadataEditorContext.service && mediaList.activeItem) {
+        //     return metadataEditorContext.service.fetchGpsDetail(mediaList.activeItem.id);
+        // }
     };
 
     const [gpsDetail] = createResource(fetchMetadataEditSignal, fetchGpsData);
 
-    createEffect(() => {
-        const src = gpsDetail()?.source;
+    // createEffect(() => {
+    //     const src = undefinedgpsDetail()?.source;
 
-        setSourceGps(
-            src
-                ? { lat: src.latitude.toString(), lng: src.longitude.toString() }
-                : { lat: undefined, lng: undefined }
-        );
+    //     setSourceGps(
+    //         src
+    //             ? { lat: src.latitude.toString(), lng: src.longitude.toString() }
+    //             : { lat: undefined, lng: undefined }
+    //     );
 
-        updateOverrideInputsFromApi();
-    });
+    //     updateOverrideInputsFromApi();
+    // });
 
     const updateOverrideInputsFromApi = () => {
-        const ov = gpsDetail()?.override;
-
-        setOverride(
-            ov
-                ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() }
-                : { lat: undefined, lng: undefined }
-        );
+        // const ov = gpsDetail()?.override;
+        // setOverride(
+        //     ov
+        //         ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() }
+        //         : { lat: undefined, lng: undefined }
+        // );
     };
 
     const onPaste = (evt: ClipboardEvent) => {
@@ -71,17 +68,17 @@ const MetadataEditorCard: Component = () => {
     const save = (evt: Event) => {
         evt.preventDefault();
 
-        if (
-            metadataEditorContext.service &&
-            mediaList.activeItem &&
-            isValidLatLng(override().lat) &&
-            isValidLatLng(override().lng)
-        ) {
-            metadataEditorContext.service.setGpsCoordinateOverride(mediaList.activeItem.id, {
-                latitude: parseFloat(override().lat),
-                longitude: parseFloat(override().lng)
-            });
-        }
+        // if (
+        //     metadataEditorContext.service &&
+        //     mediaList.activeItem &&
+        //     isValidLatLng(override().lat) &&
+        //     isValidLatLng(override().lng)
+        // ) {
+        //     metadataEditorContext.service.setGpsCoordinateOverride(mediaList.activeItem.id, {
+        //         latitude: parseFloat(override().lat),
+        //         longitude: parseFloat(override().lng)
+        //     });
+        // }
     };
 
     const saveAndMoveNext = (evt: Event) => {
@@ -90,7 +87,7 @@ const MetadataEditorCard: Component = () => {
     };
 
     const isOverrideValid = () => {
-        return isValidLatLng(override().lat) && isValidLatLng(override().lng);
+        // return isValidLatLng(override().lat) && isValidLatLng(override().lng);
     };
 
     const getValidationClass = (val: string) => {
@@ -103,16 +100,16 @@ const MetadataEditorCard: Component = () => {
 
     const getButtonClass = () => {
         return {
-            "btn-disabled": !isOverrideValid(),
+            // "btn-disabled": !isOverrideValid(),
             "btn-primary": isOverrideValid()
         };
     };
 
     createEffect(() => {
-        setFetchMetadataEditSignal({
-            media: mediaList.activeItem,
-            service: metadataEditorContext.service
-        });
+        // setFetchMetadataEditSignal({
+        //     media: mediaList.activeItem,
+        //     service: metadataEditorContext.service
+        // });
     });
 
     return (
@@ -135,7 +132,7 @@ const MetadataEditorCard: Component = () => {
                         type="text"
                         class="input input-sm w-[100%]"
                         placeholder="Override"
-                        classList={getValidationClass(override().lat)}
+                        classList={getValidationClass(override().lat!)}
                         onPaste={onPaste}
                         value={override().lat ?? ""}
                         onInput={evt =>
@@ -161,7 +158,7 @@ const MetadataEditorCard: Component = () => {
                         type="text"
                         class="input input-sm w-[100%]"
                         placeholder="Override"
-                        classList={getValidationClass(override().lng)}
+                        classList={getValidationClass(override().lng!)}
                         onPaste={onPaste}
                         value={override().lng ?? ""}
                         onInput={evt =>
@@ -179,8 +176,8 @@ const MetadataEditorCard: Component = () => {
                     <button
                         class="btn btn-sm btn-outline w-[100%]"
                         onClick={save}
-                        disabled={!isOverrideValid()}
-                        classList={getButtonClass()}
+                        // disabled={!isOverrideValid()}
+                        // classList={getButtonClass()}
                     >
                         Save
                     </button>
@@ -189,8 +186,8 @@ const MetadataEditorCard: Component = () => {
                     <button
                         class="btn btn-sm btn-outline w-[100%]"
                         onClick={saveAndMoveNext}
-                        disabled={!isOverrideValid()}
-                        classList={getButtonClass()}
+                        // disabled={!isOverrideValid()}
+                        // classList={getButtonClass()}
                     >
                         Save Move Next
                     </button>

@@ -2,29 +2,27 @@ import { Component } from "solid-js";
 
 import { useCategoryContext } from "../../_contexts/CategoryContext";
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { useCategoryTeaserServiceContext } from "../contexts/CategoryTeaserServiceContext";
 import { getMediaTeaserUrl } from "../../_models/Media";
 
 const CategoryTeaserCard: Component = () => {
-    const [teaserServiceContext] = useCategoryTeaserServiceContext();
     const [categoryState, { updateTeaser }] = useCategoryContext();
     const [mediaList] = useMediaListContext();
 
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();
 
-        if (categoryState.activeCategory && teaserServiceContext.service) {
-            await teaserServiceContext.service.setTeaser(
-                categoryState.activeCategory.id,
-                mediaList.activeItem.id
-            );
+        // if (categoryState.activeCategory && teaserServiceContext.service) {
+        //     await teaserServiceContext.service.setTeaser(
+        //         categoryState.activeCategory.id,
+        //         mediaList.activeItem.id
+        //     );
 
-            updateTeaser(
-                categoryState.activeCategory.type,
-                categoryState.activeCategory.id,
-                getMediaTeaserUrl(mediaList.activeItem)
-            );
-        }
+        //     updateTeaser(
+        //         categoryState.activeCategory.type,
+        //         categoryState.activeCategory.id,
+        //         getMediaTeaserUrl(mediaList.activeItem)
+        //     );
+        // }
     };
 
     return (
@@ -34,7 +32,7 @@ const CategoryTeaserCard: Component = () => {
             <div class="text-center">
                 <img
                     class="mt-2 mx-auto center"
-                    src={categoryState.activeCategory?.teaserImageUrl}
+                    src={categoryState.activeCategory?.toString() /*.teaserImageUrl*/}
                 />
 
                 <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>

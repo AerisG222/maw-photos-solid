@@ -3,12 +3,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
+import { CategoriesProvider } from "../../_contexts/api/CategoriesContext";
 import { CategoryProvider } from "../../_contexts/CategoryContext";
 import { ConfigProvider } from "../../_contexts/api/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
-import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
+import { MediaProvider } from "../../_contexts/api/MediaContext";
 import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
+import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
@@ -25,13 +27,17 @@ const AppContext: ParentComponent = props => {
                             <AllSettingsProvider>
                                 <ThemeWrapper>
                                     <ConfigProvider>
-                                        <CategoryProvider>
-                                            <FullscreenProvider>
-                                                <RouteDetailProvider>
-                                                    {props.children}
-                                                </RouteDetailProvider>
-                                            </FullscreenProvider>
-                                        </CategoryProvider>
+                                        <CategoriesProvider>
+                                            <MediaProvider>
+                                                <CategoryProvider>
+                                                    <FullscreenProvider>
+                                                        <RouteDetailProvider>
+                                                            {props.children}
+                                                        </RouteDetailProvider>
+                                                    </FullscreenProvider>
+                                                </CategoryProvider>
+                                            </MediaProvider>
+                                        </CategoriesProvider>
                                     </ConfigProvider>
                                 </ThemeWrapper>
                             </AllSettingsProvider>

@@ -54,8 +54,8 @@ export type CategoryContextValue = [
         getFilteredAndSortedCategories: () => Category[];
         getFilteredCategoriesForYear: (year: number) => Category[];
 
-        setActiveCategory: (category: Category) => void;
-        setActiveCategoryById: (categoryId: Uuid) => void;
+        setActiveCategory: (category: Category | undefined) => void;
+        setActiveCategoryById: (categoryId: Uuid | undefined) => void;
 
         updateTeaser: (categoryId: Uuid, media: Media) => void;
     }
@@ -162,10 +162,14 @@ export const CategoryProvider: ParentComponent = props => {
         setState({ activeCategory: category });
     };
 
-    const setActiveCategoryById = (categoryId: Uuid) => {
-        const cat = state.categories.find(c => c.id === categoryId);
+    const setActiveCategoryById = (categoryId: Uuid | undefined) => {
+        if (categoryId) {
+            const cat = state.categories.find(c => c.id === categoryId);
 
-        setActiveCategory(cat);
+            setActiveCategory(cat);
+        } else {
+            setActiveCategory(undefined);
+        }
     };
 
     const updateTeaser = (categoryId: Uuid, media: Media) => {
@@ -173,7 +177,6 @@ export const CategoryProvider: ParentComponent = props => {
     };
 
     const YEAR_FILTER = "YearFilter_Year";
-    const TYPE_FILTER = "CategoryTypeFilter_Type";
     const GPS_FILTER = "gps-filter";
     const [filter] = useCategoryFilterSettingsContext();
 
@@ -188,24 +191,6 @@ export const CategoryProvider: ParentComponent = props => {
                         addFilter({
                             name: YEAR_FILTER,
                             filterFn: (c: Category) => c.effectiveDate.getFullYear() === yearFilter
-                        });
-                    }
-                });
-            }
-        )
-    );
-
-    createEffect(
-        on(
-            () => filter.typeFilter,
-            typeFilter => {
-                batch(() => {
-                    removeFilter(TYPE_FILTER);
-
-                    if (typeFilter !== "all") {
-                        addFilter({
-                            name: TYPE_FILTER,
-                            filterFn: (c: Category) => c.effectiveDate.getFullYear() === typeFilter
                         });
                     }
                 });

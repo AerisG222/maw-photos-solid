@@ -1,6 +1,5 @@
 import { Component, createEffect, createResource, createSignal } from "solid-js";
 
-import { search } from "../../_api/Categories";
 import { useSearchContext } from "../contexts/SearchContext";
 
 const SearchMoreButton: Component = () => {
@@ -9,7 +8,7 @@ const SearchMoreButton: Component = () => {
 
     const continueSearch = () => {
         if (searchSignal()) {
-            return search(searchContext.term, searchContext.categories.length);
+            // return search(searchContext.term, searchContext.categories.length);
         }
 
         return {

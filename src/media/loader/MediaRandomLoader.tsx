@@ -9,7 +9,6 @@ import {
 } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { getRandomMedia } from "../../_api/Media";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 
 const MediaRandomLoader: ParentComponent = props => {
@@ -19,13 +18,13 @@ const MediaRandomLoader: ParentComponent = props => {
     const c = children(() => props.children);
     let intervalId = -1;
 
-    const fetchRandomMedia = trigger => getRandomMedia(trigger.count);
+    const fetchRandomMedia = trigger => []; //getRandomMedia(trigger.count);
 
     const [randomResource] = createResource(fetchTrigger, fetchRandomMedia);
 
     createEffect(() => {
         if (!randomResource.loading && !randomResource.error) {
-            addItems(randomResource());
+            // addItems(randomResource());
         }
     });
 

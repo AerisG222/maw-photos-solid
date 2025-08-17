@@ -4,12 +4,12 @@ import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/Media
 import { Media } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
+import { AreaRandom } from "../../_models/AppRouteDefinition";
 
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
-import { AreaRandom } from "../../_models/AppRouteDefinition";
 
 const Sidebar: Component = () => {
     const [routeContext] = useRouteDetailContext();
@@ -18,7 +18,6 @@ const Sidebar: Component = () => {
         settings,
         {
             setExpandInfoPanel,
-            setShowRatings,
             setShowComments,
             setShowExif,
             setShowEffects,
@@ -33,10 +32,6 @@ const Sidebar: Component = () => {
 
     const toggleExpandedState = () => {
         setExpandInfoPanel(!settings.expandInfoPanel);
-    };
-
-    const toggleRatings = () => {
-        setShowRatings(!settings.showRatings);
     };
 
     const toggleComments = () => {
@@ -68,16 +63,6 @@ const Sidebar: Component = () => {
     };
 
     const cards = [
-        {
-            title: "Ratings",
-            tooltip: "Sidebar: Ratings",
-            icon: "icon-[ic--round-star]",
-            shortcutKeys: ["r"],
-            clickHandler: toggleRatings,
-            enable: (media: Media) => true,
-            active: () => settings.expandInfoPanel && settings.showRatings,
-            component: lazy(() => import("./RatingsCard"))
-        },
         {
             title: "Comments",
             tooltip: "Sidebar: Comments",

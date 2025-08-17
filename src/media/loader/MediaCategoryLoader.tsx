@@ -2,7 +2,6 @@ import { ParentComponent, children, createEffect, createResource, createSignal }
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { useCategoryContext } from "../../_contexts/CategoryContext";
-import { categoryService } from "../../_services/categories/CategoryService";
 
 const MediaCategoryLoader: ParentComponent = props => {
     const [doFetch, setDoFetch] = createSignal(-1);
@@ -14,7 +13,7 @@ const MediaCategoryLoader: ParentComponent = props => {
         const cat = categoryContext.activeCategory;
 
         if (cat) {
-            return categoryService.loadMedia(cat.id);
+            // return categoryService.loadMedia(cat.id);
         }
 
         return [];
@@ -26,12 +25,12 @@ const MediaCategoryLoader: ParentComponent = props => {
     const [mediaResource] = createResource(doFetch, loadMedia);
 
     createEffect(() => {
-        setDoFetch(categoryContext.activeCategory?.id);
+        // setDoFetch(categoryContext.activeCategory?.id);
     });
 
     createEffect(() => {
         if (!mediaResource.loading && !mediaResource.error) {
-            setItems(mediaResource());
+            // setItems(mediaResource());
         }
     });
 

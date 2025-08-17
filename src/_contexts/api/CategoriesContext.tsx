@@ -1,0 +1,116 @@
+import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
+import { useQuery, UseQueryResult } from "@tanstack/solid-query";
+
+import { useAuthContext } from "../AuthContext";
+import { queryApi, runWithAccessToken } from "./_shared";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import { SearchResults } from "../../_models/SearchResults";
+
+export type CategoriesService = {
+    yearsQuery: () => UseQueryResult<number[], Error>;
+    categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
+    categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category, Error>;
+    categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
+    categorySearchQuery: (
+        query: Accessor<string>,
+        startOffset: Accessor<number>
+    ) => UseQueryResult<SearchResults<Category>, Error>;
+};
+
+const CategoriesContext = createContext<CategoriesService>();
+
+export const CategoriesProvider: ParentComponent = props => {
+    const [authContext, { getToken }] = useAuthContext();
+
+    const fetchYears = async () =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<number[]>(accessToken, "categories/years")
+        );
+
+    const fetchCategoriesForYear = async (year: number) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<Category[]>(accessToken, `categories/years/${year}`)
+        );
+
+    const fetchCategory = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<Category>(accessToken, `categories/${id}`)
+        );
+
+    const fetchCategoryMedia = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<Media[]>(accessToken, `categories/${id}/media`)
+        );
+
+    const fetchCategorySearch = async (query: string, startOffset: number) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<SearchResults<Category>>(accessToken, `categories/search`)
+        );
+
+    const yearsQuery = () =>
+        useQuery(() => ({
+            queryKey: ["categories", "years"],
+            queryFn: fetchYears,
+            enabled: authContext.isLoggedIn,
+            staleTime: 15 * 60 * 1000
+        }));
+
+    const categoriesForYearQuery = (year: Accessor<number>) =>
+        useQuery(() => ({
+            queryKey: ["categories", "year", year],
+            queryFn: () => fetchCategoriesForYear(year()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 1 * 60 * 1000
+        }));
+
+    const categoryQuery = (id: Accessor<Uuid>) =>
+        useQuery(() => ({
+            queryKey: ["categories", id],
+            queryFn: () => fetchCategory(id()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
+
+    const categoryMediaQuery = (id: Accessor<Uuid>) =>
+        useQuery(() => ({
+            queryKey: ["categories", id, "media"],
+            queryFn: () => fetchCategoryMedia(id()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
+
+    const categorySearchQuery = (query: Accessor<string>, startOffset: Accessor<number>) =>
+        useQuery(() => ({
+            queryKey: ["categories", "search", query, startOffset],
+            queryFn: () => fetchCategorySearch(query(), startOffset()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
+
+    // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
+
+    return (
+        <CategoriesContext.Provider
+            value={{
+                yearsQuery,
+                categoriesForYearQuery,
+                categoryQuery,
+                categoryMediaQuery,
+                categorySearchQuery
+            }}
+        >
+            {props.children}
+        </CategoriesContext.Provider>
+    );
+};
+
+export const useCategoriesContext = () => {
+    const ctx = useContext(CategoriesContext);
+
+    if (ctx) {
+        return ctx;
+    }
+
+    throw new Error("Categories context not provided by ancestor component!");
+};

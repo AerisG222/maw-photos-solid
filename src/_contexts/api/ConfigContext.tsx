@@ -5,7 +5,7 @@ import { Scale } from "../../_models/Scale";
 import { useAuthContext } from "../AuthContext";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
-import { queryApi } from "./_shared";
+import { queryApi, runWithAccessToken } from "./_shared";
 
 export type ConfigService = {
     scalesQuery: () => UseQueryResult<Scale[], Error>;
@@ -19,15 +19,10 @@ export const ConfigProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const [windowSizeContext] = useWindowSizeContext();
 
-    const fetchScales = async () => {
-        var accessToken = await getToken();
-
-        if (accessToken) {
-            return await queryApi<Scale[]>(accessToken, "config/scales");
-        }
-
-        throw new Error("Unable to obtain scales at this time!");
-    };
+    const fetchScales = async () =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<Scale[]>(accessToken, "config/scales")
+        );
 
     const scalesQuery = () =>
         useQuery(() => ({

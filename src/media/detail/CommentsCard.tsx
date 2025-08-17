@@ -1,31 +1,32 @@
-import { Component, For, createEffect, createResource, createSignal } from "solid-js";
+import { Component, For, Show, createSignal } from "solid-js";
 
 import { useMediaListContext } from "../contexts/MediaListContext";
-import { useCommentServiceContext } from "../contexts/CommentServiceContext";
+import { useMediaContext } from "../../_contexts/api/MediaContext";
 
 const CommentsCard: Component = () => {
     const [fetchCommentSignal, setFetchCommentSignal] = createSignal({
         media: undefined,
         service: undefined
     });
-    const [commentContext] = useCommentServiceContext();
+    const { commentsQuery } = useMediaContext();
     const [commentText, setCommentText] = createSignal("");
     const [mediaList] = useMediaListContext();
 
-    const getComments = () => {
-        if (commentContext.service && mediaList.activeItem) {
-            return commentContext.service.fetchComments(mediaList.activeItem.id);
-        }
-    };
+    const comments = commentsQuery(() => mediaList.activeItem?.id);
+    // const getComments = () => {
+    //     if (commentContext.service && mediaList.activeItem) {
+    //         return commentContext.service.fetchComments(mediaList.activeItem.id);
+    //     }
+    // };
 
-    const [commentResource, { refetch }] = createResource(fetchCommentSignal, getComments);
+    // const [commentResource, { refetch }] = createResource(fetchCommentSignal, getComments);
 
-    const addComment = async (comment: string) => {
-        await commentContext.service.addComment(mediaList.activeItem?.id, comment);
-        refetch();
-    };
+    // const addComment = async (comment: string) => {
+    //     await commentContext.service.addComment(mediaList.activeItem?.id, comment);
+    //     refetch();
+    // };
 
-    const commentsToDisplay = () => commentResource()?.items ?? [];
+    // const commentsToDisplay = () => commentResource()?.items ?? [];
 
     const clearComment = (evt: Event) => {
         evt.preventDefault();
@@ -37,37 +38,32 @@ const CommentsCard: Component = () => {
         evt.preventDefault();
 
         if (commentText()) {
-            await addComment(commentText());
+            // await addComment(commentText());
         }
     };
 
-    createEffect(() => {
-        setFetchCommentSignal({
-            media: mediaList.activeItem,
-            service: commentContext.service
-        });
-    });
-
     return (
         <>
-            <div>
-                <For each={commentsToDisplay()}>
-                    {comment => (
-                        <div class="chat chat-start">
-                            <div class="chat-header w-[100%]">
-                                <span class="mr-2">{comment.username}</span>
-                                <time
-                                    class="text-xs opacity-50"
-                                    datetime={comment.entryDate.toISOString()}
-                                >
-                                    {comment.entryDate.toDateString()}
-                                </time>
+            <Show when={comments.isSuccess}>
+                <div>
+                    <For each={comments.data}>
+                        {comment => (
+                            <div class="chat chat-start">
+                                <div class="chat-header w-[100%]">
+                                    <span class="mr-2">{comment.createdBy}</span>
+                                    <time
+                                        class="text-xs opacity-50"
+                                        datetime={comment.created.toISOString()}
+                                    >
+                                        {comment.created.toDateString()}
+                                    </time>
+                                </div>
+                                <div class="chat-bubble">{comment.body}</div>
                             </div>
-                            <div class="chat-bubble">{comment.commentText}</div>
-                        </div>
-                    )}
-                </For>
-            </div>
+                        )}
+                    </For>
+                </div>
+            </Show>
 
             <form>
                 <textarea

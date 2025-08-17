@@ -1,7 +1,7 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
-import { useCategoryContext } from "../../_contexts/CategoryContext";
+import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
 import Select from "../../_components/input/Select";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const YearFilter: Component<Props> = props => {
-    const [, { getAllYears }] = useCategoryContext();
+    const { yearsQuery } = useCategoriesContext();
     const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -45,18 +45,22 @@ const YearFilter: Component<Props> = props => {
                   })
               ];
 
+    const years = yearsQuery();
+
     if (searchParams.year) {
         onChangeFilter(searchParams.year);
     }
 
     return (
-        <Select
-            horizontal={props.horizontal}
-            title="Year"
-            itemArray={toKvp(getAllYears())}
-            selectedValue={filter.yearFilter ?? "all"}
-            onChange={onChangeFilter}
-        />
+        <Show when={years.isSuccess}>
+            <Select
+                horizontal={props.horizontal}
+                title="Year"
+                itemArray={toKvp(years.data!)}
+                selectedValue={filter.yearFilter ?? "all"}
+                onChange={onChangeFilter}
+            />
+        </Show>
     );
 };
 

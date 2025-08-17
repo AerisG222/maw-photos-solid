@@ -2,7 +2,6 @@ import { Component, For, createEffect, createResource, createSignal } from "soli
 
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { getFormattedExif } from "../../_models/utils/ExifUtils";
-import { useExifServiceContext } from "../contexts/ExifServiceContext";
 
 const ExifCard: Component = () => {
     const [fetchExifSignal, setFetchExifSignal] = createSignal({
@@ -10,31 +9,30 @@ const ExifCard: Component = () => {
         service: undefined
     });
     const [currentTab, setCurrentTab] = createSignal("exif");
-    const [exifContext] = useExifServiceContext();
     const [mediaList] = useMediaListContext();
 
-    const getExifData = () => {
-        if (exifContext.service && mediaList.activeItem) {
-            return exifContext.service.fetchExif(mediaList.activeItem.id);
-        }
-    };
+    // const getExifData = () => {
+    //     if (exifContext.service && mediaList.activeItem) {
+    //         return exifContext.service.fetchExif(mediaList.activeItem.id);
+    //     }
+    // };
 
-    const [exifResource] = createResource(fetchExifSignal, getExifData);
+    // const [exifResource] = createResource(fetchExifSignal, getExifData);
 
-    const getTableData = dataType => {
-        if (exifResource.loading || !exifResource()) {
-            return [];
-        }
+    // const getTableData = dataType => {
+    //     if (exifResource.loading || !exifResource()) {
+    //         return [];
+    //     }
 
-        return getFormattedExif(exifResource(), dataType);
-    };
+    //     return getFormattedExif(exifResource(), dataType);
+    // };
 
-    createEffect(() => {
-        setFetchExifSignal({
-            media: mediaList.activeItem,
-            service: exifContext.service
-        });
-    });
+    // createEffect(() => {
+    //     setFetchExifSignal({
+    //         media: mediaList.activeItem,
+    //         service: exifContext.service
+    //     });
+    // });
 
     return (
         <>
@@ -65,14 +63,14 @@ const ExifCard: Component = () => {
 
             <table class="table table-xs table-zebra w-[100%]">
                 <tbody>
-                    <For each={getTableData(currentTab())}>
+                    {/* <For each={getTableData(currentTab())}>
                         {item => (
                             <tr>
                                 <td>{item.displayName}</td>
                                 <td>{item.displayValue}</td>
                             </tr>
                         )}
-                    </For>
+                    </For> */}
                 </tbody>
             </table>
         </>

@@ -7,7 +7,6 @@ import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLe
 
 export type MediaInfoPanelSettingsState = {
     expandInfoPanel: boolean;
-    showRatings: boolean;
     showCategoryTeaserChooser: boolean;
     showComments: boolean;
     showExif: boolean;
@@ -21,7 +20,6 @@ export type MediaInfoPanelSettingsState = {
 
 export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
     expandInfoPanel: false,
-    showRatings: true,
     showCategoryTeaserChooser: false,
     showComments: true,
     showExif: false,
@@ -37,7 +35,6 @@ export type MediaInfoPanelSettingsContextValue = [
     state: MediaInfoPanelSettingsState,
     actions: {
         setExpandInfoPanel: (expandInfoPanel: boolean) => void;
-        setShowRatings: (showRatings: boolean) => void;
         setShowCategoryTeaserChooser: (showCategoryTeaserChooser: boolean) => void;
         setShowComments: (showComments: boolean) => void;
         setShowExif: (showExif: boolean) => void;
@@ -56,7 +53,6 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
     const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({ expandInfoPanel });
-    const setShowRatings = (showRatings: boolean) => updateState({ showRatings });
     const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) =>
         updateState({ showCategoryTeaserChooser });
     const setShowComments = (showComments: boolean) => updateState({ showComments });
@@ -80,7 +76,6 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
                 state,
                 {
                     setExpandInfoPanel,
-                    setShowRatings,
                     setShowCategoryTeaserChooser,
                     setShowComments,
                     setShowExif,

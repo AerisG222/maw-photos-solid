@@ -46,7 +46,7 @@ export const getRouteForViewMode = (mode: string) => {
     return categoriesGrid;
 };
 
-export const buildSearch = (year?: number) => {
+export const buildSearch = (year?: number | "all") => {
     return { year: year };
 };
 

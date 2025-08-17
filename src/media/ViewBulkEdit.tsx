@@ -5,10 +5,8 @@ import { useMediaListContext } from "./contexts/MediaListContext";
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
 import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
-import { mediaService } from "../_services/media/MediaService";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
 import { useCategoryContext } from "../_contexts/CategoryContext";
-import { categoryService } from "../_services/categories/CategoryService";
 
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
@@ -51,15 +49,15 @@ const ViewBulkEdit: Component = () => {
         setAll(false);
 
         for (const media of mediaToUpdate) {
-            await mediaService.setGpsCoordinateOverride(media.id, gps);
+            //await mediaService.setGpsCoordinateOverride(media.id, gps);
             setGpsOverride(media.id, gps);
         }
 
-        if (categoryService && categoryState.activeCategory) {
-            var category = await categoryService.loadSingle(categoryState.activeCategory.id);
+        // if (categoryService && categoryState.activeCategory) {
+        //     var category = await categoryService.loadSingle(categoryState.activeCategory.id);
 
-            updateCategory(category);
-        }
+        //     updateCategory(category);
+        // }
     };
 
     const setAll = (doSelect: boolean) => {

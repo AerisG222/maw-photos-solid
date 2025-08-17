@@ -28,7 +28,7 @@ export const SlideshowProvider: ParentComponent = props => {
     const [mediaList, { activeItemIsLast, moveFirst, moveNext }] = useMediaListContext();
     const [mediaPageSettings] = useMediaPageSettingsContext();
 
-    let intervalId: number;
+    let intervalId: number | undefined = undefined;
 
     const start = () => {
         setState({ isPlaying: true });

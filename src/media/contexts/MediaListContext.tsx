@@ -16,7 +16,7 @@ import { getMediaPath } from "../../media/_routes";
 
 export type MediaListState = {
     readonly items: Media[];
-    readonly activeItem: Media;
+    readonly activeItem: Media | undefined;
     readonly activeIndex: number;
     readonly activeRouteDefinition: AppRouteDefinition;
     readonly mediaElement: HTMLImageElement | HTMLVideoElement;
@@ -39,7 +39,7 @@ export type MediaListContextValue = [
         setActiveRouteDefinition: (def: AppRouteDefinition) => void;
         setItems: (media: Media[]) => void;
         addItems: (media: Media[]) => void;
-        setActiveItem: (id: Uuid) => void;
+        setActiveItem: (id: Uuid | undefined) => void;
         setMediaElement: (el: HTMLImageElement | HTMLVideoElement) => void;
         activeItemIsFirst: () => boolean;
         activeItemIsLast: () => boolean;

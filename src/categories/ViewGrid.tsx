@@ -1,8 +1,9 @@
-import { Component, For, Show } from "solid-js";
+import { Component, createSignal, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoryContext } from "../_contexts/CategoryContext";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -12,12 +13,18 @@ import Layout from "../_components/layout/Layout";
 import Loading from "../_components/loading/Loading";
 
 const GridView: Component = () => {
+    const [year, setYear] = createSignal(2024);
+
     const { scalesQuery } = useConfigContext();
-    const [, { getFilteredCategoriesForYear, getFilteredYears }] = useCategoryContext();
+    const { categoriesForYearQuery } = useCategoriesContext();
+    //const [, { getFilteredCategoriesForYear, getFilteredYears }] = useCategoryContext();
     const [settings] = useCategoryGridViewSettingsContext();
 
+    const categories = categoriesForYearQuery(year);
+    const doShow = () => scalesQuery().isSuccess && categories.isSuccess;
+
     return (
-        <Show when={scalesQuery().isSuccess} fallback={<Loading />}>
+        <Show when={doShow()} fallback={<Loading />}>
             <Layout
                 toolbar={
                     <Toolbar>
@@ -28,11 +35,11 @@ const GridView: Component = () => {
             >
                 <CategoryFilterBar />
 
-                <For each={getFilteredYears()}>
+                <For each={[year()]}>
                     {(year, idx) => (
                         <YearGrid
                             year={year}
-                            categories={getFilteredCategoriesForYear(year)}
+                            categories={categories.data!}
                             enableEagerLoading={idx() === 0}
                         />
                     )}

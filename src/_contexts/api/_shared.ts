@@ -3,6 +3,16 @@ const buildAbsoluteUrl = (relativeUrl: string): string =>
 
 const getQueryParams = (content: any) => new URLSearchParams(content).toString();
 
+export const runWithAccessToken = async <T>(getToken: () => Promise<string | undefined>, func: (accessToken: string) => Promise<T>) => {
+    var accessToken = await getToken();
+
+    if (accessToken) {
+        return await func(accessToken);
+    }
+
+    throw new Error("Invalid access token!");
+}
+
 export const queryApi = async <T>(accessToken: string, relativeUrl: string, content?: any) => {
     relativeUrl = content ? `${relativeUrl}?${getQueryParams(content)}` : relativeUrl;
 
