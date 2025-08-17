@@ -1,5 +1,5 @@
 import { Component, createEffect } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { MediaView, getMediaPathByView } from "./_routes";
@@ -12,15 +12,12 @@ const Redirect: Component = () => {
     const [categoryContext] = useCategoryContext();
     const [settings] = useMediaPageSettingsContext();
     const [routeContext] = useRouteDetailContext();
+    const params = useParams();
 
     const categoryRedirect = () => {
-        const cat = categoryContext.activeCategory;
-
-        if (cat) {
-            navigate(getMediaPathByView(settings.viewMode as MediaView, cat.type, cat.id), {
-                replace: true
-            });
-        }
+        navigate(getMediaPathByView(settings.viewMode as MediaView, params.categoryId as Uuid), {
+            replace: true
+        });
     };
 
     const randomRedirect = () => {

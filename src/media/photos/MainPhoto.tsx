@@ -25,10 +25,10 @@ const MainPhoto: Component<Props> = props => {
 
     return (
         <img
-            src={"TODO" /*props.media?.imageMdUrl*/}
+            src={props.media.files.find(f => f.scale === "full-hd")!.path}
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
-            class="h-100% w-100% max-h-100vh max-w-100% object-contain"
-            srcset={getSrcset()}
+            class="h-100% max-h-[100vh] max-w-[100%] object-contain"
+            // srcset={getSrcset()}
             sizes="100vw"
             loading="eager"
             ref={el => setMediaElement(el)}

@@ -23,7 +23,7 @@ export const MediaViewAll: MediaView[] = [
     MediaViewModeMap
 ];
 
-const categoryBasePath = "/categories/:categoryType/:categoryId";
+const categoryBasePath = "/categories/:categoryId";
 const randomBasePath = "/random";
 
 const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({

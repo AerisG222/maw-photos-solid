@@ -33,7 +33,7 @@ const PhotoLink: Component<Props> = props => {
             isActiveItem={props.isActiveItem}
         >
             <img
-                src={"TODO" /*props.media.imageXsSqUrl*/}
+                src={props.media.files.find(f => f.scale === "qvg-fill").path}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
                 classList={getClassList()}

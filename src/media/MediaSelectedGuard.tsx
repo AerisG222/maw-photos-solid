@@ -32,15 +32,7 @@ const MediaSelectedGuard: ParentComponent<Props> = props => {
             const m = media[0];
 
             if (m) {
-                navigate(
-                    getMediaPath(
-                        props.targetRoute,
-                        categoryContext.activeCategory?.type,
-                        m.categoryId,
-                        m.id
-                    ),
-                    { replace: true }
-                );
+                navigate(getMediaPath(props.targetRoute, m.categoryId, m.id), { replace: true });
             }
         }
     });

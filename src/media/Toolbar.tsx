@@ -38,7 +38,6 @@ const Toolbar: ParentComponent = props => {
     const c = children(() => props.children);
 
     const getRouteParams = () => ({
-        categoryType: categoryState?.activeCategory?.type,
         categoryId: categoryState?.activeCategory?.id,
         id: mediaList.activeItem?.id
     });

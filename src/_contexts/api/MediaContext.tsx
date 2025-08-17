@@ -8,8 +8,9 @@ import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
 
 export type MediaService = {
+    mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media, Error>;
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
-    commentsQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Comment[], Error>;
+    commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
 };
 
@@ -17,6 +18,9 @@ const MediaContext = createContext<MediaService>();
 
 export const MediaProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
+
+    const fetchMedia = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
 
     const fetchRandom = async (count: number) =>
         runWithAccessToken(getToken, accessToken =>
@@ -51,6 +55,14 @@ export const MediaProvider: ParentComponent = props => {
     //         staleTime: 15 * 60 * 1000
     //     }));
 
+    const mediaQuery = (id: Accessor<Uuid>) =>
+        useQuery(() => ({
+            queryKey: ["media", id()],
+            queryFn: () => fetchMedia(id()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 15 * 60 * 1000
+        }));
+
     const metadataQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
             queryKey: ["media", id(), "metadata"],
@@ -77,6 +89,7 @@ export const MediaProvider: ParentComponent = props => {
     return (
         <MediaContext.Provider
             value={{
+                mediaQuery,
                 metadataQuery,
                 commentsQuery,
                 gpsQuery

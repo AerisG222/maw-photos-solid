@@ -7,6 +7,7 @@ import { useSlideshowContext } from "./contexts/SlideshowContext";
 import { getMediaPath, categoryGridRoute, randomGridRoute } from "./_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -14,13 +15,19 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../media/MediaGrid";
 import MediaMainItem from "./MediaMainItem";
+import { useMediaContext } from "../_contexts/api/MediaContext";
 
 const ViewGrid: Component = () => {
     const [settings] = useMediaGridViewSettingsContext();
     const [routeContext] = useRouteDetailContext();
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
+    // const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [, { stop }] = useSlideshowContext();
     const params = useParams();
+    const { categoryMediaQuery } = useCategoriesContext();
+    const { mediaQuery } = useMediaContext();
+
+    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
+    const activeMedia = mediaQuery(() => params.id as Uuid);
 
     createEffect(() => {
         let route = categoryGridRoute;
@@ -28,59 +35,55 @@ const ViewGrid: Component = () => {
         if (routeContext.area === AreaRandom) {
             route = randomGridRoute;
         }
-
-        setActiveRouteDefinition(route);
     });
 
     return (
-        <Show when={mediaList.activeRouteDefinition}>
-            <Layout
-                margin={settings.margin}
-                toolbar={
-                    <Toolbar>
-                        <GridToolbar />
-                    </Toolbar>
-                }
-            >
-                <Show when={mediaList.activeItem}>
-                    <div
-                        class="position-absolute z-200 bg-base-100:92%
-                            top-82px left-0 h-[calc(100vh-82px)]
-                            md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]"
+        <Layout
+            margin={settings.margin}
+            toolbar={
+                <Toolbar>
+                    <GridToolbar />
+                </Toolbar>
+            }
+        >
+            <Show when={activeMedia.data}>
+                <div
+                    class="position-absolute z-200 bg-base-100/92
+                        top-82px left-0 h-[calc(100vh-82px)]
+                        md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]"
+                >
+                    <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
+                        <CategoryBreadcrumb showTitleAsLink={true} />
+                    </Show>
+
+                    <A
+                        class="flex h-100%"
+                        href={getMediaPath(
+                            categoryGridRoute,
+                            activeMedia.data!.categoryId,
+                            undefined
+                        )}
+                        onClick={stop}
                     >
-                        <Show
-                            when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}
-                        >
-                            <CategoryBreadcrumb showTitleAsLink={true} />
-                        </Show>
+                        <MediaMainItem media={activeMedia.data!} />
+                    </A>
+                </div>
+            </Show>
 
-                        <A
-                            class="flex h-100%"
-                            href={getMediaPath(
-                                mediaList.activeRouteDefinition,
-                                mediaList.activeItem.categoryId,
-                                undefined
-                            )}
-                            onClick={stop}
-                        >
-                            <MediaMainItem media={mediaList.activeItem} />
-                        </A>
-                    </div>
-                </Show>
-
+            <Show when={mediaList.data}>
                 <div>
                     <Show when={settings.showBreadcrumbs && routeContext.area !== AreaRandom}>
                         <CategoryBreadcrumb />
                     </Show>
 
                     <MediaGrid
-                        items={mediaList.items}
+                        items={mediaList.data!}
                         thumbnailSize={settings.thumbnailSize}
-                        activeRoute={mediaList.activeRouteDefinition}
+                        activeRoute={categoryGridRoute}
                     />
                 </div>
-            </Layout>
-        </Show>
+            </Show>
+        </Layout>
     );
 };
 
