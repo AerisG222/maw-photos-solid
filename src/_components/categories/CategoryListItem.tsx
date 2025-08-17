@@ -21,7 +21,7 @@ const CategoryListItem: Component<Props> = props => {
             <span class={`ml-1 mr-2 md:mx-4 text-6`} />
 
             <img
-                src="TODO"
+                src={props.category.teaser.files.find(f => f.scale === "qvg-fill")?.path}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
                 class="inline saturate-50 group-hover:saturate-100"

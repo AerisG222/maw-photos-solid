@@ -8,10 +8,16 @@ import ListToolbar from "./ToolbarList";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
+import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 
 const ListView: Component = () => {
     const [, { getFilteredYears, getFilteredCategoriesForYear }] = useCategoryContext();
     const [settings] = useCategoryListViewSettingsContext();
+    const [filter] = useCategoryFilterSettingsContext();
+    const { categoriesForYearQuery } = useCategoriesContext();
+
+    const categories = categoriesForYearQuery(() => filter.yearFilter as number);
 
     return (
         <Layout
@@ -24,11 +30,11 @@ const ListView: Component = () => {
         >
             <CategoryFilterBar />
 
-            <For each={getFilteredYears()}>
+            <For each={[filter.yearFilter]}>
                 {(year, idx) => (
                     <YearList
                         year={year}
-                        categories={getFilteredCategoriesForYear(year)}
+                        categories={categories.data}
                         enableEagerLoading={idx() === 0}
                     />
                 )}

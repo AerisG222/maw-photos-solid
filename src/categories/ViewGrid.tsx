@@ -1,9 +1,10 @@
-import { Component, createEffect, createSignal, For, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoryContext } from "../_contexts/CategoryContext";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -11,7 +12,6 @@ import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
 import Loading from "../_components/loading/Loading";
-import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
 
 const GridView: Component = () => {
     const { scalesQuery } = useConfigContext();
