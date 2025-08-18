@@ -16,10 +16,8 @@ const CategoryListItem: Component<Props> = props => {
     return (
         <A
             href={getCategoryPath(props.category.id)}
-            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary:10% hover:bg-secondary-content:20 hover:text-primary"
+            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10 hover:bg-base-300 hover:text-primary"
         >
-            <span class={`ml-1 mr-2 md:mx-4 text-6`} />
-
             <img
                 src={props.category.teaser.files.find(f => f.scale === "qvg-fill")?.path}
                 width={getThumbnailSize(props.thumbnailSize).width}

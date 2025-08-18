@@ -12,7 +12,7 @@ type Props<T> = {
 const Select: Component<Props<string | number>> = props => {
     return (
         <fieldset class="fieldset">
-            <legend class="fieldset-legend text-secondary font-bold">{props.title}</legend>
+            <legend class="fieldset-legend text-sm text-secondary font-bold">{props.title}</legend>
             <select
                 name="theme"
                 class="select min-w-[10rem]"

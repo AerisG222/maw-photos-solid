@@ -13,7 +13,7 @@ const PrimaryNavLink: Component<Props> = props => {
         <A
             href={props.route.path}
             activeClass="text-primary-content bg-primary"
-            class="primary-nav-link"
+            class="flex primary-nav-link"
             title={props.route.name}
         >
             <Icon classes={props.route.icon!} />
