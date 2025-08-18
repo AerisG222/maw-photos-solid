@@ -20,7 +20,7 @@ type Props = {
 const PhotoLink: Component<Props> = props => {
     const getClassList = () => ({
         "max-w-none": true,
-        "rounded-md": props.rounded
+        "rounded-sm": props.rounded
     });
 
     /// todo: make category type dynamic

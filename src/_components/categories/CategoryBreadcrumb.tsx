@@ -1,34 +1,33 @@
 import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { useCategoryContext } from "../../_contexts/CategoryContext";
+import { Category } from "../../_models/Category";
 
 type Props = {
     showTitleAsLink?: boolean;
+    category?: Category;
 };
 
 const CategoryBreadcrumb: Component<Props> = props => {
-    const [state] = useCategoryContext();
-
     return (
-        <Show when={state.activeCategory}>
+        <Show when={props.category}>
             <div class="text-center">
-                <A class="text-primary" href={`/categories?year=${state.activeCategory.year}`}>
-                    {state.activeCategory.year}
+                <A
+                    class="text-primary"
+                    href={`/categories?year=${props.category!.effectiveDate.getFullYear()}`}
+                >
+                    {props.category!.effectiveDate.getFullYear()}
                 </A>
 
-                <span class="text-6 icon-[ic--round-arrow-right]" />
+                <span class="text-xl align-middle icon-[ic--round-arrow-right]" />
 
                 <Show when={props.showTitleAsLink}>
-                    <A
-                        class="text-primary"
-                        href={`/categories/${state.activeCategory.type}/${state.activeCategory.id}`}
-                    >
-                        {state.activeCategory.name}
+                    <A class="text-primary" href={`/categories/${props.category!.id}`}>
+                        {props.category!.name}
                     </A>
                 </Show>
                 <Show when={!props.showTitleAsLink}>
-                    <span>{state.activeCategory.name}</span>
+                    <span>{props.category!.name}</span>
                 </Show>
             </div>
         </Show>

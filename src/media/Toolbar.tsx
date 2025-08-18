@@ -22,15 +22,19 @@ import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { useAuthContext } from "../_contexts/AuthContext";
+import { Media } from "../_models/Media";
+import { Category } from "../_models/Category";
 
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
 import ToolbarLink from "../_components/toolbar/ToolbarLink";
 
-const Toolbar: ParentComponent = props => {
+export type ToolbarProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
+const Toolbar: ParentComponent<ToolbarProps> = props => {
     const [, { isAdmin }] = useAuthContext();
-    const [categoryState] = useCategoryContext();
-    const [mediaList] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
     const [, { setViewMode }] = useMediaPageSettingsContext();
     const [, { gteMd }] = useMediaBreakpointContext();
@@ -38,8 +42,8 @@ const Toolbar: ParentComponent = props => {
     const c = children(() => props.children);
 
     const getRouteParams = () => ({
-        categoryId: categoryState?.activeCategory?.id,
-        id: mediaList.activeItem?.id
+        categoryId: props.activeCategory?.id,
+        id: props.activeMedia?.id
     });
 
     const getGridRoute = () => getRouteForArea(categoryGridRoute, randomGridRoute);

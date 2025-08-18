@@ -23,20 +23,35 @@ const CategoriesContext = createContext<CategoriesService>();
 export const CategoriesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
 
+    const cleanupDatesFromApi = (c: Category) => {
+        c.effectiveDate = new Date(c.effectiveDate);
+        c.modified = new Date(c.modified);
+    };
+
     const fetchYears = async () =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<number[]>(accessToken, "categories/years")
         );
 
     const fetchCategoriesForYear = async (year: number) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Category[]>(accessToken, `categories/years/${year}`)
-        );
+        runWithAccessToken(getToken, async accessToken => {
+            const categories = await queryApi<Category[]>(accessToken, `categories/years/${year}`);
+
+            for (const c of categories) {
+                cleanupDatesFromApi(c);
+            }
+
+            return categories;
+        });
 
     const fetchCategory = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Category>(accessToken, `categories/${id}`)
-        );
+        runWithAccessToken(getToken, async accessToken => {
+            const category = await queryApi<Category>(accessToken, `categories/${id}`);
+
+            cleanupDatesFromApi(category);
+
+            return category;
+        });
 
     const fetchCategoryMedia = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken =>
@@ -114,3 +129,6 @@ export const useCategoriesContext = () => {
 
     throw new Error("Categories context not provided by ancestor component!");
 };
+function cleanupDatesFromApi(category: Category) {
+    throw new Error("Function not implemented.");
+}

@@ -23,9 +23,10 @@ const ViewGrid: Component = () => {
     // const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [, { stop }] = useSlideshowContext();
     const params = useParams();
-    const { categoryMediaQuery } = useCategoriesContext();
+    const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
     const { mediaQuery } = useMediaContext();
 
+    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
     const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
     const activeMedia = mediaQuery(() => params.id as Uuid);
 
@@ -41,7 +42,7 @@ const ViewGrid: Component = () => {
         <Layout
             margin={settings.margin}
             toolbar={
-                <Toolbar>
+                <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
                     <GridToolbar />
                 </Toolbar>
             }
@@ -53,7 +54,7 @@ const ViewGrid: Component = () => {
                         md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]"
                 >
                     <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
-                        <CategoryBreadcrumb showTitleAsLink={true} />
+                        <CategoryBreadcrumb showTitleAsLink={true} category={activeCategory.data} />
                     </Show>
 
                     <A
@@ -73,7 +74,7 @@ const ViewGrid: Component = () => {
             <Show when={mediaList.data}>
                 <div>
                     <Show when={settings.showBreadcrumbs && routeContext.area !== AreaRandom}>
-                        <CategoryBreadcrumb />
+                        <CategoryBreadcrumb category={activeCategory.data} />
                     </Show>
 
                     <MediaGrid

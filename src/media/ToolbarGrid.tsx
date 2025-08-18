@@ -1,5 +1,4 @@
 import { Component, Show } from "solid-js";
-import { useParams } from "@solidjs/router";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { getNextMarginSize } from "../_models/Margin";
@@ -13,7 +12,7 @@ import ToolbarButton from "../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import MoveNextButton from "./toolbar/MoveNextButton";
-import ToggleSlideshowButton, { showSlideshowButton } from "./toolbar/ToggleSlideshowButton";
+import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton";
 import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
@@ -25,7 +24,6 @@ const GridToolbar: Component = () => {
         useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
     const [state] = useMediaListContext();
-    const params = useParams();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -52,9 +50,7 @@ const GridToolbar: Component = () => {
                 <MoveNextButton />
             </Show>
 
-            <Show when={(state.activeItem && !ltMd()) || showSlideshowButton(routeContext.area)}>
-                <ToolbarDivider />
-            </Show>
+            <ToolbarDivider />
 
             <Show when={!state.activeItem}>
                 <Show when={routeContext.area === AreaCategories}>
