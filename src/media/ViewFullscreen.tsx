@@ -44,7 +44,7 @@ const ViewFullscreen: Component = () => {
                         </Toolbar>
                     }
                 >
-                    <div class="grid h-[100vh] w-[100%] justify-center">
+                    <div class="grid h-screen w-full justify-center">
                         <MediaMainItem media={mediaList.activeItem} />
                     </div>
                 </Layout>

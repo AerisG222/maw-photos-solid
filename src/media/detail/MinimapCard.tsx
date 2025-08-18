@@ -65,7 +65,7 @@ const MinimapCard: Component = () => {
         }
     });
 
-    return <div class="h-[320px] w-[100%]" ref={el} />;
+    return <div class="h-[320px] w-full" ref={el} />;
 };
 
 export default MinimapCard;

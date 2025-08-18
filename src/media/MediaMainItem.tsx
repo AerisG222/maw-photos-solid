@@ -56,7 +56,7 @@ const MediaMainItem: Component<Props> = props => {
                 ref={el}
                 use:swipe={handleSwipe}
                 use:tap={handleTap}
-                class="h-100% w-100% max-h-100vh max-w-100% object-contain self-center"
+                class="h-full w-full max-h-screen max-w-full object-contain self-center"
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}
             >
                 <Switch>

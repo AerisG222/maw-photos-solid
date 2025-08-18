@@ -61,7 +61,7 @@ const ExifCard: Component = () => {
                 <span class="grow tab-bordered" />
             </div>
 
-            <table class="table table-xs table-zebra w-[100%]">
+            <table class="table table-xs table-zebra w-full">
                 <tbody>
                     {/* <For each={getTableData(currentTab())}>
                         {item => (

@@ -129,7 +129,7 @@ const ViewMap: Component = () => {
                         </Toolbar>
                     }
                 >
-                    <div class="h-[100vh] w-[100%]" ref={el} />
+                    <div class="h-screen w-full" ref={el} />
                 </Layout>
             </MediaSelectedGuard>
         </Show>

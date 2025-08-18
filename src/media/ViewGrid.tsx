@@ -49,16 +49,16 @@ const ViewGrid: Component = () => {
         >
             <Show when={activeMedia.data}>
                 <div
-                    class="position-absolute z-200 bg-base-100/92
-                        top-82px left-0 h-[calc(100vh-82px)]
-                        md:top-0 md:left-[114px] md:w-[calc(100vw-114px)] md:h-[100vh]"
+                    class="absolute z-200 bg-base-100/92
+                        top-[82px] left-[0] h-[calc(100vh-82px)]
+                        md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
                 >
                     <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
                         <CategoryBreadcrumb showTitleAsLink={true} category={activeCategory.data} />
                     </Show>
 
                     <A
-                        class="flex h-100%"
+                        class="flex h-full"
                         href={getMediaPath(
                             categoryGridRoute,
                             activeMedia.data!.categoryId,

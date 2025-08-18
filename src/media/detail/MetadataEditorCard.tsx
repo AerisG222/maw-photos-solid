@@ -121,7 +121,7 @@ const MetadataEditorCard: Component = () => {
                 <div>
                     <input
                         type="text"
-                        class="input input-sm w-[100%]"
+                        class="input input-sm w-full"
                         placeholder="Source"
                         value={sourceGps().lat ?? ""}
                         disabled
@@ -130,7 +130,7 @@ const MetadataEditorCard: Component = () => {
                 <div>
                     <input
                         type="text"
-                        class="input input-sm w-[100%]"
+                        class="input input-sm w-full"
                         placeholder="Override"
                         classList={getValidationClass(override().lat!)}
                         onPaste={onPaste}
@@ -147,7 +147,7 @@ const MetadataEditorCard: Component = () => {
                 <div>
                     <input
                         type="text"
-                        class="input input-sm w-[100%]"
+                        class="input input-sm w-full"
                         placeholder="Source"
                         value={sourceGps().lng ?? ""}
                         disabled
@@ -156,7 +156,7 @@ const MetadataEditorCard: Component = () => {
                 <div>
                     <input
                         type="text"
-                        class="input input-sm w-[100%]"
+                        class="input input-sm w-full"
                         placeholder="Override"
                         classList={getValidationClass(override().lng!)}
                         onPaste={onPaste}
@@ -168,13 +168,13 @@ const MetadataEditorCard: Component = () => {
                 </div>
 
                 <div>
-                    <button class="btn btn-sm btn-outline btn-error w-[100%]" onClick={cancel}>
+                    <button class="btn btn-sm btn-outline btn-error w-full" onClick={cancel}>
                         Cancel
                     </button>
                 </div>
                 <div>
                     <button
-                        class="btn btn-sm btn-outline w-[100%]"
+                        class="btn btn-sm btn-outline w-full"
                         onClick={save}
                         // disabled={!isOverrideValid()}
                         // classList={getButtonClass()}
@@ -184,7 +184,7 @@ const MetadataEditorCard: Component = () => {
                 </div>
                 <div>
                     <button
-                        class="btn btn-sm btn-outline w-[100%]"
+                        class="btn btn-sm btn-outline w-full"
                         onClick={saveAndMoveNext}
                         // disabled={!isOverrideValid()}
                         // classList={getButtonClass()}

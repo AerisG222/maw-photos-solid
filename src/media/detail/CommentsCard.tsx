@@ -49,7 +49,7 @@ const CommentsCard: Component = () => {
                     <For each={comments.data}>
                         {comment => (
                             <div class="chat chat-start">
-                                <div class="chat-header w-[100%]">
+                                <div class="chat-header w-full">
                                     <span class="mr-2">{comment.createdBy}</span>
                                     <time
                                         class="text-xs opacity-50"
@@ -67,7 +67,7 @@ const CommentsCard: Component = () => {
 
             <form>
                 <textarea
-                    class="textarea w-[100%]"
+                    class="textarea w-full"
                     placeholder="Comment"
                     onKeyDown={evt => evt.stopPropagation()}
                     onInput={evt => setCommentText(evt.currentTarget.value)}

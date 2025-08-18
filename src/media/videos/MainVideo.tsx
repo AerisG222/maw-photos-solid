@@ -19,7 +19,7 @@ const MainVideo: Component<Props> = props => {
 
     return (
         <video
-            class="h-100% w-100% center-block m-auto"
+            class="h-100% w-full center-block m-auto"
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
             autoplay={false}
             controls

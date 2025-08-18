@@ -27,7 +27,7 @@ const MainPhoto: Component<Props> = props => {
         <img
             src={props.media.files.find(f => f.scale === "full-hd")!.path}
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
-            class="h-100% max-h-[100vh] max-w-[100%] object-contain"
+            class="w-full h-full max-h-screen max-w-full object-contain"
             // srcset={getSrcset()}
             sizes="100vw"
             loading="eager"

@@ -24,7 +24,7 @@ const EffectsCard: Component = () => {
     return (
         <>
             <div class="flex gap-2">
-                <div class="w-[100%]">
+                <div class="w-full">
                     <div>
                         Grayscale ({visualEffectsState.grayscale})
                         <EffectsResetButton
@@ -108,7 +108,7 @@ const EffectsCard: Component = () => {
 
                 <div />
 
-                <div class="w-[100%]">
+                <div class="w-full">
                     <div>
                         Sepia ({visualEffectsState.sepia})
                         <EffectsResetButton
