@@ -5,7 +5,7 @@ export type GpsOverride = {
     lng: string | undefined;
 };
 
-export const isValidLatLng = (val: string) => {
+export const isValidLatLng = (val?: string) => {
     return val !== undefined && !isNaN(parseFloat(val));
 };
 

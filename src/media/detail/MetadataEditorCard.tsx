@@ -1,44 +1,29 @@
-import { Component, createEffect, createResource, createSignal } from "solid-js";
+import { Component, createSignal, Show } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
 import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
+import { useMediaContext } from "../../_contexts/api/MediaContext";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
 
-const MetadataEditorCard: Component = () => {
-    const [fetchMetadataEditSignal, setFetchMetadataEditSignal] = createSignal({
-        media: undefined,
-        service: undefined
-    });
-    const [sourceGps, setSourceGps] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
+export type MetadataEditorCardProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+    requestMoveNext: () => void;
+};
+
+const MetadataEditorCard: Component<MetadataEditorCardProps> = props => {
+    const { gpsQuery } = useMediaContext();
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
-    const [mediaList, { moveNext }] = useMediaListContext();
 
-    const fetchGpsData = () => {
-        // if (metadataEditorContext.service && mediaList.activeItem) {
-        //     return metadataEditorContext.service.fetchGpsDetail(mediaList.activeItem.id);
-        // }
-    };
-
-    const [gpsDetail] = createResource(fetchMetadataEditSignal, fetchGpsData);
-
-    // createEffect(() => {
-    //     const src = undefinedgpsDetail()?.source;
-
-    //     setSourceGps(
-    //         src
-    //             ? { lat: src.latitude.toString(), lng: src.longitude.toString() }
-    //             : { lat: undefined, lng: undefined }
-    //     );
-
-    //     updateOverrideInputsFromApi();
-    // });
+    const gps = gpsQuery(() => props.activeMedia!.id);
 
     const updateOverrideInputsFromApi = () => {
-        // const ov = gpsDetail()?.override;
-        // setOverride(
-        //     ov
-        //         ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() }
-        //         : { lat: undefined, lng: undefined }
-        // );
+        const ov = gps.data?.override;
+        setOverride(
+            ov
+                ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() }
+                : { lat: undefined, lng: undefined }
+        );
     };
 
     const onPaste = (evt: ClipboardEvent) => {
@@ -83,11 +68,11 @@ const MetadataEditorCard: Component = () => {
 
     const saveAndMoveNext = (evt: Event) => {
         save(evt);
-        moveNext();
+        props.requestMoveNext();
     };
 
     const isOverrideValid = () => {
-        // return isValidLatLng(override().lat) && isValidLatLng(override().lng);
+        return isValidLatLng(override().lat) && isValidLatLng(override().lng);
     };
 
     const getValidationClass = (val: string) => {
@@ -100,100 +85,101 @@ const MetadataEditorCard: Component = () => {
 
     const getButtonClass = () => {
         return {
-            // "btn-disabled": !isOverrideValid(),
+            "btn-disabled": !isOverrideValid(),
             "btn-primary": isOverrideValid()
         };
     };
 
-    createEffect(() => {
-        // setFetchMetadataEditSignal({
-        //     media: mediaList.activeItem,
-        //     service: metadataEditorContext.service
-        // });
-    });
-
     return (
-        <form>
-            <div class="grid grid-cols-3 grid-rows-3 grid-gap-2">
-                <div>
-                    <label class="label">Latitude</label>
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        class="input input-sm w-full"
-                        placeholder="Source"
-                        value={sourceGps().lat ?? ""}
-                        disabled
-                    />
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        class="input input-sm w-full"
-                        placeholder="Override"
-                        classList={getValidationClass(override().lat!)}
-                        onPaste={onPaste}
-                        value={override().lat ?? ""}
-                        onInput={evt =>
-                            setOverride(prev => ({ lat: evt.currentTarget.value, lng: prev.lng }))
-                        }
-                    />
-                </div>
+        <Show when={gps.isSuccess}>
+            <form>
+                <div class="grid grid-cols-3 grid-rows-3 gap-2">
+                    <div>
+                        <label class="label">Latitude</label>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            class="input input-sm"
+                            placeholder="Recorded"
+                            value={gps.data?.recorded?.latitude ?? ""}
+                            disabled
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            class="input input-sm"
+                            placeholder="Override"
+                            classList={getValidationClass(override().lat!)}
+                            onPaste={onPaste}
+                            value={override().lat ?? ""}
+                            onInput={evt =>
+                                setOverride(prev => ({
+                                    lat: evt.currentTarget.value,
+                                    lng: prev.lng
+                                }))
+                            }
+                        />
+                    </div>
 
-                <div>
-                    <label class="label">Longitude</label>
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        class="input input-sm w-full"
-                        placeholder="Source"
-                        value={sourceGps().lng ?? ""}
-                        disabled
-                    />
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        class="input input-sm w-full"
-                        placeholder="Override"
-                        classList={getValidationClass(override().lng!)}
-                        onPaste={onPaste}
-                        value={override().lng ?? ""}
-                        onInput={evt =>
-                            setOverride(prev => ({ lat: prev.lat, lng: evt.currentTarget.value }))
-                        }
-                    />
-                </div>
+                    <div>
+                        <label class="label">Longitude</label>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            class="input input-sm"
+                            placeholder="Source"
+                            value={gps.data?.recorded?.longitude ?? ""}
+                            disabled
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            class="input input-sm"
+                            placeholder="Override"
+                            classList={getValidationClass(override().lng!)}
+                            onPaste={onPaste}
+                            value={override().lng ?? ""}
+                            onInput={evt =>
+                                setOverride(prev => ({
+                                    lat: prev.lat,
+                                    lng: evt.currentTarget.value
+                                }))
+                            }
+                        />
+                    </div>
 
-                <div>
-                    <button class="btn btn-sm btn-outline btn-error w-full" onClick={cancel}>
-                        Cancel
-                    </button>
+                    <div>
+                        <button class="btn btn-sm btn-outline btn-error w-full" onClick={cancel}>
+                            Cancel
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            class="btn btn-sm btn-outline w-full"
+                            onClick={save}
+                            disabled={!isOverrideValid()}
+                            classList={getButtonClass()}
+                        >
+                            Save
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            class="btn btn-sm btn-outline w-full"
+                            onClick={saveAndMoveNext}
+                            disabled={!isOverrideValid()}
+                            classList={getButtonClass()}
+                        >
+                            Save Move Next
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <button
-                        class="btn btn-sm btn-outline w-full"
-                        onClick={save}
-                        // disabled={!isOverrideValid()}
-                        // classList={getButtonClass()}
-                    >
-                        Save
-                    </button>
-                </div>
-                <div>
-                    <button
-                        class="btn btn-sm btn-outline w-full"
-                        onClick={saveAndMoveNext}
-                        // disabled={!isOverrideValid()}
-                        // classList={getButtonClass()}
-                    >
-                        Save Move Next
-                    </button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </Show>
     );
 };
 
