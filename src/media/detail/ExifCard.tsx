@@ -9,6 +9,7 @@ export type ExifCardProps = {
     activeMedia: Media | undefined;
 };
 
+// TODO: consider adding reverse geocode info
 const ExifCard: Component<ExifCardProps> = props => {
     const { metadataQuery } = useMediaContext();
     const [currentTab, setCurrentTab] = createSignal("");
