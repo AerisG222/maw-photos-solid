@@ -1,18 +1,19 @@
 import { Component, For, Show, createSignal } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
 
-const CommentsCard: Component = () => {
-    const [fetchCommentSignal, setFetchCommentSignal] = createSignal({
-        media: undefined,
-        service: undefined
-    });
+export type SidebarProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
+
+const CommentsCard: Component<SidebarProps> = props => {
     const { commentsQuery } = useMediaContext();
     const [commentText, setCommentText] = createSignal("");
-    const [mediaList] = useMediaListContext();
 
-    const comments = commentsQuery(() => mediaList.activeItem?.id);
+    const comments = commentsQuery(() => props.activeMedia!.id);
     // const getComments = () => {
     //     if (commentContext.service && mediaList.activeItem) {
     //         return commentContext.service.fetchComments(mediaList.activeItem.id);
@@ -58,7 +59,8 @@ const CommentsCard: Component = () => {
                                         {comment.created.toDateString()}
                                     </time>
                                 </div>
-                                <div class="chat-bubble">{comment.body}</div>
+                                <div class="chat-bubble bg-base-200 w-full">{comment.body}</div>
+                                <div class="chat-footer w-full"></div>
                             </div>
                         )}
                     </For>
@@ -73,12 +75,14 @@ const CommentsCard: Component = () => {
                     onInput={evt => setCommentText(evt.currentTarget.value)}
                     value={commentText()}
                 />
-                <button class="btn btn-sm btn-outline btn-primary mr-4" onClick={saveComment}>
-                    Save
-                </button>
-                <button class="btn btn-sm btn-outline btn-error" onClick={clearComment}>
-                    Cancel
-                </button>
+                <div class="flex gap-4 mt-2">
+                    <button class="btn btn-sm btn-outline btn-primary" onClick={saveComment}>
+                        Save
+                    </button>
+                    <button class="btn btn-sm btn-outline btn-error" onClick={clearComment}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         </>
     );

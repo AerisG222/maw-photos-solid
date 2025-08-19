@@ -5,13 +5,20 @@ import { Media } from "../../_models/Media";
 import { useMediaListContext } from "../contexts/MediaListContext";
 import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
 import { AreaRandom } from "../../_models/AppRouteDefinition";
+import { Category } from "../../_models/Category";
 
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
+import { Dynamic } from "solid-js/web";
 
-const Sidebar: Component = () => {
+export type SidebarProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
+
+const Sidebar: Component<SidebarProps> = props => {
     const [routeContext] = useRouteDetailContext();
 
     const [
@@ -139,11 +146,15 @@ const Sidebar: Component = () => {
         <div class="flex">
             <Show when={settings.expandInfoPanel}>
                 <div class="w-[500px] bg-base-200 border-l-1 border-l-base-content/30 overflow-y-auto overflow-x-hidden scrollable">
-                    <For each={cards.filter(card => card.enable(mediaList.activeItem))}>
+                    <For each={cards.filter(card => card.enable(props.activeMedia!))}>
                         {card => (
                             <Show when={card.active()}>
                                 <InfoCard title={card.title} icon={card.icon}>
-                                    {card.component}
+                                    <Dynamic
+                                        component={card.component}
+                                        activeCategory={props.activeCategory!}
+                                        activeMedia={props.activeMedia!}
+                                    />
                                 </InfoCard>
                             </Show>
                         )}
@@ -165,7 +176,7 @@ const Sidebar: Component = () => {
 
                 <ToolbarDivider />
 
-                <For each={cards.filter(card => card.enable(mediaList.activeItem))}>
+                <For each={cards.filter(card => card.enable(props.activeMedia!))}>
                     {card => (
                         <ToolbarButton
                             disabled={!settings.expandInfoPanel}

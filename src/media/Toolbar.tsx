@@ -33,6 +33,7 @@ export type ToolbarProps = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
+
 const Toolbar: ParentComponent<ToolbarProps> = props => {
     const [, { isAdmin }] = useAuthContext();
     const [routeContext] = useRouteDetailContext();

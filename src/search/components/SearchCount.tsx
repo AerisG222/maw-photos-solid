@@ -6,7 +6,7 @@ const SearchCount: Component = () => {
     const [searchContext] = useSearchContext();
 
     return (
-        <div class="flex justify-end my-3 font-bold color-secondary">
+        <div class="flex justify-end my-3 font-bold text-secondary">
             {searchContext.categories.length} of {searchContext.foundCount}
         </div>
     );

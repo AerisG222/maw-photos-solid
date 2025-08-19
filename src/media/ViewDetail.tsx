@@ -64,7 +64,9 @@ const ViewDetail: Component = () => {
                         <DetailToolbar />
                     </Toolbar>
                 }
-                sidebar={<Sidebar />}
+                sidebar={
+                    <Sidebar activeCategory={activeCategory.data} activeMedia={activeMedia.data} />
+                }
             >
                 <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
                     <Show when={settings.showBreadcrumbs} fallback={<div />}>

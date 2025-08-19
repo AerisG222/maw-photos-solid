@@ -33,9 +33,15 @@ export const MediaProvider: ParentComponent = props => {
         );
 
     const fetchComments = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Comment[]>(accessToken, `media/${id}/comments`)
-        );
+        runWithAccessToken(getToken, async accessToken => {
+            const comments = await queryApi<Comment[]>(accessToken, `media/${id}/comments`);
+
+            for (const c of comments) {
+                c.created = new Date(c.created);
+            }
+
+            return comments;
+        });
 
     const fetchGps = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken =>

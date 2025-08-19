@@ -100,7 +100,7 @@ const ViewMedia: Component = () => {
                         onChange={setDetailThumbnailSize}
                     />
 
-                    <h3 class="head3 mt-4 color-secondary">Info Panel</h3>
+                    <h3 class="head3 mt-4 text-secondary">Info Panel</h3>
                     <div>
                         <Checkbox
                             title="Show Expanded Panel"
