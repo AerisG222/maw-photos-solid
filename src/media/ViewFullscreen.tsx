@@ -1,31 +1,41 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
-import { useMediaListContext } from "./contexts/MediaListContext";
-import { categoryFullscreenRoute, randomFullscreenRoute } from "./_routes";
+import { getMediaPathByView, MediaViewModeFullscreen } from "./_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
-import { AreaRandom } from "../_models/AppRouteDefinition";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { useMediaContext } from "../_contexts/api/MediaContext";
+import { useNavigate, useParams } from "@solidjs/router";
 
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
 import MediaMainItem from "./MediaMainItem";
-import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewFullscreen: Component = () => {
+    const navigate = useNavigate();
+    const params = useParams();
     const [, { setFullscreen }] = useFullscreenContext();
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
+    const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
+    const { mediaQuery } = useMediaContext();
+
+    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
+    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
 
     createEffect(() => {
-        let route = categoryFullscreenRoute;
-
-        if (routeContext.area === AreaRandom) {
-            route = randomFullscreenRoute;
+        if (!params.id && mediaList.data) {
+            navigate(
+                getMediaPathByView(
+                    MediaViewModeFullscreen,
+                    params.categoryId as Uuid,
+                    mediaList.data[0].id as Uuid
+                )
+            );
         }
-
-        setActiveRouteDefinition(route);
     });
+
+    const activeMedia = mediaQuery(() => params.id as Uuid);
 
     setFullscreen(true);
 
@@ -34,21 +44,19 @@ const ViewFullscreen: Component = () => {
     });
 
     return (
-        <Show when={mediaList.activeRouteDefinition}>
-            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout
-                    xPad={false}
-                    toolbar={
-                        <Toolbar>
-                            <FullscreenToolbar />
-                        </Toolbar>
-                    }
-                >
-                    <div class="grid h-screen w-full justify-center">
-                        <MediaMainItem media={mediaList.activeItem} />
-                    </div>
-                </Layout>
-            </MediaSelectedGuard>
+        <Show when={mediaList.isSuccess}>
+            <Layout
+                xPad={false}
+                toolbar={
+                    <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
+                        <FullscreenToolbar />
+                    </Toolbar>
+                }
+            >
+                <div class="grid h-screen w-full justify-center">
+                    <MediaMainItem media={activeMedia.data!} />
+                </div>
+            </Layout>
         </Show>
     );
 };
