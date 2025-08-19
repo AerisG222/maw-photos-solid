@@ -14,20 +14,11 @@ const CommentsCard: Component<CommentsCardProps> = props => {
     const [commentText, setCommentText] = createSignal("");
 
     const comments = commentsQuery(() => props.activeMedia!.id);
-    // const getComments = () => {
-    //     if (commentContext.service && mediaList.activeItem) {
-    //         return commentContext.service.fetchComments(mediaList.activeItem.id);
-    //     }
-    // };
-
-    // const [commentResource, { refetch }] = createResource(fetchCommentSignal, getComments);
 
     // const addComment = async (comment: string) => {
     //     await commentContext.service.addComment(mediaList.activeItem?.id, comment);
     //     refetch();
     // };
-
-    // const commentsToDisplay = () => commentResource()?.items ?? [];
 
     const clearComment = (evt: Event) => {
         evt.preventDefault();
