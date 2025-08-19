@@ -24,7 +24,7 @@ const ToolbarButton: Component<Props> = props => {
         <ShortcutWrapper {...props}>
             <button
                 disabled={props.disabled}
-                class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:hover:cursor-not-allowed"
+                class="flex flex-col px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:hover:cursor-not-allowed"
                 classList={{
                     "bg-secondary-focus": props.active,
                     "text-secondary-content": props.active
