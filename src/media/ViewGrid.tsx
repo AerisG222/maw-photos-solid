@@ -1,13 +1,13 @@
-import { Component, Show, createEffect } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A, useParams } from "@solidjs/router";
 
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useSlideshowContext } from "./contexts/SlideshowContext";
-import { getMediaPath, categoryGridRoute, randomGridRoute } from "./_routes";
+import { getMediaPath, categoryGridRoute } from "./_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { useMediaContext } from "../_contexts/api/MediaContext";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -15,12 +15,10 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../media/MediaGrid";
 import MediaMainItem from "./MediaMainItem";
-import { useMediaContext } from "../_contexts/api/MediaContext";
 
 const ViewGrid: Component = () => {
     const [settings] = useMediaGridViewSettingsContext();
     const [routeContext] = useRouteDetailContext();
-    // const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [, { stop }] = useSlideshowContext();
     const params = useParams();
     const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
@@ -29,14 +27,6 @@ const ViewGrid: Component = () => {
     const activeCategory = categoryQuery(() => params.categoryId as Uuid);
     const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
     const activeMedia = mediaQuery(() => params.id as Uuid);
-
-    createEffect(() => {
-        let route = categoryGridRoute;
-
-        if (routeContext.area === AreaRandom) {
-            route = randomGridRoute;
-        }
-    });
 
     return (
         <Layout

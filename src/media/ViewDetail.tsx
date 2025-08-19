@@ -1,11 +1,13 @@
-import { Component, Show, createEffect } from "solid-js";
+import { Component, createEffect, Show } from "solid-js";
+import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { getThumbnailSize } from "../_models/ThumbnailSize";
-import { categoryDetailRoute, randomDetailRoute } from "./_routes";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { useMediaContext } from "../_contexts/api/MediaContext";
+import { categoryDetailRoute, getMediaPathByView, MediaViewModeDetail } from "./_routes";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
@@ -14,22 +16,31 @@ import Sidebar from "./detail/Sidebar";
 import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MediaMainItem from "./MediaMainItem";
-import MediaSelectedGuard from "./MediaSelectedGuard";
 
 const ViewDetail: Component = () => {
+    const navigate = useNavigate();
+    const params = useParams();
     const [settings] = useMediaDetailViewSettingsContext();
-    const [mediaList, { setActiveRouteDefinition }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
+    const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
+    const { mediaQuery } = useMediaContext();
+
+    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
+    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
 
     createEffect(() => {
-        let route = categoryDetailRoute;
-
-        if (routeContext.area === AreaRandom) {
-            route = randomDetailRoute;
+        if (!params.id && mediaList.data) {
+            navigate(
+                getMediaPathByView(
+                    MediaViewModeDetail,
+                    params.categoryId as Uuid,
+                    mediaList.data[0].id as Uuid
+                )
+            );
         }
-
-        setActiveRouteDefinition(route);
     });
+
+    const activeMedia = mediaQuery(() => params.id as Uuid);
 
     const getMaxHeight = () => {
         let reservedHeight = 0;
@@ -45,40 +56,33 @@ const ViewDetail: Component = () => {
     };
 
     return (
-        <Show when={mediaList.activeRouteDefinition}>
-            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout
-                    xPad={false}
-                    toolbar={
-                        <Toolbar>
-                            <DetailToolbar />
-                        </Toolbar>
-                    }
-                    sidebar={<Sidebar />}
-                >
-                    <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
-                        <Show when={settings.showBreadcrumbs} fallback={<div />}>
-                            <CategoryBreadcrumb
-                                showTitleAsLink={routeContext.area === AreaRandom}
-                            />
-                        </Show>
+        <Show when={activeMedia.data}>
+            <Layout
+                xPad={false}
+                toolbar={
+                    <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
+                        <DetailToolbar />
+                    </Toolbar>
+                }
+                sidebar={<Sidebar />}
+            >
+                <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
+                    <Show when={settings.showBreadcrumbs} fallback={<div />}>
+                        <CategoryBreadcrumb showTitleAsLink={routeContext.area === AreaRandom} />
+                    </Show>
 
-                        <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                            <MediaMainItem
-                                media={mediaList.activeItem}
-                                maxHeightStyle={getMaxHeight()}
-                            />
-                        </div>
-
-                        <Show when={settings.showMediaList} fallback={<div />}>
-                            <MediaList
-                                thumbnailSize={settings.thumbnailSize}
-                                activeRoute={mediaList.activeRouteDefinition}
-                            />
-                        </Show>
+                    <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
+                        <MediaMainItem media={activeMedia.data!} maxHeightStyle={getMaxHeight()} />
                     </div>
-                </Layout>
-            </MediaSelectedGuard>
+
+                    <Show when={settings.showMediaList} fallback={<div />}>
+                        <MediaList
+                            thumbnailSize={settings.thumbnailSize}
+                            activeRoute={categoryDetailRoute}
+                        />
+                    </Show>
+                </div>
+            </Layout>
         </Show>
     );
 };
