@@ -4,12 +4,12 @@ import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 
-export type SidebarProps = {
+export type CommentsCardProps = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
-const CommentsCard: Component<SidebarProps> = props => {
+const CommentsCard: Component<CommentsCardProps> = props => {
     const { commentsQuery } = useMediaContext();
     const [commentText, setCommentText] = createSignal("");
 

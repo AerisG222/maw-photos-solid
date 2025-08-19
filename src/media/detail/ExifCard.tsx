@@ -1,78 +1,57 @@
-import { Component, For, createEffect, createResource, createSignal } from "solid-js";
+import { Component, createSignal, For, Show } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
-import { getFormattedExif } from "../../_models/utils/ExifUtils";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import { useMediaContext } from "../../_contexts/api/MediaContext";
 
-const ExifCard: Component = () => {
-    const [fetchExifSignal, setFetchExifSignal] = createSignal({
-        media: undefined,
-        service: undefined
-    });
-    const [currentTab, setCurrentTab] = createSignal("exif");
-    const [mediaList] = useMediaListContext();
+export type ExifCardProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
 
-    // const getExifData = () => {
-    //     if (exifContext.service && mediaList.activeItem) {
-    //         return exifContext.service.fetchExif(mediaList.activeItem.id);
-    //     }
-    // };
-
-    // const [exifResource] = createResource(fetchExifSignal, getExifData);
-
-    // const getTableData = dataType => {
-    //     if (exifResource.loading || !exifResource()) {
-    //         return [];
-    //     }
-
-    //     return getFormattedExif(exifResource(), dataType);
-    // };
-
-    // createEffect(() => {
-    //     setFetchExifSignal({
-    //         media: mediaList.activeItem,
-    //         service: exifContext.service
-    //     });
-    // });
+const ExifCard: Component<ExifCardProps> = props => {
+    const { metadataQuery } = useMediaContext();
+    const [currentTab, setCurrentTab] = createSignal("");
+    const metadata = metadataQuery(() => props.activeMedia!.id);
 
     return (
         <>
-            <div class="tabs">
-                <a
-                    class="tab tab-bordered"
-                    classList={{ "tab-active": currentTab() === "exif" }}
-                    onClick={() => setCurrentTab("exif")}
-                >
-                    EXIF
-                </a>
-                <a
-                    class="tab tab-bordered"
-                    classList={{ "tab-active": currentTab() === "maker" }}
-                    onClick={() => setCurrentTab("maker")}
-                >
-                    Maker
-                </a>
-                <a
-                    class="tab tab-bordered"
-                    classList={{ "tab-active": currentTab() === "composite" }}
-                    onClick={() => setCurrentTab("composite")}
-                >
-                    Composite
-                </a>
-                <span class="grow tab-bordered" />
-            </div>
+            <Show when={metadata.data}>
+                <div class="tabs tabs-border">
+                    <For each={Object.keys(metadata.data!)}>
+                        {(key, index) => {
+                            if (index() === 0) {
+                                setCurrentTab(key);
+                            }
 
-            <table class="table table-xs table-zebra w-full">
-                <tbody>
-                    {/* <For each={getTableData(currentTab())}>
-                        {item => (
-                            <tr>
-                                <td>{item.displayName}</td>
-                                <td>{item.displayValue}</td>
-                            </tr>
-                        )}
-                    </For> */}
-                </tbody>
-            </table>
+                            return (
+                                <a
+                                    class="tab"
+                                    classList={{ "tab-active": currentTab() === key }}
+                                    onClick={() => setCurrentTab(key)}
+                                >
+                                    {key}
+                                </a>
+                            );
+                        }}
+                    </For>
+
+                    <span class="grow tab-border" />
+                </div>
+
+                <table class="table table-xs table-zebra w-full">
+                    <tbody>
+                        <For each={Object.entries(metadata.data![currentTab()])}>
+                            {entry => (
+                                <tr>
+                                    <td>{entry[1].desc}</td>
+                                    <td>{entry[1].val}</td>
+                                </tr>
+                            )}
+                        </For>
+                    </tbody>
+                </table>
+            </Show>
         </>
     );
 };
