@@ -1,10 +1,22 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { Component, createEffect, createMemo, createSignal, onMount } from "solid-js";
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
-import { useMediaListContext } from "../contexts/MediaListContext";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import { useMediaContext } from "../../_contexts/api/MediaContext";
 
-const MinimapCard: Component = () => {
+export type MinimapCardProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
+
+const MinimapCard: Component<MinimapCardProps> = props => {
+    const { gpsQuery } = useMediaContext();
     const [infoState, { setMinimapMapType, setMinimapZoom }] = useMediaInfoPanelSettingsContext();
-    const [mediaList] = useMediaListContext();
+
+    const gps = gpsQuery(() => props.activeMedia!.id);
+    const effectiveGps = createMemo(() =>
+        gps.data?.override ? gps.data.override : gps.data?.recorded
+    );
 
     const defaultMapOptions = {
         controlSize: 24,
@@ -39,10 +51,10 @@ const MinimapCard: Component = () => {
     }
 
     const updateMap = () => {
-        if (mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
+        if (effectiveGps) {
             const pos = {
-                lat: mediaList.activeItem?.latitude,
-                lng: mediaList.activeItem?.longitude
+                lat: effectiveGps()?.latitude ?? 0,
+                lng: effectiveGps()?.longitude ?? 0
             };
 
             map.setCenter(pos);
@@ -60,7 +72,7 @@ const MinimapCard: Component = () => {
     });
 
     createEffect(() => {
-        if (initialized()) {
+        if (initialized() && gps.data) {
             updateMap();
         }
     });

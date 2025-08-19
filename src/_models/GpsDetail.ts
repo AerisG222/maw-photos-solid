@@ -1,6 +1,6 @@
 import { GpsCoordinate } from "./GpsCoordinate";
 
 export type GpsDetail = {
-    source: GpsCoordinate;
+    recorded: GpsCoordinate;
     override: GpsCoordinate;
 };
