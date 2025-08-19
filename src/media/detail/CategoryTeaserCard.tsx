@@ -1,12 +1,16 @@
 import { Component } from "solid-js";
 
 import { useCategoryContext } from "../../_contexts/CategoryContext";
-import { useMediaListContext } from "../contexts/MediaListContext";
-import { getMediaTeaserUrl } from "../../_models/Media";
+import { getMediaTeaserUrl, Media } from "../../_models/Media";
+import { Category } from "../../_models/Category";
 
-const CategoryTeaserCard: Component = () => {
+export type CategoryTeaserCardProps = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+};
+
+const CategoryTeaserCard: Component<CategoryTeaserCardProps> = props => {
     const [categoryState, { updateTeaser }] = useCategoryContext();
-    const [mediaList] = useMediaListContext();
 
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();
@@ -27,12 +31,14 @@ const CategoryTeaserCard: Component = () => {
 
     return (
         <>
-            <p>Current Teaser:</p>
+            <p>Current:</p>
 
             <div class="text-center">
                 <img
                     class="mt-2 mx-auto center"
-                    src={categoryState.activeCategory?.toString() /*.teaserImageUrl*/}
+                    src={
+                        props.activeCategory?.teaser.files.find(f => f.scale === "qqvg-fill")?.path
+                    }
                 />
 
                 <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>

@@ -65,7 +65,7 @@ const Sidebar: Component<SidebarProps> = props => {
         setShowMetadataEditor(!settings.showMetadataEditor);
     };
 
-    const toggleCategoryTeaserChooser = () => {
+    const toggleCategoryTeaser = () => {
         setShowCategoryTeaserChooser(!settings.showCategoryTeaserChooser);
     };
 
@@ -131,11 +131,11 @@ const Sidebar: Component<SidebarProps> = props => {
             component: lazy(() => import("./MetadataEditorCard"))
         },
         {
-            title: "Category Teaser Chooser",
-            tooltip: "Sidebar: Category Teaser Chooser",
+            title: "Category Teaser",
+            tooltip: "Sidebar: Category Teaser",
             icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
-            clickHandler: toggleCategoryTeaserChooser,
+            clickHandler: toggleCategoryTeaser,
             enable: (media: Media) => routeContext.area !== AreaRandom,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))
