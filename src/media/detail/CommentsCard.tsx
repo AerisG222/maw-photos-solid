@@ -10,15 +10,10 @@ export type CommentsCardProps = {
 };
 
 const CommentsCard: Component<CommentsCardProps> = props => {
-    const { commentsQuery } = useMediaContext();
+    const { commentsQuery, addCommentMutation } = useMediaContext();
     const [commentText, setCommentText] = createSignal("");
 
     const comments = commentsQuery(() => props.activeMedia!.id);
-
-    // const addComment = async (comment: string) => {
-    //     await commentContext.service.addComment(mediaList.activeItem?.id, comment);
-    //     refetch();
-    // };
 
     const clearComment = (evt: Event) => {
         evt.preventDefault();
@@ -30,7 +25,12 @@ const CommentsCard: Component<CommentsCardProps> = props => {
         evt.preventDefault();
 
         if (commentText()) {
-            // await addComment(commentText());
+            const req = {
+                mediaId: props.activeMedia!.id,
+                comment: commentText()
+            };
+
+            addCommentMutation.mutate(req);
         }
     };
 

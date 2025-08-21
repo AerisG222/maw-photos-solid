@@ -1,23 +1,33 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
-import { useInfiniteQuery, useQuery, UseQueryResult } from "@tanstack/solid-query";
+import {
+    useInfiniteQuery,
+    useMutation,
+    UseMutationResult,
+    useQuery,
+    useQueryClient,
+    UseQueryResult
+} from "@tanstack/solid-query";
 
 import { Comment } from "../../_models/Comment";
 import { useAuthContext } from "../AuthContext";
-import { queryApi, runWithAccessToken } from "./_shared";
+import { postApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
+import { AddCommentRequest } from "../../_models/AddCommentRequest";
 
 export type MediaService = {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media, Error>;
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
+    addCommentMutation: UseMutationResult<void, Error, AddCommentRequest, unknown>;
 };
 
 const MediaContext = createContext<MediaService>();
 
 export const MediaProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
+    const queryClient = useQueryClient();
 
     const fetchMedia = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
@@ -47,6 +57,12 @@ export const MediaProvider: ParentComponent = props => {
         runWithAccessToken(getToken, accessToken =>
             queryApi<GpsDetail>(accessToken, `media/${id}/gps`)
         );
+
+    const postComment = async (req: AddCommentRequest) => {
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/${req.mediaId}/comments`, { body: req.comment })
+        );
+    };
 
     // todo:
     // patchApi(`media/${mediaId}/favorite`, { mediaId, isFavorite });
@@ -92,13 +108,24 @@ export const MediaProvider: ParentComponent = props => {
             staleTime: 15 * 60 * 1000
         }));
 
+    const addCommentMutation = useMutation(() => ({
+        mutationFn: (req: AddCommentRequest) => postComment(req),
+        onSuccess: async (data, req) => {
+            await queryClient.invalidateQueries({
+                queryKey: ["media", req.mediaId, "comments"],
+                refetchType: "all"
+            });
+        }
+    }));
+
     return (
         <MediaContext.Provider
             value={{
                 mediaQuery,
                 metadataQuery,
                 commentsQuery,
-                gpsQuery
+                gpsQuery,
+                addCommentMutation
             }}
         >
             {props.children}
