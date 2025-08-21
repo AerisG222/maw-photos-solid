@@ -3,7 +3,8 @@ import { Component, Show, createEffect, createSignal, onCleanup, onMount } from 
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { useMediaListContext } from "./contexts/MediaListContext";
 import { categoryMapRoute } from "./_routes";
-import { Media, getMediaTeaserUrl } from "../_models/Media";
+import { Media } from "../_models/Media";
+import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
@@ -73,7 +74,7 @@ const ViewMap: Component = () => {
             });
 
             marker.addListener("click", () => {
-                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item)}" />`);
+                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item, "default")}" />`);
                 infoWindow.open({
                     anchor: marker,
                     map

@@ -7,7 +7,3 @@ export type Media = {
     isFavorite: boolean;
     files: MediaFile[];
 };
-
-export const getMediaTeaserUrl = (media: Media) => "TODO";
-
-export const getMediaShareUrl = (media: Media) => "TODO";

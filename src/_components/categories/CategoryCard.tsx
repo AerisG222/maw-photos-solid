@@ -4,6 +4,7 @@ import { A } from "@solidjs/router";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
+import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 type Props = {
     category: Category;
@@ -27,7 +28,7 @@ const CategoryCard: Component<Props> = props => {
 
             <div class="relative">
                 <img
-                    src={props.category.teaser.files.find(f => f.scale === "qqvg-fill")!.path}
+                    src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
                     class="saturate-50 group-hover:saturate-100"
                     classList={{
                         "rounded-t-sm": !props.showYears,

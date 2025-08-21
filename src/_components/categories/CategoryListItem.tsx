@@ -4,6 +4,7 @@ import { A } from "@solidjs/router";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
+import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 type Props = {
     category: Category;
@@ -19,7 +20,7 @@ const CategoryListItem: Component<Props> = props => {
             class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10 hover:bg-base-300 hover:text-primary"
         >
             <img
-                src={props.category.teaser.files.find(f => f.scale === "qvg-fill")?.path}
+                src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
                 class="inline saturate-50 group-hover:saturate-100"

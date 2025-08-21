@@ -1,8 +1,9 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { useCategoryContext } from "../../_contexts/CategoryContext";
-import { getMediaTeaserUrl, Media } from "../../_models/Media";
+import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
+import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 export type CategoryTeaserCardProps = {
     activeCategory: Category | undefined;
@@ -33,18 +34,18 @@ const CategoryTeaserCard: Component<CategoryTeaserCardProps> = props => {
         <>
             <p>Current:</p>
 
-            <div class="text-center">
-                <img
-                    class="mt-2 mx-auto center"
-                    src={
-                        props.activeCategory?.teaser.files.find(f => f.scale === "qqvg-fill")?.path
-                    }
-                />
+            <Show when={props.activeCategory}>
+                <div class="text-center">
+                    <img
+                        class="mt-2 mx-auto center"
+                        src={getMediaTeaserUrl(props.activeCategory!.teaser, "default")}
+                    />
 
-                <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>
-                    Replace with Active Photo
-                </button>
-            </div>
+                    <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>
+                        Replace with Active Photo
+                    </button>
+                </div>
+            </Show>
         </>
     );
 };
