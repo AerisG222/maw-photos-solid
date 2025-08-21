@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "@solidjs/router";
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
-import MediaMainItem from "./MediaMainItem";
+import MainItem from "./MainItem";
 
 const ViewFullscreen: Component = () => {
     const navigate = useNavigate();
@@ -54,7 +54,7 @@ const ViewFullscreen: Component = () => {
                 }
             >
                 <div class="grid h-screen w-full justify-center">
-                    <MediaMainItem media={activeMedia.data!} />
+                    <MainItem media={activeMedia.data!} />
                 </div>
             </Layout>
         </Show>

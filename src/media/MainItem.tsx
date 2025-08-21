@@ -12,15 +12,15 @@ import { tap } from "../_directives/Tap";
 false && swipe;
 false && tap;
 
-import MainPhoto from "./photos/MainPhoto";
-import MainVideo from "./videos/MainVideo";
+import MainPhoto from "./MainPhoto";
+import MainVideo from "./MainVideo";
 
 type Props = {
     media: Media;
     maxHeightStyle?: string;
 };
 
-const MediaMainItem: Component<Props> = props => {
+const MainItem: Component<Props> = props => {
     const [, { setActiveCategoryById }] = useCategoryContext();
     const [, { movePrevious, moveNext }] = useMediaListContext();
     const [routeContext] = useRouteDetailContext();
@@ -72,4 +72,4 @@ const MediaMainItem: Component<Props> = props => {
     );
 };
 
-export default MediaMainItem;
+export default MainItem;

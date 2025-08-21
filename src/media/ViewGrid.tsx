@@ -14,7 +14,7 @@ import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../media/MediaGrid";
-import MediaMainItem from "./MediaMainItem";
+import MainItem from "./MainItem";
 
 const ViewGrid: Component = () => {
     const [settings] = useMediaGridViewSettingsContext();
@@ -56,7 +56,7 @@ const ViewGrid: Component = () => {
                         )}
                         onClick={stop}
                     >
-                        <MediaMainItem media={activeMedia.data!} />
+                        <MainItem media={activeMedia.data!} />
                     </A>
                 </div>
             </Show>

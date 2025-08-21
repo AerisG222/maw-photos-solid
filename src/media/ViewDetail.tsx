@@ -15,7 +15,7 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Sidebar from "./detail/Sidebar";
 import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
-import MediaMainItem from "./MediaMainItem";
+import MainItem from "./MainItem";
 
 const ViewDetail: Component = () => {
     const navigate = useNavigate();
@@ -74,7 +74,7 @@ const ViewDetail: Component = () => {
                     </Show>
 
                     <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
-                        <MediaMainItem media={activeMedia.data!} maxHeightStyle={getMaxHeight()} />
+                        <MainItem media={activeMedia.data!} maxHeightStyle={getMaxHeight()} />
                     </div>
 
                     <Show when={settings.showMediaList} fallback={<div />}>
