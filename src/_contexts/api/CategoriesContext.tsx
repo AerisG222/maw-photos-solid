@@ -1,5 +1,11 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
-import { useQuery, UseQueryResult } from "@tanstack/solid-query";
+import {
+    InfiniteData,
+    useInfiniteQuery,
+    UseInfiniteQueryResult,
+    useQuery,
+    UseQueryResult
+} from "@tanstack/solid-query";
 
 import { useAuthContext } from "../AuthContext";
 import { queryApi, runWithAccessToken } from "./_shared";
@@ -15,7 +21,7 @@ export type CategoriesService = {
     categorySearchQuery: (
         query: Accessor<string>,
         startOffset: Accessor<number>
-    ) => UseQueryResult<SearchResults<Category>, Error>;
+    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category>>, Error>;
 };
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -60,7 +66,10 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const fetchCategorySearch = async (query: string, startOffset: number) =>
         runWithAccessToken(getToken, accessToken =>
-            queryApi<SearchResults<Category>>(accessToken, `categories/search`)
+            queryApi<SearchResults<Category>>(
+                accessToken,
+                `categories/search?s=${encodeURI(query)}&o=${startOffset}}`
+            )
         );
 
     const yearsQuery = () =>
@@ -95,12 +104,15 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
-    const categorySearchQuery = (query: Accessor<string>, startOffset: Accessor<number>) =>
-        useQuery(() => ({
-            queryKey: ["categories", "search", query(), startOffset()],
-            queryFn: () => fetchCategorySearch(query(), startOffset()),
+    const categorySearchQuery = (query: Accessor<string>) =>
+        useInfiniteQuery(() => ({
+            queryKey: ["categories", "search", query()],
+            queryFn: data => fetchCategorySearch(query(), data.pageParam),
             enabled: authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
+            staleTime: 5 * 60 * 1000,
+            initialPageParam: 0,
+            getNextPageParam: (lastPage, pages) =>
+                lastPage.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
     // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
