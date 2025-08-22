@@ -1,8 +1,9 @@
-import { Component, For } from "solid-js";
+import { Component, createEffect, createSignal, For } from "solid-js";
 
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
+import { Category } from "../_models/Category";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -13,7 +14,26 @@ import SearchResultStatus from "./components/SearchResultStatus";
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
-    const [searchContext] = useSearchContext();
+    const [state, { categorySearchQuery }] = useSearchContext();
+    const [searchQuery, setSearchQuery] = createSignal(categorySearchQuery(state.activeTerm));
+
+    createEffect(() => {
+        setSearchQuery(categorySearchQuery(state.activeTerm));
+    });
+
+    const allCategories = () => {
+        const cats: Category[] = [];
+
+        if (searchQuery().isSuccess) {
+            for (const page of searchQuery().data?.pages ?? []) {
+                if (page) {
+                    cats.push(...page.results);
+                }
+            }
+        }
+
+        return cats;
+    };
 
     return (
         <Layout
@@ -29,7 +49,7 @@ const ViewGrid: Component = () => {
             </div>
 
             <div class="flex gap-2 flex-wrap place-content-center my-4">
-                <For each={searchContext.categories}>
+                <For each={allCategories()}>
                     {(category, idx) => (
                         <CategoryCard
                             category={category}
@@ -42,7 +62,10 @@ const ViewGrid: Component = () => {
                 </For>
             </div>
 
-            <SearchResultStatus />
+            <SearchResultStatus
+                hasMore={searchQuery().hasNextPage}
+                continueSearch={() => searchQuery().fetchNextPage()}
+            />
         </Layout>
     );
 };

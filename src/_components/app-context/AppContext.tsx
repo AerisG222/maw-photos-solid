@@ -12,6 +12,7 @@ import { MediaProvider } from "../../_contexts/api/MediaContext";
 import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 
@@ -44,6 +45,8 @@ const AppContext: ParentComponent = props => {
                         </ShortcutProvider>
                     </MediaBreakpointProvider>
                 </WindowSizeProvider>
+
+                <SolidQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
         </AuthProvider>
     );

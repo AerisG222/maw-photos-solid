@@ -1,39 +1,13 @@
-import { Component, createEffect, createResource, createSignal } from "solid-js";
+import { Component } from "solid-js";
 
-import { useSearchContext } from "../contexts/SearchContext";
+export type SearchMoreButtonProps = {
+    continueSearch: () => void;
+};
 
-const SearchMoreButton: Component = () => {
-    const [searchSignal, setSearchSignal] = createSignal(false);
-    const [searchContext, { addCategories }] = useSearchContext();
-
-    const continueSearch = () => {
-        if (searchSignal()) {
-            // return search(searchContext.term, searchContext.categories.length);
-        }
-
-        return {
-            results: [],
-            totalFound: 0,
-            startIndex: 0
-        };
-    };
-
-    const triggerSearch = () => {
-        setSearchSignal(true);
-    };
-
-    const [searchResource] = createResource(searchSignal, continueSearch);
-
-    createEffect(() => {
-        if (searchResource.state === "ready") {
-            addCategories(searchResource().results);
-            setSearchSignal(false);
-        }
-    });
-
+const SearchMoreButton: Component<SearchMoreButtonProps> = props => {
     return (
         <div class="flex justify-center my-3">
-            <button class="btn btn-primary btn-outline" onClick={triggerSearch}>
+            <button class="btn btn-primary btn-outline" onClick={() => props.continueSearch()}>
                 <span class="text-6 icon-[ic--round-keyboard-arrow-down]" /> Show More
             </button>
         </div>

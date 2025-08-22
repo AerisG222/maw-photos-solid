@@ -19,9 +19,8 @@ export type CategoriesService = {
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
     categorySearchQuery: (
-        query: Accessor<string>,
-        startOffset: Accessor<number>
-    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category>>, Error>;
+        query: string
+    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
 };
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -64,13 +63,27 @@ export const CategoriesProvider: ParentComponent = props => {
             queryApi<Media[]>(accessToken, `categories/${id}/media`)
         );
 
-    const fetchCategorySearch = async (query: string, startOffset: number) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<SearchResults<Category>>(
+    const fetchCategorySearch = async (
+        query: string,
+        startOffset: number
+    ): Promise<SearchResults<Category> | undefined> => {
+        if (!query) {
+            return undefined;
+        }
+
+        return runWithAccessToken(getToken, async accessToken => {
+            const searchResults = await queryApi<SearchResults<Category>>(
                 accessToken,
-                `categories/search?s=${encodeURI(query)}&o=${startOffset}}`
-            )
-        );
+                `categories/search?s=${encodeURI(query)}&o=${startOffset}`
+            );
+
+            for (const c of searchResults.results) {
+                cleanupDatesFromApi(c);
+            }
+
+            return searchResults;
+        });
+    };
 
     const yearsQuery = () =>
         useQuery(() => ({
@@ -104,15 +117,15 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
-    const categorySearchQuery = (query: Accessor<string>) =>
+    const categorySearchQuery = (query: string) =>
         useInfiniteQuery(() => ({
-            queryKey: ["categories", "search", query()],
-            queryFn: data => fetchCategorySearch(query(), data.pageParam),
+            queryKey: ["categories", "search", query],
+            queryFn: data => fetchCategorySearch(query, data.pageParam),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
             initialPageParam: 0,
             getNextPageParam: (lastPage, pages) =>
-                lastPage.hasMoreResults ? lastPage.nextOffset : undefined
+                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
     // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
