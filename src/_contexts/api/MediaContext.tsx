@@ -16,7 +16,7 @@ import { GpsDetail } from "../../_models/GpsDetail";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
 
 export type MediaService = {
-    mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media, Error>;
+    mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
@@ -29,8 +29,12 @@ export const MediaProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
 
-    const fetchMedia = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
+    const fetchMedia = async (id?: Uuid) =>
+        id
+            ? runWithAccessToken(getToken, accessToken =>
+                  queryApi<Media>(accessToken, `media/${id}`)
+              )
+            : undefined;
 
     const fetchRandom = async (count: number) =>
         runWithAccessToken(getToken, accessToken =>
@@ -77,7 +81,7 @@ export const MediaProvider: ParentComponent = props => {
     //         staleTime: 15 * 60 * 1000
     //     }));
 
-    const mediaQuery = (id: Accessor<Uuid>) =>
+    const mediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: ["media", id()],
             queryFn: () => fetchMedia(id()),
