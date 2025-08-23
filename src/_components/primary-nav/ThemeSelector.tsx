@@ -1,9 +1,23 @@
 import { Component } from "solid-js";
 
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
+import Icon from "../icon/Icon";
 
-const ThemeSelector: Component = () => {
+type Props = {
+    showTitle: boolean;
+};
+
+const ThemeSelector: Component<Props> = props => {
     const [, { toggleTheme }] = useAppSettingsContext();
+
+    const nameClass = () => ({
+        "ml-2": true,
+        "text-lg": true,
+        "font-bold": true,
+        "align-middle": true,
+        hidden: true,
+        "md:inline": props.showTitle
+    });
 
     return (
         <button
@@ -11,8 +25,8 @@ const ThemeSelector: Component = () => {
             class="flex primary-nav-link cursor-pointer"
             title="Toggle Theme"
         >
-            <span class="block icon-[mdi--theme-light-dark]"></span>
-            {/* <span style="@titleStyle" class="hidden md:block font-bold text-lg ml-3 maw-primary-nav-title">Theme</span> */}
+            <Icon classes="block icon-[mdi--theme-light-dark]" />
+            <span classList={nameClass()}>Theme</span>
         </button>
     );
 };

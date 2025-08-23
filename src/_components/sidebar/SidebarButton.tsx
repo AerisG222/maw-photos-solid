@@ -1,10 +1,9 @@
 import { Component } from "solid-js";
 
 import { getNameWithShortcut } from "../shortcuts/_util";
-import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
-import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
+import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 
 type Props = {
     icon: string;
@@ -17,8 +16,7 @@ type Props = {
     clickHandler: () => void;
 };
 
-const ToolbarButton: Component<Props> = props => {
-    const [state] = useAppSettingsContext();
+const SidebarButton: Component<Props> = props => {
     const handleClick = (data: any, evt: Event) => {
         evt.preventDefault();
 
@@ -37,15 +35,6 @@ const ToolbarButton: Component<Props> = props => {
         return classes.join(" ");
     };
 
-    const nameClass = () => ({
-        "ml-2": true,
-        "text-sm": true,
-        "font-bold": true,
-        "align-middle": true,
-        hidden: true,
-        "md:inline": state.isToolbarCollapsed
-    });
-
     return (
         <ShortcutWrapper {...props}>
             <button
@@ -59,10 +48,9 @@ const ToolbarButton: Component<Props> = props => {
                 onClick={[handleClick, null]}
             >
                 <Icon classes={iconClasses()} />
-                <span classList={nameClass()}>{props.name}</span>
             </button>
         </ShortcutWrapper>
     );
 };
 
-export default ToolbarButton;
+export default SidebarButton;

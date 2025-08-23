@@ -15,7 +15,8 @@ const FlipVerticalButton: Component = () => {
         <ToolbarButton
             rotate90={true}
             icon="icon-[ic--round-flip]"
-            name="Flip Vertical"
+            name="Flip up"
+            tooltip="Flip Vertical"
             clickHandler={onFlipVertical}
         />
     );

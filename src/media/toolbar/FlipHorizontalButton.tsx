@@ -14,7 +14,8 @@ const FlipHorizontalButton: Component = () => {
     return (
         <ToolbarButton
             icon="icon-[ic--round-flip]"
-            name="Flip Horizontal"
+            name="Flip Right"
+            tooltip="Flip Horizontal"
             clickHandler={onFlipHorizontal}
         />
     );

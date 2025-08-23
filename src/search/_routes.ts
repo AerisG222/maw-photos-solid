@@ -13,7 +13,8 @@ export const searchRedirect: AppRouteDefinition = {
 
 export const searchGrid: AppRouteDefinition = {
     icon: "icon-[ic--outline-apps]",
-    name: "Grid View",
+    name: "Grid",
+    tooltip: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
     component: lazy(() => import("./ViewGrid"))
@@ -21,7 +22,8 @@ export const searchGrid: AppRouteDefinition = {
 
 export const searchList: AppRouteDefinition = {
     icon: "icon-[ic--round-format-list-bulleted]",
-    name: "List View",
+    name: "List",
+    tooltip: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
     component: lazy(() => import("./ViewList"))

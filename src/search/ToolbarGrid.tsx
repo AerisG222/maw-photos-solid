@@ -42,23 +42,27 @@ const GridToolbar: Component = () => {
         <>
             <ToolbarButton
                 icon="icon-[ic--round-today]"
-                name="Show / Hide Years"
+                name="Years"
+                tooltip="Show / Hide Years"
                 clickHandler={onToggleYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-title]"
-                name="Show / Hide Category Titles"
+                name="Titles"
+                tooltip="Show / Hide Category Titles"
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
-                name="Toggle Grid Thumbnail Size"
+                name="Thumbnail"
+                tooltip="Toggle Grid Thumbnail Size"
                 clickHandler={onToggleThumbnailSize}
                 disabled={settingsContext.showTitles || settingsContext.showYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
-                name="Toggle Category Margins"
+                name="Margins"
+                tooltip="Toggle Category Margins"
                 clickHandler={onToggleMargins}
             />
         </>

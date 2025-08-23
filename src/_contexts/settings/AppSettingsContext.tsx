@@ -5,16 +5,22 @@ import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
 
 export type AppSettingsState = {
     readonly theme: string;
+    readonly isPrimaryNavCollapsed: boolean;
+    readonly isToolbarCollapsed: boolean;
 };
 
 export const defaultAppSettings: AppSettingsState = {
-    theme: "dark"
+    theme: "dark",
+    isPrimaryNavCollapsed: false,
+    isToolbarCollapsed: false
 };
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,
     actions: {
         toggleTheme: () => void;
+        togglePrimaryNavCollapsed: () => void;
+        toggleToolbarCollapsed: () => void;
     }
 ];
 
@@ -29,8 +35,20 @@ export const AppSettingsProvider: ParentComponent = props => {
         saveState(state);
     };
 
+    const togglePrimaryNavCollapsed = () => {
+        setState({ isPrimaryNavCollapsed: !state.isPrimaryNavCollapsed });
+        saveState(state);
+    };
+
+    const toggleToolbarCollapsed = () => {
+        setState({ isToolbarCollapsed: !state.isToolbarCollapsed });
+        saveState(state);
+    };
+
     return (
-        <AppSettingsContext.Provider value={[state, { toggleTheme }]}>
+        <AppSettingsContext.Provider
+            value={[state, { toggleTheme, togglePrimaryNavCollapsed, toggleToolbarCollapsed }]}
+        >
             {props.children}
         </AppSettingsContext.Provider>
     );
@@ -51,9 +69,7 @@ function loadState() {
 
     // handle legacy theme
     if (state.theme === "dusk") {
-        return {
-            theme: "dark"
-        };
+        state = { ...state, theme: "dark" };
     }
 
     return state;

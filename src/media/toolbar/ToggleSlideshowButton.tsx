@@ -10,7 +10,8 @@ const ToggleSlideshowButton: Component = () => {
     return (
         <ToolbarButton
             icon={state.isPlaying ? "icon-[ic--round-stop]" : "icon-[ic--round-play-arrow]"}
-            name="Start / Stop Slideshow"
+            name="Slideshow"
+            tooltip="Start / Stop Slideshow"
             shortcutKeys={["p"]}
             clickHandler={toggle}
         />

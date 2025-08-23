@@ -30,20 +30,23 @@ const GridToolbar: Component = () => {
         <>
             <ToolbarButton
                 icon="icon-[ic--round-title]"
-                name="Show / Hide Category Titles"
+                name="Titles"
+                tooltip="Show / Hide Category Titles"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
-                name="Toggle Grid Thumbnail Size"
+                name="Thumbnail"
+                tooltip="Toggle Grid Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
-                name="Toggle Category Margins"
+                name="Margins"
+                tooltip="Toggle Category Margins"
                 shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />

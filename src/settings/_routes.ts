@@ -13,6 +13,7 @@ export const settingsRedirect: AppRouteDefinition = {
 export const settingsCategories: AppRouteDefinition = {
     icon: "icon-[ic--round-collections]",
     name: "Categories",
+    tooltip: "Category Settings",
     path: "/categories",
     absolutePath: `${basePath}/categories`,
     component: lazy(() => import("./ViewCategories"))
@@ -21,6 +22,7 @@ export const settingsCategories: AppRouteDefinition = {
 export const settingsMedia: AppRouteDefinition = {
     icon: "icon-[ic--round-image]",
     name: "Media",
+    tooltip: "Media Settings",
     path: "/media",
     absolutePath: `${basePath}/media`,
     component: lazy(() => import("./ViewMedia"))
@@ -29,6 +31,7 @@ export const settingsMedia: AppRouteDefinition = {
 export const settingsSearch: AppRouteDefinition = {
     icon: "icon-[ic--round-search]",
     name: "Search",
+    tooltip: "Search Settings",
     path: "/search",
     absolutePath: `${basePath}/search`,
     component: lazy(() => import("./ViewSearch"))

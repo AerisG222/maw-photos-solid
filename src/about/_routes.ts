@@ -20,7 +20,8 @@ export const aboutHelp: AppRouteDefinition = {
 
 export const aboutReleaseNotes: AppRouteDefinition = {
     icon: "icon-[ic--round-info]",
-    name: "Release Notes",
+    name: "Releases",
+    tooltip: "Release Notes",
     path: "/release-notes",
     absolutePath: `${basePath}/release-notes`,
     component: lazy(() => import("./ViewReleaseNotes"))
@@ -28,7 +29,8 @@ export const aboutReleaseNotes: AppRouteDefinition = {
 
 export const aboutAndroid: AppRouteDefinition = {
     icon: "icon-[ic--android]",
-    name: "Android Application",
+    name: "Android",
+    tooltip: "Android Application",
     path: "/android",
     absolutePath: `${basePath}/android`,
     component: lazy(() => import("./ViewAndroid"))

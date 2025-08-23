@@ -15,9 +15,7 @@ import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import DownloadCategoryButton from "./toolbar/DownloadCategoryButton";
 import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
-import DownloadPhotoMediumResButton from "./toolbar/DownloadPhotoMediumResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
-import DownloadPhotoHighUntouchedButton from "./toolbar/DownloadPhotoHighUntouchedButton";
 import ShareButton from "./toolbar/ShareButton";
 
 const DetailToolbar: Component = () => {
@@ -57,9 +55,7 @@ const DetailToolbar: Component = () => {
             <ToolbarDivider />
 
             <DownloadPhotoLowResButton />
-            <DownloadPhotoMediumResButton />
             <DownloadPhotoHighResButton />
-            <DownloadPhotoHighUntouchedButton />
 
             <ToolbarDivider />
 
@@ -71,19 +67,22 @@ const DetailToolbar: Component = () => {
 
             <ToolbarButton
                 icon="icon-[ic--round-title]"
-                name="Show / Hide Category Breadcrumbs"
+                name="Breadcrumbs"
+                tooltip="Show / Hide Category Breadcrumbs"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
             />
             <ToolbarButton
                 icon="icon-[ic--round-remove-red-eye]"
-                name="Show / Hide Photo List"
+                name="Media List"
+                tooltip="Show / Hide Media List"
                 shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
             />
             <ToolbarButton
                 icon="icon-[mdi--image-size-select-large]"
-                name="Toggle Photo List Thumbnail Size"
+                name="Thumbnail"
+                tooltip="Toggle Photo List Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
             />

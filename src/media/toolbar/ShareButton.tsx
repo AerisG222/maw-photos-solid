@@ -16,7 +16,14 @@ const ShareButton: Component = () => {
         }
     };
 
-    return <ToolbarButton icon="icon-[ic--baseline-share]" name="Share" clickHandler={onShare} />;
+    return (
+        <ToolbarButton
+            icon="icon-[ic--baseline-share]"
+            name="Share"
+            tooltip="Share"
+            clickHandler={onShare}
+        />
+    );
 };
 
 export default ShareButton;

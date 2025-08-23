@@ -13,7 +13,8 @@ export const categoriesRedirect: AppRouteDefinition = {
 
 export const categoriesGrid: AppRouteDefinition = {
     icon: "icon-[ic--outline-apps]",
-    name: "Grid View",
+    name: "Grid",
+    tooltip: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
     component: lazy(() => import("./ViewGrid"))
@@ -21,7 +22,8 @@ export const categoriesGrid: AppRouteDefinition = {
 
 export const categoriesList: AppRouteDefinition = {
     icon: "icon-[ic--round-format-list-bulleted]",
-    name: "List View",
+    name: "List",
+    tooltip: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
     component: lazy(() => import("./ViewList"))

@@ -17,7 +17,8 @@ const DownloadCategoryButton: Component = () => {
 
     return (
         <ToolbarExternalLink
-            title="Download All Photos in Category (.zip)"
+            name="Download"
+            tooltip="Download All Photos in Category (.zip)"
             url={getLink()}
             iconClass="icon-[ic--outline-file-download]"
         />

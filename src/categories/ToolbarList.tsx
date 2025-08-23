@@ -21,13 +21,15 @@ const ListToolbar: Component = () => {
         <>
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
-                name="Toggle List Thumbnail Size"
+                name="Thumbnail"
+                tooltip="Toggle List Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnail}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
-                name="Toggle Category Margins"
+                name="Margins"
+                tooltip="Toggle Category Margins"
                 shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />

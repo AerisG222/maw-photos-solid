@@ -1,4 +1,5 @@
 import { Component, For, Show, lazy } from "solid-js";
+import { Dynamic } from "solid-js/web";
 
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Media } from "../../_models/Media";
@@ -10,8 +11,7 @@ import { Category } from "../../_models/Category";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
-import ToolbarButton from "../../_components/toolbar/ToolbarButton";
-import { Dynamic } from "solid-js/web";
+import SidebarButton from "../../_components/sidebar/SidebarButton";
 
 export type SidebarProps = {
     activeCategory: Category | undefined;
@@ -163,8 +163,9 @@ const Sidebar: Component<SidebarProps> = props => {
             </Show>
 
             <SidebarLayout>
-                <ToolbarButton
+                <SidebarButton
                     name="Sidebar: Expand / Collapse"
+                    tooltip="Sidebar: Expand / Collapse"
                     icon={
                         settings.expandInfoPanel
                             ? "icon-[ic--chevron-right]"
@@ -178,9 +179,10 @@ const Sidebar: Component<SidebarProps> = props => {
 
                 <For each={cards.filter(card => card.enable(props.activeMedia!))}>
                     {card => (
-                        <ToolbarButton
+                        <SidebarButton
                             disabled={!settings.expandInfoPanel}
                             name={card.tooltip}
+                            tooltip={card.tooltip}
                             icon={card.icon}
                             shortcutKeys={card.shortcutKeys}
                             clickHandler={() =>
