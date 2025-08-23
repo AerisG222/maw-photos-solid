@@ -5,12 +5,12 @@ import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
-export type CategoryTeaserCardProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
-const CategoryTeaserCard: Component<CategoryTeaserCardProps> = props => {
+const CategoryTeaserCard: Component<Props> = props => {
     const [categoryState, { updateTeaser }] = useCategoryContext();
 
     const onSetTeaser = async (evt: Event) => {

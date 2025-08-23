@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-export type IconProps = {
+type Props = {
     classes: string;
 };
 
-const Icon: Component<IconProps> = props => {
+const Icon: Component<Props> = props => {
     return <span class={`align-middle ${props.classes}`}></span>;
 };
 

@@ -29,12 +29,12 @@ import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
 import ToolbarLink from "../_components/toolbar/ToolbarLink";
 
-export type ToolbarProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
-const Toolbar: ParentComponent<ToolbarProps> = props => {
+const Toolbar: ParentComponent<Props> = props => {
     const [, { isAdmin }] = useAuthContext();
     const [routeContext] = useRouteDetailContext();
     const [, { setViewMode }] = useMediaPageSettingsContext();

@@ -2,12 +2,12 @@ import { Component, Show } from "solid-js";
 
 import SearchMoreButton from "./SearchMoreButton";
 
-export type SearchResultStatusProps = {
+type Props = {
     hasMore: boolean;
     continueSearch: () => void;
 };
 
-const SearchResultStatus: Component<SearchResultStatusProps> = props => {
+const SearchResultStatus: Component<Props> = props => {
     return (
         <>
             <Show when={props.hasMore}>

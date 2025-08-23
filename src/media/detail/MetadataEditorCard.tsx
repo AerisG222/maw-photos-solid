@@ -5,13 +5,13 @@ import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 
-export type MetadataEditorCardProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
     requestMoveNext: () => void;
 };
 
-const MetadataEditorCard: Component<MetadataEditorCardProps> = props => {
+const MetadataEditorCard: Component<Props> = props => {
     const { gpsQuery } = useMediaContext();
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
 

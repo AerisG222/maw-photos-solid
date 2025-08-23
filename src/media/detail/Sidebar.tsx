@@ -13,12 +13,12 @@ import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import SidebarButton from "../../_components/sidebar/SidebarButton";
 
-export type SidebarProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
-const Sidebar: Component<SidebarProps> = props => {
+const Sidebar: Component<Props> = props => {
     const [routeContext] = useRouteDetailContext();
 
     const [

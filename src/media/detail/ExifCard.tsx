@@ -4,13 +4,13 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 
-export type ExifCardProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
 // TODO: consider adding reverse geocode info
-const ExifCard: Component<ExifCardProps> = props => {
+const ExifCard: Component<Props> = props => {
     const { metadataQuery } = useMediaContext();
     const [currentTab, setCurrentTab] = createSignal("");
     const metadata = metadataQuery(() => props.activeMedia!.id);

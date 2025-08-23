@@ -4,12 +4,12 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 
-export type MinimapCardProps = {
+type Props = {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
 };
 
-const MinimapCard: Component<MinimapCardProps> = props => {
+const MinimapCard: Component<Props> = props => {
     const { gpsQuery } = useMediaContext();
     const [infoState, { setMinimapMapType, setMinimapZoom }] = useMediaInfoPanelSettingsContext();
 
