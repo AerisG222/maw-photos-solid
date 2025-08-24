@@ -70,7 +70,10 @@ const ViewDetail: Component = () => {
             >
                 <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
                     <Show when={settings.showBreadcrumbs} fallback={<div />}>
-                        <CategoryBreadcrumb showTitleAsLink={routeContext.area === AreaRandom} />
+                        <CategoryBreadcrumb
+                            category={activeCategory.data}
+                            showTitleAsLink={routeContext.area === AreaRandom}
+                        />
                     </Show>
 
                     <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
@@ -79,6 +82,8 @@ const ViewDetail: Component = () => {
 
                     <Show when={settings.showMediaList} fallback={<div />}>
                         <MediaList
+                            media={mediaList.data!}
+                            activeMedia={activeMedia.data!}
                             thumbnailSize={settings.thumbnailSize}
                             activeRoute={categoryDetailRoute}
                         />
