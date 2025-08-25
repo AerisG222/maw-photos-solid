@@ -12,12 +12,14 @@ import { queryApi, runWithAccessToken } from "./_shared";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
+import { GpsDetail } from "../../_models/GpsDetail";
 
 export type CategoriesService = {
     yearsQuery: () => UseQueryResult<number[], Error>;
     categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
+    categoryMediaGpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail[], Error>;
     categorySearchQuery: (
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
@@ -61,6 +63,11 @@ export const CategoriesProvider: ParentComponent = props => {
     const fetchCategoryMedia = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<Media[]>(accessToken, `categories/${id}/media`)
+        );
+
+    const fetchCategoryMediaGps = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<GpsDetail[]>(accessToken, `categories/${id}/gps`)
         );
 
     const fetchCategorySearch = async (
@@ -117,6 +124,14 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
+    const categoryMediaGpsQuery = (id: Accessor<Uuid>) =>
+        useQuery(() => ({
+            queryKey: ["categories", id(), "gps"],
+            queryFn: () => fetchCategoryMediaGps(id()),
+            enabled: authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
+
     const categorySearchQuery = (query: string) =>
         useInfiniteQuery(() => ({
             queryKey: ["categories", "search", query],
@@ -137,6 +152,7 @@ export const CategoriesProvider: ParentComponent = props => {
                 categoriesForYearQuery,
                 categoryQuery,
                 categoryMediaQuery,
+                categoryMediaGpsQuery,
                 categorySearchQuery
             }}
         >

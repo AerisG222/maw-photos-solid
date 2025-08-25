@@ -1,34 +1,75 @@
-import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Component, Show, createEffect, createMemo, createSignal, onMount } from "solid-js";
 
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
-import { useMediaListContext } from "./contexts/MediaListContext";
-import { categoryMapRoute } from "./_routes";
+import { getMediaPathByView, MediaViewModeMap } from "./_routes";
 import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
+import { useNavigate, useParams } from "@solidjs/router";
+import { useMediaContext } from "../_contexts/api/MediaContext";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { GpsDetail } from "../_models/GpsDetail";
+import { GpsCoordinate } from "../_models/GpsCoordinate";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
-import MediaSelectedGuard from "./MediaSelectedGuard";
+
+type MediaWithGps = {
+    media: Media;
+    gps: GpsDetail;
+};
 
 const ViewMap: Component = () => {
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
-    const [mediaList, { getFilteredMedia, setFilter, clearFilter, setActiveRouteDefinition }] =
-        useMediaListContext();
+    const navigate = useNavigate();
+    const params = useParams();
     const [initialized, setInitialized] = createSignal(false);
     const [mapReady, setMapReady] = createSignal(false);
+    const { categoryQuery, categoryMediaQuery, categoryMediaGpsQuery } = useCategoriesContext();
+    const { mediaQuery } = useMediaContext();
 
-    let el: HTMLDivElement | undefined;
+    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
+    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
+    const gpsList = categoryMediaGpsQuery(() => params.categoryId as Uuid);
 
-    setActiveRouteDefinition(categoryMapRoute);
-
-    setFilter((media: Media) => {
-        if (media?.latitude && media?.longitude) {
-            return true;
-        } else {
-            return false;
+    createEffect(() => {
+        if (!params.id && mediaList.data) {
+            navigate(
+                getMediaPathByView(
+                    MediaViewModeMap,
+                    params.categoryId as Uuid,
+                    mediaList.data[0].id as Uuid
+                )
+            );
         }
     });
+
+    const activeMedia = mediaQuery(() => params.id as Uuid);
+
+    const preferredGpsLocation = (
+        mediaWithGps: MediaWithGps | undefined
+    ): GpsCoordinate | undefined =>
+        mediaWithGps?.gps?.override ? mediaWithGps.gps.override : mediaWithGps?.gps.recorded;
+
+    const mediaWithGps = createMemo(() => {
+        if (mediaList.isSuccess && gpsList.isSuccess) {
+            return gpsList.data.map(
+                g =>
+                    ({
+                        media: mediaList.data.find(m => m.id === g.mediaId),
+                        gps: g
+                    }) as MediaWithGps
+            );
+        }
+
+        return [];
+    });
+
+    const activeMediaGps = createMemo(() =>
+        preferredGpsLocation(mediaWithGps().find(m => m.media.id === activeMedia.data?.id))
+    );
+
+    let el: HTMLDivElement | undefined;
 
     const defaultMapOptions = {
         controlSize: 24,
@@ -67,34 +108,35 @@ const ViewMap: Component = () => {
             "marker"
         )) as google.maps.MarkerLibrary;
 
-        for (const item of getFilteredMedia()) {
+        for (const item of mediaWithGps()) {
+            const coord = preferredGpsLocation(item);
             const marker = new AdvancedMarkerElement({
                 map,
-                position: { lat: item.latitude, lng: item.longitude }
+                position: { lat: coord!.latitude, lng: coord!.longitude }
             });
 
             marker.addListener("click", () => {
-                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item, "default")}" />`);
+                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item.media, "default")}" />`);
                 infoWindow.open({
                     anchor: marker,
                     map
                 });
             });
 
-            markers[item.id] = marker;
+            markers.set(item.media.id, marker);
         }
     };
 
     const updateMap = () => {
-        if (mediaList.activeItem?.latitude && mediaList.activeItem?.longitude) {
+        if (activeMediaGps()?.latitude && activeMediaGps()?.longitude) {
             const pos = {
-                lat: mediaList.activeItem?.latitude,
-                lng: mediaList.activeItem?.longitude
+                lat: activeMediaGps()!.latitude,
+                lng: activeMediaGps()!.longitude
             };
 
             map.panTo(pos);
 
-            const marker = markers[mediaList.activeItem.id];
+            const marker = markers.get(activeMedia.data!.id);
             google.maps.event.trigger(marker, "click");
         }
     };
@@ -103,12 +145,8 @@ const ViewMap: Component = () => {
         initMap();
     });
 
-    onCleanup(() => {
-        clearFilter();
-    });
-
     createEffect(() => {
-        if (initialized() && getFilteredMedia().length > 0) {
+        if (initialized() && mediaWithGps().length > 0) {
             addMarkers();
         }
     });
@@ -120,19 +158,17 @@ const ViewMap: Component = () => {
     });
 
     return (
-        <Show when={mediaList.activeRouteDefinition}>
-            <MediaSelectedGuard targetRoute={mediaList.activeRouteDefinition}>
-                <Layout
-                    xPad={false}
-                    toolbar={
-                        <Toolbar>
-                            <MapToolbar />
-                        </Toolbar>
-                    }
-                >
-                    <div class="h-screen w-full" ref={el} />
-                </Layout>
-            </MediaSelectedGuard>
+        <Show when={mediaList.isSuccess}>
+            <Layout
+                xPad={false}
+                toolbar={
+                    <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
+                        <MapToolbar />
+                    </Toolbar>
+                }
+            >
+                <div class="h-screen w-full" ref={el} />
+            </Layout>
         </Show>
     );
 };
