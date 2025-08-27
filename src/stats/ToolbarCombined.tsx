@@ -16,12 +16,14 @@ const CombinedToolbar: Component = () => {
                 active={search?.mode === "count"}
                 icon="icon-[mdi--file-multiple]"
                 name="File Count"
+                tooltip="File Count"
                 clickHandler={() => selectMode("count")}
             />
             <ToolbarButton
                 active={search?.mode === "size"}
                 icon="icon-[mdi--weight]"
                 name="File Size"
+                tooltip="FileSize"
                 clickHandler={() => selectMode("size")}
             />
         </>

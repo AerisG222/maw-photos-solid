@@ -1,7 +1,7 @@
 import { useSearchParams } from "@solidjs/router";
 import { ParentComponent, createEffect } from "solid-js";
 
-import { StatProvider } from "./contexts/StatContext";
+import { StatsProvider } from "../_contexts/api/StatsContext";
 
 import AuthGuard from "../_components/auth/AuthGuard";
 
@@ -16,7 +16,7 @@ const Stats: ParentComponent = props => {
 
     return (
         <AuthGuard>
-            <StatProvider>{props.children}</StatProvider>
+            <StatsProvider>{props.children}</StatsProvider>
         </AuthGuard>
     );
 };

@@ -1,8 +1,7 @@
 import { Component, createEffect } from "solid-js";
 import * as Highcharts from "highcharts";
-import HighchartsTreemap from "highcharts/modules/treemap";
-
-import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
+import "highcharts/modules/heatmap.js";
+import "highcharts/modules/treemap";
 
 type Props = {
     data: any;
@@ -11,9 +10,6 @@ type Props = {
 };
 
 const Treemap: Component<Props> = props => {
-    const [settings] = useAppSettingsContext();
-    HighchartsTreemap(Highcharts);
-
     const themeBase200 = "";
     const themeBase300 = "";
     const themePrimary = "";
@@ -21,8 +17,8 @@ const Treemap: Component<Props> = props => {
 
     let el;
 
-    const labelFormat = (x: Highcharts.PointLabelObject) =>
-        `<b>${x.point.name}</b><br/>${props.formatFunc(x.point.value)}`;
+    const labelFormat = (x: Highcharts.Point) =>
+        `<b>${x.name}</b><br/>${props.formatFunc(x.value!)}`;
 
     createEffect(() => {
         Highcharts.chart("chart", {
@@ -67,7 +63,7 @@ const Treemap: Component<Props> = props => {
                     },
                     tooltip: {
                         pointFormatter: function () {
-                            return `<b>${this.name}</b>: ${props.formatFunc(this.value)}`;
+                            return `<b>${this.name}</b>: ${props.formatFunc(this.value!)}`;
                         }
                     }
                 }
@@ -77,8 +73,6 @@ const Treemap: Component<Props> = props => {
                     name: props.seriesName,
                     type: "treemap",
                     layoutAlgorithm: "squarified",
-                    borderWidth: 1,
-                    borderColor: "#ffffff22",
                     dataLabels: {
                         enabled: true,
                         style: {
@@ -90,6 +84,8 @@ const Treemap: Component<Props> = props => {
                     levels: [
                         {
                             level: 1,
+                            borderWidth: 1,
+                            borderColor: "#ffffff22",
                             dataLabels: {
                                 enabled: true,
                                 align: "left",
@@ -101,6 +97,8 @@ const Treemap: Component<Props> = props => {
                         },
                         {
                             level: 2,
+                            borderWidth: 1,
+                            borderColor: "#ffffff22",
                             dataLabels: {
                                 enabled: false,
                                 align: "left",
