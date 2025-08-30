@@ -5,7 +5,6 @@ import { search } from "./search/_routes";
 import { stats } from "./stats/_routes";
 import { settings } from "./settings/_routes";
 import { catchAllRedirect } from "./redirect/_routes";
-import { AppRouteDefinition } from "./_models/AppRouteDefinition";
 import { categoryMediaRoutes, randomMediaRoutes } from "./media/_routes";
 
 export const appRoutes = [
@@ -19,29 +18,3 @@ export const appRoutes = [
     settings,
     catchAllRedirect
 ];
-
-const getAllIcons = (routes: AppRouteDefinition[]) => {
-    const icons = [];
-
-    for (const route of routes) {
-        getIcons(route, icons);
-    }
-
-    return icons;
-};
-
-const getIcons = (route: AppRouteDefinition, icons: string[]) => {
-    if (route.children) {
-        for (const childRoute of route.children) {
-            getIcons(childRoute, icons);
-        }
-    }
-
-    if (route.icon) {
-        icons.push(route.icon);
-    }
-
-    return icons;
-};
-
-export const allRouteIcons = new Set(getAllIcons(appRoutes));
