@@ -10,28 +10,18 @@ export const statsRedirect: AppRouteDefinition = {
     component: lazy(() => import("./StatsRedirect"))
 };
 
-export const statsPhotos: AppRouteDefinition = {
-    icon: "icon-[ic--outline-photo-camera]",
-    name: "Photo Stats",
-    path: "/photos",
-    absolutePath: `${basePath}/photos`,
-    component: lazy(() => import("./ViewPhotos"))
+export const statsSummary: AppRouteDefinition = {
+    name: "Stats Summary",
+    path: "/summary",
+    absolutePath: `${basePath}/summary`,
+    component: lazy(() => import("./ViewSummary"))
 };
 
-export const statsVideos: AppRouteDefinition = {
-    icon: "icon-[ic--round-videocam]",
-    name: "Video Stats",
-    path: "/videos",
-    absolutePath: `${basePath}/videos`,
-    component: lazy(() => import("./ViewVideos"))
-};
-
-export const statsCombined: AppRouteDefinition = {
-    icon: "icon-[ic--round-functions]",
-    name: "Combined Stats",
-    path: "/combined",
-    absolutePath: `${basePath}/combined`,
-    component: lazy(() => import("./ViewCombined"))
+export const statsYear: AppRouteDefinition = {
+    name: "Stats Year",
+    path: "/summary/:year",
+    absolutePath: `${basePath}/summary/:year`,
+    component: lazy(() => import("./ViewYear"))
 };
 
 export const stats: AppRouteDefinition = {
@@ -42,5 +32,5 @@ export const stats: AppRouteDefinition = {
     path: basePath,
     component: lazy(() => import("./Stats")),
     doesPathMatch: path => routeMatch(path, basePath, AreaStats),
-    children: [statsRedirect, statsPhotos, statsVideos, statsCombined]
+    children: [statsRedirect, statsSummary, statsYear]
 };

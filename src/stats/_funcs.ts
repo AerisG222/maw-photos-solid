@@ -1,32 +1,32 @@
 import numbro from "numbro";
 
-const sizeAgg = d => d.totalSize;
-const sizeFmt = v =>
+export const formatCount = (v: number) => numbro(v).format({ thousandSeparated: true });
+
+export const formatDuration = (v: number) => numbro(v).format({ output: "time" });
+
+export const formatStorage = (v: number) =>
     numbro(v).format({ output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true });
 
-const countAgg = d => (d.children ? 0 : d.count);
-const countFmt = v => numbro(v).format({ thousandSeparated: true });
+export const formatForMode = (mode: "duration" | "size" | "count" | "category-count") => {
+    switch (mode) {
+        case "duration":
+            return formatDuration;
+        case "size":
+            return formatStorage;
+        default:
+            return formatCount;
+    }
+}
 
-const durationAgg = d => d.totalDuration;
-const durationFmt = v => numbro(v).format({ output: "time" });
-
-export const getAggFuncs = (mode: string) => {
-    if (mode === "size") {
-        return {
-            agg: sizeAgg,
-            fmt: sizeFmt
-        };
+export const statbarMediaCountTitle = (type: string) => {
+    switch (type) {
+        case "photo":
+            return "Photos";
+        case "video":
+            return "Videos";
+        case "all":
+            return "Photos & Videos";
     }
 
-    if (mode === "duration") {
-        return {
-            agg: durationAgg,
-            fmt: durationFmt
-        };
-    }
-
-    return {
-        agg: countAgg,
-        fmt: countFmt
-    };
+    throw Error("Unexpected type!");
 };

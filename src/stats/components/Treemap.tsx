@@ -7,6 +7,7 @@ type Props = {
     data: any;
     seriesName: string;
     formatFunc: (value: number) => string;
+    onSelectPoint?: (point: Highcharts.Point, event: Highcharts.PointClickEventObject) => void;
 };
 
 const Treemap: Component<Props> = props => {
@@ -26,41 +27,44 @@ const Treemap: Component<Props> = props => {
                 enabled: false
             },
             title: undefined,
+            // https://www.learnui.design/tools/data-color-picker.html
+            // https://medialab.github.io/iwanthue/
+            colors: [
+                "#ab5e85",
+                "#51c3e0",
+                "#7b285c",
+                "#9ec4e8",
+                "#483a8b",
+                "#d9c6dd",
+                "#8d4692",
+                "#6d94a9",
+                "#da72ad",
+                "#2d5d70",
+                "#e0a3de",
+                "#41465b",
+                "#a988da",
+                "#6d4858",
+                "#6193d1",
+                "#59486f",
+                "#636ec2",
+                "#676a84",
+                "#3f4e85",
+                "#a58cae"
+            ],
             chart: {
                 height: el.parentElement.clientHeight,
                 margin: 0,
-                backgroundColor: themeBase300,
+                reflow: true,
                 style: {
                     fontFamily:
                         "Nunito Sans,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
                 }
             },
-            navigation: {
-                breadcrumbs: {
-                    position: {
-                        y: -30
-                    },
-                    buttonTheme: {
-                        style: {
-                            "font-weight": 700,
-                            color: themePrimary
-                        }
-                    }
-                }
-            },
             plotOptions: {
+                series: {
+                    cursor: props.onSelectPoint ? "pointer" : undefined
+                },
                 treemap: {
-                    events: {
-                        setRootNode: function (evt) {
-                            if (evt.newRootId === "") {
-                                evt.series.options.levels[0].dataLabels.enabled = true;
-                                evt.series.options.levels[1].dataLabels.enabled = false;
-                            } else {
-                                evt.series.options.levels[0].dataLabels.enabled = false;
-                                evt.series.options.levels[1].dataLabels.enabled = true;
-                            }
-                        }
-                    },
                     tooltip: {
                         pointFormatter: function () {
                             return `<b>${this.name}</b>: ${props.formatFunc(this.value!)}`;
@@ -73,10 +77,28 @@ const Treemap: Component<Props> = props => {
                     name: props.seriesName,
                     type: "treemap",
                     layoutAlgorithm: "squarified",
+                    colorByPoint: true,
+                    point: {
+                        events: {
+                            click: function (evt: Highcharts.PointClickEventObject) {
+                                if (props.onSelectPoint) {
+                                    props.onSelectPoint(this, evt);
+                                }
+                            },
+                            mouseOver: function () {
+                                const newColor = Highcharts.color(this.color).brighten(0.2).get();
+                                this.update({ color: newColor }, true);
+                            },
+                            mouseOut: function () {
+                                const newColor = Highcharts.color(this.color).brighten(-0.2).get();
+                                this.update({ color: newColor }, false);
+                            }
+                        }
+                    },
                     dataLabels: {
                         enabled: true,
                         style: {
-                            fontSize: "14px",
+                            fontSize: "12px",
                             fontWeight: "normal",
                             textOutline: "none"
                         }
@@ -94,58 +116,15 @@ const Treemap: Component<Props> = props => {
                                     return labelFormat(this);
                                 }
                             }
-                        },
-                        {
-                            level: 2,
-                            borderWidth: 1,
-                            borderColor: "#ffffff22",
-                            dataLabels: {
-                                enabled: false,
-                                align: "left",
-                                verticalAlign: "top",
-                                formatter: function () {
-                                    return labelFormat(this);
-                                },
-                                style: {
-                                    fontSize: "11px"
-                                }
-                            }
                         }
                     ],
-                    allowTraversingTree: true,
-                    animationLimit: 10000,
-                    turboThreshold: 50000,
                     data: props.data
                 }
             ]
         });
     });
 
-    const getStyle = () => {
-        return `
-            .highcharts-button-hover rect
-                { fill: ${themeBase200} !important; }
-
-            .highcharts-button-hover text
-                { fill: ${themePrimary} !important; }
-
-            .highcharts-button-pressed text
-                { fill: ${themeSecondary} !important; }
-
-            .highcharts-button-normal text,
-            .highcharts-button-hover text,
-            .highcharts-button-pressed text
-                { font-weight: bold !important; }
-        `;
-    };
-
-    return (
-        <>
-            <style>{getStyle()}</style>
-
-            <div id="chart" ref={el} />
-        </>
-    );
+    return <div id="chart" ref={el} />;
 };
 
 export default Treemap;
