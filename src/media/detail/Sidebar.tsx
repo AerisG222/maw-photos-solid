@@ -3,7 +3,6 @@ import { Dynamic } from "solid-js/web";
 
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Media } from "../../_models/Media";
-import { useMediaListContext } from "../contexts/MediaListContext";
 import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
 import { AreaRandom } from "../../_models/AppRouteDefinition";
 import { Category } from "../../_models/Category";
@@ -34,8 +33,6 @@ const Sidebar: Component<Props> = props => {
             setShowCategoryTeaserChooser
         }
     ] = useMediaInfoPanelSettingsContext();
-
-    const [mediaList] = useMediaListContext();
 
     const toggleExpandedState = () => {
         setExpandInfoPanel(!settings.expandInfoPanel);

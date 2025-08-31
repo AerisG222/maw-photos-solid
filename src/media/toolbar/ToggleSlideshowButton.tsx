@@ -1,19 +1,20 @@
 import { Component } from "solid-js";
 
-import { useSlideshowContext } from "../contexts/SlideshowContext";
-
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-const ToggleSlideshowButton: Component = () => {
-    const [state, { toggle }] = useSlideshowContext();
+type Props = {
+    isPlaying: boolean;
+    toggleSlideshow: () => void;
+};
 
+const ToggleSlideshowButton: Component<Props> = props => {
     return (
         <ToolbarButton
-            icon={state.isPlaying ? "icon-[ic--round-stop]" : "icon-[ic--round-play-arrow]"}
+            icon={props.isPlaying ? "icon-[ic--round-stop]" : "icon-[ic--round-play-arrow]"}
             name="Slideshow"
             tooltip="Start / Stop Slideshow"
             shortcutKeys={["p"]}
-            clickHandler={toggle}
+            clickHandler={props.toggleSlideshow}
         />
     );
 };

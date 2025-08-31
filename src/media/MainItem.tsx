@@ -1,11 +1,7 @@
-import { Component, Match, Show, Switch, createEffect } from "solid-js";
+import { Component, Match, Show, Switch } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
-import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
-import { AreaRandom } from "../_models/AppRouteDefinition";
-import { useCategoryContext } from "../_contexts/CategoryContext";
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
 
@@ -18,42 +14,34 @@ import MainVideo from "./MainVideo";
 type Props = {
     media: Media;
     maxHeightStyle?: string;
+    moveNext: () => void;
+    movePrevious: () => void;
+    setActiveMediaElement?: (el: HTMLImageElement | HTMLVideoElement) => void;
 };
 
 const MainItem: Component<Props> = props => {
-    const [, { setActiveCategoryById }] = useCategoryContext();
-    const [, { movePrevious, moveNext }] = useMediaListContext();
-    const [routeContext] = useRouteDetailContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
 
-    let el: HTMLDivElement = undefined;
-
-    createEffect(() => {
-        if (routeContext.area === AreaRandom && props.media) {
-            // todo: if we ever mix photos and videos in a new category type, then this will need to
-            // be updated to accomodate as we just assume photo categories today
-            setActiveCategoryById(CategoryTypePhotos, props.media.categoryId);
-        }
-    });
+    let mediaHolderDiv: HTMLDivElement;
 
     const handleSwipe = direction => {
         if (direction === SWIPE_LEFT) {
-            movePrevious();
+            props.movePrevious();
         } else if (direction === SWIPE_RIGHT) {
-            moveNext();
+            props.moveNext();
         }
     };
 
     // video elements were not recognizing click events when on mobile, so we
     // try to and handle this here by listening for taps instead
     const handleTap = () => {
-        el?.click();
+        mediaHolderDiv!.click();
     };
 
     return (
         <Show when={props.media}>
             <div
-                ref={el}
+                ref={mediaHolderDiv}
                 use:swipe={handleSwipe}
                 use:tap={handleTap}
                 class="h-full w-full max-h-screen max-w-full object-contain self-center"
@@ -61,10 +49,20 @@ const MainItem: Component<Props> = props => {
             >
                 <Switch>
                     <Match when={props.media.type === "photo"}>
-                        <MainPhoto media={props.media} />
+                        <MainPhoto
+                            media={props.media}
+                            setActiveMediaElement={x =>
+                                props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
+                            }
+                        />
                     </Match>
                     <Match when={props.media.type === "video"}>
-                        <MainVideo media={props.media} />
+                        <MainVideo
+                            media={props.media}
+                            setActiveMediaElement={x =>
+                                props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
+                            }
+                        />
                     </Match>
                 </Switch>
             </div>

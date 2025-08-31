@@ -1,15 +1,13 @@
 import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
-import { useMediaListContext } from "./contexts/MediaListContext";
 
 type Props = {
     media: Media;
+    setActiveMediaElement: (el: HTMLVideoElement) => void;
 };
 
 const MainVideo: Component<Props> = props => {
-    const [, { setMediaElement }] = useMediaListContext();
-
     const getVideoUrl = () => props.media.files.find(f => f.scale === "full-hd")?.path;
 
     return (
@@ -19,7 +17,7 @@ const MainVideo: Component<Props> = props => {
             autoplay={false}
             controls
             src={getVideoUrl()}
-            ref={el => setMediaElement(el)}
+            ref={el => props.setActiveMediaElement(el)}
         />
     );
 };

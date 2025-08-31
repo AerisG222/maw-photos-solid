@@ -1,15 +1,13 @@
 import { Component } from "solid-js";
 
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { Media } from "../_models/Media";
 
 type Props = {
     media: Media;
+    setActiveMediaElement: (el: HTMLImageElement) => void;
 };
 
 const MainPhoto: Component<Props> = props => {
-    const [, { setMediaElement }] = useMediaListContext();
-
     const getUrl = () => props.media.files.find(f => f.scale === "full-hd")?.path;
 
     return (
@@ -19,7 +17,7 @@ const MainPhoto: Component<Props> = props => {
             class="w-full h-full max-h-screen max-w-full object-contain"
             sizes="100vw"
             loading="eager"
-            ref={el => setMediaElement(el)}
+            ref={el => props.setActiveMediaElement(el)}
         />
     );
 };

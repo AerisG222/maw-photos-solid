@@ -3,10 +3,10 @@ import { Component, Show } from "solid-js";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { getNextMarginSize } from "../_models/Margin";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
+import { Media } from "../_models/Media";
 
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
@@ -18,12 +18,21 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 
-const GridToolbar: Component = () => {
+type Props = {
+    activeMedia: Media | undefined;
+    activeMediaIsFirst: boolean;
+    activeMediaIsLast: boolean;
+    slideshowIsPlaying: boolean;
+    moveNext: () => void;
+    movePrevious: () => void;
+    toggleSlideshow: () => void;
+};
+
+const GridToolbar: Component<Props> = props => {
     const [routeContext] = useRouteDetailContext();
     const [settings, { setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin }] =
         useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
-    const [state] = useMediaListContext();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -43,16 +52,22 @@ const GridToolbar: Component = () => {
 
     return (
         <>
-            <ToggleSlideshowButton />
+            <ToggleSlideshowButton
+                isPlaying={props.slideshowIsPlaying}
+                toggleSlideshow={props.toggleSlideshow}
+            />
 
-            <Show when={state.activeItem && !ltMd()}>
-                <MovePreviousButton />
-                <MoveNextButton />
+            <Show when={props.activeMedia && !ltMd()}>
+                <MovePreviousButton
+                    isFirst={props.activeMediaIsFirst}
+                    movePrevious={props.movePrevious}
+                />
+                <MoveNextButton isLast={props.activeMediaIsLast} moveNext={props.moveNext} />
             </Show>
 
             <ToolbarDivider />
 
-            <Show when={!state.activeItem}>
+            <Show when={!props.activeMedia}>
                 <Show when={routeContext.area === AreaCategories}>
                     <ToolbarButton
                         icon="icon-[ic--round-title]"
@@ -80,7 +95,7 @@ const GridToolbar: Component = () => {
                 />
             </Show>
 
-            <Show when={state.activeItem}>
+            <Show when={props.activeMedia}>
                 <Show when={routeContext.area === AreaRandom}>
                     <ToolbarButton
                         icon="icon-[ic--round-title]"

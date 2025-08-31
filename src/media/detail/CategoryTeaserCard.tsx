@@ -1,6 +1,5 @@
 import { Component, Show } from "solid-js";
 
-import { useCategoryContext } from "../../_contexts/CategoryContext";
 import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
@@ -11,8 +10,6 @@ type Props = {
 };
 
 const CategoryTeaserCard: Component<Props> = props => {
-    const [categoryState, { updateTeaser }] = useCategoryContext();
-
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();
 

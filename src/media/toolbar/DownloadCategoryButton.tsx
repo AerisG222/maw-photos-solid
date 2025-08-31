@@ -1,25 +1,20 @@
 import { Component } from "solid-js";
 
-import { useCategoryContext } from "../../_contexts/CategoryContext";
+import { Category } from "../../_models/Category";
+import { buildCategoryDownloadUrl } from "../../_contexts/api/_shared";
 
 import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
-const DownloadCategoryButton: Component = () => {
-    const [categoryState] = useCategoryContext();
+type Props = {
+    category?: Category;
+};
 
-    const getLink = () => {
-        if (categoryState.activeCategory) {
-            return categoryState.activeCategory.downloadLink; // TODO
-        }
-
-        return "";
-    };
-
+const DownloadCategoryButton: Component<Props> = props => {
     return (
         <ToolbarExternalLink
             name="Download"
             tooltip="Download All Photos in Category (.zip)"
-            url={getLink()}
+            url={props.category?.id ? buildCategoryDownloadUrl(props.category.id) : ""}
             iconClass="icon-[ic--outline-file-download]"
         />
     );

@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
 import { CategoriesProvider } from "../../_contexts/api/CategoriesContext";
-import { CategoryProvider } from "../../_contexts/CategoryContext";
 import { ConfigProvider } from "../../_contexts/api/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
@@ -30,13 +29,11 @@ const AppContext: ParentComponent = props => {
                                     <ConfigProvider>
                                         <CategoriesProvider>
                                             <MediaProvider>
-                                                <CategoryProvider>
-                                                    <FullscreenProvider>
-                                                        <RouteDetailProvider>
-                                                            {props.children}
-                                                        </RouteDetailProvider>
-                                                    </FullscreenProvider>
-                                                </CategoryProvider>
+                                                <FullscreenProvider>
+                                                    <RouteDetailProvider>
+                                                        {props.children}
+                                                    </RouteDetailProvider>
+                                                </FullscreenProvider>
                                             </MediaProvider>
                                         </CategoriesProvider>
                                     </ConfigProvider>

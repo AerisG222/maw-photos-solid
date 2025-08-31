@@ -3,11 +3,21 @@ import { Component } from "solid-js";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 
-const MapToolbar: Component = () => {
+type Props = {
+    activeMediaIsFirst: boolean;
+    activeMediaIsLast: boolean;
+    moveNext: () => void;
+    movePrevious: () => void;
+};
+
+const MapToolbar: Component<Props> = props => {
     return (
         <>
-            <MovePreviousButton />
-            <MoveNextButton />
+            <MovePreviousButton
+                isFirst={props.activeMediaIsFirst}
+                movePrevious={props.movePrevious}
+            />
+            <MoveNextButton isLast={props.activeMediaIsLast} moveNext={props.moveNext} />
         </>
     );
 };

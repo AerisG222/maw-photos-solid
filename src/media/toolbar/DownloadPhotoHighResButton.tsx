@@ -1,17 +1,19 @@
 import { Component } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
-
 import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
-const DownloadPhotoHighResButton: Component = () => {
-    const [photoListState] = useMediaListContext();
+import { Media } from "../../_models/Media";
 
+type Props = {
+    media?: Media;
+};
+
+const DownloadPhotoHighResButton: Component<Props> = props => {
     return (
         <ToolbarExternalLink
             name="High Res"
             tooltip="High Res Download"
-            url={photoListState.activeItem?.imageLgUrl}
+            url={props.media ? (props.media.files.find(f => f.scale === "full")?.path ?? "") : ""}
             iconClass="icon-[ic--round-image]"
         />
     );

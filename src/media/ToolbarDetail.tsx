@@ -1,8 +1,9 @@
 import { Component, Show } from "solid-js";
-import { useParams } from "@solidjs/router";
 
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
+import { Category } from "../_models/Category";
+import { Media } from "../_models/Media";
 
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
@@ -18,10 +19,20 @@ import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
 
-const DetailToolbar: Component = () => {
+type Props = {
+    activeCategory: Category | undefined;
+    activeMedia: Media | undefined;
+    activeMediaIsFirst: boolean;
+    activeMediaIsLast: boolean;
+    slideshowIsPlaying: boolean;
+    moveNext: () => void;
+    movePrevious: () => void;
+    toggleSlideshow: () => void;
+};
+
+const DetailToolbar: Component<Props> = props => {
     const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize }] =
         useMediaDetailViewSettingsContext();
-    const params = useParams();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -37,13 +48,19 @@ const DetailToolbar: Component = () => {
 
     return (
         <>
-            <ToggleSlideshowButton />
-            <MovePreviousButton />
-            <MoveNextButton />
+            <ToggleSlideshowButton
+                isPlaying={props.slideshowIsPlaying}
+                toggleSlideshow={props.toggleSlideshow}
+            />
+            <MovePreviousButton
+                isFirst={props.activeMediaIsFirst}
+                movePrevious={props.movePrevious}
+            />
+            <MoveNextButton isLast={props.activeMediaIsLast} moveNext={props.moveNext} />
 
             <ToolbarDivider />
 
-            <DownloadCategoryButton />
+            <DownloadCategoryButton category={props.activeCategory} />
 
             <ToolbarDivider />
 
@@ -54,13 +71,15 @@ const DetailToolbar: Component = () => {
 
             <ToolbarDivider />
 
-            <DownloadPhotoLowResButton />
-            <DownloadPhotoHighResButton />
+            <DownloadPhotoLowResButton media={props.activeMedia} />
+            <DownloadPhotoHighResButton media={props.activeMedia} />
 
             <ToolbarDivider />
 
-            <Show when={navigator?.canShare}>
-                <ShareButton />
+            <Show
+                when={navigator && navigator.canShare && navigator.canShare() && props.activeMedia}
+            >
+                <ShareButton activeMedia={props.activeMedia!} />
 
                 <ToolbarDivider />
             </Show>

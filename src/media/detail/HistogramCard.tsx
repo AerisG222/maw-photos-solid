@@ -1,7 +1,5 @@
 import { Component, createEffect, createSignal } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
-
 type Histogram = {
     r: number[];
     g: number[];
@@ -9,14 +7,17 @@ type Histogram = {
     lum: number[];
 };
 
-const HistogramCard: Component = () => {
+type Props = {
+    mediaElement?: HTMLImageElement | HTMLVideoElement;
+};
+
+const HistogramCard: Component<Props> = props => {
     const _rgb = "rgb";
     const _r = "r";
     const _g = "g";
     const _b = "b";
     const _lum = "lum";
 
-    const [state] = useMediaListContext();
     const [channel, setChannel] = createSignal(_rgb);
     const [histogram, setHistogram] = createSignal({
         r: [],
@@ -25,18 +26,13 @@ const HistogramCard: Component = () => {
         lum: []
     });
 
-    let histogramCanvas: HTMLCanvasElement = undefined;
+    let histogramCanvas: HTMLCanvasElement;
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d", {
         willReadFrequently: true
     }) as CanvasRenderingContext2D;
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
-        if (!histogramCanvas) {
-            console.log("x");
-            return;
-        }
-
         if (histogram) {
             const maxCount = getMaxCount(channel, histogram);
 
@@ -46,7 +42,7 @@ const HistogramCard: Component = () => {
         }
     };
 
-    const updateHistogramFromImage = (img): void => {
+    const updateHistogramFromImage = (img: HTMLImageElement): void => {
         tempCanvas.width = img.naturalWidth ? img.naturalWidth : img.width;
         tempCanvas.height = img.naturalHeight ? img.naturalHeight : img.height;
 
@@ -58,7 +54,7 @@ const HistogramCard: Component = () => {
     };
 
     const updateHistogramFromVideoFrame = async (timestamp, frame) => {
-        const video = state.mediaElement as HTMLVideoElement;
+        const video = props.mediaElement as HTMLVideoElement;
         const bitmap = await createImageBitmap(video);
 
         updateHistogramFromImage(bitmap);
@@ -131,9 +127,9 @@ const HistogramCard: Component = () => {
     };
 
     const drawHistogram = (channel: string, histogram: Histogram, maxCount: number): void => {
-        const ctx = histogramCanvas.getContext("2d") as CanvasRenderingContext2D;
+        const ctx = histogramCanvas!.getContext("2d") as CanvasRenderingContext2D;
 
-        ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
+        ctx.clearRect(0, 0, histogramCanvas!.width, histogramCanvas!.height);
 
         ctx.globalCompositeOperation = "lighter";
 
@@ -165,27 +161,27 @@ const HistogramCard: Component = () => {
         ctx.fillStyle = color;
 
         ctx.beginPath();
-        ctx.moveTo(0, histogramCanvas.height);
+        ctx.moveTo(0, histogramCanvas!.height);
 
         for (let x, y, i = 0; i <= 255; i++) {
             if (!(i in vals)) {
                 continue;
             }
 
-            y = Math.round((vals[i] / maxCount) * histogramCanvas.height);
-            x = Math.round((i / 255) * histogramCanvas.width);
+            y = Math.round((vals[i] / maxCount) * histogramCanvas!.height);
+            x = Math.round((i / 255) * histogramCanvas!.width);
 
-            ctx.lineTo(x, histogramCanvas.height - y);
+            ctx.lineTo(x, histogramCanvas!.height - y);
         }
 
-        ctx.lineTo(histogramCanvas.width, histogramCanvas.height);
+        ctx.lineTo(histogramCanvas!.width, histogramCanvas!.height);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
     };
 
     createEffect(() => {
-        const el = state.mediaElement;
+        const el = props.mediaElement;
 
         if (!el) {
             return;
@@ -197,7 +193,7 @@ const HistogramCard: Component = () => {
             img.onload = async () => {
                 await img.decode();
 
-                updateHistogramFromImage(el);
+                updateHistogramFromImage(img);
             };
         }
 
@@ -211,11 +207,11 @@ const HistogramCard: Component = () => {
     });
 
     // render the initial histogram if media is already loaded
-    if (state.mediaElement) {
-        const el = state.mediaElement;
+    if (props.mediaElement) {
+        const el = props.mediaElement;
 
-        if (el.nodeName === "IMG" && (state.mediaElement as HTMLImageElement).complete) {
-            updateHistogramFromImage(state.mediaElement);
+        if (el.nodeName === "IMG" && (props.mediaElement as HTMLImageElement).complete) {
+            updateHistogramFromImage(el as HTMLImageElement);
         } else if (el.nodeName === "VIDEO") {
             updateHistogramFromVideoFrame(null, null);
         }

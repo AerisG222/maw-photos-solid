@@ -1,7 +1,5 @@
 import { ParentComponent, Show, children } from "solid-js";
 
-import { useCategoryContext } from "../_contexts/CategoryContext";
-import { useMediaListContext } from "./contexts/MediaListContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import {
     MediaViewModeBulkEdit,

@@ -1,23 +1,15 @@
-import { Component, Show, createEffect, createMemo, createSignal, onMount } from "solid-js";
+import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
 
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
-import { getMediaPathByView, MediaViewModeMap } from "./_routes";
-import { Media } from "../_models/Media";
+import { MediaViewModeMap } from "./_routes";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { useNavigate, useParams } from "@solidjs/router";
-import { useMediaContext } from "../_contexts/api/MediaContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { GpsDetail } from "../_models/GpsDetail";
-import { GpsCoordinate } from "../_models/GpsCoordinate";
+import { CategoryMapsMediaService } from "./services/CategoryMapsMediaService";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
-
-type MediaWithGps = {
-    media: Media;
-    gps: GpsDetail;
-};
 
 const ViewMap: Component = () => {
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
@@ -26,48 +18,20 @@ const ViewMap: Component = () => {
     const [initialized, setInitialized] = createSignal(false);
     const [mapReady, setMapReady] = createSignal(false);
     const { categoryQuery, categoryMediaQuery, categoryMediaGpsQuery } = useCategoriesContext();
-    const { mediaQuery } = useMediaContext();
 
-    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
-    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
+    const cq = categoryQuery(() => params.categoryId as Uuid);
+    const mq = categoryMediaQuery(() => params.categoryId as Uuid);
     const gpsList = categoryMediaGpsQuery(() => params.categoryId as Uuid);
-
-    createEffect(() => {
-        if (!params.id && mediaList.data) {
-            navigate(
-                getMediaPathByView(
-                    MediaViewModeMap,
-                    params.categoryId as Uuid,
-                    mediaList.data[0].id as Uuid
-                )
-            );
-        }
-    });
-
-    const activeMedia = mediaQuery(() => params.id as Uuid);
-
-    const preferredGpsLocation = (
-        mediaWithGps: MediaWithGps | undefined
-    ): GpsCoordinate | undefined =>
-        mediaWithGps?.gps?.override ? mediaWithGps.gps.override : mediaWithGps?.gps.recorded;
-
-    const mediaWithGps = createMemo(() => {
-        if (mediaList.isSuccess && gpsList.isSuccess) {
-            return gpsList.data.map(
-                g =>
-                    ({
-                        media: mediaList.data.find(m => m.id === g.mediaId),
-                        gps: g
-                    }) as MediaWithGps
-            );
-        }
-
-        return [];
-    });
-
-    const activeMediaGps = createMemo(() =>
-        preferredGpsLocation(mediaWithGps().find(m => m.media.id === activeMedia.data?.id))
+    const mediaService = new CategoryMapsMediaService(
+        navigate,
+        params,
+        MediaViewModeMap,
+        cq,
+        mq,
+        gpsList
     );
+
+    createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
     let el: HTMLDivElement | undefined;
 
@@ -108,8 +72,8 @@ const ViewMap: Component = () => {
             "marker"
         )) as google.maps.MarkerLibrary;
 
-        for (const item of mediaWithGps()) {
-            const coord = preferredGpsLocation(item);
+        for (const item of mediaService.mediaWithGps()) {
+            const coord = mediaService.preferredGpsLocation(item);
             const marker = new AdvancedMarkerElement({
                 map,
                 position: { lat: coord!.latitude, lng: coord!.longitude }
@@ -128,15 +92,15 @@ const ViewMap: Component = () => {
     };
 
     const updateMap = () => {
-        if (activeMediaGps()?.latitude && activeMediaGps()?.longitude) {
+        if (mediaService.activeMediaGps()?.latitude && mediaService.activeMediaGps()?.longitude) {
             const pos = {
-                lat: activeMediaGps()!.latitude,
-                lng: activeMediaGps()!.longitude
+                lat: mediaService.activeMediaGps()!.latitude,
+                lng: mediaService.activeMediaGps()!.longitude
             };
 
             map.panTo(pos);
 
-            const marker = markers.get(activeMedia.data!.id);
+            const marker = markers.get(mediaService.getActiveMedia()!.id);
             google.maps.event.trigger(marker, "click");
         }
     };
@@ -146,7 +110,7 @@ const ViewMap: Component = () => {
     });
 
     createEffect(() => {
-        if (initialized() && mediaWithGps().length > 0) {
+        if (initialized() && mediaService.mediaWithGps().length > 0) {
             addMarkers();
         }
     });
@@ -158,12 +122,20 @@ const ViewMap: Component = () => {
     });
 
     return (
-        <Show when={mediaList.isSuccess}>
+        <Show when={mediaService.isReady()}>
             <Layout
                 xPad={false}
                 toolbar={
-                    <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
-                        <MapToolbar />
+                    <Toolbar
+                        activeCategory={mediaService.getActiveCategory()}
+                        activeMedia={mediaService.getActiveMedia()}
+                    >
+                        <MapToolbar
+                            activeMediaIsFirst={mediaService.isActiveMediaFirst()}
+                            activeMediaIsLast={mediaService.isActiveMediaLast()}
+                            moveNext={mediaService.moveNext}
+                            movePrevious={mediaService.movePrevious}
+                        />
                     </Toolbar>
                 }
             >

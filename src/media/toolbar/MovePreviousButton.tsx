@@ -1,20 +1,21 @@
 import { Component } from "solid-js";
 
-import { useMediaListContext } from "../contexts/MediaListContext";
-
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-const MovePreviousButton: Component = () => {
-    const [, { activeItemIsFirst, movePrevious }] = useMediaListContext();
+type Props = {
+    isFirst: boolean;
+    movePrevious: () => void;
+};
 
+const MovePreviousButton: Component<Props> = props => {
     return (
         <ToolbarButton
-            disabled={activeItemIsFirst()}
+            disabled={props.isFirst}
             icon="icon-[ic--round-chevron-left]"
             name="Prev"
             tooltip="Move Previous"
             shortcutKeys={["arrowleft"]}
-            clickHandler={movePrevious}
+            clickHandler={props.movePrevious}
         />
     );
 };

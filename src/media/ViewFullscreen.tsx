@@ -1,11 +1,12 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
-import { getMediaPathByView, MediaViewModeFullscreen } from "./_routes";
-import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
+import { MediaViewModeFullscreen } from "./_routes";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { useMediaContext } from "../_contexts/api/MediaContext";
 import { useNavigate, useParams } from "@solidjs/router";
+import { CategoryMediaService } from "./services/CategoryMediaService";
+import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
+import { SlideshowService } from "./services/SlideshowService";
 
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
@@ -15,46 +16,57 @@ import MainItem from "./MainItem";
 const ViewFullscreen: Component = () => {
     const navigate = useNavigate();
     const params = useParams();
+    const [mediaPageSettings] = useMediaPageSettingsContext();
     const [, { setFullscreen }] = useFullscreenContext();
-    const [routeContext] = useRouteDetailContext();
     const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
-    const { mediaQuery } = useMediaContext();
 
-    const activeCategory = categoryQuery(() => params.categoryId as Uuid);
-    const mediaList = categoryMediaQuery(() => params.categoryId as Uuid);
+    const cq = categoryQuery(() => params.categoryId as Uuid);
+    const mq = categoryMediaQuery(() => params.categoryId as Uuid);
+    const mediaService = new CategoryMediaService(
+        navigate,
+        params,
+        MediaViewModeFullscreen,
+        cq,
+        mq
+    );
+    const slideshowService = new SlideshowService(
+        mediaService,
+        mediaPageSettings.slideshowDisplayDurationSeconds
+    );
 
-    createEffect(() => {
-        if (!params.id && mediaList.data) {
-            navigate(
-                getMediaPathByView(
-                    MediaViewModeFullscreen,
-                    params.categoryId as Uuid,
-                    mediaList.data[0].id as Uuid
-                )
-            );
-        }
-    });
-
-    const activeMedia = mediaQuery(() => params.id as Uuid);
+    createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
     setFullscreen(true);
 
     onCleanup(() => {
+        slideshowService.stop();
         setFullscreen(false);
     });
 
     return (
-        <Show when={mediaList.isSuccess}>
+        <Show when={mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
                 toolbar={
-                    <Toolbar activeCategory={activeCategory.data} activeMedia={activeMedia.data}>
-                        <FullscreenToolbar />
+                    <Toolbar
+                        activeCategory={mediaService.getActiveCategory()}
+                        activeMedia={mediaService.getActiveMedia()}
+                    >
+                        <FullscreenToolbar
+                            activeMediaIsFirst={mediaService.isActiveMediaFirst()}
+                            activeMediaIsLast={mediaService.isActiveMediaLast()}
+                            moveNext={mediaService.moveNext}
+                            movePrevious={mediaService.movePrevious}
+                        />
                     </Toolbar>
                 }
             >
                 <div class="grid h-screen w-full justify-center">
-                    <MainItem media={activeMedia.data!} />
+                    <MainItem
+                        media={mediaService.getActiveMedia()!}
+                        moveNext={mediaService.moveNext}
+                        movePrevious={mediaService.movePrevious}
+                    />
                 </div>
             </Layout>
         </Show>

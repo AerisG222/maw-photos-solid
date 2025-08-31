@@ -1,6 +1,9 @@
 const buildAbsoluteUrl = (relativeUrl: string): string =>
     `${import.meta.env.VITE_API_URI}/${relativeUrl}`;
 
+export const buildCategoryDownloadUrl = (id: Uuid): string =>
+    buildAbsoluteUrl(`categories/${id}/download`);
+
 const getQueryParams = (content: any) => new URLSearchParams(content).toString();
 
 export const runWithAccessToken = async <T>(getToken: () => Promise<string | undefined>, func: (accessToken: string) => Promise<T>) => {

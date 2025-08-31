@@ -1,7 +1,6 @@
 import { Component, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
-import { useCategoryContext } from "../_contexts/CategoryContext";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
@@ -17,7 +16,6 @@ const GridView: Component = () => {
     const { scalesQuery } = useConfigContext();
     const { categoriesForYearQuery } = useCategoriesContext();
     const [filter] = useCategoryFilterSettingsContext();
-    //const [, { getFilteredCategoriesForYear, getFilteredYears }] = useCategoryContext();
     const [settings] = useCategoryGridViewSettingsContext();
 
     const categories = categoriesForYearQuery(() => filter.yearFilter as number);
