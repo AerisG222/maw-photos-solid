@@ -3,7 +3,7 @@ import { useIsRouting, useLocation, useNavigate } from "@solidjs/router";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
 const AuthGuard: ParentComponent = props => {
-    const [authContext] = useAuthContext();
+    const [authContext, { getToken }] = useAuthContext();
     const location = useLocation();
     const isRouting = useIsRouting();
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const AuthGuard: ParentComponent = props => {
             return;
         }
 
-        if (!authContext.isLoggedIn) {
+        if (!authContext.isLoggedIn || !getToken()) {
             // todo: redirect to orig dest after login
             //setRedirectUrl(`${location.pathname}${location.search}`);
             navigate("/login", { replace: true });
