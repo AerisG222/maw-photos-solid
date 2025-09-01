@@ -6,8 +6,11 @@ import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { categoryDetailRoute, MediaViewModeDetail } from "./_routes";
+import { detailRoute } from "./_routes";
 import { CategoryMediaService } from "./services/CategoryMediaService";
+import { SlideshowService } from "./services/SlideshowService";
+import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
+import { MediaViewModeDetail } from "./models/MediaView";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
@@ -16,8 +19,6 @@ import Sidebar from "./detail/Sidebar";
 import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MainItem from "./MainItem";
-import { SlideshowService } from "./services/SlideshowService";
-import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 
 const ViewDetail: Component = () => {
     const navigate = useNavigate();
@@ -107,7 +108,7 @@ const ViewDetail: Component = () => {
                             media={mediaService.getMediaList()!}
                             activeMedia={mediaService.getActiveMedia()!}
                             thumbnailSize={settings.thumbnailSize}
-                            activeRoute={categoryDetailRoute}
+                            activeRoute={detailRoute}
                         />
                     </Show>
                 </div>

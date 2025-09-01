@@ -2,13 +2,15 @@ import { Component, Show } from "solid-js";
 import { A, useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { getMediaPath, categoryGridRoute, MediaViewModeGrid } from "./_routes";
+import { gridRoute } from "./_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
+import { MediaViewModeGrid } from "./models/MediaView";
+import { getMediaPath } from "./models/RouteHelpers";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -69,7 +71,7 @@ const ViewGrid: Component = () => {
                     <A
                         class="flex h-full"
                         href={getMediaPath(
-                            categoryGridRoute,
+                            gridRoute,
                             mediaService.getActiveMedia()!.categoryId,
                             undefined
                         )}
@@ -93,7 +95,7 @@ const ViewGrid: Component = () => {
                     <MediaGrid
                         items={mediaService.getMediaList()}
                         thumbnailSize={settings.thumbnailSize}
-                        activeRoute={categoryGridRoute}
+                        activeRoute={gridRoute}
                     />
                 </div>
             </Show>

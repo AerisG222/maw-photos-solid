@@ -1,30 +1,8 @@
 import { lazy } from "solid-js";
-import { AppRouteDefinition, AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
-import { buildPath, routeMatch } from "../_models/utils/RouteUtils";
+import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
+import { routeMatch } from "../_models/utils/RouteUtils";
 
-export const MediaViewModeBulkEdit = "bulk-edit";
-export const MediaViewModeDetail = "detail";
-export const MediaViewModeFullscreen = "fullscreen";
-export const MediaViewModeGrid = "grid";
-export const MediaViewModeMap = "map";
-
-export type MediaView =
-    | typeof MediaViewModeBulkEdit
-    | typeof MediaViewModeDetail
-    | typeof MediaViewModeFullscreen
-    | typeof MediaViewModeGrid
-    | typeof MediaViewModeMap;
-
-export const MediaViewAll: MediaView[] = [
-    MediaViewModeBulkEdit,
-    MediaViewModeDetail,
-    MediaViewModeFullscreen,
-    MediaViewModeGrid,
-    MediaViewModeMap
-];
-
-const categoryBasePath = "/categories/:categoryId";
-const randomBasePath = "/random";
+const basePath = "/categories/:categoryId";
 
 const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
     path: "/",
@@ -82,68 +60,24 @@ const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
     component: lazy(() => import("./ViewBulkEdit"))
 });
 
-const categoryRedirectRoute = buildRedirectRoute(categoryBasePath);
-export const categoryGridRoute = buildGridRoute(categoryBasePath);
-export const categoryDetailRoute = buildDetailRoute(categoryBasePath);
-export const categoryFullscreenRoute = buildFullscreenRoute(categoryBasePath);
-export const categoryMapRoute = buildMapRoute(categoryBasePath);
-export const categoryBulkEditRoute = buildBulkEditRoute(categoryBasePath);
+const redirectRoute = buildRedirectRoute(basePath);
+export const gridRoute = buildGridRoute(basePath);
+export const detailRoute = buildDetailRoute(basePath);
+export const fullscreenRoute = buildFullscreenRoute(basePath);
+export const mapRoute = buildMapRoute(basePath);
+export const bulkEditRoute = buildBulkEditRoute(basePath);
 
-export const categoryMediaRoutes: AppRouteDefinition = {
-    path: categoryBasePath,
-    absolutePath: categoryBasePath,
+export const mediaRoutes: AppRouteDefinition = {
+    path: basePath,
+    absolutePath: basePath,
     component: lazy(() => import("./MediaRoot")),
     doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [
-        categoryRedirectRoute,
-        categoryGridRoute,
-        categoryDetailRoute,
-        categoryFullscreenRoute,
-        categoryMapRoute,
-        categoryBulkEditRoute
+        redirectRoute,
+        gridRoute,
+        detailRoute,
+        fullscreenRoute,
+        mapRoute,
+        bulkEditRoute
     ]
-};
-
-const randomRedirectRoute = buildRedirectRoute(randomBasePath);
-export const randomGridRoute = buildGridRoute(randomBasePath);
-export const randomDetailRoute = buildDetailRoute(randomBasePath);
-export const randomFullscreenRoute = buildFullscreenRoute(randomBasePath);
-
-export const randomMediaRoutes: AppRouteDefinition = {
-    icon: "icon-[ic--round-shuffle]",
-    name: "Random",
-    helpText: "Play though an unending list of random photos.",
-    path: randomBasePath,
-    absolutePath: randomBasePath,
-    component: lazy(() => import("./MediaRoot")),
-    doesPathMatch: path => routeMatch(path, randomBasePath, AreaRandom),
-    children: [randomRedirectRoute, randomGridRoute, randomDetailRoute, randomFullscreenRoute]
-};
-
-export const getMediaCategoryPath = (categoryId: Uuid): string =>
-    buildPath(categoryMediaRoutes, { categoryId });
-
-export const getMediaPathByView = (viewMode: MediaView, categoryId: Uuid, id?: Uuid): string =>
-    getMediaPath(getRouteForViewMode(viewMode), categoryId, id);
-
-export const getMediaPath = (route: AppRouteDefinition, categoryId: Uuid, id?: Uuid): string =>
-    buildPath(route, { categoryId, id });
-
-const getRouteForViewMode = (mode: MediaView): AppRouteDefinition => {
-    switch (mode) {
-        case MediaViewModeBulkEdit:
-            return categoryBulkEditRoute;
-        case MediaViewModeDetail:
-            return categoryDetailRoute;
-        case MediaViewModeFullscreen:
-            return categoryFullscreenRoute;
-        case MediaViewModeGrid:
-            return categoryGridRoute;
-        case MediaViewModeMap:
-            return categoryMapRoute;
-        default:
-            // eslint-disable-next-line no-case-declarations
-            const _exhaustiveCheck: never = mode;
-            return _exhaustiveCheck;
-    }
 };

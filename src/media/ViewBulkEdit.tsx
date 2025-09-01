@@ -3,7 +3,7 @@ import { useParams } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
-import { MediaViewModeGrid, categoryBulkEditRoute, getMediaPathByView } from "./_routes";
+import { bulkEditRoute } from "./_routes";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
 
 import Toolbar from "./Toolbar";
@@ -11,6 +11,8 @@ import Layout from "../_components/layout/Layout";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../_components/auth/AdminGuard";
+import { MediaViewModeGrid } from "./models/MediaView";
+import { getMediaPathByView } from "./models/RouteHelpers";
 
 type SelectableMedia = {
     id: Uuid;

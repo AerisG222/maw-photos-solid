@@ -1,6 +1,5 @@
 import { Navigator, Params } from "@solidjs/router";
 
-import { MediaView } from '../_routes';
 import { UseQueryResult } from '@tanstack/solid-query';
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
@@ -10,6 +9,7 @@ import { createMemo } from 'solid-js';
 import { GpsCoordinate } from '../../_models/GpsCoordinate';
 import { MediaWithGps } from '../models/MediaWithGps';
 import { INavigable } from './INavigable';
+import { MediaView } from '../models/MediaView';
 
 export class CategoryMapsMediaService extends CategoryMediaService implements INavigable {
     constructor(

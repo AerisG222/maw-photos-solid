@@ -1,11 +1,11 @@
 import { Navigator, Params } from "@solidjs/router";
 
 import { BaseMediaService } from './BaseMediaService';
-import { MediaView } from '../_routes';
 import { UseQueryResult } from '@tanstack/solid-query';
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
 import { INavigable } from './INavigable';
+import { MediaView } from '../models/MediaView';
 
 export class CategoryMediaService extends BaseMediaService implements INavigable {
     constructor(

@@ -4,8 +4,8 @@ import { A } from "@solidjs/router";
 import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../_models/ThumbnailSize";
-import { getMediaPath } from "./_routes";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { getMediaPath } from "./models/RouteHelpers";
 
 type Props = {
     media: Media;

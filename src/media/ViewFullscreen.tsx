@@ -1,12 +1,12 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
-import { MediaViewModeFullscreen } from "./_routes";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useNavigate, useParams } from "@solidjs/router";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { SlideshowService } from "./services/SlideshowService";
+import { MediaViewModeFullscreen } from "./models/MediaView";
 
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
@@ -55,8 +55,10 @@ const ViewFullscreen: Component = () => {
                         <FullscreenToolbar
                             activeMediaIsFirst={mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={mediaService.isActiveMediaLast()}
+                            slideshowIsPlaying={slideshowService.isPlaying()}
                             moveNext={mediaService.moveNext}
                             movePrevious={mediaService.movePrevious}
+                            toggleSlideshow={slideshowService.toggle}
                         />
                     </Toolbar>
                 }

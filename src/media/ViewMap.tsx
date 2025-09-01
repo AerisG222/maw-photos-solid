@@ -1,11 +1,11 @@
 import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
 
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
-import { MediaViewModeMap } from "./_routes";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { useNavigate, useParams } from "@solidjs/router";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { CategoryMapsMediaService } from "./services/CategoryMapsMediaService";
+import { MediaViewModeMap } from "./models/MediaView";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
