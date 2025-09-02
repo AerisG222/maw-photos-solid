@@ -1,16 +1,11 @@
 import { Component, Show } from "solid-js";
-import { A, useNavigate, useParams } from "@solidjs/router";
+import { A } from "@solidjs/router";
 
-import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
+import { MediaGridViewSettingsState } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { gridRoute } from "../category/_routes";
-import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
-import { AreaRandom } from "../_models/AppRouteDefinition";
-import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "./services/SlideshowService";
-import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeGrid } from "./models/MediaView";
 import { getMediaPath } from "./models/RouteHelpers";
+import { IMediaService } from "./services/IMediaService";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -19,52 +14,46 @@ import Layout from "../_components/layout/Layout";
 import MediaGrid from "../media/MediaGrid";
 import MainItem from "./MainItem";
 
-const ViewGrid: Component = () => {
-    const navigate = useNavigate();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
-    const [settings] = useMediaGridViewSettingsContext();
-    const [routeContext] = useRouteDetailContext();
-    const params = useParams();
-    const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
+type Props = {
+    mediaService: IMediaService;
+    slideshowService: SlideshowService;
+    gridSettings: MediaGridViewSettingsState;
+    showBreadcrumbsOnGrid: boolean;
+    showBreadcrumbsOnMedia: boolean;
+};
 
-    const cq = categoryQuery(() => params.categoryId as Uuid);
-    const mq = categoryMediaQuery(() => params.categoryId as Uuid);
-    const mediaService = new CategoryMediaService(navigate, params, MediaViewModeGrid, cq, mq);
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
-
+const ViewGrid: Component<Props> = props => {
     return (
         <Layout
-            margin={settings.margin}
+            margin={props.gridSettings.margin}
             toolbar={
                 <Toolbar
-                    activeCategory={mediaService.getActiveCategory()}
-                    activeMedia={mediaService.getActiveMedia()}
+                    activeCategory={props.mediaService.getActiveCategory()}
+                    activeMedia={props.mediaService.getActiveMedia()}
                 >
                     <GridToolbar
-                        activeMedia={mediaService.getActiveMedia()}
-                        activeMediaIsFirst={mediaService.isActiveMediaFirst()}
-                        activeMediaIsLast={mediaService.isActiveMediaLast()}
-                        slideshowIsPlaying={slideshowService.isPlaying()}
-                        moveNext={mediaService.moveNext}
-                        movePrevious={mediaService.movePrevious}
-                        toggleSlideshow={slideshowService.toggle}
+                        activeMedia={props.mediaService.getActiveMedia()}
+                        activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
+                        activeMediaIsLast={props.mediaService.isActiveMediaLast()}
+                        slideshowIsPlaying={props.slideshowService.isPlaying()}
+                        moveNext={props.mediaService.moveNext}
+                        movePrevious={props.mediaService.movePrevious}
+                        toggleSlideshow={props.slideshowService.toggle}
                     />
                 </Toolbar>
             }
         >
-            <Show when={mediaService.getActiveMedia()}>
+            <Show when={props.mediaService.getActiveMedia()}>
                 <div
                     class="absolute z-200 bg-base-100/92
                         top-[82px] left-[0] h-[calc(100vh-82px)]
                         md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
                 >
-                    <Show when={routeContext.area === AreaRandom && settings.showMainBreadcrumbs}>
+                    {/* todo: routeContext.area === AreaRandom && props.gridSettings.showMainBreadcrumbs */}
+                    <Show when={props.showBreadcrumbsOnMedia}>
                         <CategoryBreadcrumb
                             showTitleAsLink={true}
-                            category={mediaService.getActiveCategory()}
+                            category={props.mediaService.getActiveCategory()}
                         />
                     </Show>
 
@@ -72,29 +61,29 @@ const ViewGrid: Component = () => {
                         class="flex h-full"
                         href={getMediaPath(
                             gridRoute,
-                            mediaService.getActiveMedia()!.categoryId,
+                            props.mediaService.getActiveMedia()!.categoryId,
                             undefined
                         )}
                         onClick={stop}
                     >
                         <MainItem
-                            media={mediaService.getActiveMedia()!}
-                            moveNext={mediaService.moveNext}
-                            movePrevious={mediaService.movePrevious}
+                            media={props.mediaService.getActiveMedia()!}
+                            moveNext={props.mediaService.moveNext}
+                            movePrevious={props.mediaService.movePrevious}
                         />
                     </A>
                 </div>
             </Show>
 
-            <Show when={mediaService.getMediaList()}>
+            <Show when={props.mediaService.getMediaList()}>
                 <div>
-                    <Show when={settings.showBreadcrumbs && routeContext.area !== AreaRandom}>
-                        <CategoryBreadcrumb category={mediaService.getActiveCategory()} />
+                    <Show when={props.showBreadcrumbsOnGrid}>
+                        <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
                     </Show>
 
                     <MediaGrid
-                        items={mediaService.getMediaList()}
-                        thumbnailSize={settings.thumbnailSize}
+                        items={props.mediaService.getMediaList()}
+                        thumbnailSize={props.gridSettings.thumbnailSize}
                         activeRoute={gridRoute}
                     />
                 </div>

@@ -2,11 +2,10 @@ import { Navigator, Params } from "@solidjs/router";
 
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
-import { INavigable } from './INavigable';
 import { MediaView } from '../models/MediaView';
 import { getMediaPathByView } from '../models/RouteHelpers';
 
-export abstract class BaseMediaService implements INavigable {
+export abstract class BaseMediaService {
     constructor(
         protected navigate: Navigator,
         protected params: Params,

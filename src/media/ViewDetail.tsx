@@ -1,16 +1,10 @@
-import { Component, createEffect, onCleanup, Show } from "solid-js";
-import { useNavigate, useParams } from "@solidjs/router";
+import { Component, Show } from "solid-js";
 
-import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
+import { MediaDetailViewSettingsState } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { getThumbnailSize } from "../_models/ThumbnailSize";
-import { AreaRandom } from "../_models/AppRouteDefinition";
-import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
-import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { detailRoute } from "../category/_routes";
-import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "./services/SlideshowService";
-import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeDetail } from "./models/MediaView";
+import { IMediaService } from "./services/IMediaService";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
@@ -20,32 +14,22 @@ import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MainItem from "./MainItem";
 
-const ViewDetail: Component = () => {
-    const navigate = useNavigate();
-    const params = useParams();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
-    const [settings] = useMediaDetailViewSettingsContext();
-    const [routeContext] = useRouteDetailContext();
-    const { categoryQuery, categoryMediaQuery } = useCategoriesContext();
+type Props = {
+    mediaService: IMediaService;
+    slideshowService: SlideshowService;
+    detailSettings: MediaDetailViewSettingsState;
+    showBreadcrumbTitleAsLink: boolean;
+};
 
-    const cq = categoryQuery(() => params.categoryId as Uuid);
-    const mq = categoryMediaQuery(() => params.categoryId as Uuid);
-    const mediaService = new CategoryMediaService(navigate, params, MediaViewModeDetail, cq, mq);
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
-
-    createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
-
+const ViewDetail: Component<Props> = props => {
     const getMaxHeight = () => {
         let reservedHeight = 0;
 
-        reservedHeight += settings.showBreadcrumbs ? 28 : 0;
+        reservedHeight += props.detailSettings.showBreadcrumbs ? 28 : 0;
 
-        if (settings.showMediaList) {
+        if (props.detailSettings.showMediaList) {
             // 20 => rough approximation for scrollbar height
-            reservedHeight += getThumbnailSize(settings.thumbnailSize).height + 20;
+            reservedHeight += getThumbnailSize(props.detailSettings.thumbnailSize).height + 20;
         }
 
         return `max-height: calc(100vh - ${reservedHeight}px);`;
@@ -53,61 +37,57 @@ const ViewDetail: Component = () => {
 
     let mediaElement: HTMLImageElement | HTMLVideoElement;
 
-    onCleanup(() => {
-        slideshowService.stop();
-    });
-
     return (
-        <Show when={mediaService.getActiveMedia()}>
+        <Show when={props.mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
                 toolbar={
                     <Toolbar
-                        activeCategory={mediaService.getActiveCategory()}
-                        activeMedia={mediaService.getActiveMedia()}
+                        activeCategory={props.mediaService.getActiveCategory()}
+                        activeMedia={props.mediaService.getActiveMedia()}
                     >
                         <DetailToolbar
-                            activeCategory={mediaService.getActiveCategory()}
-                            activeMedia={mediaService.getActiveMedia()}
-                            activeMediaIsFirst={mediaService.isActiveMediaFirst()}
-                            activeMediaIsLast={mediaService.isActiveMediaLast()}
-                            slideshowIsPlaying={slideshowService.isPlaying()}
-                            moveNext={mediaService.moveNext}
-                            movePrevious={mediaService.movePrevious}
-                            toggleSlideshow={slideshowService.toggle}
+                            activeCategory={props.mediaService.getActiveCategory()}
+                            activeMedia={props.mediaService.getActiveMedia()}
+                            activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
+                            activeMediaIsLast={props.mediaService.isActiveMediaLast()}
+                            slideshowIsPlaying={props.slideshowService.isPlaying()}
+                            moveNext={props.mediaService.moveNext}
+                            movePrevious={props.mediaService.movePrevious}
+                            toggleSlideshow={props.slideshowService.toggle}
                         />
                     </Toolbar>
                 }
                 sidebar={
                     <Sidebar
-                        activeCategory={mediaService.getActiveCategory()}
-                        activeMedia={mediaService.getActiveMedia()}
+                        activeCategory={props.mediaService.getActiveCategory()}
+                        activeMedia={props.mediaService.getActiveMedia()}
                     />
                 }
             >
                 <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
-                    <Show when={settings.showBreadcrumbs} fallback={<div />}>
+                    <Show when={props.detailSettings.showBreadcrumbs} fallback={<div />}>
                         <CategoryBreadcrumb
-                            category={mediaService.getActiveCategory()}
-                            showTitleAsLink={routeContext.area === AreaRandom}
+                            category={props.mediaService.getActiveCategory()}
+                            showTitleAsLink={props.showBreadcrumbTitleAsLink}
                         />
                     </Show>
 
                     <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
                         <MainItem
-                            media={mediaService.getActiveMedia()!}
+                            media={props.mediaService.getActiveMedia()!}
                             maxHeightStyle={getMaxHeight()}
-                            moveNext={mediaService.moveNext}
-                            movePrevious={mediaService.movePrevious}
+                            moveNext={props.mediaService.moveNext}
+                            movePrevious={props.mediaService.movePrevious}
                             setActiveMediaElement={el => (mediaElement = el)}
                         />
                     </div>
 
-                    <Show when={settings.showMediaList} fallback={<div />}>
+                    <Show when={props.detailSettings.showMediaList} fallback={<div />}>
                         <MediaList
-                            media={mediaService.getMediaList()!}
-                            activeMedia={mediaService.getActiveMedia()!}
-                            thumbnailSize={settings.thumbnailSize}
+                            media={props.mediaService.getMediaList()!}
+                            activeMedia={props.mediaService.getActiveMedia()!}
+                            thumbnailSize={props.detailSettings.thumbnailSize}
                             activeRoute={detailRoute}
                         />
                     </Show>

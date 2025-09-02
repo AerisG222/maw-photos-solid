@@ -8,10 +8,12 @@ import { GpsDetail } from '../../_models/GpsDetail';
 import { createMemo } from 'solid-js';
 import { GpsCoordinate } from '../../_models/GpsCoordinate';
 import { MediaWithGps } from '../models/MediaWithGps';
-import { INavigable } from './INavigable';
 import { MediaView } from '../models/MediaView';
+import { IMapsMediaService } from './IMapsMediaService';
 
-export class CategoryMapsMediaService extends CategoryMediaService implements INavigable {
+export class CategoryMapsMediaService
+    extends CategoryMediaService
+    implements IMapsMediaService {
     constructor(
         navigate: Navigator,
         params: Params,
