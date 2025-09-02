@@ -3,7 +3,7 @@ import { useParams } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
-import { bulkEditRoute } from "./_routes";
+import { bulkEditRoute } from "../category/_routes";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
 
 import Toolbar from "./Toolbar";

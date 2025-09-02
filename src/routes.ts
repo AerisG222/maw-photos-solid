@@ -5,7 +5,7 @@ import { search } from "./search/_routes";
 import { stats } from "./stats/_routes";
 import { settings } from "./settings/_routes";
 import { catchAllRedirect } from "./redirect/_routes";
-import { mediaRoutes } from "./media/_routes";
+import { mediaRoutes } from "./category/_routes";
 import { randomMediaRoutes } from './random/_routes';
 
 export const appRoutes = [

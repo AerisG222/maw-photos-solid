@@ -1,7 +1,13 @@
 import { ParentComponent, Show, children } from "solid-js";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from "./_routes";
+import {
+    bulkEditRoute,
+    detailRoute,
+    fullscreenRoute,
+    gridRoute,
+    mapRoute
+} from "../category/_routes";
 import { randomDetailRoute, randomFullscreenRoute, randomGridRoute } from "../random/_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";

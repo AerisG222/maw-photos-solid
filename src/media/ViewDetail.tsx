@@ -6,7 +6,7 @@ import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { detailRoute } from "./_routes";
+import { detailRoute } from "../category/_routes";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";

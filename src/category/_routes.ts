@@ -17,7 +17,7 @@ const buildGridRoute = (basePath: string): AppRouteDefinition => ({
     shortcutKeys: ["g"],
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
-    component: lazy(() => import("./ViewGrid"))
+    component: lazy(() => import("./Grid"))
 });
 
 const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
@@ -27,7 +27,7 @@ const buildDetailRoute = (basePath: string): AppRouteDefinition => ({
     shortcutKeys: ["w"],
     path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
-    component: lazy(() => import("./ViewDetail"))
+    component: lazy(() => import("./Detail"))
 });
 
 const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
@@ -37,7 +37,7 @@ const buildFullscreenRoute = (basePath: string): AppRouteDefinition => ({
     shortcutKeys: ["f"],
     path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,
-    component: lazy(() => import("./ViewFullscreen"))
+    component: lazy(() => import("./Fullscreen"))
 });
 
 const buildMapRoute = (basePath: string): AppRouteDefinition => ({
@@ -47,7 +47,7 @@ const buildMapRoute = (basePath: string): AppRouteDefinition => ({
     shortcutKeys: ["z"],
     path: "/map/:id?",
     absolutePath: `${basePath}/map/:id?`,
-    component: lazy(() => import("./ViewMap"))
+    component: lazy(() => import("./Map"))
 });
 
 const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
@@ -57,7 +57,7 @@ const buildBulkEditRoute = (basePath: string): AppRouteDefinition => ({
     shortcutKeys: ["b"],
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
-    component: lazy(() => import("./ViewBulkEdit"))
+    component: lazy(() => import("./BulkEdit"))
 });
 
 const redirectRoute = buildRedirectRoute(basePath);
@@ -70,7 +70,7 @@ export const bulkEditRoute = buildBulkEditRoute(basePath);
 export const mediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("./MediaRoot")),
+    component: lazy(() => import("../media/MediaRoot")),
     doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [
         redirectRoute,

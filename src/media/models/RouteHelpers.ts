@@ -1,8 +1,9 @@
 import { AppRouteDefinition } from '../../_models/AppRouteDefinition';
 import { buildPath } from '../../_models/utils/RouteUtils';
-import { mediaRoutes, bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from '../_routes';
+import { mediaRoutes, bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from '../../category/_routes';
 import { MediaView, MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap } from './MediaView';
 
+// todo: move to service
 export const getMediaCategoryPath = (categoryId: Uuid): string =>
     buildPath(mediaRoutes, { categoryId });
 

@@ -2,7 +2,7 @@ import { Component, Show } from "solid-js";
 import { A, useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { gridRoute } from "./_routes";
+import { gridRoute } from "../category/_routes";
 import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { AreaRandom } from "../_models/AppRouteDefinition";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
