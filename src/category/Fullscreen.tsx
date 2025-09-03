@@ -5,7 +5,7 @@ import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { MediaViewModeFullscreen } from "../media/models/MediaView";
-import { CategoryMediaService } from "../media/services/CategoryMediaService";
+import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "../media/services/SlideshowService";
 
 import ViewFullscreen from "../media/ViewFullscreen";

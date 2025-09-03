@@ -1,11 +1,11 @@
 import { Navigator, Params } from "@solidjs/router";
 
-import { BaseMediaService } from './BaseMediaService';
+import { BaseMediaService } from '../../media/services/BaseMediaService';
 import { UseQueryResult } from '@tanstack/solid-query';
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
-import { MediaView } from '../models/MediaView';
-import { IMediaService } from './IMediaService';
+import { MediaView } from '../../media/models/MediaView';
+import { IMediaService } from '../../media/services/IMediaService';
 
 export class CategoryMediaService
     extends BaseMediaService

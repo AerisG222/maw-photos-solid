@@ -5,7 +5,7 @@ import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { MediaViewModeDetail } from "../media/models/MediaView";
-import { CategoryMediaService } from "../media/services/CategoryMediaService";
+import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "../media/services/SlideshowService";
 
 import ViewDetail from "../media/ViewDetail";
