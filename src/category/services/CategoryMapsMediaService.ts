@@ -7,9 +7,9 @@ import { CategoryMediaService } from './CategoryMediaService';
 import { GpsDetail } from '../../_models/GpsDetail';
 import { createMemo } from 'solid-js';
 import { GpsCoordinate } from '../../_models/GpsCoordinate';
-import { MediaWithGps } from '../../media/models/MediaWithGps';
-import { MediaView } from '../../media/models/MediaView';
-import { IMapsMediaService } from '../../media/services/IMapsMediaService';
+import { MediaWithGps } from '../../_media/models/MediaWithGps';
+import { MediaView } from '../../_media/models/MediaView';
+import { IMapsMediaService } from '../../_media/services/IMapsMediaService';
 
 export class CategoryMapsMediaService
     extends CategoryMediaService

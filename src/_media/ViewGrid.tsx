@@ -11,7 +11,7 @@ import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Layout from "../_components/layout/Layout";
-import MediaGrid from "../media/MediaGrid";
+import MediaGrid from "../_media/MediaGrid";
 import MainItem from "./MainItem";
 
 type Props = {

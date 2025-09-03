@@ -4,11 +4,11 @@ import { Component } from "solid-js";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeGrid } from "../media/models/MediaView";
+import { MediaViewModeGrid } from "../_media/models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
-import { SlideshowService } from "../media/services/SlideshowService";
+import { SlideshowService } from "../_media/services/SlideshowService";
 
-import ViewGrid from "../media/ViewGrid";
+import ViewGrid from "../_media/ViewGrid";
 
 const Grid: Component = () => {
     const navigate = useNavigate();

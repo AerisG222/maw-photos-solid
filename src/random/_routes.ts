@@ -53,7 +53,7 @@ export const randomMediaRoutes: AppRouteDefinition = {
     helpText: "Play though an unending list of random photos.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("../media/MediaRoot")),
+    component: lazy(() => import("../_media/MediaRoot")),
     doesPathMatch: path => routeMatch(path, basePath, AreaRandom),
     children: [randomRedirectRoute, randomGridRoute, randomDetailRoute, randomFullscreenRoute]
 };

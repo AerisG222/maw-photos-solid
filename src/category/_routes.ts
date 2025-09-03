@@ -70,7 +70,7 @@ export const bulkEditRoute = buildBulkEditRoute(basePath);
 export const mediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("../media/MediaRoot")),
+    component: lazy(() => import("../_media/MediaRoot")),
     doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [
         redirectRoute,

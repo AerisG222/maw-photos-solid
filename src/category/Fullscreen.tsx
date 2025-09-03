@@ -4,11 +4,11 @@ import { Component, createEffect, onCleanup } from "solid-js";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeFullscreen } from "../media/models/MediaView";
+import { MediaViewModeFullscreen } from "../_media/models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
-import { SlideshowService } from "../media/services/SlideshowService";
+import { SlideshowService } from "../_media/services/SlideshowService";
 
-import ViewFullscreen from "../media/ViewFullscreen";
+import ViewFullscreen from "../_media/ViewFullscreen";
 
 const Fullscreen: Component = () => {
     const navigate = useNavigate();

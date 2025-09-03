@@ -3,10 +3,10 @@ import { Component, createEffect } from "solid-js";
 
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
-import { MediaViewModeMap } from "../media/models/MediaView";
+import { MediaViewModeMap } from "../_media/models/MediaView";
 import { CategoryMapsMediaService } from "./services/CategoryMapsMediaService";
 
-import ViewMap from "../media/ViewMap";
+import ViewMap from "../_media/ViewMap";
 
 const Map: Component = () => {
     const navigate = useNavigate();
