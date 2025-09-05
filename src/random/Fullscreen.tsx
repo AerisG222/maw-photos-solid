@@ -4,7 +4,7 @@ import { Component, createEffect, onCleanup } from "solid-js";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeFullscreen } from "../_media/models/MediaView";
+import { MediaViewFullscreen } from "../_models/MediaView";
 import { SlideshowService } from "../_media/services/SlideshowService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { RandomMediaService } from "./services/RandomMediaService";
@@ -21,7 +21,7 @@ const Fullscreen: Component = () => {
 
     const cq = categoryQuery(() => params.categoryId as Uuid);
     const mq = randomMediaQuery(24);
-    const mediaService = new RandomMediaService(navigate, params, MediaViewModeFullscreen, cq, mq);
+    const mediaService = new RandomMediaService(navigate, params, MediaViewFullscreen, cq, mq);
     const slideshowService = new SlideshowService(
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds

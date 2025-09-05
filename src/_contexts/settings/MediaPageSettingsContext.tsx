@@ -1,11 +1,11 @@
 import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { defaultMediaView, MediaViewIdType } from "../../_models/MediaViewMode";
+import { defaultMediaView, MediaView } from "../../_models/MediaView";
 import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from "./_storage";
 
 export type MediaPageSettingsState = {
-    readonly view: MediaViewIdType;
+    readonly view: MediaView;
     readonly slideshowDisplayDurationSeconds: number;
 };
 
@@ -17,7 +17,7 @@ export const defaultMediaPageSettings: MediaPageSettingsState = {
 export type MediaPageSettingsContextValue = [
     state: MediaPageSettingsState,
     actions: {
-        setView: (view: MediaViewIdType) => void;
+        setView: (view: MediaView) => void;
         setSlideshowDisplayDurationSeconds: (slideshowDurationSeconds: number) => void;
     }
 ];
@@ -27,7 +27,7 @@ const MediaPageSettingsContext = createContext<MediaPageSettingsContextValue>();
 export const MediaPageSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setViewMode = (view: MediaViewIdType) => updateState({ view: view });
+    const setViewMode = (view: MediaView) => updateState({ view: view });
     const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) =>
         updateState({ slideshowDisplayDurationSeconds });
 

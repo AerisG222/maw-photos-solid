@@ -8,7 +8,7 @@ import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapVi
 import { allMapTypes } from "../_models/MapType";
 import { allMapZoomLevels } from "../_models/MapZoomLevel";
 import { allMargins } from "../_models/Margin";
-import { allMediaViews } from "../_models/MediaViewMode";
+import { allMediaViews } from "../_models/MediaView";
 import { allThumbnailSizes } from "../_models/ThumbnailSize";
 import { allSlideshowDurations } from "../_models/SlideshowDuration";
 

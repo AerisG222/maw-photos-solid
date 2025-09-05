@@ -14,7 +14,7 @@ import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MainItem from "./MainItem";
 import { Media } from "../_models/Media";
-import { MediaViewModeDetail } from "./models/MediaView";
+import { MediaViewDetail } from "../_models/MediaView";
 
 type Props = {
     mediaService: IMediaService;
@@ -89,7 +89,7 @@ const ViewDetail: Component<Props> = props => {
                     <Show when={props.detailSettings.showMediaList} fallback={<div />}>
                         <MediaList
                             mediaLinkBuilder={(media: Media) =>
-                                props.mediaService.getMediaPathByView(MediaViewModeDetail, media)
+                                props.mediaService.getMediaPathByView(MediaViewDetail, media)
                             }
                             media={props.mediaService.getMediaList()!}
                             activeMedia={props.mediaService.getActiveMedia()!}

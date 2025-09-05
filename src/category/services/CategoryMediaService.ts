@@ -4,7 +4,7 @@ import { BaseMediaService } from '../../_media/services/BaseMediaService';
 import { UseQueryResult } from '@tanstack/solid-query';
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
-import { MediaView, MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap } from '../../_media/models/MediaView';
+import { MediaView, MediaViewBulkEdit, MediaViewDetail, MediaViewFullscreen, MediaViewGrid, MediaViewMap } from '../../_models/MediaView';
 import { IMediaService } from '../../_media/services/IMediaService';
 import { bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from '../_routes';
 import { MediaAppRouteDefinition } from '../../_models/MediaAppRouteDefinition';
@@ -58,15 +58,15 @@ export class CategoryMediaService
 
     getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
         switch (view) {
-            case MediaViewModeDetail:
+            case MediaViewDetail:
                 return detailRoute;
-            case MediaViewModeFullscreen:
+            case MediaViewFullscreen:
                 return fullscreenRoute;
-            case MediaViewModeGrid:
+            case MediaViewGrid:
                 return gridRoute;
-            case MediaViewModeMap:
+            case MediaViewMap:
                 return mapRoute;
-            case MediaViewModeBulkEdit:
+            case MediaViewBulkEdit:
                 return bulkEditRoute;
             default:
                 return gridRoute;

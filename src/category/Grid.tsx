@@ -4,7 +4,7 @@ import { Component, onCleanup } from "solid-js";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeGrid } from "../_media/models/MediaView";
+import { MediaViewGrid } from "../_models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "../_media/services/SlideshowService";
 
@@ -19,7 +19,7 @@ const Grid: Component = () => {
 
     const cq = categoryQuery(() => params.categoryId as Uuid);
     const mq = categoryMediaQuery(() => params.categoryId as Uuid);
-    const mediaService = new CategoryMediaService(navigate, params, MediaViewModeGrid, cq, mq);
+    const mediaService = new CategoryMediaService(navigate, params, MediaViewGrid, cq, mq);
     const slideshowService = new SlideshowService(
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds

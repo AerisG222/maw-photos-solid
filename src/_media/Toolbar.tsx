@@ -6,12 +6,12 @@ import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
 import { IMediaService } from "./services/IMediaService";
 import {
-    MediaViewModeGrid,
-    MediaViewModeDetail,
-    MediaViewModeFullscreen,
-    MediaViewModeMap,
-    MediaViewModeBulkEdit
-} from "./models/MediaView";
+    MediaViewGrid,
+    MediaViewDetail,
+    MediaViewFullscreen,
+    MediaViewMap,
+    MediaViewBulkEdit
+} from "../_models/MediaView";
 
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
@@ -30,19 +30,19 @@ const Toolbar: ParentComponent<Props> = props => {
     const c = children(() => props.children);
 
     const mediaViewDetail = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewModeDetail)
+        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewDetail)
     );
     const mediaViewFullscreen = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewModeFullscreen)
+        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewFullscreen)
     );
     const mediaViewGrid = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewModeGrid)
+        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewGrid)
     );
     const mediaViewMap = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewModeMap)
+        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewMap)
     );
     const mediaViewBulkEdit = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewModeBulkEdit)
+        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewBulkEdit)
     );
 
     return (
@@ -54,7 +54,7 @@ const Toolbar: ParentComponent<Props> = props => {
                         props.activeMedia
                     )}
                     route={mediaViewGrid()!}
-                    clickHandler={() => setViewMode(MediaViewModeGrid)}
+                    clickHandler={() => setViewMode(MediaViewGrid)}
                 />
             </Show>
 
@@ -66,7 +66,7 @@ const Toolbar: ParentComponent<Props> = props => {
                             props.activeMedia
                         )}
                         route={mediaViewDetail()!}
-                        clickHandler={() => setViewMode(MediaViewModeDetail)}
+                        clickHandler={() => setViewMode(MediaViewDetail)}
                     />
                 </Show>
 
@@ -77,7 +77,7 @@ const Toolbar: ParentComponent<Props> = props => {
                             props.activeMedia
                         )}
                         route={mediaViewFullscreen()!}
-                        clickHandler={() => setViewMode(MediaViewModeFullscreen)}
+                        clickHandler={() => setViewMode(MediaViewFullscreen)}
                     />
                 </Show>
 
@@ -88,7 +88,7 @@ const Toolbar: ParentComponent<Props> = props => {
                             props.activeMedia
                         )}
                         route={mediaViewMap()!}
-                        clickHandler={() => setViewMode(MediaViewModeMap)}
+                        clickHandler={() => setViewMode(MediaViewMap)}
                     />
                 </Show>
 
@@ -99,7 +99,7 @@ const Toolbar: ParentComponent<Props> = props => {
                             props.activeMedia
                         )}
                         route={mediaViewBulkEdit()!}
-                        clickHandler={() => setViewMode(MediaViewModeBulkEdit)}
+                        clickHandler={() => setViewMode(MediaViewBulkEdit)}
                     />
                 </Show>
             </Show>

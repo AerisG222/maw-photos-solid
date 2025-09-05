@@ -1,7 +1,7 @@
 import { lazy } from "solid-js";
 import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
 import { routeMatch } from "../_models/utils/RouteUtils";
-import { MediaViewModeBulkEdit, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid, MediaViewModeMap } from '../_media/models/MediaView';
+import { MediaViewBulkEdit, MediaViewDetail, MediaViewFullscreen, MediaViewGrid, MediaViewMap } from '../_models/MediaView';
 import { MediaAppRouteDefinition } from '../_models/MediaAppRouteDefinition';
 import { Media } from '../_models/Media';
 import { Category } from '../_models/Category';
@@ -21,7 +21,7 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--outline-apps]",
     name: "Grid",
     tooltip: "Grid View",
-    mediaView: MediaViewModeGrid,
+    mediaView: MediaViewGrid,
     shortcutKeys: ["g"],
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
@@ -33,7 +33,7 @@ const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-dashboard]",
     name: "Detail",
     tooltip: "Detail View",
-    mediaView: MediaViewModeDetail,
+    mediaView: MediaViewDetail,
     shortcutKeys: ["w"],
     path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
@@ -45,7 +45,7 @@ const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-fullscreen]",
     name: "Fullscreen",
     tooltip: "Fullscreen View",
-    mediaView: MediaViewModeFullscreen,
+    mediaView: MediaViewFullscreen,
     shortcutKeys: ["f"],
     path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,
@@ -57,7 +57,7 @@ const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-map]",
     name: "Map",
     tooltip: "Map View",
-    mediaView: MediaViewModeMap,
+    mediaView: MediaViewMap,
     shortcutKeys: ["z"],
     path: "/map/:id?",
     absolutePath: `${basePath}/map/:id?`,
@@ -69,7 +69,7 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-collections]",
     name: "Bulk Edit",
     tooltip: "Bulk Edit View",
-    mediaView: MediaViewModeBulkEdit,
+    mediaView: MediaViewBulkEdit,
     shortcutKeys: ["b"],
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,

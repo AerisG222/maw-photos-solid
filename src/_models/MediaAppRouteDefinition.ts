@@ -1,4 +1,4 @@
-import { MediaView } from '../_media/models/MediaView';
+import { MediaView } from './MediaView';
 import { AppRouteDefinition } from './AppRouteDefinition';
 import { Category } from './Category';
 import { Media } from './Media';

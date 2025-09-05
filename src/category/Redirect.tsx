@@ -2,7 +2,7 @@ import { Component, createEffect } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaView } from "../_media/models/MediaView";
+import { MediaView } from "../_models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 

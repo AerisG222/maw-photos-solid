@@ -2,7 +2,7 @@ import { Navigator, Params } from "@solidjs/router";
 
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
-import { MediaView } from '../models/MediaView';
+import { MediaView } from '../../_models/MediaView';
 
 export abstract class BaseMediaService {
     constructor(

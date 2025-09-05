@@ -5,7 +5,7 @@ import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGrid
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaContext } from "../_contexts/api/MediaContext";
-import { MediaViewModeGrid } from "../_media/models/MediaView";
+import { MediaViewGrid } from "../_models/MediaView";
 import { SlideshowService } from "../_media/services/SlideshowService";
 import { RandomMediaService } from "./services/RandomMediaService";
 
@@ -21,7 +21,7 @@ const Grid: Component = () => {
 
     const cq = categoryQuery(() => params.categoryId as Uuid);
     const mq = randomMediaQuery(24);
-    const mediaService = new RandomMediaService(navigate, params, MediaViewModeGrid, cq, mq);
+    const mediaService = new RandomMediaService(navigate, params, MediaViewGrid, cq, mq);
     const slideshowService = new SlideshowService(
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds

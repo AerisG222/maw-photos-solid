@@ -1,7 +1,7 @@
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
 import { MediaAppRouteDefinition } from '../../_models/MediaAppRouteDefinition';
-import { MediaView } from '../models/MediaView';
+import { MediaView } from '../../_models/MediaView';
 import { INavigable } from './INavigable';
 
 export interface IMediaService extends INavigable {

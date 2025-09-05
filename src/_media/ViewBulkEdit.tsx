@@ -11,7 +11,7 @@ import Layout from "../_components/layout/Layout";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../_components/auth/AdminGuard";
-import { MediaViewModeGrid } from "./models/MediaView";
+import { MediaViewGrid } from "../_models/MediaView";
 import { getMediaPathByView } from "./models/RouteHelpers";
 
 type SelectableMedia = {
@@ -92,7 +92,7 @@ const ViewBulkEdit: Component = () => {
     });
 
     return (
-        <AdminGuard redirectRoute={getMediaPathByView(MediaViewModeGrid, categoryId)}>
+        <AdminGuard redirectRoute={getMediaPathByView(MediaViewGrid, categoryId)}>
             {/* <Show when={mediaList.activeRouteDefinition}> */}
             <Layout
                 // toolbar={<Toolbar />}

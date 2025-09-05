@@ -4,7 +4,7 @@ import { BaseMediaService } from '../../_media/services/BaseMediaService';
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from '@tanstack/solid-query';
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
-import { MediaView, MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid } from '../../_media/models/MediaView';
+import { MediaView, MediaViewDetail, MediaViewFullscreen, MediaViewGrid } from '../../_models/MediaView';
 import { IMediaService } from '../../_media/services/IMediaService';
 import { detailRoute, fullscreenRoute, gridRoute } from '../_routes';
 import { MediaAppRouteDefinition } from '../../_models/MediaAppRouteDefinition';
@@ -66,11 +66,11 @@ export class RandomMediaService
 
     getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
         switch (view) {
-            case MediaViewModeDetail:
+            case MediaViewDetail:
                 return detailRoute;
-            case MediaViewModeFullscreen:
+            case MediaViewFullscreen:
                 return fullscreenRoute;
-            case MediaViewModeGrid:
+            case MediaViewGrid:
                 return gridRoute;
             default:
                 return gridRoute;

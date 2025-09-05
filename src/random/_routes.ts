@@ -2,7 +2,7 @@ import { lazy } from 'solid-js';
 
 import { routeMatch } from '../_models/utils/RouteUtils';
 import { AppRouteDefinition, AreaRandom } from '../_models/AppRouteDefinition';
-import { MediaViewModeDetail, MediaViewModeFullscreen, MediaViewModeGrid } from '../_media/models/MediaView';
+import { MediaViewDetail, MediaViewFullscreen, MediaViewGrid } from '../_models/MediaView';
 import { MediaAppRouteDefinition } from '../_models/MediaAppRouteDefinition';
 import { Media } from '../_models/Media';
 import { Category } from '../_models/Category';
@@ -22,7 +22,7 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--outline-apps]",
     name: "Grid",
     tooltip: "Grid View",
-    mediaView: MediaViewModeGrid,
+    mediaView: MediaViewGrid,
     shortcutKeys: ["g"],
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
@@ -34,7 +34,7 @@ const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-dashboard]",
     name: "Detail",
     tooltip: "Detail View",
-    mediaView: MediaViewModeDetail,
+    mediaView: MediaViewDetail,
     shortcutKeys: ["w"],
     path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
@@ -46,7 +46,7 @@ const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--round-fullscreen]",
     name: "Fullscreen",
     tooltip: "Fullscreen View",
-    mediaView: MediaViewModeFullscreen,
+    mediaView: MediaViewFullscreen,
     shortcutKeys: ["f"],
     path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,

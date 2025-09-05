@@ -5,7 +5,7 @@ import { MediaGridViewSettingsState } from "../_contexts/settings/MediaGridViewS
 import { gridRoute } from "../category/_routes";
 import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
-import { MediaViewModeGrid } from "./models/MediaView";
+import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
 
 import GridToolbar from "./ToolbarGrid";
@@ -61,7 +61,7 @@ const ViewGrid: Component<Props> = props => {
 
                     <A
                         class="flex h-full"
-                        href={props.mediaService.getEntryPathByView(MediaViewModeGrid)}
+                        href={props.mediaService.getEntryPathByView(MediaViewGrid)}
                         onClick={() => props.slideshowService.stop()}
                     >
                         <MainItem
@@ -81,7 +81,7 @@ const ViewGrid: Component<Props> = props => {
 
                     <MediaGrid
                         mediaLinkBuilder={(media: Media) =>
-                            props.mediaService.getMediaPathByView(MediaViewModeGrid, media)
+                            props.mediaService.getMediaPathByView(MediaViewGrid, media)
                         }
                         items={props.mediaService.getMediaList()}
                         thumbnailSize={props.gridSettings.thumbnailSize}

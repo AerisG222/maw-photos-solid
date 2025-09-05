@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "@solidjs/router";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewModeDetail } from "../_media/models/MediaView";
+import { MediaViewDetail } from "../_models/MediaView";
 import { SlideshowService } from "../_media/services/SlideshowService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { RandomMediaService } from "./services/RandomMediaService";
@@ -21,7 +21,7 @@ const Detail: Component = () => {
 
     const cq = categoryQuery(() => params.categoryId as Uuid);
     const mq = randomMediaQuery(24);
-    const mediaService = new RandomMediaService(navigate, params, MediaViewModeDetail, cq, mq);
+    const mediaService = new RandomMediaService(navigate, params, MediaViewDetail, cq, mq);
     const slideshowService = new SlideshowService(
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds
