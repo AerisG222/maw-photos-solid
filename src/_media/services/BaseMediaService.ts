@@ -1,15 +1,15 @@
 import { Navigator, Params } from "@solidjs/router";
 
-import { Category } from '../../_models/Category';
-import { Media } from '../../_models/Media';
-import { MediaView } from '../../_models/MediaView';
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import { MediaView } from "../../_models/MediaView";
 
 export abstract class BaseMediaService {
     constructor(
         protected navigate: Navigator,
         protected params: Params,
         protected view: MediaView
-    ) { }
+    ) {}
 
     abstract getMediaList(): Media[];
     abstract getActiveCategory(): Category | undefined;
@@ -28,7 +28,7 @@ export abstract class BaseMediaService {
         }
 
         return list.find(m => m.id === this.params.id);
-    }
+    };
 
     navigateToMedia = (view: MediaView, media: Media) => {
         this.navigate(this.getMediaPathByView(view, media));

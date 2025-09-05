@@ -3,4 +3,4 @@ export type MediaTypeStat = {
     mediaCount: number;
     fileSize: number;
     duration: number;
-}
+};

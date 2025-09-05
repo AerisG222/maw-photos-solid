@@ -8,7 +8,7 @@ const basePath = "/categories";
 export const categoriesRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    name: 'Redirect',
+    name: "Redirect",
     component: lazy(() => import("./CategoriesRedirect"))
 };
 

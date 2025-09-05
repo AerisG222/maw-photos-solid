@@ -1,5 +1,5 @@
-import { createSignal } from 'solid-js';
-import { INavigable } from './INavigable';
+import { createSignal } from "solid-js";
+import { INavigable } from "./INavigable";
 
 const [intervalId, setIntervalId] = createSignal<number | undefined>(undefined);
 
@@ -7,7 +7,7 @@ export class SlideshowService {
     constructor(
         private navigable: INavigable,
         private displayDurationSeconds: number
-    ) { }
+    ) {}
 
     start = () => {
         if (intervalId()) {
@@ -22,7 +22,8 @@ export class SlideshowService {
                 }
 
                 this.navigable.moveNext();
-            }, this.displayDurationSeconds * 1000));
+            }, this.displayDurationSeconds * 1000)
+        );
     };
 
     stop = () => {

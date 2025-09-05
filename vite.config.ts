@@ -9,8 +9,8 @@ export default defineConfig({
         host: "dev-photos.mikeandwan.us",
         port: 3000,
         https: {
-            key: '/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.pem',
-            cert: '/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.crt'
+            key: "/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.pem",
+            cert: "/home/mmorano/maw-photos/dev/certificates/dev-photos.mikeandwan.us.crt"
         }
     },
     build: {

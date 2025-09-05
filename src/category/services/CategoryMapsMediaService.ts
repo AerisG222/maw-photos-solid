@@ -1,26 +1,24 @@
 import { Navigator, Params } from "@solidjs/router";
 
-import { UseQueryResult } from '@tanstack/solid-query';
-import { Category } from '../../_models/Category';
-import { Media } from '../../_models/Media';
-import { CategoryMediaService } from './CategoryMediaService';
-import { GpsDetail } from '../../_models/GpsDetail';
-import { createMemo } from 'solid-js';
-import { GpsCoordinate } from '../../_models/GpsCoordinate';
-import { MediaWithGps } from '../../_media/models/MediaWithGps';
-import { MediaView } from '../../_models/MediaView';
-import { IMapsMediaService } from '../../_media/services/IMapsMediaService';
+import { UseQueryResult } from "@tanstack/solid-query";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import { CategoryMediaService } from "./CategoryMediaService";
+import { GpsDetail } from "../../_models/GpsDetail";
+import { createMemo } from "solid-js";
+import { GpsCoordinate } from "../../_models/GpsCoordinate";
+import { MediaWithGps } from "../../_media/models/MediaWithGps";
+import { MediaView } from "../../_models/MediaView";
+import { IMapsMediaService } from "../../_media/services/IMapsMediaService";
 
-export class CategoryMapsMediaService
-    extends CategoryMediaService
-    implements IMapsMediaService {
+export class CategoryMapsMediaService extends CategoryMediaService implements IMapsMediaService {
     constructor(
         navigate: Navigator,
         params: Params,
         view: MediaView,
         categoryQuery: UseQueryResult<Category | undefined, Error>,
         mediaListQuery: UseQueryResult<Media[], Error>,
-        protected gpsListQuery: UseQueryResult<GpsDetail[], Error>,
+        protected gpsListQuery: UseQueryResult<GpsDetail[], Error>
     ) {
         super(navigate, params, view, categoryQuery, mediaListQuery);
     }
@@ -33,7 +31,8 @@ export class CategoryMapsMediaService
         }
     };
 
-    getCurrIndexWithGps = (list: MediaWithGps[], currId: Uuid) => list?.findIndex(x => x.media.id === currId);
+    getCurrIndexWithGps = (list: MediaWithGps[], currId: Uuid) =>
+        list?.findIndex(x => x.media.id === currId);
 
     getNextIndexWithGps = (list: MediaWithGps[], currId: Uuid) => {
         const nextIndex = this.getCurrIndexWithGps(list, currId) + 1;
@@ -89,16 +88,18 @@ export class CategoryMapsMediaService
 
     isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess;
 
-    getGpsList = () =>
-        this.gpsListQuery.isSuccess ? this.gpsListQuery.data : [];
+    getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 
-    preferredGpsLocation = (
-        mediaWithGps: MediaWithGps | undefined
-    ): GpsCoordinate | undefined =>
+    preferredGpsLocation = (mediaWithGps: MediaWithGps | undefined): GpsCoordinate | undefined =>
         mediaWithGps?.gps?.override ? mediaWithGps.gps.override : mediaWithGps?.gps.recorded;
 
     mediaWithGps = createMemo(() => {
-        if (this.mediaListQuery && this.mediaListQuery.isSuccess && this.gpsListQuery && this.gpsListQuery.isSuccess) {
+        if (
+            this.mediaListQuery &&
+            this.mediaListQuery.isSuccess &&
+            this.gpsListQuery &&
+            this.gpsListQuery.isSuccess
+        ) {
             return this.getGpsList().map(
                 g =>
                     ({
@@ -112,6 +113,8 @@ export class CategoryMapsMediaService
     });
 
     activeMediaGps = createMemo(() =>
-        this.preferredGpsLocation(this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id))
+        this.preferredGpsLocation(
+            this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id)
+        )
     );
 }

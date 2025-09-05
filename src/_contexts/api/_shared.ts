@@ -6,7 +6,10 @@ export const buildCategoryDownloadUrl = (id: Uuid): string =>
 
 const getQueryParams = (content: any) => new URLSearchParams(content).toString();
 
-export const runWithAccessToken = async <T>(getToken: () => Promise<string | undefined>, func: (accessToken: string) => Promise<T>) => {
+export const runWithAccessToken = async <T>(
+    getToken: () => Promise<string | undefined>,
+    func: (accessToken: string) => Promise<T>
+) => {
     var accessToken = await getToken();
 
     if (accessToken) {
@@ -14,7 +17,7 @@ export const runWithAccessToken = async <T>(getToken: () => Promise<string | und
     }
 
     throw new Error("Invalid access token!");
-}
+};
 
 export const queryApi = async <T>(accessToken: string, relativeUrl: string, content?: any) => {
     relativeUrl = content ? `${relativeUrl}?${getQueryParams(content)}` : relativeUrl;
@@ -37,14 +40,14 @@ const callApi = async (method: string, relativeUrl: string, content: any, access
         cache: "no-cache",
         body: content ? JSON.stringify(content) : null,
         headers: {
-            "Authorization": `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json"
         },
         referrerPolicy: "no-referrer"
     });
 
     if (!response.ok) {
-        throw new Error('Error invoking remote API call.');
+        throw new Error("Error invoking remote API call.");
     }
 
     return response;

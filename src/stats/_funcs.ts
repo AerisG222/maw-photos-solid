@@ -16,7 +16,7 @@ export const formatForMode = (mode: "duration" | "size" | "count" | "category-co
         default:
             return formatCount;
     }
-}
+};
 
 export const statbarMediaCountTitle = (type: string) => {
     switch (type) {

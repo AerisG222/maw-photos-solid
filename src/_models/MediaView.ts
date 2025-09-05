@@ -1,4 +1,4 @@
-import { KeyValuePair } from './KeyValuePair';
+import { KeyValuePair } from "./KeyValuePair";
 
 export const MediaViewBulkEdit = "bulk-edit";
 export const MediaViewDetail = "detail";

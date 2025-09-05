@@ -1,4 +1,4 @@
 export type AddCommentRequest = {
-    mediaId: Uuid,
-    comment: string
+    mediaId: Uuid;
+    comment: string;
 };

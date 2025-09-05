@@ -7,7 +7,7 @@ const basePath = "/stats";
 export const statsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
-    name: 'Redirect',
+    name: "Redirect",
     component: lazy(() => import("./StatsRedirect"))
 };
 

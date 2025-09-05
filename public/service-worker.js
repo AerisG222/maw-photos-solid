@@ -1,24 +1,24 @@
-self.addEventListener('install', (event) => {
+self.addEventListener("install", event => {
     // Skip the 'waiting' lifecycle phase, to go directly from 'installed' to 'activated', even if
     // there are still previous incarnations of this service worker registration active.
-    console.info('sw: install');
+    console.info("sw: install");
     event.waitUntil(self.skipWaiting());
 });
 
-self.addEventListener('activate', async (event) => {
-    console.info('sw: activate');
+self.addEventListener("activate", async event => {
+    console.info("sw: activate");
     // Claim any clients immediately, so that the page will be under SW control without reloading.
     event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener("fetch", function (event) {
     const url = event.request.url.toLowerCase();
 
     // make sure request is for assets on *our* site, so this is managed in one place
     if (
-        !url.includes('mikeandwan.us') ||
-        !url.includes('/assets/') ||
-        event.request.headers.has('Authorization')
+        !url.includes("mikeandwan.us") ||
+        !url.includes("/assets/") ||
+        event.request.headers.has("Authorization")
     ) {
         return;
     }
@@ -28,12 +28,12 @@ self.addEventListener('fetch', function (event) {
             const token = await requestTokenFromMainThread();
             const headers = new Headers(event.request.headers);
 
-            headers.set('Authorization', 'Bearer ' + token);
+            headers.set("Authorization", "Bearer " + token);
 
             const modifiedRequestInit = {
                 headers: headers,
-                mode: 'cors',
-                credentials: 'omit',
+                mode: "cors",
+                credentials: "omit"
             };
 
             const modifiedRequest = new Request(event.request, modifiedRequestInit);
@@ -41,24 +41,24 @@ self.addEventListener('fetch', function (event) {
             try {
                 return fetch(modifiedRequest);
             } catch (error) {
-                console.error('sw: Error fetching resource:', error);
-                return new Response('Error fetching resource', { status: 500 });
+                console.error("sw: Error fetching resource:", error);
+                return new Response("Error fetching resource", { status: 500 });
             }
-        })(),
+        })()
     );
 });
 
 function requestTokenFromMainThread() {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         const channel = new MessageChannel();
 
-        channel.port1.onmessage = (event) => {
+        channel.port1.onmessage = event => {
             resolve(event.data);
         };
 
-        self.clients.matchAll().then((clients) => {
+        self.clients.matchAll().then(clients => {
             if (clients && clients.length) {
-                clients[0].postMessage('requestToken', [channel.port2]);
+                clients[0].postMessage("requestToken", [channel.port2]);
             }
         });
     });

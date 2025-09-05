@@ -1,23 +1,26 @@
 import { Navigator, Params } from "@solidjs/router";
 
-import { BaseMediaService } from '../../_media/services/BaseMediaService';
-import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from '@tanstack/solid-query';
-import { Category } from '../../_models/Category';
-import { Media } from '../../_models/Media';
-import { MediaView, MediaViewDetail, MediaViewFullscreen, MediaViewGrid } from '../../_models/MediaView';
-import { IMediaService } from '../../_media/services/IMediaService';
-import { detailRoute, fullscreenRoute, gridRoute } from '../_routes';
-import { MediaAppRouteDefinition } from '../../_models/MediaAppRouteDefinition';
+import { BaseMediaService } from "../../_media/services/BaseMediaService";
+import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import {
+    MediaView,
+    MediaViewDetail,
+    MediaViewFullscreen,
+    MediaViewGrid
+} from "../../_models/MediaView";
+import { IMediaService } from "../../_media/services/IMediaService";
+import { detailRoute, fullscreenRoute, gridRoute } from "../_routes";
+import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 
-export class RandomMediaService
-    extends BaseMediaService
-    implements IMediaService {
+export class RandomMediaService extends BaseMediaService implements IMediaService {
     constructor(
         navigate: Navigator,
         params: Params,
         view: MediaView,
         protected categoryQuery: UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>,
+        protected mediaListQuery: UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>
     ) {
         super(navigate, params, view);
     }
@@ -34,8 +37,7 @@ export class RandomMediaService
         }
     };
 
-    getActiveCategory = () =>
-        this.categoryQuery?.data;
+    getActiveCategory = () => this.categoryQuery?.data;
 
     getMediaList = () => {
         if (!this.mediaListQuery.isSuccess) {
@@ -51,15 +53,13 @@ export class RandomMediaService
         }
 
         return list;
-    }
+    };
 
     getEntryPathByView = (view: MediaView) =>
         this.getRouteForView(view).absolutePath.replace("/:id?", "");
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media
-            ? this.getMediaPath(this.getRouteForView(view), media)
-            : "";
+        media ? this.getMediaPath(this.getRouteForView(view), media) : "";
 
     getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
         route.buildPathForMedia(undefined, media);
@@ -77,9 +77,5 @@ export class RandomMediaService
         }
     };
 
-    getAvailableRoutes = () => [
-        gridRoute,
-        detailRoute,
-        fullscreenRoute
-    ];
+    getAvailableRoutes = () => [gridRoute, detailRoute, fullscreenRoute];
 }

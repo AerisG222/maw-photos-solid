@@ -1,21 +1,27 @@
 import { lazy } from "solid-js";
 import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
 import { routeMatch } from "../_models/utils/RouteUtils";
-import { MediaViewBulkEdit, MediaViewDetail, MediaViewFullscreen, MediaViewGrid, MediaViewMap } from '../_models/MediaView';
-import { MediaAppRouteDefinition } from '../_models/MediaAppRouteDefinition';
-import { Media } from '../_models/Media';
-import { Category } from '../_models/Category';
+import {
+    MediaViewBulkEdit,
+    MediaViewDetail,
+    MediaViewFullscreen,
+    MediaViewGrid,
+    MediaViewMap
+} from "../_models/MediaView";
+import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
+import { Media } from "../_models/Media";
+import { Category } from "../_models/Category";
 
 const basePath = "/categories/:categoryId";
 
 const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
     path: "/",
     absolutePath: basePath,
-    name: 'Redirect',
+    name: "Redirect",
     component: lazy(() => import("./Redirect"))
 });
 
-const idOrBlank = (media: Media | undefined) => media ? `/${media.id}` : "";
+const idOrBlank = (media: Media | undefined) => (media ? `/${media.id}` : "");
 
 const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--outline-apps]",
@@ -26,7 +32,8 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/grid/:id?",
     absolutePath: `${basePath}/grid/:id?`,
     component: lazy(() => import("./Grid")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) => `/categories/${category!.id}/grid${idOrBlank(media)}`
+    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+        `/categories/${category!.id}/grid${idOrBlank(media)}`
 });
 
 const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -38,7 +45,8 @@ const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/detail/:id?",
     absolutePath: `${basePath}/detail/:id?`,
     component: lazy(() => import("./Detail")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) => `/categories/${category!.id}/detail${idOrBlank(media)}`
+    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+        `/categories/${category!.id}/detail${idOrBlank(media)}`
 });
 
 const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -50,7 +58,8 @@ const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/fullscreen/:id?",
     absolutePath: `${basePath}/fullscreen/:id?`,
     component: lazy(() => import("./Fullscreen")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) => `/categories/${category!.id}/fullscreen${idOrBlank(media)}`
+    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+        `/categories/${category!.id}/fullscreen${idOrBlank(media)}`
 });
 
 const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -62,7 +71,8 @@ const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/map/:id?",
     absolutePath: `${basePath}/map/:id?`,
     component: lazy(() => import("./Map")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) => `/categories/${category!.id}/map${idOrBlank(media)}`
+    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+        `/categories/${category!.id}/map${idOrBlank(media)}`
 });
 
 const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -74,7 +84,8 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import("./BulkEdit")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) => `/categories/${category!.id}/bulk-edit`
+    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+        `/categories/${category!.id}/bulk-edit`
 });
 
 const redirectRoute = buildRedirectRoute(basePath);
@@ -87,15 +98,8 @@ export const bulkEditRoute = buildBulkEditRoute(basePath);
 export const mediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
-    name: 'Category',
+    name: "Category",
     component: lazy(() => import("../_media/MediaRoot")),
     doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
-    children: [
-        redirectRoute,
-        gridRoute,
-        detailRoute,
-        fullscreenRoute,
-        mapRoute,
-        bulkEditRoute
-    ]
+    children: [redirectRoute, gridRoute, detailRoute, fullscreenRoute, mapRoute, bulkEditRoute]
 };
