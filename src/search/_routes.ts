@@ -8,6 +8,7 @@ const basePath = "/search";
 export const searchRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
+    name: 'Redirect',
     component: lazy(() => import("./SearchRedirect"))
 };
 

@@ -17,19 +17,19 @@ export class CategoryMapsMediaService
     constructor(
         navigate: Navigator,
         params: Params,
-        viewMode: MediaView,
-        categoryQuery: UseQueryResult<Category, Error>,
+        view: MediaView,
+        categoryQuery: UseQueryResult<Category | undefined, Error>,
         mediaListQuery: UseQueryResult<Media[], Error>,
         protected gpsListQuery: UseQueryResult<GpsDetail[], Error>,
     ) {
-        super(navigate, params, viewMode, categoryQuery, mediaListQuery);
+        super(navigate, params, view, categoryQuery, mediaListQuery);
     }
 
     override navigateToFirstMediaIfNeeded = () => {
         const list = this.mediaWithGps();
 
         if (!this.params.id && list && list.length > 0) {
-            this.navigateToMedia(list[0].media.id as Uuid, this.viewMode);
+            this.navigateToMedia(this.view, list[0].media);
         }
     };
 
@@ -47,30 +47,30 @@ export class CategoryMapsMediaService
         return prevIndex >= 0 ? prevIndex : undefined;
     };
 
-    getNextIdWithGps = (list: MediaWithGps[], currId: Uuid) => {
+    getNextMediaWithGps = (list: MediaWithGps[], currId: Uuid) => {
         const nextIndex = this.getNextIndexWithGps(list, currId);
 
-        return nextIndex ? list[nextIndex].media.id : undefined;
+        return nextIndex ? list[nextIndex].media : undefined;
     };
 
-    getPreviousIdWithGps = (list: MediaWithGps[], currId: Uuid) => {
+    getPreviousMediaWithGps = (list: MediaWithGps[], currId: Uuid) => {
         const prevIndex = this.getPreviousIndexWithGps(list, currId);
 
-        return prevIndex ? list[prevIndex].media.id : undefined;
+        return prevIndex ? list[prevIndex].media : undefined;
     };
 
     override moveNext = () => {
         const list = this.mediaWithGps();
 
         if (!this.params.id) {
-            this.navigateToMedia(list[0].media.id, this.viewMode);
+            this.navigateToMedia(this.view, list[0].media);
         }
 
         if (list && this.params.id) {
-            const nextId = this.getNextIdWithGps(list, this.params.id as Uuid);
+            const nextMedia = this.getNextMediaWithGps(list, this.params.id as Uuid);
 
-            if (nextId) {
-                this.navigateToMedia(nextId, this.viewMode);
+            if (nextMedia) {
+                this.navigateToMedia(this.view, nextMedia);
             }
         }
     };
@@ -79,10 +79,10 @@ export class CategoryMapsMediaService
         const list = this.mediaWithGps();
 
         if (list && this.params.id) {
-            const prevId = this.getPreviousIdWithGps(list, this.params.id as Uuid);
+            const prevMedia = this.getPreviousMediaWithGps(list, this.params.id as Uuid);
 
-            if (prevId) {
-                this.navigateToMedia(prevId, this.viewMode);
+            if (prevMedia) {
+                this.navigateToMedia(this.view, prevMedia);
             }
         }
     };

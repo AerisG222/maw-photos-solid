@@ -8,9 +8,9 @@ import ToolbarLink from "../_components/toolbar/ToolbarLink";
 const Toolbar: Component = () => {
     return (
         <ToolbarLayout>
-            <ToolbarLink route={aboutHelp} />
-            <ToolbarLink route={aboutReleaseNotes} />
-            <ToolbarLink route={aboutAndroid} />
+            <ToolbarLink href={aboutHelp.absolutePath} route={aboutHelp} />
+            <ToolbarLink href={aboutReleaseNotes.absolutePath} route={aboutReleaseNotes} />
+            <ToolbarLink href={aboutAndroid.absolutePath} route={aboutAndroid} />
         </ToolbarLayout>
     );
 };

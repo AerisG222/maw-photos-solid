@@ -8,9 +8,9 @@ import ToolbarLink from "../_components/toolbar/ToolbarLink";
 const Toolbar: ParentComponent = () => {
     return (
         <ToolbarLayout>
-            <ToolbarLink route={settingsCategories} />
-            <ToolbarLink route={settingsMedia} />
-            <ToolbarLink route={settingsSearch} />
+            <ToolbarLink href={settingsCategories.absolutePath} route={settingsCategories} />
+            <ToolbarLink href={settingsMedia.absolutePath} route={settingsMedia} />
+            <ToolbarLink href={settingsSearch.absolutePath} route={settingsSearch} />
         </ToolbarLayout>
     );
 };

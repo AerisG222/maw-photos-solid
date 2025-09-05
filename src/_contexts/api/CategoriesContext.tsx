@@ -17,7 +17,7 @@ import { GpsDetail } from "../../_models/GpsDetail";
 export type CategoriesService = {
     yearsQuery: () => UseQueryResult<number[], Error>;
     categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
-    categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category, Error>;
+    categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category | undefined, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
     categoryMediaGpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail[], Error>;
     categorySearchQuery: (
@@ -109,12 +109,14 @@ export const CategoriesProvider: ParentComponent = props => {
         }));
 
     const categoryQuery = (id: Accessor<Uuid>) =>
-        useQuery(() => ({
-            queryKey: ["categories", id()],
-            queryFn: () => fetchCategory(id()),
-            enabled: authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
-        }));
+        id()
+            ? useQuery(() => ({
+                  queryKey: ["categories", id()],
+                  queryFn: () => fetchCategory(id()),
+                  enabled: authContext.isLoggedIn,
+                  staleTime: 5 * 60 * 1000
+              }))
+            : undefined;
 
     const categoryMediaQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { Component } from "solid-js";
+import { Component, onCleanup } from "solid-js";
 
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
@@ -24,6 +24,10 @@ const Grid: Component = () => {
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds
     );
+
+    onCleanup(() => {
+        slideshowService.stop();
+    });
 
     return (
         <ViewGrid

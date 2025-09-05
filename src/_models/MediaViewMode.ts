@@ -1,9 +1,9 @@
 import { KeyValuePair } from "./KeyValuePair";
 
-export type MediaViewModeIdType = string;
-export type MediaViewMode = KeyValuePair<MediaViewModeIdType>;
+export type MediaViewIdType = string;
+export type MediaView = KeyValuePair<MediaViewIdType>;
 
-export const allMediaViewModes: MediaViewMode[] = [
+export const allMediaViews: MediaView[] = [
     { id: "bulkEdit", name: "Bulk Edit" },
     { id: "detail", name: "Detail" },
     { id: "fullscreen", name: "Fullscreen" },
@@ -11,4 +11,4 @@ export const allMediaViewModes: MediaViewMode[] = [
     { id: "map", name: "Map" }
 ];
 
-export const defaultMediaViewMode: MediaViewModeIdType = "grid";
+export const defaultMediaView: MediaViewIdType = "grid";

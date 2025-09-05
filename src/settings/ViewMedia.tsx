@@ -8,7 +8,7 @@ import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapVi
 import { allMapTypes } from "../_models/MapType";
 import { allMapZoomLevels } from "../_models/MapZoomLevel";
 import { allMargins } from "../_models/Margin";
-import { allMediaViewModes } from "../_models/MediaViewMode";
+import { allMediaViews } from "../_models/MediaViewMode";
 import { allThumbnailSizes } from "../_models/ThumbnailSize";
 import { allSlideshowDurations } from "../_models/SlideshowDuration";
 
@@ -22,7 +22,7 @@ import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
 const ViewMedia: Component = () => {
-    const [pageSettings, { setViewMode, setSlideshowDisplayDurationSeconds }] =
+    const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
         useMediaPageSettingsContext();
     const [mapSettings, { setMapType: setMapMapType, setZoom: setMapZoom }] =
         useMediaMapViewSettingsContext();
@@ -66,8 +66,8 @@ const ViewMedia: Component = () => {
                     <RadioGroup
                         title="View"
                         groupName="pageView"
-                        itemArray={allMediaViewModes}
-                        selectedValue={pageSettings.viewMode}
+                        itemArray={allMediaViews}
+                        selectedValue={pageSettings.view}
                         onChange={setViewMode}
                     />
                     <Select

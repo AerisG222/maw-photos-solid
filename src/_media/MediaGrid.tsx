@@ -8,6 +8,7 @@ import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import MediaLink from "./MediaLink";
 
 type Props = {
+    mediaLinkBuilder: (media: Media) => string;
     items: Media[];
     thumbnailSize: ThumbnailSizeIdType;
     activeRoute: AppRouteDefinition;
@@ -19,6 +20,7 @@ const MediaGrid: Component<Props> = props => {
             <For each={props.items}>
                 {(media, idx) => (
                     <MediaLink
+                        href={props.mediaLinkBuilder(media)}
                         media={media}
                         rounded={true}
                         isActiveItem={false} // no need to show highlight state in grid view

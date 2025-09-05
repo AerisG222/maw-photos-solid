@@ -5,9 +5,9 @@ import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { getMediaPath } from "./models/RouteHelpers";
 
 type Props = {
+    href: string;
     media: Media;
     thumbnailSize: ThumbnailSizeIdType;
     rounded: boolean;
@@ -38,10 +38,11 @@ const MediaLink: Component<Props> = props => {
         "rounded-md": props.rounded
     });
 
+    // todo: getMediaPath(props.route, props.media.categoryId, props.media.id)
     return (
         <A
             classList={getClassList()}
-            href={getMediaPath(props.route, props.media.categoryId, props.media.id)}
+            href={props.href}
             ref={el => (props.scroll ? props.scroll(el, props.media) : () => {})}
         >
             <img

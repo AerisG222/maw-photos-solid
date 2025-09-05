@@ -7,6 +7,7 @@ const basePath = "/settings";
 export const settingsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
+    name: 'Redirect',
     component: lazy(() => import("./SettingsRedirect"))
 };
 

@@ -20,6 +20,7 @@ const ViewFullscreen: Component<Props> = props => {
                 xPad={false}
                 toolbar={
                     <Toolbar
+                        mediaService={props.mediaService}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                     >

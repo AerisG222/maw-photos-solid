@@ -11,8 +11,8 @@ const Toolbar: ParentComponent = props => {
 
     return (
         <ToolbarLayout>
-            <ToolbarLink route={searchGrid} />
-            <ToolbarLink route={searchList} />
+            <ToolbarLink href={searchGrid.absolutePath} route={searchGrid} />
+            <ToolbarLink href={searchList.absolutePath} route={searchList} />
 
             <Show when={!!c()}>
                 <ToolbarDivider />

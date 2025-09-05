@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
-import { buildPath } from "../../_models/utils/RouteUtils";
 import { getNameWithShortcut } from "../shortcuts/_util";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
@@ -10,9 +9,8 @@ import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
 
 type Props = {
+    href: string;
     route: AppRouteDefinition;
-    routeParams?: any;
-    routeSearch?: any;
     clickHandler?: () => void;
 };
 
@@ -43,7 +41,7 @@ const ToolbarLink: Component<Props> = props => {
             clickHandler={() => el.click()}
         >
             <A
-                href={buildPath(props.route, props.routeParams, props.routeSearch)}
+                href={props.href}
                 onClick={evt => handleClick()}
                 end={false}
                 activeClass="text-primary-content bg-primary mr[-1px]"

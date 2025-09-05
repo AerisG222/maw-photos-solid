@@ -18,3 +18,5 @@ export const MediaViewAll: MediaView[] = [
     MediaViewModeGrid,
     MediaViewModeMap
 ];
+
+// todo: rename - remove 'mode'

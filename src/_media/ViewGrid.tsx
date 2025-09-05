@@ -4,8 +4,9 @@ import { A } from "@solidjs/router";
 import { MediaGridViewSettingsState } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { gridRoute } from "../category/_routes";
 import { SlideshowService } from "./services/SlideshowService";
-import { getMediaPath } from "./models/RouteHelpers";
 import { IMediaService } from "./services/IMediaService";
+import { MediaViewModeGrid } from "./models/MediaView";
+import { Media } from "../_models/Media";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -28,6 +29,7 @@ const ViewGrid: Component<Props> = props => {
             margin={props.gridSettings.margin}
             toolbar={
                 <Toolbar
+                    mediaService={props.mediaService}
                     activeCategory={props.mediaService.getActiveCategory()}
                     activeMedia={props.mediaService.getActiveMedia()}
                 >
@@ -59,12 +61,8 @@ const ViewGrid: Component<Props> = props => {
 
                     <A
                         class="flex h-full"
-                        href={getMediaPath(
-                            gridRoute,
-                            props.mediaService.getActiveMedia()!.categoryId,
-                            undefined
-                        )}
-                        onClick={stop}
+                        href={props.mediaService.getEntryPathByView(MediaViewModeGrid)}
+                        onClick={() => props.slideshowService.stop()}
                     >
                         <MainItem
                             media={props.mediaService.getActiveMedia()!}
@@ -82,6 +80,9 @@ const ViewGrid: Component<Props> = props => {
                     </Show>
 
                     <MediaGrid
+                        mediaLinkBuilder={(media: Media) =>
+                            props.mediaService.getMediaPathByView(MediaViewModeGrid, media)
+                        }
                         items={props.mediaService.getMediaList()}
                         thumbnailSize={props.gridSettings.thumbnailSize}
                         activeRoute={gridRoute}

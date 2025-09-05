@@ -1,6 +1,8 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 import {
+    InfiniteData,
     useInfiniteQuery,
+    UseInfiniteQueryResult,
     useMutation,
     UseMutationResult,
     useQuery,
@@ -20,6 +22,9 @@ export type MediaService = {
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
+    randomMediaQuery: (
+        count: number
+    ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
     addCommentMutation: UseMutationResult<void, Error, AddCommentRequest, unknown>;
 };
 
@@ -73,13 +78,15 @@ export const MediaProvider: ParentComponent = props => {
     // postApi(`media/${mediaId}/comments`, { comment });
     // patchApi(`media/${mediaId}/gps`, gps);
 
-    // const randomQuery = (count: number) =>
-    //     useInfiniteQuery(() => ({
-    //         queryKey: ["media", "random"],
-    //         queryFn: ({pageParam}) => fetchRandom(count),
-    //         enabled: authContext.isLoggedIn,
-    //         staleTime: 15 * 60 * 1000
-    //     }));
+    const randomMediaQuery = (count: number) =>
+        useInfiniteQuery(() => ({
+            queryKey: ["media", "random"],
+            queryFn: data => fetchRandom(count),
+            enabled: authContext.isLoggedIn,
+            staleTime: Infinity,
+            initialPageParam: 0,
+            getNextPageParam: () => 0
+        }));
 
     const mediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
@@ -129,6 +136,7 @@ export const MediaProvider: ParentComponent = props => {
                 metadataQuery,
                 commentsQuery,
                 gpsQuery,
+                randomMediaQuery,
                 addCommentMutation
             }}
         >

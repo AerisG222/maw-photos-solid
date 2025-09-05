@@ -3,17 +3,18 @@ import { Navigator, Params } from "@solidjs/router";
 import { Category } from '../../_models/Category';
 import { Media } from '../../_models/Media';
 import { MediaView } from '../models/MediaView';
-import { getMediaPathByView } from '../models/RouteHelpers';
 
 export abstract class BaseMediaService {
     constructor(
         protected navigate: Navigator,
         protected params: Params,
-        protected viewMode: MediaView
+        protected view: MediaView
     ) { }
 
     abstract getMediaList(): Media[];
     abstract getActiveCategory(): Category | undefined;
+    abstract getEntryPathByView(view: MediaView): string;
+    abstract getMediaPathByView(view: MediaView, media: Media | undefined): string;
 
     getActiveMedia = () => {
         if (!this.params.id) {
@@ -29,8 +30,8 @@ export abstract class BaseMediaService {
         return list.find(m => m.id === this.params.id);
     }
 
-    navigateToMedia = (mediaId: Uuid, mode: MediaView) => {
-        this.navigate(getMediaPathByView(mode, this.params.categoryId as Uuid, mediaId));
+    navigateToMedia = (view: MediaView, media: Media) => {
+        this.navigate(this.getMediaPathByView(view, media));
     };
 
     getCurrIndex = (list: Media[], currId: Uuid) => list?.findIndex(x => x.id === currId);
@@ -47,30 +48,30 @@ export abstract class BaseMediaService {
         return prevIndex >= 0 ? prevIndex : undefined;
     };
 
-    getNextId = (list: Media[], currId: Uuid) => {
+    getNextMedia = (list: Media[], currId: Uuid) => {
         const nextIndex = this.getNextIndex(list, currId);
 
-        return nextIndex ? list[nextIndex].id : undefined;
+        return nextIndex ? list[nextIndex] : undefined;
     };
 
-    getPreviousId = (list: Media[], currId: Uuid) => {
+    getPreviousMedia = (list: Media[], currId: Uuid) => {
         const prevIndex = this.getPreviousIndex(list, currId);
 
-        return prevIndex !== undefined ? list[prevIndex].id : undefined;
+        return prevIndex !== undefined ? list[prevIndex] : undefined;
     };
 
     moveNext = () => {
         const list = this.getMediaList();
 
         if (!this.params.id) {
-            this.navigateToMedia(list[0].id, this.viewMode);
+            this.navigateToMedia(this.view, list[0]);
         }
 
         if (list && this.params.id) {
-            const nextId = this.getNextId(list, this.params.id as Uuid);
+            const nextMedia = this.getNextMedia(list, this.params.id as Uuid);
 
-            if (nextId) {
-                this.navigateToMedia(nextId, this.viewMode);
+            if (nextMedia) {
+                this.navigateToMedia(this.view, nextMedia);
             }
         }
     };
@@ -79,10 +80,10 @@ export abstract class BaseMediaService {
         const list = this.getMediaList();
 
         if (list && this.params.id) {
-            const prevId = this.getPreviousId(list, this.params.id as Uuid);
+            const prevMedia = this.getPreviousMedia(list, this.params.id as Uuid);
 
-            if (prevId) {
-                this.navigateToMedia(prevId, this.viewMode);
+            if (prevMedia) {
+                this.navigateToMedia(this.view, prevMedia);
             }
         }
     };

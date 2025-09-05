@@ -8,6 +8,7 @@ import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 import MediaLink from "./MediaLink";
 
 type Props = {
+    mediaLinkBuilder: (media: Media) => string;
     media: Media[];
     activeMedia: Media;
     thumbnailSize: ThumbnailSizeIdType;
@@ -44,6 +45,7 @@ const MediaList: Component<Props> = props => {
             <For each={props.media}>
                 {(media, idx) => (
                     <MediaLink
+                        href={props.mediaLinkBuilder(media)}
                         media={media}
                         rounded={false}
                         thumbnailSize={props.thumbnailSize}
