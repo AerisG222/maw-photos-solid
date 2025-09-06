@@ -8,7 +8,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     let path = route.absolutePath;
 
     // apply provided replacements
-    for (let [key, value] of Object.entries(routeParams)) {
+    for (const [key, value] of Object.entries(routeParams)) {
         if (value) {
             path = path.replace(new RegExp(`:${key}\\??`), value);
         }
@@ -37,7 +37,7 @@ const buildSearch = (routeSearch?: any) => {
 
     let isFirst = true;
 
-    for (let [key, value] of Object.entries(routeSearch)) {
+    for (const [key, value] of Object.entries(routeSearch)) {
         search += isFirst ? "?" : "&";
         search += `${key}=${value}`;
         isFirst = false;

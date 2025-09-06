@@ -2,10 +2,10 @@ import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
 
-type Props = {
+interface Props {
     media: Media;
     setActiveMediaElement: (el: HTMLVideoElement) => void;
-};
+}
 
 const MainVideo: Component<Props> = props => {
     const getVideoUrl = () => props.media.files.find(f => f.scale === "full-hd")?.path;

@@ -3,13 +3,13 @@ import { createStore } from "solid-js/store";
 import { createBreakpoints } from "@solid-primitives/media";
 
 // we currently only alter display based on >= md, so only track that one for now
-export type MediaBreakpointState = {
+export interface MediaBreakpointState {
     // readonly sm: boolean;
     readonly md: boolean;
     // readonly lg: boolean;
     // readonly xl: boolean;
     // readonly xxl: boolean;
-};
+}
 
 export const defaultMediaBreakpointState: MediaBreakpointState = {
     // sm: true,

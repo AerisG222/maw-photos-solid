@@ -2,10 +2,10 @@ import { Component } from "solid-js";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-type Props = {
+interface Props {
     isLast: boolean;
     moveNext: () => void;
-};
+}
 
 const MoveNextButton: Component<Props> = props => {
     return (

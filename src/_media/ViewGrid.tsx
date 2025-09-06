@@ -15,13 +15,13 @@ import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
 import MainItem from "./MainItem";
 
-type Props = {
+interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
     gridSettings: MediaGridViewSettingsState;
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
-};
+}
 
 const ViewGrid: Component<Props> = props => {
     return (

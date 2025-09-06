@@ -2,11 +2,11 @@ import { Component } from "solid-js";
 
 import Checkbox from "../../_components/input/Checkbox";
 
-type Props = {
+interface Props {
     onHideMediaWithGps: (hide: boolean) => void;
     onSelectAll: () => void;
     onDeselectAll: () => void;
-};
+}
 
 const BulkEditFilterCard: Component<Props> = props => {
     const onSelectAll = (evt: Event) => {

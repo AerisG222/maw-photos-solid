@@ -1,16 +1,16 @@
 import { ParentComponent, createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-export type ShortcutInfo = {
+export interface ShortcutInfo {
     id: string;
     shortcut: string[];
     description: string;
-};
+}
 
-export type ShortcutState = {
+export interface ShortcutState {
     readonly shortcuts: ShortcutInfo[];
     readonly showDialog: false;
-};
+}
 
 export const defaultShortcutState = {
     shortcuts: [],

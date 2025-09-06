@@ -19,14 +19,14 @@ const Redirect: Component = () => {
     const mediaService = new CategoryMediaService(
         navigate,
         params,
-        settings.view as MediaView,
+        settings.view,
         cq,
         mq
     );
 
     createEffect(() => {
         if (mediaService.getActiveCategory()) {
-            mediaService.navigateToView(settings.view as MediaView);
+            mediaService.navigateToView(settings.view);
         }
     });
 

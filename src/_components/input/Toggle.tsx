@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
 
-type Props = {
+interface Props {
     title: string;
     name: string;
     isSelected: boolean;
     onChange: (isSelected: boolean) => void;
-};
+}
 
 const Select: Component<Props> = props => {
     return (

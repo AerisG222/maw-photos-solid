@@ -7,11 +7,11 @@ import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
 
-export type ConfigService = {
+export interface ConfigService {
     scalesQuery: () => UseQueryResult<Scale[], Error>;
     getScalesForThumbnail: (thumbSize: ThumbnailSize) => Scale[];
     getScalesForMain: (width: number, height: number) => Scale[];
-};
+}
 
 const ConfigContext = createContext<ConfigService>();
 

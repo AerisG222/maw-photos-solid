@@ -18,7 +18,7 @@ const ViewYear: Component = () => {
     const route = useParams();
     const [search] = useSearchParams();
 
-    const stats = statsForYearQuery(() => parseInt(route.year as string, 10));
+    const stats = statsForYearQuery(() => parseInt(route.year, 10));
 
     const statbarData = createMemo(() => {
         let mediaCount = 0;
@@ -117,7 +117,7 @@ const ViewYear: Component = () => {
                 </div>
                 <div class="my-2">
                     <Treemap
-                        seriesName={route.year as string}
+                        seriesName={route.year}
                         data={treeData()}
                         formatFunc={formatForMode(search.mode)}
                     />

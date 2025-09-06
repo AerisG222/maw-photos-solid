@@ -6,9 +6,9 @@ import { useCategoryFilterSettingsContext } from "../../_contexts/settings/Categ
 
 import Select from "../../_components/input/Select";
 
-type Props = {
+interface Props {
     horizontal: boolean;
-};
+}
 
 const YearFilter: Component<Props> = props => {
     const { yearsQuery } = useCategoriesContext();

@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 
-type Props = {
+interface Props {
     title: string;
     value: string;
-};
+}
 
 const StatBox: Component<Props> = props => {
     return (

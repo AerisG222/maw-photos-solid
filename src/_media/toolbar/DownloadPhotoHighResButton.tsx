@@ -4,9 +4,9 @@ import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
 import { Media } from "../../_models/Media";
 
-type Props = {
+interface Props {
     media?: Media;
-};
+}
 
 const DownloadPhotoHighResButton: Component<Props> = props => {
     return (

@@ -4,10 +4,10 @@ import { createStore } from "solid-js/store";
 import { defaultMediaView, MediaView } from "../../_models/MediaView";
 import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from "./_storage";
 
-export type MediaPageSettingsState = {
+export interface MediaPageSettingsState {
     readonly view: MediaView;
     readonly slideshowDisplayDurationSeconds: number;
-};
+}
 
 export const defaultMediaPageSettings: MediaPageSettingsState = {
     view: defaultMediaView,

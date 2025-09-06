@@ -15,13 +15,13 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../_components/auth/AdminGuard";
 
-type SelectableMedia = {
+interface SelectableMedia {
     id: Uuid;
     isSelected: boolean;
     imageUrl: string;
     latitude?: number;
     longitude?: number;
-};
+}
 
 const ViewBulkEdit: Component = () => {
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);

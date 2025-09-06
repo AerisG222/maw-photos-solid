@@ -4,10 +4,10 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
-};
+}
 
 const MinimapCard: Component<Props> = props => {
     const { gpsQuery } = useMediaContext();

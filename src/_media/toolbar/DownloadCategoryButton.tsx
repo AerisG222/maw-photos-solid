@@ -5,9 +5,9 @@ import { buildCategoryDownloadUrl } from "../../_contexts/api/_shared";
 
 import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 
-type Props = {
+interface Props {
     category?: Category;
-};
+}
 
 const DownloadCategoryButton: Component<Props> = props => {
     return (

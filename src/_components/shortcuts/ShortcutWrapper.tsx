@@ -3,12 +3,12 @@ import { createShortcut } from "@solid-primitives/keyboard";
 
 import { useShortcutContext } from "../../_contexts/ShortcutContext";
 
-type Props = {
+interface Props {
     name: string;
     disabled?: boolean;
     shortcutKeys?: string[];
     clickHandler: () => void;
-};
+}
 
 const ShortcutWrapper: ParentComponent<Props> = props => {
     const c = children(() => props.children);

@@ -6,10 +6,10 @@ import { UseInfiniteQueryResult, InfiniteData } from "@tanstack/solid-query";
 import { Category } from "../../_models/Category";
 import { SearchResults } from "../../_models/SearchResults";
 
-export type SearchState = {
+export interface SearchState {
     readonly term: string;
     readonly activeTerm: string;
-};
+}
 
 export const defaultSearchState = {
     term: "",

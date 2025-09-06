@@ -8,10 +8,10 @@ import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
 import MainItem from "./MainItem";
 
-type Props = {
+interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
-};
+}
 
 const ViewFullscreen: Component<Props> = props => {
     return (

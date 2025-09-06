@@ -15,7 +15,7 @@ import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { Uuid } from "../../_models/Uuid";
 
-export type CategoriesService = {
+export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
     categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category | undefined, Error>;
@@ -24,7 +24,7 @@ export type CategoriesService = {
     categorySearchQuery: (
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
-};
+}
 
 const CategoriesContext = createContext<CategoriesService>();
 

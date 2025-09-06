@@ -20,7 +20,7 @@ const CategoriesRedirect: Component = () => {
             return;
         }
 
-        search["year"] = parseInt(searchParams.get("year")!, 10);
+        search.year = parseInt(searchParams.get("year")!, 10);
     };
 
     if (location.pathname.endsWith("/categories")) {

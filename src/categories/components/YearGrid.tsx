@@ -9,11 +9,11 @@ import { useConfigContext } from "../../_contexts/api/ConfigContext";
 import CategoryCard from "../../_components/categories/CategoryCard";
 import YearHeading from "./YearHeading";
 
-type Props = {
+interface Props {
     year: number;
     categories: Category[];
     enableEagerLoading: boolean;
-};
+}
 
 const YearGrid: Component<Props> = props => {
     const [settings] = useCategoryGridViewSettingsContext();

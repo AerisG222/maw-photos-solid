@@ -14,7 +14,7 @@ const ToolbarLayout: ParentComponent = props => {
 
             <span class="grow" />
 
-            <div class="divider my-0 h-auto"></div>
+            <div class="divider my-0 h-auto" />
 
             <ToolbarCollapseButton />
         </div>

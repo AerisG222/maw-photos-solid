@@ -4,9 +4,9 @@ import { createStore } from "solid-js/store";
 import { CategoryViewModeIdType, defaultCategoryViewMode } from "../../_models/CategoryViewMode";
 import { KEY_SETTINGS_SEARCH_PAGE, loadJson, saveJson } from "./_storage";
 
-export type SearchPageSettingsState = {
+export interface SearchPageSettingsState {
     readonly viewMode: CategoryViewModeIdType;
-};
+}
 
 export const defaultSearchPageSettings: SearchPageSettingsState = {
     viewMode: defaultCategoryViewMode

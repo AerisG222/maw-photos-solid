@@ -3,9 +3,9 @@ import { Component } from "solid-js";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 import Icon from "../icon/Icon";
 
-type Props = {
+interface Props {
     showTitle: boolean;
-};
+}
 
 const ThemeSelector: Component<Props> = props => {
     const [, { toggleTheme }] = useAppSettingsContext();

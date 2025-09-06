@@ -5,11 +5,11 @@ import { statsSummary } from "../_routes";
 
 import Icon from "../../_components/icon/Icon";
 
-type Props = {
+interface Props {
     year: string | undefined;
     type?: string | undefined;
     mode?: string | undefined;
-};
+}
 
 const Header: Component<Props> = props => {
     return (

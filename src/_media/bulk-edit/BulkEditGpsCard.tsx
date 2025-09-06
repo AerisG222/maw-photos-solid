@@ -3,9 +3,9 @@ import { Component, createSignal } from "solid-js";
 import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
-type Props = {
+interface Props {
     onSave: (gps: GpsCoordinate) => void;
-};
+}
 
 const BulkEditGpsCard: Component<Props> = props => {
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });

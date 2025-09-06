@@ -2,10 +2,10 @@ import { Component } from "solid-js";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-type Props = {
+interface Props {
     isPlaying: boolean;
     toggleSlideshow: () => void;
-};
+}
 
 const ToggleSlideshowButton: Component<Props> = props => {
     return (

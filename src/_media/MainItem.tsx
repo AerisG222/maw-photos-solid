@@ -11,13 +11,13 @@ false && tap;
 import MainPhoto from "./MainPhoto";
 import MainVideo from "./MainVideo";
 
-type Props = {
+interface Props {
     media: Media;
     maxHeightStyle?: string;
     moveNext: () => void;
     movePrevious: () => void;
     setActiveMediaElement?: (el: HTMLImageElement | HTMLVideoElement) => void;
-};
+}
 
 const MainItem: Component<Props> = props => {
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();

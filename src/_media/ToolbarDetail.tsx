@@ -19,7 +19,7 @@ import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
     activeMediaIsFirst: boolean;
@@ -28,7 +28,7 @@ type Props = {
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
-};
+}
 
 const DetailToolbar: Component<Props> = props => {
     const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize }] =

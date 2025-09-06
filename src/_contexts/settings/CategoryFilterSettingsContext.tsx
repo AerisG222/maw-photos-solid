@@ -3,10 +3,10 @@ import { createStore } from "solid-js/store";
 
 import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from "./_storage";
 
-export type CategoryFilterSettingsState = {
+export interface CategoryFilterSettingsState {
     readonly yearFilter: number | "all";
     readonly missingGpsFilter: boolean;
-};
+}
 
 export const defaultCategoryFilterSettings: CategoryFilterSettingsState = {
     yearFilter: "all",

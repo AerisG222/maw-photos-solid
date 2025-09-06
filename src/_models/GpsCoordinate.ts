@@ -1,4 +1,4 @@
-export type GpsCoordinate = {
+export interface GpsCoordinate {
     latitude: number;
     longitude: number;
-};
+}

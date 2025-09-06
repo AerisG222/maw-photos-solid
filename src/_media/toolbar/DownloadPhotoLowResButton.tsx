@@ -3,9 +3,9 @@ import { Component } from "solid-js";
 import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
 import { Media } from "../../_models/Media";
 
-type Props = {
+interface Props {
     media?: Media;
-};
+}
 
 const DownloadPhotoLowResButton: Component<Props> = props => {
     return (

@@ -1,8 +1,8 @@
 import { ParentComponent, children } from "solid-js";
 
-type Props = {
+interface Props {
     title: string;
-};
+}
 
 const Panel: ParentComponent<Props> = props => {
     const c = children(() => props.children);

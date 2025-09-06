@@ -3,10 +3,10 @@ import { A } from "@solidjs/router";
 
 import { Category } from "../../_models/Category";
 
-type Props = {
+interface Props {
     showTitleAsLink?: boolean;
     category?: Category;
-};
+}
 
 const CategoryBreadcrumb: Component<Props> = props => {
     return (

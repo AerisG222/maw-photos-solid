@@ -1,9 +1,9 @@
 import { GpsCoordinate } from "../GpsCoordinate";
 
-export type GpsOverride = {
+export interface GpsOverride {
     lat: string | undefined;
     lng: string | undefined;
-};
+}
 
 export const isValidLatLng = (val?: string) => {
     return val !== undefined && !isNaN(parseFloat(val));

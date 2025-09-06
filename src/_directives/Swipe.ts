@@ -19,7 +19,7 @@ declare module "solid-js" {
     }
 }
 
-type Position = { x?: number; y?: number };
+interface Position { x?: number; y?: number }
 
 // inspiration: https://stackoverflow.com/a/69617795
 export const swipe = (el: HTMLElement, accessor) => {
@@ -55,8 +55,8 @@ export const swipe = (el: HTMLElement, accessor) => {
             return;
         }
 
-        let horizontalDifference = end.x - start.x;
-        let verticalDifference = end.y - start.y;
+        const horizontalDifference = end.x - start.x;
+        const verticalDifference = end.y - start.y;
         let direction = undefined;
 
         // Horizontal difference dominates

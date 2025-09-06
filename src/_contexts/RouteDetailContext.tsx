@@ -5,10 +5,10 @@ import { createStore } from "solid-js/store";
 import { Area } from "../_models/AppRouteDefinition";
 import { appRoutes } from "../routes";
 
-export type RouteDetailState = {
+export interface RouteDetailState {
     readonly path?: string;
     readonly area?: Area;
-};
+}
 
 export const defaultRouteDetailState: RouteDetailState = {
     path: undefined,

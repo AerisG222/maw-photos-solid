@@ -6,12 +6,12 @@ import InfoCard from "../../_components/sidebar/InfoCard";
 import BulkEditFilterCard from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
 
-type Props = {
+interface Props {
     onSave: (gps: GpsCoordinate) => void;
     onHideMediaWithGps: (hide: boolean) => void;
     onSelectAll: () => void;
     onDeselectAll: () => void;
-};
+}
 
 const BulkEditSidebar: Component<Props> = props => {
     const cards = [

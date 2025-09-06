@@ -6,13 +6,13 @@ import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
-type Props = {
+interface Props {
     category: Category;
     showTitles: boolean;
     showYears: boolean;
     thumbnailSize: ThumbnailSizeIdType;
     eager: boolean;
-};
+}
 
 const CategoryCard: Component<Props> = props => {
     return (

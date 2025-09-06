@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-type Props = {
+interface Props {
     year: number;
-};
+}
 
 const YearHeading: Component<Props> = props => {
     return (

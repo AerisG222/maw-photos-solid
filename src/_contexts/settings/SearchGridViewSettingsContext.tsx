@@ -5,12 +5,12 @@ import { defaultMargin, MarginIdType } from "../../_models/Margin";
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { KEY_SETTINGS_SEARCH_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
-export type SearchGridViewSettingsState = {
+export interface SearchGridViewSettingsState {
     margin: MarginIdType;
     showTitles: boolean;
     showYears: boolean;
     thumbnailSize: ThumbnailSizeIdType;
-};
+}
 
 export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     margin: defaultMargin,

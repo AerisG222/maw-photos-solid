@@ -6,7 +6,7 @@ import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsConte
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
 
-type Props = {
+interface Props {
     icon: string;
     name: string;
     tooltip: string;
@@ -15,7 +15,7 @@ type Props = {
     disabled?: boolean;
     shortcutKeys?: string[];
     clickHandler: () => void;
-};
+}
 
 const ToolbarButton: Component<Props> = props => {
     const [state] = useAppSettingsContext();

@@ -6,12 +6,12 @@ import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
-type Props = {
+interface Props {
     category: Category;
     thumbnailSize: ThumbnailSizeIdType;
     eager: boolean;
     showYear?: boolean;
-};
+}
 
 const CategoryListItem: Component<Props> = props => {
     return (

@@ -5,12 +5,12 @@ import { defaultMargin, MarginIdType } from "../../_models/Margin";
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
-export type MediaGridViewSettingsState = {
+export interface MediaGridViewSettingsState {
     margin: MarginIdType;
     showBreadcrumbs: boolean;
     showMainBreadcrumbs: boolean;
     thumbnailSize: ThumbnailSizeIdType;
-};
+}
 
 export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
     margin: defaultMargin,

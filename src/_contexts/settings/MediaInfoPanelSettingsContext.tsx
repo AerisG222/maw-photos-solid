@@ -5,7 +5,7 @@ import { defaultMapType, MapTypeIdType } from "../../_models/MapType";
 import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from "./_storage";
 import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
 
-export type MediaInfoPanelSettingsState = {
+export interface MediaInfoPanelSettingsState {
     expandInfoPanel: boolean;
     showCategoryTeaserChooser: boolean;
     showComments: boolean;
@@ -16,7 +16,7 @@ export type MediaInfoPanelSettingsState = {
     showMinimap: boolean;
     minimapZoom: MapZoomLevelIdType;
     minimapMapType: MapTypeIdType;
-};
+}
 
 export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
     expandInfoPanel: false,

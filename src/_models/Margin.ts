@@ -16,7 +16,7 @@ export const allMarginClasses = new Set(allMargins.map(x => Object.keys(x.klass)
 export const defaultMargin: MarginIdType = "compact";
 
 export const getNextMarginSize = (margin: MarginIdType) => {
-    var idx = allMargins.findIndex(x => equalsIgnoreCase(x.id, margin));
+    let idx = allMargins.findIndex(x => equalsIgnoreCase(x.id, margin));
 
     if (idx === allMargins.length - 1) {
         idx = -1;

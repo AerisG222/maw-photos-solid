@@ -12,10 +12,10 @@ import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import SidebarButton from "../../_components/sidebar/SidebarButton";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
-};
+}
 
 const Sidebar: Component<Props> = props => {
     const [routeContext] = useRouteDetailContext();
@@ -149,8 +149,8 @@ const Sidebar: Component<Props> = props => {
                                 <InfoCard title={card.title} icon={card.icon}>
                                     <Dynamic
                                         component={card.component}
-                                        activeCategory={props.activeCategory!}
-                                        activeMedia={props.activeMedia!}
+                                        activeCategory={props.activeCategory}
+                                        activeMedia={props.activeMedia}
                                     />
                                 </InfoCard>
                             </Show>

@@ -9,7 +9,7 @@ declare module "solid-js" {
     }
 }
 
-type Position = { x?: number; y?: number };
+interface Position { x?: number; y?: number }
 
 export const tap = (el: HTMLElement, accessor) => {
     const THRESHOLD = 5;
@@ -32,8 +32,8 @@ export const tap = (el: HTMLElement, accessor) => {
             return;
         }
 
-        let horizontalDifference = end.x - start.x;
-        let verticalDifference = end.y - start.y;
+        const horizontalDifference = end.x - start.x;
+        const verticalDifference = end.y - start.y;
 
         if (horizontalDifference <= THRESHOLD && verticalDifference <= THRESHOLD) {
             accessor?.()();

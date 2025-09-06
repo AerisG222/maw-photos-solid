@@ -8,12 +8,12 @@ import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
 
-type Props = {
+interface Props {
     mediaService: IMapsMediaService;
     mapState: MediaMapViewSettingsState;
     setMapType: (mapType: string | undefined) => void;
     setZoom: (zoom: number | undefined) => void;
-};
+}
 
 const ViewMap: Component<Props> = props => {
     const [initialized, setInitialized] = createSignal(false);

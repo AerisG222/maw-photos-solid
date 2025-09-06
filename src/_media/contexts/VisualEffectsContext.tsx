@@ -1,7 +1,7 @@
 import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-export type VisualEffectsState = {
+export interface VisualEffectsState {
     // filters
     readonly grayscale: number;
     readonly sepia: number;
@@ -16,7 +16,7 @@ export type VisualEffectsState = {
     readonly rotation: number;
     readonly flipHorizontal: boolean;
     readonly flipVertical: boolean;
-};
+}
 
 export const defaultVisualEffects: VisualEffectsState = {
     // filters

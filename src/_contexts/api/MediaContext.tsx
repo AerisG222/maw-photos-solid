@@ -18,7 +18,7 @@ import { GpsDetail } from "../../_models/GpsDetail";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
 import { Uuid } from "../../_models/Uuid";
 
-export type MediaService = {
+export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
@@ -27,7 +27,7 @@ export type MediaService = {
         count: number
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
     addCommentMutation: UseMutationResult<void, Error, AddCommentRequest, unknown>;
-};
+}
 
 const MediaContext = createContext<MediaService>();
 

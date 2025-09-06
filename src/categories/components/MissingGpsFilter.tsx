@@ -3,9 +3,9 @@ import { Component } from "solid-js";
 import Checkbox from "../../_components/input/Checkbox";
 import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
-type Props = {
+interface Props {
     horizontal: boolean;
-};
+}
 
 const MissingGpsFilter: Component<Props> = props => {
     const [filter, { setMissingGpsFilter }] = useCategoryFilterSettingsContext();

@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-type Props = {
+interface Props {
     continueSearch: () => void;
-};
+}
 
 const SearchMoreButton: Component<Props> = props => {
     return (

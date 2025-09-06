@@ -6,7 +6,7 @@ import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
-type Props = {
+interface Props {
     href: string;
     media: Media;
     thumbnailSize: ThumbnailSizeIdType;
@@ -15,7 +15,7 @@ type Props = {
     route: AppRouteDefinition;
     eager: boolean;
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
-};
+}
 
 const MediaLink: Component<Props> = props => {
     const getClassList = () => {

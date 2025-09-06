@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
 
-type Props = {
+interface Props {
     classes: string;
-};
+}
 
 const Icon: Component<Props> = props => {
-    return <span class={`align-middle ${props.classes}`}></span>;
+    return <span class={`align-middle ${props.classes}`} />;
 };
 
 export default Icon;

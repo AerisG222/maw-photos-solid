@@ -3,11 +3,11 @@ import { createStore } from "solid-js/store";
 
 import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
 
-export type AppSettingsState = {
+export interface AppSettingsState {
     readonly theme: string;
     readonly isPrimaryNavCollapsed: boolean;
     readonly isToolbarCollapsed: boolean;
-};
+}
 
 export const defaultAppSettings: AppSettingsState = {
     theme: "dark",
@@ -65,7 +65,7 @@ export const useAppSettingsContext = () => {
 };
 
 function loadState() {
-    var state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
+    let state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
 
     // handle legacy theme
     if (state.theme === "dusk") {

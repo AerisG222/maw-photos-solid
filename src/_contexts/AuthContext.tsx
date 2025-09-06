@@ -2,10 +2,10 @@ import { createContext, createResource, ParentComponent, Show, useContext } from
 import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 
-export type AuthState = {
+export interface AuthState {
     readonly isLoggedIn: boolean;
     readonly user: User | undefined;
-};
+}
 
 const defaultAuth: AuthState = {
     isLoggedIn: false,
@@ -48,7 +48,7 @@ export const AuthProvider: ParentComponent = props => {
     };
 
     const [auth0Client] = createResource(async () => {
-        var client = await createAuth0Client({
+        const client = await createAuth0Client({
             domain: import.meta.env.VITE_AUTH0_DOMAIN,
             clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
             authorizationParams: authParams

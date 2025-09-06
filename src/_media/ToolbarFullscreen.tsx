@@ -9,14 +9,14 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 
-type Props = {
+interface Props {
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
     slideshowIsPlaying: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
-};
+}
 
 const FullscreenToolbar: Component<Props> = props => {
     return (

@@ -1,8 +1,8 @@
 import { Uuid } from './Uuid';
 import { GpsCoordinate } from "./GpsCoordinate";
 
-export type GpsDetail = {
+export interface GpsDetail {
     mediaId: Uuid;
     recorded: GpsCoordinate | undefined;
     override: GpsCoordinate | undefined;
-};
+}

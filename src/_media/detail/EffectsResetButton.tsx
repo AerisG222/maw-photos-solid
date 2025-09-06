@@ -1,9 +1,9 @@
 import { Component, Show } from "solid-js";
 
-type Props = {
+interface Props {
     enabled: boolean;
     handleClick: () => void;
-};
+}
 
 const EffectsResetButton: Component<Props> = props => {
     return (

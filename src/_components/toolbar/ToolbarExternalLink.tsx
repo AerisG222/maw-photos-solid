@@ -4,13 +4,13 @@ import Icon from "../icon/Icon";
 
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
-type Props = {
+interface Props {
     name: string;
     tooltip: string;
     iconClass: string;
     url: string;
     textClassList?: {};
-};
+}
 
 const ToolbarExternalLink: Component<Props> = props => {
     const [state] = useAppSettingsContext();

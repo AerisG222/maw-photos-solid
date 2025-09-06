@@ -5,7 +5,7 @@ import { getNameWithShortcut } from "../shortcuts/_util";
 import Icon from "../icon/Icon";
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 
-type Props = {
+interface Props {
     icon: string;
     name: string;
     tooltip: string;
@@ -14,7 +14,7 @@ type Props = {
     disabled?: boolean;
     shortcutKeys?: string[];
     clickHandler: () => void;
-};
+}
 
 const SidebarButton: Component<Props> = props => {
     const handleClick = (data: any, evt: Event) => {

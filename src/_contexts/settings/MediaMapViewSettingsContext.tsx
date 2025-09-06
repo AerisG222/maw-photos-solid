@@ -5,10 +5,10 @@ import { defaultMapType, MapTypeIdType } from "../../_models/MapType";
 import { KEY_SETTINGS_MEDIA_VIEW_MAP, loadJson, saveJson } from "./_storage";
 import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
 
-export type MediaMapViewSettingsState = {
+export interface MediaMapViewSettingsState {
     mapType: MapTypeIdType;
     zoom: MapZoomLevelIdType;
-};
+}
 
 export const defaultMediaMapViewSettings: MediaMapViewSettingsState = {
     mapType: defaultMapType,

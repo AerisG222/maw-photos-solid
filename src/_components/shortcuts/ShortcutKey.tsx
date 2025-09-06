@@ -2,9 +2,9 @@ import { Component, For } from "solid-js";
 
 import { ShortcutInfo } from "../../_contexts/ShortcutContext";
 
-type Props = {
+interface Props {
     shortcut: ShortcutInfo;
-};
+}
 
 const ShortcutKey: Component<Props> = props => {
     const getDisplayIcon = (key: string) => {

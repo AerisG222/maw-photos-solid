@@ -7,10 +7,10 @@ import { YearStat } from "../../_models/YearStat";
 import { CategoryStat } from "../../_models/CategoryStat";
 
 // todo: these names kinda suck
-export type StatsService = {
+export interface StatsService {
     statsByYearQuery: () => UseQueryResult<YearStat[], Error>;
     statsForYearQuery: (year: Accessor<number>) => UseQueryResult<CategoryStat[], Error>;
-};
+}
 
 const StatsContext = createContext<StatsService>();
 

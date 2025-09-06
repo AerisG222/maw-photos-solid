@@ -8,11 +8,11 @@ import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsConte
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
 
-type Props = {
+interface Props {
     href: string;
     route: AppRouteDefinition;
     clickHandler?: () => void;
-};
+}
 
 const ToolbarLink: Component<Props> = props => {
     const [state] = useAppSettingsContext();

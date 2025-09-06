@@ -7,11 +7,11 @@ import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 import CategoryListItem from "../../_components/categories/CategoryListItem";
 import YearHeading from "./YearHeading";
 
-type Props = {
+interface Props {
     year: number;
     categories: Category[];
     enableEagerLoading: boolean;
-};
+}
 
 const YearList: Component<Props> = props => {
     const [settings] = useCategoryListViewSettingsContext();

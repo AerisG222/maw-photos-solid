@@ -3,12 +3,12 @@ import * as Highcharts from "highcharts";
 import "highcharts/modules/heatmap.js";
 import "highcharts/modules/treemap";
 
-type Props = {
+interface Props {
     data: any;
     seriesName: string;
     formatFunc: (value: number) => string;
     onSelectPoint?: (point: Highcharts.Point, event: Highcharts.PointClickEventObject) => void;
-};
+}
 
 const Treemap: Component<Props> = props => {
     const themeBase200 = "";

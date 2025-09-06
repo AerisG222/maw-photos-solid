@@ -1,7 +1,7 @@
 import { MediaType, Uuid } from './Uuid';
 import { MediaFile } from "./MediaFile";
 
-export type Media = {
+export interface Media {
     latitude: any;
     longitude: any;
     id: Uuid;
@@ -9,4 +9,4 @@ export type Media = {
     type: MediaType;
     isFavorite: boolean;
     files: MediaFile[];
-};
+}

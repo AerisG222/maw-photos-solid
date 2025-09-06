@@ -7,13 +7,13 @@ import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import MediaLink from "./MediaLink";
 
-type Props = {
+interface Props {
     mediaLinkBuilder: (media: Media) => string;
     media: Media[];
     activeMedia: Media;
     thumbnailSize: ThumbnailSizeIdType;
     activeRoute?: AppRouteDefinition;
-};
+}
 
 const MediaList: Component<Props> = props => {
     const [scrollElement, setScrollElement] = createSignal(undefined);

@@ -4,10 +4,10 @@ import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
-};
+}
 
 const CommentsCard: Component<Props> = props => {
     const { commentsQuery, addCommentMutation } = useMediaContext();
@@ -51,7 +51,7 @@ const CommentsCard: Component<Props> = props => {
                                     </time>
                                 </div>
                                 <div class="chat-bubble bg-base-200 w-full">{comment.body}</div>
-                                <div class="chat-footer w-full"></div>
+                                <div class="chat-footer w-full" />
                             </div>
                         )}
                     </For>

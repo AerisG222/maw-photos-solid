@@ -2,10 +2,10 @@ import { createWindowSize } from "@solid-primitives/resize-observer";
 import { createContext, createEffect, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-export type WindowSizeState = {
+export interface WindowSizeState {
     readonly width: number;
     readonly height: number;
-};
+}
 
 export const defaultWindowSizeState: WindowSizeState = {
     width: 1000,

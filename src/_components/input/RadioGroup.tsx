@@ -1,13 +1,13 @@
 import { Component, For } from "solid-js";
 import { KeyValuePair } from "../../_models/KeyValuePair";
 
-type Props<T> = {
+interface Props<T> {
     title: string;
     groupName: string;
     itemArray: KeyValuePair<T>[];
     selectedValue: T;
     onChange: (value: string) => void;
-};
+}
 
 const RadioGroup: Component<Props<string | number>> = props => {
     return (

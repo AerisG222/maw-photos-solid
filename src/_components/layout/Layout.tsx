@@ -2,13 +2,13 @@ import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-j
 
 import { MarginIdType, getMarginClass } from "../../_models/Margin";
 
-type Props = {
+interface Props {
     xPad?: boolean;
     title?: string;
     margin?: MarginIdType;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
-};
+}
 
 const Layout: ParentComponent<Props> = props => {
     const merged = mergeProps({ xPad: true }, props);

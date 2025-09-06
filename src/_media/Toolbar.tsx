@@ -17,11 +17,11 @@ import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
 import ToolbarLink from "../_components/toolbar/ToolbarLink";
 
-type Props = {
+interface Props {
     mediaService: IMediaService;
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
-};
+}
 
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaPageSettingsContext();

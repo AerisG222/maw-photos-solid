@@ -1,6 +1,6 @@
 import { Uuid } from './Uuid';
 
-export type AddCommentRequest = {
+export interface AddCommentRequest {
     mediaId: Uuid;
     comment: string;
-};
+}

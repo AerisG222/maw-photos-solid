@@ -1,9 +1,9 @@
 import { ParentComponent, children } from "solid-js";
 
-type Props = {
+interface Props {
     icon: string;
     title: string;
-};
+}
 
 const InfoCard: ParentComponent<Props> = props => {
     const c = children(() => props.children);

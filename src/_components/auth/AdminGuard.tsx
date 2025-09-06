@@ -2,9 +2,9 @@ import { ParentComponent, children, createEffect } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
-type Props = {
+interface Props {
     redirectRoute?: string;
-};
+}
 
 const AdminGuard: ParentComponent<Props> = props => {
     const [, { isAdmin }] = useAuthContext();

@@ -4,10 +4,10 @@ import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
-};
+}
 
 const CategoryTeaserCard: Component<Props> = props => {
     const onSetTeaser = async (evt: Event) => {

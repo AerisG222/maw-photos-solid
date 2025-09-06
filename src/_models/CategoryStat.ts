@@ -1,8 +1,8 @@
 import { Uuid } from './Uuid';
 import { MediaTypeStat } from "./MediaTypeStat";
 
-export type CategoryStat = {
+export interface CategoryStat {
     categoryId: Uuid;
     categoryName: string;
     mediaTypeStats: MediaTypeStat[];
-};
+}

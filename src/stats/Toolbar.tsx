@@ -5,13 +5,13 @@ import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
-type Props = {
+interface Props {
     initialParams: {
         type: "all" | "photo" | "video";
         mode: "category-count" | "count" | "size" | "duration";
     };
     showSummarizeByCategoryCount: boolean;
-};
+}
 
 const Toolbar: Component<Props> = props => {
     const [search, setSearchParams] = useSearchParams();

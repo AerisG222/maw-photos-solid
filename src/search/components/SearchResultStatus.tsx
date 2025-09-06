@@ -2,10 +2,10 @@ import { Component, Show } from "solid-js";
 
 import SearchMoreButton from "./SearchMoreButton";
 
-type Props = {
+interface Props {
     hasMore: boolean;
     continueSearch: () => void;
-};
+}
 
 const SearchResultStatus: Component<Props> = props => {
     return (

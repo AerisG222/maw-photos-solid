@@ -5,11 +5,11 @@ import { defaultMargin, MarginIdType } from "../../_models/Margin";
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { KEY_SETTINGS_CATEGORY_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
-export type CategoryGridViewSettingsState = {
+export interface CategoryGridViewSettingsState {
     readonly margin: MarginIdType;
     readonly showTitles: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
-};
+}
 
 export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
     margin: defaultMargin,

@@ -1,11 +1,11 @@
 import { Uuid } from './Uuid';
 import { Media } from "./Media";
 
-export type Category = {
+export interface Category {
     id: Uuid;
     name: string;
     effectiveDate: Date;
     modified: Date;
     isFavorite: boolean;
     teaser: Media;
-};
+}

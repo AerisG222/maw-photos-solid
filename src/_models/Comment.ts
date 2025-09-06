@@ -1,9 +1,9 @@
 import { Uuid } from './Uuid';
 
-export type Comment = {
+export interface Comment {
     commentId: Uuid;
     created: Date;
     createdBy: string;
     modified: Date;
     body: string;
-};
+}

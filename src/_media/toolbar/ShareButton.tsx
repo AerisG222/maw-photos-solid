@@ -5,9 +5,9 @@ import { Media } from "../../_models/Media";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-type Props = {
+interface Props {
     activeMedia: Media;
-};
+}
 
 const ShareButton: Component<Props> = props => {
     const onShare = () => {

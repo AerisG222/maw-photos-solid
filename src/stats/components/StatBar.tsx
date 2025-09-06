@@ -5,10 +5,10 @@ import { formatCount, formatStorage, formatDuration } from "../_funcs";
 
 import StatBox from "./StatBox";
 
-type Props = {
+interface Props {
     statbarData: StatBarData;
     mediaCountTitle: string;
-};
+}
 
 const StatBar: Component<Props> = props => {
     return (

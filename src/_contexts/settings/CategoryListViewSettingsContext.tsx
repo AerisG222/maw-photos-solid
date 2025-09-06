@@ -5,10 +5,10 @@ import { defaultMargin, MarginIdType } from "../../_models/Margin";
 import { defaultListThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson, saveJson } from "./_storage";
 
-export type CategoryListViewSettingsState = {
+export interface CategoryListViewSettingsState {
     readonly margin: MarginIdType;
     readonly thumbnailSize: ThumbnailSizeIdType;
-};
+}
 
 export const defaultCategoryListViewSettings: CategoryListViewSettingsState = {
     margin: defaultMargin,

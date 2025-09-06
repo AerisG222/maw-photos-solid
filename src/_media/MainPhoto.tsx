@@ -2,10 +2,10 @@ import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
 
-type Props = {
+interface Props {
     media: Media;
     setActiveMediaElement: (el: HTMLImageElement) => void;
-};
+}
 
 const MainPhoto: Component<Props> = props => {
     const getUrl = () => props.media.files.find(f => f.scale === "full-hd")?.path;

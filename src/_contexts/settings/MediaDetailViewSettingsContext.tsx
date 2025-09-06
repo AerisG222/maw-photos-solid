@@ -4,11 +4,11 @@ import { createStore } from "solid-js/store";
 import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { KEY_SETTINGS_MEDIA_VIEW_DETAIL, loadJson, saveJson } from "./_storage";
 
-export type MediaDetailViewSettingsState = {
+export interface MediaDetailViewSettingsState {
     showBreadcrumbs: boolean;
     thumbnailSize: ThumbnailSizeIdType;
     showMediaList: boolean;
-};
+}
 
 export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
     showBreadcrumbs: true,

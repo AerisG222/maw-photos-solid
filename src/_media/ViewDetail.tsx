@@ -16,12 +16,12 @@ import MainItem from "./MainItem";
 import { Media } from "../_models/Media";
 import { MediaViewDetail } from "../_models/MediaView";
 
-type Props = {
+interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
     detailSettings: MediaDetailViewSettingsState;
     showBreadcrumbTitleAsLink: boolean;
-};
+}
 
 const ViewDetail: Component<Props> = props => {
     const getMaxHeight = () => {
@@ -91,7 +91,7 @@ const ViewDetail: Component<Props> = props => {
                             mediaLinkBuilder={(media: Media) =>
                                 props.mediaService.getMediaPathByView(MediaViewDetail, media)
                             }
-                            media={props.mediaService.getMediaList()!}
+                            media={props.mediaService.getMediaList()}
                             activeMedia={props.mediaService.getActiveMedia()!}
                             thumbnailSize={props.detailSettings.thumbnailSize}
                             activeRoute={detailRoute}

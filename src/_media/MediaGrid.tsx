@@ -7,12 +7,12 @@ import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 
 import MediaLink from "./MediaLink";
 
-type Props = {
+interface Props {
     mediaLinkBuilder: (media: Media) => string;
     items: Media[];
     thumbnailSize: ThumbnailSizeIdType;
     activeRoute: AppRouteDefinition;
-};
+}
 
 const MediaGrid: Component<Props> = props => {
     return (

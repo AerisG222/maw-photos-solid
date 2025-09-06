@@ -4,10 +4,10 @@ import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 
 import Icon from "../icon/Icon";
 
-type Props = {
+interface Props {
     route: AppRouteDefinition;
     showTitle: boolean;
-};
+}
 
 const PrimaryNavLink: Component<Props> = props => {
     const nameClass = () => ({

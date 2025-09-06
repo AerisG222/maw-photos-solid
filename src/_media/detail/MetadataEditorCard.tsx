@@ -5,11 +5,11 @@ import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 
-type Props = {
+interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
     requestMoveNext: () => void;
-};
+}
 
 const MetadataEditorCard: Component<Props> = props => {
     const { gpsQuery } = useMediaContext();

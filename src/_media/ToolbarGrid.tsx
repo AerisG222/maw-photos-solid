@@ -18,7 +18,7 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 
-type Props = {
+interface Props {
     activeMedia: Media | undefined;
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
@@ -26,7 +26,7 @@ type Props = {
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
-};
+}
 
 const GridToolbar: Component<Props> = props => {
     const [routeContext] = useRouteDetailContext();

@@ -3,12 +3,12 @@ import { Component } from "solid-js";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 
-type Props = {
+interface Props {
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
     moveNext: () => void;
     movePrevious: () => void;
-};
+}
 
 const MapToolbar: Component<Props> = props => {
     return (

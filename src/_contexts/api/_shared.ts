@@ -12,7 +12,7 @@ export const runWithAccessToken = async <T>(
     getToken: () => Promise<string | undefined>,
     func: (accessToken: string) => Promise<T>
 ) => {
-    var accessToken = await getToken();
+    const accessToken = await getToken();
 
     if (accessToken) {
         return await func(accessToken);
@@ -24,7 +24,7 @@ export const runWithAccessToken = async <T>(
 export const queryApi = async <T>(accessToken: string, relativeUrl: string, content?: any) => {
     relativeUrl = content ? `${relativeUrl}?${getQueryParams(content)}` : relativeUrl;
 
-    var response = await callApi("GET", relativeUrl, undefined, accessToken);
+    const response = await callApi("GET", relativeUrl, undefined, accessToken);
 
     return response.json() as T;
 };

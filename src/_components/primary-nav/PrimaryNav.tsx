@@ -28,7 +28,7 @@ const PrimaryNav: Component = () => {
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={about} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={settings} />
 
-            <div class="divider my-0 h-auto"></div>
+            <div class="divider my-0 h-auto" />
 
             <PrimaryNavCollapseButton />
         </div>

@@ -1,15 +1,15 @@
 import { Component, createEffect, createSignal } from "solid-js";
 
-type Histogram = {
+interface Histogram {
     r: number[];
     g: number[];
     b: number[];
     lum: number[];
-};
+}
 
-type Props = {
+interface Props {
     mediaElement?: HTMLImageElement | HTMLVideoElement;
-};
+}
 
 const HistogramCard: Component<Props> = props => {
     const _rgb = "rgb";
@@ -30,7 +30,7 @@ const HistogramCard: Component<Props> = props => {
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d", {
         willReadFrequently: true
-    }) as CanvasRenderingContext2D;
+    })!;
 
     const renderHistogram = (histogram: Histogram, channel: string) => {
         if (histogram) {
@@ -127,7 +127,7 @@ const HistogramCard: Component<Props> = props => {
     };
 
     const drawHistogram = (channel: string, histogram: Histogram, maxCount: number): void => {
-        const ctx = histogramCanvas!.getContext("2d") as CanvasRenderingContext2D;
+        const ctx = histogramCanvas!.getContext("2d")!;
 
         ctx.clearRect(0, 0, histogramCanvas!.width, histogramCanvas!.height);
 
