@@ -8,6 +8,7 @@ import { MediaViewDetail } from "../_models/MediaView";
 import { SlideshowService } from "../_media/services/SlideshowService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { RandomMediaService } from "./services/RandomMediaService";
+import { Uuid } from "../_models/Uuid";
 
 import ViewDetail from "../_media/ViewDetail";
 

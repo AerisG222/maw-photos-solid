@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { Component, onCleanup } from "solid-js";
+import { Component, onCleanup, Show } from "solid-js";
 
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
@@ -7,6 +7,7 @@ import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSett
 import { MediaViewGrid } from "../_models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "../_media/services/SlideshowService";
+import { Uuid } from "../_models/Uuid";
 
 import ViewGrid from "../_media/ViewGrid";
 
@@ -30,13 +31,15 @@ const Grid: Component = () => {
     });
 
     return (
-        <ViewGrid
-            mediaService={mediaService}
-            slideshowService={slideshowService}
-            gridSettings={settings}
-            showBreadcrumbsOnGrid={settings.showBreadcrumbs}
-            showBreadcrumbsOnMedia={false}
-        />
+        <Show when={mediaService.getActiveCategory()}>
+            <ViewGrid
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                gridSettings={settings}
+                showBreadcrumbsOnGrid={settings.showBreadcrumbs}
+                showBreadcrumbsOnMedia={false}
+            />
+        </Show>
     );
 };
 

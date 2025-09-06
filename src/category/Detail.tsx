@@ -7,6 +7,7 @@ import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSett
 import { MediaViewDetail } from "../_models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { SlideshowService } from "../_media/services/SlideshowService";
+import { Uuid } from "../_models/Uuid";
 
 import ViewDetail from "../_media/ViewDetail";
 

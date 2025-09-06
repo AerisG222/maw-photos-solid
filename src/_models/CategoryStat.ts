@@ -1,3 +1,4 @@
+import { Uuid } from './Uuid';
 import { MediaTypeStat } from "./MediaTypeStat";
 
 export type CategoryStat = {

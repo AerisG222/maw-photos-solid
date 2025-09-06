@@ -10,6 +10,7 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { MediaWithGps } from "../../_media/models/MediaWithGps";
 import { MediaView } from "../../_models/MediaView";
 import { IMapsMediaService } from "../../_media/services/IMapsMediaService";
+import { Uuid } from '../../_models/Uuid';
 
 export class CategoryMapsMediaService extends CategoryMediaService implements IMapsMediaService {
     constructor(

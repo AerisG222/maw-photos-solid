@@ -1,3 +1,4 @@
+import { MediaType, Uuid } from './Uuid';
 import { MediaFile } from "./MediaFile";
 
 export type Media = {

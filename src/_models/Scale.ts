@@ -1,3 +1,5 @@
+import { Uuid } from './Uuid';
+
 export type Scale = {
     id: Uuid;
     code: string;

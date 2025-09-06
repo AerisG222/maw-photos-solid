@@ -5,6 +5,7 @@ import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSett
 import { MediaView } from "../_models/MediaView";
 import { CategoryMediaService } from "./services/CategoryMediaService";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { Uuid } from "../_models/Uuid";
 
 const Redirect: Component = () => {
     const navigate = useNavigate();

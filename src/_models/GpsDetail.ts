@@ -1,3 +1,4 @@
+import { Uuid } from './Uuid';
 import { GpsCoordinate } from "./GpsCoordinate";
 
 export type GpsDetail = {

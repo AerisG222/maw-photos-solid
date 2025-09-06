@@ -12,6 +12,7 @@
         "types": [
             "vite/client",
             "google.maps",
+            "./_types"
         ],
         "noEmit": true,
         "isolatedModules": true

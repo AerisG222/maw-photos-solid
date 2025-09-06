@@ -1,3 +1,5 @@
+import { Uuid } from './Uuid';
+
 export type Comment = {
     commentId: Uuid;
     created: Date;

@@ -1,3 +1,5 @@
+import { Uuid } from '../../_models/Uuid';
+
 const buildAbsoluteUrl = (relativeUrl: string): string =>
     `${import.meta.env.VITE_API_URI}/${relativeUrl}`;
 

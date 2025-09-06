@@ -5,6 +5,7 @@ import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { MediaViewMap } from "../_models/MediaView";
 import { CategoryMapsMediaService } from "./services/CategoryMapsMediaService";
+import { Uuid } from "../_models/Uuid";
 
 import ViewMap from "../_media/ViewMap";
 

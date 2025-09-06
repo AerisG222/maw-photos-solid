@@ -1,3 +1,4 @@
+import { Uuid } from './Uuid';
 import { Media } from "./Media";
 
 export type Category = {

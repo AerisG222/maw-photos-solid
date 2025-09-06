@@ -16,6 +16,7 @@ import { postApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
+import { Uuid } from "../../_models/Uuid";
 
 export type MediaService = {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;

@@ -13,6 +13,7 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
+import { Uuid } from "../../_models/Uuid";
 
 export type CategoriesService = {
     yearsQuery: () => UseQueryResult<number[], Error>;
