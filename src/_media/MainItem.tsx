@@ -4,6 +4,7 @@ import { Media } from "../_models/Media";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
 import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
+import { useConfigContext } from "../_contexts/api/ConfigContext";
 
 false && swipe;
 false && tap;
@@ -21,6 +22,7 @@ interface Props {
 
 const MainItem: Component<Props> = props => {
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
+    const { getScalesForMain } = useConfigContext();
 
     let mediaHolderDiv: HTMLDivElement;
 
@@ -38,6 +40,20 @@ const MainItem: Component<Props> = props => {
         mediaHolderDiv!.click();
     };
 
+    const getMediaUrl = () => {
+        const scales = getScalesForMain();
+
+        for (const scale of scales) {
+            const file = props.media.files.find(f => f.scale === scale.code);
+
+            if (file) {
+                return file.path;
+            }
+        }
+
+        return props.media.files.find(f => f.scale === "full-hd")?.path ?? "";
+    };
+
     return (
         <Show when={props.media}>
             <div
@@ -50,7 +66,7 @@ const MainItem: Component<Props> = props => {
                 <Switch>
                     <Match when={props.media.type === "photo"}>
                         <MainPhoto
-                            media={props.media}
+                            url={getMediaUrl()}
                             setActiveMediaElement={x =>
                                 props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
                             }
@@ -58,7 +74,7 @@ const MainItem: Component<Props> = props => {
                     </Match>
                     <Match when={props.media.type === "video"}>
                         <MainVideo
-                            media={props.media}
+                            url={getMediaUrl()}
                             setActiveMediaElement={x =>
                                 props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
                             }

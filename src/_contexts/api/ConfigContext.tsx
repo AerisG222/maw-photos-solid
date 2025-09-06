@@ -6,12 +6,13 @@ import { useAuthContext } from "../AuthContext";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
+
 import Loading from "../../_components/loading/Loading";
 
 export interface ConfigService {
     scalesQuery: () => UseQueryResult<Scale[], Error>;
     getScalesForThumbnail: (thumbSize: ThumbnailSize) => Scale[];
-    getScalesForMain: (width: number, height: number) => Scale[];
+    getScalesForMain: () => Scale[];
 }
 
 const ConfigContext = createContext<ConfigService>();
@@ -33,7 +34,7 @@ export const ConfigProvider: ParentComponent = props => {
             staleTime: 15 * 60 * 1000
         }));
 
-    const sortScalesDescendingInSize = (a: Scale, b: Scale) => a.width - b.width;
+    const sortScalesDescendingInSize = (a: Scale, b: Scale) => b.width - a.width;
 
     const getScalesForThumbnail = (thumbSize: ThumbnailSize) =>
         scalesQuery()
@@ -45,8 +46,8 @@ export const ConfigProvider: ParentComponent = props => {
             ?.data?.filter(
                 s =>
                     !s.fillsDimensions &&
-                    s.width >= windowSizeContext.width &&
-                    s.height >= windowSizeContext.height
+                    !(s.code === "src") &&
+                    (s.width <= windowSizeContext.width || s.height <= windowSizeContext.height)
             )
             ?.sort(sortScalesDescendingInSize) ?? [];
 
