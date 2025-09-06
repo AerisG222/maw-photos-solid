@@ -4,18 +4,13 @@ import "highcharts/modules/heatmap.js";
 import "highcharts/modules/treemap";
 
 interface Props {
-    data: any;
+    data: { name: string; value: number | undefined }[];
     seriesName: string;
     formatFunc: (value: number) => string;
     onSelectPoint?: (point: Highcharts.Point, event: Highcharts.PointClickEventObject) => void;
 }
 
 const Treemap: Component<Props> = props => {
-    const themeBase200 = "";
-    const themeBase300 = "";
-    const themePrimary = "";
-    const themeSecondary = "";
-
     let el;
 
     const labelFormat = (x: Highcharts.Point) =>

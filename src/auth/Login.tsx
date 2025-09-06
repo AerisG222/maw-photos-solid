@@ -1,13 +1,15 @@
-import { Component } from "solid-js";
+import { Component, createResource } from "solid-js";
 
 import { useAuthContext } from "../_contexts/AuthContext";
 
 const Login: Component = () => {
     const [authState, { login }] = useAuthContext();
 
-    if (!authState.isLoggedIn) {
-        login();
-    }
+    createResource(async () => {
+        if (!authState.isLoggedIn) {
+            await login();
+        }
+    });
 
     return (
         <>
@@ -23,7 +25,7 @@ const Login: Component = () => {
                 <button
                     class="btn btn-primary btn-outline gap-2 mt-8"
                     type="submit"
-                    onClick={async () => login()}
+                    onClick={login}
                 >
                     <span class="icon-[ic--round-security]" /> Login
                 </button>

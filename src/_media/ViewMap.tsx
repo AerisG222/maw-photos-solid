@@ -122,8 +122,8 @@ const ViewMap: Component<Props> = props => {
                         <MapToolbar
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
-                            moveNext={props.mediaService.moveNext}
-                            movePrevious={props.mediaService.movePrevious}
+                            moveNext={() => props.mediaService.moveNext()}
+                            movePrevious={() => props.mediaService.movePrevious()}
                         />
                     </Toolbar>
                 }

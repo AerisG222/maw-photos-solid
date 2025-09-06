@@ -140,7 +140,7 @@ const ViewCombined: Component = () => {
                             seriesName="Summary"
                             data={treeData()}
                             formatFunc={formatForMode(search.mode)}
-                            onSelectPoint={(point, event) => goToYear(point.name)}
+                            onSelectPoint={point => goToYear(point.name)}
                         />
                     </div>
                 </StatLayout>

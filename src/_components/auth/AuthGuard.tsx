@@ -1,5 +1,6 @@
 import { ParentComponent, Show, children, createResource } from "solid-js";
 import { useIsRouting, useLocation, useNavigate } from "@solidjs/router";
+
 import { useAuthContext } from "../../_contexts/AuthContext";
 
 const AuthGuard: ParentComponent = props => {
@@ -14,7 +15,7 @@ const AuthGuard: ParentComponent = props => {
             return true;
         }
 
-        if (!authContext.isLoggedIn || !getToken()) {
+        if (!authContext.isLoggedIn || !(await getToken())) {
             // todo: redirect to orig dest after login
             //setRedirectUrl(`${location.pathname}${location.search}`);
             navigate("/login", { replace: true });

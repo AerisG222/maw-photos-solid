@@ -28,8 +28,8 @@ const ViewFullscreen: Component<Props> = props => {
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
-                            moveNext={props.mediaService.moveNext}
-                            movePrevious={props.mediaService.movePrevious}
+                            moveNext={() => props.mediaService.moveNext()}
+                            movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={props.slideshowService.toggle}
                         />
                     </Toolbar>
@@ -38,8 +38,8 @@ const ViewFullscreen: Component<Props> = props => {
                 <div class="grid h-screen w-full justify-center">
                     <MainItem
                         media={props.mediaService.getActiveMedia()!}
-                        moveNext={props.mediaService.moveNext}
-                        movePrevious={props.mediaService.movePrevious}
+                        moveNext={() => props.mediaService.moveNext()}
+                        movePrevious={() => props.mediaService.movePrevious()}
                     />
                 </div>
             </Layout>

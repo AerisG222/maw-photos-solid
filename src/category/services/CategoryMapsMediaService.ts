@@ -92,7 +92,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 
     preferredGpsLocation = (mediaWithGps: MediaWithGps | undefined): GpsCoordinate | undefined =>
-        mediaWithGps?.gps?.override ? mediaWithGps.gps.override : mediaWithGps?.gps.recorded;
+        mediaWithGps?.gps?.override ?? mediaWithGps?.gps?.recorded;
 
     mediaWithGps = createMemo(() => {
         if (

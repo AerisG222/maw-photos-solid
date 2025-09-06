@@ -55,8 +55,8 @@ const ViewDetail: Component<Props> = props => {
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
-                            moveNext={props.mediaService.moveNext}
-                            movePrevious={props.mediaService.movePrevious}
+                            moveNext={() => props.mediaService.moveNext()}
+                            movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={props.slideshowService.toggle}
                         />
                     </Toolbar>
@@ -80,8 +80,8 @@ const ViewDetail: Component<Props> = props => {
                         <MainItem
                             media={props.mediaService.getActiveMedia()!}
                             maxHeightStyle={getMaxHeight()}
-                            moveNext={props.mediaService.moveNext}
-                            movePrevious={props.mediaService.movePrevious}
+                            moveNext={() => props.mediaService.moveNext()}
+                            movePrevious={() => props.mediaService.movePrevious()}
                             setActiveMediaElement={el => (mediaElement = el)}
                         />
                     </div>
