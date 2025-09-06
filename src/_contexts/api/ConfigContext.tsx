@@ -1,4 +1,4 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
+import { createContext, ParentComponent, Show, useContext } from "solid-js";
 import { useQuery, UseQueryResult } from "@tanstack/solid-query";
 
 import { Scale } from "../../_models/Scale";
@@ -6,6 +6,7 @@ import { useAuthContext } from "../AuthContext";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
+import Loading from "../../_components/loading/Loading";
 
 export interface ConfigService {
     scalesQuery: () => UseQueryResult<Scale[], Error>;
@@ -51,7 +52,9 @@ export const ConfigProvider: ParentComponent = props => {
 
     return (
         <ConfigContext.Provider value={{ scalesQuery, getScalesForThumbnail, getScalesForMain }}>
-            {props.children}
+            <Show when={scalesQuery().isSuccess} fallback={<Loading />}>
+                {props.children}
+            </Show>
         </ConfigContext.Provider>
     );
 };
