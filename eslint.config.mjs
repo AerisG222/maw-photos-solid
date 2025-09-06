@@ -1,41 +1,44 @@
+import eslint from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
 import solidPlugin from "eslint-plugin-solid";
 import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
+export default defineConfig(
+    [globalIgnores([
+        "**/dist/", "**/node_modules/", "**/*.mjs"
+    ])],
+    eslint.configs.recommended,
+    tseslint.configs.recommendedTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
+    {
+        files: ["**/*.js", "**/*.ts", "**/*.tsx"],
 
-export default defineConfig([globalIgnores(["**/dist", "**/node_modules"]), {
-    extends: compat.extends("eslint:recommended"),
-
-    files: ["**/*.ts", "**/*.tsx"],
-
-    plugins: {
-        solid: solidPlugin,
-    },
-
-    languageOptions: {
-        globals: {
-            ...globals.browser,
-            google: "readonly",
+        plugins: {
+            ["@typescript-eslint"]: tseslint.plugin,
+            solid: solidPlugin,
         },
 
-        parser: tsParser,
-        ecmaVersion: "latest",
-        sourceType: "module",
-    },
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                google: "readonly",
+            },
 
-    rules: {
-        ...solidPlugin.configs.recommended.rules,
-    }
-}]);
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+
+            ecmaVersion: "latest",
+            sourceType: "module",
+        },
+
+        rules: {
+            ...solidPlugin.configs.recommended.rules,
+
+            // Note: you must disable the base rule as it can report incorrect errors
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": "error"
+        }
+    });
