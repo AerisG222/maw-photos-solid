@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite --mode dev",
-        "lint": "eslint --ext '.ts,.tsx' .",
+        "lint": "eslint .",
         "build": "vite build --mode prod",
         "serve": "vite preview",
         "test": "vitest",
@@ -15,6 +15,8 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/js": "^9.35.0",
         "@iconify-json/ic": "^1.2.4",
         "@iconify-json/mdi": "^1.2.3",
         "@iconify/tailwind4": "^1.0.6",
@@ -25,6 +27,7 @@
         "daisyui": "^5.1.7",
         "eslint": "^9.35.0",
         "eslint-plugin-solid": "^0.14.5",
+        "globals": "^16.3.0",
         "prettier": "^3.6.2",
         "typescript": "^5.9.2",
         "vite": "^7.1.4",
