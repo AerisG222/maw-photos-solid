@@ -28,5 +28,5 @@ export const statbarMediaCountTitle = (type: string) => {
             return "Photos & Videos";
     }
 
-    throw Error("Unexpected type!");
+    throw Error(`Unexpected type: ${type}`);
 };

@@ -8,7 +8,6 @@ import { ConfigProvider } from "../../_contexts/api/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import { MediaProvider } from "../../_contexts/api/MediaContext";
-import { RouteDetailProvider } from "../../_contexts/RouteDetailContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
@@ -30,9 +29,7 @@ const AppContext: ParentComponent = props => {
                                         <CategoriesProvider>
                                             <MediaProvider>
                                                 <FullscreenProvider>
-                                                    <RouteDetailProvider>
-                                                        {props.children}
-                                                    </RouteDetailProvider>
+                                                    {props.children}
                                                 </FullscreenProvider>
                                             </MediaProvider>
                                         </CategoriesProvider>

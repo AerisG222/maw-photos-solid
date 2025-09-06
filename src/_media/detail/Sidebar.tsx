@@ -3,8 +3,6 @@ import { Dynamic } from "solid-js/web";
 
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Media } from "../../_models/Media";
-import { useRouteDetailContext } from "../../_contexts/RouteDetailContext";
-import { AreaRandom } from "../../_models/AppRouteDefinition";
 import { Category } from "../../_models/Category";
 
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
@@ -15,11 +13,10 @@ import SidebarButton from "../../_components/sidebar/SidebarButton";
 interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
+    enableCategoryTeaser: boolean;
 }
 
 const Sidebar: Component<Props> = props => {
-    const [routeContext] = useRouteDetailContext();
-
     const [
         settings,
         {
@@ -133,7 +130,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaser,
-            enable: (media: Media) => routeContext.area !== AreaRandom,
+            enable: (media: Media) => props.enableCategoryTeaser,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))
         }

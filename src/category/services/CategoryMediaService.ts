@@ -50,9 +50,9 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     getEntryPathByView = (view: MediaView) =>
         this.getActiveCategory()
             ? this.getRouteForView(view).absolutePath.replace(
-                  ":categoryId",
-                  this.getActiveCategory()!.id
-              )
+                ":categoryId",
+                this.getActiveCategory()!.id
+            ).replace("/:id?", "")
             : "";
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>

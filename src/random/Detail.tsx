@@ -40,6 +40,7 @@ const Detail: Component = () => {
             slideshowService={slideshowService}
             detailSettings={settings}
             showBreadcrumbTitleAsLink={true}
+            enableCategoryTeaserChooser={false}
         />
     );
 };

@@ -21,6 +21,8 @@ interface Props {
     gridSettings: MediaGridViewSettingsState;
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
+    enableToggleBreadcrumbsOnActiveMedia: boolean;
+    enableToggleBreadcrumbsOnInactiveMedia: boolean;
 }
 
 const ViewGrid: Component<Props> = props => {
@@ -38,6 +40,12 @@ const ViewGrid: Component<Props> = props => {
                         activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                         activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                         slideshowIsPlaying={props.slideshowService.isPlaying()}
+                        enableToggleBreadcrumbsOnActiveMedia={
+                            props.enableToggleBreadcrumbsOnActiveMedia
+                        }
+                        enableToggleBreadcrumbsOnInactiveMedia={
+                            props.enableToggleBreadcrumbsOnInactiveMedia
+                        }
                         moveNext={() => props.mediaService.moveNext()}
                         movePrevious={() => props.mediaService.movePrevious()}
                         toggleSlideshow={props.slideshowService.toggle}

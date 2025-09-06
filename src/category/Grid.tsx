@@ -31,13 +31,15 @@ const Grid: Component = () => {
     });
 
     return (
-        <Show when={mediaService.getActiveCategory()}>
+        <Show when={cq.data}>
             <ViewGrid
                 mediaService={mediaService}
                 slideshowService={slideshowService}
                 gridSettings={settings}
                 showBreadcrumbsOnGrid={settings.showBreadcrumbs}
                 showBreadcrumbsOnMedia={false}
+                enableToggleBreadcrumbsOnActiveMedia={false}
+                enableToggleBreadcrumbsOnInactiveMedia={true}
             />
         </Show>
     );

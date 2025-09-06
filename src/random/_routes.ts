@@ -1,7 +1,6 @@
 import { lazy } from "solid-js";
 
-import { routeMatch } from "../_models/utils/RouteUtils";
-import { AppRouteDefinition, AreaRandom } from "../_models/AppRouteDefinition";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { MediaViewDetail, MediaViewFullscreen, MediaViewGrid } from "../_models/MediaView";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
@@ -69,6 +68,5 @@ export const randomMediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import("../_media/MediaRoot")),
-    doesPathMatch: path => routeMatch(path, basePath, AreaRandom),
     children: [redirectRoute, gridRoute, detailRoute, fullscreenRoute]
 };

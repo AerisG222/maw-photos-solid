@@ -3,8 +3,6 @@ import { Component, Show } from "solid-js";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { getNextMarginSize } from "../_models/Margin";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
-import { AreaCategories, AreaRandom } from "../_models/AppRouteDefinition";
-import { useRouteDetailContext } from "../_contexts/RouteDetailContext";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
 
@@ -23,13 +21,14 @@ interface Props {
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
     slideshowIsPlaying: boolean;
+    enableToggleBreadcrumbsOnActiveMedia: boolean;
+    enableToggleBreadcrumbsOnInactiveMedia: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
 }
 
 const GridToolbar: Component<Props> = props => {
-    const [routeContext] = useRouteDetailContext();
     const [settings, { setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin }] =
         useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
@@ -68,7 +67,7 @@ const GridToolbar: Component<Props> = props => {
             <ToolbarDivider />
 
             <Show when={!props.activeMedia}>
-                <Show when={routeContext.area === AreaCategories}>
+                <Show when={props.enableToggleBreadcrumbsOnInactiveMedia}>
                     <ToolbarButton
                         icon="icon-[ic--round-title]"
                         name="Breadcrumbs"
@@ -96,7 +95,7 @@ const GridToolbar: Component<Props> = props => {
             </Show>
 
             <Show when={props.activeMedia}>
-                <Show when={routeContext.area === AreaRandom}>
+                <Show when={props.enableToggleBreadcrumbsOnActiveMedia}>
                     <ToolbarButton
                         icon="icon-[ic--round-title]"
                         name="Breadcrumbs"

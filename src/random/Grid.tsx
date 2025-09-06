@@ -39,6 +39,8 @@ const Grid: Component = () => {
             gridSettings={settings}
             showBreadcrumbsOnGrid={false}
             showBreadcrumbsOnMedia={settings.showMainBreadcrumbs}
+            enableToggleBreadcrumbsOnActiveMedia={true}
+            enableToggleBreadcrumbsOnInactiveMedia={false}
         />
     );
 };

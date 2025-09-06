@@ -1,6 +1,5 @@
 import { lazy } from "solid-js";
-import { AppRouteDefinition, AreaCategories } from "../_models/AppRouteDefinition";
-import { routeMatch } from "../_models/utils/RouteUtils";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import {
     MediaViewBulkEdit,
     MediaViewDetail,
@@ -100,6 +99,5 @@ export const mediaRoutes: AppRouteDefinition = {
     absolutePath: basePath,
     name: "Category",
     component: lazy(() => import("../_media/MediaRoot")),
-    doesPathMatch: path => routeMatch(path, "/categories", AreaCategories),
     children: [redirectRoute, gridRoute, detailRoute, fullscreenRoute, mapRoute, bulkEditRoute]
 };

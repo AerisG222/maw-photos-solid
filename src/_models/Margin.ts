@@ -33,4 +33,4 @@ export const getNextMarginSize = (margin: MarginIdType) => {
 export const getMarginClass = (margin: MarginIdType | undefined) =>
     margin
         ? allMargins.filter(x => equalsIgnoreCase(x.id, margin)).map(x => x.klass)[0]
-        : compact.klass;
+        : undefined;

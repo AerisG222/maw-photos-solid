@@ -1,6 +1,5 @@
 import { lazy } from "solid-js";
-import { AppRouteDefinition, AreaAbout } from "../_models/AppRouteDefinition";
-import { routeMatch } from "../_models/utils/RouteUtils";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
 const basePath = "/about";
 
@@ -44,6 +43,5 @@ export const about: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import("./AboutLayout")),
-    doesPathMatch: path => routeMatch(path, basePath, AreaAbout),
     children: [aboutRedirect, aboutHelp, aboutReleaseNotes, aboutAndroid]
 };

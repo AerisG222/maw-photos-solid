@@ -1,7 +1,6 @@
 import { lazy } from "solid-js";
 
-import { AppRouteDefinition, AreaAuth } from "../_models/AppRouteDefinition";
-import { routeMatch } from "../_models/utils/RouteUtils";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
 const basePath = "/login";
 
@@ -16,6 +15,5 @@ export const login: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     name: "Auth",
-    doesPathMatch: path => routeMatch(path, basePath, AreaAuth),
     children: [loginPage]
 };

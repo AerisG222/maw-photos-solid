@@ -1,6 +1,5 @@
 import { lazy } from "solid-js";
-import { AppRouteDefinition, AreaSettings } from "../_models/AppRouteDefinition";
-import { routeMatch } from "../_models/utils/RouteUtils";
+import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
 const basePath = "/settings";
 
@@ -46,6 +45,5 @@ export const settings: AppRouteDefinition = {
     absolutePath: basePath,
     path: basePath,
     component: lazy(() => import("./Settings")),
-    doesPathMatch: path => routeMatch(path, basePath, AreaSettings),
     children: [settingsRedirect, settingsCategories, settingsMedia, settingsSearch]
 };

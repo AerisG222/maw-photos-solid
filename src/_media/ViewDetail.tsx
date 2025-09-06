@@ -5,6 +5,8 @@ import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { detailRoute } from "../category/_routes";
 import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
+import { Media } from "../_models/Media";
+import { MediaViewDetail } from "../_models/MediaView";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
@@ -13,14 +15,13 @@ import Sidebar from "./detail/Sidebar";
 import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MainItem from "./MainItem";
-import { Media } from "../_models/Media";
-import { MediaViewDetail } from "../_models/MediaView";
 
 interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
     detailSettings: MediaDetailViewSettingsState;
     showBreadcrumbTitleAsLink: boolean;
+    enableCategoryTeaserChooser: boolean;
 }
 
 const ViewDetail: Component<Props> = props => {
@@ -65,6 +66,7 @@ const ViewDetail: Component<Props> = props => {
                     <Sidebar
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
+                        enableCategoryTeaser={props.enableCategoryTeaserChooser}
                     />
                 }
             >
