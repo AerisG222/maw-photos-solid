@@ -30,8 +30,11 @@ const Detail: Component = () => {
 
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
+    mediaService.startPeriodicFetching();
+
     onCleanup(() => {
         slideshowService.stop();
+        mediaService.stopPeriodicFetching();
     });
 
     return (

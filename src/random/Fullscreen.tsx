@@ -31,9 +31,11 @@ const Fullscreen: Component = () => {
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
     setFullscreen(true);
+    mediaService.startPeriodicFetching();
 
     onCleanup(() => {
         slideshowService.stop();
+        mediaService.stopPeriodicFetching();
         setFullscreen(false);
     });
 

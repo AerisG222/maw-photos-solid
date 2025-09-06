@@ -86,7 +86,8 @@ export const MediaProvider: ParentComponent = props => {
             enabled: authContext.isLoggedIn,
             staleTime: Infinity,
             initialPageParam: 0,
-            getNextPageParam: () => 0
+            getNextPageParam: (lastPage, pages) => pages.length,
+            maxPages: 120
         }));
 
     const mediaQuery = (id: Accessor<Uuid | undefined>) =>

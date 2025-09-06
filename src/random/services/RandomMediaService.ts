@@ -15,6 +15,8 @@ import { detailRoute, fullscreenRoute, gridRoute } from "../_routes";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 
 export class RandomMediaService extends BaseMediaService implements IMediaService {
+    private intervalId?: number = undefined;
+
     constructor(
         navigate: Navigator,
         params: Params,
@@ -78,4 +80,27 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     };
 
     getAvailableRoutes = () => [gridRoute, detailRoute, fullscreenRoute];
+
+    startPeriodicFetching = () => {
+        if (this.intervalId) {
+            return;
+        }
+
+        this.intervalId = setInterval(async () => {
+            await this.mediaListQuery.fetchNextPage();
+        }, 20 * 1000);
+    }
+
+    stopPeriodicFetching = () => {
+        if (!this.intervalId) {
+            return;
+        }
+
+        clearInterval(this.intervalId);
+        this.intervalId = undefined;
+    }
+
+    fetchNextPage = async () => {
+        await this.mediaListQuery.fetchNextPage();
+    }
 }

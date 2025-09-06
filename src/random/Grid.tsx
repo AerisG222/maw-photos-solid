@@ -28,8 +28,11 @@ const Grid: Component = () => {
         mediaPageSettings.slideshowDisplayDurationSeconds
     );
 
+    mediaService.startPeriodicFetching();
+
     onCleanup(() => {
         slideshowService.stop();
+        mediaService.stopPeriodicFetching();
     });
 
     return (
