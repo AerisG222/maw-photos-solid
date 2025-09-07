@@ -1,6 +1,6 @@
 import { Navigator, Params } from "@solidjs/router";
-
 import { UseQueryResult } from "@tanstack/solid-query";
+
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { CategoryMediaService } from "./CategoryMediaService";

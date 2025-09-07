@@ -38,7 +38,6 @@ const MediaLink: Component<Props> = props => {
         "rounded-md": props.rounded
     });
 
-    // todo: getMediaPath(props.route, props.media.categoryId, props.media.id)
     return (
         <A
             classList={getClassList()}
