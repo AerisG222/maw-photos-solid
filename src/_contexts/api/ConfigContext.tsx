@@ -53,7 +53,7 @@ export const ConfigProvider: ParentComponent = props => {
 
     return (
         <ConfigContext.Provider value={{ scalesQuery, getScalesForThumbnail, getScalesForMain }}>
-            <Show when={scalesQuery().isSuccess} fallback={<Loading />}>
+            <Show when={!authContext.isLoggedIn || scalesQuery().isSuccess} fallback={<Loading />}>
                 {props.children}
             </Show>
         </ConfigContext.Provider>
