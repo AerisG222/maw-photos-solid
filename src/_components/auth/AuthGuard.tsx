@@ -21,6 +21,8 @@ const AuthGuard: ParentComponent = props => {
             navigate("/login", { replace: true });
             return false;
         }
+
+        return true;
     });
 
     return <Show when={res.latest}>{c()}</Show>;
