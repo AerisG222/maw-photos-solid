@@ -48,7 +48,7 @@ const ViewGrid: Component<Props> = props => {
                         }
                         moveNext={() => props.mediaService.moveNext()}
                         movePrevious={() => props.mediaService.movePrevious()}
-                        toggleSlideshow={props.slideshowService.toggle}
+                        toggleSlideshow={() => props.slideshowService.toggle()}
                     />
                 </Toolbar>
             }
@@ -59,7 +59,6 @@ const ViewGrid: Component<Props> = props => {
                         top-[82px] left-[0] h-[calc(100vh-82px)]
                         md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
                 >
-                    {/* todo: routeContext.area === AreaRandom && props.gridSettings.showMainBreadcrumbs */}
                     <Show when={props.showBreadcrumbsOnMedia}>
                         <CategoryBreadcrumb
                             showTitleAsLink={true}

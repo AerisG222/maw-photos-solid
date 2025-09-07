@@ -31,7 +31,7 @@ const Grid: Component = () => {
     });
 
     return (
-        <Show when={cq.data}>
+        <Show when={cq.data && mq.data}>
             <ViewGrid
                 mediaService={mediaService}
                 slideshowService={slideshowService}

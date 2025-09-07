@@ -30,7 +30,7 @@ const ViewFullscreen: Component<Props> = props => {
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
-                            toggleSlideshow={props.slideshowService.toggle}
+                            toggleSlideshow={() => props.slideshowService.toggle()}
                         />
                     </Toolbar>
                 }
