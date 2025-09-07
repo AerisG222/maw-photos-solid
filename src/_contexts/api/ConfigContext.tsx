@@ -41,15 +41,44 @@ export const ConfigProvider: ParentComponent = props => {
             ?.data?.filter(s => s.fillsDimensions && s.width >= thumbSize.width)
             ?.sort(sortScalesDescendingInSize) ?? [];
 
-    const getScalesForMain = () =>
-        scalesQuery()
-            ?.data?.filter(
-                s =>
-                    !s.fillsDimensions &&
-                    !(s.code === "src") &&
-                    (s.width <= windowSizeContext.width || s.height <= windowSizeContext.height)
-            )
-            ?.sort(sortScalesDescendingInSize) ?? [];
+    const shouldIncludePriorScale = (currScale: Scale) => {
+        const threshold = 0.2;
+        const heightDiffPct = windowSizeContext.height / currScale.height;
+        const widthDiffPct = windowSizeContext.width / currScale.width;
+
+        return heightDiffPct > threshold && widthDiffPct > threshold;
+    };
+
+    const getScalesForMain = () => {
+        const results: Scale[] = [];
+        let priorScale: Scale | undefined;
+        const scales = scalesQuery()?.data;
+
+        if (scales) {
+            for (const scale of scales) {
+                if (scale.fillsDimensions || scale.code === "src") {
+                    continue;
+                }
+
+                if (
+                    scale.height > windowSizeContext.height &&
+                    scale.width > windowSizeContext.width
+                ) {
+                    priorScale = scale;
+                    continue;
+                }
+
+                if (priorScale && shouldIncludePriorScale(scale)) {
+                    results.push(priorScale);
+                    priorScale = undefined;
+                }
+
+                results.push(scale);
+            }
+        }
+
+        return results;
+    };
 
     return (
         <ConfigContext.Provider value={{ scalesQuery, getScalesForThumbnail, getScalesForMain }}>
