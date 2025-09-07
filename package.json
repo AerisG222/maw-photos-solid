@@ -22,6 +22,7 @@
         "@iconify/tailwind4": "^1.0.6",
         "@solidjs/testing-library": "^0.8.10",
         "@tailwindcss/vite": "^4.1.13",
+        "@tanstack/eslint-plugin-query": "^5.86.0",
         "@types/google.maps": "^3.58.1",
         "daisyui": "^5.1.7",
         "eslint": "^9.35.0",

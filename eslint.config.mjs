@@ -1,6 +1,7 @@
 import eslint from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
 import solidPlugin from "eslint-plugin-solid";
+import pluginQuery from '@tanstack/eslint-plugin-query'
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -16,6 +17,7 @@ export default defineConfig(
 
         plugins: {
             ["@typescript-eslint"]: tseslint.plugin,
+            '@tanstack/query': pluginQuery,
             solid: solidPlugin,
         },
 
@@ -35,6 +37,7 @@ export default defineConfig(
         },
 
         rules: {
+            '@tanstack/query/exhaustive-deps': 'error',
             ...solidPlugin.configs.recommended.rules,
 
             // Note: you must disable the base rule as it can report incorrect errors
