@@ -14,26 +14,12 @@ import SearchResultStatus from "./components/SearchResultStatus";
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
-    const [state, { categorySearchQuery }] = useSearchContext();
+    const [state, { categorySearchQuery, allSearchResults }] = useSearchContext();
     const [searchQuery, setSearchQuery] = createSignal(categorySearchQuery(state.activeTerm));
 
     createEffect(() => {
         setSearchQuery(categorySearchQuery(state.activeTerm));
     });
-
-    const allCategories = () => {
-        const cats: Category[] = [];
-
-        if (searchQuery().isSuccess) {
-            for (const page of searchQuery().data?.pages ?? []) {
-                if (page) {
-                    cats.push(...page.results);
-                }
-            }
-        }
-
-        return cats;
-    };
 
     return (
         <Layout
@@ -49,7 +35,7 @@ const ViewGrid: Component = () => {
             </div>
 
             <div class="flex gap-2 flex-wrap place-content-center my-4">
-                <For each={allCategories()}>
+                <For each={allSearchResults(searchQuery()) ?? []}>
                     {(category, idx) => (
                         <CategoryCard
                             category={category}

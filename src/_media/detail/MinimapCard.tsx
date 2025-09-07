@@ -1,4 +1,11 @@
-import { Component, createEffect, createMemo, createSignal, onMount } from "solid-js";
+import {
+    Component,
+    createEffect,
+    createMemo,
+    createResource,
+    createSignal,
+    onMount
+} from "solid-js";
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
@@ -10,13 +17,12 @@ interface Props {
 }
 
 const MinimapCard: Component<Props> = props => {
+    const [isMounted, setIsMounted] = createSignal(false);
     const { gpsQuery } = useMediaContext();
     const [infoState, { setMinimapMapType, setMinimapZoom }] = useMediaInfoPanelSettingsContext();
 
     const gps = gpsQuery(() => props.activeMedia!.id);
-    const effectiveGps = createMemo(() =>
-        gps.data?.override ? gps.data.override : gps.data?.recorded
-    );
+    const effectiveGps = createMemo(() => gps.data?.override ?? gps.data?.recorded);
 
     const defaultMapOptions = {
         controlSize: 24,
@@ -67,14 +73,20 @@ const MinimapCard: Component<Props> = props => {
         }
     };
 
-    onMount(() => {
-        initMap();
+    createResource(isMounted, async () => {
+        if (isMounted()) {
+            await initMap();
+        }
     });
 
     createEffect(() => {
         if (initialized() && gps.data) {
             updateMap();
         }
+    });
+
+    onMount(() => {
+        setIsMounted(true);
     });
 
     return <div class="h-[320px] w-full" ref={el} />;

@@ -26,6 +26,12 @@ export type SearchContextValue = [
         categorySearchQuery: (
             query: string
         ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
+        allSearchResults: (
+            searchQuery: UseInfiniteQueryResult<
+                InfiniteData<SearchResults<Category> | undefined>,
+                Error
+            >
+        ) => Category[];
     }
 ];
 
@@ -51,6 +57,25 @@ export const SearchProvider: ParentComponent = props => {
         setSearchState({ activeTerm });
     };
 
+    const allSearchResults = (
+        searchQuery: UseInfiniteQueryResult<
+            InfiniteData<SearchResults<Category> | undefined>,
+            Error
+        >
+    ) => {
+        const cats: Category[] = [];
+
+        if (searchQuery.isSuccess) {
+            for (const page of searchQuery.data?.pages ?? []) {
+                if (page) {
+                    cats.push(...page.results);
+                }
+            }
+        }
+
+        return cats;
+    };
+
     return (
         <SearchContext.Provider
             value={[
@@ -60,7 +85,8 @@ export const SearchProvider: ParentComponent = props => {
                     setSearchTerm,
                     clearActiveTerm,
                     setActiveTerm,
-                    categorySearchQuery
+                    categorySearchQuery,
+                    allSearchResults
                 }
             ]}
         >

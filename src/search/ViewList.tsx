@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, createEffect, createSignal, For } from "solid-js";
 
 import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
@@ -13,7 +13,12 @@ import SearchResultStatus from "./components/SearchResultStatus";
 
 const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();
-    const [searchContext] = useSearchContext();
+    const [state, { categorySearchQuery, allSearchResults }] = useSearchContext();
+    const [searchQuery, setSearchQuery] = createSignal(categorySearchQuery(state.activeTerm));
+
+    createEffect(() => {
+        setSearchQuery(categorySearchQuery(state.activeTerm));
+    });
 
     return (
         <Layout
@@ -29,7 +34,7 @@ const ViewList: Component = () => {
             </div>
 
             <div class="my-4">
-                <For each={searchContext.categories}>
+                <For each={allSearchResults(searchQuery()) ?? []}>
                     {(category, idx) => (
                         <CategoryListItem
                             category={category}
@@ -41,7 +46,10 @@ const ViewList: Component = () => {
                 </For>
             </div>
 
-            <SearchResultStatus />
+            <SearchResultStatus
+                hasMore={searchQuery().hasNextPage}
+                continueSearch={() => searchQuery().fetchNextPage()}
+            />
         </Layout>
     );
 };

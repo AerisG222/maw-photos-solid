@@ -1,4 +1,4 @@
-import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
+import { Component, Show, createEffect, createResource, createSignal, onMount } from "solid-js";
 
 import { MediaMapViewSettingsState } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
@@ -16,6 +16,7 @@ interface Props {
 }
 
 const ViewMap: Component<Props> = props => {
+    const [isMounted, setIsMounted] = createSignal(false);
     const [initialized, setInitialized] = createSignal(false);
     const [mapReady, setMapReady] = createSignal(false);
     let el: HTMLDivElement | undefined;
@@ -93,8 +94,10 @@ const ViewMap: Component<Props> = props => {
         }
     };
 
-    onMount(() => {
-        initMap();
+    createResource(isMounted, async () => {
+        if (isMounted()) {
+            await initMap();
+        }
     });
 
     createEffect(() => {
@@ -107,6 +110,10 @@ const ViewMap: Component<Props> = props => {
         if (mapReady()) {
             updateMap();
         }
+    });
+
+    onMount(() => {
+        setIsMounted(true);
     });
 
     return (

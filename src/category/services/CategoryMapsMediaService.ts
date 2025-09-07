@@ -96,10 +96,8 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
 
     mediaWithGps = createMemo(() => {
         if (
-            this.mediaListQuery &&
-            this.mediaListQuery.isSuccess &&
-            this.gpsListQuery &&
-            this.gpsListQuery.isSuccess
+            this.mediaListQuery?.isSuccess &&
+            this.gpsListQuery?.isSuccess
         ) {
             return this.getGpsList().map(
                 g =>
