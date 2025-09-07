@@ -14,10 +14,10 @@ self.addEventListener("activate", async event => {
 self.addEventListener("fetch", function (event) {
     const url = event.request.url.toLowerCase();
 
-    // make sure request is for assets on *our* site, so this is managed in one place
+    // make sure request is for media assets on *our* site
     if (
-        !url.includes("mikeandwan.us") ||
         !url.includes("/assets/") ||
+        !url.includes("media.mikeandwan.us") ||
         event.request.headers.has("Authorization")
     ) {
         return;
