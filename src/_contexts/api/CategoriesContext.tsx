@@ -105,25 +105,23 @@ export const CategoriesProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["categories", "year", year()],
             queryFn: () => fetchCategoriesForYear(year()),
-            enabled: authContext.isLoggedIn,
+            enabled: year() > 0 && authContext.isLoggedIn,
             staleTime: 1 * 60 * 1000
         }));
 
     const categoryQuery = (id: Accessor<Uuid>) =>
-        id()
-            ? useQuery(() => ({
-                  queryKey: ["categories", id()],
-                  queryFn: () => fetchCategory(id()),
-                  enabled: authContext.isLoggedIn,
-                  staleTime: 5 * 60 * 1000
-              }))
-            : undefined;
+        useQuery(() => ({
+            queryKey: ["categories", id()],
+            queryFn: () => fetchCategory(id()),
+            enabled: id() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
 
     const categoryMediaQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
             queryKey: ["categories", id(), "media"],
             queryFn: () => fetchCategoryMedia(id()),
-            enabled: authContext.isLoggedIn,
+            enabled: id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
         }));
 
@@ -131,7 +129,7 @@ export const CategoriesProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["categories", id(), "gps"],
             queryFn: () => fetchCategoryMediaGps(id()),
-            enabled: authContext.isLoggedIn,
+            enabled: id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
         }));
 
@@ -173,6 +171,3 @@ export const useCategoriesContext = () => {
 
     throw new Error("Categories context not provided by ancestor component!");
 };
-function cleanupDatesFromApi(category: Category) {
-    throw new Error("Function not implemented.");
-}

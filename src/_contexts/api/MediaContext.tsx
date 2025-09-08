@@ -36,11 +36,7 @@ export const MediaProvider: ParentComponent = props => {
     const queryClient = useQueryClient();
 
     const fetchMedia = async (id?: Uuid) =>
-        id
-            ? runWithAccessToken(getToken, accessToken =>
-                  queryApi<Media>(accessToken, `media/${id}`)
-              )
-            : undefined;
+        runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
 
     const fetchRandom = async (count: number) =>
         runWithAccessToken(getToken, accessToken =>
@@ -82,8 +78,8 @@ export const MediaProvider: ParentComponent = props => {
     const randomMediaQuery = (count: number) =>
         useInfiniteQuery(() => ({
             queryKey: ["media", "random"],
-            queryFn: data => fetchRandom(count),
-            enabled: authContext.isLoggedIn,
+            queryFn: () => fetchRandom(count),
+            enabled: count > 0 && authContext.isLoggedIn,
             staleTime: Infinity,
             initialPageParam: 0,
             getNextPageParam: (lastPage, pages) => pages.length,
@@ -94,7 +90,7 @@ export const MediaProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["media", id()],
             queryFn: () => fetchMedia(id()),
-            enabled: authContext.isLoggedIn,
+            enabled: id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
         }));
 
@@ -102,7 +98,7 @@ export const MediaProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["media", id(), "metadata"],
             queryFn: () => fetchMetadata(id()),
-            enabled: authContext.isLoggedIn,
+            enabled: id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
         }));
 
@@ -110,14 +106,14 @@ export const MediaProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["media", id(), "comments"],
             queryFn: () => fetchComments(id()),
-            enabled: authContext.isLoggedIn
+            enabled: id() && authContext.isLoggedIn
         }));
 
     const gpsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
             queryKey: ["media", id(), "gps"],
             queryFn: () => fetchGps(id()),
-            enabled: authContext.isLoggedIn,
+            enabled: id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
         }));
 

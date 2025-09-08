@@ -21,11 +21,9 @@ export const StatsProvider: ParentComponent = props => {
         runWithAccessToken(getToken, accessToken => queryApi<YearStat[]>(accessToken, "stats"));
 
     const fetchStatsForYear = async (year: number) =>
-        year
-            ? runWithAccessToken(getToken, accessToken =>
-                  queryApi<CategoryStat[]>(accessToken, `stats/${year}`)
-              )
-            : [];
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<CategoryStat[]>(accessToken, `stats/${year}`)
+        );
 
     const statsByYearQuery = () =>
         useQuery(() => ({
@@ -39,7 +37,7 @@ export const StatsProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["stats", year()],
             queryFn: () => fetchStatsForYear(year()),
-            enabled: authContext.isLoggedIn,
+            enabled: year() > 0 && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
         }));
 

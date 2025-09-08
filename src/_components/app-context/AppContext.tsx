@@ -1,5 +1,6 @@
 import { ParentComponent } from "solid-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
@@ -10,7 +11,6 @@ import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext"
 import { MediaProvider } from "../../_contexts/api/MediaContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 

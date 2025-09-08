@@ -4,7 +4,6 @@ import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/Cat
 import { Category } from "../../_models/Category";
 import { defaultGridThumbnailSize } from "../../_models/ThumbnailSize";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
-import { useConfigContext } from "../../_contexts/api/ConfigContext";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
 import YearHeading from "./YearHeading";
@@ -17,7 +16,6 @@ interface Props {
 
 const YearGrid: Component<Props> = props => {
     const [settings] = useCategoryGridViewSettingsContext();
-    const { getScalesForThumbnail } = useConfigContext();
 
     return (
         <>
