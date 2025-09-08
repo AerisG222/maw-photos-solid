@@ -1,6 +1,7 @@
 import { createContext, createResource, ParentComponent, Show, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
+import { useNavigate } from "@solidjs/router";
 
 export interface AuthState {
     readonly isLoggedIn: boolean;
@@ -15,8 +16,8 @@ const defaultAuth: AuthState = {
 export type AuthContextValue = [
     state: AuthState,
     actions: {
-        login: () => Promise<void>;
-        logout: () => void;
+        login: (returnUrl: string | undefined) => Promise<void>;
+        logout: () => Promise<void>;
         isAdmin: () => boolean;
         getToken: () => Promise<string | undefined>;
     }
@@ -26,6 +27,7 @@ const AuthContext = createContext<AuthContextValue>();
 
 // inspiration: https://github.com/rturnq/solid-auth0/blob/master/src/components.tsx
 export const AuthProvider: ParentComponent = props => {
+    const navigate = useNavigate();
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
@@ -58,7 +60,10 @@ export const AuthProvider: ParentComponent = props => {
 
         if (isRedirect(url)) {
             const response = await client.handleRedirectCallback(url);
+
             window.history.replaceState(undefined, "", redirectUrl);
+
+            navigate(response.appState?.returnTo ?? "/");
         }
 
         setState({ isLoggedIn: await client.isAuthenticated() });
@@ -67,10 +72,12 @@ export const AuthProvider: ParentComponent = props => {
             // https://steven-giesel.com/blogPost/caa09b13-83e4-452e-899f-598c66181e63
             // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
             // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
-            navigator.serviceWorker.addEventListener("message", async event => {
+            navigator.serviceWorker.addEventListener("message", event => {
                 if (event.data === "requestToken") {
-                    const token = await client.getTokenSilently();
-                    event.ports[0].postMessage(token);
+                    client
+                        .getTokenSilently()
+                        .then(token => event.ports[0].postMessage(token))
+                        .catch(err => console.log(err));
                 }
             });
 
@@ -80,16 +87,21 @@ export const AuthProvider: ParentComponent = props => {
         return client;
     });
 
-    const login = async () => {
+    const login = async (returnUrl: string | undefined) => {
+        const destAfterLogin = returnUrl ?? window.location.pathname;
+
         try {
             await auth0Client()!.loginWithRedirect({
-                authorizationParams: authParams
+                authorizationParams: authParams,
+                appState: { returnTo: destAfterLogin }
             });
         } catch (err) {
             console.error(err);
         }
     };
-    const logout = () => {};
+    const logout = async () => {
+        await auth0Client()?.logout();
+    };
     const isAdmin = () => false;
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
