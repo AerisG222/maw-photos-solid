@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { categories } from "../../categories/_routes";
 import { search } from "../../search/_routes";
@@ -7,12 +7,15 @@ import { stats } from "../../stats/_routes";
 import { about } from "../../about/_routes";
 import { settings } from "../../settings/_routes";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
+import { useAuthContext } from "../../_contexts/AuthContext";
 
 import PrimaryNavLink from "./PrimaryNavLink";
 import ThemeSelector from "./ThemeSelector";
 import PrimaryNavCollapseButton from "./PrimaryNavCollapseButton";
+import UserInfo from "./UserInfo";
 
 const PrimaryNav: Component = () => {
+    const [authContext] = useAuthContext();
     const [state] = useAppSettingsContext();
 
     return (
@@ -23,6 +26,12 @@ const PrimaryNav: Component = () => {
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />
 
             <span class="flex-grow" />
+
+            <Show when={authContext.isLoggedIn}>
+                <UserInfo showTitle={!state.isPrimaryNavCollapsed} />
+
+                <div class="divider my-0 h-auto" />
+            </Show>
 
             <ThemeSelector showTitle={!state.isPrimaryNavCollapsed} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={about} />

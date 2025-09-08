@@ -3,6 +3,8 @@ import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 import { useNavigate } from "@solidjs/router";
 
+import { loginPage, logout as logoutPage } from "../auth/_routes";
+
 export interface AuthState {
     readonly isLoggedIn: boolean;
     readonly user: User | undefined;
@@ -17,7 +19,7 @@ export type AuthContextValue = [
     state: AuthState,
     actions: {
         login: (returnUrl: string | undefined) => Promise<void>;
-        logout: () => Promise<void>;
+        logout: (returnUrl: string | undefined) => Promise<void>;
         isAdmin: () => boolean;
         getToken: () => Promise<string | undefined>;
     }
@@ -63,7 +65,13 @@ export const AuthProvider: ParentComponent = props => {
 
             window.history.replaceState(undefined, "", redirectUrl);
 
-            navigate(response.appState?.returnTo ?? "/");
+            const returnTo = response.appState?.returnTo as string | undefined;
+
+            if (returnTo && returnTo !== loginPage.absolutePath) {
+                navigate(returnTo);
+            } else {
+                navigate("/");
+            }
         }
 
         setState({ isLoggedIn: await client.isAuthenticated() });
@@ -99,10 +107,18 @@ export const AuthProvider: ParentComponent = props => {
             console.error(err);
         }
     };
-    const logout = async () => {
-        await auth0Client()?.logout();
+
+    const logout = async (returnUrl: string | undefined) => {
+        const destAfterLogout = returnUrl ?? `${window.location.origin}${logoutPage.absolutePath}`;
+
+        await auth0Client()?.logout({
+            clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+            logoutParams: { returnTo: destAfterLogout }
+        });
     };
+
     const isAdmin = () => false;
+
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
     return (
