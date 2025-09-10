@@ -31,7 +31,7 @@ const CategoriesRedirect: Component = () => {
             updateSearchFromUrl(search, location.search);
         }
 
-        navigate(buildPath(route, undefined, search));
+        navigate(buildPath(route, undefined, search), { replace: true });
     }
 
     return <></>;

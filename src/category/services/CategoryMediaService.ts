@@ -31,7 +31,8 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         this.navigate(
             this.getEntryPathByView(view)
                 .replace(":categoryId", this.params.categoryId)
-                .replace("/:id?", "")
+                .replace("/:id?", ""),
+            { replace: true }
         );
     };
 
