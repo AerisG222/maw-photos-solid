@@ -35,20 +35,12 @@ const GridView: Component = () => {
     const categoriesToDisplay = createMemo(() => {
         if(allCategories() && !allCategories()!.some(result => result.isPending)) {
             return allCategories()!.reduce<Record<number, Category[]>>((acc, result) => {
-                    if(result.data) {
-                        for(const cat of result.data) {
-                            const year = cat.effectiveDate.getFullYear();
+                if(result.data) {
+                    acc[result.data.year] = result.data.categories;
+                }
 
-                            if(!acc[year]) {
-                                acc[year] = [];
-                            }
-
-                            acc[year]?.push(cat);
-                        }
-                    }
-
-                    return acc;
-                }, {});
+                return acc;
+            }, {});
         }
 
         return undefined;
@@ -66,12 +58,12 @@ const GridView: Component = () => {
             >
                 <CategoryFilterBar />
 
-                <For each={Object.keys(categoriesToDisplay()!).sort().reverse()}>
+                <For each={Object.keys(categoriesToDisplay()!).map(x => parseInt(x, 10)).sort().reverse()}>
                     {(year, idx) => (
                         <YearGrid
                             year={year}
-                            categories={categoriesToDisplay()[year] ?? []}
-                            enableEagerLoading={idx() === 0}
+                            categories={categoriesToDisplay()![year] ?? []}
+                            enableEagerLoading={idx() <= 3}
                         />
                     )}
                 </For>

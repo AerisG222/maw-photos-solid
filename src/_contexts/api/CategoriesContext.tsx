@@ -15,11 +15,12 @@ import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { Uuid } from "../../_models/Uuid";
+import { CategoriesForYearResult } from './models/CategoriesForYearResult';
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
-    categoriesForAllYearsQuery: (years: number[]) => UseQueryResult<Category[], Error>[];
-    categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
+    categoriesForAllYearsQuery: (years: number[]) => UseQueryResult<CategoriesForYearResult, Error>[];
+    categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<CategoriesForYearResult, Error>;
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category | undefined, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
     categoryMediaGpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail[], Error>;
@@ -51,7 +52,7 @@ export const CategoriesProvider: ParentComponent = props => {
                 cleanupDatesFromApi(c);
             }
 
-            return categories;
+            return {year, categories};
         });
 
     const fetchCategory = async (id: Uuid) =>
