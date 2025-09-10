@@ -3,6 +3,7 @@ import {
     InfiniteData,
     useInfiniteQuery,
     UseInfiniteQueryResult,
+    useQueries,
     useQuery,
     UseQueryResult
 } from "@tanstack/solid-query";
@@ -17,6 +18,7 @@ import { Uuid } from "../../_models/Uuid";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
+    categoriesForAllYearsQuery: (years: number[]) => UseQueryResult<Category[], Error>[];
     categoriesForYearQuery: (year: Accessor<number>) => UseQueryResult<Category[], Error>;
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category | undefined, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
@@ -101,6 +103,15 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 15 * 60 * 1000
         }));
 
+    const categoriesForAllYearsQuery = (years: number[]) =>
+        useQueries(() => ({
+            queries: years.map(year => ({
+                queryKey: ["categories", "year", year],
+                queryFn: () => fetchCategoriesForYear(year),
+                enabled: years && years.length > 0
+            }))
+        }));
+
     const categoriesForYearQuery = (year: Accessor<number>) =>
         useQuery(() => ({
             queryKey: ["categories", "year", year()],
@@ -150,6 +161,7 @@ export const CategoriesProvider: ParentComponent = props => {
         <CategoriesContext.Provider
             value={{
                 yearsQuery,
+                categoriesForAllYearsQuery,
                 categoriesForYearQuery,
                 categoryQuery,
                 categoryMediaQuery,
