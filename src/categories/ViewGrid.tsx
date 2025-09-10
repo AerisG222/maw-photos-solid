@@ -1,9 +1,7 @@
-import { Component, createMemo, createResource, For, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
-import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
-import { Category } from '../_models/Category';
+import { useCategoriesByYear } from "./useCategoriesByYear";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -13,38 +11,8 @@ import Layout from "../_components/layout/Layout";
 import Loading from "../_components/loading/Loading";
 
 const GridView: Component = () => {
-    const { yearsQuery, categoriesForAllYearsQuery } =
-        useCategoriesContext();
-    const [filter] = useCategoryFilterSettingsContext();
     const [settings] = useCategoryGridViewSettingsContext();
-    const years = yearsQuery();
-
-    const [allCategories] = createResource(
-        () => ({yearFilter: filter.yearFilter, yearsReady: years.isSuccess}),
-        () => {
-            if(filter.yearFilter === "all") {
-                if(years.isSuccess) {
-                    return categoriesForAllYearsQuery(years.data);
-                }
-            } else {
-                return categoriesForAllYearsQuery([filter.yearFilter]);
-            }
-        }
-    );
-
-    const categoriesToDisplay = createMemo(() => {
-        if(allCategories() && !allCategories()!.some(result => result.isPending)) {
-            return allCategories()!.reduce<Record<number, Category[]>>((acc, result) => {
-                if(result.data) {
-                    acc[result.data.year] = result.data.categories;
-                }
-
-                return acc;
-            }, {});
-        }
-
-        return undefined;
-    });
+    const { categoriesToDisplay } = useCategoriesByYear();
 
     return (
         <Show when={categoriesToDisplay()} fallback={<Loading />}>

@@ -1,8 +1,7 @@
 import { Component, For } from "solid-js";
 
 import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
-import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
-import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
+import { useCategoriesByYear } from './useCategoriesByYear';
 
 import Toolbar from "./Toolbar";
 import ListToolbar from "./ToolbarList";
@@ -12,10 +11,7 @@ import Layout from "../_components/layout/Layout";
 
 const ListView: Component = () => {
     const [settings] = useCategoryListViewSettingsContext();
-    const [filter] = useCategoryFilterSettingsContext();
-    const { categoriesForYearQuery } = useCategoriesContext();
-
-    const categories = categoriesForYearQuery(() => filter.yearFilter as number);
+    const { categoriesToDisplay } = useCategoriesByYear();
 
     return (
         <Layout
@@ -28,11 +24,11 @@ const ListView: Component = () => {
         >
             <CategoryFilterBar />
 
-            <For each={[filter.yearFilter]}>
+            <For each={Object.keys(categoriesToDisplay()!).map(x => parseInt(x, 10)).sort().reverse()}>
                 {(year, idx) => (
                     <YearList
                         year={year}
-                        categories={categories.data}
+                        categories={categoriesToDisplay()![year] ?? []}
                         enableEagerLoading={idx() === 0}
                     />
                 )}
