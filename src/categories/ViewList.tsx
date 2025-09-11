@@ -1,7 +1,7 @@
 import { Component, For } from "solid-js";
 
 import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
-import { useCategoriesByYear } from './useCategoriesByYear';
+import { useCategoriesByYear } from './hooks/useCategoriesByYear';
 
 import Toolbar from "./Toolbar";
 import ListToolbar from "./ToolbarList";

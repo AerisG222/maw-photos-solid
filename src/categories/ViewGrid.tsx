@@ -1,7 +1,7 @@
 import { Component, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
-import { useCategoriesByYear } from "./useCategoriesByYear";
+import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";

@@ -27,60 +27,60 @@ interface Props {
 
 const ViewGrid: Component<Props> = props => {
     return (
-        <Layout
-            margin={props.gridSettings.margin}
-            toolbar={
-                <Toolbar
-                    mediaService={props.mediaService}
-                    activeCategory={props.mediaService.getActiveCategory()}
-                    activeMedia={props.mediaService.getActiveMedia()}
-                >
-                    <GridToolbar
+        <Show when={props.mediaService.getMediaList()}>
+            <Layout
+                margin={props.gridSettings.margin}
+                toolbar={
+                    <Toolbar
+                        mediaService={props.mediaService}
+                        activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
-                        activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
-                        activeMediaIsLast={props.mediaService.isActiveMediaLast()}
-                        slideshowIsPlaying={props.slideshowService.isPlaying()}
-                        enableToggleBreadcrumbsOnActiveMedia={
-                            props.enableToggleBreadcrumbsOnActiveMedia
-                        }
-                        enableToggleBreadcrumbsOnInactiveMedia={
-                            props.enableToggleBreadcrumbsOnInactiveMedia
-                        }
-                        moveNext={() => props.mediaService.moveNext()}
-                        movePrevious={() => props.mediaService.movePrevious()}
-                        toggleSlideshow={() => props.slideshowService.toggle()}
-                    />
-                </Toolbar>
-            }
-        >
-            <Show when={props.mediaService.getActiveMedia()}>
-                <div
-                    class="absolute z-200 bg-base-100/92
-                        top-[82px] left-[0] h-[calc(100vh-82px)]
-                        md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
-                >
-                    <Show when={props.showBreadcrumbsOnMedia}>
-                        <CategoryBreadcrumb
-                            showTitleAsLink={true}
-                            category={props.mediaService.getActiveCategory()}
-                        />
-                    </Show>
-
-                    <A
-                        class="flex h-full"
-                        href={props.mediaService.getEntryPathByView(MediaViewGrid)}
-                        onClick={() => props.slideshowService.stop()}
                     >
-                        <MainItem
-                            media={props.mediaService.getActiveMedia()!}
+                        <GridToolbar
+                            activeMedia={props.mediaService.getActiveMedia()}
+                            activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
+                            activeMediaIsLast={props.mediaService.isActiveMediaLast()}
+                            slideshowIsPlaying={props.slideshowService.isPlaying()}
+                            enableToggleBreadcrumbsOnActiveMedia={
+                                props.enableToggleBreadcrumbsOnActiveMedia
+                            }
+                            enableToggleBreadcrumbsOnInactiveMedia={
+                                props.enableToggleBreadcrumbsOnInactiveMedia
+                            }
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
+                            toggleSlideshow={() => props.slideshowService.toggle()}
                         />
-                    </A>
-                </div>
-            </Show>
+                    </Toolbar>
+                }
+            >
+                <Show when={props.mediaService.getActiveMedia()}>
+                    <div
+                        class="absolute z-200 bg-base-100/92
+                        top-[82px] left-[0] h-[calc(100vh-82px)]
+                        md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
+                    >
+                        <Show when={props.showBreadcrumbsOnMedia}>
+                            <CategoryBreadcrumb
+                                showTitleAsLink={true}
+                                category={props.mediaService.getActiveCategory()}
+                            />
+                        </Show>
 
-            <Show when={props.mediaService.getMediaList()}>
+                        <A
+                            class="flex h-full"
+                            href={props.mediaService.getEntryPathByView(MediaViewGrid)}
+                            onClick={() => props.slideshowService.stop()}
+                        >
+                            <MainItem
+                                media={props.mediaService.getActiveMedia()!}
+                                moveNext={() => props.mediaService.moveNext()}
+                                movePrevious={() => props.mediaService.movePrevious()}
+                            />
+                        </A>
+                    </div>
+                </Show>
+
                 <div>
                     <Show when={props.showBreadcrumbsOnGrid}>
                         <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
@@ -95,8 +95,8 @@ const ViewGrid: Component<Props> = props => {
                         activeRoute={gridRoute}
                     />
                 </div>
-            </Show>
-        </Layout>
+            </Layout>
+        </Show>
     );
 };
 

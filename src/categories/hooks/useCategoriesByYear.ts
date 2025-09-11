@@ -1,8 +1,8 @@
 import { createMemo, createResource } from "solid-js";
 
-import { Category } from "../_models/Category";
-import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
-import { useCategoryFilterSettingsContext } from '../_contexts/settings/CategoryFilterSettingsContext';
+import { Category } from "../../_models/Category";
+import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
+import { useCategoryFilterSettingsContext } from '../../_contexts/settings/CategoryFilterSettingsContext';
 
 export const useCategoriesByYear = () => {
     const [filter] = useCategoryFilterSettingsContext();
