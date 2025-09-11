@@ -3,6 +3,8 @@ import { Component, Show, createEffect, createResource, createSignal, onMount } 
 import { MediaMapViewSettingsState } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
+import { GpsCoordinate } from "../_models/GpsCoordinate";
+import { Uuid } from "../_models/Uuid";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
@@ -17,39 +19,37 @@ interface Props {
 
 const ViewMap: Component<Props> = props => {
     const [isMounted, setIsMounted] = createSignal(false);
-    const [initialized, setInitialized] = createSignal(false);
-    const [mapReady, setMapReady] = createSignal(false);
+    const [markersAdded, setMarkersAdded] = createSignal(false);
     let el: HTMLDivElement | undefined;
+    let map: google.maps.Map;
+    let infoWindow: google.maps.InfoWindow;
+    const markers = new Map<Uuid, unknown>();
 
-    const defaultMapOptions = {
+    const defaultMapOptions = (center: GpsCoordinate) => ({
         controlSize: 24,
-        center: { lat: 0, lng: 0 },
+        center: { lat: center.latitude, lng: center.longitude },
         fullscreenControl: true,
         mapTypeControl: true,
         mapId: "af11584565f27198",
         mapTypeId: props.mapState.mapType,
         zoom: props.mapState.zoom
-    };
+    });
 
-    let map: google.maps.Map;
-    let infoWindow: google.maps.InfoWindow;
-    const markers = new Map();
-
-    async function initMap(): Promise<void> {
+    async function initMap(initialLocation: GpsCoordinate): Promise<void> {
         const { InfoWindow, Map } = (await google.maps.importLibrary(
             "maps"
         )) as google.maps.MapsLibrary;
 
         if (el) {
-            map = new Map(el, defaultMapOptions);
+            const options = defaultMapOptions(initialLocation);
+            map = new Map(el, options);
             map.addListener("zoom_changed", () => props.setZoom(map.getZoom()));
             map.addListener("maptypeid_changed", () => props.setMapType(map.getMapTypeId()));
-
-            google.maps.event.addListenerOnce(map, "idle", () => setMapReady(true));
-
             infoWindow = new InfoWindow({ content: "" });
 
-            setInitialized(true);
+            google.maps.event.addListenerOnce(map, "idle", async () => {
+                await addMarkers();
+            });
         }
     }
 
@@ -75,6 +75,8 @@ const ViewMap: Component<Props> = props => {
 
             markers.set(item.media.id, marker);
         }
+
+        setMarkersAdded(true);
     };
 
     const updateMap = () => {
@@ -94,20 +96,28 @@ const ViewMap: Component<Props> = props => {
         }
     };
 
-    createResource(isMounted, async () => {
-        if (isMounted()) {
-            await initMap();
+    createResource(
+        () => ({
+            isMounted: isMounted(),
+            markersAdded: markersAdded(),
+            isReady: props.mediaService.isReady(),
+            activeGps: props.mediaService.activeMediaGps()
+        }),
+        async ({ isMounted, markersAdded, isReady }) => {
+            if (!markersAdded && isMounted && isReady) {
+                const initial =
+                    props.mediaService.activeMediaGps() ??
+                    props.mediaService.preferredGpsLocation(props.mediaService.mediaWithGps()[0]);
+
+                if (initial) {
+                    await initMap(initial);
+                }
+            }
         }
-    });
+    );
 
     createEffect(() => {
-        if (initialized() && props.mediaService.mediaWithGps().length > 0) {
-            addMarkers();
-        }
-    });
-
-    createEffect(() => {
-        if (mapReady()) {
+        if (markersAdded()) {
             updateMap();
         }
     });
@@ -117,7 +127,7 @@ const ViewMap: Component<Props> = props => {
     });
 
     return (
-        <Show when={props.mediaService.isReady()}>
+        <Show when={() => props.mediaService.isReady()}>
             <Layout
                 xPad={false}
                 toolbar={

@@ -5,7 +5,6 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { CategoryMediaService } from "./CategoryMediaService";
 import { GpsDetail } from "../../_models/GpsDetail";
-import { createMemo } from "solid-js";
 import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { MediaWithGps } from "../../_media/models/MediaWithGps";
 import { MediaView } from "../../_models/MediaView";
@@ -87,33 +86,60 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         }
     };
 
-    isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess;
+    override isActiveMediaFirst = () => {
+        const list = this.mediaWithGps();
+
+        if (!list || list.length === 0) {
+            return true;
+        }
+
+        return list[0].media.id === this.getActiveMedia()?.id;
+    };
+
+    override isActiveMediaLast = () => {
+        const list = this.mediaWithGps();
+
+        if (!list || list.length === 0) {
+            return true;
+        }
+
+        return list[list.length - 1].media.id === this.getActiveMedia()?.id;
+    };
+
+    isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess && !!this.params.id;
 
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 
     preferredGpsLocation = (mediaWithGps: MediaWithGps | undefined): GpsCoordinate | undefined =>
         mediaWithGps?.gps?.override ?? mediaWithGps?.gps?.recorded;
 
-    mediaWithGps = createMemo(() => {
+    mediaWithGps = () => {
         if (
             this.mediaListQuery?.isSuccess &&
             this.gpsListQuery?.isSuccess
         ) {
-            return this.getGpsList().map(
-                g =>
-                    ({
-                        media: this.getMediaList().find(m => m.id === g.mediaId),
-                        gps: g
-                    }) as MediaWithGps
-            );
+            const mediaWithGps: MediaWithGps[] = [];
+
+            // iterate over the original list to maintain sort order that is consistent w/ other views
+            for (const media of this.getMediaList()) {
+                const gps = this.getGpsList().find(g => g.mediaId === media.id);
+
+                if (gps) {
+                    mediaWithGps.push({
+                        media,
+                        gps
+                    });
+                }
+            }
+
+            return mediaWithGps;
         }
 
         return [];
-    });
+    };
 
-    activeMediaGps = createMemo(() =>
+    activeMediaGps = () =>
         this.preferredGpsLocation(
             this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id)
-        )
-    );
+        );
 }
