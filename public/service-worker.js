@@ -58,7 +58,7 @@ function requestTokenFromMainThread() {
 
         self.clients.matchAll().then(clients => {
             if (clients && clients.length) {
-                clients[0].postMessage("requestToken", [channel.port2]);
+                clients[0].postMessage("REQUEST_TOKEN", [channel.port2]);
             }
         });
     });

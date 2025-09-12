@@ -1,4 +1,12 @@
-import { createContext, createResource, ParentComponent, Show, useContext } from "solid-js";
+import {
+    createContext,
+    createResource,
+    onCleanup,
+    onMount,
+    ParentComponent,
+    Show,
+    useContext
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 import { useNavigate } from "@solidjs/router";
@@ -32,6 +40,8 @@ export const AuthProvider: ParentComponent = props => {
     const navigate = useNavigate();
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
+
+    let swMessageHandler: (ev: MessageEvent) => Promise<void>;
 
     const scopes = [
         "openid",
@@ -75,22 +85,7 @@ export const AuthProvider: ParentComponent = props => {
         }
 
         setState({ isLoggedIn: await client.isAuthenticated() });
-
-        if (state.isLoggedIn) {
-            // https://steven-giesel.com/blogPost/caa09b13-83e4-452e-899f-598c66181e63
-            // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
-            // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
-            navigator.serviceWorker.addEventListener("message", event => {
-                if (event.data === "requestToken") {
-                    client
-                        .getTokenSilently()
-                        .then(token => event.ports[0].postMessage(token))
-                        .catch(err => console.log(err));
-                }
-            });
-
-            setState({ user: await client.getUser() });
-        }
+        setState({ user: await client.getUser() });
 
         return client;
     });
@@ -120,6 +115,44 @@ export const AuthProvider: ParentComponent = props => {
     const isAdmin = () => false;
 
     const getToken = async () => await auth0Client()?.getTokenSilently();
+
+    onMount(() => {
+        // https://steven-giesel.com/blogPost/caa09b13-83e4-452e-899f-598c66181e63
+        // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
+        // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
+        if (navigator.serviceWorker) {
+            swMessageHandler = async (ev: MessageEvent) => {
+                const data = ev.data;
+
+                if (data === "REQUEST_TOKEN" && ev.ports?.[0]) {
+                    try {
+                        const token = await getToken();
+                        ev.ports[0].postMessage(token);
+                    } catch (err) {
+                        console.error("AuthContext: failed to get token for SW", err);
+                        ev.ports[0].postMessage(undefined);
+                    }
+                }
+            };
+
+            navigator.serviceWorker.addEventListener("message", swMessageHandler);
+
+            if (!navigator.serviceWorker.controller) {
+                setTimeout(() => {
+                    if (!navigator.serviceWorker.controller) {
+                        console.warn("serviceworker not detected - forcing reload");
+                        window.location.reload();
+                    }
+                }, 300);
+            }
+        }
+    });
+
+    onCleanup(() => {
+        if (navigator.serviceWorker && swMessageHandler) {
+            navigator.serviceWorker.removeEventListener("message", swMessageHandler);
+        }
+    });
 
     return (
         <Show when={auth0Client()}>
