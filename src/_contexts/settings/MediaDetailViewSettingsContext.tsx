@@ -5,15 +5,17 @@ import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/Thu
 import { KEY_SETTINGS_MEDIA_VIEW_DETAIL, loadJson, saveJson } from "./_storage";
 
 export interface MediaDetailViewSettingsState {
-    showBreadcrumbs: boolean;
-    thumbnailSize: ThumbnailSizeIdType;
-    showMediaList: boolean;
+    readonly showBreadcrumbs: boolean;
+    readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly showMediaList: boolean;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
     showBreadcrumbs: true,
     thumbnailSize: defaultGridThumbnailSize,
-    showMediaList: true
+    showMediaList: true,
+    dimThumbnails: true
 };
 
 export type MediaDetailViewSettingsContextValue = [
@@ -22,6 +24,7 @@ export type MediaDetailViewSettingsContextValue = [
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowMediaList: (showMediaList: boolean) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -33,6 +36,7 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
     const setShowMediaList = (showMediaList: boolean) => updateState({ showMediaList });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
 
     const updateState = (update: Partial<MediaDetailViewSettingsState>) => {
         setState(update);
@@ -41,7 +45,10 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
 
     return (
         <MediaDetailViewSettingsContext.Provider
-            value={[state, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize }]}
+            value={[
+                state,
+                { setShowBreadcrumbs, setShowMediaList, setThumbnailSize, setDimThumbnails }
+            ]}
         >
             {props.children}
         </MediaDetailViewSettingsContext.Provider>
@@ -59,7 +66,10 @@ export const useMediaDetailViewSettingsContext = () => {
 };
 
 function loadMediaDetailViewSettings() {
-    return loadJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, defaultMediaDetailViewSettings);
+    return {
+        ...defaultMediaDetailViewSettings,
+        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, defaultMediaDetailViewSettings)
+    };
 }
 
 function saveState(state: MediaDetailViewSettingsState) {

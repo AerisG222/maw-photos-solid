@@ -29,8 +29,16 @@ interface Props {
 }
 
 const GridToolbar: Component<Props> = props => {
-    const [settings, { setShowBreadcrumbs, setShowMainBreadcrumbs, setThumbnailSize, setMargin }] =
-        useMediaGridViewSettingsContext();
+    const [
+        settings,
+        {
+            setShowBreadcrumbs,
+            setShowMainBreadcrumbs,
+            setThumbnailSize,
+            setMargin,
+            setDimThumbnails
+        }
+    ] = useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
 
     const onToggleBreadcrumbs = () => {
@@ -47,6 +55,10 @@ const GridToolbar: Component<Props> = props => {
 
     const onToggleMargins = () => {
         setMargin(getNextMarginSize(settings.margin).id);
+    };
+
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
     };
 
     return (
@@ -71,7 +83,7 @@ const GridToolbar: Component<Props> = props => {
                     <ToolbarButton
                         icon="icon-[ic--round-title]"
                         name="Breadcrumbs"
-                        tooltip="Show / Hide Category Breadcrumbs"
+                        tooltip="Toggle Category Breadcrumbs"
                         shortcutKeys={["t"]}
                         clickHandler={onToggleBreadcrumbs}
                     />
@@ -92,6 +104,14 @@ const GridToolbar: Component<Props> = props => {
                     shortcutKeys={["m"]}
                     clickHandler={onToggleMargins}
                 />
+
+                <ToolbarButton
+                    icon="icon-[mdi--lightbulb-dimmer-50]"
+                    name="Dim Thumbnails"
+                    tooltip="Toggle Thumbnail Dimming"
+                    shortcutKeys={["d"]}
+                    clickHandler={onToggleDimThumbnails}
+                />
             </Show>
 
             <Show when={props.activeMedia}>
@@ -99,7 +119,7 @@ const GridToolbar: Component<Props> = props => {
                     <ToolbarButton
                         icon="icon-[ic--round-title]"
                         name="Breadcrumbs"
-                        tooltip="Show / Hide Category Breadcrumbs"
+                        tooltip="Toggle Category Breadcrumbs"
                         shortcutKeys={["t"]}
                         clickHandler={onToggleMainBreadcrumbs}
                     />

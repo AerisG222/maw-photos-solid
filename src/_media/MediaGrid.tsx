@@ -11,6 +11,7 @@ interface Props {
     mediaLinkBuilder: (media: Media) => string;
     items: Media[];
     thumbnailSize: ThumbnailSizeIdType;
+    dimThumbnails: boolean;
     activeRoute: AppRouteDefinition;
 }
 
@@ -26,6 +27,7 @@ const MediaGrid: Component<Props> = props => {
                         isActiveItem={false} // no need to show highlight state in grid view
                         route={props.activeRoute}
                         thumbnailSize={props.thumbnailSize}
+                        dimThumbnails={props.dimThumbnails}
                         eager={idx() <= EAGER_THRESHOLD}
                     />
                 )}

@@ -7,14 +7,19 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
-    const [settingsContext, { setMargin, setThumbnailSize }] = useSearchListViewSettingsContext();
+    const [settings, { setMargin, setThumbnailSize, setDimThumbnails }] =
+        useSearchListViewSettingsContext();
 
     const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settingsContext.thumbnailSize).id);
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
     };
 
     const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settingsContext.margin).id);
+        setMargin(getNextMarginSize(settings.margin).id);
+    };
+
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
     };
 
     return (
@@ -22,7 +27,7 @@ const ListToolbar: Component = () => {
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
-                tooltip="Toggle Grid Thumbnail Size"
+                tooltip="Toggle Thumbnail Size"
                 clickHandler={onToggleThumbnailSize}
             />
             <ToolbarButton
@@ -30,6 +35,13 @@ const ListToolbar: Component = () => {
                 name="Margins"
                 tooltip="Toggle Category Margins"
                 clickHandler={onToggleMargins}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--lightbulb-dimmer-50]"
+                name="Dim Thumbnails"
+                tooltip="Toggle Thumbnail Dimming"
+                shortcutKeys={["d"]}
+                clickHandler={onToggleDimThumbnails}
             />
         </>
     );

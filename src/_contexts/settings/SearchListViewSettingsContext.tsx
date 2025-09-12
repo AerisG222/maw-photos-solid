@@ -8,11 +8,13 @@ import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from "./_storage";
 export interface SearchListViewSettingsState {
     readonly margin: MarginIdType;
     readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultSearchListViewSettings: SearchListViewSettingsState = {
     margin: defaultMargin,
-    thumbnailSize: defaultGridThumbnailSize
+    thumbnailSize: defaultGridThumbnailSize,
+    dimThumbnails: true
 };
 
 export type SearchListViewSettingsContextValue = [
@@ -20,6 +22,7 @@ export type SearchListViewSettingsContextValue = [
     actions: {
         setMargin: (margin: MarginIdType) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -28,9 +31,9 @@ const SearchListViewSettingsContext = createContext<SearchListViewSettingsContex
 export const SearchListSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({ margin: margin });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) =>
-        updateState({ thumbnailSize: thumbnailSize });
+    const setMargin = (margin: MarginIdType) => updateState({ margin });
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
 
     const updateState = (update: Partial<SearchListViewSettingsState>) => {
         setState(update);
@@ -38,7 +41,9 @@ export const SearchListSettingsProvider: ParentComponent = props => {
     };
 
     return (
-        <SearchListViewSettingsContext.Provider value={[state, { setMargin, setThumbnailSize }]}>
+        <SearchListViewSettingsContext.Provider
+            value={[state, { setMargin, setThumbnailSize, setDimThumbnails }]}
+        >
             {props.children}
         </SearchListViewSettingsContext.Provider>
     );
@@ -55,7 +60,10 @@ export const useSearchListViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings);
+    return {
+        ...defaultSearchListViewSettings,
+        ...loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings)
+    };
 }
 
 function saveState(state: SearchListViewSettingsState) {

@@ -32,6 +32,7 @@ const YearGrid: Component<Props> = props => {
                             }
                             showYears={false}
                             thumbnailSize={settings.thumbnailSize}
+                            dimThumbnails={settings.dimThumbnails}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
                         />
                     )}

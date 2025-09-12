@@ -10,6 +10,7 @@ interface Props {
     href: string;
     media: Media;
     thumbnailSize: ThumbnailSizeIdType;
+    dimThumbnails: boolean;
     rounded: boolean;
     isActiveItem: boolean;
     route: AppRouteDefinition;
@@ -18,29 +19,20 @@ interface Props {
 }
 
 const MediaLink: Component<Props> = props => {
-    const getClassList = () => {
-        return {
-            "cursor-pointer": true,
-            "mr-[0.1rem]": true,
-            "saturate-20": true,
-            "hover:saturate-100": true,
-            "border-1": true,
-            "border-transparent": true,
-            "hover:border-primary": true,
-            "rounded-md": props.rounded,
-            "saturate-100!": props.isActiveItem,
-            "border-primary!": props.isActiveItem
-        };
-    };
-
-    const getImgClassList = () => ({
-        "max-w-none": true,
-        "rounded-md": props.rounded
-    });
-
     return (
         <A
-            classList={getClassList()}
+            classList={{
+                "cursor-pointer": true,
+                "mr-[0.1rem]": true,
+                "saturate-50": props.dimThumbnails,
+                "hover:saturate-100": props.dimThumbnails,
+                "border-1": true,
+                "border-transparent": true,
+                "hover:border-primary": true,
+                "rounded-md": props.rounded,
+                "saturate-100!": props.isActiveItem,
+                "border-primary!": props.isActiveItem
+            }}
             href={props.href}
             ref={el => (props.scroll ? props.scroll(el, props.media) : () => {})}
         >
@@ -48,7 +40,10 @@ const MediaLink: Component<Props> = props => {
                 src={getMediaTeaserUrl(props.media, props.thumbnailSize)}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
-                classList={getImgClassList()}
+                classList={{
+                    "max-w-none": true,
+                    "rounded-md": props.rounded
+                }}
                 loading={props.eager ? "eager" : "lazy"}
             />
         </A>

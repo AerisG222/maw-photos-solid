@@ -25,7 +25,7 @@ export const CategoryPageSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
     const setViewMode = (viewMode: CategoryViewModeIdType) => {
-        setState({ viewMode: viewMode });
+        setState({ viewMode });
         saveState(state);
     };
 
@@ -47,7 +47,10 @@ export const useCategoryPageSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_CATEGORY_PAGE, defaultCategoryPageSettings);
+    return {
+        ...defaultCategoryPageSettings,
+        ...loadJson(KEY_SETTINGS_CATEGORY_PAGE, defaultCategoryPageSettings)
+    };
 }
 
 function saveState(state: CategoryPageSettingsState) {

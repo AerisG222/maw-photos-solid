@@ -99,6 +99,7 @@ const ViewGrid: Component<Props> = props => {
                             }
                             items={props.mediaService.getMediaList()}
                             thumbnailSize={props.gridSettings.thumbnailSize}
+                            dimThumbnails={props.gridSettings.dimThumbnails}
                             activeRoute={gridRoute}
                         />
                     </div>

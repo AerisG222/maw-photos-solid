@@ -20,15 +20,22 @@ import Layout from "../_components/layout/Layout";
 
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
-    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] =
-        useSearchListViewSettingsContext();
+    const [
+        listSettings,
+        {
+            setMargin: setListMargin,
+            setThumbnailSize: setListThumbnailSize,
+            setDimThumbnails: setListDimThumbnails
+        }
+    ] = useSearchListViewSettingsContext();
     const [
         gridSettings,
         {
             setShowTitles: setGridShowTitles,
             setShowYears: setGridShowYears,
             setMargin: setGridMargin,
-            setThumbnailSize: setGridThumbnailSize
+            setThumbnailSize: setGridThumbnailSize,
+            setDimThumbnails: setGridDimThumbnails
         }
     ] = useSearchGridViewSettingsContext();
 
@@ -103,6 +110,12 @@ const ViewSearch: Component = () => {
                         selectedValue={gridSettings.thumbnailSize}
                         onChange={gridSetThumbnailSize}
                     />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="gridDimThumbnails"
+                        isSelected={gridSettings.dimThumbnails}
+                        onChange={setGridDimThumbnails}
+                    />
                 </Panel>
 
                 <Panel title="List View">
@@ -119,6 +132,12 @@ const ViewSearch: Component = () => {
                         itemArray={allThumbnailSizes}
                         selectedValue={listSettings.thumbnailSize}
                         onChange={setListThumbnailSize}
+                    />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="listDimThumbnails"
+                        isSelected={listSettings.dimThumbnails}
+                        onChange={setListDimThumbnails}
                     />
                 </Panel>
             </PanelContainer>

@@ -6,16 +6,16 @@ import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from "./_storage";
 import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
 
 export interface MediaInfoPanelSettingsState {
-    expandInfoPanel: boolean;
-    showCategoryTeaserChooser: boolean;
-    showComments: boolean;
-    showExif: boolean;
-    showEffects: boolean;
-    showMetadataEditor: boolean;
-    showHistogram: boolean;
-    showMinimap: boolean;
-    minimapZoom: MapZoomLevelIdType;
-    minimapMapType: MapTypeIdType;
+    readonly expandInfoPanel: boolean;
+    readonly showCategoryTeaserChooser: boolean;
+    readonly showComments: boolean;
+    readonly showExif: boolean;
+    readonly showEffects: boolean;
+    readonly showMetadataEditor: boolean;
+    readonly showHistogram: boolean;
+    readonly showMinimap: boolean;
+    readonly minimapZoom: MapZoomLevelIdType;
+    readonly minimapMapType: MapTypeIdType;
 }
 
 export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
@@ -104,7 +104,10 @@ export const useMediaInfoPanelSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultMediaInfoPanelSettings);
+    return {
+        ...defaultMediaInfoPanelSettings,
+        ...loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultMediaInfoPanelSettings)
+    };
 }
 
 function saveState(state: MediaInfoPanelSettingsState) {

@@ -31,7 +31,7 @@ interface Props {
 }
 
 const DetailToolbar: Component<Props> = props => {
-    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize }] =
+    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize, setDimThumbnails }] =
         useMediaDetailViewSettingsContext();
 
     const onToggleBreadcrumbs = () => {
@@ -44,6 +44,10 @@ const DetailToolbar: Component<Props> = props => {
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
+    };
+
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
     };
 
     return (
@@ -87,23 +91,30 @@ const DetailToolbar: Component<Props> = props => {
             <ToolbarButton
                 icon="icon-[ic--round-title]"
                 name="Breadcrumbs"
-                tooltip="Show / Hide Category Breadcrumbs"
+                tooltip="Toggle Category Breadcrumbs"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
             />
             <ToolbarButton
                 icon="icon-[ic--round-remove-red-eye]"
                 name="Media List"
-                tooltip="Show / Hide Media List"
+                tooltip="Toggle Media List"
                 shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
             />
             <ToolbarButton
                 icon="icon-[mdi--image-size-select-large]"
                 name="Thumbnail"
-                tooltip="Toggle Photo List Thumbnail Size"
+                tooltip="Toggle Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--lightbulb-dimmer-50]"
+                name="Dim Thumbnails"
+                tooltip="Toggle Thumbnail Dimming"
+                shortcutKeys={["d"]}
+                clickHandler={onToggleDimThumbnails}
             />
         </>
     );

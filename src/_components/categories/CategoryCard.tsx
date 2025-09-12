@@ -11,6 +11,7 @@ interface Props {
     showTitles: boolean;
     showYears: boolean;
     thumbnailSize: ThumbnailSizeIdType;
+    dimThumbnails: boolean;
     eager: boolean;
 }
 
@@ -29,8 +30,9 @@ const CategoryCard: Component<Props> = props => {
             <div class="relative">
                 <img
                     src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
-                    class="saturate-50 group-hover:saturate-100"
                     classList={{
+                        "saturate-50": props.dimThumbnails,
+                        "group-hover:saturate-100": props.dimThumbnails,
                         "rounded-t-sm": !props.showYears,
                         "rounded-b-sm": !props.showTitles
                     }}

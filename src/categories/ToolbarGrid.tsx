@@ -7,7 +7,7 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
-    const [settings, { setShowTitles, setMargin, setThumbnailSize }] =
+    const [settings, { setShowTitles, setMargin, setThumbnailSize, setDimThumbnails }] =
         useCategoryGridViewSettingsContext();
 
     const onToggleTitles = () => {
@@ -26,19 +26,23 @@ const GridToolbar: Component = () => {
         setMargin(getNextMarginSize(settings.margin).id);
     };
 
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
+    };
+
     return (
         <>
             <ToolbarButton
                 icon="icon-[ic--round-title]"
                 name="Titles"
-                tooltip="Show / Hide Category Titles"
+                tooltip="Toggle Category Titles"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
-                tooltip="Toggle Grid Thumbnail Size"
+                tooltip="Toggle Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles}
@@ -49,6 +53,13 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Category Margins"
                 shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--lightbulb-dimmer-50]"
+                name="Dim Thumbnails"
+                tooltip="Toggle Thumbnail Dimming"
+                shortcutKeys={["d"]}
+                clickHandler={onToggleDimThumbnails}
             />
         </>
     );

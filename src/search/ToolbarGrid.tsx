@@ -7,35 +7,41 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
-    const [settingsContext, { setShowTitles, setShowYears, setThumbnailSize, setMargin }] =
-        useSearchGridViewSettingsContext();
+    const [
+        settings,
+        { setShowTitles, setShowYears, setThumbnailSize, setMargin, setDimThumbnails }
+    ] = useSearchGridViewSettingsContext();
 
     const ensureLargeThumbnails = () => {
         setThumbnailSize(defaultGridThumbnailSize);
     };
 
     const onToggleYears = () => {
-        setShowYears(!settingsContext.showYears);
+        setShowYears(!settings.showYears);
 
-        if (settingsContext.showYears) {
+        if (settings.showYears) {
             ensureLargeThumbnails();
         }
     };
 
     const onToggleTitles = () => {
-        setShowTitles(!settingsContext.showTitles);
+        setShowTitles(!settings.showTitles);
 
-        if (settingsContext.showTitles) {
+        if (settings.showTitles) {
             ensureLargeThumbnails();
         }
     };
 
     const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settingsContext.thumbnailSize).id);
+        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
     };
 
     const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settingsContext.margin).id);
+        setMargin(getNextMarginSize(settings.margin).id);
+    };
+
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
     };
 
     return (
@@ -43,27 +49,34 @@ const GridToolbar: Component = () => {
             <ToolbarButton
                 icon="icon-[ic--round-today]"
                 name="Years"
-                tooltip="Show / Hide Years"
+                tooltip="Toggle Years"
                 clickHandler={onToggleYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-title]"
                 name="Titles"
-                tooltip="Show / Hide Category Titles"
+                tooltip="Toggle Category Titles"
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
-                tooltip="Toggle Grid Thumbnail Size"
+                tooltip="Toggle Thumbnail Size"
                 clickHandler={onToggleThumbnailSize}
-                disabled={settingsContext.showTitles || settingsContext.showYears}
+                disabled={settings.showTitles || settings.showYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
                 name="Margins"
                 tooltip="Toggle Category Margins"
                 clickHandler={onToggleMargins}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--lightbulb-dimmer-50]"
+                name="Dim Thumbnails"
+                tooltip="Toggle Thumbnail Dimming"
+                shortcutKeys={["d"]}
+                clickHandler={onToggleDimThumbnails}
             />
         </>
     );

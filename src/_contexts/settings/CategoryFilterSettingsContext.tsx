@@ -26,9 +26,8 @@ const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContex
 export const CategoryFilterSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setYearFilter = (yearFilter: number | "all") => updateState({ yearFilter: yearFilter });
-    const setMissingGpsFilter = (missingGpsFilter: boolean) =>
-        updateState({ missingGpsFilter: missingGpsFilter });
+    const setYearFilter = (yearFilter: number | "all") => updateState({ yearFilter });
+    const setMissingGpsFilter = (missingGpsFilter: boolean) => updateState({ missingGpsFilter });
 
     const updateState = (update: Partial<CategoryFilterSettingsState>) => {
         setState(update);
@@ -55,7 +54,10 @@ export const useCategoryFilterSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings);
+    return {
+        ...defaultCategoryFilterSettings,
+        ...loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings)
+    };
 }
 
 function saveState(state: CategoryFilterSettingsState) {

@@ -26,6 +26,7 @@ const YearList: Component<Props> = props => {
                         <CategoryListItem
                             category={category}
                             thumbnailSize={settings.thumbnailSize}
+                            dimThumbnails={settings.dimThumbnails}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
                         />
                     )}

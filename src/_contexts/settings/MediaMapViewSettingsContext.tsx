@@ -6,8 +6,8 @@ import { KEY_SETTINGS_MEDIA_VIEW_MAP, loadJson, saveJson } from "./_storage";
 import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
 
 export interface MediaMapViewSettingsState {
-    mapType: MapTypeIdType;
-    zoom: MapZoomLevelIdType;
+    readonly mapType: MapTypeIdType;
+    readonly zoom: MapZoomLevelIdType;
 }
 
 export const defaultMediaMapViewSettings: MediaMapViewSettingsState = {
@@ -59,7 +59,10 @@ export const useMediaMapViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_VIEW_MAP, defaultMediaMapViewSettings);
+    return {
+        ...defaultMediaMapViewSettings,
+        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_MAP, defaultMediaMapViewSettings)
+    };
 }
 
 function saveState(state: MediaMapViewSettingsState) {

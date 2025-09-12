@@ -31,7 +31,8 @@ const ViewMedia: Component = () => {
         {
             setShowBreadcrumbs: setDetailShowBreadcrumbs,
             setShowMediaList: setDetailShowMediaList,
-            setThumbnailSize: setDetailThumbnailSize
+            setThumbnailSize: setDetailThumbnailSize,
+            setDimThumbnails: setDetailDimThumbnails
         }
     ] = useMediaDetailViewSettingsContext();
     const [
@@ -39,7 +40,8 @@ const ViewMedia: Component = () => {
         {
             setMargin: setGridMargin,
             setShowBreadcrumbs: setGridShowBreadcrumbs,
-            setThumbnailSize: setGridThumbnailSize
+            setThumbnailSize: setGridThumbnailSize,
+            setDimThumbnails: setGridDimThumbnails
         }
     ] = useMediaGridViewSettingsContext();
     const [
@@ -98,6 +100,12 @@ const ViewMedia: Component = () => {
                         itemArray={allThumbnailSizes}
                         selectedValue={detailSettings.thumbnailSize}
                         onChange={setDetailThumbnailSize}
+                    />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="detailDimThumbnails"
+                        isSelected={detailSettings.dimThumbnails}
+                        onChange={setDetailDimThumbnails}
                     />
 
                     <h3 class="head3 mt-4 text-secondary">Info Panel</h3>
@@ -194,6 +202,12 @@ const ViewMedia: Component = () => {
                         itemArray={allThumbnailSizes}
                         selectedValue={gridSettings.thumbnailSize}
                         onChange={setGridThumbnailSize}
+                    />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="gridDimThumbnails"
+                        isSelected={gridSettings.dimThumbnails}
+                        onChange={setGridDimThumbnails}
                     />
                 </Panel>
 

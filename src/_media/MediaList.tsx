@@ -12,6 +12,7 @@ interface Props {
     media: Media[];
     activeMedia: Media;
     thumbnailSize: ThumbnailSizeIdType;
+    dimThumbnails: boolean;
     activeRoute?: AppRouteDefinition;
 }
 
@@ -49,6 +50,7 @@ const MediaList: Component<Props> = props => {
                         media={media}
                         rounded={false}
                         thumbnailSize={props.thumbnailSize}
+                        dimThumbnails={props.dimThumbnails}
                         isActiveItem={props.activeMedia.id === media.id}
                         route={props.activeRoute!}
                         scroll={scroll}

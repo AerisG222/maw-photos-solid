@@ -9,12 +9,14 @@ export interface CategoryGridViewSettingsState {
     readonly margin: MarginIdType;
     readonly showTitles: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
     margin: defaultMargin,
     showTitles: true,
-    thumbnailSize: defaultGridThumbnailSize
+    thumbnailSize: defaultGridThumbnailSize,
+    dimThumbnails: true
 };
 
 export type CategoryGridViewSettingsContextValue = [
@@ -23,6 +25,7 @@ export type CategoryGridViewSettingsContextValue = [
         setMargin: (margin: MarginIdType) => void;
         setShowTitles: (showTitles: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -31,10 +34,10 @@ const CategoryGridViewSettingsContext = createContext<CategoryGridViewSettingsCo
 export const CategoryGridSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({ margin: margin });
-    const setShowTitles = (showTitles: boolean) => updateState({ showTitles: showTitles });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) =>
-        updateState({ thumbnailSize: thumbnailSize });
+    const setMargin = (margin: MarginIdType) => updateState({ margin });
+    const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
 
     const updateState = (update: Partial<CategoryGridViewSettingsState>) => {
         setState(update);
@@ -43,7 +46,7 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
 
     return (
         <CategoryGridViewSettingsContext.Provider
-            value={[state, { setMargin, setShowTitles, setThumbnailSize }]}
+            value={[state, { setMargin, setShowTitles, setThumbnailSize, setDimThumbnails }]}
         >
             {props.children}
         </CategoryGridViewSettingsContext.Provider>
@@ -61,7 +64,10 @@ export const useCategoryGridViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, defaultCategoryGridViewSettings);
+    return {
+        ...defaultCategoryGridViewSettings,
+        ...loadJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, defaultCategoryGridViewSettings)
+    };
 }
 
 function saveState(state: CategoryGridViewSettingsState) {

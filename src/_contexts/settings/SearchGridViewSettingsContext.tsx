@@ -6,17 +6,19 @@ import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/Thu
 import { KEY_SETTINGS_SEARCH_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
 export interface SearchGridViewSettingsState {
-    margin: MarginIdType;
-    showTitles: boolean;
-    showYears: boolean;
-    thumbnailSize: ThumbnailSizeIdType;
+    readonly margin: MarginIdType;
+    readonly showTitles: boolean;
+    readonly showYears: boolean;
+    readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     margin: defaultMargin,
     showTitles: true,
     showYears: true,
-    thumbnailSize: defaultGridThumbnailSize
+    thumbnailSize: defaultGridThumbnailSize,
+    dimThumbnails: true
 };
 
 export type SearchGridViewSettingsContextValue = [
@@ -26,6 +28,7 @@ export type SearchGridViewSettingsContextValue = [
         setShowTitles: (showTitles: boolean) => void;
         setShowYears: (showYears: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -38,6 +41,7 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
     const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
     const setShowYears = (showYears: boolean) => updateState({ showYears });
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
 
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);
@@ -46,7 +50,10 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
 
     return (
         <SearchGridViewSettingsContext.Provider
-            value={[state, { setMargin, setShowTitles, setShowYears, setThumbnailSize }]}
+            value={[
+                state,
+                { setMargin, setShowTitles, setShowYears, setThumbnailSize, setDimThumbnails }
+            ]}
         >
             {props.children}
         </SearchGridViewSettingsContext.Provider>
@@ -64,7 +71,10 @@ export const useSearchGridViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_SEARCH_VIEW_GRID, defaultSearchGridViewSettings);
+    return {
+        ...defaultSearchGridViewSettings,
+        ...loadJson(KEY_SETTINGS_SEARCH_VIEW_GRID, defaultSearchGridViewSettings)
+    };
 }
 
 function saveState(state: SearchGridViewSettingsState) {

@@ -7,7 +7,8 @@ import { getNextMarginSize } from "../_models/Margin";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
-    const [settings, { setThumbnailSize, setMargin }] = useCategoryListViewSettingsContext();
+    const [settings, { setThumbnailSize, setMargin, setDimThumbnails }] =
+        useCategoryListViewSettingsContext();
 
     const onToggleThumbnail = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
@@ -17,12 +18,16 @@ const ListToolbar: Component = () => {
         setMargin(getNextMarginSize(settings.margin).id);
     };
 
+    const onToggleDimThumbnails = () => {
+        setDimThumbnails(!settings.dimThumbnails);
+    };
+
     return (
         <>
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
-                tooltip="Toggle List Thumbnail Size"
+                tooltip="Toggle Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnail}
             />
@@ -32,6 +37,13 @@ const ListToolbar: Component = () => {
                 tooltip="Toggle Category Margins"
                 shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--lightbulb-dimmer-50]"
+                name="Dim Thumbnails"
+                tooltip="Toggle Thumbnail Dimming"
+                shortcutKeys={["d"]}
+                clickHandler={onToggleDimThumbnails}
             />
         </>
     );

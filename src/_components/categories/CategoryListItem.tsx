@@ -9,6 +9,7 @@ import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 interface Props {
     category: Category;
     thumbnailSize: ThumbnailSizeIdType;
+    dimThumbnails: boolean;
     eager: boolean;
     showYear?: boolean;
 }
@@ -23,7 +24,11 @@ const CategoryListItem: Component<Props> = props => {
                 src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
                 width={getThumbnailSize(props.thumbnailSize).width}
                 height={getThumbnailSize(props.thumbnailSize).height}
-                class="inline saturate-50 group-hover:saturate-100"
+                classList={{
+                    inline: true,
+                    "saturate-50": props.dimThumbnails,
+                    "group-hover:saturate-100": props.dimThumbnails
+                }}
                 loading={props.eager ? "eager" : "lazy"}
             />
 

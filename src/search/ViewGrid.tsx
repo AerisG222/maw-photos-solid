@@ -3,7 +3,6 @@ import { Component, createEffect, createSignal, For } from "solid-js";
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
-import { Category } from "../_models/Category";
 
 import Toolbar from "./Toolbar";
 import GridToolbar from "./ToolbarGrid";
@@ -41,6 +40,7 @@ const ViewGrid: Component = () => {
                             category={category}
                             showTitles={settings.showTitles}
                             thumbnailSize={settings.thumbnailSize}
+                            dimThumbnails={settings.dimThumbnails}
                             showYears={settings.showYears}
                             eager={idx() <= EAGER_THRESHOLD}
                         />

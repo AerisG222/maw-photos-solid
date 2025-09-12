@@ -25,11 +25,18 @@ const ViewCategories: Component = () => {
         {
             setShowTitles: setGridShowTitles,
             setMargin: setGridMargin,
-            setThumbnailSize: setGridThumbnailSize
+            setThumbnailSize: setGridThumbnailSize,
+            setDimThumbnails: setGridDimThumbnails
         }
     ] = useCategoryGridViewSettingsContext();
-    const [listSettings, { setMargin: setListMargin, setThumbnailSize: setListThumbnailSize }] =
-        useCategoryListViewSettingsContext();
+    const [
+        listSettings,
+        {
+            setMargin: setListMargin,
+            setThumbnailSize: setListThumbnailSize,
+            setDimThumbnails: setListDimThumbnails
+        }
+    ] = useCategoryListViewSettingsContext();
 
     const gridSetShowTitles = (doShow: boolean) => {
         batch(() => {
@@ -85,6 +92,12 @@ const ViewCategories: Component = () => {
                         selectedValue={gridSettings.thumbnailSize}
                         onChange={gridSetThumbnailSize}
                     />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="gridDimThumbnails"
+                        isSelected={gridSettings.dimThumbnails}
+                        onChange={setGridDimThumbnails}
+                    />
                 </Panel>
 
                 <Panel title="List View">
@@ -101,6 +114,12 @@ const ViewCategories: Component = () => {
                         itemArray={allThumbnailSizes}
                         selectedValue={listSettings.thumbnailSize}
                         onChange={setListThumbnailSize}
+                    />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="listDimThumbnails"
+                        isSelected={listSettings.dimThumbnails}
+                        onChange={setListDimThumbnails}
                     />
                 </Panel>
             </PanelContainer>

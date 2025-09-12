@@ -8,11 +8,13 @@ import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson, saveJson } from "./_storage"
 export interface CategoryListViewSettingsState {
     readonly margin: MarginIdType;
     readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultCategoryListViewSettings: CategoryListViewSettingsState = {
     margin: defaultMargin,
-    thumbnailSize: defaultListThumbnailSize
+    thumbnailSize: defaultListThumbnailSize,
+    dimThumbnails: true
 };
 
 export type CategoryListViewSettingsContextValue = [
@@ -20,6 +22,7 @@ export type CategoryListViewSettingsContextValue = [
     actions: {
         setMargin: (margin: MarginIdType) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -28,9 +31,9 @@ const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsCo
 export const CategoryListSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(loadState());
 
-    const setMargin = (margin: MarginIdType) => updateState({ margin: margin });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) =>
-        updateState({ thumbnailSize: thumbnailSize });
+    const setMargin = (margin: MarginIdType) => updateState({ margin });
+    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
 
     const updateState = (update: Partial<CategoryListViewSettingsState>) => {
         setState(update);
@@ -38,7 +41,9 @@ export const CategoryListSettingsProvider: ParentComponent = props => {
     };
 
     return (
-        <CategoryListViewSettingsContext.Provider value={[state, { setMargin, setThumbnailSize }]}>
+        <CategoryListViewSettingsContext.Provider
+            value={[state, { setMargin, setThumbnailSize, setDimThumbnails }]}
+        >
             {props.children}
         </CategoryListViewSettingsContext.Provider>
     );
@@ -55,7 +60,10 @@ export const useCategoryListViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings);
+    return {
+        ...defaultCategoryListViewSettings,
+        ...loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings)
+    };
 }
 
 function saveState(state: CategoryListViewSettingsState) {

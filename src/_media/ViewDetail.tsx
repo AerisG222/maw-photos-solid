@@ -96,6 +96,7 @@ const ViewDetail: Component<Props> = props => {
                             media={props.mediaService.getMediaList()}
                             activeMedia={props.mediaService.getActiveMedia()!}
                             thumbnailSize={props.detailSettings.thumbnailSize}
+                            dimThumbnails={props.detailSettings.dimThumbnails}
                             activeRoute={detailRoute}
                         />
                     </Show>

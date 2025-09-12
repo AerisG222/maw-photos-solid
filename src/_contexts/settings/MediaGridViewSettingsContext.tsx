@@ -6,17 +6,19 @@ import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/Thu
 import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
 export interface MediaGridViewSettingsState {
-    margin: MarginIdType;
-    showBreadcrumbs: boolean;
-    showMainBreadcrumbs: boolean;
-    thumbnailSize: ThumbnailSizeIdType;
+    readonly margin: MarginIdType;
+    readonly showBreadcrumbs: boolean;
+    readonly showMainBreadcrumbs: boolean;
+    readonly thumbnailSize: ThumbnailSizeIdType;
+    readonly dimThumbnails: boolean;
 }
 
 export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
     margin: defaultMargin,
     showBreadcrumbs: true,
     showMainBreadcrumbs: true,
-    thumbnailSize: defaultGridThumbnailSize
+    thumbnailSize: defaultGridThumbnailSize,
+    dimThumbnails: true
 };
 
 export type MediaGridViewSettingsContextValue = [
@@ -26,6 +28,7 @@ export type MediaGridViewSettingsContextValue = [
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setShowMainBreadcrumbs: (showBreadcrumbs: boolean) => void;
+        setDimThumbnails: (dimThumbnails: boolean) => void;
     }
 ];
 
@@ -36,9 +39,10 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
 
     const setMargin = (margin: MarginIdType) => updateState({ margin });
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
+    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
-    const setShowMainBreadcrumbs = (showBreadcrumbs: boolean) =>
-        updateState({ showMainBreadcrumbs: showBreadcrumbs });
+    const setShowMainBreadcrumbs = (showMainBreadcrumbs: boolean) =>
+        updateState({ showMainBreadcrumbs });
 
     const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);
@@ -53,7 +57,8 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
                     setMargin,
                     setShowBreadcrumbs,
                     setShowMainBreadcrumbs,
-                    setThumbnailSize
+                    setThumbnailSize,
+                    setDimThumbnails
                 }
             ]}
         >
@@ -73,7 +78,10 @@ export const useMediaGridViewSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultMediaGridViewSettings);
+    return {
+        ...defaultMediaGridViewSettings,
+        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultMediaGridViewSettings)
+    };
 }
 
 function saveState(state: MediaGridViewSettingsState) {

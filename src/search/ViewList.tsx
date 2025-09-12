@@ -40,6 +40,7 @@ const ViewList: Component = () => {
                             category={category}
                             showYear={true}
                             thumbnailSize={settings.thumbnailSize}
+                            dimThumbnails={settings.dimThumbnails}
                             eager={idx() <= EAGER_THRESHOLD}
                         />
                     )}

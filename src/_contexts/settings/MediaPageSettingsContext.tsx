@@ -56,7 +56,10 @@ export const useMediaPageSettingsContext = () => {
 };
 
 function loadState() {
-    return loadJson(KEY_SETTINGS_MEDIA_PAGE, defaultMediaPageSettings);
+    return {
+        ...defaultMediaPageSettings,
+        ...loadJson(KEY_SETTINGS_MEDIA_PAGE, defaultMediaPageSettings)
+    };
 }
 
 function saveState(state: MediaPageSettingsState) {
