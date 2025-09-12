@@ -74,7 +74,7 @@ const ViewGrid: Component<Props> = props => {
                                 </Show>
 
                                 <A
-                                    class="flex h-full"
+                                    class="fixed w-full h-full"
                                     href={props.mediaService.getEntryPathByView(MediaViewGrid)}
                                     onClick={() => props.slideshowService.stop()}
                                 >
