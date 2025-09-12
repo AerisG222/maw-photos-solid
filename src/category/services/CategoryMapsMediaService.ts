@@ -106,7 +106,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         return list[list.length - 1].media.id === this.getActiveMedia()?.id;
     };
 
-    isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess && !!this.params.id;
+    isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess && this.categoryQuery.isSuccess;
 
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 

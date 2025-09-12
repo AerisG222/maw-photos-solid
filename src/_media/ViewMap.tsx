@@ -25,17 +25,17 @@ const ViewMap: Component<Props> = props => {
     let infoWindow: google.maps.InfoWindow;
     const markers = new Map<Uuid, unknown>();
 
-    const defaultMapOptions = (center: GpsCoordinate) => ({
+    const defaultMapOptions = (center: GpsCoordinate | undefined) => ({
         controlSize: 24,
-        center: { lat: center.latitude, lng: center.longitude },
+        center: center ? { lat: center.latitude, lng: center.longitude } : { lat: 0, lng: 0 },
         fullscreenControl: true,
         mapTypeControl: true,
         mapId: "af11584565f27198",
         mapTypeId: props.mapState.mapType,
-        zoom: props.mapState.zoom
+        zoom: center ? props.mapState.zoom : 2
     });
 
-    async function initMap(initialLocation: GpsCoordinate): Promise<void> {
+    async function initMap(initialLocation: GpsCoordinate | undefined): Promise<void> {
         const { InfoWindow, Map } = (await google.maps.importLibrary(
             "maps"
         )) as google.maps.MapsLibrary;
@@ -105,13 +105,16 @@ const ViewMap: Component<Props> = props => {
         }),
         async ({ isMounted, markersAdded, isReady }) => {
             if (!markersAdded && isMounted && isReady) {
-                const initial =
-                    props.mediaService.activeMediaGps() ??
-                    props.mediaService.preferredGpsLocation(props.mediaService.mediaWithGps()[0]);
+                let initial = props.mediaService.activeMediaGps();
 
-                if (initial) {
-                    await initMap(initial);
-                }
+                initial ??=
+                    props.mediaService.mediaWithGps().length > 0
+                        ? props.mediaService.preferredGpsLocation(
+                              props.mediaService.mediaWithGps()[0]
+                          )
+                        : undefined;
+
+                await initMap(initial);
             }
         }
     );
@@ -145,6 +148,11 @@ const ViewMap: Component<Props> = props => {
                     </Toolbar>
                 }
             >
+                <Show when={props.mediaService.mediaWithGps().length === 0}>
+                    <div class="text-center p-4 text-secondary italic">
+                        Sorry, we do not have GPS data for this category.
+                    </div>
+                </Show>
                 <div class="h-screen w-full" ref={el} />
             </Layout>
         </Show>
