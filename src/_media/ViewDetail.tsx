@@ -41,7 +41,7 @@ const ViewDetail: Component<Props> = props => {
     let mediaElement: HTMLImageElement | HTMLVideoElement;
 
     return (
-        <Show when={props.mediaService.getActiveCategory() && props.mediaService.getActiveMedia()}>
+        <Show when={props.mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
                 toolbar={

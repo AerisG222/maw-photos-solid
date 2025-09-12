@@ -15,7 +15,7 @@ interface Props {
 
 const ViewFullscreen: Component<Props> = props => {
     return (
-        <Show when={props.mediaService.getActiveCategory() && props.mediaService.getActiveMedia()}>
+        <Show when={props.mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
                 toolbar={
