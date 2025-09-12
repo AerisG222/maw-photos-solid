@@ -13,7 +13,7 @@ const CategoryBreadcrumb: Component<Props> = props => {
         <Show when={props.category}>
             <div class="text-center">
                 <A
-                    class="text-primary"
+                    class="text-primary hover:underline"
                     href={`/categories?year=${props.category!.effectiveDate.getFullYear()}`}
                 >
                     {props.category!.effectiveDate.getFullYear()}
@@ -22,7 +22,10 @@ const CategoryBreadcrumb: Component<Props> = props => {
                 <span class="text-xl align-middle icon-[ic--round-arrow-right]" />
 
                 <Show when={props.showTitleAsLink}>
-                    <A class="text-primary" href={`/categories/${props.category!.id}`}>
+                    <A
+                        class="text-primary hover:underline"
+                        href={`/categories/${props.category!.id}`}
+                    >
                         {props.category!.name}
                     </A>
                 </Show>
