@@ -7,6 +7,7 @@ import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
+import { getMarginClass, MarginIdType } from "../_models/Margin";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -26,10 +27,16 @@ interface Props {
 }
 
 const ViewGrid: Component<Props> = props => {
+    const buildGridContainerClass = (margin: MarginIdType | undefined) => ({
+        ...getMarginClass(margin),
+        "col-start-1": true,
+        "row-start-1": true,
+        "z-10": true
+    });
+
     return (
         <Show when={props.mediaService.getMediaList()}>
             <Layout
-                margin={props.gridSettings.margin}
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}
@@ -54,46 +61,47 @@ const ViewGrid: Component<Props> = props => {
                     </Toolbar>
                 }
             >
-                <Show when={props.mediaService.getActiveMedia()}>
-                    <div
-                        class="absolute z-200 bg-base-100/92
-                        top-[82px] left-[0] h-[calc(100vh-82px)]
-                        md:top-[0] md:left-[114px] md:w-[calc(100vw-114px)] md:h-screen"
-                    >
-                        <Show when={props.showBreadcrumbsOnMedia}>
-                            <CategoryBreadcrumb
-                                showTitleAsLink={true}
-                                category={props.mediaService.getActiveCategory()}
-                            />
+                <div class="grid">
+                    <Show when={props.mediaService.getActiveMedia()}>
+                        {/* overlay layer — uses grid layering instead of absolute positioning */}
+                        <div class="col-start-1 row-start-1 z-30 w-full h-full bg-base-100/92">
+                            <div class="h-full w-full overflow-auto">
+                                <Show when={props.showBreadcrumbsOnMedia}>
+                                    <CategoryBreadcrumb
+                                        showTitleAsLink={true}
+                                        category={props.mediaService.getActiveCategory()}
+                                    />
+                                </Show>
+
+                                <A
+                                    class="flex h-full"
+                                    href={props.mediaService.getEntryPathByView(MediaViewGrid)}
+                                    onClick={() => props.slideshowService.stop()}
+                                >
+                                    <MainItem
+                                        media={props.mediaService.getActiveMedia()!}
+                                        moveNext={() => props.mediaService.moveNext()}
+                                        movePrevious={() => props.mediaService.movePrevious()}
+                                    />
+                                </A>
+                            </div>
+                        </div>
+                    </Show>
+                    {/* base layer (grid content) — placed in same grid so it sits under the overlay */}
+                    <div classList={buildGridContainerClass(props.gridSettings.margin)}>
+                        <Show when={props.showBreadcrumbsOnGrid}>
+                            <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
                         </Show>
 
-                        <A
-                            class="flex h-full"
-                            href={props.mediaService.getEntryPathByView(MediaViewGrid)}
-                            onClick={() => props.slideshowService.stop()}
-                        >
-                            <MainItem
-                                media={props.mediaService.getActiveMedia()!}
-                                moveNext={() => props.mediaService.moveNext()}
-                                movePrevious={() => props.mediaService.movePrevious()}
-                            />
-                        </A>
+                        <MediaGrid
+                            mediaLinkBuilder={(media: Media) =>
+                                props.mediaService.getMediaPathByView(MediaViewGrid, media)
+                            }
+                            items={props.mediaService.getMediaList()}
+                            thumbnailSize={props.gridSettings.thumbnailSize}
+                            activeRoute={gridRoute}
+                        />
                     </div>
-                </Show>
-
-                <div>
-                    <Show when={props.showBreadcrumbsOnGrid}>
-                        <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
-                    </Show>
-
-                    <MediaGrid
-                        mediaLinkBuilder={(media: Media) =>
-                            props.mediaService.getMediaPathByView(MediaViewGrid, media)
-                        }
-                        items={props.mediaService.getMediaList()}
-                        thumbnailSize={props.gridSettings.thumbnailSize}
-                        activeRoute={gridRoute}
-                    />
                 </div>
             </Layout>
         </Show>
