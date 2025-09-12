@@ -35,7 +35,7 @@ const ViewGrid: Component<Props> = props => {
     });
 
     return (
-        <Show when={props.mediaService.getMediaList()}>
+        <Show when={props.mediaService.getActiveCategory() && props.mediaService.getMediaList()}>
             <Layout
                 toolbar={
                     <Toolbar
