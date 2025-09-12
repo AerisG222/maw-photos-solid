@@ -7,6 +7,7 @@ import { SlideshowService } from '../../_media/services/SlideshowService';
 import { MediaView } from '../../_models/MediaView';
 import { RandomMediaService } from '../services/RandomMediaService';
 import { createEffect, createSignal } from 'solid-js';
+import { Uuid } from '../../_models/Uuid';
 
 export const useRandomServices = (view: MediaView) => {
     const navigate = useNavigate();
