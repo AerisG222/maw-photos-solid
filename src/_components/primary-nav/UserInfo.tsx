@@ -13,22 +13,34 @@ interface Props {
 const UserInfo: Component<Props> = props => {
     const [authContext] = useAuthContext();
 
-    const nameClass = () => ({
-        "ml-2": true,
-        "text-lg": true,
-        "font-bold": true,
-        "align-middle": true,
-        hidden: true,
-        "md:inline": props.showTitle
-    });
+    return (
+        <>
+            <div class="dropdown dropdown-bottom dropdown-center md:dropdown-right md:dropdown-start dropdown-hover cursor-pointer">
+                <div class="flex primary-nav-link" role="button">
+                    <Show
+                        when={authContext.user?.picture}
+                        fallback={<Icon classes="icon-[ic--round-person]" />}
+                    >
+                        <img
+                            src={authContext.user?.picture}
+                            class="w-[29px] h-[29px] block rounded-full cursor-pointer"
+                        />
+                    </Show>
+                    <span
+                        classList={{
+                            "ml-2": true,
+                            "text-lg": true,
+                            "font-bold": true,
+                            "align-middle": true,
+                            hidden: true,
+                            "md:inline": props.showTitle
+                        }}
+                    >
+                        {authContext.user?.given_name}
+                    </span>
+                </div>
 
-    const logoutWidget = () => {
-        return (
-            <>
-                <ul
-                    tabindex="0"
-                    class="menu dropdown-content bg-base-300 rounded z-[1] mt-2 w-52 p-2 shadow"
-                >
+                <ul class="menu dropdown-content bg-base-300 rounded z-1 w-52 p-2 shadow">
                     <li>
                         <A
                             class="cursor-pointer hover:bg-primary hover:text-primary-content"
@@ -39,28 +51,6 @@ const UserInfo: Component<Props> = props => {
                         </A>
                     </li>
                 </ul>
-            </>
-        );
-    };
-
-    // todo: check the dropdown menu on full and mobile - the breakpoints weren't working nicely, so just left
-    // at the md size for now - this is what i was going to use for mobile: dropdown-bottom dropdown-center
-    return (
-        <>
-            <div class="cursor-pointer dropdown dropdown-right dropdown-center dropdown-hover">
-                <div class="flex primary-nav-link" tabindex="0" role="button">
-                    <Show
-                        when={authContext.user?.picture}
-                        fallback={<Icon classes="icon-[ic--round-person]" />}
-                    >
-                        <img
-                            src={authContext.user?.picture}
-                            class="w-[29px] h-[29px] block rounded-full cursor-pointer"
-                        />
-                    </Show>
-                    <span classList={nameClass()}>{authContext.user?.given_name}</span>
-                </div>
-                {logoutWidget()}
             </div>
         </>
     );
