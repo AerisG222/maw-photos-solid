@@ -30,7 +30,12 @@ const CommentsCard: Component<Props> = props => {
                 comment: commentText()
             };
 
-            addCommentMutation.mutate(req);
+            addCommentMutation.mutate(req, {
+                onSuccess: () => {
+                    comments.refetch();
+                    setCommentText("");
+                }
+            });
         }
     };
 
@@ -40,9 +45,12 @@ const CommentsCard: Component<Props> = props => {
                 <div>
                     <For each={comments.data}>
                         {comment => (
-                            <div class="chat chat-start">
-                                <div class="chat-header w-full">
-                                    <span class="mr-2">{comment.createdBy}</span>
+                            <div class="mb-2">
+                                <div class="flex w-full">
+                                    <span class="text-xs">{comment.createdBy}</span>
+
+                                    <span class="grow" />
+
                                     <time
                                         class="text-xs opacity-50"
                                         datetime={comment.created.toISOString()}
@@ -50,15 +58,14 @@ const CommentsCard: Component<Props> = props => {
                                         {comment.created.toDateString()}
                                     </time>
                                 </div>
-                                <div class="chat-bubble bg-base-200 w-full">{comment.body}</div>
-                                <div class="chat-footer w-full" />
+                                <div class="text-sm bg-base-200 w-full px-2">{comment.body}</div>
                             </div>
                         )}
                     </For>
                 </div>
             </Show>
 
-            <form>
+            <form class="mt-4">
                 <textarea
                     class="textarea w-full"
                     placeholder="Comment"
@@ -67,7 +74,11 @@ const CommentsCard: Component<Props> = props => {
                     value={commentText()}
                 />
                 <div class="flex gap-4 mt-2">
-                    <button class="btn btn-sm btn-outline btn-primary" onClick={saveComment}>
+                    <button
+                        class="btn btn-sm btn-outline btn-primary"
+                        onClick={saveComment}
+                        disabled={!commentText()}
+                    >
                         Save
                     </button>
                     <button class="btn btn-sm btn-outline btn-error" onClick={clearComment}>
