@@ -34,7 +34,7 @@ const MediaLink: Component<Props> = props => {
                 "border-primary!": props.isActiveItem
             }}
             href={props.href}
-            ref={el => (props.scroll ? props.scroll(el, props.media) : () => {})}
+            ref={el => (props.scroll ? props.scroll(el, props.media) : {})}
         >
             <img
                 src={getMediaTeaserUrl(props.media, props.thumbnailSize)}

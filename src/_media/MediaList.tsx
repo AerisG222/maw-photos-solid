@@ -1,9 +1,10 @@
-import { Component, For, createEffect, createSignal } from "solid-js";
+import { Component, For, createEffect, onCleanup } from "solid-js";
 
 import { ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import { Media } from "../_models/Media";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
+import { Uuid } from "../_models/Uuid";
 
 import MediaLink from "./MediaLink";
 
@@ -17,17 +18,14 @@ interface Props {
 }
 
 const MediaList: Component<Props> = props => {
-    const [scrollElement, setScrollElement] = createSignal(undefined);
+    const elMap = new Map<Uuid, HTMLAnchorElement>();
 
     const scroll = (el: HTMLAnchorElement, media: Media) => {
-        if (props.activeMedia.id === media.id) {
-            setScrollElement(el);
-        }
+        elMap.set(media.id, el);
     };
 
     createEffect(() => {
-        const el = scrollElement();
-
+        const el = elMap.get(props.activeMedia.id);
         const parent = el?.parentElement;
 
         if (parent) {
@@ -36,9 +34,12 @@ const MediaList: Component<Props> = props => {
             const imgMiddle = el.clientWidth / 2;
             const newLeft = Math.max(0, el.offsetLeft - startingOffset - parentMiddle + imgMiddle);
 
-            // TODO: list is being rebuilt, which causes each nav to scroll from zero...
-            parent.scrollTo({ top: 0, left: newLeft /* behavior: "smooth" */ });
+            parent.scrollTo({ top: 0, left: newLeft, behavior: "smooth" });
         }
+    });
+
+    onCleanup(() => {
+        elMap.clear();
     });
 
     return (
