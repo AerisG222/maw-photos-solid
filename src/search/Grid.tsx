@@ -4,8 +4,8 @@ import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGr
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
-import Toolbar from "./Toolbar";
-import GridToolbar from "./ToolbarGrid";
+import Toolbar from "./components/Toolbar";
+import GridToolbar from "./components/ToolbarGrid";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryCard from "../_components/categories/CategoryCard";

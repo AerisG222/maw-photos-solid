@@ -14,7 +14,7 @@ import { allCategoryViewModes } from "../_models/CategoryViewMode";
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import RadioGroup from "../_components/input/RadioGroup";
-import Toolbar from "./Toolbar";
+import Toolbar from "./components/Toolbar";
 import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 

@@ -6,7 +6,7 @@ import { formatForMode, statbarMediaCountTitle } from "./_funcs";
 import { CategoryStat } from "../_models/CategoryStat";
 import { MediaTypeStat } from "../_models/MediaTypeStat";
 
-import Toolbar from "./Toolbar";
+import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 import StatBar from "./components/StatBar";
 import Treemap from "./components/Treemap";

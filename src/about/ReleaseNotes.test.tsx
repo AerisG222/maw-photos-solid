@@ -1,7 +1,7 @@
 import { render } from "@solidjs/testing-library";
 import { describe, expect, test } from "vitest";
 
-import ViewReleaseNotes from "./ViewReleaseNotes";
+import ViewReleaseNotes from "./ReleaseNotes";
 
 describe("ViewReleaseNotes component", () => {
     test("should assert something", () => {

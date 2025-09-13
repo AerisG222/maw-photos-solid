@@ -1,9 +1,9 @@
 import { Component, Show } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 
-import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
-import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
-import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 interface Props {
     initialParams: {

@@ -7,7 +7,7 @@ import { MediaTypeStat } from "../_models/MediaTypeStat";
 import { formatForMode, statbarMediaCountTitle } from "./_funcs";
 import { statsYear } from "./_routes";
 
-import Toolbar from "./Toolbar";
+import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 import StatBar from "./components/StatBar";
 import StatLayout from "./components/StatLayout";

@@ -3,8 +3,8 @@ import { Component, For, Show } from "solid-js";
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 
-import Toolbar from "./Toolbar";
-import GridToolbar from "./ToolbarGrid";
+import Toolbar from "./components/Toolbar";
+import GridToolbar from "./components/ToolbarGrid";
 import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
@@ -26,7 +26,12 @@ const GridView: Component = () => {
             >
                 <CategoryFilterBar />
 
-                <For each={Object.keys(categoriesToDisplay()!).map(x => parseInt(x, 10)).sort().reverse()}>
+                <For
+                    each={Object.keys(categoriesToDisplay()!)
+                        .map(x => parseInt(x, 10))
+                        .sort()
+                        .reverse()}
+                >
                     {(year, idx) => (
                         <YearGrid
                             year={year}

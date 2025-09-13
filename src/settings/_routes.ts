@@ -7,7 +7,7 @@ export const settingsRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     name: "Redirect",
-    component: lazy(() => import("./SettingsRedirect"))
+    component: lazy(() => import("./Redirect"))
 };
 
 export const settingsCategories: AppRouteDefinition = {
@@ -16,7 +16,7 @@ export const settingsCategories: AppRouteDefinition = {
     tooltip: "Category Settings",
     path: "/categories",
     absolutePath: `${basePath}/categories`,
-    component: lazy(() => import("./ViewCategories"))
+    component: lazy(() => import("./Categories"))
 };
 
 export const settingsMedia: AppRouteDefinition = {
@@ -25,7 +25,7 @@ export const settingsMedia: AppRouteDefinition = {
     tooltip: "Media Settings",
     path: "/media",
     absolutePath: `${basePath}/media`,
-    component: lazy(() => import("./ViewMedia"))
+    component: lazy(() => import("./Media"))
 };
 
 export const settingsSearch: AppRouteDefinition = {
@@ -34,7 +34,7 @@ export const settingsSearch: AppRouteDefinition = {
     tooltip: "Search Settings",
     path: "/search",
     absolutePath: `${basePath}/search`,
-    component: lazy(() => import("./ViewSearch"))
+    component: lazy(() => import("./Search"))
 };
 
 export const settings: AppRouteDefinition = {
@@ -44,6 +44,6 @@ export const settings: AppRouteDefinition = {
         "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
     absolutePath: basePath,
     path: basePath,
-    component: lazy(() => import("./Settings")),
+    component: lazy(() => import("./Layout")),
     children: [settingsRedirect, settingsCategories, settingsMedia, settingsSearch]
 };

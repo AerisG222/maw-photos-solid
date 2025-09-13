@@ -17,7 +17,7 @@ import PanelContainer from "./components/PanelContainer";
 import Select from "../_components/input/Select";
 import RadioGroup from "../_components/input/RadioGroup";
 import Checkbox from "../_components/input/Checkbox";
-import Toolbar from "./Toolbar";
+import Toolbar from "./components/Toolbar";
 import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 

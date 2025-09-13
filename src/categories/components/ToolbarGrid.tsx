@@ -1,14 +1,22 @@
 import { Component } from "solid-js";
 
-import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
-import { getNextThumbnailSize } from "../_models/ThumbnailSize";
-import { getNextMarginSize } from "../_models/Margin";
+import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/CategoryGridViewSettingsContext";
+import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
+import { getNextMarginSize } from "../../_models/Margin";
 
-import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
-const ListToolbar: Component = () => {
-    const [settings, { setMargin, setThumbnailSize, setDimThumbnails }] =
-        useSearchListViewSettingsContext();
+const GridToolbar: Component = () => {
+    const [settings, { setShowTitles, setMargin, setThumbnailSize, setDimThumbnails }] =
+        useCategoryGridViewSettingsContext();
+
+    const onToggleTitles = () => {
+        setShowTitles(!settings.showTitles);
+
+        if (settings.showTitles) {
+            setThumbnailSize(defaultGridThumbnailSize);
+        }
+    };
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
@@ -25,15 +33,25 @@ const ListToolbar: Component = () => {
     return (
         <>
             <ToolbarButton
+                icon="icon-[ic--round-title]"
+                name="Titles"
+                tooltip="Toggle Category Titles"
+                shortcutKeys={["t"]}
+                clickHandler={onToggleTitles}
+            />
+            <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
                 tooltip="Toggle Thumbnail Size"
+                shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
+                disabled={settings.showTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
                 name="Margins"
                 tooltip="Toggle Category Margins"
+                shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />
             <ToolbarButton
@@ -47,4 +65,4 @@ const ListToolbar: Component = () => {
     );
 };
 
-export default ListToolbar;
+export default GridToolbar;

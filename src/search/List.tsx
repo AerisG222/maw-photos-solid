@@ -4,8 +4,8 @@ import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchLi
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
-import Toolbar from "./Toolbar";
-import ListToolbar from "./ToolbarList";
+import Toolbar from "./components/Toolbar";
+import ListToolbar from "./components/ToolbarList";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryListItem from "../_components/categories/CategoryListItem";

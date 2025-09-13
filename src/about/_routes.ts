@@ -7,7 +7,7 @@ export const aboutRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     name: "Redirect",
-    component: lazy(() => import("./AboutRedirect"))
+    component: lazy(() => import("./Redirect"))
 };
 
 export const aboutHelp: AppRouteDefinition = {
@@ -15,7 +15,7 @@ export const aboutHelp: AppRouteDefinition = {
     name: "Help",
     path: "/help",
     absolutePath: `${basePath}/help`,
-    component: lazy(() => import("./ViewHelp"))
+    component: lazy(() => import("./Help"))
 };
 
 export const aboutReleaseNotes: AppRouteDefinition = {
@@ -24,7 +24,7 @@ export const aboutReleaseNotes: AppRouteDefinition = {
     tooltip: "Release Notes",
     path: "/release-notes",
     absolutePath: `${basePath}/release-notes`,
-    component: lazy(() => import("./ViewReleaseNotes"))
+    component: lazy(() => import("./ReleaseNotes"))
 };
 
 export const aboutAndroid: AppRouteDefinition = {
@@ -33,7 +33,7 @@ export const aboutAndroid: AppRouteDefinition = {
     tooltip: "Android Application",
     path: "/android",
     absolutePath: `${basePath}/android`,
-    component: lazy(() => import("./ViewAndroid"))
+    component: lazy(() => import("./Android"))
 };
 
 export const about: AppRouteDefinition = {
@@ -42,6 +42,6 @@ export const about: AppRouteDefinition = {
     helpText: "View help and release notes for this application.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("./AboutLayout")),
+    component: lazy(() => import("./Layout")),
     children: [aboutRedirect, aboutHelp, aboutReleaseNotes, aboutAndroid]
 };

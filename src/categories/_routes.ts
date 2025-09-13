@@ -10,7 +10,7 @@ export const categoriesRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     name: "Redirect",
-    component: lazy(() => import("./CategoriesRedirect"))
+    component: lazy(() => import("./Redirect"))
 };
 
 export const categoriesGrid: AppRouteDefinition = {
@@ -19,7 +19,7 @@ export const categoriesGrid: AppRouteDefinition = {
     tooltip: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
-    component: lazy(() => import("./ViewGrid"))
+    component: lazy(() => import("./Grid"))
 };
 
 export const categoriesList: AppRouteDefinition = {
@@ -28,7 +28,7 @@ export const categoriesList: AppRouteDefinition = {
     tooltip: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
-    component: lazy(() => import("./ViewList"))
+    component: lazy(() => import("./List"))
 };
 
 export const categories: AppRouteDefinition = {
@@ -37,7 +37,7 @@ export const categories: AppRouteDefinition = {
     helpText: "Browse by year and category.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("./Categories")),
+    component: lazy(() => import("./Layout")),
     children: [categoriesRedirect, categoriesGrid, categoriesList]
 };
 

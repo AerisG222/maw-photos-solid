@@ -8,7 +8,7 @@ export const searchRedirect: AppRouteDefinition = {
     path: "/",
     absolutePath: basePath,
     name: "Redirect",
-    component: lazy(() => import("./SearchRedirect"))
+    component: lazy(() => import("./Redirect"))
 };
 
 export const searchGrid: AppRouteDefinition = {
@@ -17,7 +17,7 @@ export const searchGrid: AppRouteDefinition = {
     tooltip: "Grid View",
     path: "/grid",
     absolutePath: `${basePath}/grid`,
-    component: lazy(() => import("./ViewGrid"))
+    component: lazy(() => import("./Grid"))
 };
 
 export const searchList: AppRouteDefinition = {
@@ -26,7 +26,7 @@ export const searchList: AppRouteDefinition = {
     tooltip: "List View",
     path: "/list",
     absolutePath: `${basePath}/list`,
-    component: lazy(() => import("./ViewList"))
+    component: lazy(() => import("./List"))
 };
 
 export const search: AppRouteDefinition = {
@@ -35,7 +35,7 @@ export const search: AppRouteDefinition = {
     helpText: "Search photo and video categories.",
     path: basePath,
     absolutePath: basePath,
-    component: lazy(() => import("./Search")),
+    component: lazy(() => import("./Layout")),
     children: [searchRedirect, searchGrid, searchList]
 };
 
