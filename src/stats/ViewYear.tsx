@@ -46,20 +46,30 @@ const ViewYear: Component = () => {
         };
     });
 
-    const sumMediaCount = (stat: CategoryStat) =>
-        aggregateMedia(stat, typedStat => typedStat.mediaCount);
+    const sumMediaCount = (stat: CategoryStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.mediaCount);
 
-    const sumMediaSize = (stat: CategoryStat) =>
-        aggregateMedia(stat, typedStat => typedStat.fileSize);
+    const sumMediaSize = (stat: CategoryStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.fileSize);
 
-    const sumMediaDuration = (stat: CategoryStat) =>
-        aggregateMedia(stat, typedStat => typedStat.duration);
+    const sumMediaDuration = (stat: CategoryStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.duration);
 
-    const aggregateMedia = (stat: CategoryStat, getValue: (typeStat: MediaTypeStat) => number) => {
+    const aggregateMedia = (
+        stat: CategoryStat,
+        mediaType: string | undefined,
+        getValue: (typeStat: MediaTypeStat) => number
+    ) => {
         let value = 0;
 
         for (const typeStat of stat.mediaTypeStats) {
-            value += getValue(typeStat);
+            if (
+                mediaType === "all" ||
+                mediaType === undefined ||
+                mediaType === typeStat.mediaType
+            ) {
+                value += getValue(typeStat);
+            }
         }
 
         return value;
@@ -68,11 +78,11 @@ const ViewYear: Component = () => {
     const getSumForCategory = (stat: CategoryStat) => {
         switch (search?.mode) {
             case "count":
-                return sumMediaCount(stat);
+                return sumMediaCount(stat, search?.type);
             case "size":
-                return sumMediaSize(stat);
+                return sumMediaSize(stat, search?.type);
             case "duration":
-                return sumMediaDuration(stat);
+                return sumMediaDuration(stat, search?.type);
         }
 
         throw Error("Unexpected mode!");

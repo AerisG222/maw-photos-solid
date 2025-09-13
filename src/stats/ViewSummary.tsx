@@ -24,19 +24,30 @@ const ViewCombined: Component = () => {
 
     const sumCategoryCount = (stat: YearStat) => stat.categoryCount;
 
-    const sumMediaCount = (stat: YearStat) =>
-        aggregateMedia(stat, typedStat => typedStat.mediaCount);
+    const sumMediaCount = (stat: YearStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.mediaCount);
 
-    const sumMediaSize = (stat: YearStat) => aggregateMedia(stat, typedStat => typedStat.fileSize);
+    const sumMediaSize = (stat: YearStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.fileSize);
 
-    const sumMediaDuration = (stat: YearStat) =>
-        aggregateMedia(stat, typedStat => typedStat.duration);
+    const sumMediaDuration = (stat: YearStat, mediaType: string | undefined) =>
+        aggregateMedia(stat, mediaType, typedStat => typedStat.duration);
 
-    const aggregateMedia = (stat: YearStat, getValue: (typeStat: MediaTypeStat) => number) => {
+    const aggregateMedia = (
+        stat: YearStat,
+        mediaType: string | undefined,
+        getValue: (typeStat: MediaTypeStat) => number
+    ) => {
         let value = 0;
 
         for (const typeStat of stat.mediaTypeStats) {
-            value += getValue(typeStat);
+            if (
+                mediaType === "all" ||
+                mediaType === undefined ||
+                mediaType === typeStat.mediaType
+            ) {
+                value += getValue(typeStat);
+            }
         }
 
         return value;
@@ -47,17 +58,17 @@ const ViewCombined: Component = () => {
             case "category-count":
                 return sumCategoryCount(stat);
             case "count":
-                return sumMediaCount(stat);
+                return sumMediaCount(stat, search?.type);
             case "size":
-                return sumMediaSize(stat);
+                return sumMediaSize(stat, search?.type);
             case "duration":
-                return sumMediaDuration(stat);
+                return sumMediaDuration(stat, search?.type);
         }
 
         return undefined;
     };
 
-    const treeData = createMemo(() => {
+    const treeData = () => {
         if (stats.isSuccess && stats.data) {
             const res = [];
 
@@ -69,7 +80,7 @@ const ViewCombined: Component = () => {
         }
 
         return [];
-    });
+    };
 
     const statbarData = createMemo(() => {
         let yearCount = 0;
