@@ -14,6 +14,7 @@ interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
     enableCategoryTeaser: boolean;
+    mediaElement: HTMLImageElement | HTMLVideoElement | undefined;
 }
 
 const Sidebar: Component<Props> = props => {
@@ -148,6 +149,7 @@ const Sidebar: Component<Props> = props => {
                                         component={card.component}
                                         activeCategory={props.activeCategory}
                                         activeMedia={props.activeMedia}
+                                        mediaElement={props.mediaElement}
                                     />
                                 </InfoCard>
                             </Show>

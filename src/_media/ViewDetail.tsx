@@ -67,6 +67,7 @@ const ViewDetail: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         enableCategoryTeaser={props.enableCategoryTeaserChooser}
+                        mediaElement={mediaElement}
                     />
                 }
             >

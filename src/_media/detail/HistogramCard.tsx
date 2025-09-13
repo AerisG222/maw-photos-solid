@@ -272,7 +272,7 @@ const HistogramCard: Component<Props> = props => {
                 </label>
             </form>
             <div>
-                <canvas class="histogram" width="473px" height="200px" ref={histogramCanvas} />
+                <canvas class="histogram w-full h-[200px]" ref={histogramCanvas} />
             </div>
         </>
     );
