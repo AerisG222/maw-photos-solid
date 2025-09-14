@@ -48,6 +48,7 @@ const ViewGrid: Component<Props> = props => {
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
+                            canRequestMore={props.mediaService.canRequestMore()}
                             enableToggleBreadcrumbsOnActiveMedia={
                                 props.enableToggleBreadcrumbsOnActiveMedia
                             }
@@ -57,6 +58,7 @@ const ViewGrid: Component<Props> = props => {
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
+                            requestMore={() => props.mediaService.requestMore()}
                         />
                     </Toolbar>
                 }

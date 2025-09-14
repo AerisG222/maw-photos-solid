@@ -13,4 +13,6 @@ export interface IMediaService extends INavigable {
     getAvailableRoutes(): MediaAppRouteDefinition[];
     getEntryPathByView(view: MediaView): string;
     getMediaPathByView(view: MediaView, media: Media | undefined): string;
+    canRequestMore(): boolean;
+    requestMore(): void;
 }

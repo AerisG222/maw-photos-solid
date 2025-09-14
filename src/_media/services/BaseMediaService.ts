@@ -17,6 +17,9 @@ export abstract class BaseMediaService {
     abstract getEntryPathByView(view: MediaView): string;
     abstract getMediaPathByView(view: MediaView, media: Media | undefined): string;
 
+    canRequestMore = () => false;
+    requestMore = () => { /* empty */ };
+
     getActiveMedia = () => {
         if (!this.params.id) {
             return undefined;

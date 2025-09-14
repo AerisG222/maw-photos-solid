@@ -103,4 +103,8 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     fetchNextPage = async () => {
         await this.mediaListQuery.fetchNextPage();
     }
+
+    override canRequestMore = () => true;
+
+    override requestMore = () => { this.mediaListQuery.fetchNextPage(); };
 }

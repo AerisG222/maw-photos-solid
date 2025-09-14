@@ -18,6 +18,7 @@ import DownloadCategoryButton from "./toolbar/DownloadCategoryButton";
 import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
+import RequestMoreButton from "./toolbar/RequestMoreButton";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -25,9 +26,11 @@ interface Props {
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
     slideshowIsPlaying: boolean;
+    canRequestMore: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
+    requestMore: () => void;
 }
 
 const DetailToolbar: Component<Props> = props => {
@@ -52,6 +55,10 @@ const DetailToolbar: Component<Props> = props => {
 
     return (
         <>
+            <Show when={props.canRequestMore}>
+                <RequestMoreButton requestMore={props.requestMore} />
+            </Show>
+
             <ToggleSlideshowButton
                 isPlaying={props.slideshowIsPlaying}
                 toggleSlideshow={props.toggleSlideshow}

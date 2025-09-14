@@ -1,4 +1,4 @@
-import { Component, Show, onCleanup } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
@@ -28,9 +28,11 @@ const ViewFullscreen: Component<Props> = props => {
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
+                            canRequestMore={props.mediaService.canRequestMore()}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
+                            requestMore={() => props.mediaService.requestMore()}
                         />
                     </Toolbar>
                 }

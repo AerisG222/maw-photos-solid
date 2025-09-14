@@ -15,6 +15,7 @@ import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton
 import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
+import RequestMoreButton from "./toolbar/RequestMoreButton";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -23,9 +24,11 @@ interface Props {
     slideshowIsPlaying: boolean;
     enableToggleBreadcrumbsOnActiveMedia: boolean;
     enableToggleBreadcrumbsOnInactiveMedia: boolean;
+    canRequestMore: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
+    requestMore: () => void;
 }
 
 const GridToolbar: Component<Props> = props => {
@@ -63,6 +66,10 @@ const GridToolbar: Component<Props> = props => {
 
     return (
         <>
+            <Show when={props.canRequestMore}>
+                <RequestMoreButton requestMore={props.requestMore} />
+            </Show>
+
             <ToggleSlideshowButton
                 isPlaying={props.slideshowIsPlaying}
                 toggleSlideshow={props.toggleSlideshow}
