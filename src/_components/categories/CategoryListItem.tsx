@@ -6,19 +6,29 @@ import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
+import FavoriteIcon from "../icon/FavoriteIcon";
+import IconButton from "../icon/IconButton";
+
 interface Props {
     category: Category;
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
     eager: boolean;
     showYear?: boolean;
+    setIsFavorite: (category: Category, isFavorite: boolean) => void;
 }
 
 const CategoryListItem: Component<Props> = props => {
+    const onClickFavorite = () => {
+        if (props.setIsFavorite) {
+            props.setIsFavorite(props.category, !props.category.isFavorite);
+        }
+    };
+
     return (
         <A
             href={getCategoryPath(props.category.id)}
-            class="group block cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10 hover:bg-base-300 hover:text-primary"
+            class="group flex items-center cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10 hover:bg-base-300 hover:text-primary"
         >
             <img
                 src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
@@ -38,6 +48,15 @@ const CategoryListItem: Component<Props> = props => {
             </Show>
 
             <span class="ml-2 md:ml-4">{props.category.name}</span>
+
+            <span class="grow" />
+
+            <IconButton onClick={onClickFavorite} buttonClasses="btn-lg mr-4">
+                <FavoriteIcon
+                    isFavorite={props.category.isFavorite}
+                    extraClasses="hover:text-primary"
+                />
+            </IconButton>
         </A>
     );
 };

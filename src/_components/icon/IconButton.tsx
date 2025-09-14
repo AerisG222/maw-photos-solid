@@ -1,7 +1,7 @@
 import { children, ParentComponent } from "solid-js";
 
 interface Props {
-    buttonClasses: string;
+    buttonClasses?: string;
     onClick: () => void;
 }
 
@@ -18,10 +18,7 @@ const IconButton: ParentComponent<Props> = props => {
     };
 
     return (
-        <button
-            class={`btn btn-xs btn-circle ${props.buttonClasses}`}
-            onClick={evt => handleClick(evt)}
-        >
+        <button class={`btn btn-circle ${props.buttonClasses}`} onClick={evt => handleClick(evt)}>
             {c()}
         </button>
     );

@@ -13,7 +13,7 @@ const FloatingIconButton: ParentComponent<Props> = props => {
         <>
             <div class="relative">
                 <IconButton
-                    buttonClasses={"absolute top-[2px] right-[2px] z-1 text-primary"}
+                    buttonClasses={"absolute top-[2px] right-[2px] z-1 text-primary btn-xs"}
                     onClick={props.onClick}
                 >
                     {c()}
