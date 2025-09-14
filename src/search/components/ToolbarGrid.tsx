@@ -40,7 +40,9 @@ const GridToolbar: Component = () => {
     };
 
     const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
+        if (!settings.showTitles && !settings.showYears) {
+            setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
+        }
     };
 
     const onToggleMargins = () => {

@@ -21,7 +21,9 @@ const GridToolbar: Component = () => {
     };
 
     const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
+        if (!settings.showTitles) {
+            setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
+        }
     };
 
     const onToggleMargins = () => {
