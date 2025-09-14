@@ -35,7 +35,7 @@ export interface CategoriesService {
     categorySearchQuery: (
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
-    setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest, unknown>;
+    setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
 }
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -181,6 +181,11 @@ export const CategoriesProvider: ParentComponent = props => {
 
             await queryClient.invalidateQueries({
                 queryKey,
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories", "search"],
                 refetchType: "all"
             });
         }

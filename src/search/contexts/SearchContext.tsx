@@ -2,9 +2,10 @@ import { ParentComponent, createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { UseInfiniteQueryResult, InfiniteData } from "@tanstack/solid-query";
+import { UseInfiniteQueryResult, InfiniteData, UseMutationResult } from "@tanstack/solid-query";
 import { Category } from "../../_models/Category";
 import { SearchResults } from "../../_models/SearchResults";
+import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 
 export interface SearchState {
     readonly term: string;
@@ -32,6 +33,12 @@ export type SearchContextValue = [
                 Error
             >
         ) => Category[];
+        setIsFavoriteMutation: UseMutationResult<
+            Response,
+            Error,
+            IsFavoriteRequest<Category>,
+            unknown
+        >;
     }
 ];
 
@@ -39,7 +46,7 @@ const SearchContext = createContext<SearchContextValue>();
 
 export const SearchProvider: ParentComponent = props => {
     const [searchState, setSearchState] = createStore(defaultSearchState);
-    const { categorySearchQuery } = useCategoriesContext();
+    const { categorySearchQuery, setIsFavoriteMutation } = useCategoriesContext();
 
     const clearSearchTerm = () => {
         setSearchTerm("");
@@ -86,7 +93,8 @@ export const SearchProvider: ParentComponent = props => {
                     clearActiveTerm,
                     setActiveTerm,
                     categorySearchQuery,
-                    allSearchResults
+                    allSearchResults,
+                    setIsFavoriteMutation
                 }
             ]}
         >

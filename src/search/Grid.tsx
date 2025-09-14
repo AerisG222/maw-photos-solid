@@ -3,6 +3,8 @@ import { Component, createEffect, createSignal, For } from "solid-js";
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
+import { Category } from "../_models/Category";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
 import GridToolbar from "./components/ToolbarGrid";
@@ -13,12 +15,22 @@ import SearchResultStatus from "./components/SearchResultStatus";
 
 const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
-    const [state, { categorySearchQuery, allSearchResults }] = useSearchContext();
+    const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
+        useSearchContext();
     const [searchQuery, setSearchQuery] = createSignal(categorySearchQuery(state.activeTerm));
 
     createEffect(() => {
         setSearchQuery(categorySearchQuery(state.activeTerm));
     });
+
+    const setIsFavorite = (category: Category, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Category> = {
+            item: category,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
 
     return (
         <Layout
@@ -42,7 +54,9 @@ const ViewGrid: Component = () => {
                             thumbnailSize={settings.thumbnailSize}
                             dimThumbnails={settings.dimThumbnails}
                             showYears={settings.showYears}
+                            showFavoriteBadge={settings.showFavoritesBadge}
                             eager={idx() <= EAGER_THRESHOLD}
+                            setIsFavorite={setIsFavorite}
                         />
                     )}
                 </For>

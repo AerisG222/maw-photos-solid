@@ -11,6 +11,7 @@ export interface SearchGridViewSettingsState {
     readonly showYears: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
+    readonly showFavoritesBadge: boolean;
 }
 
 export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
@@ -18,7 +19,8 @@ export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     showTitles: true,
     showYears: true,
     thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true
+    dimThumbnails: true,
+    showFavoritesBadge: false
 };
 
 export type SearchGridViewSettingsContextValue = [
@@ -29,6 +31,7 @@ export type SearchGridViewSettingsContextValue = [
         setShowYears: (showYears: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
+        setShowFavoritesBadge: (showBadge: boolean) => void;
     }
 ];
 
@@ -42,6 +45,8 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
     const setShowYears = (showYears: boolean) => updateState({ showYears });
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
+    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
+        updateState({ showFavoritesBadge });
 
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);
@@ -52,7 +57,14 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
         <SearchGridViewSettingsContext.Provider
             value={[
                 state,
-                { setMargin, setShowTitles, setShowYears, setThumbnailSize, setDimThumbnails }
+                {
+                    setMargin,
+                    setShowTitles,
+                    setShowYears,
+                    setThumbnailSize,
+                    setDimThumbnails,
+                    setShowFavoritesBadge
+                }
             ]}
         >
             {props.children}

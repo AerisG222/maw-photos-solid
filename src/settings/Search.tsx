@@ -35,7 +35,8 @@ const ViewSearch: Component = () => {
             setShowYears: setGridShowYears,
             setMargin: setGridMargin,
             setThumbnailSize: setGridThumbnailSize,
-            setDimThumbnails: setGridDimThumbnails
+            setDimThumbnails: setGridDimThumbnails,
+            setShowFavoritesBadge: setGridShowFavoritesBadge
         }
     ] = useSearchGridViewSettingsContext();
 
@@ -115,6 +116,12 @@ const ViewSearch: Component = () => {
                         name="gridDimThumbnails"
                         isSelected={gridSettings.dimThumbnails}
                         onChange={setGridDimThumbnails}
+                    />
+                    <Toggle
+                        title="Show Favorite Badges"
+                        name="gridShowFavoriteBadges"
+                        isSelected={gridSettings.showFavoritesBadge}
+                        onChange={setGridShowFavoritesBadge}
                     />
                 </Panel>
 

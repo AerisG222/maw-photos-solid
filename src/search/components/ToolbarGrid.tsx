@@ -9,7 +9,14 @@ import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 const GridToolbar: Component = () => {
     const [
         settings,
-        { setShowTitles, setShowYears, setThumbnailSize, setMargin, setDimThumbnails }
+        {
+            setShowTitles,
+            setShowYears,
+            setThumbnailSize,
+            setMargin,
+            setDimThumbnails,
+            setShowFavoritesBadge
+        }
     ] = useSearchGridViewSettingsContext();
 
     const ensureLargeThumbnails = () => {
@@ -42,6 +49,10 @@ const GridToolbar: Component = () => {
 
     const onToggleDimThumbnails = () => {
         setDimThumbnails(!settings.dimThumbnails);
+    };
+
+    const onToggleFavoritesBadge = () => {
+        setShowFavoritesBadge(!settings.showFavoritesBadge);
     };
 
     return (
@@ -77,6 +88,13 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["d"]}
                 clickHandler={onToggleDimThumbnails}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--heart]"
+                name="Favorites"
+                tooltip="Toggle Favorites Badge"
+                shortcutKeys={["f"]}
+                clickHandler={onToggleFavoritesBadge}
             />
         </>
     );
