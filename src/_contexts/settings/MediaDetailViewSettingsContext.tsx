@@ -9,13 +9,15 @@ export interface MediaDetailViewSettingsState {
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly showMediaList: boolean;
     readonly dimThumbnails: boolean;
+    readonly showFavoritesBadge: boolean;
 }
 
 export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
     showBreadcrumbs: true,
     thumbnailSize: defaultGridThumbnailSize,
     showMediaList: true,
-    dimThumbnails: true
+    dimThumbnails: true,
+    showFavoritesBadge: false
 };
 
 export type MediaDetailViewSettingsContextValue = [
@@ -25,6 +27,7 @@ export type MediaDetailViewSettingsContextValue = [
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowMediaList: (showMediaList: boolean) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
+        setShowFavoritesBadge: (showFavoritesBadge: boolean) => void;
     }
 ];
 
@@ -37,6 +40,8 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
     const setShowMediaList = (showMediaList: boolean) => updateState({ showMediaList });
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
+    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
+        updateState({ showFavoritesBadge });
 
     const updateState = (update: Partial<MediaDetailViewSettingsState>) => {
         setState(update);
@@ -47,7 +52,13 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
         <MediaDetailViewSettingsContext.Provider
             value={[
                 state,
-                { setShowBreadcrumbs, setShowMediaList, setThumbnailSize, setDimThumbnails }
+                {
+                    setShowBreadcrumbs,
+                    setShowMediaList,
+                    setThumbnailSize,
+                    setDimThumbnails,
+                    setShowFavoritesBadge
+                }
             ]}
         >
             {props.children}

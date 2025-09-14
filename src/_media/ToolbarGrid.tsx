@@ -16,6 +16,7 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
+import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -29,6 +30,7 @@ interface Props {
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
+    setShowFavoritesBadge: () => void;
 }
 
 const GridToolbar: Component<Props> = props => {
@@ -82,6 +84,10 @@ const GridToolbar: Component<Props> = props => {
                 />
                 <MoveNextButton isLast={props.activeMediaIsLast} moveNext={props.moveNext} />
             </Show>
+
+            <ToolbarDivider />
+
+            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
 
             <ToolbarDivider />
 

@@ -11,13 +11,17 @@ false && tap;
 
 import MainPhoto from "./MainPhoto";
 import MainVideo from "./MainVideo";
+import FavoriteIcon from "../_components/icon/FavoriteIcon";
+import IconButton from "../_components/icon/IconButton";
 
 interface Props {
     media: Media;
     maxHeightStyle?: string;
+    showFavoriteBadge: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     setActiveMediaElement?: (el: HTMLImageElement | HTMLVideoElement) => void;
+    setIsFavorite: (media: Media, isFavorite: boolean) => void;
 }
 
 const MainItem: Component<Props> = props => {
@@ -54,6 +58,12 @@ const MainItem: Component<Props> = props => {
         return props.media.files.find(f => f.scale === "full-hd")?.path ?? "";
     };
 
+    const onClickFavorite = () => {
+        if (props.setIsFavorite) {
+            props.setIsFavorite(props.media, !props.media.isFavorite);
+        }
+    };
+
     return (
         <Show when={props.media}>
             <div
@@ -63,6 +73,14 @@ const MainItem: Component<Props> = props => {
                 class="h-full w-full max-h-screen max-w-full object-contain self-center"
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}
             >
+                <Show when={props.showFavoriteBadge}>
+                    <div class="fab mx-auto">
+                        <IconButton buttonClasses="hover:text-primary" onClick={onClickFavorite}>
+                            <FavoriteIcon isFavorite={props.media.isFavorite} />
+                        </IconButton>
+                    </div>
+                </Show>
+
                 <Switch>
                     <Match when={props.media.type === "photo"}>
                         <MainPhoto

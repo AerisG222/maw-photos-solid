@@ -8,6 +8,8 @@ import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
 import { getMarginClass, MarginIdType } from "../_models/Margin";
+import { useMediaContext } from "../_contexts/api/MediaContext";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
@@ -24,9 +26,22 @@ interface Props {
     showBreadcrumbsOnMedia: boolean;
     enableToggleBreadcrumbsOnActiveMedia: boolean;
     enableToggleBreadcrumbsOnInactiveMedia: boolean;
+    showFavoritesBadge: boolean;
+    setShowFavoritesBadge: () => void;
 }
 
 const ViewGrid: Component<Props> = props => {
+    const { setIsFavoriteMutation } = useMediaContext();
+
+    const setIsFavorite = (media: Media, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Media> = {
+            item: media,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
+
     const buildGridContainerClass = (margin: MarginIdType | undefined) => ({
         ...getMarginClass(margin),
         "col-start-1": true,
@@ -59,6 +74,7 @@ const ViewGrid: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
+                            setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                         />
                     </Toolbar>
                 }
@@ -82,8 +98,10 @@ const ViewGrid: Component<Props> = props => {
                                 >
                                     <MainItem
                                         media={props.mediaService.getActiveMedia()!}
+                                        showFavoriteBadge={props.showFavoritesBadge}
                                         moveNext={() => props.mediaService.moveNext()}
                                         movePrevious={() => props.mediaService.movePrevious()}
+                                        setIsFavorite={setIsFavorite}
                                     />
                                 </A>
                             </div>
@@ -103,6 +121,8 @@ const ViewGrid: Component<Props> = props => {
                             thumbnailSize={props.gridSettings.thumbnailSize}
                             dimThumbnails={props.gridSettings.dimThumbnails}
                             activeRoute={gridRoute}
+                            showFavoritesBadge={props.showFavoritesBadge}
+                            setIsFavorite={setIsFavorite}
                         />
                     </div>
                 </div>

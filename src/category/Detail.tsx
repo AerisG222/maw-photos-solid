@@ -7,7 +7,7 @@ import { useCategoryServices } from "./hooks/useCategoryServices";
 import ViewDetail from "../_media/ViewDetail";
 
 const Detail: Component = () => {
-    const [settings] = useMediaDetailViewSettingsContext();
+    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
     const { mediaService, slideshowService } = useCategoryServices(MediaViewDetail);
 
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
@@ -23,6 +23,8 @@ const Detail: Component = () => {
             detailSettings={settings}
             showBreadcrumbTitleAsLink={false}
             enableCategoryTeaserChooser={true}
+            showFavoritesBadge={settings.showFavoritesBadge}
+            setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
         />
     );
 };

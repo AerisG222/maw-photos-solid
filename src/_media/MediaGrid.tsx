@@ -12,7 +12,9 @@ interface Props {
     items: Media[];
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
+    showFavoritesBadge: boolean;
     activeRoute: AppRouteDefinition;
+    setIsFavorite: (media: Media, isFavorite: boolean) => void;
 }
 
 const MediaGrid: Component<Props> = props => {
@@ -28,7 +30,9 @@ const MediaGrid: Component<Props> = props => {
                         route={props.activeRoute}
                         thumbnailSize={props.thumbnailSize}
                         dimThumbnails={props.dimThumbnails}
+                        showFavoritesBadge={props.showFavoritesBadge}
                         eager={idx() <= EAGER_THRESHOLD}
+                        setIsFavorite={props.setIsFavorite}
                     />
                 )}
             </For>

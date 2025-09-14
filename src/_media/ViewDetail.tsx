@@ -7,6 +7,8 @@ import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
 import { Media } from "../_models/Media";
 import { MediaViewDetail } from "../_models/MediaView";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
+import { useMediaContext } from "../_contexts/api/MediaContext";
 
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
@@ -22,9 +24,13 @@ interface Props {
     detailSettings: MediaDetailViewSettingsState;
     showBreadcrumbTitleAsLink: boolean;
     enableCategoryTeaserChooser: boolean;
+    showFavoritesBadge: boolean;
+    setShowFavoritesBadge: () => void;
 }
 
 const ViewDetail: Component<Props> = props => {
+    const { setIsFavoriteMutation } = useMediaContext();
+
     const getMaxHeight = () => {
         let reservedHeight = 0;
 
@@ -39,6 +45,15 @@ const ViewDetail: Component<Props> = props => {
     };
 
     let mediaElement: HTMLImageElement | HTMLVideoElement;
+
+    const setIsFavorite = (media: Media, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Media> = {
+            item: media,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
 
     return (
         <Show when={props.mediaService.getActiveMedia()}>
@@ -61,6 +76,7 @@ const ViewDetail: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
+                            setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                         />
                     </Toolbar>
                 }
@@ -85,9 +101,11 @@ const ViewDetail: Component<Props> = props => {
                         <MainItem
                             media={props.mediaService.getActiveMedia()!}
                             maxHeightStyle={getMaxHeight()}
+                            showFavoriteBadge={props.showFavoritesBadge}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
                             setActiveMediaElement={el => (mediaElement = el)}
+                            setIsFavorite={setIsFavorite}
                         />
                     </div>
 

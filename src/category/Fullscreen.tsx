@@ -5,8 +5,10 @@ import { MediaViewFullscreen } from "../_models/MediaView";
 
 import ViewFullscreen from "../_media/ViewFullscreen";
 import { useCategoryServices } from "./hooks/useCategoryServices";
+import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 
 const Fullscreen: Component = () => {
+    const [settings, { setShowFavoritesBadge }] = useMediaFullscreenViewSettingsContext();
     const [, { setFullscreen }] = useFullscreenContext();
     const { mediaService, slideshowService } = useCategoryServices(MediaViewFullscreen);
 
@@ -19,7 +21,14 @@ const Fullscreen: Component = () => {
         setFullscreen(false);
     });
 
-    return <ViewFullscreen mediaService={mediaService} slideshowService={slideshowService} />;
+    return (
+        <ViewFullscreen
+            mediaService={mediaService}
+            slideshowService={slideshowService}
+            showFavoritesBadge={settings.showFavoritesBadge}
+            setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+        />
+    );
 };
 
 export default Fullscreen;

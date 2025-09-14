@@ -7,7 +7,7 @@ import { MediaViewGrid } from "../_models/MediaView";
 import ViewGrid from "../_media/ViewGrid";
 
 const Grid: Component = () => {
-    const [settings] = useMediaGridViewSettingsContext();
+    const [settings, { setShowFavoritesBadge }] = useMediaGridViewSettingsContext();
     const { mediaService, slideshowService } = useCategoryServices(MediaViewGrid);
 
     onCleanup(() => {
@@ -23,6 +23,8 @@ const Grid: Component = () => {
             showBreadcrumbsOnMedia={false}
             enableToggleBreadcrumbsOnActiveMedia={false}
             enableToggleBreadcrumbsOnInactiveMedia={true}
+            showFavoritesBadge={settings.showFavoritesBadge}
+            setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
         />
     );
 };

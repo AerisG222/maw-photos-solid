@@ -11,6 +11,7 @@ export interface MediaGridViewSettingsState {
     readonly showMainBreadcrumbs: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
+    readonly showFavoritesBadge: boolean;
 }
 
 export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
@@ -18,7 +19,8 @@ export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
     showBreadcrumbs: true,
     showMainBreadcrumbs: true,
     thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true
+    dimThumbnails: true,
+    showFavoritesBadge: false
 };
 
 export type MediaGridViewSettingsContextValue = [
@@ -29,6 +31,7 @@ export type MediaGridViewSettingsContextValue = [
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setShowMainBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
+        setShowFavoritesBadge: (showFavoritesBadge: boolean) => void;
     }
 ];
 
@@ -43,6 +46,8 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
     const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
     const setShowMainBreadcrumbs = (showMainBreadcrumbs: boolean) =>
         updateState({ showMainBreadcrumbs });
+    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
+        updateState({ showFavoritesBadge });
 
     const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);
@@ -58,7 +63,8 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
                     setShowBreadcrumbs,
                     setShowMainBreadcrumbs,
                     setThumbnailSize,
-                    setDimThumbnails
+                    setDimThumbnails,
+                    setShowFavoritesBadge
                 }
             ]}
         >

@@ -17,6 +17,7 @@ import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
 import { Uuid } from "../../_models/Uuid";
+import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -27,6 +28,7 @@ export interface MediaService {
         count: number
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
     addCommentMutation: UseMutationResult<Response, Error, AddCommentRequest, unknown>;
+    setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Media>, unknown>;
 }
 
 const MediaContext = createContext<MediaService>();
@@ -69,9 +71,14 @@ export const MediaProvider: ParentComponent = props => {
             postApi(accessToken, `media/${req.mediaId}/comments`, { body: req.comment })
         );
 
+    const postIsFavorite = async (req: IsFavoriteRequest<Media>) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/${req.item.id}/favorite`, {
+                isFavorite: req.isFavorite
+            })
+        );
+
     // todo:
-    // patchApi(`media/${mediaId}/favorite`, { mediaId, isFavorite });
-    // postApi(`media/${mediaId}/comments`, { comment });
     // patchApi(`media/${mediaId}/gps`, gps);
 
     const randomMediaQuery = (count: number) =>
@@ -126,6 +133,22 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
+    // todo: optimize if this starts getting used more
+    const setIsFavoriteMutation = useMutation(() => ({
+        mutationFn: (isFavoriteReq: IsFavoriteRequest<Media>) => postIsFavorite(isFavoriteReq),
+        onSettled: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["media", "random"],
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories"],
+                refetchType: "all"
+            });
+        }
+    }));
+
     return (
         <MediaContext.Provider
             value={{
@@ -134,7 +157,8 @@ export const MediaProvider: ParentComponent = props => {
                 commentsQuery,
                 gpsQuery,
                 randomMediaQuery,
-                addCommentMutation
+                addCommentMutation,
+                setIsFavoriteMutation
             }}
         >
             {props.children}

@@ -13,6 +13,7 @@ import { MediaPageSettingsProvider } from "./MediaPageSettingsContext";
 import { SearchGridSettingsProvider } from "./SearchGridViewSettingsContext";
 import { SearchListSettingsProvider } from "./SearchListViewSettingsContext";
 import { SearchPageSettingsProvider } from "./SearchPageSettingsContext";
+import { MediaFullscreenSettingsProvider } from "./MediaFullscreenViewSettingsContext";
 
 export const AllSettingsProvider: ParentComponent = props => {
     return (
@@ -22,21 +23,23 @@ export const AllSettingsProvider: ParentComponent = props => {
                     <CategoryListSettingsProvider>
                         <CategoryPageSettingsProvider>
                             <MediaDetailSettingsProvider>
-                                <MediaGridSettingsProvider>
-                                    <MediaInfoPanelSettingsProvider>
-                                        <MediaMapSettingsProvider>
-                                            <MediaPageSettingsProvider>
-                                                <SearchGridSettingsProvider>
-                                                    <SearchListSettingsProvider>
-                                                        <SearchPageSettingsProvider>
-                                                            {props.children}
-                                                        </SearchPageSettingsProvider>
-                                                    </SearchListSettingsProvider>
-                                                </SearchGridSettingsProvider>
-                                            </MediaPageSettingsProvider>
-                                        </MediaMapSettingsProvider>
-                                    </MediaInfoPanelSettingsProvider>
-                                </MediaGridSettingsProvider>
+                                <MediaFullscreenSettingsProvider>
+                                    <MediaGridSettingsProvider>
+                                        <MediaInfoPanelSettingsProvider>
+                                            <MediaMapSettingsProvider>
+                                                <MediaPageSettingsProvider>
+                                                    <SearchGridSettingsProvider>
+                                                        <SearchListSettingsProvider>
+                                                            <SearchPageSettingsProvider>
+                                                                {props.children}
+                                                            </SearchPageSettingsProvider>
+                                                        </SearchListSettingsProvider>
+                                                    </SearchGridSettingsProvider>
+                                                </MediaPageSettingsProvider>
+                                            </MediaMapSettingsProvider>
+                                        </MediaInfoPanelSettingsProvider>
+                                    </MediaGridSettingsProvider>
+                                </MediaFullscreenSettingsProvider>
                             </MediaDetailSettingsProvider>
                         </CategoryPageSettingsProvider>
                     </CategoryListSettingsProvider>

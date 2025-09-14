@@ -32,23 +32,26 @@ const ViewMedia: Component = () => {
             setShowBreadcrumbs: setDetailShowBreadcrumbs,
             setShowMediaList: setDetailShowMediaList,
             setThumbnailSize: setDetailThumbnailSize,
-            setDimThumbnails: setDetailDimThumbnails
+            setDimThumbnails: setDetailDimThumbnails,
+            setShowFavoritesBadge: setDetailShowFavoritesBadge
         }
     ] = useMediaDetailViewSettingsContext();
+    const [fullscreenSettings, { setShowFavoritesBadge: setFullscreenShowFavoritesBadge }] =
+        useMediaGridViewSettingsContext();
     const [
         gridSettings,
         {
             setMargin: setGridMargin,
             setShowBreadcrumbs: setGridShowBreadcrumbs,
             setThumbnailSize: setGridThumbnailSize,
-            setDimThumbnails: setGridDimThumbnails
+            setDimThumbnails: setGridDimThumbnails,
+            setShowFavoritesBadge: setGridShowFavoritesBadge
         }
     ] = useMediaGridViewSettingsContext();
     const [
         infoPanelSettings,
         {
             setExpandInfoPanel,
-            setShowRatings,
             setShowCategoryTeaserChooser,
             setShowComments,
             setShowExif,
@@ -107,6 +110,12 @@ const ViewMedia: Component = () => {
                         isSelected={detailSettings.dimThumbnails}
                         onChange={setDetailDimThumbnails}
                     />
+                    <Toggle
+                        title="Show Favorite Badges"
+                        name="detailShowFavoriteBadges"
+                        isSelected={detailSettings.showFavoritesBadge}
+                        onChange={setDetailShowFavoritesBadge}
+                    />
 
                     <h3 class="head3 mt-4 text-secondary">Info Panel</h3>
                     <div>
@@ -115,12 +124,6 @@ const ViewMedia: Component = () => {
                             name="showInfoPanel"
                             isSelected={infoPanelSettings.expandInfoPanel}
                             onChange={setExpandInfoPanel}
-                        />
-                        <Checkbox
-                            title="Show Ratings"
-                            name="showRatingsPanel"
-                            isSelected={infoPanelSettings.showRatings}
-                            onChange={setShowRatings}
                         />
                         <Checkbox
                             title="Show Comments"
@@ -182,6 +185,15 @@ const ViewMedia: Component = () => {
                     />
                 </Panel>
 
+                <Panel title="Fullscreen View">
+                    <Toggle
+                        title="Show Favorite Badges"
+                        name="fullscreenShowFavoriteBadges"
+                        isSelected={fullscreenSettings.showFavoritesBadge}
+                        onChange={setFullscreenShowFavoritesBadge}
+                    />
+                </Panel>
+
                 <Panel title="Grid View">
                     <Toggle
                         title="Show Breadcrumbs"
@@ -208,6 +220,12 @@ const ViewMedia: Component = () => {
                         name="gridDimThumbnails"
                         isSelected={gridSettings.dimThumbnails}
                         onChange={setGridDimThumbnails}
+                    />
+                    <Toggle
+                        title="Show Favorite Badges"
+                        name="gridShowFavoriteBadges"
+                        isSelected={gridSettings.showFavoritesBadge}
+                        onChange={setGridShowFavoritesBadge}
                     />
                 </Panel>
 

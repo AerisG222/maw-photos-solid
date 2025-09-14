@@ -8,7 +8,7 @@ import ViewDetail from "../_media/ViewDetail";
 
 const Detail: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewDetail);
-    const [settings] = useMediaDetailViewSettingsContext();
+    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
 
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
@@ -24,6 +24,8 @@ const Detail: Component = () => {
             detailSettings={settings}
             showBreadcrumbTitleAsLink={true}
             enableCategoryTeaserChooser={false}
+            showFavoritesBadge={settings.showFavoritesBadge}
+            setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
         />
     );
 };

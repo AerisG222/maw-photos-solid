@@ -9,6 +9,7 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
+import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
 interface Props {
     activeMediaIsFirst: boolean;
@@ -19,6 +20,7 @@ interface Props {
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
+    setShowFavoritesBadge: () => void;
 }
 
 const FullscreenToolbar: Component<Props> = props => {
@@ -44,6 +46,10 @@ const FullscreenToolbar: Component<Props> = props => {
             <RotateClockwiseButton />
             <FlipHorizontalButton />
             <FlipVerticalButton />
+
+            <ToolbarDivider />
+
+            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
         </>
     );
 };

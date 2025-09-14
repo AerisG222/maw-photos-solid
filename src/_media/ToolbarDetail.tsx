@@ -19,6 +19,7 @@ import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
+import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -31,6 +32,7 @@ interface Props {
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
+    setShowFavoritesBadge: () => void;
 }
 
 const DetailToolbar: Component<Props> = props => {
@@ -123,6 +125,8 @@ const DetailToolbar: Component<Props> = props => {
                 shortcutKeys={["b"]}
                 clickHandler={onToggleDimThumbnails}
             />
+
+            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
         </>
     );
 };

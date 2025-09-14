@@ -9,6 +9,7 @@ export const KEY_SETTINGS_CATEGORY_VIEW_LIST = `${PREFIX}|categorylistview`;
 
 export const KEY_SETTINGS_MEDIA_PAGE = `${PREFIX}|mediapage`;
 export const KEY_SETTINGS_MEDIA_VIEW_DETAIL = `${PREFIX}|mediadetailview`;
+export const KEY_SETTINGS_MEDIA_VIEW_FULLSCREEN = `${PREFIX}|mediafullscreenview`;
 export const KEY_SETTINGS_MEDIA_VIEW_GRID = `${PREFIX}|mediagridview`;
 export const KEY_SETTINGS_MEDIA_VIEW_MAP = `${PREFIX}|mediamapview`;
 export const KEY_SETTINGS_MEDIA_INFO_PANEL = `${PREFIX}|mediainfopanel`;
@@ -22,7 +23,7 @@ export function loadJson<T>(key: string, def: T): T {
 
     if (val) {
         try {
-            return JSON.parse(val);
+            return JSON.parse(val) as T;
         } catch {
             // swallow
         }

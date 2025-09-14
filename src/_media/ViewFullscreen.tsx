@@ -2,6 +2,9 @@ import { Component, Show } from "solid-js";
 
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
+import { useMediaContext } from "../_contexts/api/MediaContext";
+import { Media } from "../_models/Media";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import FullscreenToolbar from "./ToolbarFullscreen";
 import Toolbar from "./Toolbar";
@@ -11,9 +14,22 @@ import MainItem from "./MainItem";
 interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
+    showFavoritesBadge: boolean;
+    setShowFavoritesBadge: () => void;
 }
 
 const ViewFullscreen: Component<Props> = props => {
+    const { setIsFavoriteMutation } = useMediaContext();
+
+    const setIsFavorite = (media: Media, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Media> = {
+            item: media,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
+
     return (
         <Show when={props.mediaService.getActiveMedia()}>
             <Layout
@@ -33,6 +49,7 @@ const ViewFullscreen: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
+                            setShowFavoritesBadge={props.setShowFavoritesBadge}
                         />
                     </Toolbar>
                 }
@@ -40,8 +57,10 @@ const ViewFullscreen: Component<Props> = props => {
                 <div class="grid h-screen w-full justify-center">
                     <MainItem
                         media={props.mediaService.getActiveMedia()!}
+                        showFavoriteBadge={props.showFavoritesBadge}
                         moveNext={() => props.mediaService.moveNext()}
                         movePrevious={() => props.mediaService.movePrevious()}
+                        setIsFavorite={setIsFavorite}
                     />
                 </div>
             </Layout>
