@@ -11,11 +11,11 @@ const FavoriteIcon: Component<Props> = props => {
         const klass = [];
 
         if (props.isFavorite) {
-            klass.push("group-hover:icon-[mdi--heart]");
-            klass.push("group-hover:hover:icon-[mdi--heart-outline]");
+            klass.push("icon-[mdi--heart]");
+            klass.push("hover:icon-[mdi--heart-outline]");
         } else {
-            klass.push("group-hover:icon-[mdi--heart-outline]");
-            klass.push("group-hover:hover:icon-[mdi--heart]");
+            klass.push("icon-[mdi--heart-outline]");
+            klass.push("hover:icon-[mdi--heart]");
         }
 
         return klass.join(" ");

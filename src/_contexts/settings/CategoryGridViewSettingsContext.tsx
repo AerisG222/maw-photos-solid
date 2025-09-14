@@ -10,13 +10,15 @@ export interface CategoryGridViewSettingsState {
     readonly showTitles: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
+    readonly showFavoritesBadge: boolean;
 }
 
 export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
     margin: defaultMargin,
     showTitles: true,
     thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true
+    dimThumbnails: true,
+    showFavoritesBadge: false
 };
 
 export type CategoryGridViewSettingsContextValue = [
@@ -26,6 +28,7 @@ export type CategoryGridViewSettingsContextValue = [
         setShowTitles: (showTitles: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
+        setShowFavoritesBadge: (showBadge: boolean) => void;
     }
 ];
 
@@ -38,6 +41,8 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
     const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
     const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
+    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
+        updateState({ showFavoritesBadge });
 
     const updateState = (update: Partial<CategoryGridViewSettingsState>) => {
         setState(update);
@@ -46,7 +51,16 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
 
     return (
         <CategoryGridViewSettingsContext.Provider
-            value={[state, { setMargin, setShowTitles, setThumbnailSize, setDimThumbnails }]}
+            value={[
+                state,
+                {
+                    setMargin,
+                    setShowTitles,
+                    setThumbnailSize,
+                    setDimThumbnails,
+                    setShowFavoritesBadge
+                }
+            ]}
         >
             {props.children}
         </CategoryGridViewSettingsContext.Provider>

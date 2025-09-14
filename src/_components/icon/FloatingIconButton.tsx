@@ -13,9 +13,7 @@ const FloatingIconButton: ParentComponent<Props> = props => {
         <>
             <div class="relative">
                 <IconButton
-                    buttonClasses={
-                        "invisible group-hover:visible absolute top-[2px] right-[2px] z-1 text-primary"
-                    }
+                    buttonClasses={"absolute top-[2px] right-[2px] z-1 text-primary"}
                     onClick={props.onClick}
                 >
                     {c()}

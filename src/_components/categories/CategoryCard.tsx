@@ -15,6 +15,7 @@ interface Props {
     showYears: boolean;
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
+    showFavoriteBadge: boolean;
     eager: boolean;
     setIsFavorite: (category: Category, isFavorite: boolean) => void;
 }
@@ -37,9 +38,11 @@ const CategoryCard: Component<Props> = props => {
                 </div>
             </Show>
 
-            <FloatingIconButton onClick={onClickFavorite}>
-                <FavoriteIcon isFavorite={props.category.isFavorite} />
-            </FloatingIconButton>
+            <Show when={props.showFavoriteBadge}>
+                <FloatingIconButton onClick={onClickFavorite}>
+                    <FavoriteIcon isFavorite={props.category.isFavorite} />
+                </FloatingIconButton>
+            </Show>
 
             <img
                 src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
