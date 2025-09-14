@@ -3,19 +3,23 @@ import {
     InfiniteData,
     useInfiniteQuery,
     UseInfiniteQueryResult,
+    useMutation,
+    UseMutationResult,
     useQueries,
     useQuery,
+    useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
 
 import { useAuthContext } from "../AuthContext";
-import { queryApi, runWithAccessToken } from "./_shared";
+import { postApi, queryApi, runWithAccessToken } from "./_shared";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { Uuid } from "../../_models/Uuid";
 import { CategoriesForYearResult } from "./models/CategoriesForYearResult";
+import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -31,12 +35,14 @@ export interface CategoriesService {
     categorySearchQuery: (
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
+    setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest, unknown>;
 }
 
 const CategoriesContext = createContext<CategoriesService>();
 
 export const CategoriesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
+    const queryClient = useQueryClient();
 
     const cleanupDatesFromApi = (c: Category) => {
         c.effectiveDate = new Date(c.effectiveDate);
@@ -100,6 +106,13 @@ export const CategoriesProvider: ParentComponent = props => {
         });
     };
 
+    const postIsFavorite = async (req: IsFavoriteRequest<Category>) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `categories/${req.item.id}/favorite`, {
+                isFavorite: req.isFavorite
+            })
+        );
+
     const yearsQuery = () =>
         useQuery(() => ({
             queryKey: ["categories", "years"],
@@ -160,6 +173,19 @@ export const CategoriesProvider: ParentComponent = props => {
                 lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
+    const setIsFavoriteMutation = useMutation(() => ({
+        mutationFn: (isFavoriteReq: IsFavoriteRequest<Category>) => postIsFavorite(isFavoriteReq),
+        onSettled: async (response, error, request) => {
+            const year = request.item.effectiveDate.getFullYear();
+            const queryKey = ["categories", "year", year];
+
+            await queryClient.invalidateQueries({
+                queryKey,
+                refetchType: "all"
+            });
+        }
+    }));
+
     // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
 
     return (
@@ -171,7 +197,8 @@ export const CategoriesProvider: ParentComponent = props => {
                 categoryQuery,
                 categoryMediaQuery,
                 categoryMediaGpsQuery,
-                categorySearchQuery
+                categorySearchQuery,
+                setIsFavoriteMutation
             }}
         >
             {props.children}

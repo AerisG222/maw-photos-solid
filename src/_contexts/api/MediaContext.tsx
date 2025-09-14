@@ -26,7 +26,7 @@ export interface MediaService {
     randomMediaQuery: (
         count: number
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
-    addCommentMutation: UseMutationResult<void, Error, AddCommentRequest, unknown>;
+    addCommentMutation: UseMutationResult<Response, Error, AddCommentRequest, unknown>;
 }
 
 const MediaContext = createContext<MediaService>();
@@ -64,11 +64,10 @@ export const MediaProvider: ParentComponent = props => {
             queryApi<GpsDetail>(accessToken, `media/${id}/gps`)
         );
 
-    const postComment = async (req: AddCommentRequest) => {
+    const postComment = async (req: AddCommentRequest) =>
         runWithAccessToken(getToken, accessToken =>
             postApi(accessToken, `media/${req.mediaId}/comments`, { body: req.comment })
         );
-    };
 
     // todo:
     // patchApi(`media/${mediaId}/favorite`, { mediaId, isFavorite });

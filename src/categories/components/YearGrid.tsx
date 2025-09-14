@@ -12,6 +12,7 @@ interface Props {
     year: number;
     categories: Category[];
     enableEagerLoading: boolean;
+    setIsFavorite: (category: Category, isFavorite: boolean) => void;
 }
 
 const YearGrid: Component<Props> = props => {
@@ -34,6 +35,7 @@ const YearGrid: Component<Props> = props => {
                             thumbnailSize={settings.thumbnailSize}
                             dimThumbnails={settings.dimThumbnails}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
+                            setIsFavorite={props.setIsFavorite}
                         />
                     )}
                 </For>

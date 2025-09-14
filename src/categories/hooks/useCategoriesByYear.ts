@@ -6,7 +6,7 @@ import { useCategoryFilterSettingsContext } from '../../_contexts/settings/Categ
 
 export const useCategoriesByYear = () => {
     const [filter] = useCategoryFilterSettingsContext();
-    const { categoriesForAllYearsQuery } = useCategoriesContext();
+    const { categoriesForAllYearsQuery, setIsFavoriteMutation } = useCategoriesContext();
     const { yearsQuery } = useCategoriesContext();
     const years = yearsQuery();
 
@@ -35,5 +35,5 @@ export const useCategoriesByYear = () => {
         return undefined;
     });
 
-    return { categoriesToDisplay };
+    return { categoriesToDisplay, setIsFavoriteMutation };
 }

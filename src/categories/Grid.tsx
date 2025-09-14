@@ -2,6 +2,8 @@ import { Component, For, Show } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
+import { Category } from "../_models/Category";
 
 import Toolbar from "./components/Toolbar";
 import GridToolbar from "./components/ToolbarGrid";
@@ -12,7 +14,16 @@ import Loading from "../_components/loading/Loading";
 
 const GridView: Component = () => {
     const [settings] = useCategoryGridViewSettingsContext();
-    const { categoriesToDisplay } = useCategoriesByYear();
+    const { categoriesToDisplay, setIsFavoriteMutation } = useCategoriesByYear();
+
+    const setIsFavorite = (category: Category, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Category> = {
+            item: category,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
 
     return (
         <Show when={categoriesToDisplay()} fallback={<Loading />}>
@@ -37,6 +48,7 @@ const GridView: Component = () => {
                             year={year}
                             categories={categoriesToDisplay()![year] ?? []}
                             enableEagerLoading={idx() <= 3}
+                            setIsFavorite={setIsFavorite}
                         />
                     )}
                 </For>
