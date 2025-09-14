@@ -61,18 +61,21 @@ const GridToolbar: Component = () => {
                 icon="icon-[ic--round-today]"
                 name="Years"
                 tooltip="Toggle Years"
+                shortcutKeys={["y"]}
                 clickHandler={onToggleYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-title]"
                 name="Titles"
                 tooltip="Toggle Category Titles"
+                shortcutKeys={["t"]}
                 clickHandler={onToggleTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
                 tooltip="Toggle Thumbnail Size"
+                shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles || settings.showYears}
             />
@@ -80,6 +83,7 @@ const GridToolbar: Component = () => {
                 icon="icon-[ic--round-format-indent-increase]"
                 name="Margins"
                 tooltip="Toggle Category Margins"
+                shortcutKeys={["m"]}
                 clickHandler={onToggleMargins}
             />
             <ToolbarButton
