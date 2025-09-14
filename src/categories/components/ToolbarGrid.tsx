@@ -64,7 +64,7 @@ const GridToolbar: Component = () => {
                 icon="icon-[mdi--lightbulb-dimmer-50]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
-                shortcutKeys={["d"]}
+                shortcutKeys={["b"]}
                 clickHandler={onToggleDimThumbnails}
             />
             <ToolbarButton

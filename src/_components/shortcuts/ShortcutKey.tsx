@@ -9,11 +9,11 @@ interface Props {
 const ShortcutKey: Component<Props> = props => {
     const getDisplayIcon = (key: string) => {
         if (key === "arrowright") {
-            return "i-ic:round-arrow-right-alt";
+            return "icon-[mdi--arrow-right-thin]";
         }
 
         if (key === "arrowleft") {
-            return "i-ic:round-arrow-right-alt rotate-180";
+            return "icon-[mdi--arrow-right-thin] rotate-180";
         }
 
         return "";
@@ -37,9 +37,7 @@ const ShortcutKey: Component<Props> = props => {
                 )}
             </For>
 
-            <span> - </span>
-
-            <span>{props.shortcut.description}</span>
+            <span class="ml-3">{props.shortcut.description}</span>
         </div>
     );
 };
