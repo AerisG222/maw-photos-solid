@@ -79,7 +79,7 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
     name: "Bulk Edit",
     tooltip: "Bulk Edit View",
     mediaView: MediaViewBulkEdit,
-    shortcutKeys: ["b"],
+    shortcutKeys: ["/"],
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import("./BulkEdit")),

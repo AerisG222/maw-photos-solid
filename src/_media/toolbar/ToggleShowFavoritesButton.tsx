@@ -12,7 +12,7 @@ const ToggleShowFavoritesBadgeButton: Component<Props> = props => {
             icon="icon-[mdi--heart]"
             name="Favorites"
             tooltip="Toggle Favorites Badge"
-            shortcutKeys={["f"]}
+            shortcutKeys={["h"]}
             clickHandler={props.setShowFavoritesBadge}
         />
     );

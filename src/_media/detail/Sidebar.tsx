@@ -99,7 +99,7 @@ const Sidebar: Component<Props> = props => {
             title: "Histogram",
             tooltip: "Sidebar: Histogram",
             icon: "icon-[ic--round-color-lens]",
-            shortcutKeys: ["h"],
+            shortcutKeys: ["o"],
             clickHandler: toggleHistogram,
             enable: (media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showHistogram,

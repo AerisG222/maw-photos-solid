@@ -73,7 +73,7 @@ const GridToolbar: Component = () => {
                 icon="icon-[mdi--heart]"
                 name="Favorites"
                 tooltip="Toggle Favorites Badge"
-                shortcutKeys={["f"]}
+                shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
             />
         </>
