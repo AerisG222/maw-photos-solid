@@ -41,5 +41,5 @@ export const useWindowSizeContext = () => {
         return ctx;
     }
 
-    throw new Error("Shortcut context not provided by ancestor component!");
+    throw new Error("Window Size context not provided by ancestor component!");
 };

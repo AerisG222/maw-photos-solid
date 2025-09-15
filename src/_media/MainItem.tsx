@@ -73,33 +73,29 @@ const MainItem: Component<Props> = props => {
                 class="h-full w-full max-h-screen max-w-full object-contain self-center"
                 style={`${props.maxHeightStyle ?? ""} ${getTransformStyles()} ${getFilterStyles()}`}
             >
-                <Show when={props.showFavoriteBadge}>
-                    <div class="fab mx-auto">
-                        <IconButton buttonClasses="hover:text-primary" onClick={onClickFavorite}>
-                            <FavoriteIcon isFavorite={props.media.isFavorite} />
-                        </IconButton>
-                    </div>
-                </Show>
-
                 <Switch>
                     <Match when={props.media.type === "photo"}>
                         <MainPhoto
                             url={getMediaUrl()}
-                            setActiveMediaElement={x =>
-                                props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
-                            }
+                            setActiveMediaElement={el => props.setActiveMediaElement?.(el)}
                         />
                     </Match>
                     <Match when={props.media.type === "video"}>
                         <MainVideo
                             url={getMediaUrl()}
-                            setActiveMediaElement={x =>
-                                props.setActiveMediaElement ? props.setActiveMediaElement(x) : {}
-                            }
+                            setActiveMediaElement={el => props.setActiveMediaElement?.(el)}
                         />
                     </Match>
                 </Switch>
             </div>
+
+            <Show when={props.showFavoriteBadge}>
+                <div class="absolute m-2">
+                    <IconButton buttonClasses="hover:text-primary" onClick={onClickFavorite}>
+                        <FavoriteIcon isFavorite={props.media.isFavorite} />
+                    </IconButton>
+                </div>
+            </Show>
         </Show>
     );
 };

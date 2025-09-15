@@ -1,4 +1,4 @@
-import { Component, onCleanup } from "solid-js";
+import { Component, onCleanup, Show } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useCategoryServices } from "./hooks/useCategoryServices";
@@ -15,17 +15,19 @@ const Grid: Component = () => {
     });
 
     return (
-        <ViewGrid
-            mediaService={mediaService}
-            slideshowService={slideshowService}
-            gridSettings={settings}
-            showBreadcrumbsOnGrid={settings.showBreadcrumbs}
-            showBreadcrumbsOnMedia={false}
-            enableToggleBreadcrumbsOnActiveMedia={false}
-            enableToggleBreadcrumbsOnInactiveMedia={true}
-            showFavoritesBadge={settings.showFavoritesBadge}
-            setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
-        />
+        <Show when={mediaService.getActiveCategory()}>
+            <ViewGrid
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                gridSettings={settings}
+                showBreadcrumbsOnGrid={settings.showBreadcrumbs}
+                showBreadcrumbsOnMedia={false}
+                enableToggleBreadcrumbsOnActiveMedia={false}
+                enableToggleBreadcrumbsOnInactiveMedia={true}
+                showFavoritesBadge={settings.showFavoritesBadge}
+                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+            />
+        </Show>
     );
 };
 

@@ -1,5 +1,6 @@
-import { Component, Show } from "solid-js";
+import { Component, createEffect, createSignal, onMount, Show } from "solid-js";
 import { A } from "@solidjs/router";
+import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
 import { MediaGridViewSettingsState } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { gridRoute } from "../category/_routes";
@@ -7,7 +8,6 @@ import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
-import { getMarginClass, MarginIdType } from "../_models/Margin";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
@@ -32,6 +32,11 @@ interface Props {
 
 const ViewGrid: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
+    const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
+    const [sizeTarget, setSizeTarget] = createSignal<HTMLElement | undefined>(undefined);
+    const elSize = createElementSize(sizeTarget);
+    const windowSize = createWindowSize();
+    let sizeDiv: HTMLDivElement;
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Media> = {
@@ -42,16 +47,25 @@ const ViewGrid: Component<Props> = props => {
         setIsFavoriteMutation.mutate(req);
     };
 
-    const buildGridContainerClass = (margin: MarginIdType | undefined) => ({
-        ...getMarginClass(margin),
-        "col-start-1": true,
-        "row-start-1": true,
-        "z-10": true
+    createEffect(() => {
+        setAbsoluteDivStyle({
+            left: `${windowSize.width - elSize.width}px`,
+            width: `${elSize.width}px`,
+            top: `${windowSize.height - elSize.height}px`,
+            height: `${elSize.height}px`
+        });
+    });
+
+    onMount(() => {
+        if (sizeDiv) {
+            setSizeTarget(sizeDiv.parentElement?.parentElement);
+        }
     });
 
     return (
         <Show when={props.mediaService.getMediaList()}>
             <Layout
+                margin={props.gridSettings.margin}
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}
@@ -79,52 +93,47 @@ const ViewGrid: Component<Props> = props => {
                     </Toolbar>
                 }
             >
-                <div class="grid">
-                    <Show when={props.mediaService.getActiveMedia()}>
-                        {/* overlay layer — uses grid layering instead of absolute positioning */}
-                        <div class="col-start-1 row-start-1 z-30 w-full h-full bg-base-100/92">
-                            <div class="h-full w-full overflow-auto">
-                                <Show when={props.showBreadcrumbsOnMedia}>
-                                    <CategoryBreadcrumb
-                                        showTitleAsLink={true}
-                                        category={props.mediaService.getActiveCategory()}
-                                    />
-                                </Show>
-
-                                <A
-                                    class="fixed w-full h-full"
-                                    href={props.mediaService.getEntryPathByView(MediaViewGrid)}
-                                    onClick={() => props.slideshowService.stop()}
-                                >
-                                    <MainItem
-                                        media={props.mediaService.getActiveMedia()!}
-                                        showFavoriteBadge={props.showFavoritesBadge}
-                                        moveNext={() => props.mediaService.moveNext()}
-                                        movePrevious={() => props.mediaService.movePrevious()}
-                                        setIsFavorite={setIsFavorite}
-                                    />
-                                </A>
-                            </div>
-                        </div>
-                    </Show>
-                    {/* base layer (grid content) — placed in same grid so it sits under the overlay */}
-                    <div classList={buildGridContainerClass(props.gridSettings.margin)}>
-                        <Show when={props.showBreadcrumbsOnGrid}>
-                            <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+                <Show when={props.mediaService.getActiveMedia()}>
+                    <div class="absolute z-30 bg-base-100/92" style={absoluteDivStyle()}>
+                        <Show when={props.showBreadcrumbsOnMedia}>
+                            <CategoryBreadcrumb
+                                showTitleAsLink={true}
+                                category={props.mediaService.getActiveCategory()}
+                            />
                         </Show>
 
-                        <MediaGrid
-                            mediaLinkBuilder={(media: Media) =>
-                                props.mediaService.getMediaPathByView(MediaViewGrid, media)
-                            }
-                            items={props.mediaService.getMediaList()}
-                            thumbnailSize={props.gridSettings.thumbnailSize}
-                            dimThumbnails={props.gridSettings.dimThumbnails}
-                            activeRoute={gridRoute}
-                            showFavoritesBadge={props.showFavoritesBadge}
-                            setIsFavorite={setIsFavorite}
-                        />
+                        <A
+                            class="flex h-full"
+                            href={props.mediaService.getEntryPathByView(MediaViewGrid)}
+                            onClick={() => props.slideshowService.stop()}
+                        >
+                            <MainItem
+                                media={props.mediaService.getActiveMedia()!}
+                                showFavoriteBadge={props.showFavoritesBadge}
+                                moveNext={() => props.mediaService.moveNext()}
+                                movePrevious={() => props.mediaService.movePrevious()}
+                                setIsFavorite={setIsFavorite}
+                            />
+                        </A>
                     </div>
+                </Show>
+
+                <div ref={sizeDiv}>
+                    <Show when={props.showBreadcrumbsOnGrid}>
+                        <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+                    </Show>
+
+                    <MediaGrid
+                        mediaLinkBuilder={(media: Media) =>
+                            props.mediaService.getMediaPathByView(MediaViewGrid, media)
+                        }
+                        items={props.mediaService.getMediaList()}
+                        thumbnailSize={props.gridSettings.thumbnailSize}
+                        dimThumbnails={props.gridSettings.dimThumbnails}
+                        activeRoute={gridRoute}
+                        showFavoritesBadge={props.showFavoritesBadge}
+                        setIsFavorite={setIsFavorite}
+                    />
                 </div>
             </Layout>
         </Show>
