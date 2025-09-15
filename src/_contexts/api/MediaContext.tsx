@@ -18,6 +18,7 @@ import { GpsDetail } from "../../_models/GpsDetail";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
 import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
+import { parseISO } from "date-fns";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -55,7 +56,7 @@ export const MediaProvider: ParentComponent = props => {
             const comments = await queryApi<Comment[]>(accessToken, `media/${id}/comments`);
 
             for (const c of comments) {
-                c.created = new Date(c.created);
+                c.created = parseISO(c.created as string);
             }
 
             return comments;

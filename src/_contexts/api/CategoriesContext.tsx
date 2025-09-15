@@ -10,6 +10,7 @@ import {
     useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
+import { parseISO } from "date-fns";
 
 import { useAuthContext } from "../AuthContext";
 import { postApi, queryApi, runWithAccessToken } from "./_shared";
@@ -45,8 +46,8 @@ export const CategoriesProvider: ParentComponent = props => {
     const queryClient = useQueryClient();
 
     const cleanupDatesFromApi = (c: Category) => {
-        c.effectiveDate = new Date(c.effectiveDate);
-        c.modified = new Date(c.modified);
+        c.effectiveDate = parseISO(c.effectiveDate as string);
+        c.modified = parseISO(c.modified as string);
     };
 
     const fetchYears = async () =>
