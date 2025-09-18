@@ -1,4 +1,4 @@
-import { Component, createSignal, Show } from "solid-js";
+import { Component, createEffect, createSignal, Show } from "solid-js";
 
 import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const MetadataEditorCard: Component<Props> = props => {
-    const { gpsQuery } = useMediaContext();
+    const { gpsQuery, setGpsOverrideMutation } = useMediaContext();
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
 
     const gps = gpsQuery(() => props.activeMedia!.id);
@@ -21,7 +21,7 @@ const MetadataEditorCard: Component<Props> = props => {
         const ov = gps.data?.override;
         setOverride(
             ov
-                ? { lat: ov.latitude.toString(), lng: ov.longitude.toString() }
+                ? { lat: ov.latitude?.toString(), lng: ov.longitude?.toString() }
                 : { lat: undefined, lng: undefined }
         );
     };
@@ -50,24 +50,29 @@ const MetadataEditorCard: Component<Props> = props => {
         updateOverrideInputsFromApi();
     };
 
-    const save = (evt: Event) => {
+    const save = async (evt: Event) => {
         evt.preventDefault();
 
-        // if (
-        //     metadataEditorContext.service &&
-        //     mediaList.activeItem &&
-        //     isValidLatLng(override().lat) &&
-        //     isValidLatLng(override().lng)
-        // ) {
-        //     metadataEditorContext.service.setGpsCoordinateOverride(mediaList.activeItem.id, {
-        //         latitude: parseFloat(override().lat),
-        //         longitude: parseFloat(override().lng)
-        //     });
-        // }
+        if (props.activeMedia && isValidLatLng(override().lat) && isValidLatLng(override().lng)) {
+            const req = {
+                mediaId: props.activeMedia.id,
+                latitude: parseFloat(override().lat!),
+                longitude: parseFloat(override().lng!)
+            };
+
+            await setGpsOverrideMutation.mutateAsync(req);
+        }
     };
 
-    const saveAndMoveNext = (evt: Event) => {
-        save(evt);
+    createEffect(() => {
+        // update inputs when navigating between media
+        if (props.activeMedia!.id) {
+            updateOverrideInputsFromApi();
+        }
+    });
+
+    const saveAndMoveNext = async (evt: Event) => {
+        await save(evt);
         props.requestMoveNext();
     };
 

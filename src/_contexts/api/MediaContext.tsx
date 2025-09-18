@@ -19,6 +19,7 @@ import { AddCommentRequest } from "../../_models/AddCommentRequest";
 import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { parseISO } from "date-fns";
+import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -30,6 +31,7 @@ export interface MediaService {
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
     addCommentMutation: UseMutationResult<Response, Error, AddCommentRequest, unknown>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Media>, unknown>;
+    setGpsOverrideMutation: UseMutationResult<Response, Error, GpsOverrideRequest, unknown>;
 }
 
 const MediaContext = createContext<MediaService>();
@@ -63,9 +65,17 @@ export const MediaProvider: ParentComponent = props => {
         });
 
     const fetchGps = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<GpsDetail>(accessToken, `media/${id}/gps`)
-        );
+        runWithAccessToken(getToken, async accessToken => {
+            try {
+                return await queryApi<GpsDetail>(accessToken, `media/${id}/gps`);
+            } catch {
+                return {
+                    mediaId: id,
+                    recorded: { latitude: undefined, longitude: undefined },
+                    override: { latitude: undefined, longitude: undefined }
+                };
+            }
+        });
 
     const postComment = async (req: AddCommentRequest) =>
         runWithAccessToken(getToken, accessToken =>
@@ -79,8 +89,13 @@ export const MediaProvider: ParentComponent = props => {
             })
         );
 
-    // todo:
-    // patchApi(`media/${mediaId}/gps`, gps);
+    const postGpsOverride = async (req: GpsOverrideRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/${req.mediaId}/gps`, {
+                latitude: req.latitude,
+                longitude: req.longitude
+            })
+        );
 
     const randomMediaQuery = (count: number) =>
         useInfiniteQuery(() => ({
@@ -150,6 +165,21 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
+    const setGpsOverrideMutation = useMutation(() => ({
+        mutationFn: (gpsOverrideRequest: GpsOverrideRequest) => postGpsOverride(gpsOverrideRequest),
+        onSettled: async (data, errs, variables) => {
+            await queryClient.invalidateQueries({
+                queryKey: ["media", variables.mediaId, "gps"],
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories"],
+                refetchType: "all"
+            });
+        }
+    }));
+
     return (
         <MediaContext.Provider
             value={{
@@ -159,7 +189,8 @@ export const MediaProvider: ParentComponent = props => {
                 gpsQuery,
                 randomMediaQuery,
                 addCommentMutation,
-                setIsFavoriteMutation
+                setIsFavoriteMutation,
+                setGpsOverrideMutation
             }}
         >
             {props.children}

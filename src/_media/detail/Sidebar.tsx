@@ -4,18 +4,19 @@ import { Dynamic } from "solid-js/web";
 import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
+import { useAuthContext } from "../../_contexts/AuthContext";
 
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import SidebarButton from "../../_components/sidebar/SidebarButton";
-import { useAuthContext } from "../../_contexts/AuthContext";
 
 interface Props {
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
     enableCategoryTeaser: boolean;
     mediaElement: HTMLImageElement | HTMLVideoElement | undefined;
+    requestMoveNext: () => void;
 }
 
 const Sidebar: Component<Props> = props => {
@@ -154,6 +155,7 @@ const Sidebar: Component<Props> = props => {
                                         activeCategory={props.activeCategory}
                                         activeMedia={props.activeMedia}
                                         mediaElement={props.mediaElement}
+                                        requestMoveNext={props.requestMoveNext}
                                     />
                                 </InfoCard>
                             </Show>
