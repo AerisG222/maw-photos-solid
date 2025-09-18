@@ -56,7 +56,7 @@ const ViewDetail: Component<Props> = props => {
     };
 
     return (
-        <Show when={props.mediaService.getActiveMedia()}>
+        <Show when={props.mediaService.getActiveMedia() && props.mediaService.getActiveCategory()}>
             <Layout
                 xPad={false}
                 toolbar={

@@ -27,9 +27,17 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         super(navigate, params, view);
     }
 
-    override navigateToMedia = (view: MediaView, media: Media) => {
+    override navigateToMedia = (view: MediaView, media: Media | undefined) => {
         this.navigate(this.getMediaPathByView(view, media));
     };
+
+    navigateToViewIfMediaNotInList = () => {
+        const list = this.getMediaList();
+
+        if (this.params.id && list && !list.find(x => x.id === this.params.id)) {
+            this.navigateToMedia(this.view, undefined);
+        }
+    }
 
     navigateToFirstMediaIfNeeded = () => {
         const list = this.getMediaList();
@@ -61,7 +69,9 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         this.getRouteForView(view).absolutePath.replace("/:id?", "");
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media ? this.getMediaPath(this.getRouteForView(view), media) : "";
+        media
+            ? this.getMediaPath(this.getRouteForView(view), media)
+            : this.getRouteForView(view).absolutePath.replace("/:id?", "");
 
     getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
         route.buildPathForMedia(undefined, media);

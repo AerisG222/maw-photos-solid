@@ -1,4 +1,4 @@
-import { Component, onCleanup } from "solid-js";
+import { Component, createEffect, onCleanup } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { MediaViewGrid } from "../_models/MediaView";
@@ -9,6 +9,10 @@ import ViewGrid from "../_media/ViewGrid";
 const Grid: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewGrid);
     const [settings, { setShowFavoritesBadge }] = useMediaGridViewSettingsContext();
+
+    createEffect(() => {
+        mediaService.navigateToViewIfMediaNotInList();
+    });
 
     onCleanup(() => {
         slideshowService.stop();

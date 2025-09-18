@@ -10,7 +10,10 @@ const Detail: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewDetail);
     const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
 
-    createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
+    createEffect(() => {
+        mediaService.navigateToFirstMediaIfNeeded();
+        mediaService.navigateToViewIfMediaNotInList();
+    });
 
     onCleanup(() => {
         slideshowService.stop();

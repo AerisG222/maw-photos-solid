@@ -12,7 +12,10 @@ const Fullscreen: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewFullscreen);
     const [, { setFullscreen }] = useFullscreenContext();
 
-    createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
+    createEffect(() => {
+        mediaService.navigateToFirstMediaIfNeeded();
+        mediaService.navigateToViewIfMediaNotInList();
+    });
 
     setFullscreen(true);
 
