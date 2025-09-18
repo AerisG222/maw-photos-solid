@@ -9,6 +9,7 @@ import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import SidebarLayout from "../../_components/sidebar/SidebarLayout";
 import InfoCard from "../../_components/sidebar/InfoCard";
 import SidebarButton from "../../_components/sidebar/SidebarButton";
+import { useAuthContext } from "../../_contexts/AuthContext";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -18,6 +19,9 @@ interface Props {
 }
 
 const Sidebar: Component<Props> = props => {
+    // todo: consider getting this from props
+    const [authContext] = useAuthContext();
+
     const [
         settings,
         {
@@ -121,7 +125,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-edit]",
             shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
-            enable: (media: Media) => true,
+            enable: (media: Media) => authContext.isAdmin,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
             component: lazy(() => import("./MetadataEditorCard"))
         },
@@ -131,7 +135,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaser,
-            enable: (media: Media) => props.enableCategoryTeaser,
+            enable: (media: Media) => props.enableCategoryTeaser && authContext.isAdmin,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))
         }

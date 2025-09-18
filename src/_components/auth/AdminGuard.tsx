@@ -7,12 +7,12 @@ interface Props {
 }
 
 const AdminGuard: ParentComponent<Props> = props => {
-    const [, { isAdmin }] = useAuthContext();
+    const [state] = useAuthContext();
     const navigate = useNavigate();
     const c = children(() => props.children);
 
     createEffect(() => {
-        if (!isAdmin()) {
+        if (!state.isAdmin) {
             navigate(props.redirectRoute ?? "/", { replace: true });
         }
     });

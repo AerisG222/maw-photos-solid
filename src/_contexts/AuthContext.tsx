@@ -15,11 +15,13 @@ import { loginPage, logout as logoutPage } from "../auth/_routes";
 
 export interface AuthState {
     readonly isLoggedIn: boolean;
+    readonly isAdmin: boolean;
     readonly user: User | undefined;
 }
 
 const defaultAuth: AuthState = {
     isLoggedIn: false,
+    isAdmin: false,
     user: undefined
 };
 
@@ -28,7 +30,7 @@ export type AuthContextValue = [
     actions: {
         login: (returnUrl: string | undefined) => Promise<void>;
         logout: (returnUrl: string | undefined) => Promise<void>;
-        isAdmin: () => boolean;
+        setIsAdmin: (isAdmin: boolean) => void;
         getToken: () => Promise<string | undefined>;
     }
 ];
@@ -112,7 +114,7 @@ export const AuthProvider: ParentComponent = props => {
         });
     };
 
-    const isAdmin = () => false;
+    const setIsAdmin = (isAdmin: boolean) => setState({ isAdmin });
 
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
@@ -162,7 +164,7 @@ export const AuthProvider: ParentComponent = props => {
                     {
                         login,
                         logout,
-                        isAdmin,
+                        setIsAdmin,
                         getToken
                     }
                 ]}

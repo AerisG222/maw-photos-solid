@@ -18,12 +18,17 @@ export interface ConfigService {
 const ConfigContext = createContext<ConfigService>();
 
 export const ConfigProvider: ParentComponent = props => {
-    const [authContext, { getToken }] = useAuthContext();
+    const [authContext, { getToken, setIsAdmin }] = useAuthContext();
     const [windowSizeContext] = useWindowSizeContext();
 
     const fetchScales = async () =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<Scale[]>(accessToken, "config/scales")
+        );
+
+    const fetchIsAdmin = async () =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<boolean>(accessToken, "config/is-admin")
         );
 
     const scalesQuery = () =>
@@ -32,6 +37,14 @@ export const ConfigProvider: ParentComponent = props => {
             queryFn: fetchScales,
             enabled: authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
+        }));
+
+    const isAdminQuery = () =>
+        useQuery(() => ({
+            queryKey: ["config", "is-admin"],
+            queryFn: fetchIsAdmin,
+            enabled: authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
         }));
 
     const sortScalesDescendingInSize = (a: Scale, b: Scale) => b.width - a.width;
@@ -80,9 +93,24 @@ export const ConfigProvider: ParentComponent = props => {
         return results;
     };
 
+    const showChildren = () => {
+        if (!authContext.isLoggedIn) {
+            // allow request to proceed so they can see the login page
+            return true;
+        }
+
+        if (scalesQuery().isSuccess && isAdminQuery().isSuccess) {
+            setIsAdmin(isAdminQuery().data!);
+
+            return true;
+        }
+
+        return false;
+    };
+
     return (
         <ConfigContext.Provider value={{ scalesQuery, getScalesForThumbnail, getScalesForMain }}>
-            <Show when={!authContext.isLoggedIn || scalesQuery().isSuccess} fallback={<Loading />}>
+            <Show when={showChildren()} fallback={<Loading />}>
                 {props.children}
             </Show>
         </ConfigContext.Provider>

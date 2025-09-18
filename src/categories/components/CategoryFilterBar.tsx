@@ -7,7 +7,7 @@ import YearFilter from "./YearFilter";
 import MissingGpsFilter from "./MissingGpsFilter";
 
 const CategoryFilterBar: Component = () => {
-    const [, { isAdmin }] = useAuthContext();
+    const [state] = useAuthContext();
     const [, { ltMd }] = useMediaBreakpointContext();
 
     return (
@@ -18,7 +18,7 @@ const CategoryFilterBar: Component = () => {
         >
             <YearFilter horizontal={ltMd()} />
 
-            <Show when={isAdmin()}>
+            <Show when={state.isAdmin}>
                 <MissingGpsFilter horizontal={ltMd()} />
             </Show>
         </div>
