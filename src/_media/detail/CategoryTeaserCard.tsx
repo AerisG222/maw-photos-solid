@@ -3,6 +3,7 @@ import { Component, Show } from "solid-js";
 import { Media } from "../../_models/Media";
 import { Category } from "../../_models/Category";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
+import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -10,21 +11,19 @@ interface Props {
 }
 
 const CategoryTeaserCard: Component<Props> = props => {
+    const { setCategoryTeaserMutation } = useCategoriesContext();
+
     const onSetTeaser = async (evt: Event) => {
         evt.preventDefault();
 
-        // if (categoryState.activeCategory && teaserServiceContext.service) {
-        //     await teaserServiceContext.service.setTeaser(
-        //         categoryState.activeCategory.id,
-        //         mediaList.activeItem.id
-        //     );
+        if (props.activeCategory) {
+            const req = {
+                category: props.activeCategory,
+                media: props.activeMedia!
+            };
 
-        //     updateTeaser(
-        //         categoryState.activeCategory.type,
-        //         categoryState.activeCategory.id,
-        //         getMediaTeaserUrl(mediaList.activeItem)
-        //     );
-        // }
+            await setCategoryTeaserMutation.mutateAsync(req);
+        }
     };
 
     return (

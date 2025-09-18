@@ -21,6 +21,7 @@ import { GpsDetail } from "../../_models/GpsDetail";
 import { Uuid } from "../../_models/Uuid";
 import { CategoriesForYearResult } from "./models/CategoriesForYearResult";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
+import { CategoryTeaserRequest } from "../../_models/CategoryTeaserRequest";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -37,6 +38,7 @@ export interface CategoriesService {
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
+    setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
 }
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -111,6 +113,13 @@ export const CategoriesProvider: ParentComponent = props => {
         runWithAccessToken(getToken, accessToken =>
             postApi(accessToken, `categories/${req.item.id}/favorite`, {
                 isFavorite: req.isFavorite
+            })
+        );
+
+    const postCategoryTeaser = async (req: CategoryTeaserRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `categories/${req.category.id}/teaser`, {
+                mediaId: req.media.id
             })
         );
 
@@ -192,6 +201,28 @@ export const CategoriesProvider: ParentComponent = props => {
         }
     }));
 
+    const setCategoryTeaserMutation = useMutation(() => ({
+        mutationFn: (teaserReq: CategoryTeaserRequest) => postCategoryTeaser(teaserReq),
+        onSettled: async (response, error, request) => {
+            const year = request.category.effectiveDate.getFullYear();
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories", "year", year],
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories", request.category.id],
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories", "search"],
+                refetchType: "all"
+            });
+        }
+    }));
+
     // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
 
     return (
@@ -204,7 +235,8 @@ export const CategoriesProvider: ParentComponent = props => {
                 categoryMediaQuery,
                 categoryMediaGpsQuery,
                 categorySearchQuery,
-                setIsFavoriteMutation
+                setIsFavoriteMutation,
+                setCategoryTeaserMutation
             }}
         >
             {props.children}
