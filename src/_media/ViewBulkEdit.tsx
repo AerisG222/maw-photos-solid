@@ -84,8 +84,15 @@ const ViewBulkEdit: Component<Props> = props => {
         setMedia(props.mediaService.getMediaList().map(buildSelectableMedia));
     });
 
-    const hasGps = (mediaId: Uuid) =>
-        props.mediaService.mediaWithGps().find(x => x.media.id === mediaId);
+    const mediaToShow = () => {
+        if (!hideMediaWithGps()) {
+            return media();
+        } else {
+            const mediaWithGps = new Set(props.mediaService.mediaWithGps().map(x => x.media.id));
+
+            return media().filter(m => !mediaWithGps.has(m.id));
+        }
+    };
 
     return (
         <AdminGuard redirectRoute={props.mediaService.getEntryPathByView(MediaViewGrid)}>
@@ -110,29 +117,25 @@ const ViewBulkEdit: Component<Props> = props => {
                     <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
 
                     <div class="flex gap-2 flex-wrap place-content-center mb-4">
-                        <For each={media()}>
+                        <For each={mediaToShow()}>
                             {m => (
-                                <Show when={hideMediaWithGps() ? !hasGps(m.id) : true}>
-                                    <div
-                                        class="border-1 border-primary/40 hover:border-primary cursor-pointer text-center rounded-sm"
-                                        onClick={() => toggle(m)}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            class="checkbox checkbox-sm my-1"
-                                            checked={m.isSelected}
-                                            onInput={evt =>
-                                                (m.isSelected = evt.currentTarget.checked)
-                                            }
-                                        />
-                                        <img
-                                            src={m.imageUrl}
-                                            class="rounded-b-sm"
-                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
-                                        />
-                                    </div>
-                                </Show>
+                                <div
+                                    class="border-1 border-primary/40 hover:border-primary cursor-pointer text-center rounded-sm"
+                                    onClick={() => toggle(m)}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="checkbox checkbox-sm my-1"
+                                        checked={m.isSelected}
+                                        onInput={evt => (m.isSelected = evt.currentTarget.checked)}
+                                    />
+                                    <img
+                                        src={m.imageUrl}
+                                        class="rounded-b-sm"
+                                        width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                        height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                    />
+                                </div>
                             )}
                         </For>
                     </div>
