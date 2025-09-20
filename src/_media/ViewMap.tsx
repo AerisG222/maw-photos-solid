@@ -97,15 +97,15 @@ const ViewMap: Component<Props> = props => {
     };
 
     createResource(
-        () => ({
-            isMounted: isMounted(),
-            markersAdded: markersAdded(),
-            isReady: props.mediaService.isReady(),
-            activeGps: props.mediaService.activeMediaGps()
-        }),
-        async ({ isMounted, markersAdded, isReady }) => {
+        () => [
+            isMounted(),
+            markersAdded(),
+            props.mediaService.isReady(),
+            props.mediaService.activeMediaGps()
+        ],
+        async ([isMounted, markersAdded, isReady, activeMediaGps]) => {
             if (!markersAdded && isMounted && isReady) {
-                let initial = props.mediaService.activeMediaGps();
+                let initial = activeMediaGps as GpsCoordinate | undefined;
 
                 initial ??=
                     props.mediaService.mediaWithGps().length > 0
@@ -130,7 +130,7 @@ const ViewMap: Component<Props> = props => {
     });
 
     return (
-        <Show when={() => props.mediaService.isReady()}>
+        <Show when={props.mediaService.isReady()}>
             <Layout
                 xPad={false}
                 toolbar={
