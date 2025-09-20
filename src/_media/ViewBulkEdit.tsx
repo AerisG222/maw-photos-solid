@@ -1,13 +1,13 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
-import { useParams } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
-import { bulkEditRoute } from "../category/_routes";
 import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
 import { MediaViewGrid } from "../_models/MediaView";
-import { getMediaPathByView } from "./models/RouteHelpers";
 import { Uuid } from "../_models/Uuid";
+import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
+import { IMapsMediaService } from "./services/IMapsMediaService";
+import { useMediaContext } from "../_contexts/api/MediaContext";
 
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
@@ -19,44 +19,36 @@ interface SelectableMedia {
     id: Uuid;
     isSelected: boolean;
     imageUrl: string;
-    latitude?: number;
-    longitude?: number;
 }
 
-const ViewBulkEdit: Component = () => {
+interface Props {
+    mediaService: IMapsMediaService;
+}
+
+const ViewBulkEdit: Component<Props> = props => {
+    const { bulkGpsOverrideMutation } = useMediaContext(); // todo: add to service
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
     const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
-    const params = useParams();
-    const categoryId = params.categoryId as Uuid;
-
-    // setActiveRouteDefinition(categoryBulkEditRoute);
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
-        kind: "kind",
-        imageUrl: "todo", //getMediaTeaserUrl(media),
-        latitude: 0, //media.latitude,
-        longitude: 0, //media.longitude,
+        imageUrl: getMediaTeaserUrl(media, ThumbnailSizeDefault)!,
         isSelected: false
     });
 
     const onSave = async (gps: GpsCoordinate) => {
-        const mediaToUpdate = media().filter(p => p.isSelected);
+        const mediaToUpdate = media()
+            .filter(p => p.isSelected)
+            .map(x => x.id);
 
         // assume success - make sure photos that may be removed from view are not still tracked as
         // participating in a future edit
         setAll(false);
 
-        for (const media of mediaToUpdate) {
-            //await mediaService.setGpsCoordinateOverride(media.id, gps);
-            // setGpsOverride(media.id, gps);
-        }
-
-        // if (categoryService && categoryState.activeCategory) {
-        //     var category = await categoryService.loadSingle(categoryState.activeCategory.id);
-
-        //     updateCategory(category);
-        // }
+        await bulkGpsOverrideMutation.mutateAsync({
+            mediaIds: mediaToUpdate,
+            gpsCoordinate: gps
+        });
     };
 
     const setAll = (doSelect: boolean) => {
@@ -79,7 +71,7 @@ const ViewBulkEdit: Component = () => {
     const toggle = (media: SelectableMedia) => {
         setMedia(prev =>
             prev.map(m => {
-                if (m.imageUrl === media.imageUrl) {
+                if (m.id === media.id) {
                     return { ...m, isSelected: !m.isSelected };
                 }
 
@@ -89,51 +81,63 @@ const ViewBulkEdit: Component = () => {
     };
 
     createEffect(() => {
-        // setMedia(mediaList.items.map(buildSelectableMedia));
+        setMedia(props.mediaService.getMediaList().map(buildSelectableMedia));
     });
 
-    return (
-        <AdminGuard redirectRoute={getMediaPathByView(MediaViewGrid, categoryId)}>
-            {/* <Show when={mediaList.activeRouteDefinition}> */}
-            <Layout
-                // toolbar={<Toolbar />}
-                sidebar={
-                    <BulkEditSidebar
-                        onSave={onSave}
-                        onSelectAll={() => setAll(true)}
-                        onDeselectAll={() => setAll(false)}
-                        onHideMediaWithGps={onHideMediaWithGps}
-                    />
-                }
-            >
-                <CategoryBreadcrumb />
+    const hasGps = (mediaId: Uuid) =>
+        props.mediaService.mediaWithGps().find(x => x.media.id === mediaId);
 
-                <div class="flex flex-wrap gap-2 mx-8 mb-2 flex-justify-center">
-                    <For each={media()}>
-                        {m => (
-                            <Show when={hideMediaWithGps() ? !m.latitude && !m.longitude : true}>
-                                <div
-                                    class="border-1 border-text-primary:40 hover:border-text-primary cursor-pointer text-center bg-secondary-content:6"
-                                    onClick={() => toggle(m)}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        class="checkbox checkbox-sm mt-1"
-                                        checked={m.isSelected}
-                                        onInput={evt => (m.isSelected = evt.currentTarget.checked)}
-                                    />
-                                    <img
-                                        src={m.imageUrl}
-                                        width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                        height={getThumbnailSize(ThumbnailSizeDefault).height}
-                                    />
-                                </div>
-                            </Show>
-                        )}
-                    </For>
-                </div>
-            </Layout>
-            {/* </Show> */}
+    return (
+        <AdminGuard redirectRoute={props.mediaService.getEntryPathByView(MediaViewGrid)}>
+            <Show when={props.mediaService.isReady()}>
+                <Layout
+                    toolbar={
+                        <Toolbar
+                            mediaService={props.mediaService}
+                            activeCategory={props.mediaService.getActiveCategory()}
+                            activeMedia={props.mediaService.getActiveMedia()}
+                        />
+                    }
+                    sidebar={
+                        <BulkEditSidebar
+                            onSave={onSave}
+                            onSelectAll={() => setAll(true)}
+                            onDeselectAll={() => setAll(false)}
+                            onHideMediaWithGps={onHideMediaWithGps}
+                        />
+                    }
+                >
+                    <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+
+                    <div class="flex gap-2 flex-wrap place-content-center mb-4">
+                        <For each={media()}>
+                            {m => (
+                                <Show when={hideMediaWithGps() ? !hasGps(m.id) : true}>
+                                    <div
+                                        class="border-1 border-primary/40 hover:border-primary cursor-pointer text-center rounded-sm"
+                                        onClick={() => toggle(m)}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm my-1"
+                                            checked={m.isSelected}
+                                            onInput={evt =>
+                                                (m.isSelected = evt.currentTarget.checked)
+                                            }
+                                        />
+                                        <img
+                                            src={m.imageUrl}
+                                            class="rounded-b-sm"
+                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                        />
+                                    </div>
+                                </Show>
+                            )}
+                        </For>
+                    </div>
+                </Layout>
+            </Show>
         </AdminGuard>
     );
 };

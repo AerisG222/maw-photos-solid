@@ -17,7 +17,7 @@ const BulkEditSidebar: Component<Props> = props => {
     const cards = [
         {
             title: "Filter/Selection Tools",
-            icon: "icon-[ic--round-filter-list]",
+            icon: "icon-[ic--round-filter-alt]",
             component: (
                 <BulkEditFilterCard
                     onSelectAll={props.onSelectAll}

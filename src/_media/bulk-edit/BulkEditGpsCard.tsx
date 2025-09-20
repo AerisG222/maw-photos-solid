@@ -93,14 +93,14 @@ const BulkEditGpsCard: Component<Props> = props => {
 
             <div class="mt-4">
                 <button
-                    class="btn btn-sm mr-2"
+                    class="btn btn-sm btn-primary btn-outline mr-2"
                     classList={getButtonClass()}
                     disabled={!isOverrideValid()}
                     onClick={save}
                 >
                     Save
                 </button>
-                <button class="btn btn-sm" onClick={cancel}>
+                <button class="btn btn-sm btn-error btn-outline" onClick={cancel}>
                     Cancel
                 </button>
             </div>

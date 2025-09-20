@@ -12,7 +12,7 @@ interface Props {
 }
 
 const MetadataEditorCard: Component<Props> = props => {
-    const { gpsQuery, setGpsOverrideMutation } = useMediaContext();
+    const { gpsQuery, setGpsOverrideMutation } = useMediaContext(); // todo: add to service
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
 
     const gps = gpsQuery(() => props.activeMedia!.id);

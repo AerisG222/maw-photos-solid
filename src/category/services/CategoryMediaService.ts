@@ -83,7 +83,7 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         gridRoute,
         detailRoute,
         fullscreenRoute,
-        mapRoute
-        //bulkEditRoute   // todo: admin? owner?
+        mapRoute,
+        bulkEditRoute
     ];
 }

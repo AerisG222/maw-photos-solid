@@ -20,6 +20,7 @@ import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { parseISO } from "date-fns";
 import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
+import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -32,6 +33,7 @@ export interface MediaService {
     addCommentMutation: UseMutationResult<Response, Error, AddCommentRequest, unknown>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Media>, unknown>;
     setGpsOverrideMutation: UseMutationResult<Response, Error, GpsOverrideRequest, unknown>;
+    bulkGpsOverrideMutation: UseMutationResult<Response, Error, BulkGpsOverrideRequest, unknown>;
 }
 
 const MediaContext = createContext<MediaService>();
@@ -94,6 +96,14 @@ export const MediaProvider: ParentComponent = props => {
             postApi(accessToken, `media/${req.mediaId}/gps`, {
                 latitude: req.latitude,
                 longitude: req.longitude
+            })
+        );
+
+    const postBulkGpsOverride = async (req: BulkGpsOverrideRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/bulk-gps-override`, {
+                mediaIds: req.mediaIds,
+                gpsCoordinate: req.gpsCoordinate
             })
         );
 
@@ -180,6 +190,22 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
+    const bulkGpsOverrideMutation = useMutation(() => ({
+        mutationFn: (overrideRequest: BulkGpsOverrideRequest) =>
+            postBulkGpsOverride(overrideRequest),
+        onSettled: async (data, errs, variables) => {
+            await queryClient.invalidateQueries({
+                queryKey: ["media"],
+                refetchType: "all"
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ["categories"],
+                refetchType: "all"
+            });
+        }
+    }));
+
     return (
         <MediaContext.Provider
             value={{
@@ -190,7 +216,8 @@ export const MediaProvider: ParentComponent = props => {
                 randomMediaQuery,
                 addCommentMutation,
                 setIsFavoriteMutation,
-                setGpsOverrideMutation
+                setGpsOverrideMutation,
+                bulkGpsOverrideMutation
             }}
         >
             {props.children}
