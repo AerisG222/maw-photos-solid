@@ -1,4 +1,4 @@
-import { Uuid } from './Uuid';
+import { Uuid } from "./Uuid";
 import { Media } from "./Media";
 
 export interface Category {

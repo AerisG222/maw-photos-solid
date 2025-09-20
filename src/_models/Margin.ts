@@ -9,12 +9,7 @@ const compact = { id: "compact", name: "Compact", klass: { "mx-[8%]": true } };
 const comfy = { id: "comfy", name: "Comfy", klass: { "mx-[16%]": true } };
 const cozy = { id: "cozy", name: "Cozy", klass: { "mx-[24%]": true } };
 
-export const allMargins: Margin[] = [
-    dense,
-    compact,
-    comfy,
-    cozy
-];
+export const allMargins: Margin[] = [dense, compact, comfy, cozy];
 
 export const allMarginClasses = new Set(allMargins.map(x => Object.keys(x.klass)).flat(1));
 

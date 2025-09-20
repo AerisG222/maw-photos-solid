@@ -1,4 +1,4 @@
-import { Uuid } from './Uuid';
+import { Uuid } from "./Uuid";
 import { MediaTypeStat } from "./MediaTypeStat";
 
 export interface CategoryStat {

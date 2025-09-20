@@ -2,7 +2,7 @@ import { lazy } from "solid-js";
 
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { equalsIgnoreCase } from "../_models/utils/StringUtils";
-import { Uuid } from '../_models/Uuid';
+import { Uuid } from "../_models/Uuid";
 
 const basePath = "/categories";
 

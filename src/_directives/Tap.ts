@@ -9,7 +9,10 @@ declare module "solid-js" {
     }
 }
 
-interface Position { x?: number; y?: number }
+interface Position {
+    x?: number;
+    y?: number;
+}
 
 export const tap = (el: HTMLElement, accessor) => {
     const THRESHOLD = 5;

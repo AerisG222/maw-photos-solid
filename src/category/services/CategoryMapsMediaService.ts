@@ -9,7 +9,7 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { MediaWithGps } from "../../_media/models/MediaWithGps";
 import { MediaView } from "../../_models/MediaView";
 import { IMapsMediaService } from "../../_media/services/IMapsMediaService";
-import { Uuid } from '../../_models/Uuid';
+import { Uuid } from "../../_models/Uuid";
 
 export class CategoryMapsMediaService extends CategoryMediaService implements IMapsMediaService {
     constructor(
@@ -106,7 +106,10 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         return list[list.length - 1].media.id === this.getActiveMedia()?.id;
     };
 
-    isReady = () => this.gpsListQuery.isSuccess && this.mediaListQuery.isSuccess && this.categoryQuery.isSuccess;
+    isReady = () =>
+        this.gpsListQuery.isSuccess &&
+        this.mediaListQuery.isSuccess &&
+        this.categoryQuery.isSuccess;
 
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 
@@ -114,10 +117,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         mediaWithGps?.gps?.override ?? mediaWithGps?.gps?.recorded;
 
     mediaWithGps = () => {
-        if (
-            this.mediaListQuery?.isSuccess &&
-            this.gpsListQuery?.isSuccess
-        ) {
+        if (this.mediaListQuery?.isSuccess && this.gpsListQuery?.isSuccess) {
             const mediaWithGps: MediaWithGps[] = [];
 
             // iterate over the original list to maintain sort order that is consistent w/ other views

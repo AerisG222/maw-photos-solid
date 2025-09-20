@@ -1,4 +1,4 @@
 export interface IsFavoriteRequest<T> {
-    item: T,
-    isFavorite: boolean
+    item: T;
+    isFavorite: boolean;
 }

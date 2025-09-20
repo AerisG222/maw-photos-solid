@@ -1,5 +1,5 @@
-import { Category } from './Category';
-import { Media } from './Media';
+import { Category } from "./Category";
+import { Media } from "./Media";
 
 export interface CategoryTeaserRequest {
     category: Category;

@@ -19,7 +19,10 @@ declare module "solid-js" {
     }
 }
 
-interface Position { x?: number; y?: number }
+interface Position {
+    x?: number;
+    y?: number;
+}
 
 // inspiration: https://stackoverflow.com/a/69617795
 export const swipe = (el: HTMLElement, accessor) => {

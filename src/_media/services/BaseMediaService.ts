@@ -3,14 +3,14 @@ import { Navigator, Params } from "@solidjs/router";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaView } from "../../_models/MediaView";
-import { Uuid } from '../../_models/Uuid';
+import { Uuid } from "../../_models/Uuid";
 
 export abstract class BaseMediaService {
     constructor(
         protected navigate: Navigator,
         protected params: Params,
         protected view: MediaView
-    ) { }
+    ) {}
 
     abstract getMediaList(): Media[];
     abstract getActiveCategory(): Category | undefined;
@@ -18,7 +18,9 @@ export abstract class BaseMediaService {
     abstract getMediaPathByView(view: MediaView, media: Media | undefined): string;
 
     canRequestMore = () => false;
-    requestMore = () => { /* empty */ };
+    requestMore = () => {
+        /* empty */
+    };
 
     getActiveMedia = () => {
         if (!this.params.id) {

@@ -37,7 +37,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         if (this.params.id && list && !list.find(x => x.id === this.params.id)) {
             this.navigateToMedia(this.view, undefined);
         }
-    }
+    };
 
     navigateToFirstMediaIfNeeded = () => {
         const list = this.getMediaList();
@@ -99,7 +99,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         this.intervalId = setInterval(async () => {
             await this.mediaListQuery.fetchNextPage();
         }, 20 * 1000);
-    }
+    };
 
     stopPeriodicFetching = () => {
         if (!this.intervalId) {
@@ -108,13 +108,15 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
 
         clearInterval(this.intervalId);
         this.intervalId = undefined;
-    }
+    };
 
     fetchNextPage = async () => {
         await this.mediaListQuery.fetchNextPage();
-    }
+    };
 
     override canRequestMore = () => true;
 
-    override requestMore = () => { this.mediaListQuery.fetchNextPage(); };
+    override requestMore = () => {
+        this.mediaListQuery.fetchNextPage();
+    };
 }

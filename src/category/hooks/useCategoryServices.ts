@@ -1,10 +1,10 @@
-import { useNavigate, useParams } from '@solidjs/router';
-import { useCategoriesContext } from '../../_contexts/api/CategoriesContext';
-import { useMediaPageSettingsContext } from '../../_contexts/settings/MediaPageSettingsContext';
-import { SlideshowService } from '../../_media/services/SlideshowService';
-import { MediaView } from '../../_models/MediaView';
-import { Uuid } from '../../_models/Uuid';
-import { CategoryMediaService } from '../services/CategoryMediaService';
+import { useNavigate, useParams } from "@solidjs/router";
+import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
+import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { SlideshowService } from "../../_media/services/SlideshowService";
+import { MediaView } from "../../_models/MediaView";
+import { Uuid } from "../../_models/Uuid";
+import { CategoryMediaService } from "../services/CategoryMediaService";
 
 export const useCategoryServices = (view: MediaView) => {
     const navigate = useNavigate();
@@ -21,4 +21,4 @@ export const useCategoryServices = (view: MediaView) => {
     );
 
     return { mediaService, slideshowService };
-}
+};

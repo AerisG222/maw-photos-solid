@@ -1,5 +1,5 @@
-import { GpsCoordinate } from './GpsCoordinate';
-import { Uuid } from './Uuid';
+import { GpsCoordinate } from "./GpsCoordinate";
+import { Uuid } from "./Uuid";
 
 export interface BulkGpsOverrideRequest {
     mediaIds: Uuid[];
