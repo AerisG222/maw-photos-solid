@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 
 import Checkbox from "../../_components/input/Checkbox";
+
 import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
 interface Props {

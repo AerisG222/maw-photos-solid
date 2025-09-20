@@ -22,6 +22,7 @@ import { Uuid } from "../../_models/Uuid";
 import { CategoriesForYearResult } from "./models/CategoriesForYearResult";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { CategoryTeaserRequest } from "../../_models/CategoryTeaserRequest";
+import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -31,6 +32,12 @@ export interface CategoriesService {
     categoriesForYearQuery: (
         year: Accessor<number>
     ) => UseQueryResult<CategoriesForYearResult, Error>;
+    categoriesWithoutGpsForAllYearsQuery: (
+        years: number[]
+    ) => UseQueryResult<CategoryIdsForYearResult, Error>[];
+    categoriesWithoutGpsForYearQuery: (
+        year: Accessor<number>
+    ) => UseQueryResult<CategoryIdsForYearResult, Error>;
     categoryQuery: (id: Accessor<Uuid>) => UseQueryResult<Category | undefined, Error>;
     categoryMediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media[], Error>;
     categoryMediaGpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail[], Error>;
@@ -66,6 +73,16 @@ export const CategoriesProvider: ParentComponent = props => {
             }
 
             return { year, categories };
+        });
+
+    const fetchCategoriesWithoutGpsForYear = async (year: number) =>
+        runWithAccessToken(getToken, async accessToken => {
+            const categoryIds = await queryApi<Uuid[]>(
+                accessToken,
+                `categories/years/${year}/no-gps`
+            );
+
+            return { year, categoryIds };
         });
 
     const fetchCategory = async (id: Uuid) =>
@@ -136,7 +153,8 @@ export const CategoriesProvider: ParentComponent = props => {
             queries: years.map(year => ({
                 queryKey: ["categories", "year", year],
                 queryFn: () => fetchCategoriesForYear(year),
-                enabled: years && years.length > 0
+                enabled: years && years.length > 0,
+                staleTime: 1 * 60 * 1000
             }))
         }));
 
@@ -144,6 +162,24 @@ export const CategoriesProvider: ParentComponent = props => {
         useQuery(() => ({
             queryKey: ["categories", "year", year()],
             queryFn: () => fetchCategoriesForYear(year()),
+            enabled: year() > 0 && authContext.isLoggedIn,
+            staleTime: 1 * 60 * 1000
+        }));
+
+    const categoriesWithoutGpsForAllYearsQuery = (years: number[]) =>
+        useQueries(() => ({
+            queries: years.map(year => ({
+                queryKey: ["categories", "year", year, "no-gps"],
+                queryFn: () => fetchCategoriesWithoutGpsForYear(year),
+                enabled: years && years.length > 0,
+                staleTime: 1 * 60 * 1000
+            }))
+        }));
+
+    const categoriesWithoutGpsForYearQuery = (year: Accessor<number>) =>
+        useQuery(() => ({
+            queryKey: ["categories", "year", year(), "no-gps"],
+            queryFn: () => fetchCategoriesWithoutGpsForYear(year()),
             enabled: year() > 0 && authContext.isLoggedIn,
             staleTime: 1 * 60 * 1000
         }));
@@ -223,14 +259,14 @@ export const CategoriesProvider: ParentComponent = props => {
         }
     }));
 
-    // todo: patchApi(`categories/${categoryId}/teaser`, { mediaId });
-
     return (
         <CategoriesContext.Provider
             value={{
                 yearsQuery,
                 categoriesForAllYearsQuery,
                 categoriesForYearQuery,
+                categoriesWithoutGpsForAllYearsQuery,
+                categoriesWithoutGpsForYearQuery,
                 categoryQuery,
                 categoryMediaQuery,
                 categoryMediaGpsQuery,
