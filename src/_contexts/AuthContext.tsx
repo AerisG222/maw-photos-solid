@@ -12,16 +12,17 @@ import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 import { useNavigate } from "@solidjs/router";
 
 import { loginPage, logout as logoutPage } from "../auth/_routes";
+import { AccountStatus } from "../_models/AccountStatus";
 
 export interface AuthState {
     readonly isLoggedIn: boolean;
-    readonly isAdmin: boolean;
+    readonly accountStatus: AccountStatus | undefined;
     readonly user: User | undefined;
 }
 
 const defaultAuth: AuthState = {
     isLoggedIn: false,
-    isAdmin: false,
+    accountStatus: undefined,
     user: undefined
 };
 
@@ -30,7 +31,7 @@ export type AuthContextValue = [
     actions: {
         login: (returnUrl: string | undefined) => Promise<void>;
         logout: (returnUrl: string | undefined) => Promise<void>;
-        setIsAdmin: (isAdmin: boolean) => void;
+        setAccountStatus: (accountStatus: AccountStatus) => void;
         getToken: () => Promise<string | undefined>;
     }
 ];
@@ -114,7 +115,7 @@ export const AuthProvider: ParentComponent = props => {
         });
     };
 
-    const setIsAdmin = (isAdmin: boolean) => setState({ isAdmin });
+    const setAccountStatus = (accountStatus: AccountStatus) => setState({ accountStatus });
 
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
@@ -164,7 +165,7 @@ export const AuthProvider: ParentComponent = props => {
                     {
                         login,
                         logout,
-                        setIsAdmin,
+                        setAccountStatus,
                         getToken
                     }
                 ]}

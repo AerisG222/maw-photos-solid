@@ -6,6 +6,7 @@ import { useAuthContext } from "../AuthContext";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
+import { AccountStatus } from "../../_models/AccountStatus";
 
 import Loading from "../../_components/loading/Loading";
 
@@ -18,7 +19,7 @@ export interface ConfigService {
 const ConfigContext = createContext<ConfigService>();
 
 export const ConfigProvider: ParentComponent = props => {
-    const [authContext, { getToken, setIsAdmin }] = useAuthContext();
+    const [authContext, { getToken, setAccountStatus }] = useAuthContext();
     const [windowSizeContext] = useWindowSizeContext();
 
     const fetchScales = async () =>
@@ -26,9 +27,9 @@ export const ConfigProvider: ParentComponent = props => {
             queryApi<Scale[]>(accessToken, "config/scales")
         );
 
-    const fetchIsAdmin = async () =>
+    const fetchAccountStatus = async () =>
         runWithAccessToken(getToken, accessToken =>
-            queryApi<boolean>(accessToken, "auth/is-admin")
+            queryApi<AccountStatus>(accessToken, "auth/account-status")
         );
 
     const scalesQuery = () =>
@@ -39,10 +40,10 @@ export const ConfigProvider: ParentComponent = props => {
             staleTime: 15 * 60 * 1000
         }));
 
-    const isAdminQuery = () =>
+    const accountStatusQuery = () =>
         useQuery(() => ({
-            queryKey: ["auth", "is-admin"],
-            queryFn: fetchIsAdmin,
+            queryKey: ["auth", "account-status"],
+            queryFn: fetchAccountStatus,
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
         }));
@@ -99,8 +100,8 @@ export const ConfigProvider: ParentComponent = props => {
             return true;
         }
 
-        if (scalesQuery().isSuccess && isAdminQuery().isSuccess) {
-            setIsAdmin(isAdminQuery().data!);
+        if (scalesQuery().isSuccess && accountStatusQuery().isSuccess) {
+            setAccountStatus(accountStatusQuery().data!);
 
             return true;
         }

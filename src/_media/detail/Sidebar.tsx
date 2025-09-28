@@ -126,7 +126,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-edit]",
             shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
-            enable: (media: Media) => authContext.isAdmin,
+            enable: (media: Media) => authContext.accountStatus?.isAdmin,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
             component: lazy(() => import("./MetadataEditorCard"))
         },
@@ -136,7 +136,8 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaser,
-            enable: (media: Media) => props.enableCategoryTeaser && authContext.isAdmin,
+            enable: (media: Media) =>
+                props.enableCategoryTeaser && authContext.accountStatus?.isAdmin,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))
         }

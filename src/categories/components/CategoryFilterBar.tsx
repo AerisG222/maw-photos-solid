@@ -18,7 +18,7 @@ const CategoryFilterBar: Component = () => {
         >
             <YearFilter horizontal={ltMd()} />
 
-            <Show when={state.isAdmin}>
+            <Show when={state.accountStatus?.isAdmin}>
                 <MissingGpsFilter horizontal={ltMd()} />
             </Show>
         </div>
