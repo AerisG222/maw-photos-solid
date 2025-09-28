@@ -48,7 +48,9 @@ const MainItem: Component<Props> = props => {
         const scales = getScalesForMain();
 
         for (const scale of scales) {
-            const file = props.media.files.find(f => f.scale === scale.code);
+            const file = props.media.files.find(
+                f => f.scale === scale.code && f.type !== "video-poster"
+            );
 
             if (file) {
                 return file.path;
