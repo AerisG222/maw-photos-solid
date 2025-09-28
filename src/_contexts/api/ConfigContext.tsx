@@ -28,7 +28,7 @@ export const ConfigProvider: ParentComponent = props => {
 
     const fetchIsAdmin = async () =>
         runWithAccessToken(getToken, accessToken =>
-            queryApi<boolean>(accessToken, "config/is-admin")
+            queryApi<boolean>(accessToken, "auth/is-admin")
         );
 
     const scalesQuery = () =>
@@ -41,7 +41,7 @@ export const ConfigProvider: ParentComponent = props => {
 
     const isAdminQuery = () =>
         useQuery(() => ({
-            queryKey: ["config", "is-admin"],
+            queryKey: ["auth", "is-admin"],
             queryFn: fetchIsAdmin,
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
