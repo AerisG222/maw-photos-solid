@@ -13,6 +13,7 @@ import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
+import AccountActivatedGuard from "../auth/AccountActivatedGuard";
 
 const AppContext: ParentComponent = props => {
     const queryClient = new QueryClient();
@@ -26,13 +27,15 @@ const AppContext: ParentComponent = props => {
                             <AllSettingsProvider>
                                 <ThemeWrapper>
                                     <ConfigProvider>
-                                        <CategoriesProvider>
-                                            <MediaProvider>
-                                                <FullscreenProvider>
-                                                    {props.children}
-                                                </FullscreenProvider>
-                                            </MediaProvider>
-                                        </CategoriesProvider>
+                                        <AccountActivatedGuard>
+                                            <CategoriesProvider>
+                                                <MediaProvider>
+                                                    <FullscreenProvider>
+                                                        {props.children}
+                                                    </FullscreenProvider>
+                                                </MediaProvider>
+                                            </CategoriesProvider>
+                                        </AccountActivatedGuard>
                                     </ConfigProvider>
                                 </ThemeWrapper>
                             </AllSettingsProvider>

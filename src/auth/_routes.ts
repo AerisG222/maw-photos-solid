@@ -18,9 +18,16 @@ export const logout: AppRouteDefinition = {
     component: lazy(() => import("./Logout"))
 };
 
+export const inactive: AppRouteDefinition = {
+    path: "/inactive",
+    absolutePath: `${basePath}/inactive`,
+    name: "Inactive",
+    component: lazy(() => import("./Inactive"))
+};
+
 export const login: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     name: "Auth",
-    children: [loginPage, logout]
+    children: [loginPage, logout, inactive]
 };

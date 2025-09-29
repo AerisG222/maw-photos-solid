@@ -1,4 +1,4 @@
-import { ParentComponent, children, createEffect } from "solid-js";
+import { ParentComponent, Show, children, createEffect } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
@@ -17,7 +17,7 @@ const AdminGuard: ParentComponent<Props> = props => {
         }
     });
 
-    return <>{c()}</>;
+    return <Show when={state.accountStatus?.isAdmin}>{c()}</Show>;
 };
 
 export default AdminGuard;
