@@ -3,17 +3,17 @@ name: CI
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: build container
-      run: ./_prod_build_and_push.sh
-      env:
-        DH_USER: ${{ secrets.DH_USER }}
-        DH_PASS: ${{ secrets.DH_PASS }}
+      - name: build container
+        run: ./_prod-build-and-push.sh
+        env:
+          DH_USER: ${{ secrets.DH_USER }}
+          DH_PASS: ${{ secrets.DH_PASS }}

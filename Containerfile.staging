@@ -1,0 +1,29 @@
+# build container
+FROM docker.io/oven/bun:1-debian
+
+WORKDIR /usr/src/maw-photos
+COPY package.json .
+COPY bun.lock .
+
+RUN bun install --frozen-lockfile
+
+COPY . .
+
+RUN bun run build_staging
+
+
+# runtime container
+FROM nginx:1.29-bookworm
+
+WORKDIR /maw-photos
+
+RUN rm /etc/nginx/conf.d/*
+
+COPY etc/nginx/tls.conf                       /etc/nginx
+COPY etc/nginx/nginx.conf                     /etc/nginx/nginx.conf
+COPY etc/nginx/h5bp                           /etc/nginx/h5bp
+COPY etc/nginx/conf.d/staging.maw-photos.conf /etc/nginx/conf.d/maw-photos.conf
+COPY --from=0                                 /usr/src/maw-photos/dist .
+
+CMD [ "nginx", "-g", "daemon off;" ]
+EXPOSE 4200

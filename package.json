@@ -10,7 +10,7 @@
         "build": "vite build --mode prod",
         "serve": "vite preview",
         "test": "vitest",
-        "build_test": "vite build --mode test",
+        "build_staging": "vite build --mode staging",
         "format": "prettier --write --cache \"**/*.[tj]s?(x)\""
     },
     "license": "MIT",
