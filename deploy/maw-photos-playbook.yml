@@ -1,0 +1,110 @@
+# narrowly focused ansible deployment playbook for www.mikeandwan.us
+---
+- name: Configure Service Account
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Add Service Account
+      ansible.builtin.user:
+        name: "{{ svcacct_name }}"
+        password: "{{ svcacct_pwd | password_hash('sha512') }}"
+        update_password: always
+        state: present
+
+    # fedora creates a unique subuid range automatically, so need to do this via usermod here
+
+    - name: Enable Linger for Service Account
+      ansible.builtin.command:
+        cmd: loginctl enable-linger "{{ svcacct_name | quote }}"
+
+    - name: Add SSH key to authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ svcacct_name }}"
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+        state: present
+
+- name: Configure Application
+  hosts: webservers
+  remote_user: "{{ svcacct_name }}"
+  vars:
+    pod: pod-maw-photos
+    img_maw_photos: "docker.io/aerisg222/maw-photos:latest"
+    container_photos: maw-photos
+    dir_localroot: "{{ lookup('env', 'HOME') }}/maw-photos/{{ mawenv }}"
+    dir_root: "/home/{{ svcacct_name }}"
+    dir_approot: "{{ dir_root }}/maw-photos"
+    dir_photosecrets: "{{ dir_approot }}/photos-secrets"
+
+  tasks:
+    - name: Create Directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        recurse: true
+        state: directory
+      loop:
+        - "{{ dir_photosecrets }}"
+
+    - name: Copy Files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: u+rw
+      loop:
+        - src: "{{ dir_localroot }}/photos-secrets/dh2048.pem"
+          dest: "{{ dir_photosecrets }}"
+        - src: "{{ dir_localroot }}/photos-secrets/maw-ca.crt"
+          dest: "{{ dir_photosecrets }}"
+        - src: "{{ dir_localroot }}/photos-secrets/maw-photos.crt"
+          dest: "{{ dir_photosecrets }}"
+        - src: "{{ dir_localroot }}/photos-secrets/maw-photos.key"
+          dest: "{{ dir_photosecrets }}"
+
+    - name: Pull Container Images
+      containers.podman.podman_image:
+        name: "{{ item }}"
+      loop:
+        - "{{ img_maw_photos }}"
+
+    - name: Create Pod Quadlet
+      containers.podman.podman_pod:
+        name: "{{ pod }}"
+        state: quadlet
+        userns: "keep-id:uid=1654"
+        ports:
+          - "4200:4200"
+        quadlet_options:
+          - "ServiceName={{ pod }}"
+
+    - name: Create maw-photos Quadlet
+      containers.podman.podman_container:
+        name: "{{ container_photos }}"
+        image: "{{ img_maw_photos }}"
+        state: quadlet
+        read_only: true
+        pod: "{{ pod }}.pod"
+        user: 1654
+        volumes:
+          - "{{ dir_photosecrets }}:/certs:ro,Z"
+        quadlet_options:
+          - "AutoUpdate=registry"
+          - "Pull=newer"
+          - "ReadOnly=true"
+          - |
+
+            [Unit]
+            Description=Container for photos.mikeandwan.us webserver
+
+            [Install]
+            WantedBy=multi-user.target default.target
+
+            [Service]
+            Restart=on-failure
+
+    - name: Start and Enable Pod / Containers
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+        name: "{{ pod }}.service"
+        scope: user
+        enabled: true
+        state: restarted

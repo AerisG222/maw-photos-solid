@@ -19,5 +19,6 @@
         "titleBar.inactiveBackground": "#4687d999",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#4687d9"
+    "peacock.color": "#4687d9",
+    "ansible.python.interpreterPath": "/bin/python"
 }
