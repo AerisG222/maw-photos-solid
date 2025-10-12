@@ -26,7 +26,8 @@
 
 - name: Configure Application
   hosts: webservers
-  remote_user: "{{ svcacct_name }}"
+  become: true
+  become_user: "{{ svcacct_name }}"
   vars:
     pod: pod-maw-photos
     img_maw_photos: "docker.io/aerisg222/maw-photos:latest"
