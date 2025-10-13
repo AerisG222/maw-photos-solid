@@ -6,6 +6,29 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.0.0</span> : <span class="date">2025-10-13</span>
+            </h3>
+            <p>Major rework of the application:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Updates to support changes to the backend API</li>
+                <li>Categories can now contain both photos and videos</li>
+                <li>
+                    All media re-encoded in avif and av1 for better quality and smaller file sizes
+                </li>
+                <li>Better support for loading appropriately sized media for screen resolution</li>
+                <li>By special request: allow users to disable dimming images in grids/lists</li>
+                <li>Add options to view or hide navigation and toolbar button names</li>
+                <li>Migrated to Auth0 for authentication</li>
+                <li>Increased security so only authorized users can access media files</li>
+                <li>
+                    Key dependency changes: migrated from unocss to tailwind, first use of Tanstack
+                    Solid Query, and switched from pnpm to bun
+                </li>
+                <li>Replaced rating media with the ability to favorite media and categories</li>
+                <li>Improved themes</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v3.0.2</span> : <span class="date">2023-10-11</span>
             </h3>
             <p>A handful of improvements:</p>
