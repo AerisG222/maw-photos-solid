@@ -85,6 +85,9 @@
         read_only: true
         pod: "{{ pod }}.pod"
         user: 1654
+        mount:
+          - "type=tmpfs,tmpfs-size=512m,chown=true,destination=/var/cache/nginx"
+          - "type=tmpfs,tmpfs-size=16m,chown=true,destination=/var/run"
         volumes:
           - "{{ dir_photosecrets }}:/certs:ro,Z"
         quadlet_options:
