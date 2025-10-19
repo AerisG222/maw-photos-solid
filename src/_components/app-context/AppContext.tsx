@@ -1,4 +1,4 @@
-import { ParentComponent } from "solid-js";
+import { ParentComponent, Show } from "solid-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
@@ -43,7 +43,9 @@ const AppContext: ParentComponent = props => {
                     </MediaBreakpointProvider>
                 </WindowSizeProvider>
 
-                <SolidQueryDevtools initialIsOpen={false} />
+                <Show when={import.meta.env.DEV}>
+                    <SolidQueryDevtools initialIsOpen={false} />
+                </Show>
             </QueryClientProvider>
         </AuthProvider>
     );
