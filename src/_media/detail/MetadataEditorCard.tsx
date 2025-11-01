@@ -135,7 +135,7 @@ const MetadataEditorCard: Component<Props> = props => {
                         <input
                             type="text"
                             class="input input-sm"
-                            placeholder="Source"
+                            placeholder="Recorded"
                             value={gps.data?.recorded?.longitude ?? ""}
                             disabled
                         />
