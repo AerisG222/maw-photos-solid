@@ -23,17 +23,22 @@ export abstract class BaseMediaService {
     };
 
     getActiveMedia = () => {
-        if (!this.params.id) {
+        if (
+            !this.params.categoryYear &&
+            !this.params.categorySlug &&
+            !this.params.mediaSlug
+        ) {
             return undefined;
         }
 
         const list = this.getMediaList();
 
-        if (!list) {
-            return undefined;
-        }
-
-        return list.find(m => m.id === this.params.id);
+        return this.findMediaBySlug(
+            list,
+            this.params.categoryYear,
+            this.params.categorySlug,
+            this.params.mediaSlug
+        );
     };
 
     navigateToMedia = (view: MediaView, media: Media) => {
@@ -68,13 +73,17 @@ export abstract class BaseMediaService {
 
     moveNext = () => {
         const list = this.getMediaList();
+        const currMedia = this.findMediaBySlug(
+            list,
+            this.params.categoryYear,
+            this.params.categorySlug,
+            this.params.mediaSlug
+        );
 
-        if (!this.params.id) {
+        if (!currMedia) {
             this.navigateToMedia(this.view, list[0]);
-        }
-
-        if (list && this.params.id) {
-            const nextMedia = this.getNextMedia(list, this.params.id as Uuid);
+        } else {
+            const nextMedia = this.getNextMedia(list, currMedia.id);
 
             if (nextMedia) {
                 this.navigateToMedia(this.view, nextMedia);
@@ -84,9 +93,17 @@ export abstract class BaseMediaService {
 
     movePrevious = () => {
         const list = this.getMediaList();
+        const currMedia = this.findMediaBySlug(
+            list,
+            this.params.categoryYear,
+            this.params.categorySlug,
+            this.params.mediaSlug
+        );
 
-        if (list && this.params.id) {
-            const prevMedia = this.getPreviousMedia(list, this.params.id as Uuid);
+        if (!currMedia) {
+            this.navigateToMedia(this.view, list[0]);
+        } else {
+            const prevMedia = this.getPreviousMedia(list, currMedia.id);
 
             if (prevMedia) {
                 this.navigateToMedia(this.view, prevMedia);
@@ -113,4 +130,13 @@ export abstract class BaseMediaService {
 
         return list[list.length - 1].id === this.getActiveMedia()?.id;
     };
+
+    protected findMediaBySlug = (list?: Media[], categoryYearAsString?: string, categorySlug?: string, mediaSlug?: string) =>
+        (list && categoryYearAsString && categorySlug && mediaSlug)
+            ? list?.find(m =>
+                m.categoryYear === parseInt(categoryYearAsString, 10) &&
+                m.categorySlug === categorySlug &&
+                m.slug === mediaSlug
+            )
+            : undefined;
 }

@@ -27,7 +27,7 @@ const CategoryListItem: Component<Props> = props => {
 
     return (
         <A
-            href={getCategoryPath(props.category.id)}
+            href={getCategoryPath(props.category.year, props.category.slug)}
             class="group flex items-center cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10 hover:bg-base-300 hover:text-primary"
         >
             <img

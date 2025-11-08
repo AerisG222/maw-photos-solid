@@ -10,8 +10,9 @@ import {
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
+import { getCategoryPath } from '../categories/_routes';
 
-const basePath = "/categories/:categoryId";
+const basePath = "/categories/:categoryYear/:categorySlug";
 
 const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
     path: "/",
@@ -20,7 +21,7 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
     component: lazy(() => import("./Redirect"))
 });
 
-const idOrBlank = (media: Media | undefined) => (media ? `/${media.id}` : "");
+const slugOrBlank = (media: Media | undefined) => (media ? `/${media.slug}` : "");
 
 const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--outline-apps]",
@@ -28,11 +29,11 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Grid View",
     mediaView: MediaViewGrid,
     shortcutKeys: ["g"],
-    path: "/grid/:id?",
-    absolutePath: `${basePath}/grid/:id?`,
+    path: "/grid/:mediaSlug?",
+    absolutePath: `${basePath}/grid/:mediaSlug?`,
     component: lazy(() => import("./Grid")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `/categories/${category!.id}/grid${idOrBlank(media)}`
+        `${getCategoryPath(category!.year, category!.slug)}/grid${slugOrBlank(media)}`
 });
 
 const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -41,11 +42,11 @@ const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Detail View",
     mediaView: MediaViewDetail,
     shortcutKeys: ["w"],
-    path: "/detail/:id?",
-    absolutePath: `${basePath}/detail/:id?`,
+    path: "/detail/:mediaSlug?",
+    absolutePath: `${basePath}/detail/:mediaSlug?`,
     component: lazy(() => import("./Detail")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `/categories/${category!.id}/detail${idOrBlank(media)}`
+        `${getCategoryPath(category!.year, category!.slug)}/detail${slugOrBlank(media)}`
 });
 
 const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -54,11 +55,11 @@ const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Fullscreen View",
     mediaView: MediaViewFullscreen,
     shortcutKeys: ["f"],
-    path: "/fullscreen/:id?",
-    absolutePath: `${basePath}/fullscreen/:id?`,
+    path: "/fullscreen/:mediaSlug?",
+    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
     component: lazy(() => import("./Fullscreen")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `/categories/${category!.id}/fullscreen${idOrBlank(media)}`
+        `${getCategoryPath(category!.year, category!.slug)}/fullscreen${slugOrBlank(media)}`
 });
 
 const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -67,11 +68,11 @@ const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Map View",
     mediaView: MediaViewMap,
     shortcutKeys: ["z"],
-    path: "/map/:id?",
-    absolutePath: `${basePath}/map/:id?`,
+    path: "/map/:mediaSlug?",
+    absolutePath: `${basePath}/map/:mediaSlug?`,
     component: lazy(() => import("./Map")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `/categories/${category!.id}/map${idOrBlank(media)}`
+        `${getCategoryPath(category!.year, category!.slug)}/map${slugOrBlank(media)}`
 });
 
 const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -84,7 +85,7 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import("./BulkEdit")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `/categories/${category!.id}/bulk-edit`
+        `${getCategoryPath(category!.year, category!.slug)}/bulk-edit`
 });
 
 const redirectRoute = buildRedirectRoute(basePath);

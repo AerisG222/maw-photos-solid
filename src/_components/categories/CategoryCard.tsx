@@ -29,7 +29,7 @@ const CategoryCard: Component<Props> = props => {
 
     return (
         <A
-            href={getCategoryPath(props.category.id)}
+            href={getCategoryPath(props.category.year, props.category.slug)}
             class="group border-1 rounded-sm bg-base-200 border-secondary/20 cursor-pointer hover:bg-base-300 hover:border-primary hover:text-primary"
         >
             <Show when={props.showYears}>

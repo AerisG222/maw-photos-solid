@@ -2,7 +2,6 @@ import { lazy } from "solid-js";
 
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { equalsIgnoreCase } from "../_models/utils/StringUtils";
-import { Uuid } from "../_models/Uuid";
 
 const basePath = "/categories";
 
@@ -53,4 +52,4 @@ export const buildSearch = (year?: number | "all") => {
     return { year: year };
 };
 
-export const getCategoryPath = (categoryId: Uuid) => `${basePath}/${categoryId}`;
+export const getCategoryPath = (year: number, slug: string) => `${basePath}/${year}/${slug}`;

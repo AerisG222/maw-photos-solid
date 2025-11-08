@@ -24,10 +24,14 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
     }
 
     override navigateToFirstMediaIfNeeded = () => {
-        const list = this.mediaWithGps();
+        const activeMedia = this.getActiveMedia();
 
-        if (!this.params.id && list && list.length > 0) {
-            this.navigateToMedia(this.view, list[0].media);
+        if (!activeMedia) {
+            const list = this.mediaWithGps();
+
+            if(list && list.length > 0) {
+                this.navigateToMedia(this.view, list[0].media);
+            }
         }
     };
 
@@ -60,13 +64,15 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
 
     override moveNext = () => {
         const list = this.mediaWithGps();
+        const currMedia = this.findMediaWithGpsBySlug(
+            list,
+            this.params.categoryYear,
+            this.params.categorySlug,
+            this.params.mediaSlug
+        );
 
-        if (!this.params.id) {
-            this.navigateToMedia(this.view, list[0].media);
-        }
-
-        if (list && this.params.id) {
-            const nextMedia = this.getNextMediaWithGps(list, this.params.id as Uuid);
+        if (currMedia) {
+            const nextMedia = this.getNextMediaWithGps(list, currMedia.media.id);
 
             if (nextMedia) {
                 this.navigateToMedia(this.view, nextMedia);
@@ -76,9 +82,15 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
 
     override movePrevious = () => {
         const list = this.mediaWithGps();
+        const currMedia = this.findMediaWithGpsBySlug(
+            list,
+            this.params.categoryYear,
+            this.params.categorySlug,
+            this.params.mediaSlug
+        );
 
-        if (list && this.params.id) {
-            const prevMedia = this.getPreviousMediaWithGps(list, this.params.id as Uuid);
+        if (currMedia) {
+            const prevMedia = this.getPreviousMediaWithGps(list, currMedia.media.id);
 
             if (prevMedia) {
                 this.navigateToMedia(this.view, prevMedia);
@@ -111,7 +123,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         this.mediaListQuery.isSuccess &&
         this.categoryQuery.isSuccess &&
         (
-            !this.params.id || (!!this.params.id && !!this.getActiveMedia())
+            !this.params.mediaSlug || (!!this.getActiveMedia())
         );
 
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
@@ -145,4 +157,13 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         this.preferredGpsLocation(
             this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id)
         );
+
+    findMediaWithGpsBySlug = (list?: MediaWithGps[], categoryYearAsString?: string, categorySlug?: string, mediaSlug?: string) =>
+        (list && categoryYearAsString && categorySlug && mediaSlug)
+            ? list?.find(m =>
+                m.media.categoryYear === parseInt(categoryYearAsString, 10) &&
+                m.media.categorySlug === categorySlug &&
+                m.media.slug === mediaSlug
+            )
+            : undefined;
 }

@@ -15,7 +15,13 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
     component: lazy(() => import("./Redirect"))
 });
 
-const idOrBlank = (media: Media | undefined) => (media ? `/${media.id}` : "");
+const mediaSlugOrBlank = (category: Category | undefined, media: Media | undefined) => {
+    if(!media) {
+        return "";
+    }
+
+    return `/${media.categoryYear}/${media.categorySlug}/${media.slug}`;
+};
 
 const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     icon: "icon-[ic--outline-apps]",
@@ -23,11 +29,11 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Grid View",
     mediaView: MediaViewGrid,
     shortcutKeys: ["g"],
-    path: "/grid/:id?",
-    absolutePath: `${basePath}/grid/:id?`,
+    path: "/grid/:categoryYear?/:categorySlug?/:mediaSlug?",
+    absolutePath: `${basePath}/grid/:categoryYear?/:categorySlug?/:mediaSlug?`,
     component: lazy(() => import("./Grid")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${basePath}/grid${idOrBlank(media)}`
+        `${basePath}/grid${mediaSlugOrBlank(category, media)}`
 });
 
 const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -36,11 +42,11 @@ const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Detail View",
     mediaView: MediaViewDetail,
     shortcutKeys: ["w"],
-    path: "/detail/:id?",
-    absolutePath: `${basePath}/detail/:id?`,
+    path: "/detail/:categoryYear?/:categorySlug?/:mediaSlug?",
+    absolutePath: `${basePath}/detail/:categoryYear?/:categorySlug?/:mediaSlug?`,
     component: lazy(() => import("./Detail")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${basePath}/detail${idOrBlank(media)}`
+        `${basePath}/detail${mediaSlugOrBlank(category, media)}`
 });
 
 const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -49,11 +55,11 @@ const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
     tooltip: "Fullscreen View",
     mediaView: MediaViewFullscreen,
     shortcutKeys: ["f"],
-    path: "/fullscreen/:id?",
-    absolutePath: `${basePath}/fullscreen/:id?`,
+    path: "/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?",
+    absolutePath: `${basePath}/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?`,
     component: lazy(() => import("./Fullscreen")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${basePath}/fullscreen${idOrBlank(media)}`
+        `${basePath}/fullscreen${mediaSlugOrBlank(category, media)}`
 });
 
 const redirectRoute = buildRedirectRoute(basePath);

@@ -32,18 +32,22 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     };
 
     navigateToViewIfMediaNotInList = () => {
-        const list = this.getMediaList();
+        const activeMedia = this.getActiveMedia();
 
-        if (this.params.id && list && !list.find(x => x.id === this.params.id)) {
+        if (!activeMedia) {
             this.navigateToMedia(this.view, undefined);
         }
     };
 
     navigateToFirstMediaIfNeeded = () => {
-        const list = this.getMediaList();
+        const activeMedia = this.getActiveMedia();
 
-        if (!this.params.id && list && list.length > 0) {
-            this.navigateToMedia(this.view, list[0]);
+        if (!activeMedia) {
+            const list = this.getMediaList();
+
+            if(list?.length > 0) {
+                this.navigateToMedia(this.view, list[0]);
+            }
         }
     };
 
@@ -66,12 +70,20 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     };
 
     getEntryPathByView = (view: MediaView) =>
-        this.getRouteForView(view).absolutePath.replace("/:id?", "");
+        this.getRouteForView(view)
+            .absolutePath
+            .replace("/:categoryYear?", "")
+            .replace("/:categorySlug?", "")
+            .replace("/:mediaSlug?", "");
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
         media
             ? this.getMediaPath(this.getRouteForView(view), media)
-            : this.getRouteForView(view).absolutePath.replace("/:id?", "");
+            : this.getRouteForView(view)
+                .absolutePath
+                .replace("/:categoryYear?", "")
+                .replace("/:categorySlug?", "")
+                .replace("/:mediaSlug?", "");
 
     getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
         route.buildPathForMedia(undefined, media);

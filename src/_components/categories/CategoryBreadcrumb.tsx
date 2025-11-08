@@ -24,7 +24,7 @@ const CategoryBreadcrumb: Component<Props> = props => {
                 <Show when={props.showTitleAsLink}>
                     <A
                         class="text-primary hover:underline"
-                        href={`/categories/${props.category!.id}`}
+                        href={`/categories/${props.category!.year}/${props.category!.slug}`}
                     >
                         {props.category!.name}
                     </A>

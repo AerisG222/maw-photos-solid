@@ -30,8 +30,9 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     navigateToView = (view: MediaView) => {
         this.navigate(
             this.getEntryPathByView(view)
-                .replace(":categoryId", this.params.categoryId)
-                .replace("/:id?", ""),
+                .replace(":categoryYear", this.params.categoryYear)
+                .replace(":categorySlug", this.params.categorySlug)
+                .replace("/:mediaSlug?", ""),
             { replace: true }
         );
     };
@@ -39,7 +40,7 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     navigateToFirstMediaIfNeeded = () => {
         const list = this.getMediaList();
 
-        if (!this.params.id && list && list.length > 0) {
+        if (!this.params.mediaSlug && list && list.length > 0) {
             this.navigateToMedia(this.view, list[0]);
         }
     };
@@ -51,8 +52,10 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     getEntryPathByView = (view: MediaView) =>
         this.getActiveCategory()
             ? this.getRouteForView(view)
-                  .absolutePath.replace(":categoryId", this.getActiveCategory()!.id)
-                  .replace("/:id?", "")
+                .absolutePath
+                .replace(":categoryYear", this.getActiveCategory()!.year.toString())
+                .replace(":categorySlug", this.getActiveCategory()!.slug)
+                .replace("/:mediaSlug?", "")
             : "";
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
