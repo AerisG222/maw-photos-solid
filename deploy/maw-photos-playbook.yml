@@ -37,6 +37,8 @@
     dir_approot: "{{ dir_root }}/maw-photos"
     dir_photosecrets: "{{ dir_approot }}/photos-secrets"
     dir_scripts: "{{ dir_approot }}/scripts"
+    dir_podman_secrets: "{{ dir_approot }}/podman-secrets"
+    podman_authfile: "{{dir_podman_secrets}}/auth.json"
 
   tasks:
     - name: Create Directories
@@ -47,6 +49,7 @@
       loop:
         - "{{ dir_photosecrets }}"
         - "{{ dir_scripts }}"
+        - "{{ dir_podman_secrets }}"
 
     - name: Copy Files
       ansible.builtin.copy:
@@ -63,8 +66,16 @@
         - src: "{{ dir_localroot }}/photos-secrets/maw-photos.key"
           dest: "{{ dir_photosecrets }}"
 
+    - name: Establish Login to registry
+      containers.podman.podman_login:
+        registry: docker.io
+        authfile: "{{ podman_authfile }}"
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+
     - name: Pull Container Images
       containers.podman.podman_image:
+        authfile: "{{ podman_authfile }}"
         name: "{{ item }}"
       loop:
         - "{{ img_maw_photos }}"
@@ -94,6 +105,7 @@
           - "{{ dir_photosecrets }}:/certs:ro,Z"
         quadlet_options:
           - "AutoUpdate=registry"
+          - "Label=io.containers.autoupdate.authfile={{ podman_authfile }}"
           - "Pull=newer"
           - "ReadOnly=true"
           - |
