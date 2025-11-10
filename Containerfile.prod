@@ -1,15 +1,17 @@
 # build container
-FROM docker.io/oven/bun:1-debian
+FROM docker.io/node:22-bookworm
 
 WORKDIR /usr/src/maw-photos
 COPY package.json .
 COPY bun.lock .
 
-RUN bun install --frozen-lockfile
+RUN curl -fsSL https://bun.com/install | bash
+
+RUN . /root/.bashrc && bun install --frozen-lockfile
 
 COPY . .
 
-RUN bun run build
+RUN . /root/.bashrc && bun run build
 
 
 # runtime container
