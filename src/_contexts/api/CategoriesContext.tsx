@@ -46,6 +46,7 @@ export interface CategoriesService {
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
+    downloadFile: (url: string, fileName: string) => Promise<void>;
 }
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -259,6 +260,33 @@ export const CategoriesProvider: ParentComponent = props => {
         }
     }));
 
+    const downloadFile = async (url: string, fileName: string) =>
+        runWithAccessToken(getToken, async accessToken => {
+            const response = await fetch(url, {
+                method: "GET",
+                mode: "cors",
+                cache: "no-cache",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                referrerPolicy: "no-referrer"
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to download file: HTTP ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = objectUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(objectUrl);
+        });
+
     return (
         <CategoriesContext.Provider
             value={{
@@ -272,7 +300,8 @@ export const CategoriesProvider: ParentComponent = props => {
                 categoryMediaGpsQuery,
                 categorySearchQuery,
                 setIsFavoriteMutation,
-                setCategoryTeaserMutation
+                setCategoryTeaserMutation,
+                downloadFile
             }}
         >
             {props.children}

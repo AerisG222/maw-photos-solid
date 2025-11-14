@@ -1,6 +1,6 @@
-import { Component } from "solid-js";
+import { Component, createMemo } from "solid-js";
 
-import ToolbarExternalLink from "../../_components/toolbar/ToolbarExternalLink";
+import ToolbarDownloadLink, { getFilenameFromUrl } from "../../_components/toolbar/ToolbarDownloadLink";
 
 import { Media } from "../../_models/Media";
 
@@ -9,12 +9,19 @@ interface Props {
 }
 
 const DownloadPhotoHighResButton: Component<Props> = props => {
+    const fullResUrl = createMemo(() =>
+        props.media
+            ? (props.media.files.find(f => f.scale === "full" && f.type !== "video-poster")?.path ?? "")
+            : ""
+    );
+
     return (
-        <ToolbarExternalLink
+        <ToolbarDownloadLink
             name="High Res"
             tooltip="High Res Download"
-            url={props.media ? (props.media.files.find(f => f.scale === "full")?.path ?? "") : ""}
+            url={fullResUrl()}
             iconClass="icon-[ic--round-image]"
+            downloadFileName={getFilenameFromUrl(fullResUrl(), "high")}
         />
     );
 };
