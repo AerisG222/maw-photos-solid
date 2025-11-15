@@ -1,6 +1,6 @@
 {
     "name": "maw-photos",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "description": "Interactive application to view photos",
     "private": true,
     "type": "module",

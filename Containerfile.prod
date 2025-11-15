@@ -1,5 +1,5 @@
 # build container
-FROM docker.io/node:22-bookworm
+FROM docker.io/node:24-bookworm
 
 WORKDIR /usr/src/maw-photos
 COPY package.json .
@@ -15,7 +15,7 @@ RUN . /root/.bashrc && bun run build
 
 
 # runtime container
-FROM nginx:1.29-bookworm
+FROM nginx:1.29-trixie
 
 WORKDIR /maw-photos
 
