@@ -36,9 +36,12 @@
     dir_root: "/home/{{ svcacct_name }}"
     dir_approot: "{{ dir_root }}/maw-photos"
     dir_photosecrets: "{{ dir_approot }}/photos-secrets"
+    dir_varcache: "{{ dir_approot }}/varcache"
+    dir_varrun: "{{ dir_approot }}/varrun"
     dir_scripts: "{{ dir_approot }}/scripts"
     dir_podman_secrets: "{{ dir_approot }}/podman-secrets"
-    podman_authfile: "{{dir_podman_secrets}}/auth.json"
+    dir_kube: "{{ dir_approot }}/kube"
+    file_kube: "{{ dir_approot }}/kube/kube.yml"
 
   tasks:
     - name: Create Directories
@@ -50,6 +53,9 @@
         - "{{ dir_photosecrets }}"
         - "{{ dir_scripts }}"
         - "{{ dir_podman_secrets }}"
+        - "{{ dir_kube }}"
+        - "{{ dir_varcache }}"
+        - "{{ dir_varrun }}"
 
     - name: Copy Files
       ansible.builtin.copy:
@@ -66,48 +72,25 @@
         - src: "{{ dir_localroot }}/photos-secrets/maw-photos.key"
           dest: "{{ dir_photosecrets }}"
 
-    - name: Establish Login to registry
-      containers.podman.podman_login:
-        registry: docker.io
-        authfile: "{{ podman_authfile }}"
-        username: "{{ dockerhub_username }}"
-        password: "{{ dockerhub_password }}"
-
-    - name: Pull Container Images
-      containers.podman.podman_image:
-        authfile: "{{ podman_authfile }}"
-        name: "{{ item }}"
+    - name: Process Templates
+      ansible.builtin.template:
+        dest: "{{ item.dest }}"
+        src: "{{ item.src }}"
+        mode: u+rw
       loop:
-        - "{{ img_maw_photos }}"
-
-    - name: Create Pod Quadlet
-      containers.podman.podman_pod:
-        name: "{{ pod }}"
-        state: quadlet
-        userns: "keep-id:uid=1654"
-        ports:
-          - "4200:4200"
-        quadlet_options:
-          - "ServiceName={{ pod }}"
+        - { "src": "kube.yml.j2", "dest": "{{ file_kube }}" }
 
     - name: Create maw-photos Quadlet
-      containers.podman.podman_container:
-        name: "{{ container_photos }}"
-        image: "{{ img_maw_photos }}"
+      containers.podman.podman_play:
+        kube_file: "{{ file_kube }}"
         state: quadlet
-        read_only: true
-        pod: "{{ pod }}.pod"
-        user: 1654
-        mount:
-          - "type=tmpfs,tmpfs-size=512m,chown=true,destination=/var/cache/nginx"
-          - "type=tmpfs,tmpfs-size=16m,chown=true,destination=/var/run"
-        volumes:
-          - "{{ dir_photosecrets }}:/certs:ro,Z"
+        recreate: true
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+        quadlet_filename: "{{ pod }}"
+        quadlet_file_mode: '0640'
         quadlet_options:
           - "AutoUpdate=registry"
-          - "Label=io.containers.autoupdate.authfile={{ podman_authfile }}"
-          - "Pull=newer"
-          - "ReadOnly=true"
           - |
 
             [Unit]
@@ -122,7 +105,7 @@
     - name: Start and Enable Pod / Containers
       ansible.builtin.systemd_service:
         daemon_reload: true
-        name: "{{ pod }}.service"
+        name: "{{ pod }}"
         scope: user
         enabled: true
         state: restarted
