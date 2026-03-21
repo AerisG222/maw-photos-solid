@@ -6,6 +6,16 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.0.2</span> : <span class="date">2026-03-21</span>
+            </h3>
+            <p>Minor enhancements:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Add option to show media types in category and media itself</li>
+                <li>Toolbar buttons that toggle behavior now set a background color to reinforce when they are active</li>
+                <li>Update dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.0.1</span> : <span class="date">2025-11-15</span>
             </h3>
             <p>Minor update:</p>
