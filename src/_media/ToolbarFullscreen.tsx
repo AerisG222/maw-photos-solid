@@ -16,6 +16,7 @@ interface Props {
     activeMediaIsLast: boolean;
     slideshowIsPlaying: boolean;
     canRequestMore: boolean;
+    showFavoritesBadge: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
@@ -49,7 +50,9 @@ const FullscreenToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
+            <ToggleShowFavoritesBadgeButton
+                isActive={props.showFavoritesBadge}
+                setShowFavoritesBadge={props.setShowFavoritesBadge} />
         </>
     );
 };

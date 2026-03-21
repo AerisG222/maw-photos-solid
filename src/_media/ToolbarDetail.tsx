@@ -103,6 +103,7 @@ const DetailToolbar: Component<Props> = props => {
                 tooltip="Toggle Category Breadcrumbs"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleBreadcrumbs}
+                active={settings.showBreadcrumbs}
             />
             <ToolbarButton
                 icon="icon-[ic--round-remove-red-eye]"
@@ -110,6 +111,7 @@ const DetailToolbar: Component<Props> = props => {
                 tooltip="Toggle Media List"
                 shortcutKeys={["l"]}
                 clickHandler={onTogglePhotoList}
+                active={settings.showMediaList}
             />
             <ToolbarButton
                 icon="icon-[mdi--image-size-select-large]"
@@ -124,9 +126,13 @@ const DetailToolbar: Component<Props> = props => {
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}
                 clickHandler={onToggleDimThumbnails}
+                active={!settings.dimThumbnails}
             />
 
-            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
+            <ToggleShowFavoritesBadgeButton
+                isActive={settings.showFavoritesBadge}
+                setShowFavoritesBadge={props.setShowFavoritesBadge}
+            />
         </>
     );
 };

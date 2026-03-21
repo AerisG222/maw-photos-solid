@@ -44,6 +44,7 @@ const ListToolbar: Component = () => {
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}
                 clickHandler={onToggleDimThumbnails}
+                active={!settings.dimThumbnails}
             />
         </>
     );

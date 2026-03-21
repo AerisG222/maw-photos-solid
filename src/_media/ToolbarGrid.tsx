@@ -89,8 +89,14 @@ const GridToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
-            <ToggleShowTypesBadgeButton setShowTypesBadge={props.setShowTypesBadge} />
+            <ToggleShowFavoritesBadgeButton
+                isActive={settings.showFavoritesBadge}
+                setShowFavoritesBadge={props.setShowFavoritesBadge}
+            />
+            <ToggleShowTypesBadgeButton
+                isActive={settings.showTypesBadge}
+                setShowTypesBadge={props.setShowTypesBadge}
+            />
 
             <ToolbarDivider />
 
@@ -102,6 +108,7 @@ const GridToolbar: Component<Props> = props => {
                         tooltip="Toggle Category Breadcrumbs"
                         shortcutKeys={["t"]}
                         clickHandler={onToggleBreadcrumbs}
+                        active={settings.showBreadcrumbs}
                     />
                 </Show>
 
@@ -127,6 +134,7 @@ const GridToolbar: Component<Props> = props => {
                     tooltip="Toggle Thumbnail Dimming"
                     shortcutKeys={["b"]}
                     clickHandler={onToggleDimThumbnails}
+                    active={!settings.dimThumbnails}
                 />
             </Show>
 

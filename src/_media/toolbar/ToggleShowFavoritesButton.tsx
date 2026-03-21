@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 interface Props {
+    isActive: boolean;
     setShowFavoritesBadge: () => void;
 }
 
@@ -14,6 +15,7 @@ const ToggleShowFavoritesBadgeButton: Component<Props> = props => {
             tooltip="Toggle Favorites Badge"
             shortcutKeys={["h"]}
             clickHandler={props.setShowFavoritesBadge}
+            active={props.isActive}
         />
     );
 };

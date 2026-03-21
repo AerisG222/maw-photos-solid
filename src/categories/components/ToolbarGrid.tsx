@@ -50,6 +50,7 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Category Titles"
                 shortcutKeys={["t"]}
                 clickHandler={onToggleTitles}
+                active={settings.showTitles}
             />
             <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
@@ -72,6 +73,7 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}
                 clickHandler={onToggleDimThumbnails}
+                active={!settings.dimThumbnails}
             />
             <ToolbarButton
                 icon="icon-[mdi--heart]"
@@ -79,6 +81,7 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Favorites Badge"
                 shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
+                active={settings.showFavoritesBadge}
             />
             <ToolbarButton
                 icon="icon-[mdi--label]"
@@ -86,6 +89,7 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Media Types Badge"
                 shortcutKeys={["e"]}
                 clickHandler={onToggleTypesBadge}
+                active={settings.showTypesBadge}
             />
         </>
     );
