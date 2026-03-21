@@ -8,7 +8,7 @@ import ViewGrid from "../_media/ViewGrid";
 
 const Grid: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewGrid);
-    const [settings, { setShowFavoritesBadge }] = useMediaGridViewSettingsContext();
+    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] = useMediaGridViewSettingsContext();
 
     createEffect(() => {
         mediaService.navigateToViewIfMediaNotInList();
@@ -29,7 +29,9 @@ const Grid: Component = () => {
             enableToggleBreadcrumbsOnActiveMedia={true}
             enableToggleBreadcrumbsOnInactiveMedia={false}
             showFavoritesBadge={settings.showFavoritesBadge}
+            showTypesBadge={settings.showTypesBadge}
             setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+            setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
         />
     );
 };

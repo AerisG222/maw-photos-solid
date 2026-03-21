@@ -9,7 +9,7 @@ import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 const GridToolbar: Component = () => {
     const [
         settings,
-        { setShowTitles, setMargin, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }
+        { setShowTitles, setMargin, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge, setShowTypesBadge }
     ] = useCategoryGridViewSettingsContext();
 
     const onToggleTitles = () => {
@@ -36,6 +36,10 @@ const GridToolbar: Component = () => {
 
     const onToggleFavoritesBadge = () => {
         setShowFavoritesBadge(!settings.showFavoritesBadge);
+    };
+
+    const onToggleTypesBadge = () => {
+        setShowTypesBadge(!settings.showTypesBadge);
     };
 
     return (
@@ -75,6 +79,13 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Favorites Badge"
                 shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--label]"
+                name="Media Types"
+                tooltip="Toggle Media Types Badge"
+                shortcutKeys={["e"]}
+                clickHandler={onToggleTypesBadge}
             />
         </>
     );

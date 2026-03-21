@@ -55,6 +55,7 @@ const ViewGrid: Component = () => {
                             dimThumbnails={settings.dimThumbnails}
                             showYears={settings.showYears}
                             showFavoriteBadge={settings.showFavoritesBadge}
+                            showTypesBadge={settings.showTypesBadge}
                             eager={idx() <= EAGER_THRESHOLD}
                             setIsFavorite={setIsFavorite}
                         />

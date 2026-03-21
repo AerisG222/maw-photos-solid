@@ -33,7 +33,7 @@ const ViewMedia: Component = () => {
             setShowMediaList: setDetailShowMediaList,
             setThumbnailSize: setDetailThumbnailSize,
             setDimThumbnails: setDetailDimThumbnails,
-            setShowFavoritesBadge: setDetailShowFavoritesBadge
+            setShowFavoritesBadge: setDetailShowFavoritesBadge,
         }
     ] = useMediaDetailViewSettingsContext();
     const [fullscreenSettings, { setShowFavoritesBadge: setFullscreenShowFavoritesBadge }] =
@@ -45,7 +45,8 @@ const ViewMedia: Component = () => {
             setShowBreadcrumbs: setGridShowBreadcrumbs,
             setThumbnailSize: setGridThumbnailSize,
             setDimThumbnails: setGridDimThumbnails,
-            setShowFavoritesBadge: setGridShowFavoritesBadge
+            setShowFavoritesBadge: setGridShowFavoritesBadge,
+            setShowTypesBadge: setGridShowTypesBadge
         }
     ] = useMediaGridViewSettingsContext();
     const [
@@ -226,6 +227,12 @@ const ViewMedia: Component = () => {
                         name="gridShowFavoriteBadges"
                         isSelected={gridSettings.showFavoritesBadge}
                         onChange={setGridShowFavoritesBadge}
+                    />
+                    <Toggle
+                        title="Show Media Type Badges"
+                        name="gridShowTypeBadges"
+                        isSelected={gridSettings.showTypesBadge}
+                        onChange={setGridShowTypesBadge}
                     />
                 </Panel>
 

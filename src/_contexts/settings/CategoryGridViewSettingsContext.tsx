@@ -11,6 +11,7 @@ export interface CategoryGridViewSettingsState {
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
     readonly showFavoritesBadge: boolean;
+    readonly showTypesBadge: boolean;
 }
 
 export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
@@ -18,7 +19,8 @@ export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
     showTitles: true,
     thumbnailSize: defaultGridThumbnailSize,
     dimThumbnails: true,
-    showFavoritesBadge: false
+    showFavoritesBadge: false,
+    showTypesBadge: false
 };
 
 export type CategoryGridViewSettingsContextValue = [
@@ -29,6 +31,7 @@ export type CategoryGridViewSettingsContextValue = [
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
         setShowFavoritesBadge: (showBadge: boolean) => void;
+        setShowTypesBadge: (showBadge: boolean) => void;
     }
 ];
 
@@ -43,6 +46,8 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
+    const setShowTypesBadge = (showTypesBadge: boolean) =>
+        updateState({ showTypesBadge });
 
     const updateState = (update: Partial<CategoryGridViewSettingsState>) => {
         setState(update);
@@ -58,7 +63,8 @@ export const CategoryGridSettingsProvider: ParentComponent = props => {
                     setShowTitles,
                     setThumbnailSize,
                     setDimThumbnails,
-                    setShowFavoritesBadge
+                    setShowFavoritesBadge,
+                    setShowTypesBadge
                 }
             ]}
         >

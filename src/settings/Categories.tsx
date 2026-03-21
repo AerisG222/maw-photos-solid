@@ -27,7 +27,8 @@ const ViewCategories: Component = () => {
             setMargin: setGridMargin,
             setThumbnailSize: setGridThumbnailSize,
             setDimThumbnails: setGridDimThumbnails,
-            setShowFavoritesBadge: setGridShowFavoritesBadge
+            setShowFavoritesBadge: setGridShowFavoritesBadge,
+            setShowTypesBadge: setGridShowTypesBadge
         }
     ] = useCategoryGridViewSettingsContext();
     const [
@@ -104,6 +105,12 @@ const ViewCategories: Component = () => {
                         name="gridShowFavoriteBadges"
                         isSelected={gridSettings.showFavoritesBadge}
                         onChange={setGridShowFavoritesBadge}
+                    />
+                    <Toggle
+                        title="Show Media Type Badges"
+                        name="gridShowTypesBadge"
+                        isSelected={gridSettings.showTypesBadge}
+                        onChange={setGridShowTypesBadge}
                     />
                 </Panel>
 

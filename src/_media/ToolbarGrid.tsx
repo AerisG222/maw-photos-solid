@@ -17,6 +17,7 @@ import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
+import ToggleShowTypesBadgeButton from "./toolbar/ToggleShowTypesButton";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -31,6 +32,7 @@ interface Props {
     toggleSlideshow: () => void;
     requestMore: () => void;
     setShowFavoritesBadge: () => void;
+    setShowTypesBadge: () => void;
 }
 
 const GridToolbar: Component<Props> = props => {
@@ -88,6 +90,7 @@ const GridToolbar: Component<Props> = props => {
             <ToolbarDivider />
 
             <ToggleShowFavoritesBadgeButton setShowFavoritesBadge={props.setShowFavoritesBadge} />
+            <ToggleShowTypesBadgeButton setShowTypesBadge={props.setShowTypesBadge} />
 
             <ToolbarDivider />
 

@@ -12,6 +12,7 @@ export interface SearchGridViewSettingsState {
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
     readonly showFavoritesBadge: boolean;
+    readonly showTypesBadge: boolean;
 }
 
 export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
@@ -20,7 +21,8 @@ export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
     showYears: true,
     thumbnailSize: defaultGridThumbnailSize,
     dimThumbnails: true,
-    showFavoritesBadge: false
+    showFavoritesBadge: false,
+    showTypesBadge: false
 };
 
 export type SearchGridViewSettingsContextValue = [
@@ -32,6 +34,7 @@ export type SearchGridViewSettingsContextValue = [
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
         setShowFavoritesBadge: (showBadge: boolean) => void;
+        setShowTypesBadge: (showBadge: boolean) => void;
     }
 ];
 
@@ -47,6 +50,8 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
+    const setShowTypesBadge = (showTypesBadge: boolean) =>
+        updateState({ showTypesBadge });
 
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);
@@ -63,7 +68,8 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
                     setShowYears,
                     setThumbnailSize,
                     setDimThumbnails,
-                    setShowFavoritesBadge
+                    setShowFavoritesBadge,
+                    setShowTypesBadge
                 }
             ]}
         >

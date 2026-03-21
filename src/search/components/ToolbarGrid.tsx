@@ -15,7 +15,8 @@ const GridToolbar: Component = () => {
             setThumbnailSize,
             setMargin,
             setDimThumbnails,
-            setShowFavoritesBadge
+            setShowFavoritesBadge,
+            setShowTypesBadge
         }
     ] = useSearchGridViewSettingsContext();
 
@@ -55,6 +56,10 @@ const GridToolbar: Component = () => {
 
     const onToggleFavoritesBadge = () => {
         setShowFavoritesBadge(!settings.showFavoritesBadge);
+    };
+
+    const onToggleTypesBadge = () => {
+        setShowTypesBadge(!settings.showTypesBadge);
     };
 
     return (
@@ -101,6 +106,13 @@ const GridToolbar: Component = () => {
                 tooltip="Toggle Favorites Badge"
                 shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--label]"
+                name="Media Types"
+                tooltip="Toggle Media Types Badge"
+                shortcutKeys={["e"]}
+                clickHandler={onToggleTypesBadge}
             />
         </>
     );

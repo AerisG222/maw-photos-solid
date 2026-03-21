@@ -35,6 +35,7 @@ const YearGrid: Component<Props> = props => {
                             thumbnailSize={settings.thumbnailSize}
                             dimThumbnails={settings.dimThumbnails}
                             showFavoriteBadge={settings.showFavoritesBadge}
+                            showTypesBadge={settings.showTypesBadge}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
                             setIsFavorite={props.setIsFavorite}
                         />

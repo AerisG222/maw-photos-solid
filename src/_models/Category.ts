@@ -1,5 +1,6 @@
 import { Uuid } from "./Uuid";
 import { Media } from "./Media";
+import { MediaType } from './MediaType';
 
 export interface Category {
     id: Uuid;
@@ -10,4 +11,5 @@ export interface Category {
     modified: Date;
     isFavorite: boolean;
     teaser: Media;
+    mediaTypes: MediaType[];
 }

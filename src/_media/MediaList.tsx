@@ -14,6 +14,7 @@ interface Props {
     activeMedia: Media;
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
+    showTypesBadge: boolean;
     activeRoute?: AppRouteDefinition;
 }
 
@@ -50,8 +51,10 @@ const MediaList: Component<Props> = props => {
                         href={props.mediaLinkBuilder(media)}
                         media={media}
                         rounded={false}
+                        showFavoritesBadge={false}
                         thumbnailSize={props.thumbnailSize}
                         dimThumbnails={props.dimThumbnails}
+                        showTypesBadge={props.showTypesBadge}
                         isActiveItem={props.activeMedia.id === media.id}
                         route={props.activeRoute!}
                         scroll={scroll}
