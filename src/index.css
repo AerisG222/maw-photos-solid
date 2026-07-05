@@ -64,3 +64,33 @@
         margin-bottom: calc(var(--spacing));
     }
 }
+
+/*
+   Google Maps injects its own DOM (controls, markers, InfoWindow) into
+   `.gm-style`. Tailwind's Preflight resets every <img> with
+   `max-width: 100%; height: auto`, which overrides the width/height Google
+   sets on the InfoWindow close ("X") button image and collapses it — the
+   button remains clickable but the icon is invisible. Opt Google's images
+   out of the reset so its controls render at their intended size.
+*/
+.gm-style img,
+.gm-ui-hover-effect img {
+    max-width: none;
+    height: auto;
+}
+
+/*
+   Vector maps (we set a `mapId`) render the InfoWindow close ("X") as a
+   <span> whose glyph is a `mask-image`; the visible color comes from
+   `background-color`, which Google does not set inline — so the icon is
+   shaped but has no fill and is invisible. Give it a fill (and ensure the
+   mask is sized/positioned). Google's InfoWindow chrome stays light
+   regardless of the app theme, so a fixed neutral grey keeps good contrast
+   and matches the native close-button look.
+*/
+.gm-ui-hover-effect > span {
+    background-color: #5f6368 !important;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
