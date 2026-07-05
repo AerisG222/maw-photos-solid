@@ -13,8 +13,8 @@ const App: ParentComponent = props => {
             <ShortcutDialog />
             <div
                 class="grid
-                    grid-rows-[max-content_100vh] grid-cols-[100vw]
-                    md:grid-rows-[100vh] md:grid-cols-[max-content_auto]"
+                    grid-rows-[max-content_100dvh] grid-cols-[100%]
+                    md:grid-rows-[100dvh] md:grid-cols-[max-content_auto]"
             >
                 <Show when={!fullscreen.isFullscreen} fallback={<div class="w-0" />}>
                     <PrimaryNav />

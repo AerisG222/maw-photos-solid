@@ -9,7 +9,7 @@ const MainPhoto: Component<Props> = props => {
     return (
         <img
             crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
-            class="w-full h-full max-h-screen max-w-full object-contain"
+            class="w-full h-full max-h-dvh max-w-full object-contain"
             sizes="100vw"
             loading="eager"
             src={props.url}

@@ -18,9 +18,9 @@ const Layout: ParentComponent<Props> = props => {
 
     return (
         <div
-            class="grid w-full h-[calc(100vh-48px)]
+            class="grid w-full h-[calc(100dvh-48px)]
             grid-rows-[max-content_auto_0] grid-cols-[100%]
-            md:h-screen md:grid-rows-[100%] md:grid-cols-[max-content_auto_max-content]"
+            md:h-dvh md:grid-rows-[100%] md:grid-cols-[max-content_auto_max-content]"
         >
             <Show when={toolbar()} fallback={<div />}>
                 {toolbar()}

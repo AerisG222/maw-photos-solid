@@ -153,7 +153,7 @@ const ViewMap: Component<Props> = props => {
                         Sorry, we do not have GPS data for this category.
                     </div>
                 </Show>
-                <div class="h-screen w-full" ref={el} />
+                <div class="h-dvh w-full" ref={el} />
             </Layout>
         </Show>
     );

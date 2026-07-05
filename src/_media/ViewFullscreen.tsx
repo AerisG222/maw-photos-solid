@@ -55,7 +55,7 @@ const ViewFullscreen: Component<Props> = props => {
                     </Toolbar>
                 }
             >
-                <div class="grid h-screen w-full justify-center">
+                <div class="grid h-dvh w-full justify-center">
                     <MainItem
                         media={props.mediaService.getActiveMedia()!}
                         showFavoriteBadge={props.showFavoritesBadge}

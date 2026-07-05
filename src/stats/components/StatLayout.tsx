@@ -4,7 +4,7 @@ const StatLayout: ParentComponent = props => {
     const c = children(() => props.children);
 
     return (
-        <div class="grid grid-rows-[max-content_max-content_auto] h-[calc(100vh-.25rem)]">
+        <div class="grid grid-rows-[max-content_max-content_auto] h-[calc(100dvh-.25rem)]">
             {c()}
         </div>
     );

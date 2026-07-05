@@ -41,7 +41,7 @@ const ViewDetail: Component<Props> = props => {
             reservedHeight += getThumbnailSize(props.detailSettings.thumbnailSize).height + 20;
         }
 
-        return `max-height: calc(100vh - ${reservedHeight}px);`;
+        return `max-height: calc(100dvh - ${reservedHeight}px);`;
     };
 
     let mediaElement: HTMLImageElement | HTMLVideoElement;
@@ -90,7 +90,7 @@ const ViewDetail: Component<Props> = props => {
                     />
                 }
             >
-                <div class="flex flex-col flex-[max-content_auto_max-content] h-screen --val-[100px]">
+                <div class="flex flex-col flex-[max-content_auto_max-content] h-dvh --val-[100px]">
                     <Show when={props.detailSettings.showBreadcrumbs} fallback={<div />}>
                         <CategoryBreadcrumb
                             category={props.mediaService.getActiveCategory()}
