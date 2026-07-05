@@ -62,10 +62,11 @@ const ViewMap: Component<Props> = props => {
             const coord = props.mediaService.preferredGpsLocation(item);
             const marker = new AdvancedMarkerElement({
                 map,
-                position: { lat: coord!.latitude, lng: coord!.longitude }
+                position: { lat: coord!.latitude, lng: coord!.longitude },
+                gmpClickable: true
             });
 
-            marker.addListener("click", () => {
+            marker.addListener("gmp-click", () => {
                 infoWindow.setContent(`<img src="${getMediaTeaserUrl(item.media, "default")}" />`);
                 infoWindow.open({
                     anchor: marker,
@@ -92,7 +93,7 @@ const ViewMap: Component<Props> = props => {
             map.panTo(pos);
 
             const marker = markers.get(props.mediaService.getActiveMedia()!.id);
-            google.maps.event.trigger(marker, "click");
+            google.maps.event.trigger(marker, "gmp-click");
         }
     };
 
