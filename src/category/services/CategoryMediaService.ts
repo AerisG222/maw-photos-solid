@@ -30,8 +30,8 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     navigateToView = (view: MediaView) => {
         this.navigate(
             this.getEntryPathByView(view)
-                .replace(":categoryYear", this.params.categoryYear)
-                .replace(":categorySlug", this.params.categorySlug)
+                .replace(":categoryYear", this.params.categoryYear ?? "")
+                .replace(":categorySlug", this.params.categorySlug ?? "")
                 .replace("/:mediaSlug?", ""),
             { replace: true }
         );

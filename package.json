@@ -7,10 +7,11 @@
     "scripts": {
         "dev": "vite --mode dev",
         "lint": "eslint .",
-        "build": "vite build --mode production",
+        "typecheck": "tsc --noEmit",
+        "build": "tsc --noEmit && vite build --mode production",
         "serve": "vite preview",
         "test": "vitest",
-        "build_staging": "vite build --mode staging",
+        "build_staging": "tsc --noEmit && vite build --mode staging",
         "format": "prettier --write --cache \"**/*.[tj]s?(x)\""
     },
     "license": "MIT",

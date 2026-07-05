@@ -15,7 +15,7 @@ export class SlideshowService {
         }
 
         setIntervalId(
-            setInterval(() => {
+            window.setInterval(() => {
                 if (this.navigable.isActiveMediaLast()) {
                     this.stop();
                     return;

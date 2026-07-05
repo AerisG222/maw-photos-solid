@@ -30,7 +30,7 @@ interface Props {
 const ViewDetail: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
 
-    let mediaElement: HTMLImageElement | HTMLVideoElement;
+    let mediaElement: HTMLImageElement | HTMLVideoElement | undefined;
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Media> = {
@@ -105,6 +105,7 @@ const ViewDetail: Component<Props> = props => {
                             activeMedia={props.mediaService.getActiveMedia()!}
                             thumbnailSize={props.detailSettings.thumbnailSize}
                             dimThumbnails={props.detailSettings.dimThumbnails}
+                            showTypesBadge={false}
                             activeRoute={detailRoute}
                         />
                     </Show>

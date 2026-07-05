@@ -13,8 +13,8 @@ import Layout from "../_components/layout/Layout";
 interface Props {
     mediaService: IMapsMediaService;
     mapState: MediaMapViewSettingsState;
-    setMapType: (mapType: string | undefined) => void;
-    setZoom: (zoom: number | undefined) => void;
+    setMapType: (mapType: string) => void;
+    setZoom: (zoom: number) => void;
 }
 
 const ViewMap: Component<Props> = props => {
@@ -43,8 +43,20 @@ const ViewMap: Component<Props> = props => {
         if (el) {
             const options = defaultMapOptions(initialLocation);
             map = new Map(el, options);
-            map.addListener("zoom_changed", () => props.setZoom(map.getZoom()));
-            map.addListener("maptypeid_changed", () => props.setMapType(map.getMapTypeId()));
+            map.addListener("zoom_changed", () => {
+                const zoom = map.getZoom();
+
+                if (zoom !== undefined) {
+                    props.setZoom(zoom);
+                }
+            });
+            map.addListener("maptypeid_changed", () => {
+                const mapType = map.getMapTypeId();
+
+                if (mapType) {
+                    props.setMapType(mapType);
+                }
+            });
             infoWindow = new InfoWindow({ content: "" });
 
             google.maps.event.addListenerOnce(map, "idle", async () => {
@@ -93,7 +105,10 @@ const ViewMap: Component<Props> = props => {
             map.panTo(pos);
 
             const marker = markers.get(props.mediaService.getActiveMedia()!.id);
-            google.maps.event.trigger(marker, "gmp-click");
+
+            if (marker) {
+                google.maps.event.trigger(marker as object, "gmp-click");
+            }
         }
     };
 

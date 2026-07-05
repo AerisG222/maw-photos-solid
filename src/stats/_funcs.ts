@@ -7,7 +7,9 @@ export const formatDuration = (v: number) => numbro(v).format({ output: "time" }
 export const formatStorage = (v: number) =>
     numbro(v).format({ output: "byte", base: "decimal", mantissa: 2, spaceSeparated: true });
 
-export const formatForMode = (mode: "duration" | "size" | "count" | "category-count") => {
+export type StatMode = "duration" | "size" | "count" | "category-count";
+
+export const formatForMode = (mode: StatMode) => {
     switch (mode) {
         case "duration":
             return formatDuration;

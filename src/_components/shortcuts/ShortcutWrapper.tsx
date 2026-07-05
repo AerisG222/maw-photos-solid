@@ -13,7 +13,7 @@ interface Props {
 const ShortcutWrapper: ParentComponent<Props> = props => {
     const c = children(() => props.children);
     const [, { addShortcut, removeShortcut }] = useShortcutContext();
-    let id = undefined;
+    let id: string | undefined = undefined;
 
     const clearShortcut = () => {
         if (id) {
@@ -23,7 +23,7 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
     };
 
     const registerShortcut = () => {
-        if (id) {
+        if (id || !props.shortcutKeys) {
             return;
         }
 

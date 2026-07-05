@@ -2,7 +2,7 @@ import { Component, Match, Show, Switch } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
-import { SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
+import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
 
@@ -27,9 +27,9 @@ const MainItem: Component<Props> = props => {
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
     const { getScalesForMain } = useConfigContext();
 
-    let mediaHolderDiv: HTMLDivElement;
+    let mediaHolderDiv!: HTMLDivElement;
 
-    const handleSwipe = direction => {
+    const handleSwipe = (direction: SWIPE_DIRECTION) => {
         if (direction === SWIPE_LEFT) {
             props.movePrevious();
         } else if (direction === SWIPE_RIGHT) {

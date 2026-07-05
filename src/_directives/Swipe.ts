@@ -1,4 +1,4 @@
-import { onCleanup } from "solid-js";
+import { Accessor, onCleanup } from "solid-js";
 
 export const SWIPE_LEFT = "swipe_left";
 export const SWIPE_RIGHT = "swipe_right";
@@ -14,20 +14,23 @@ declare module "solid-js" {
     namespace JSX {
         interface Directives {
             // use:model
-            swipe: () => void;
+            swipe: (direction: SWIPE_DIRECTION) => void;
         }
     }
 }
 
 interface Position {
-    x?: number;
-    y?: number;
+    x: number;
+    y: number;
 }
 
 // inspiration: https://stackoverflow.com/a/69617795
-export const swipe = (el: HTMLElement, accessor) => {
+export const swipe = (
+    el: HTMLElement,
+    accessor: Accessor<(direction: SWIPE_DIRECTION) => void>
+) => {
     const THRESHOLD = 50;
-    let start: Position;
+    let start: Position | undefined;
 
     const onTouchStart = (evt: TouchEvent) =>
         (start = {
@@ -60,7 +63,7 @@ export const swipe = (el: HTMLElement, accessor) => {
 
         const horizontalDifference = end.x - start.x;
         const verticalDifference = end.y - start.y;
-        let direction = undefined;
+        let direction: SWIPE_DIRECTION | undefined = undefined;
 
         // Horizontal difference dominates
         if (Math.abs(horizontalDifference) > Math.abs(verticalDifference)) {

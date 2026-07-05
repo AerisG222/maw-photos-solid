@@ -108,7 +108,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
             return;
         }
 
-        this.intervalId = setInterval(async () => {
+        this.intervalId = window.setInterval(async () => {
             await this.mediaListQuery.fetchNextPage();
         }, 20 * 1000);
     };

@@ -30,7 +30,8 @@ const MediaList: Component<Props> = props => {
         const parent = el?.parentElement;
 
         if (parent) {
-            const startingOffset = parent.firstChild.offsetLeft;
+            const firstChild = parent.firstChild as HTMLElement | null;
+            const startingOffset = firstChild?.offsetLeft ?? 0;
             const parentMiddle = parent.clientWidth / 2;
             const imgMiddle = el.clientWidth / 2;
             const newLeft = Math.max(0, el.offsetLeft - startingOffset - parentMiddle + imgMiddle);

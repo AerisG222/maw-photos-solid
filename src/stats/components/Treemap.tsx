@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Treemap: Component<Props> = props => {
-    let el;
+    let el: HTMLDivElement | undefined;
 
     const labelFormat = (x: Highcharts.Point) =>
         `<b>${x.name}</b><br/>${props.formatFunc(x.value!)}`;
@@ -47,7 +47,7 @@ const Treemap: Component<Props> = props => {
                 "#a58cae"
             ],
             chart: {
-                height: el.parentElement.clientHeight,
+                height: el?.parentElement?.clientHeight,
                 margin: 0,
                 reflow: true,
                 style: {
@@ -81,11 +81,15 @@ const Treemap: Component<Props> = props => {
                                 }
                             },
                             mouseOver: function () {
-                                const newColor = Highcharts.color(this.color).brighten(0.2).get();
+                                const newColor = Highcharts.color(this.color ?? "#000000")
+                                    .brighten(0.2)
+                                    .get();
                                 this.update({ color: newColor }, true);
                             },
                             mouseOut: function () {
-                                const newColor = Highcharts.color(this.color).brighten(-0.2).get();
+                                const newColor = Highcharts.color(this.color ?? "#000000")
+                                    .brighten(-0.2)
+                                    .get();
                                 this.update({ color: newColor }, false);
                             }
                         }

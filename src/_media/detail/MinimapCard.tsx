@@ -37,7 +37,7 @@ const MinimapCard: Component<Props> = props => {
     const [initialized, setInitialized] = createSignal(false);
     let el: HTMLDivElement | undefined;
     let map: google.maps.Map;
-    let marker: google.maps.AdvancedMarkerElement;
+    let marker: google.maps.marker.AdvancedMarkerElement;
 
     async function initMap(): Promise<void> {
         const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
@@ -47,8 +47,20 @@ const MinimapCard: Component<Props> = props => {
 
         if (el) {
             map = new Map(el, defaultMapOptions);
-            map.addListener("zoom_changed", () => setMinimapZoom(map.getZoom()));
-            map.addListener("maptypeid_changed", () => setMinimapMapType(map.getMapTypeId()));
+            map.addListener("zoom_changed", () => {
+                const zoom = map.getZoom();
+
+                if (zoom !== undefined) {
+                    setMinimapZoom(zoom);
+                }
+            });
+            map.addListener("maptypeid_changed", () => {
+                const mapType = map.getMapTypeId();
+
+                if (mapType) {
+                    setMinimapMapType(mapType);
+                }
+            });
 
             marker = new AdvancedMarkerElement({ map, position: defaultMapOptions.center });
 
@@ -66,9 +78,13 @@ const MinimapCard: Component<Props> = props => {
             map.setCenter(pos);
             marker.position = pos;
 
-            el.style.visibility = "visible";
+            if (el) {
+                el.style.visibility = "visible";
+            }
         } else {
-            el.style.visibility = "hidden";
+            if (el) {
+                el.style.visibility = "hidden";
+            }
             marker.position = null;
         }
     };

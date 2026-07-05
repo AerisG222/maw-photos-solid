@@ -38,7 +38,7 @@ const ViewGrid: Component<Props> = props => {
     const [sizeTarget, setSizeTarget] = createSignal<HTMLElement | undefined>(undefined);
     const elSize = createElementSize(sizeTarget);
     const windowSize = createWindowSize();
-    let sizeDiv: HTMLDivElement;
+    let sizeDiv!: HTMLDivElement;
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Media> = {
@@ -51,16 +51,16 @@ const ViewGrid: Component<Props> = props => {
 
     createEffect(() => {
         setAbsoluteDivStyle({
-            left: `${windowSize.width - elSize.width}px`,
-            width: `${elSize.width}px`,
-            top: `${windowSize.height - elSize.height}px`,
-            height: `${elSize.height}px`
+            left: `${windowSize.width - (elSize.width ?? 0)}px`,
+            width: `${elSize.width ?? 0}px`,
+            top: `${windowSize.height - (elSize.height ?? 0)}px`,
+            height: `${elSize.height ?? 0}px`
         });
     });
 
     onMount(() => {
         if (sizeDiv) {
-            setSizeTarget(sizeDiv.parentElement?.parentElement);
+            setSizeTarget(sizeDiv.parentElement?.parentElement ?? undefined);
         }
     });
 

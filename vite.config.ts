@@ -1,6 +1,16 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import tailwindcssPlugin from "@tailwindcss/vite";
+import type { InlineConfig as VitestInlineConfig } from "vitest/node";
+
+// Teach vite's config type about the vitest `test` block. Importing vitest's own
+// `defineConfig` blows the type-instantiation depth against vite 8, so we augment
+// the interface directly instead.
+declare module "vite" {
+    interface UserConfig {
+        test?: VitestInlineConfig;
+    }
+}
 
 export default defineConfig({
     envDir: "environments",
@@ -22,9 +32,6 @@ export default defineConfig({
     test: {
         environment: "jsdom",
         globals: true,
-        transformMode: { web: [/\.tsx?$/] },
-        deps: { registerNodeLoader: true },
-        threads: false,
         isolate: false
     }
 });

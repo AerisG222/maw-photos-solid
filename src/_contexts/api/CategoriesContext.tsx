@@ -10,11 +10,9 @@ import {
     useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
-import { parseISO } from "date-fns";
-
 import { useAuthContext } from "../AuthContext";
 import { postApi, queryApi, runWithAccessToken } from "./_shared";
-import { Category } from "../../_models/Category";
+import { Category, CategoryDto, mapCategory } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
@@ -55,11 +53,6 @@ export const CategoriesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
 
-    const cleanupDatesFromApi = (c: Category) => {
-        c.effectiveDate = parseISO(c.effectiveDate as string);
-        c.modified = parseISO(c.modified as string);
-    };
-
     const fetchYears = async () =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<number[]>(accessToken, "categories/years")
@@ -67,13 +60,12 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const fetchCategoriesForYear = async (year: number) =>
         runWithAccessToken(getToken, async accessToken => {
-            const categories = await queryApi<Category[]>(accessToken, `categories/years/${year}`);
+            const categories = await queryApi<CategoryDto[]>(
+                accessToken,
+                `categories/years/${year}`
+            );
 
-            for (const c of categories) {
-                cleanupDatesFromApi(c);
-            }
-
-            return { year, categories };
+            return { year, categories: categories.map(mapCategory) };
         });
 
     const fetchCategoriesWithoutGpsForYear = async (year: number) =>
@@ -88,11 +80,9 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const fetchCategory = async (id: Uuid) =>
         runWithAccessToken(getToken, async accessToken => {
-            const category = await queryApi<Category>(accessToken, `categories/${id}`);
+            const category = await queryApi<CategoryDto>(accessToken, `categories/${id}`);
 
-            cleanupDatesFromApi(category);
-
-            return category;
+            return mapCategory(category);
         });
 
     const fetchCategoryMedia = async (id: Uuid) =>
@@ -114,16 +104,15 @@ export const CategoriesProvider: ParentComponent = props => {
         }
 
         return runWithAccessToken(getToken, async accessToken => {
-            const searchResults = await queryApi<SearchResults<Category>>(
+            const searchResults = await queryApi<SearchResults<CategoryDto>>(
                 accessToken,
                 `categories/search?s=${encodeURI(query)}&o=${startOffset}`
             );
 
-            for (const c of searchResults.results) {
-                cleanupDatesFromApi(c);
-            }
-
-            return searchResults;
+            return {
+                ...searchResults,
+                results: searchResults.results.map(mapCategory)
+            };
         });
     };
 

@@ -10,7 +10,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     // apply provided replacements
     for (const [key, value] of Object.entries(routeParams)) {
         if (value) {
-            path = path.replace(new RegExp(`:${key}\\??`), value);
+            path = path.replace(new RegExp(`:${key}\\??`), String(value));
         }
     }
 

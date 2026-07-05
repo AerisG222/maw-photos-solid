@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { For, JSX } from "solid-js";
 import { KeyValuePair } from "../../_models/KeyValuePair";
 
 interface Props<T> {
@@ -6,10 +6,13 @@ interface Props<T> {
     groupName: string;
     itemArray: KeyValuePair<T>[];
     selectedValue: T;
-    onChange: (value: string) => void;
+    onChange: (value: T) => void;
 }
 
-const RadioGroup: Component<Props<string | number>> = props => {
+// Generic Solid component: Solid's `Component<P>` type can't take a type
+// parameter, so a generic function returning `JSX.Element` is the idiomatic
+// way to keep `RadioGroup` a component while letting `onChange` carry `T`.
+const RadioGroup = <T extends string | number>(props: Props<T>): JSX.Element => {
     return (
         <>
             <h3 class="head3">{props.title}</h3>
@@ -23,7 +26,7 @@ const RadioGroup: Component<Props<string | number>> = props => {
                                 value={item.id}
                                 checked={item.id === props.selectedValue}
                                 class="radio mr-3"
-                                onChange={evt => props.onChange(evt.currentTarget.value)}
+                                onChange={() => props.onChange(item.id)}
                             />
                             <span class="label-text">{item.name}</span>
                         </label>

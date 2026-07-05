@@ -32,7 +32,7 @@ const BulkEditGpsCard: Component<Props> = props => {
         return isValidLatLng(override().lat) && isValidLatLng(override().lng);
     };
 
-    const getValidationClass = (val: string) => {
+    const getValidationClass = (val: string | undefined) => {
         const nullOrEmpty = val === undefined || val === "";
 
         return {
@@ -56,8 +56,8 @@ const BulkEditGpsCard: Component<Props> = props => {
         evt.preventDefault();
 
         props.onSave({
-            latitude: parseFloat(override().lat),
-            longitude: parseFloat(override().lng)
+            latitude: parseFloat(override().lat ?? ""),
+            longitude: parseFloat(override().lng ?? "")
         });
     };
 

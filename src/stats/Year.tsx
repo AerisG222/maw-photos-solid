@@ -2,7 +2,7 @@ import { Component, createMemo } from "solid-js";
 import { useParams, useSearchParams } from "@solidjs/router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
-import { formatForMode, statbarMediaCountTitle } from "./_funcs";
+import { formatForMode, StatMode, statbarMediaCountTitle } from "./_funcs";
 import { CategoryStat } from "../_models/CategoryStat";
 import { MediaTypeStat } from "../_models/MediaTypeStat";
 
@@ -18,7 +18,10 @@ const ViewYear: Component = () => {
     const route = useParams();
     const [search] = useSearchParams();
 
-    const stats = statsForYearQuery(() => parseInt(route.year, 10));
+    const searchType = () => (search.type as string | undefined) ?? "all";
+    const searchMode = () => ((search.mode as string | undefined) ?? "count") as StatMode;
+
+    const stats = statsForYearQuery(() => parseInt(route.year ?? "", 10));
 
     const statbarData = createMemo(() => {
         let mediaCount = 0;
@@ -76,13 +79,13 @@ const ViewYear: Component = () => {
     };
 
     const getSumForCategory = (stat: CategoryStat) => {
-        switch (search?.mode) {
+        switch (searchMode()) {
             case "count":
-                return sumMediaCount(stat, search?.type);
+                return sumMediaCount(stat, searchType());
             case "size":
-                return sumMediaSize(stat, search?.type);
+                return sumMediaSize(stat, searchType());
             case "duration":
-                return sumMediaDuration(stat, search?.type);
+                return sumMediaDuration(stat, searchType());
         }
 
         throw Error("Unexpected mode!");
@@ -115,21 +118,21 @@ const ViewYear: Component = () => {
                 <div class="my-2">
                     <Header
                         year={route.year}
-                        mode={search.mode as string}
-                        type={search.type as string}
+                        mode={searchMode()}
+                        type={searchType()}
                     />
                 </div>
                 <div class="my-2">
                     <StatBar
                         statbarData={statbarData()}
-                        mediaCountTitle={statbarMediaCountTitle(search.type as string)}
+                        mediaCountTitle={statbarMediaCountTitle(searchType())}
                     />
                 </div>
                 <div class="my-2">
                     <Treemap
-                        seriesName={route.year}
+                        seriesName={route.year ?? ""}
                         data={treeData()}
-                        formatFunc={formatForMode(search.mode)}
+                        formatFunc={formatForMode(searchMode())}
                     />
                 </div>
             </StatLayout>

@@ -19,14 +19,14 @@ const HistogramCard: Component<Props> = props => {
     const _lum = "lum";
 
     const [channel, setChannel] = createSignal(_rgb);
-    const [histogram, setHistogram] = createSignal({
+    const [histogram, setHistogram] = createSignal<Histogram>({
         r: [],
         g: [],
         b: [],
         lum: []
     });
 
-    let histogramCanvas: HTMLCanvasElement;
+    let histogramCanvas!: HTMLCanvasElement;
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d", {
         willReadFrequently: true
@@ -42,9 +42,12 @@ const HistogramCard: Component<Props> = props => {
         }
     };
 
-    const updateHistogramFromImage = (img: HTMLImageElement): void => {
-        tempCanvas.width = img.naturalWidth ? img.naturalWidth : img.width;
-        tempCanvas.height = img.naturalHeight ? img.naturalHeight : img.height;
+    const updateHistogramFromImage = (img: HTMLImageElement | ImageBitmap): void => {
+        const naturalWidth = "naturalWidth" in img ? img.naturalWidth : 0;
+        const naturalHeight = "naturalHeight" in img ? img.naturalHeight : 0;
+
+        tempCanvas.width = naturalWidth ? naturalWidth : img.width;
+        tempCanvas.height = naturalHeight ? naturalHeight : img.height;
 
         tempCtx.drawImage(img, 0, 0);
 
@@ -53,7 +56,10 @@ const HistogramCard: Component<Props> = props => {
         setHistogram(calcHistogram(data));
     };
 
-    const updateHistogramFromVideoFrame = async (timestamp, frame) => {
+    const updateHistogramFromVideoFrame = async (
+        _timestamp?: DOMHighResTimeStamp,
+        _frame?: VideoFrameCallbackMetadata
+    ) => {
         const video = props.mediaElement as HTMLVideoElement;
         const bitmap = await createImageBitmap(video);
 
@@ -213,7 +219,7 @@ const HistogramCard: Component<Props> = props => {
         if (el.nodeName === "IMG" && (props.mediaElement as HTMLImageElement).complete) {
             updateHistogramFromImage(el as HTMLImageElement);
         } else if (el.nodeName === "VIDEO") {
-            updateHistogramFromVideoFrame(null, null);
+            updateHistogramFromVideoFrame();
         }
     }
 

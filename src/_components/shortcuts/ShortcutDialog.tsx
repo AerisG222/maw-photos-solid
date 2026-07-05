@@ -20,14 +20,18 @@ const ShortcutDialog: Component = () => {
 
     createEffect(() => {
         if (shortcutContext.showDialog) {
-            dialog().showModal();
+            dialog()?.showModal();
         } else {
-            dialog().close();
+            dialog()?.close();
         }
     });
 
     onMount(() => {
-        dialog().onclose = () => setShowDialog(false);
+        const el = dialog();
+
+        if (el) {
+            el.onclose = () => setShowDialog(false);
+        }
 
         addShortcut({
             id: id,

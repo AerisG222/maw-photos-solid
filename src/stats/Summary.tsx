@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "@solidjs/router";
 import { useStatsContext } from "../_contexts/api/StatsContext";
 import { YearStat } from "../_models/YearStat";
 import { MediaTypeStat } from "../_models/MediaTypeStat";
-import { formatForMode, statbarMediaCountTitle } from "./_funcs";
+import { formatForMode, StatMode, statbarMediaCountTitle } from "./_funcs";
 import { statsYear } from "./_routes";
 
 import Toolbar from "./components/Toolbar";
@@ -19,6 +19,9 @@ const ViewCombined: Component = () => {
     const [search] = useSearchParams();
     const navigate = useNavigate();
     const { statsByYearQuery } = useStatsContext();
+
+    const searchType = () => (search.type as string | undefined) ?? "all";
+    const searchMode = () => ((search.mode as string | undefined) ?? "category-count") as StatMode;
 
     const stats = statsByYearQuery();
 
@@ -54,15 +57,15 @@ const ViewCombined: Component = () => {
     };
 
     const getSumForYear = (stat: YearStat) => {
-        switch (search?.mode) {
+        switch (searchMode()) {
             case "category-count":
                 return sumCategoryCount(stat);
             case "count":
-                return sumMediaCount(stat, search?.type);
+                return sumMediaCount(stat, searchType());
             case "size":
-                return sumMediaSize(stat, search?.type);
+                return sumMediaSize(stat, searchType());
             case "duration":
-                return sumMediaDuration(stat, search?.type);
+                return sumMediaDuration(stat, searchType());
         }
 
         return undefined;
@@ -143,14 +146,14 @@ const ViewCombined: Component = () => {
                     <div class="my-2">
                         <StatBar
                             statbarData={statbarData()}
-                            mediaCountTitle={statbarMediaCountTitle(search.type as string)}
+                            mediaCountTitle={statbarMediaCountTitle(searchType())}
                         />
                     </div>
                     <div class="my-2">
                         <Treemap
                             seriesName="Summary"
                             data={treeData()}
-                            formatFunc={formatForMode(search.mode)}
+                            formatFunc={formatForMode(searchMode())}
                             onSelectPoint={point => goToYear(point.name)}
                         />
                     </div>

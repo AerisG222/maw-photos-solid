@@ -9,10 +9,10 @@ export interface ShortcutInfo {
 
 export interface ShortcutState {
     readonly shortcuts: ShortcutInfo[];
-    readonly showDialog: false;
+    readonly showDialog: boolean;
 }
 
-export const defaultShortcutState = {
+export const defaultShortcutState: ShortcutState = {
     shortcuts: [],
     showDialog: false
 };

@@ -43,8 +43,10 @@ const thumbnailSizes: Record<ThumbnailSizeIdType, ThumbnailSize> = {
     }
 };
 
-export const allThumbnailSizes = Object.entries(thumbnailSizes).map(([key, value]) => ({
-    id: key,
+export const allThumbnailSizes: KeyValuePair<ThumbnailSizeIdType>[] = Object.entries(
+    thumbnailSizes
+).map(([key, value]) => ({
+    id: key as ThumbnailSizeIdType,
     name: value.name
 }));
 export const defaultGridThumbnailSize = ThumbnailSizeDefault;

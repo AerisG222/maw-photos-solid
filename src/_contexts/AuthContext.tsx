@@ -29,8 +29,8 @@ const defaultAuth: AuthState = {
 export type AuthContextValue = [
     state: AuthState,
     actions: {
-        login: (returnUrl: string | undefined) => Promise<void>;
-        logout: (returnUrl: string | undefined) => Promise<void>;
+        login: (returnUrl?: string) => Promise<void>;
+        logout: (returnUrl?: string) => Promise<void>;
         setAccountStatus: (accountStatus: AccountStatus) => void;
         getToken: () => Promise<string | undefined>;
     }
@@ -93,7 +93,7 @@ export const AuthProvider: ParentComponent = props => {
         return client;
     });
 
-    const login = async (returnUrl: string | undefined) => {
+    const login = async (returnUrl?: string) => {
         const destAfterLogin = returnUrl ?? window.location.pathname;
 
         try {
@@ -106,7 +106,7 @@ export const AuthProvider: ParentComponent = props => {
         }
     };
 
-    const logout = async (returnUrl: string | undefined) => {
+    const logout = async (returnUrl?: string) => {
         const destAfterLogout = returnUrl ?? `${window.location.origin}${logoutPage.absolutePath}`;
 
         await auth0Client()?.logout({

@@ -16,7 +16,7 @@ interface Props {
 
 const ToolbarLink: Component<Props> = props => {
     const [state] = useAppSettingsContext();
-    let el: HTMLAnchorElement;
+    let el!: HTMLAnchorElement;
 
     const handleClick = () => {
         if (props.clickHandler) {

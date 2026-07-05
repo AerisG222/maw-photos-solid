@@ -10,21 +10,21 @@ import {
     UseQueryResult
 } from "@tanstack/solid-query";
 
-import { Comment } from "../../_models/Comment";
+import { Comment, CommentDto, mapComment } from "../../_models/Comment";
 import { useAuthContext } from "../AuthContext";
 import { postApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
+import { MediaMetadata } from "../../_models/MediaMetadata";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
 import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
-import { parseISO } from "date-fns";
 import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
-    metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<object, Error>;
+    metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<MediaMetadata, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
     randomMediaQuery: (
@@ -52,18 +52,14 @@ export const MediaProvider: ParentComponent = props => {
 
     const fetchMetadata = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken =>
-            queryApi<object>(accessToken, `media/${id}/metadata`)
+            queryApi<MediaMetadata>(accessToken, `media/${id}/metadata`)
         );
 
     const fetchComments = async (id: Uuid) =>
         runWithAccessToken(getToken, async accessToken => {
-            const comments = await queryApi<Comment[]>(accessToken, `media/${id}/comments`);
+            const comments = await queryApi<CommentDto[]>(accessToken, `media/${id}/comments`);
 
-            for (const c of comments) {
-                c.created = parseISO(c.created as string);
-            }
-
-            return comments;
+            return comments.map(mapComment);
         });
 
     const fetchGps = async (id: Uuid) =>
@@ -73,9 +69,9 @@ export const MediaProvider: ParentComponent = props => {
             } catch {
                 return {
                     mediaId: id,
-                    recorded: { latitude: undefined, longitude: undefined },
-                    override: { latitude: undefined, longitude: undefined }
-                };
+                    recorded: undefined,
+                    override: undefined
+                } satisfies GpsDetail;
             }
         });
 

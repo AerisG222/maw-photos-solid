@@ -1,4 +1,4 @@
-import { onCleanup } from "solid-js";
+import { Accessor, onCleanup } from "solid-js";
 
 declare module "solid-js" {
     namespace JSX {
@@ -10,13 +10,13 @@ declare module "solid-js" {
 }
 
 interface Position {
-    x?: number;
-    y?: number;
+    x: number;
+    y: number;
 }
 
-export const tap = (el: HTMLElement, accessor) => {
+export const tap = (el: HTMLElement, accessor: Accessor<() => void>) => {
     const THRESHOLD = 5;
-    let start: Position;
+    let start: Position | undefined;
 
     const onTouchStart = (evt: TouchEvent) =>
         (start = {
