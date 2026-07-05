@@ -1,7 +1,6 @@
 import { Component, Show } from "solid-js";
 
 import { MediaDetailViewSettingsState } from "../_contexts/settings/MediaDetailViewSettingsContext";
-import { getThumbnailSize } from "../_models/ThumbnailSize";
 import { detailRoute } from "../category/_routes";
 import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
@@ -31,19 +30,6 @@ interface Props {
 const ViewDetail: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
 
-    const getMaxHeight = () => {
-        let reservedHeight = 0;
-
-        reservedHeight += props.detailSettings.showBreadcrumbs ? 28 : 0;
-
-        if (props.detailSettings.showMediaList) {
-            // 20 => rough approximation for scrollbar height
-            reservedHeight += getThumbnailSize(props.detailSettings.thumbnailSize).height + 20;
-        }
-
-        return `max-height: calc(100dvh - ${reservedHeight}px);`;
-    };
-
     let mediaElement: HTMLImageElement | HTMLVideoElement;
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
@@ -59,6 +45,7 @@ const ViewDetail: Component<Props> = props => {
         <Show when={props.mediaService.getActiveMedia() && props.mediaService.getActiveCategory()}>
             <Layout
                 xPad={false}
+                fill
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}
@@ -90,7 +77,7 @@ const ViewDetail: Component<Props> = props => {
                     />
                 }
             >
-                <div class="flex flex-col flex-[max-content_auto_max-content] h-dvh --val-[100px]">
+                <div class="flex flex-col h-full min-h-0">
                     <Show when={props.detailSettings.showBreadcrumbs} fallback={<div />}>
                         <CategoryBreadcrumb
                             category={props.mediaService.getActiveCategory()}
@@ -98,10 +85,9 @@ const ViewDetail: Component<Props> = props => {
                         />
                     </Show>
 
-                    <div class="flex flex-wrap flex-1 flex-justify-center flex-content-center">
+                    <div class="flex flex-1 min-h-0 justify-center">
                         <MainItem
                             media={props.mediaService.getActiveMedia()!}
-                            maxHeightStyle={getMaxHeight()}
                             showFavoriteBadge={props.showFavoritesBadge}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
