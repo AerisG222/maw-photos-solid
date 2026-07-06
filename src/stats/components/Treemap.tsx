@@ -1,4 +1,4 @@
-import { Component, createEffect } from "solid-js";
+import { Component, createEffect, onCleanup } from "solid-js";
 import * as Highcharts from "highcharts";
 import "highcharts/modules/heatmap.js";
 import "highcharts/modules/treemap";
@@ -12,12 +12,13 @@ interface Props {
 
 const Treemap: Component<Props> = props => {
     let el: HTMLDivElement | undefined;
+    let chart: Highcharts.Chart | undefined;
 
     const labelFormat = (x: Highcharts.Point) =>
         `<b>${x.name}</b><br/>${props.formatFunc(x.value!)}`;
 
-    createEffect(() => {
-        Highcharts.chart("chart", {
+    const createChart = () =>
+        Highcharts.chart(el!, {
             accessibility: {
                 enabled: false
             },
@@ -121,9 +122,25 @@ const Treemap: Component<Props> = props => {
                 }
             ]
         });
+
+    // build the chart once, then update the series data in place on changes
+    // rather than recreating (and leaking) a whole chart each time
+    createEffect(() => {
+        const data = props.data;
+
+        if (chart) {
+            chart.series[0]?.setData(data, true);
+        } else {
+            chart = createChart();
+        }
     });
 
-    return <div id="chart" ref={el} />;
+    onCleanup(() => {
+        chart?.destroy();
+        chart = undefined;
+    });
+
+    return <div ref={el} />;
 };
 
 export default Treemap;
