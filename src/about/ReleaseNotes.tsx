@@ -6,6 +6,22 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.1.0</span> : <span class="date">2026-07-06</span>
+            </h3>
+            <p>Set Claude loose on my podunk codebase:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Make the service worker more efficient by caching access token and coalescing concurrent requests</li>
+                <li>Cleanup html/css grid layout to improve composability</li>
+                <li>Improve typings and fix most lint issues</li>
+                <li>Improve stats to reuse the treemap chart rather than rebuilding it when filters change</li>
+                <li>Do less work when building histograms</li>
+                <li>Use gmp-click rather than standard click in google maps for markers</li>
+                <li>Fix the close icon in google maps</li>
+                <li>Improve font loading performance by loading in html</li>
+                <li>Update dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.0.2</span> : <span class="date">2026-03-21</span>
             </h3>
             <p>Minor enhancements:</p>
