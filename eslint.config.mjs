@@ -44,7 +44,11 @@ export default defineConfig(
         },
 
         rules: {
-            "@tanstack/query/exhaustive-deps": "error",
+            // exhaustive-deps assumes React's re-render model. Solid provider bodies run once,
+            // so the fetch closures referenced by queryFn are stable and never go stale, yet the
+            // rule flags them on every well-formed query. Disabled; keeping the varying values in
+            // each queryKey (e.g. the media id / year) is enforced by convention and code review.
+            "@tanstack/query/exhaustive-deps": "off",
             ...solidPlugin.configs.recommended.rules,
 
             // Solid types custom `use:` directives via `declare module "solid-js" { namespace JSX ... }`,
