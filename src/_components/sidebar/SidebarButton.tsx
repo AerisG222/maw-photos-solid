@@ -17,7 +17,7 @@ interface Props {
 }
 
 const SidebarButton: Component<Props> = props => {
-    const handleClick = (data: any, evt: Event) => {
+    const handleClick = (data: null, evt: Event) => {
         evt.preventDefault();
 
         props.clickHandler();

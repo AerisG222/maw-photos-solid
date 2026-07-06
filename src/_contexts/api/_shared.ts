@@ -6,7 +6,8 @@ const buildAbsoluteUrl = (relativeUrl: string): string =>
 export const buildCategoryDownloadUrl = (id: Uuid): string =>
     buildAbsoluteUrl(`categories/${id}/download`);
 
-const getQueryParams = (content: any) => new URLSearchParams(content).toString();
+const getQueryParams = (content: Record<string, string>) =>
+    new URLSearchParams(content).toString();
 
 export const runWithAccessToken = async <T>(
     getToken: () => Promise<string | undefined>,
@@ -21,7 +22,11 @@ export const runWithAccessToken = async <T>(
     throw new Error("Invalid access token!");
 };
 
-export const queryApi = async <T>(accessToken: string, relativeUrl: string, content?: any) => {
+export const queryApi = async <T>(
+    accessToken: string,
+    relativeUrl: string,
+    content?: Record<string, string>
+) => {
     relativeUrl = content ? `${relativeUrl}?${getQueryParams(content)}` : relativeUrl;
 
     const response = await callApi("GET", relativeUrl, undefined, accessToken);
@@ -29,13 +34,18 @@ export const queryApi = async <T>(accessToken: string, relativeUrl: string, cont
     return response.json() as T;
 };
 
-export const patchApi = (accessToken: string, relativeUrl: string, content: any) =>
+export const patchApi = (accessToken: string, relativeUrl: string, content: unknown) =>
     callApi("PATCH", relativeUrl, content, accessToken);
 
-export const postApi = (accessToken: string, relativeUrl: string, content: any) =>
+export const postApi = (accessToken: string, relativeUrl: string, content: unknown) =>
     callApi("POST", relativeUrl, content, accessToken);
 
-const callApi = async (method: string, relativeUrl: string, content: any, accessToken: string) => {
+const callApi = async (
+    method: string,
+    relativeUrl: string,
+    content: unknown,
+    accessToken: string
+) => {
     const response = await fetch(buildAbsoluteUrl(relativeUrl), {
         method: method,
         mode: "cors",

@@ -78,7 +78,7 @@ export const AuthProvider: ParentComponent = props => {
 
             window.history.replaceState(undefined, "", redirectUrl);
 
-            const returnTo = response.appState?.returnTo as string | undefined;
+            const returnTo = (response.appState as { returnTo?: string } | undefined)?.returnTo;
 
             if (returnTo && returnTo !== loginPage.absolutePath) {
                 navigate(returnTo);
@@ -125,7 +125,7 @@ export const AuthProvider: ParentComponent = props => {
         // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
         if (navigator.serviceWorker) {
             swMessageHandler = async (ev: MessageEvent) => {
-                const data = ev.data;
+                const data: unknown = ev.data;
 
                 if (data === "REQUEST_TOKEN" && ev.ports?.[0]) {
                     try {

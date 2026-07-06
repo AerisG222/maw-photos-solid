@@ -12,7 +12,7 @@ const CategoriesRedirect: Component = () => {
     const [settings] = useCategoryPageSettingsContext();
     const [filterState] = useCategoryFilterSettingsContext();
 
-    const updateSearchFromUrl = (search: any, querystring: string) => {
+    const updateSearchFromUrl = (search: { year?: number | "all" }, querystring: string) => {
         const searchParams = new URLSearchParams(querystring);
         const yearParam = searchParams.get("year");
 

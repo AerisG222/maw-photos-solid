@@ -21,7 +21,7 @@ const PrimaryNavLink: Component<Props> = props => {
 
     return (
         <A
-            href={props.route.path}
+            href={props.route.path!}
             activeClass="text-primary-content bg-primary"
             class="flex primary-nav-link"
             title={props.route.tooltip ?? props.route.name}

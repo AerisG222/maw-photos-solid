@@ -19,7 +19,7 @@ interface Props {
 
 const ToolbarButton: Component<Props> = props => {
     const [state] = useAppSettingsContext();
-    const handleClick = (data: any, evt: Event) => {
+    const handleClick = (data: null, evt: Event) => {
         evt.preventDefault();
 
         props.clickHandler();

@@ -2,7 +2,7 @@ import { Category } from "./Category";
 
 export interface FilterFunction {
     name: string;
-    filterFn: (a: any) => boolean;
+    filterFn: (a: Category) => boolean;
 }
 
 export interface SortFunction {

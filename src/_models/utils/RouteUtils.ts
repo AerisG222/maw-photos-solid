@@ -1,6 +1,8 @@
 import { AppRouteDefinition } from "../AppRouteDefinition";
 
-const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
+type RouteParamValues = Record<string, string | number | undefined>;
+
+const buildRootPath = (route: AppRouteDefinition, routeParams?: RouteParamValues) => {
     if (!routeParams) {
         return route.absolutePath;
     }
@@ -28,7 +30,7 @@ const buildRootPath = (route: AppRouteDefinition, routeParams?: any) => {
     return path;
 };
 
-const buildSearch = (routeSearch?: any) => {
+const buildSearch = (routeSearch?: RouteParamValues) => {
     let search = "";
 
     if (!routeSearch) {
@@ -39,14 +41,18 @@ const buildSearch = (routeSearch?: any) => {
 
     for (const [key, value] of Object.entries(routeSearch)) {
         search += isFirst ? "?" : "&";
-        search += `${key}=${value}`;
+        search += `${key}=${String(value)}`;
         isFirst = false;
     }
 
     return search;
 };
 
-export const buildPath = (route: AppRouteDefinition, routeParams?: any, routeSearch?: any) => {
+export const buildPath = (
+    route: AppRouteDefinition,
+    routeParams?: RouteParamValues,
+    routeSearch?: RouteParamValues
+) => {
     let path = buildRootPath(route, routeParams);
 
     path += buildSearch(routeSearch);
