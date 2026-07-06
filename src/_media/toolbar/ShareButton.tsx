@@ -10,9 +10,9 @@ interface Props {
 }
 
 const ShareButton: Component<Props> = props => {
-    const onShare = () => {
+    const onShare = async () => {
         try {
-            navigator.share({ url: getMediaShareUrl(props.activeMedia) });
+            await navigator.share({ url: getMediaShareUrl(props.activeMedia) });
         } catch {
             console.error("Error sharing media");
         }

@@ -21,7 +21,7 @@ const CommentsCard: Component<Props> = props => {
         setCommentText("");
     };
 
-    const saveComment = async (evt: Event) => {
+    const saveComment = (evt: Event) => {
         evt.preventDefault();
 
         if (commentText()) {
@@ -32,7 +32,7 @@ const CommentsCard: Component<Props> = props => {
 
             addCommentMutation.mutate(req, {
                 onSuccess: () => {
-                    comments.refetch();
+                    void comments.refetch();
                     setCommentText("");
                 }
             });

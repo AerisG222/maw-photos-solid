@@ -6,7 +6,16 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig(
-    [globalIgnores(["**/dist/", "**/node_modules/", "**/*.mjs", "deploy/", "public/", "**/.venv/"])],
+    [
+        globalIgnores([
+            "**/dist/",
+            "**/node_modules/",
+            "**/*.mjs",
+            "deploy/",
+            "public/",
+            "**/.venv/"
+        ])
+    ],
     eslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
     tseslint.configs.stylisticTypeChecked,
@@ -42,9 +51,31 @@ export default defineConfig(
             // which is the required pattern, not a code smell.
             "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
 
+            // Async handlers on JSX attributes (onClick, onSave, ...) are idiomatic in Solid and
+            // safe to fire-and-forget; still flag promise-returning fns passed as plain arguments.
+            "@typescript-eslint/no-misused-promises": [
+                "error",
+                { checksVoidReturn: { attributes: false } }
+            ],
+
             // Note: you must disable the base rule as it can report incorrect errors
             "no-unused-vars": "off",
-            "@typescript-eslint/no-unused-vars": "error"
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_"
+                }
+            ]
+        }
+    },
+    {
+        // Testing Library queries are pre-bound, so destructuring them off `render()`
+        // does not risk an unbound `this`.
+        files: ["**/*.test.ts", "**/*.test.tsx"],
+        rules: {
+            "@typescript-eslint/unbound-method": "off"
         }
     }
 );

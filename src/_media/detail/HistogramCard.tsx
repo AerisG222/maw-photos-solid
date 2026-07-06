@@ -97,7 +97,7 @@ const HistogramCard: Component<Props> = props => {
         }
 
         if (!video.ended) {
-            video.requestVideoFrameCallback(updateHistogramFromVideoFrame);
+            video.requestVideoFrameCallback(() => void updateHistogramFromVideoFrame());
         }
     };
 
@@ -235,7 +235,9 @@ const HistogramCard: Component<Props> = props => {
         }
 
         if (el.nodeName === "VIDEO") {
-            (el as HTMLVideoElement).requestVideoFrameCallback(updateHistogramFromVideoFrame);
+            (el as HTMLVideoElement).requestVideoFrameCallback(
+                () => void updateHistogramFromVideoFrame()
+            );
         }
     });
 
@@ -250,7 +252,7 @@ const HistogramCard: Component<Props> = props => {
         if (el.nodeName === "IMG" && (props.mediaElement as HTMLImageElement).complete) {
             updateHistogramFromImage(el as HTMLImageElement);
         } else if (el.nodeName === "VIDEO") {
-            updateHistogramFromVideoFrame();
+            void updateHistogramFromVideoFrame();
         }
     }
 

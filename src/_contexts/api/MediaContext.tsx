@@ -189,7 +189,7 @@ export const MediaProvider: ParentComponent = props => {
     const bulkGpsOverrideMutation = useMutation(() => ({
         mutationFn: (overrideRequest: BulkGpsOverrideRequest) =>
             postBulkGpsOverride(overrideRequest),
-        onSettled: async (data, errs, variables) => {
+        onSettled: async () => {
             await queryClient.invalidateQueries({
                 queryKey: ["media"],
                 refetchType: "all"

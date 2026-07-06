@@ -119,8 +119,9 @@ const ViewCombined: Component = () => {
 
     function goToYear(year: string) {
         const path = statsYear.absolutePath.replace(":year", year);
-        const type = `type=${search.type}`;
-        const mode = search.mode === "category-count" ? "mode=count" : `mode=${search.mode}`;
+        const type = `type=${String(search.type)}`;
+        const mode =
+            search.mode === "category-count" ? "mode=count" : `mode=${String(search.mode)}`;
 
         navigate(`${path}?${mode}&${type}`);
     }

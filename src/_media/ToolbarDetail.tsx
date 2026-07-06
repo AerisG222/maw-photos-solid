@@ -90,7 +90,7 @@ const DetailToolbar: Component<Props> = props => {
             <ToolbarDivider />
 
             <Show
-                when={navigator && navigator.canShare && navigator.canShare() && props.activeMedia}
+                when={navigator?.canShare?.() && props.activeMedia}
             >
                 <ShareButton activeMedia={props.activeMedia!} />
 

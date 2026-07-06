@@ -44,7 +44,7 @@ export const AuthProvider: ParentComponent = props => {
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
-    let swMessageHandler: (ev: MessageEvent) => Promise<void>;
+    let swMessageHandler: (ev: MessageEvent) => void;
 
     const scopes = [
         "openid",
@@ -124,17 +124,21 @@ export const AuthProvider: ParentComponent = props => {
         // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
         // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
         if (navigator.serviceWorker) {
-            swMessageHandler = async (ev: MessageEvent) => {
+            swMessageHandler = (ev: MessageEvent) => {
                 const data: unknown = ev.data;
 
                 if (data === "REQUEST_TOKEN" && ev.ports?.[0]) {
-                    try {
-                        const token = await getToken();
-                        ev.ports[0].postMessage(token);
-                    } catch (err) {
-                        console.error("AuthContext: failed to get token for SW", err);
-                        ev.ports[0].postMessage(undefined);
-                    }
+                    const port = ev.ports[0];
+
+                    void (async () => {
+                        try {
+                            const token = await getToken();
+                            port.postMessage(token);
+                        } catch (err) {
+                            console.error("AuthContext: failed to get token for SW", err);
+                            port.postMessage(undefined);
+                        }
+                    })();
                 }
             };
 

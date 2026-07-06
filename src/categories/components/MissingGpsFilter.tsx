@@ -8,7 +8,7 @@ interface Props {
     horizontal: boolean;
 }
 
-const MissingGpsFilter: Component<Props> = props => {
+const MissingGpsFilter: Component<Props> = _props => {
     const [filter, { setMissingGpsFilter }] = useCategoryFilterSettingsContext();
 
     const updateFilter = (enableFilter: boolean) => {

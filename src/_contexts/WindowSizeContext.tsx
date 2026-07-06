@@ -12,7 +12,7 @@ export const defaultWindowSizeState: WindowSizeState = {
     height: 1000
 };
 
-export type WindowSizeContextValue = [state: WindowSizeState, actions: {}];
+export type WindowSizeContextValue = [state: WindowSizeState, actions: Record<string, never>];
 
 const WindowSizeContext = createContext<WindowSizeContextValue>();
 

@@ -10,7 +10,7 @@ const Logout: Component = () => {
     const [authContext, { logout }] = useAuthContext();
 
     if (authContext.isLoggedIn) {
-        logout();
+        void logout();
     }
 
     return (

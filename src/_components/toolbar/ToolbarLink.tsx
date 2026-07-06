@@ -42,7 +42,7 @@ const ToolbarLink: Component<Props> = props => {
         >
             <A
                 href={props.href}
-                onClick={evt => handleClick()}
+                onClick={() => handleClick()}
                 end={false}
                 activeClass="text-primary-content bg-primary mr[-1px]"
                 inactiveClass="text-primary"

@@ -76,7 +76,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-comment]",
             shortcutKeys: ["c"],
             clickHandler: toggleComments,
-            enable: (media: Media) => true,
+            enable: (_media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showComments,
             component: lazy(() => import("./CommentsCard"))
         },
@@ -86,7 +86,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-tune]",
             shortcutKeys: ["x"],
             clickHandler: toggleExif,
-            enable: (media: Media) => true,
+            enable: (_media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showExif,
             component: lazy(() => import("./ExifCard"))
         },
@@ -96,7 +96,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-photo-filter]",
             shortcutKeys: ["e"],
             clickHandler: toggleEffects,
-            enable: (media: Media) => true,
+            enable: (_media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showEffects,
             component: lazy(() => import("./EffectsCard"))
         },
@@ -106,7 +106,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-color-lens]",
             shortcutKeys: ["o"],
             clickHandler: toggleHistogram,
-            enable: (media: Media) => true,
+            enable: (_media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showHistogram,
             component: lazy(() => import("./HistogramCard"))
         },
@@ -116,7 +116,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-map]",
             shortcutKeys: ["v"],
             clickHandler: toggleMinimap,
-            enable: (media: Media) => true,
+            enable: (_media: Media) => true,
             active: () => settings.expandInfoPanel && settings.showMinimap,
             component: lazy(() => import("./MinimapCard"))
         },
@@ -126,7 +126,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-edit]",
             shortcutKeys: ["n"],
             clickHandler: toggleMetadataEditor,
-            enable: (media: Media) => authContext.accountStatus?.isAdmin,
+            enable: (_media: Media) => authContext.accountStatus?.isAdmin,
             active: () => settings.expandInfoPanel && settings.showMetadataEditor,
             component: lazy(() => import("./MetadataEditorCard"))
         },
@@ -136,7 +136,7 @@ const Sidebar: Component<Props> = props => {
             icon: "icon-[ic--round-image-search]",
             shortcutKeys: ["k"],
             clickHandler: toggleCategoryTeaser,
-            enable: (media: Media) =>
+            enable: (_media: Media) =>
                 props.enableCategoryTeaser && authContext.accountStatus?.isAdmin,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))

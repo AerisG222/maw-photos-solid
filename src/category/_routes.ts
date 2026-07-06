@@ -84,7 +84,7 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
     path: "/bulk-edit",
     absolutePath: `${basePath}/bulk-edit`,
     component: lazy(() => import("./BulkEdit")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
+    buildPathForMedia: (category: Category | undefined, _media: Media | undefined) =>
         `${getCategoryPath(category!.year, category!.slug)}/bulk-edit`
 });
 

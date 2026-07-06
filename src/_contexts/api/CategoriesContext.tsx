@@ -205,7 +205,7 @@ export const CategoriesProvider: ParentComponent = props => {
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
             initialPageParam: 0,
-            getNextPageParam: (lastPage, pages) =>
+            getNextPageParam: (lastPage, _pages) =>
                 lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 

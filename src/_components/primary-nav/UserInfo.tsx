@@ -1,4 +1,4 @@
-import { Component, Match, Show, Switch } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { useAuthContext } from "../../_contexts/AuthContext";

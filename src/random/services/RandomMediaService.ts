@@ -106,8 +106,8 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
             return;
         }
 
-        this.intervalId = window.setInterval(async () => {
-            await this.mediaListQuery.fetchNextPage();
+        this.intervalId = window.setInterval(() => {
+            void this.mediaListQuery.fetchNextPage();
         }, 20 * 1000);
     };
 
@@ -127,6 +127,6 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     override canRequestMore = () => true;
 
     override requestMore = () => {
-        this.mediaListQuery.fetchNextPage();
+        void this.mediaListQuery.fetchNextPage();
     };
 }
