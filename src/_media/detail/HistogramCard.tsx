@@ -1,5 +1,14 @@
 import { Component, createEffect, createSignal } from "solid-js";
 
+// The histogram only needs the color *distribution*, not native resolution, so
+// downsample the source into a small canvas before reading pixels back. This
+// keeps `getImageData` + the per-pixel loop cheap even for large photos/video.
+const SAMPLE_MAX_DIM = 256;
+
+// Recompute the video histogram a few times per second rather than on every
+// displayed frame; per-frame full-frame processing pegs the main thread.
+const VIDEO_SAMPLE_INTERVAL_MS = 100;
+
 interface Histogram {
     r: number[];
     g: number[];
@@ -27,6 +36,7 @@ const HistogramCard: Component<Props> = props => {
     });
 
     let histogramCanvas!: HTMLCanvasElement;
+    let lastVideoSampleTime = 0;
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d", {
         willReadFrequently: true
@@ -45,25 +55,46 @@ const HistogramCard: Component<Props> = props => {
     const updateHistogramFromImage = (img: HTMLImageElement | ImageBitmap): void => {
         const naturalWidth = "naturalWidth" in img ? img.naturalWidth : 0;
         const naturalHeight = "naturalHeight" in img ? img.naturalHeight : 0;
+        const srcWidth = naturalWidth ? naturalWidth : img.width;
+        const srcHeight = naturalHeight ? naturalHeight : img.height;
 
-        tempCanvas.width = naturalWidth ? naturalWidth : img.width;
-        tempCanvas.height = naturalHeight ? naturalHeight : img.height;
+        if (!srcWidth || !srcHeight) {
+            return;
+        }
 
-        tempCtx.drawImage(img, 0, 0);
+        // scale the longest side down to SAMPLE_MAX_DIM (never up), keeping aspect
+        const scale = Math.min(1, SAMPLE_MAX_DIM / Math.max(srcWidth, srcHeight));
+        const width = Math.max(1, Math.round(srcWidth * scale));
+        const height = Math.max(1, Math.round(srcHeight * scale));
 
-        const data = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+
+        tempCtx.drawImage(img, 0, 0, width, height);
+
+        const data = tempCtx.getImageData(0, 0, width, height).data;
 
         setHistogram(calcHistogram(data));
     };
 
     const updateHistogramFromVideoFrame = async (
-        _timestamp?: DOMHighResTimeStamp,
+        timestamp?: DOMHighResTimeStamp,
         _frame?: VideoFrameCallbackMetadata
     ) => {
         const video = props.mediaElement as HTMLVideoElement;
-        const bitmap = await createImageBitmap(video);
 
-        updateHistogramFromImage(bitmap);
+        // keep receiving frames, but only recompute a few times per second
+        const now = timestamp ?? performance.now();
+
+        if (now - lastVideoSampleTime >= VIDEO_SAMPLE_INTERVAL_MS) {
+            lastVideoSampleTime = now;
+
+            const bitmap = await createImageBitmap(video);
+
+            updateHistogramFromImage(bitmap);
+
+            bitmap.close();
+        }
 
         if (!video.ended) {
             video.requestVideoFrameCallback(updateHistogramFromVideoFrame);
