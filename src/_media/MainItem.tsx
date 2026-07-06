@@ -6,8 +6,9 @@ import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/
 import { tap } from "../_directives/Tap";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
 
-false && swipe;
-false && tap;
+// Reference the directives so the bundler keeps them for `use:swipe` / `use:tap`.
+void swipe;
+void tap;
 
 import MainPhoto from "./MainPhoto";
 import MainVideo from "./MainVideo";

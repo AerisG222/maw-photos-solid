@@ -6,7 +6,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig(
-    [globalIgnores(["**/dist/", "**/node_modules/", "**/*.mjs"])],
+    [globalIgnores(["**/dist/", "**/node_modules/", "**/*.mjs", "deploy/", "public/", "**/.venv/"])],
     eslint.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
     tseslint.configs.stylisticTypeChecked,
@@ -37,6 +37,10 @@ export default defineConfig(
         rules: {
             "@tanstack/query/exhaustive-deps": "error",
             ...solidPlugin.configs.recommended.rules,
+
+            // Solid types custom `use:` directives via `declare module "solid-js" { namespace JSX ... }`,
+            // which is the required pattern, not a code smell.
+            "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
 
             // Note: you must disable the base rule as it can report incorrect errors
             "no-unused-vars": "off",
