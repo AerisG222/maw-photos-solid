@@ -36,9 +36,9 @@ export interface CategoriesService {
     categoriesWithoutGpsForYearQuery: (
         year: Accessor<number>
     ) => UseQueryResult<CategoryIdsForYearResult, Error>;
-    categoryQuery: (id: Accessor<Uuid|undefined>) => UseQueryResult<Category | undefined, Error>;
-    categoryMediaQuery: (id: Accessor<Uuid|undefined>) => UseQueryResult<Media[], Error>;
-    categoryMediaGpsQuery: (id: Accessor<Uuid|undefined>) => UseQueryResult<GpsDetail[], Error>;
+    categoryQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Category | undefined, Error>;
+    categoryMediaQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Media[], Error>;
+    categoryMediaGpsQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<GpsDetail[], Error>;
     categorySearchQuery: (
         query: string
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
@@ -174,7 +174,7 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 1 * 60 * 1000
         }));
 
-    const categoryQuery = (id: Accessor<Uuid|undefined>) =>
+    const categoryQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: ["categories", id()],
             queryFn: () => fetchCategory(id()!),
@@ -182,7 +182,7 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
-    const categoryMediaQuery = (id: Accessor<Uuid|undefined>) =>
+    const categoryMediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: ["categories", id(), "media"],
             queryFn: () => fetchCategoryMedia(id()!),
@@ -190,7 +190,7 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
-    const categoryMediaGpsQuery = (id: Accessor<Uuid|undefined>) =>
+    const categoryMediaGpsQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: ["categories", id(), "gps"],
             queryFn: () => fetchCategoryMediaGps(id()!),

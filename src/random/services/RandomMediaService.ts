@@ -45,7 +45,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         if (!activeMedia) {
             const list = this.getMediaList();
 
-            if(list?.length > 0) {
+            if (list?.length > 0) {
                 this.navigateToMedia(this.view, list[0]);
             }
         }
@@ -71,8 +71,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
 
     getEntryPathByView = (view: MediaView) =>
         this.getRouteForView(view)
-            .absolutePath
-            .replace("/:categoryYear?", "")
+            .absolutePath.replace("/:categoryYear?", "")
             .replace("/:categorySlug?", "")
             .replace("/:mediaSlug?", "");
 
@@ -80,10 +79,9 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         media
             ? this.getMediaPath(this.getRouteForView(view), media)
             : this.getRouteForView(view)
-                .absolutePath
-                .replace("/:categoryYear?", "")
-                .replace("/:categorySlug?", "")
-                .replace("/:mediaSlug?", "");
+                  .absolutePath.replace("/:categoryYear?", "")
+                  .replace("/:categorySlug?", "")
+                  .replace("/:mediaSlug?", "");
 
     getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
         route.buildPathForMedia(undefined, media);

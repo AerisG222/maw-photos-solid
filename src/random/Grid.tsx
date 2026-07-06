@@ -8,7 +8,8 @@ import ViewGrid from "../_media/ViewGrid";
 
 const Grid: Component = () => {
     const { mediaService, slideshowService } = useRandomServices(MediaViewGrid);
-    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] = useMediaGridViewSettingsContext();
+    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
+        useMediaGridViewSettingsContext();
 
     createEffect(() => {
         mediaService.navigateToViewIfMediaNotInList();

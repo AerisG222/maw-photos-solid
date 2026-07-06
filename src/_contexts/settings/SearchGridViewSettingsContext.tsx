@@ -50,8 +50,7 @@ export const SearchGridSettingsProvider: ParentComponent = props => {
     const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) =>
-        updateState({ showTypesBadge });
+    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
 
     const updateState = (update: Partial<SearchGridViewSettingsState>) => {
         setState(update);

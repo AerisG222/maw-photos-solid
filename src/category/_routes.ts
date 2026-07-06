@@ -10,7 +10,7 @@ import {
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
-import { getCategoryPath } from '../categories/_routes';
+import { getCategoryPath } from "../categories/_routes";
 
 const basePath = "/categories/:categoryYear/:categorySlug";
 

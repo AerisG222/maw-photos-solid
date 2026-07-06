@@ -116,11 +116,7 @@ const ViewYear: Component = () => {
         >
             <StatLayout>
                 <div class="my-2">
-                    <Header
-                        year={route.year}
-                        mode={searchMode()}
-                        type={searchType()}
-                    />
+                    <Header year={route.year} mode={searchMode()} type={searchType()} />
                 </div>
                 <div class="my-2">
                     <StatBar

@@ -12,7 +12,11 @@ export const useCategoryServices = (view: MediaView) => {
     const { categoryQuery, categoryMediaQuery, categoriesForYearQuery } = useCategoriesContext();
 
     const categoriesQuery = categoriesForYearQuery(() => parseInt(params.categoryYear ?? "", 10));
-    const categoryId = () => categoriesQuery.data?.categories?.find(x => x.year === parseInt(params.categoryYear ?? "", 10) && x.slug === params.categorySlug)?.id;
+    const categoryId = () =>
+        categoriesQuery.data?.categories?.find(
+            x =>
+                x.year === parseInt(params.categoryYear ?? "", 10) && x.slug === params.categorySlug
+        )?.id;
     const cq = categoryQuery(categoryId);
     const mq = categoryMediaQuery(categoryId);
     const mediaService = new CategoryMediaService(navigate, params, view, cq, mq);

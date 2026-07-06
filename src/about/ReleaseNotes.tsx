@@ -11,7 +11,10 @@ const ViewApplication: Component = () => {
             <p>Minor enhancements:</p>
             <ul class="list-inside list-disc mb-4">
                 <li>Add option to show media types in category and media itself</li>
-                <li>Toolbar buttons that toggle behavior now set a background color to reinforce when they are active</li>
+                <li>
+                    Toolbar buttons that toggle behavior now set a background color to reinforce
+                    when they are active
+                </li>
                 <li>Update dependencies</li>
             </ul>
 

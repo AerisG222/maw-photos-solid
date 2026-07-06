@@ -34,7 +34,7 @@ const ToolbarDownloadLink: Component<Props> = props => {
     };
 
     const buttonClass = () => ({
-        "flex": true,
+        flex: true,
         "py-2": true,
         "px-3": true,
         "cursor-pointer": true,
@@ -42,15 +42,11 @@ const ToolbarDownloadLink: Component<Props> = props => {
         "hover:text-secondary-content": true,
         "disabled:bg-transparent!": true,
         "disabled:color-base-content/20": true,
-        ...(props.textClassList!)
+        ...props.textClassList!
     });
 
     return (
-        <button
-            title={props.tooltip}
-            onClick={handleDownload}
-            classList={buttonClass()}
-        >
+        <button title={props.tooltip} onClick={handleDownload} classList={buttonClass()}>
             <Icon classes={props.iconClass} />
             <span classList={nameClass()}>{props.name}</span>
         </button>
@@ -63,13 +59,11 @@ export const getFilenameFromUrl = (url: string, suffix?: string) => {
     try {
         const urlObj = new URL(url);
         const path = urlObj.pathname;
-        const filename = path.substring(path.lastIndexOf('/') + 1) || "download";
+        const filename = path.substring(path.lastIndexOf("/") + 1) || "download";
 
         return getFilenameWithSuffix(filename, suffix);
     } catch {
-        return suffix
-            ? `download-${suffix}`
-            : "download";
+        return suffix ? `download-${suffix}` : "download";
     }
 };
 

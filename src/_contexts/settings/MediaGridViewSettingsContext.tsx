@@ -51,8 +51,7 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
         updateState({ showMainBreadcrumbs });
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) =>
-        updateState({ showTypesBadge });
+    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
 
     const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);

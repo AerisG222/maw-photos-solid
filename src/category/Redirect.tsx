@@ -1,7 +1,7 @@
 import { Component, createEffect } from "solid-js";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { useCategoryServices } from './hooks/useCategoryServices';
+import { useCategoryServices } from "./hooks/useCategoryServices";
 
 const Redirect: Component = () => {
     const [settings] = useMediaPageSettingsContext();

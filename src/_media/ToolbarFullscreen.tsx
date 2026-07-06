@@ -52,7 +52,8 @@ const FullscreenToolbar: Component<Props> = props => {
 
             <ToggleShowFavoritesBadgeButton
                 isActive={props.showFavoritesBadge}
-                setShowFavoritesBadge={props.setShowFavoritesBadge} />
+                setShowFavoritesBadge={props.setShowFavoritesBadge}
+            />
         </>
     );
 };

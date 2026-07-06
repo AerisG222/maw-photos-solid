@@ -7,7 +7,8 @@ import { MediaViewGrid } from "../_models/MediaView";
 import ViewGrid from "../_media/ViewGrid";
 
 const Grid: Component = () => {
-    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] = useMediaGridViewSettingsContext();
+    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
+        useMediaGridViewSettingsContext();
     const { mediaService, slideshowService } = useCategoryServices(MediaViewGrid);
 
     onCleanup(() => {

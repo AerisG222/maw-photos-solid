@@ -12,7 +12,8 @@
         "serve": "vite preview",
         "test": "vitest",
         "build_staging": "tsc --noEmit && vite build --mode staging",
-        "format": "prettier --write --cache \"**/*.[tj]s?(x)\""
+        "format": "prettier --write --cache .",
+        "format:check": "prettier --check --cache ."
     },
     "license": "MIT",
     "devDependencies": {

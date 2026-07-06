@@ -63,8 +63,7 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
     const setShowHistogram = (showHistogram: boolean) => updateState({ showHistogram });
     const setShowMinimap = (showMinimap: boolean) => updateState({ showMinimap });
     const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({ minimapZoom });
-    const setMinimapMapType = (minimapMapType: MapTypeIdType) =>
-        updateState({ minimapMapType });
+    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({ minimapMapType });
 
     const updateState = (update: Partial<MediaInfoPanelSettingsState>) => {
         setState(update);

@@ -9,7 +9,7 @@ import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 import FavoriteIcon from "../icon/FavoriteIcon";
 import IconButton from "../icon/IconButton";
-import MediaTypeIcon from '../icon/MediaTypeIcon';
+import MediaTypeIcon from "../icon/MediaTypeIcon";
 
 interface Props {
     category: Category;
@@ -44,8 +44,14 @@ const CategoryListItem: Component<Props> = props => {
                 loading={props.eager ? "eager" : "lazy"}
             />
 
-            <MediaTypeIcon extraClasses={`ml-2 text-lg text-primary ${props.category.mediaTypes.includes(MediaTypePhoto) ? "opacity-100" : "opacity-10"}`} mediaType={MediaTypePhoto} />
-            <MediaTypeIcon extraClasses={`ml-1 text-lg text-primary ${props.category.mediaTypes.includes(MediaTypeVideo) ? "opacity-100" : "opacity-10"}`} mediaType={MediaTypeVideo} />
+            <MediaTypeIcon
+                extraClasses={`ml-2 text-lg text-primary ${props.category.mediaTypes.includes(MediaTypePhoto) ? "opacity-100" : "opacity-10"}`}
+                mediaType={MediaTypePhoto}
+            />
+            <MediaTypeIcon
+                extraClasses={`ml-1 text-lg text-primary ${props.category.mediaTypes.includes(MediaTypeVideo) ? "opacity-100" : "opacity-10"}`}
+                mediaType={MediaTypeVideo}
+            />
 
             <Show when={props.showYear}>
                 <span class="ml-2 md:ml-4">{props.category.effectiveDate.getFullYear()}</span>

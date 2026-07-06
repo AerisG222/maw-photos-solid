@@ -38,7 +38,9 @@ const Layout: ParentComponent<Props> = props => {
                     "h-full min-h-0 overflow-hidden": !!merged.fill
                 }}
             >
-                <div classList={{ ...(getMarginClass(props.margin) ?? {}), "h-full": !!merged.fill }}>
+                <div
+                    classList={{ ...(getMarginClass(props.margin) ?? {}), "h-full": !!merged.fill }}
+                >
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
                     </Show>

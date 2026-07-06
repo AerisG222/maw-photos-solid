@@ -29,7 +29,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         if (!activeMedia) {
             const list = this.mediaWithGps();
 
-            if(list && list.length > 0) {
+            if (list && list.length > 0) {
                 this.navigateToMedia(this.view, list[0].media);
             }
         }
@@ -122,9 +122,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         this.gpsListQuery.isSuccess &&
         this.mediaListQuery.isSuccess &&
         this.categoryQuery.isSuccess &&
-        (
-            !this.params.mediaSlug || (!!this.getActiveMedia())
-        );
+        (!this.params.mediaSlug || !!this.getActiveMedia());
 
     getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
 
@@ -158,12 +156,18 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
             this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id)
         );
 
-    findMediaWithGpsBySlug = (list?: MediaWithGps[], categoryYearAsString?: string, categorySlug?: string, mediaSlug?: string) =>
-        (list && categoryYearAsString && categorySlug && mediaSlug)
-            ? list?.find(m =>
-                m.media.categoryYear === parseInt(categoryYearAsString, 10) &&
-                m.media.categorySlug === categorySlug &&
-                m.media.slug === mediaSlug
-            )
+    findMediaWithGpsBySlug = (
+        list?: MediaWithGps[],
+        categoryYearAsString?: string,
+        categorySlug?: string,
+        mediaSlug?: string
+    ) =>
+        list && categoryYearAsString && categorySlug && mediaSlug
+            ? list?.find(
+                  m =>
+                      m.media.categoryYear === parseInt(categoryYearAsString, 10) &&
+                      m.media.categorySlug === categorySlug &&
+                      m.media.slug === mediaSlug
+              )
             : undefined;
 }

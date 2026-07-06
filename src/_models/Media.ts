@@ -1,6 +1,6 @@
 import { Uuid } from "./Uuid";
 import { MediaFile } from "./MediaFile";
-import { MediaType } from './MediaType';
+import { MediaType } from "./MediaType";
 
 export interface Media {
     id: Uuid;

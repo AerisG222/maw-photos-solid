@@ -7,8 +7,8 @@ import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 import FavoriteIcon from "../icon/FavoriteIcon";
-import MediaTypeIcon from '../icon/MediaTypeIcon';
-import IconButton from '../icon/IconButton';
+import MediaTypeIcon from "../icon/MediaTypeIcon";
+import IconButton from "../icon/IconButton";
 
 interface Props {
     category: Category;
@@ -40,16 +40,19 @@ const CategoryCard: Component<Props> = props => {
                 </div>
             </Show>
 
-            <div class="inline-grid grid-cols-2 grid-rows-2" style={{
-                "width": `${getThumbnailSize(props.thumbnailSize).width}px`,
-                "height": `${getThumbnailSize(props.thumbnailSize).height}px`
-            }}>
+            <div
+                class="inline-grid grid-cols-2 grid-rows-2"
+                style={{
+                    width: `${getThumbnailSize(props.thumbnailSize).width}px`,
+                    height: `${getThumbnailSize(props.thumbnailSize).height}px`
+                }}
+            >
                 <img
                     src={getMediaTeaserUrl(props.category.teaser, props.thumbnailSize)}
                     classList={{
                         "col-span-full": true,
                         "row-span-full": true,
-                        "block": true,
+                        block: true,
                         "w-full": true,
                         "saturate-50": props.dimThumbnails,
                         "group-hover:saturate-100": props.dimThumbnails,
@@ -62,8 +65,11 @@ const CategoryCard: Component<Props> = props => {
                 <Show when={props.showTypesBadge}>
                     <div class="col-start-1 row-start-1 z-10 justify-self-start self-start badge m-[1px] gap-0.5 px-0.5 opacity-50">
                         <For each={props.category.mediaTypes}>
-                            { typ => (
-                                <MediaTypeIcon extraClasses={"text-sm text-primary"} mediaType={typ} />
+                            {typ => (
+                                <MediaTypeIcon
+                                    extraClasses={"text-sm text-primary"}
+                                    mediaType={typ}
+                                />
                             )}
                         </For>
                     </div>
@@ -71,13 +77,16 @@ const CategoryCard: Component<Props> = props => {
 
                 <Show when={props.showFavoriteBadge}>
                     <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-                        <IconButton buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"} onClick={onClickFavorite}>
+                        <IconButton
+                            buttonClasses={
+                                "btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"
+                            }
+                            onClick={onClickFavorite}
+                        >
                             <FavoriteIcon isFavorite={props.category.isFavorite} />
                         </IconButton>
                     </div>
                 </Show>
-
-
             </div>
 
             <Show when={props.showTitles}>

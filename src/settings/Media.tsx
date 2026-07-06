@@ -33,7 +33,7 @@ const ViewMedia: Component = () => {
             setShowMediaList: setDetailShowMediaList,
             setThumbnailSize: setDetailThumbnailSize,
             setDimThumbnails: setDetailDimThumbnails,
-            setShowFavoritesBadge: setDetailShowFavoritesBadge,
+            setShowFavoritesBadge: setDetailShowFavoritesBadge
         }
     ] = useMediaDetailViewSettingsContext();
     const [fullscreenSettings, { setShowFavoritesBadge: setFullscreenShowFavoritesBadge }] =

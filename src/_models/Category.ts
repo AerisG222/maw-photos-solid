@@ -2,7 +2,7 @@ import { parseISO } from "date-fns";
 
 import { Uuid } from "./Uuid";
 import { Media } from "./Media";
-import { MediaType } from './MediaType';
+import { MediaType } from "./MediaType";
 
 export interface Category {
     id: Uuid;

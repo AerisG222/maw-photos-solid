@@ -16,7 +16,7 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
 });
 
 const mediaSlugOrBlank = (category: Category | undefined, media: Media | undefined) => {
-    if(!media) {
+    if (!media) {
         return "";
     }
 

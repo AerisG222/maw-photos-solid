@@ -5,10 +5,7 @@ export const SWIPE_RIGHT = "swipe_right";
 export const SWIPE_UP = "swipe_up";
 export const SWIPE_DOWN = "swipe_down";
 export type SWIPE_DIRECTION =
-    | typeof SWIPE_LEFT
-    | typeof SWIPE_RIGHT
-    | typeof SWIPE_DOWN
-    | typeof SWIPE_UP;
+    typeof SWIPE_LEFT | typeof SWIPE_RIGHT | typeof SWIPE_DOWN | typeof SWIPE_UP;
 
 declare module "solid-js" {
     namespace JSX {

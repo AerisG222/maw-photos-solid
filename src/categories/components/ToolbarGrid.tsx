@@ -9,7 +9,14 @@ import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 const GridToolbar: Component = () => {
     const [
         settings,
-        { setShowTitles, setMargin, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge, setShowTypesBadge }
+        {
+            setShowTitles,
+            setMargin,
+            setThumbnailSize,
+            setDimThumbnails,
+            setShowFavoritesBadge,
+            setShowTypesBadge
+        }
     ] = useCategoryGridViewSettingsContext();
 
     const onToggleTitles = () => {

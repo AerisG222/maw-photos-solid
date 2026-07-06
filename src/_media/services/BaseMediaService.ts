@@ -23,11 +23,7 @@ export abstract class BaseMediaService {
     };
 
     getActiveMedia = () => {
-        if (
-            !this.params.categoryYear &&
-            !this.params.categorySlug &&
-            !this.params.mediaSlug
-        ) {
+        if (!this.params.categoryYear && !this.params.categorySlug && !this.params.mediaSlug) {
             return undefined;
         }
 
@@ -131,12 +127,18 @@ export abstract class BaseMediaService {
         return list[list.length - 1].id === this.getActiveMedia()?.id;
     };
 
-    protected findMediaBySlug = (list?: Media[], categoryYearAsString?: string, categorySlug?: string, mediaSlug?: string) =>
-        (list && categoryYearAsString && categorySlug && mediaSlug)
-            ? list?.find(m =>
-                m.categoryYear === parseInt(categoryYearAsString, 10) &&
-                m.categorySlug === categorySlug &&
-                m.slug === mediaSlug
-            )
+    protected findMediaBySlug = (
+        list?: Media[],
+        categoryYearAsString?: string,
+        categorySlug?: string,
+        mediaSlug?: string
+    ) =>
+        list && categoryYearAsString && categorySlug && mediaSlug
+            ? list?.find(
+                  m =>
+                      m.categoryYear === parseInt(categoryYearAsString, 10) &&
+                      m.categorySlug === categorySlug &&
+                      m.slug === mediaSlug
+              )
             : undefined;
 }

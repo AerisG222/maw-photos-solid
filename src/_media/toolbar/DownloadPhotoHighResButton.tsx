@@ -1,6 +1,8 @@
 import { Component, createMemo } from "solid-js";
 
-import ToolbarDownloadLink, { getFilenameFromUrl } from "../../_components/toolbar/ToolbarDownloadLink";
+import ToolbarDownloadLink, {
+    getFilenameFromUrl
+} from "../../_components/toolbar/ToolbarDownloadLink";
 
 import { Media } from "../../_models/Media";
 
@@ -11,7 +13,8 @@ interface Props {
 const DownloadPhotoHighResButton: Component<Props> = props => {
     const fullResUrl = createMemo(() =>
         props.media
-            ? (props.media.files.find(f => f.scale === "full" && f.type !== "video-poster")?.path ?? "")
+            ? (props.media.files.find(f => f.scale === "full" && f.type !== "video-poster")?.path ??
+              "")
             : ""
     );
 

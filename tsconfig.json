@@ -9,10 +9,7 @@
         "esModuleInterop": true,
         "jsx": "preserve",
         "jsxImportSource": "solid-js",
-        "types": [
-            "vite/client",
-            "google.maps"
-        ],
+        "types": ["vite/client", "google.maps"],
         "noEmit": true,
         "isolatedModules": true
     }

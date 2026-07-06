@@ -7,8 +7,8 @@ import { getThumbnailSize, ThumbnailSizeIdType } from "../_models/ThumbnailSize"
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 
 import FavoriteIcon from "../_components/icon/FavoriteIcon";
-import MediaTypeIcon from '../_components/icon/MediaTypeIcon';
-import IconButton from '../_components/icon/IconButton';
+import MediaTypeIcon from "../_components/icon/MediaTypeIcon";
+import IconButton from "../_components/icon/IconButton";
 
 interface Props {
     href: string;
@@ -51,8 +51,8 @@ const MediaLink: Component<Props> = props => {
                 "border-primary!": props.isActiveItem
             }}
             style={{
-                "width": `${getThumbnailSize(props.thumbnailSize).width}px`,
-                "height": `${getThumbnailSize(props.thumbnailSize).height}px`
+                width: `${getThumbnailSize(props.thumbnailSize).width}px`,
+                height: `${getThumbnailSize(props.thumbnailSize).height}px`
             }}
             href={props.href}
             ref={el => (props.scroll ? props.scroll(el, props.media) : {})}
@@ -62,7 +62,7 @@ const MediaLink: Component<Props> = props => {
                 classList={{
                     "col-span-full": true,
                     "row-span-full": true,
-                    "block": true,
+                    block: true,
                     "w-full": true,
                     "max-w-none": true,
                     "rounded-md": props.rounded
@@ -72,13 +72,19 @@ const MediaLink: Component<Props> = props => {
 
             <Show when={props.showTypesBadge}>
                 <div class="col-start-1 row-start-1 z-10 justify-self-start self-start badge m-[1px] gap-0.5 px-0.5 opacity-50">
-                    <MediaTypeIcon extraClasses={"text-sm text-primary"} mediaType={props.media.type} />
+                    <MediaTypeIcon
+                        extraClasses={"text-sm text-primary"}
+                        mediaType={props.media.type}
+                    />
                 </div>
             </Show>
 
             <Show when={props.showFavoritesBadge}>
                 <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-                    <IconButton buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"} onClick={onClickFavorite}>
+                    <IconButton
+                        buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
+                        onClick={onClickFavorite}
+                    >
                         <FavoriteIcon isFavorite={props.media.isFavorite} />
                     </IconButton>
                 </div>
