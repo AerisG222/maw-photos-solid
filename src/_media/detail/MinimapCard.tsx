@@ -40,10 +40,10 @@ const MinimapCard: Component<Props> = props => {
     let marker: google.maps.marker.AdvancedMarkerElement;
 
     async function initMap(): Promise<void> {
-        const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
+        const { Map } = (await google.maps.importLibrary("maps"));
         const { AdvancedMarkerElement } = (await google.maps.importLibrary(
             "marker"
-        )) as google.maps.MarkerLibrary;
+        ));
 
         if (el) {
             map = new Map(el, defaultMapOptions);

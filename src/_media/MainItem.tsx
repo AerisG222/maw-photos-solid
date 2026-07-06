@@ -40,7 +40,7 @@ const MainItem: Component<Props> = props => {
     // video elements were not recognizing click events when on mobile, so we
     // try to and handle this here by listening for taps instead
     const handleTap = () => {
-        mediaHolderDiv!.click();
+        mediaHolderDiv.click();
     };
 
     const getMediaUrl = () => {

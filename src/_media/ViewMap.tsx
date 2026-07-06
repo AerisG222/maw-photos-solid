@@ -38,7 +38,7 @@ const ViewMap: Component<Props> = props => {
     async function initMap(initialLocation: GpsCoordinate | undefined): Promise<void> {
         const { InfoWindow, Map } = (await google.maps.importLibrary(
             "maps"
-        )) as google.maps.MapsLibrary;
+        ));
 
         if (el) {
             const options = defaultMapOptions(initialLocation);
@@ -68,7 +68,7 @@ const ViewMap: Component<Props> = props => {
     const addMarkers = async () => {
         const { AdvancedMarkerElement } = (await google.maps.importLibrary(
             "marker"
-        )) as google.maps.MarkerLibrary;
+        ));
 
         for (const item of props.mediaService.mediaWithGps()) {
             const coord = props.mediaService.preferredGpsLocation(item);
@@ -107,7 +107,7 @@ const ViewMap: Component<Props> = props => {
             const marker = markers.get(props.mediaService.getActiveMedia()!.id);
 
             if (marker) {
-                google.maps.event.trigger(marker as object, "gmp-click");
+                google.maps.event.trigger(marker, "gmp-click");
             }
         }
     };

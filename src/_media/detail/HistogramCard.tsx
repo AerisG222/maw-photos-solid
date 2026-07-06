@@ -164,9 +164,9 @@ const HistogramCard: Component<Props> = props => {
     };
 
     const drawHistogram = (channel: string, histogram: Histogram, maxCount: number): void => {
-        const ctx = histogramCanvas!.getContext("2d")!;
+        const ctx = histogramCanvas.getContext("2d")!;
 
-        ctx.clearRect(0, 0, histogramCanvas!.width, histogramCanvas!.height);
+        ctx.clearRect(0, 0, histogramCanvas.width, histogramCanvas.height);
 
         ctx.globalCompositeOperation = "lighter";
 
@@ -198,20 +198,20 @@ const HistogramCard: Component<Props> = props => {
         ctx.fillStyle = color;
 
         ctx.beginPath();
-        ctx.moveTo(0, histogramCanvas!.height);
+        ctx.moveTo(0, histogramCanvas.height);
 
         for (let x, y, i = 0; i <= 255; i++) {
             if (!(i in vals)) {
                 continue;
             }
 
-            y = Math.round((vals[i] / maxCount) * histogramCanvas!.height);
-            x = Math.round((i / 255) * histogramCanvas!.width);
+            y = Math.round((vals[i] / maxCount) * histogramCanvas.height);
+            x = Math.round((i / 255) * histogramCanvas.width);
 
-            ctx.lineTo(x, histogramCanvas!.height - y);
+            ctx.lineTo(x, histogramCanvas.height - y);
         }
 
-        ctx.lineTo(histogramCanvas!.width, histogramCanvas!.height);
+        ctx.lineTo(histogramCanvas.width, histogramCanvas.height);
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
