@@ -1,7 +1,9 @@
 import { Uuid } from "../../_models/Uuid";
 
+const API_VERSION = "v1";
+
 const buildAbsoluteUrl = (relativeUrl: string): string =>
-    `${import.meta.env.VITE_API_URI}/${relativeUrl}`;
+    `${import.meta.env.VITE_API_URI}/api/${API_VERSION}/${relativeUrl}`;
 
 export const buildCategoryDownloadUrl = (id: Uuid): string =>
     buildAbsoluteUrl(`categories/${id}/download`);
@@ -39,6 +41,9 @@ export const patchApi = (accessToken: string, relativeUrl: string, content: unkn
 
 export const postApi = (accessToken: string, relativeUrl: string, content: unknown) =>
     callApi("POST", relativeUrl, content, accessToken);
+
+export const putApi = (accessToken: string, relativeUrl: string, content: unknown) =>
+    callApi("PUT", relativeUrl, content, accessToken);
 
 const callApi = async (
     method: string,

@@ -11,7 +11,7 @@ import {
     UseQueryResult
 } from "@tanstack/solid-query";
 import { useAuthContext } from "../AuthContext";
-import { postApi, queryApi, runWithAccessToken } from "./_shared";
+import { putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Category, CategoryDto, mapCategory } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
@@ -118,14 +118,14 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const postIsFavorite = async (req: IsFavoriteRequest<Category>) =>
         runWithAccessToken(getToken, accessToken =>
-            postApi(accessToken, `categories/${req.item.id}/favorite`, {
+            putApi(accessToken, `categories/${req.item.id}/favorite`, {
                 isFavorite: req.isFavorite
             })
         );
 
     const postCategoryTeaser = async (req: CategoryTeaserRequest) =>
         runWithAccessToken(getToken, accessToken =>
-            postApi(accessToken, `categories/${req.category.id}/teaser`, {
+            putApi(accessToken, `categories/${req.category.id}/teaser`, {
                 mediaId: req.media.id
             })
         );

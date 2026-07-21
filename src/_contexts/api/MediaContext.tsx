@@ -12,7 +12,7 @@ import {
 
 import { Comment, CommentDto, mapComment } from "../../_models/Comment";
 import { useAuthContext } from "../AuthContext";
-import { postApi, queryApi, runWithAccessToken } from "./_shared";
+import { postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { MediaMetadata } from "../../_models/MediaMetadata";
@@ -82,14 +82,14 @@ export const MediaProvider: ParentComponent = props => {
 
     const postIsFavorite = async (req: IsFavoriteRequest<Media>) =>
         runWithAccessToken(getToken, accessToken =>
-            postApi(accessToken, `media/${req.item.id}/favorite`, {
+            putApi(accessToken, `media/${req.item.id}/favorite`, {
                 isFavorite: req.isFavorite
             })
         );
 
     const postGpsOverride = async (req: GpsOverrideRequest) =>
         runWithAccessToken(getToken, accessToken =>
-            postApi(accessToken, `media/${req.mediaId}/gps`, {
+            putApi(accessToken, `media/${req.mediaId}/gps`, {
                 latitude: req.latitude,
                 longitude: req.longitude
             })
