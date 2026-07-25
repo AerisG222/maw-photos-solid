@@ -2,6 +2,7 @@ import { ParentComponent, Show } from "solid-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
+import { ApiError } from "../../_contexts/api/ApiError";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
 import { CategoriesProvider } from "../../_contexts/api/CategoriesContext";
@@ -16,7 +17,23 @@ import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 import AccountActivatedGuard from "../auth/AccountActivatedGuard";
 
 const AppContext: ParentComponent = props => {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                /*
+                   The default is three blind retries with backoff, so a 401 or
+                   404 made the user wait through several pointless round trips
+                   before anything could be shown. A 4xx reflects the request
+                   itself and will not resolve on its own - surface it at once,
+                   and keep retrying only the transient cases.
+                */
+                retry: (failureCount, error) =>
+                    error instanceof ApiError && error.isClientError ? false : failureCount < 2
+            },
+            // a write should never be replayed automatically
+            mutations: { retry: false }
+        }
+    });
 
     return (
         <AuthProvider>

@@ -1,4 +1,5 @@
 import { Uuid } from "../../_models/Uuid";
+import { ApiError } from "./ApiError";
 
 const API_VERSION = "v1";
 
@@ -63,7 +64,7 @@ const callApi = async (
     });
 
     if (!response.ok) {
-        throw new Error("Error invoking remote API call.");
+        throw new ApiError(response.status, response.statusText, relativeUrl);
     }
 
     return response;

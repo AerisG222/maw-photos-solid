@@ -1,4 +1,4 @@
-import { createContext, ParentComponent, Show, useContext } from "solid-js";
+import { createContext, createEffect, Match, ParentComponent, Switch, useContext } from "solid-js";
 import { useQuery, UseQueryResult } from "@tanstack/solid-query";
 
 import { Scale } from "../../_models/Scale";
@@ -9,6 +9,7 @@ import { queryApi, runWithAccessToken } from "./_shared";
 import { AccountStatus } from "../../_models/AccountStatus";
 
 import Loading from "../../_components/loading/Loading";
+import ErrorMessage from "../../_components/error/ErrorMessage";
 
 export interface ConfigService {
     scalesQuery: () => UseQueryResult<Scale[], Error>;
@@ -32,21 +33,28 @@ export const ConfigProvider: ParentComponent = props => {
             queryApi<AccountStatus>(accessToken, "auth/account-status")
         );
 
-    const scalesQuery = () =>
-        useQuery(() => ({
-            queryKey: ["config", "scales"],
-            queryFn: fetchScales,
-            enabled: authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
-        }));
+    /*
+       Created once, here in the provider body. These used to be factories that
+       ran `useQuery` on every call, and `getScalesForMain` calls back into them
+       from render - so each photo navigation spun up another observer, and no
+       caller could reliably read the shared loading/error state.
+    */
+    const scales = useQuery(() => ({
+        queryKey: ["config", "scales"],
+        queryFn: fetchScales,
+        enabled: authContext.isLoggedIn,
+        staleTime: 15 * 60 * 1000
+    }));
 
-    const accountStatusQuery = () =>
-        useQuery(() => ({
-            queryKey: ["auth", "account-status"],
-            queryFn: fetchAccountStatus,
-            enabled: authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
-        }));
+    const accountStatus = useQuery(() => ({
+        queryKey: ["auth", "account-status"],
+        queryFn: fetchAccountStatus,
+        enabled: authContext.isLoggedIn,
+        staleTime: 5 * 60 * 1000
+    }));
+
+    // keeps the existing ConfigService shape while handing back the one instance
+    const scalesQuery = () => scales;
 
     const sortScalesDescendingInSize = (a: Scale, b: Scale) => b.width - a.width;
 
@@ -94,26 +102,50 @@ export const ConfigProvider: ParentComponent = props => {
         return results;
     };
 
-    const showChildren = () => {
+    // publishing account status is a side effect, so it belongs in an effect -
+    // it previously ran inside the <Show> predicate below, which is a tracked
+    // computation and no place to be writing state
+    createEffect(() => {
+        if (accountStatus.isSuccess && accountStatus.data) {
+            setAccountStatus(accountStatus.data);
+        }
+    });
+
+    /*
+       Boot gate. Previously this was a single boolean, so "still loading" and
+       "failed" were indistinguishable: if either query errored the app sat on a
+       spinner forever with no message and no way out short of a manual reload.
+    */
+    const bootState = () => {
         if (!authContext.isLoggedIn) {
             // allow request to proceed so they can see the login page
-            return true;
+            return "ready";
         }
 
-        if (scalesQuery().isSuccess && accountStatusQuery().isSuccess) {
-            setAccountStatus(accountStatusQuery().data!);
-
-            return true;
+        if (scales.isError || accountStatus.isError) {
+            return "error";
         }
 
-        return false;
+        return scales.isSuccess && accountStatus.isSuccess ? "ready" : "loading";
+    };
+
+    const retryBoot = () => {
+        void scales.refetch();
+        void accountStatus.refetch();
     };
 
     return (
         <ConfigContext.Provider value={{ scalesQuery, getScalesForThumbnail, getScalesForMain }}>
-            <Show when={showChildren()} fallback={<Loading />}>
-                {props.children}
-            </Show>
+            <Switch fallback={<Loading />}>
+                <Match when={bootState() === "ready"}>{props.children}</Match>
+                <Match when={bootState() === "error"}>
+                    <ErrorMessage
+                        title="MaW Photos could not finish loading"
+                        error={scales.error ?? accountStatus.error}
+                        onRetry={retryBoot}
+                    />
+                </Match>
+            </Switch>
         </ConfigContext.Provider>
     );
 };

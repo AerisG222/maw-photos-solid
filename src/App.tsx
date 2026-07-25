@@ -4,6 +4,7 @@ import { useFullscreenContext } from "./_contexts/FullscreenContext";
 
 import PrimaryNav from "./_components/primary-nav/PrimaryNav";
 import ShortcutDialog from "./_components/shortcuts/ShortcutDialog";
+import AppErrorBoundary from "./_components/error/AppErrorBoundary";
 
 const App: ParentComponent = props => {
     const [fullscreen] = useFullscreenContext();
@@ -20,7 +21,13 @@ const App: ParentComponent = props => {
                     <PrimaryNav />
                 </Show>
 
-                {props.children}
+                {/*
+                    Scoped to the routed page so a crash there leaves the nav
+                    usable - the user can navigate away instead of reloading.
+                */}
+                <AppErrorBoundary title="This page could not be displayed">
+                    {props.children}
+                </AppErrorBoundary>
             </div>
         </>
     );
