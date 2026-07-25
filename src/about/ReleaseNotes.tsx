@@ -6,6 +6,19 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.2.0</span> : <span class="date">2026-07-25</span>
+            </h3>
+            <p>Set Claude loose for more improvements:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Add some animation and other UI polish</li>
+                <li>Improve error messaging under more situations</li>
+                <li>Update to support api versioning on the backend</li>
+                <li>Further optimize production build</li>
+                <li>Improve use of Tanstack Query</li>
+                <li>Update dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.1.0</span> : <span class="date">2026-07-06</span>
             </h3>
             <p>Set Claude loose on my podunk codebase:</p>
