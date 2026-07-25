@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, For } from "solid-js";
+import { Component, createEffect, createSignal, For, Show } from "solid-js";
 
 import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
@@ -12,6 +12,7 @@ import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryListItem from "../_components/categories/CategoryListItem";
 import SearchResultStatus from "./components/SearchResultStatus";
+import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ViewList: Component = () => {
     const [settings] = useSearchListViewSettingsContext();
@@ -45,25 +46,37 @@ const ViewList: Component = () => {
                 <SearchBar />
             </div>
 
-            <div class="my-4">
-                <For each={allSearchResults(searchQuery()) ?? []}>
-                    {(category, idx) => (
-                        <CategoryListItem
-                            category={category}
-                            showYear={true}
-                            thumbnailSize={settings.thumbnailSize}
-                            dimThumbnails={settings.dimThumbnails}
-                            eager={idx() <= EAGER_THRESHOLD}
-                            setIsFavorite={setIsFavorite}
-                        />
-                    )}
-                </For>
-            </div>
+            {/* the toolbar and search bar stay put so the term can be retried or edited */}
+            <Show
+                when={!searchQuery().isError}
+                fallback={
+                    <ErrorMessage
+                        title="Search could not be completed"
+                        error={searchQuery().error}
+                        onRetry={() => void searchQuery().refetch()}
+                    />
+                }
+            >
+                <div class="my-4">
+                    <For each={allSearchResults(searchQuery()) ?? []}>
+                        {(category, idx) => (
+                            <CategoryListItem
+                                category={category}
+                                showYear={true}
+                                thumbnailSize={settings.thumbnailSize}
+                                dimThumbnails={settings.dimThumbnails}
+                                eager={idx() <= EAGER_THRESHOLD}
+                                setIsFavorite={setIsFavorite}
+                            />
+                        )}
+                    </For>
+                </div>
 
-            <SearchResultStatus
-                hasMore={searchQuery().hasNextPage}
-                continueSearch={() => searchQuery().fetchNextPage()}
-            />
+                <SearchResultStatus
+                    hasMore={searchQuery().hasNextPage}
+                    continueSearch={() => searchQuery().fetchNextPage()}
+                />
+            </Show>
         </Layout>
     );
 };

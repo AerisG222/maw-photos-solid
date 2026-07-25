@@ -6,6 +6,7 @@ import { useCategoryFilterSettingsContext } from "../../_contexts/settings/Categ
 import { UseQueryResult } from "@tanstack/solid-query";
 import { CategoryIdsForYearResult } from "../../_contexts/api/models/CategoryIdsForYearResult";
 import { Uuid } from "../../_models/Uuid";
+import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 
 export const useCategoriesByYear = () => {
     const [filter] = useCategoryFilterSettingsContext();
@@ -92,5 +93,21 @@ export const useCategoriesByYear = () => {
         return undefined;
     });
 
-    return { categoriesToDisplay, setIsFavoriteMutation };
+    /*
+       The screen is fed by the year list plus one query per year, so any of
+       them failing leaves `categoriesToDisplay` undefined - indistinguishable
+       from still loading unless the failure is surfaced separately.
+    */
+    const loadError = () =>
+        findQueryError([
+            years,
+            ...(allCategories() ?? []),
+            // only consulted while the missing-gps filter is on
+            ...(filter.missingGpsFilter ? (categoryIdsWithoutGps() ?? []) : [])
+        ]);
+
+    const retryLoad = () =>
+        refetchQueries([years, ...(allCategories() ?? []), ...(categoryIdsWithoutGps() ?? [])]);
+
+    return { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation };
 };

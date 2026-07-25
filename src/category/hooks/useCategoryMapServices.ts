@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "@solidjs/router";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { MediaView } from "../../_models/MediaView";
 import { CategoryMapsMediaService } from "../services/CategoryMapsMediaService";
+import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 
 export const useCategoryMapServices = (view: MediaView) => {
     const navigate = useNavigate();
@@ -20,5 +21,15 @@ export const useCategoryMapServices = (view: MediaView) => {
     const gpsList = categoryMediaGpsQuery(categoryId);
     const mediaService = new CategoryMapsMediaService(navigate, params, view, cq, mq, gpsList);
 
-    return { mediaService };
+    const loadError = () => findQueryError([categoriesQuery, cq, mq, gpsList]);
+    const retryLoad = () => refetchQueries([categoriesQuery, cq, mq, gpsList]);
+
+    // sequential queries - see the note in useCategoryServices
+    const isLoading = () =>
+        categoriesQuery.isLoading ||
+        (categoriesQuery.isSuccess &&
+            !!categoryId() &&
+            (cq.isPending || mq.isPending || gpsList.isPending));
+
+    return { mediaService, isLoading, loadError, retryLoad };
 };

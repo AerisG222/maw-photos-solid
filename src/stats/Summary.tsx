@@ -13,6 +13,7 @@ import StatBar from "./components/StatBar";
 import StatLayout from "./components/StatLayout";
 import Treemap from "./components/Treemap";
 import Loading from "../_components/loading/Loading";
+import ErrorMessage from "../_components/error/ErrorMessage";
 import Header from "./components/Header";
 
 const ViewCombined: Component = () => {
@@ -137,6 +138,14 @@ const ViewCombined: Component = () => {
         >
             <Show when={stats.isLoading}>
                 <Loading />
+            </Show>
+
+            <Show when={stats.isError}>
+                <ErrorMessage
+                    title="Could not load statistics"
+                    error={stats.error}
+                    onRetry={() => void stats.refetch()}
+                />
             </Show>
 
             <Show when={stats.isSuccess}>

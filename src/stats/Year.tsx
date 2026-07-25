@@ -1,4 +1,4 @@
-import { Component, createMemo } from "solid-js";
+import { Component, createMemo, Show } from "solid-js";
 import { useParams, useSearchParams } from "@solidjs/router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
@@ -12,6 +12,7 @@ import StatBar from "./components/StatBar";
 import Treemap from "./components/Treemap";
 import StatLayout from "./components/StatLayout";
 import Header from "./components/Header";
+import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ViewYear: Component = () => {
     const { statsForYearQuery } = useStatsContext();
@@ -114,24 +115,35 @@ const ViewYear: Component = () => {
                 />
             }
         >
-            <StatLayout>
-                <div class="my-2">
-                    <Header year={route.year} mode={searchMode()} type={searchType()} />
-                </div>
-                <div class="my-2">
-                    <StatBar
-                        statbarData={statbarData()}
-                        mediaCountTitle={statbarMediaCountTitle(searchType())}
-                    />
-                </div>
-                <div class="my-2">
-                    <Treemap
-                        seriesName={route.year ?? ""}
-                        data={treeData()}
-                        formatFunc={formatForMode(searchMode())}
-                    />
-                </div>
-            </StatLayout>
+            {/* this screen previously rendered an empty treemap on failure */}
+            <Show when={stats.isError}>
+                <ErrorMessage
+                    title="Could not load statistics"
+                    error={stats.error}
+                    onRetry={() => void stats.refetch()}
+                />
+            </Show>
+
+            <Show when={!stats.isError}>
+                <StatLayout>
+                    <div class="my-2">
+                        <Header year={route.year} mode={searchMode()} type={searchType()} />
+                    </div>
+                    <div class="my-2">
+                        <StatBar
+                            statbarData={statbarData()}
+                            mediaCountTitle={statbarMediaCountTitle(searchType())}
+                        />
+                    </div>
+                    <div class="my-2">
+                        <Treemap
+                            seriesName={route.year ?? ""}
+                            data={treeData()}
+                            formatFunc={formatForMode(searchMode())}
+                        />
+                    </div>
+                </StatLayout>
+            </Show>
         </Layout>
     );
 };

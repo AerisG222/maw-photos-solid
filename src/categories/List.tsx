@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, Match, Switch } from "solid-js";
 
 import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
@@ -11,10 +11,12 @@ import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
 import SkeletonList from "../_components/loading/SkeletonList";
+import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ListView: Component = () => {
     const [settings] = useCategoryListViewSettingsContext();
-    const { categoriesToDisplay, setIsFavoriteMutation } = useCategoriesByYear();
+    const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
+        useCategoriesByYear();
 
     const setIsFavorite = (category: Category, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Category> = {
@@ -26,37 +28,46 @@ const ListView: Component = () => {
     };
 
     return (
-        <Show
-            when={categoriesToDisplay()}
-            fallback={<SkeletonList thumbnailSize={settings.thumbnailSize} />}
-        >
-            <Layout
-                toolbar={
-                    <Toolbar>
-                        <ListToolbar />
-                    </Toolbar>
-                }
-                margin={settings.margin}
-            >
-                <CategoryFilterBar />
+        // error is checked first: a failed year query also leaves
+        // categoriesToDisplay undefined, which would otherwise skeleton forever
+        <Switch fallback={<SkeletonList thumbnailSize={settings.thumbnailSize} />}>
+            <Match when={loadError()}>
+                <ErrorMessage
+                    title="Could not load categories"
+                    error={loadError()}
+                    onRetry={retryLoad}
+                />
+            </Match>
 
-                <For
-                    each={Object.keys(categoriesToDisplay()!)
-                        .map(x => parseInt(x, 10))
-                        .sort()
-                        .reverse()}
+            <Match when={categoriesToDisplay()}>
+                <Layout
+                    toolbar={
+                        <Toolbar>
+                            <ListToolbar />
+                        </Toolbar>
+                    }
+                    margin={settings.margin}
                 >
-                    {(year, idx) => (
-                        <YearList
-                            year={year}
-                            categories={categoriesToDisplay()![year] ?? []}
-                            enableEagerLoading={idx() === 0}
-                            setIsFavorite={setIsFavorite}
-                        />
-                    )}
-                </For>
-            </Layout>
-        </Show>
+                    <CategoryFilterBar />
+
+                    <For
+                        each={Object.keys(categoriesToDisplay()!)
+                            .map(x => parseInt(x, 10))
+                            .sort()
+                            .reverse()}
+                    >
+                        {(year, idx) => (
+                            <YearList
+                                year={year}
+                                categories={categoriesToDisplay()![year] ?? []}
+                                enableEagerLoading={idx() === 0}
+                                setIsFavorite={setIsFavorite}
+                            />
+                        )}
+                    </For>
+                </Layout>
+            </Match>
+        </Switch>
     );
 };
 
