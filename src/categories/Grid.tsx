@@ -28,26 +28,37 @@ const GridView: Component = () => {
     };
 
     return (
-        // error is checked first: a failed year query also leaves
-        // categoriesToDisplay undefined, which would otherwise skeleton forever
-        <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load categories"
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
+        /*
+           Layout wraps every state rather than just the loaded one. It owns the
+           page backdrop and the toolbar, so gating it on data meant the skeleton
+           and the error message rendered on a bare background with no toolbar,
+           and the whole page visibly re-chromed itself once the data landed.
 
-            <Match when={categoriesToDisplay()}>
-                <Layout
-                    toolbar={
-                        <Toolbar>
-                            <GridToolbar />
-                        </Toolbar>
-                    }
-                    margin={settings.margin}
-                >
+           The toolbars here are driven purely by settings, so they are safe to
+           show while the categories are still on their way.
+        */
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <GridToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}
+        >
+            {/*
+                error is checked first: a failed year query also leaves
+                categoriesToDisplay undefined, which would otherwise skeleton forever
+            */}
+            <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
+                <Match when={loadError()}>
+                    <ErrorMessage
+                        title="Could not load categories"
+                        error={loadError()}
+                        onRetry={retryLoad}
+                    />
+                </Match>
+
+                <Match when={categoriesToDisplay()}>
                     <CategoryFilterBar />
 
                     <For
@@ -65,9 +76,9 @@ const GridView: Component = () => {
                             />
                         )}
                     </For>
-                </Layout>
-            </Match>
-        </Switch>
+                </Match>
+            </Switch>
+        </Layout>
     );
 };
 

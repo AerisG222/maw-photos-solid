@@ -28,26 +28,30 @@ const ListView: Component = () => {
     };
 
     return (
-        // error is checked first: a failed year query also leaves
-        // categoriesToDisplay undefined, which would otherwise skeleton forever
-        <Switch fallback={<SkeletonList thumbnailSize={settings.thumbnailSize} />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load categories"
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
+        // Layout wraps every state so the backdrop and toolbar are constant -
+        // see the note in Grid.tsx
+        <Layout
+            toolbar={
+                <Toolbar>
+                    <ListToolbar />
+                </Toolbar>
+            }
+            margin={settings.margin}
+        >
+            {/*
+                error is checked first: a failed year query also leaves
+                categoriesToDisplay undefined, which would otherwise skeleton forever
+            */}
+            <Switch fallback={<SkeletonList thumbnailSize={settings.thumbnailSize} />}>
+                <Match when={loadError()}>
+                    <ErrorMessage
+                        title="Could not load categories"
+                        error={loadError()}
+                        onRetry={retryLoad}
+                    />
+                </Match>
 
-            <Match when={categoriesToDisplay()}>
-                <Layout
-                    toolbar={
-                        <Toolbar>
-                            <ListToolbar />
-                        </Toolbar>
-                    }
-                    margin={settings.margin}
-                >
+                <Match when={categoriesToDisplay()}>
                     <CategoryFilterBar />
 
                     <For
@@ -65,9 +69,9 @@ const ListView: Component = () => {
                             />
                         )}
                     </For>
-                </Layout>
-            </Match>
-        </Switch>
+                </Match>
+            </Switch>
+        </Layout>
     );
 };
 
