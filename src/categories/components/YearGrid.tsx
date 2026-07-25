@@ -22,7 +22,15 @@ const YearGrid: Component<Props> = props => {
         <>
             <YearHeading year={props.year} />
 
-            <div class="flex gap-2 flex-wrap place-content-center mb-4">
+            {/*
+                The entrance is on the group, not each card. Favoriting refetches
+                the list, which gives every category a new identity and makes the
+                reference-keyed <For> re-create every card - a per-card animation
+                would replay across the whole grid on each heart click. This
+                container instance is keyed by year, so it survives the refetch
+                and animates only when the year first appears.
+            */}
+            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
                 <For each={props.categories}>
                     {(category, idx) => (
                         <CategoryCard

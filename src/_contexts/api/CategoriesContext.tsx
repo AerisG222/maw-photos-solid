@@ -21,6 +21,8 @@ import { CategoriesForYearResult } from "./models/CategoriesForYearResult";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { CategoryTeaserRequest } from "../../_models/CategoryTeaserRequest";
 import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
+import { pulseFavorite } from "../../_components/icon/_favoritePulse";
+import { patchById } from "./_cacheUtils";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -209,21 +211,88 @@ export const CategoriesProvider: ParentComponent = props => {
                 lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
+    /*
+       Patch the toggled category into the caches that hold it rather than
+       invalidating and refetching.
+
+       Refetching replaced every Category object in the list, and because Solid's
+       <For> keys on reference that rebuilt every tile in the grid for a
+       one-field change. Rewriting only the matching entry - and returning the
+       previous array untouched when there is no match - keeps every other item's
+       reference stable, so the DOM for those tiles is left alone.
+    */
+    const applyCategoryIsFavorite = (id: Uuid, isFavorite: boolean) => {
+        const patchOne = (categories: Category[]) => patchById(categories, id, { isFavorite });
+
+        // the per-year lists behind the category grid and list views. Matching on
+        // a predicate rather than deriving the year keeps this correct no matter
+        // which bucket the category is filed under; untouched years keep their
+        // exact previous value, so nothing downstream re-renders for them.
+        queryClient.setQueriesData<CategoriesForYearResult>(
+            {
+                predicate: query =>
+                    query.queryKey[0] === "categories" &&
+                    query.queryKey[1] === "year" &&
+                    query.queryKey.length === 3
+            },
+            prev => {
+                if (!prev) {
+                    return prev;
+                }
+
+                const categories = patchOne(prev.categories);
+
+                return categories === prev.categories ? prev : { ...prev, categories };
+            }
+        );
+
+        // any search results currently held. `fetchCategorySearch` yields
+        // undefined for an empty query, so a page is not guaranteed to be there
+        queryClient.setQueriesData<InfiniteData<SearchResults<Category> | undefined>>(
+            {
+                predicate: query =>
+                    query.queryKey[0] === "categories" && query.queryKey[1] === "search"
+            },
+            prev => {
+                if (!prev) {
+                    return prev;
+                }
+
+                let changed = false;
+
+                const pages = prev.pages.map(page => {
+                    if (!page) {
+                        return page;
+                    }
+
+                    const results = patchOne(page.results);
+
+                    if (results === page.results) {
+                        return page;
+                    }
+
+                    changed = true;
+
+                    return { ...page, results };
+                });
+
+                return changed ? { ...prev, pages } : prev;
+            }
+        );
+
+        // the single-category query behind the detail views
+        queryClient.setQueryData<Category>(["categories", id], prev =>
+            prev ? { ...prev, isFavorite } : prev
+        );
+    };
+
     const setIsFavoriteMutation = useMutation(() => ({
         mutationFn: (isFavoriteReq: IsFavoriteRequest<Category>) => postIsFavorite(isFavoriteReq),
-        onSettled: async (response, error, request) => {
-            const year = request.item.effectiveDate.getFullYear();
-            const queryKey = ["categories", "year", year];
+        onSuccess: (response, request) => {
+            applyCategoryIsFavorite(request.item.id, request.isFavorite);
 
-            await queryClient.invalidateQueries({
-                queryKey,
-                refetchType: "all"
-            });
-
-            await queryClient.invalidateQueries({
-                queryKey: ["categories", "search"],
-                refetchType: "all"
-            });
+            // the value is now on screen, so let its heart celebrate
+            pulseFavorite(request.item.id);
         }
     }));
 

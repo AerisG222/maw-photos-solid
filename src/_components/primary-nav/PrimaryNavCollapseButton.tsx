@@ -7,7 +7,14 @@ const PrimaryNavCollapseButton: Component = () => {
     const [settingsState, { togglePrimaryNavCollapsed }] = useAppSettingsContext();
 
     const collapseIconClass = () => {
-        const classes = ["text-lg", "icon-[mdi--chevron-double-left]"];
+        const classes = [
+            "text-lg",
+            "icon-[mdi--chevron-double-left]",
+            "inline-block",
+            "transition-transform",
+            "duration-300",
+            "ease-out"
+        ];
 
         if (settingsState.isPrimaryNavCollapsed) {
             classes.push("rotate-180");
@@ -18,7 +25,7 @@ const PrimaryNavCollapseButton: Component = () => {
 
     return (
         <button
-            class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer"
+            class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer transition-colors duration-150 ease-out"
             onClick={togglePrimaryNavCollapsed}
             title="Expand/Collapse Nav"
         >

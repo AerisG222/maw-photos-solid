@@ -95,7 +95,10 @@ const MainItem: Component<Props> = props => {
                 <Show when={props.showFavoriteBadge}>
                     <div class="absolute top-0 left-0 m-2">
                         <IconButton buttonClasses="hover:text-primary" onClick={onClickFavorite}>
-                            <FavoriteIcon isFavorite={props.media.isFavorite} />
+                            <FavoriteIcon
+                                isFavorite={props.media.isFavorite}
+                                subjectId={props.media.id}
+                            />
                         </IconButton>
                     </div>
                 </Show>

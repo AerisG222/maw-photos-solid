@@ -4,7 +4,7 @@ import { A } from "@solidjs/router";
 import { useAuthContext } from "../_contexts/AuthContext";
 import { loginPage } from "./_routes";
 
-import BrandHeader from "./components/BrandHeader";
+import BrandHeader from "../_components/brand/BrandHeader";
 
 const Logout: Component = () => {
     const [authContext, { logout }] = useAuthContext();

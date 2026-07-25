@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import BrandHeader from "./components/BrandHeader";
+import BrandHeader from "../_components/brand/BrandHeader";
 
 const Inactive: Component = () => {
     return (

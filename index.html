@@ -4,7 +4,35 @@
         <meta charset="utf-8" />
         <title>MaW Photos</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fbfbfd" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b22" />
+
+        <script>
+            /*
+               The app applies `data-theme` to a wrapper inside #root, so nothing
+               themes the page until Solid mounts - which shows as a flash of white
+               on load for dark-theme users. Pin the persisted theme onto <html>
+               up front so the very first paint is already correct. ThemeWrapper
+               keeps this in sync afterwards.
+            */
+            (() => {
+                let theme = "dark";
+
+                try {
+                    const saved = JSON.parse(localStorage.getItem("maw-photos|app") || "{}");
+
+                    // anything else (including the legacy "dusk") falls back to dark
+                    if (saved.theme === "light") {
+                        theme = "light";
+                    }
+                } catch {
+                    // swallow - the default already covers us
+                }
+
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.style.colorScheme = theme;
+            })();
+        </script>
 
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />

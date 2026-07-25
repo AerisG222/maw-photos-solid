@@ -21,6 +21,8 @@ import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
+import { pulseFavorite } from "../../_components/icon/_favoritePulse";
+import { patchById } from "./_cacheUtils";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -155,19 +157,66 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
-    // todo: optimize if this starts getting used more
-    const setIsFavoriteMutation = useMutation(() => ({
-        mutationFn: (isFavoriteReq: IsFavoriteRequest<Media>) => postIsFavorite(isFavoriteReq),
-        onSettled: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ["media", "random"],
-                refetchType: "all"
+    /*
+       Patch the toggled media into the caches that hold it rather than
+       invalidating and refetching - see the matching note in CategoriesContext
+       for why reference stability matters here.
+
+       Note this deliberately does not chase `Category.teaser`, which is also a
+       Media. Its `isFavorite` is never rendered - the card shows the category's
+       own flag - so rewriting every category list on each media toggle would be
+       churn for a value nothing reads.
+    */
+    const applyMediaIsFavorite = (id: Uuid, isFavorite: boolean) => {
+        const patchOne = (media: Media[]) => patchById(media, id, { isFavorite });
+
+        queryClient.setQueryData<Media>(["media", id], prev =>
+            prev ? { ...prev, isFavorite } : prev
+        );
+
+        queryClient.setQueryData<InfiniteData<Media[] | undefined>>(["media", "random"], prev => {
+            if (!prev) {
+                return prev;
+            }
+
+            let changed = false;
+
+            const pages = prev.pages.map(page => {
+                if (!page) {
+                    return page;
+                }
+
+                const next = patchOne(page);
+
+                if (next === page) {
+                    return page;
+                }
+
+                changed = true;
+
+                return next;
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories"],
-                refetchType: "all"
-            });
+            return changed ? { ...prev, pages } : prev;
+        });
+
+        // the media list held for each category
+        queryClient.setQueriesData<Media[]>(
+            {
+                predicate: query =>
+                    query.queryKey[0] === "categories" && query.queryKey[2] === "media"
+            },
+            prev => (prev ? patchOne(prev) : prev)
+        );
+    };
+
+    const setIsFavoriteMutation = useMutation(() => ({
+        mutationFn: (isFavoriteReq: IsFavoriteRequest<Media>) => postIsFavorite(isFavoriteReq),
+        onSuccess: (response, request) => {
+            applyMediaIsFavorite(request.item.id, request.isFavorite);
+
+            // the value is now on screen, so let its heart celebrate
+            pulseFavorite(request.item.id);
         }
     }));
 

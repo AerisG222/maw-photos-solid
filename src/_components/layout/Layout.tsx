@@ -31,7 +31,7 @@ const Layout: ParentComponent<Props> = props => {
             </Show>
 
             <div
-                class="scrollable"
+                class="scrollable stage-backdrop"
                 classList={{
                     "px-2": merged.xPad,
                     "overflow-y-auto": !merged.fill,

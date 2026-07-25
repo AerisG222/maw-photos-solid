@@ -10,7 +10,7 @@ import ListToolbar from "./components/ToolbarList";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
-import Loading from "../_components/loading/Loading";
+import SkeletonList from "../_components/loading/SkeletonList";
 
 const ListView: Component = () => {
     const [settings] = useCategoryListViewSettingsContext();
@@ -26,7 +26,10 @@ const ListView: Component = () => {
     };
 
     return (
-        <Show when={categoriesToDisplay()} fallback={<Loading />}>
+        <Show
+            when={categoriesToDisplay()}
+            fallback={<SkeletonList thumbnailSize={settings.thumbnailSize} />}
+        >
             <Layout
                 toolbar={
                     <Toolbar>

@@ -19,7 +19,10 @@ const PrimaryNav: Component = () => {
     const [state] = useAppSettingsContext();
 
     return (
-        <div class="flex md:flex-col bg-base-300 border-b-1 md:border-r-1 border-base-content/30">
+        <div
+            class="flex md:flex-col border-b-1 md:border-r-1 border-base-content/30
+                bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
+        >
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={categories} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={search} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />

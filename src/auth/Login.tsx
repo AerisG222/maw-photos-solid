@@ -2,7 +2,7 @@ import { Component, Show } from "solid-js";
 
 import { useAuthContext } from "../_contexts/AuthContext";
 
-import BrandHeader from "./components/BrandHeader";
+import BrandHeader from "../_components/brand/BrandHeader";
 
 const Login: Component = () => {
     const [state, { login }] = useAuthContext();

@@ -21,7 +21,8 @@ const YearList: Component<Props> = props => {
         <>
             <YearHeading year={props.year} />
 
-            <div class="mb-4">
+            {/* entrance on the group, not each row - see the note in YearGrid */}
+            <div class="mb-4 rise-in">
                 <For each={props.categories}>
                     {(category, idx) => (
                         <CategoryListItem

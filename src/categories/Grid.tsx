@@ -10,7 +10,7 @@ import GridToolbar from "./components/ToolbarGrid";
 import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
-import Loading from "../_components/loading/Loading";
+import SkeletonGrid from "../_components/loading/SkeletonGrid";
 
 const GridView: Component = () => {
     const [settings] = useCategoryGridViewSettingsContext();
@@ -26,7 +26,10 @@ const GridView: Component = () => {
     };
 
     return (
-        <Show when={categoriesToDisplay()} fallback={<Loading />}>
+        <Show
+            when={categoriesToDisplay()}
+            fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+        >
             <Layout
                 toolbar={
                     <Toolbar>

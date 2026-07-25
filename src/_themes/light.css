@@ -4,10 +4,15 @@
     prefersdark: false;
     color-scheme: light;
 
-    --color-base-100: oklch(100% 0 0);
-    --color-base-200: oklch(97.31% 0 0);
-    --color-base-300: oklch(93.4% 0 0);
-    --color-base-content: oklch(32.11% 0 0);
+    /*
+       Surfaces carry a trace of the primary's hue (262) rather than sitting at
+       chroma 0. It is well below the threshold where anyone would call it blue,
+       but it stops the greys reading as unstyled browser default.
+    */
+    --color-base-100: oklch(99.4% 0.002 262);
+    --color-base-200: oklch(97.31% 0.004 262);
+    --color-base-300: oklch(93.4% 0.007 262);
+    --color-base-content: oklch(32.11% 0.008 262);
     --color-primary: oklch(24.3% 0.1146 262.26);
     --color-secondary: oklch(44.95% 0.1474 255.27);
     --color-accent: oklch(37.53% 0.0501 263.06);

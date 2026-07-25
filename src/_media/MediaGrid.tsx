@@ -19,14 +19,16 @@ interface Props {
 }
 
 const MediaGrid: Component<Props> = props => {
+    // entrance on the group, not each tile - see the note in YearGrid
     return (
-        <div class="flex gap-2 flex-wrap place-content-center mb-4">
+        <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
             <For each={props.items}>
                 {(media, idx) => (
                     <MediaLink
                         href={props.mediaLinkBuilder(media)}
                         media={media}
                         rounded={true}
+                        elevate={true}
                         isActiveItem={false} // no need to show highlight state in grid view
                         route={props.activeRoute}
                         thumbnailSize={props.thumbnailSize}
