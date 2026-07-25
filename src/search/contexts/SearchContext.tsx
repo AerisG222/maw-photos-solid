@@ -1,4 +1,4 @@
-import { ParentComponent, createContext, useContext } from "solid-js";
+import { Accessor, ParentComponent, createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
@@ -25,7 +25,7 @@ export type SearchContextValue = [
         clearActiveTerm: () => void;
         setActiveTerm: (term: string) => void;
         categorySearchQuery: (
-            query: string
+            query: Accessor<string>
         ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
         allSearchResults: (
             searchQuery: UseInfiniteQueryResult<

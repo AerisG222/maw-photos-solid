@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, For, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
@@ -18,11 +18,12 @@ const ViewGrid: Component = () => {
     const [settings] = useSearchGridViewSettingsContext();
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
         useSearchContext();
-    const [searchQuery, setSearchQuery] = createSignal(categorySearchQuery(state.activeTerm));
-
-    createEffect(() => {
-        setSearchQuery(categorySearchQuery(state.activeTerm));
-    });
+    /*
+       One subscription, re-keyed by the term. Rebuilding the query inside an
+       effect created a new observer per search and disposed of none of them,
+       and every leaked observer kept its query active for later invalidations.
+    */
+    const searchQuery = categorySearchQuery(() => state.activeTerm);
 
     const setIsFavorite = (category: Category, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Category> = {
@@ -48,17 +49,17 @@ const ViewGrid: Component = () => {
 
             {/* the toolbar and search bar stay put so the term can be retried or edited */}
             <Show
-                when={!searchQuery().isError}
+                when={!searchQuery.isError}
                 fallback={
                     <ErrorMessage
                         title="Search could not be completed"
-                        error={searchQuery().error}
-                        onRetry={() => void searchQuery().refetch()}
+                        error={searchQuery.error}
+                        onRetry={() => void searchQuery.refetch()}
                     />
                 }
             >
                 <div class="flex gap-2 flex-wrap place-content-center my-4">
-                    <For each={allSearchResults(searchQuery()) ?? []}>
+                    <For each={allSearchResults(searchQuery) ?? []}>
                         {(category, idx) => (
                             <CategoryCard
                                 category={category}
@@ -76,8 +77,8 @@ const ViewGrid: Component = () => {
                 </div>
 
                 <SearchResultStatus
-                    hasMore={searchQuery().hasNextPage}
-                    continueSearch={() => searchQuery().fetchNextPage()}
+                    hasMore={searchQuery.hasNextPage}
+                    continueSearch={() => searchQuery.fetchNextPage()}
                 />
             </Show>
         </Layout>

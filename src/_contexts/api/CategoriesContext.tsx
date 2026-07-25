@@ -27,13 +27,13 @@ import { patchById } from "./_cacheUtils";
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
     categoriesForAllYearsQuery: (
-        years: number[]
+        years: Accessor<number[]>
     ) => UseQueryResult<CategoriesForYearResult, Error>[];
     categoriesForYearQuery: (
         year: Accessor<number>
     ) => UseQueryResult<CategoriesForYearResult, Error>;
     categoriesWithoutGpsForAllYearsQuery: (
-        years: number[]
+        years: Accessor<number[]>
     ) => UseQueryResult<CategoryIdsForYearResult, Error>[];
     categoriesWithoutGpsForYearQuery: (
         year: Accessor<number>
@@ -42,7 +42,7 @@ export interface CategoriesService {
     categoryMediaQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Media[], Error>;
     categoryMediaGpsQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<GpsDetail[], Error>;
     categorySearchQuery: (
-        query: string
+        query: Accessor<string>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
@@ -140,12 +140,18 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 15 * 60 * 1000
         }));
 
-    const categoriesForAllYearsQuery = (years: number[]) =>
+    /*
+       Takes an accessor rather than a plain array so the options factory can be
+       re-evaluated in place when the set of years changes. Called with a value,
+       callers had to re-invoke this to pick up a new list - and every invocation
+       built a fresh batch of observers that nothing ever disposed.
+    */
+    const categoriesForAllYearsQuery = (years: Accessor<number[]>) =>
         useQueries(() => ({
-            queries: years.map(year => ({
+            queries: years().map(year => ({
                 queryKey: ["categories", "year", year],
                 queryFn: () => fetchCategoriesForYear(year),
-                enabled: years && years.length > 0,
+                enabled: authContext.isLoggedIn,
                 staleTime: 1 * 60 * 1000
             }))
         }));
@@ -158,12 +164,14 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 1 * 60 * 1000
         }));
 
-    const categoriesWithoutGpsForAllYearsQuery = (years: number[]) =>
+    // an empty accessor result means no queries at all, which is how callers
+    // switch this off rather than fetching data nothing will read
+    const categoriesWithoutGpsForAllYearsQuery = (years: Accessor<number[]>) =>
         useQueries(() => ({
-            queries: years.map(year => ({
+            queries: years().map(year => ({
                 queryKey: ["categories", "year", year, "no-gps"],
                 queryFn: () => fetchCategoriesWithoutGpsForYear(year),
-                enabled: years && years.length > 0,
+                enabled: authContext.isLoggedIn,
                 staleTime: 1 * 60 * 1000
             }))
         }));
@@ -200,10 +208,12 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 5 * 60 * 1000
         }));
 
-    const categorySearchQuery = (query: string) =>
+    // accessor, so a new term re-keys this one subscription instead of the
+    // caller having to build a replacement query for every search
+    const categorySearchQuery = (query: Accessor<string>) =>
         useInfiniteQuery(() => ({
-            queryKey: ["categories", "search", query],
-            queryFn: data => fetchCategorySearch(query, data.pageParam),
+            queryKey: ["categories", "search", query()],
+            queryFn: data => fetchCategorySearch(query(), data.pageParam),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
             initialPageParam: 0,
