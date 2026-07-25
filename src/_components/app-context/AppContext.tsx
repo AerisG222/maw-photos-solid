@@ -1,6 +1,19 @@
-import { ParentComponent, Show } from "solid-js";
+import { lazy, ParentComponent, Show } from "solid-js";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
+/*
+   Loaded behind a statically-false branch in production so the devtools never
+   reach the build output at all. A plain top-level import still emitted its
+   ~220kB chunk into dist/ - unreferenced and never fetched, but shipped in the
+   container all the same. `import.meta.env.DEV` is substituted at build time,
+   so the dynamic import below is dead code that rollup drops.
+*/
+const SolidQueryDevtools = import.meta.env.DEV
+    ? lazy(async () => {
+          const devtools = await import("@tanstack/solid-query-devtools");
+
+          return { default: devtools.SolidQueryDevtools };
+      })
+    : () => null;
 
 import { ApiError } from "../../_contexts/api/ApiError";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";

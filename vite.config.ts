@@ -26,9 +26,18 @@ export default defineConfig({
     build: {
         target: "esnext"
     },
-    resolve: {
-        conditions: ["development", "browser"]
-    },
+    /*
+       Solid ships separate development and production builds behind export
+       conditions, and its testing setup needs the development one. But
+       `resolve.conditions` applies to every mode, so pinning it here meant the
+       production build resolved solid's *dev* runtime - warnings, dev-only
+       bookkeeping and all - and modulepreloaded it from index.html on every
+       page view.
+
+       Scope it to vitest. The dev server selects the development condition on
+       its own, so nothing is lost there.
+    */
+    ...(process.env.VITEST ? { resolve: { conditions: ["development", "browser"] } } : {}),
     test: {
         environment: "jsdom",
         globals: true,
