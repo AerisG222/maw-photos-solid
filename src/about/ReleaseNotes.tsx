@@ -10,10 +10,16 @@ const ViewApplication: Component = () => {
             </h3>
             <p>Set Claude loose on my podunk codebase:</p>
             <ul class="list-inside list-disc mb-4">
-                <li>Make the service worker more efficient by caching access token and coalescing concurrent requests</li>
+                <li>
+                    Make the service worker more efficient by caching access token and coalescing
+                    concurrent requests
+                </li>
                 <li>Cleanup html/css grid layout to improve composability</li>
                 <li>Improve typings and fix most lint issues</li>
-                <li>Improve stats to reuse the treemap chart rather than rebuilding it when filters change</li>
+                <li>
+                    Improve stats to reuse the treemap chart rather than rebuilding it when filters
+                    change
+                </li>
                 <li>Do less work when building histograms</li>
                 <li>Use gmp-click rather than standard click in google maps for markers</li>
                 <li>Fix the close icon in google maps</li>

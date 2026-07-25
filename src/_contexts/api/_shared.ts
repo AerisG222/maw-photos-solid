@@ -8,8 +8,7 @@ const buildAbsoluteUrl = (relativeUrl: string): string =>
 export const buildCategoryDownloadUrl = (id: Uuid): string =>
     buildAbsoluteUrl(`categories/${id}/download`);
 
-const getQueryParams = (content: Record<string, string>) =>
-    new URLSearchParams(content).toString();
+const getQueryParams = (content: Record<string, string>) => new URLSearchParams(content).toString();
 
 export const runWithAccessToken = async <T>(
     getToken: () => Promise<string | undefined>,
