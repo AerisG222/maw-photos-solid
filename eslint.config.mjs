@@ -51,6 +51,11 @@ export default defineConfig(
             "@tanstack/query/exhaustive-deps": "off",
             ...solidPlugin.configs.recommended.rules,
 
+            // Solid compiles `ref={el}` into an assignment to `el`, but that rewrite happens in
+            // the JSX transform, so eslint's static analysis only ever sees the bare declaration.
+            // Every ref variable in the codebase trips this rule; it is a false positive, not a bug.
+            "no-unassigned-vars": "off",
+
             // Solid types custom `use:` directives via `declare module "solid-js" { namespace JSX ... }`,
             // which is the required pattern, not a code smell.
             "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],

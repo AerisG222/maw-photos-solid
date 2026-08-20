@@ -1,7 +1,12 @@
 import { Component, createEffect, onCleanup } from "solid-js";
-import * as Highcharts from "highcharts";
-import "highcharts/modules/heatmap.js";
-import "highcharts/modules/treemap";
+// Import the ESM build explicitly, core and modules alike. highcharts 13.0.1 added a
+// "module" field, so the bare "highcharts" specifier now resolves to esm/highcharts.js in a
+// bundle while "highcharts/modules/*" stay UMD - and those UMD modules compose against a
+// `window._Highcharts` global the ESM core never sets, so they blow up on undefined. The
+// esm/modules/* variants import the core directly, keeping everything on one instance.
+import Highcharts from "highcharts/esm/highcharts.js";
+import "highcharts/esm/modules/heatmap.js";
+import "highcharts/esm/modules/treemap.js";
 
 interface Props {
     data: { name: string; value: number | undefined }[];
