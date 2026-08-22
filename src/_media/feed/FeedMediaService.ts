@@ -1,8 +1,8 @@
 import { Navigator, Params } from "@solidjs/router";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
 
-import { BaseMediaService } from "../../_media/services/BaseMediaService";
-import { IMediaService } from "../../_media/services/IMediaService";
+import { BaseMediaService } from "../services/BaseMediaService";
+import { IMediaService } from "../services/IMediaService";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
@@ -13,32 +13,35 @@ import {
     MediaViewGrid
 } from "../../_models/MediaView";
 import { SearchResults } from "../../_models/SearchResults";
-import { getPersonMediaRoutes, stripMediaParams } from "../_routes";
+import { FeedRoutes, stripMediaParams } from "./_routes";
 
-export class PersonMediaService extends BaseMediaService implements IMediaService {
+export type FeedMediaQuery = UseInfiniteQueryResult<
+    InfiniteData<SearchResults<Media> | undefined>,
+    Error
+>;
+
+/*
+   Drives a face feed - one person's media, or a clan's - over the shared media
+   views.
+
+   Both the routes and the query arrive as accessors rather than values: the
+   subject can change under a mounted page (one person to the next), and the feed
+   is re-keyed rather than re-created when it does.
+*/
+export class FeedMediaService extends BaseMediaService implements IMediaService {
     constructor(
         navigate: Navigator,
         params: Params,
         view: MediaView,
+        protected routes: () => FeedRoutes,
         // the query string the feed is being browsed under, so every path this
         // service hands out keeps the filter and shuffle the user chose
         protected search: () => string,
         protected categoryQuery: UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: UseInfiniteQueryResult<
-            InfiniteData<SearchResults<Media> | undefined>,
-            Error
-        >
+        protected mediaListQuery: () => FeedMediaQuery
     ) {
         super(navigate, params, view);
     }
-
-    /*
-       Read from the params on every call rather than captured once. Moving from
-       one person to another keeps the same route, so the component - and this
-       service with it - is reused while only the id changes.
-    */
-    // the route cannot match without the id, so it is always there
-    private routes = () => getPersonMediaRoutes(this.params.personId!, this.search());
 
     private entryPath = (view: MediaView) =>
         `${this.getEntryPathWithoutFilter(view)}${this.search()}`;
@@ -75,13 +78,15 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
     getActiveCategory = () => this.categoryQuery?.data;
 
     getMediaList = () => {
-        if (!this.mediaListQuery.isSuccess) {
+        const query = this.mediaListQuery();
+
+        if (!query.isSuccess) {
             return [];
         }
 
         const list: Media[] = [];
 
-        for (const page of this.mediaListQuery.data?.pages ?? []) {
+        for (const page of query.data?.pages ?? []) {
             if (page) {
                 list.push(...page.results);
             }
@@ -137,9 +142,9 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
 
     // the feed is paged, so "more" is only offered while the API says another
     // page exists - unlike the random feed, which never runs out
-    override canRequestMore = () => this.mediaListQuery.hasNextPage;
+    override canRequestMore = () => this.mediaListQuery().hasNextPage;
 
     override requestMore = () => {
-        void this.mediaListQuery.fetchNextPage();
+        void this.mediaListQuery().fetchNextPage();
     };
 }

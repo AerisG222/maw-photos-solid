@@ -3,27 +3,37 @@ import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
+import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
-import { SlideshowService } from "../../_media/services/SlideshowService";
 import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
-import { PersonMediaService } from "../services/PersonMediaService";
+import { SlideshowService } from "../services/SlideshowService";
+import { buildFeedRoutes, clanFeedBasePath, personFeedBasePath } from "./_routes";
+import { FeedMediaService } from "./FeedMediaService";
 
 // a repeated key parses as an array; the last value wins, matching how the
 // browser would have filled the control that wrote it
 const first = (value: string | string[] | undefined) =>
     Array.isArray(value) ? value[value.length - 1] : value;
 
-export const usePersonServices = (view: MediaView) => {
+export const useFeedServices = (view: MediaView) => {
     const navigate = useNavigate();
     const params = useParams();
     const [searchParams] = useSearchParams();
     const [mediaPageSettings] = useMediaPageSettingsContext();
     const { categoryQuery } = useCategoriesContext();
     const { peopleQuery, personMediaQuery } = usePeopleContext();
+    const { clansQuery, clanMediaQuery } = useClansContext();
 
+    // which route matched decides what this feed is about; the two never appear
+    // together, and a page is only ever reached through one of them
     const personId = () => params.personId as Uuid | undefined;
+    const clanId = () => params.clanId as Uuid | undefined;
+    const isClan = () => !!clanId();
+
+    const basePath = () =>
+        isClan() ? clanFeedBasePath(clanId()!) : personFeedBasePath(personId()!);
 
     /*
        The filter lives in the url rather than in a store. It has to survive
@@ -60,6 +70,65 @@ export const usePersonServices = (view: MediaView) => {
 
     const search = () => buildSearch(favoritesOnly(), seed());
 
+    const routes = () => buildFeedRoutes(basePath(), search());
+
+    /*
+       Both queries are created, and the one this feed is not about is switched
+       off by its own id being undefined. Creating them conditionally would mean
+       a different set of observers per render, which is not something a
+       subscription can survive; an idle observer costs nothing.
+    */
+    const personMq = personMediaQuery(personId, filter);
+    const clanMq = clanMediaQuery(clanId, filter);
+    const mq = () => (isClan() ? clanMq : personMq);
+
+    // both lists are already cached for the picker, so naming the subject on its
+    // own page costs nothing beyond a lookup
+    const pq = peopleQuery();
+    const cq = clansQuery();
+
+    const clan = () => cq.data?.find(c => c.id === clanId());
+    const subjectName = () =>
+        isClan() ? clan()?.name : pq.data?.find(p => p.id === personId())?.name;
+
+    // "None of the media <x> appears in..." reads differently for a group
+    const subjectPhrase = () => {
+        const name = subjectName();
+
+        if (!name) {
+            return isClan() ? "anyone in this clan" : "this person";
+        }
+
+        return isClan() ? `anyone in ${name}` : name;
+    };
+
+    /*
+       A clan with nobody in it answers the media call with a 404, exactly as a
+       person the caller cannot see does - the API cannot tell those apart
+       without leaking which. Reading the clan itself can, and an empty clan is a
+       state worth explaining rather than reporting as a failure.
+    */
+    const subjectIsEmpty = () => isClan() && cq.isSuccess && clan()?.members.length === 0;
+
+    const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
+
+    const categoryResult = categoryQuery(catId);
+
+    const mediaService = new FeedMediaService(
+        navigate,
+        params,
+        view,
+        routes,
+        search,
+        categoryResult,
+        mq
+    );
+
+    const slideshowService = new SlideshowService(
+        mediaService,
+        mediaPageSettings.slideshowDisplayDurationSeconds
+    );
+
     /*
        One navigation rather than a path change followed by a query change, so
        there is never an intermediate location fetching a feed nobody asked for.
@@ -80,22 +149,6 @@ export const usePersonServices = (view: MediaView) => {
     // on reshuffles rather than replaying the same order
     const setShuffled = (on: boolean) => applyFilter(favoritesOnly(), on ? newSeed() : undefined);
 
-    const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
-
-    const cq = categoryQuery(catId);
-    const mq = personMediaQuery(personId, filter);
-
-    // the whole list is cached for the picker already, so naming the person on
-    // their own page costs nothing beyond a lookup
-    const pq = peopleQuery();
-    const person = () => pq.data?.find(p => p.id === personId());
-
-    const mediaService = new PersonMediaService(navigate, params, view, search, cq, mq);
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
-
     createEffect(() => {
         const currMedia = mediaService.getActiveMedia();
 
@@ -106,18 +159,21 @@ export const usePersonServices = (view: MediaView) => {
 
     /*
        Only the media feed can block the screen. The category follows whichever
-       item is active and the person list only supplies a display name, so
-       neither failing is a reason to withhold the photos.
+       item is active and the person and clan lists only supply a display name,
+       so none of them failing is a reason to withhold the photos.
     */
-    const loadError = () => findQueryError([mq]);
-    const retryLoad = () => refetchQueries([mq, cq, pq]);
+    const loadError = () => findQueryError([mq()]);
+    const retryLoad = () => refetchQueries([mq(), categoryResult, pq, cq]);
 
-    const isLoading = () => mq.isLoading;
+    const isLoading = () => mq().isLoading;
 
     return {
         mediaService,
         slideshowService,
-        person,
+        subjectName,
+        subjectPhrase,
+        subjectIsEmpty,
+        isClan,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,

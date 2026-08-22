@@ -211,10 +211,10 @@ export const MediaProvider: ParentComponent = props => {
         );
 
         /*
-           The feeds behind each person, which hold pages of search results
-           rather than plain arrays. There is one cache entry per filter, and a
-           person can be favorited from any of them, so this matches on the shape
-           of the key rather than naming a single feed.
+           The feeds behind each person and clan, which hold pages of search
+           results rather than plain arrays. There is one cache entry per filter,
+           and an item can be favorited from any of them, so this matches on the
+           shape of the key rather than naming a single feed.
 
            Note an item is deliberately left in place when it is un-favorited
            while the favorites filter is on: it belongs to the page that was
@@ -223,7 +223,9 @@ export const MediaProvider: ParentComponent = props => {
         */
         queryClient.setQueriesData<InfiniteData<SearchResults<Media> | undefined>>(
             {
-                predicate: query => query.queryKey[0] === "people" && query.queryKey[2] === "media"
+                predicate: query =>
+                    (query.queryKey[0] === "people" || query.queryKey[0] === "clans") &&
+                    query.queryKey[2] === "media"
             },
             prev => {
                 if (!prev) {

@@ -209,7 +209,7 @@ const GridView: Component = () => {
            categories grid: it owns the backdrop and toolbar, and both are driven
            by settings alone, so they are safe to show while the list is in flight.
         */
-        <Layout toolbar={<Toolbar />} margin={settings.margin} title="People">
+        <Layout toolbar={<Toolbar />} margin={settings.margin}>
             <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
                 <Match when={people.isError}>
                     <ErrorMessage

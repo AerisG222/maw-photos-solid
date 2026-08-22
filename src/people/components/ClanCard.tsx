@@ -1,7 +1,9 @@
 import { Component, For, Show } from "solid-js";
+import { A } from "@solidjs/router";
 
 import { Clan } from "../../_models/Clan";
 import { Person } from "../../_models/Person";
+import { getClanPath } from "../../clan/_routes";
 
 import Icon from "../../_components/icon/Icon";
 
@@ -20,7 +22,7 @@ const MemberFace: Component<{ person: Person }> = props => (
         when={props.person.preferredFaceUrl}
         fallback={
             <span
-                class="w-[36px] h-[36px] rounded-full bg-base-300 text-base-content/40 flex items-center justify-center border-1 border-base-100"
+                class="w-9 h-9 rounded-full bg-base-300 text-base-content/40 flex items-center justify-center border border-base-100"
                 title={props.person.name}
             >
                 <Icon classes="icon-[ic--round-person]" />
@@ -31,7 +33,7 @@ const MemberFace: Component<{ person: Person }> = props => (
             src={props.person.preferredFaceUrl!}
             alt={props.person.name}
             title={props.person.name}
-            class="w-[36px] h-[36px] rounded-full object-cover border-1 border-base-100"
+            class="w-9 h-9 rounded-full object-cover border border-base-100"
             loading="lazy"
         />
     </Show>
@@ -48,34 +50,46 @@ const ClanCard: Component<Props> = props => {
     };
 
     return (
-        <div class="flex flex-col gap-2 border-1 rounded-sm bg-base-200 border-secondary/20 p-3 min-w-[220px]">
-            <div class="flex items-baseline gap-2">
-                <span class="font-bold truncate">{props.clan.name}</span>
-                <span class="text-sm opacity-70">{memberSummary()}</span>
-            </div>
-
-            <Show
-                when={props.clan.members.length > 0}
-                fallback={
-                    /*
-                       Either nobody was ever added, or the members are no longer
-                       visible to this user - the API cannot tell the two apart
-                       without leaking who it dropped, so neither can this
-                    */
-                    <p class="text-sm opacity-70">No people in this clan yet.</p>
-                }
+        <div class="flex flex-col gap-2 border rounded-sm bg-base-200 border-secondary/20 p-3 min-w-55">
+            {/*
+                The name and faces open the clan's media; the buttons below manage
+                the clan itself. Browsing is the common errand, so it gets the
+                large target.
+            */}
+            <A
+                href={getClanPath(props.clan.id)}
+                class="flex flex-col gap-2 hover:text-primary transition-colors duration-200 ease-out"
+                title={`View media for ${props.clan.name}`}
             >
-                {/* -space-x pulls the faces into an overlapping row */}
-                <div class="flex flex-row -space-x-2">
-                    <For each={shown()}>{person => <MemberFace person={person} />}</For>
-
-                    <Show when={hidden() > 0}>
-                        <span class="w-[36px] h-[36px] rounded-full bg-base-300 border-1 border-base-100 text-xs flex items-center justify-center">
-                            +{hidden()}
-                        </span>
-                    </Show>
+                <div class="flex items-baseline gap-2">
+                    <span class="font-bold truncate">{props.clan.name}</span>
+                    <span class="text-sm opacity-70">{memberSummary()}</span>
                 </div>
-            </Show>
+
+                <Show
+                    when={props.clan.members.length > 0}
+                    fallback={
+                        /*
+                           Either nobody was ever added, or the members are no
+                           longer visible to this user - the API cannot tell the
+                           two apart without leaking who it dropped, so neither
+                           can this
+                        */
+                        <p class="text-sm opacity-70">No people in this clan yet.</p>
+                    }
+                >
+                    {/* -space-x pulls the faces into an overlapping row */}
+                    <div class="flex flex-row -space-x-2">
+                        <For each={shown()}>{person => <MemberFace person={person} />}</For>
+
+                        <Show when={hidden() > 0}>
+                            <span class="w-9 h-9 rounded-full bg-base-300 border border-base-100 text-xs flex items-center justify-center">
+                                +{hidden()}
+                            </span>
+                        </Show>
+                    </div>
+                </Show>
+            </A>
 
             <div class="flex flex-row gap-1">
                 <button

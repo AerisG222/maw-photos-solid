@@ -1,19 +1,23 @@
 import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
 
-import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { MediaViewGrid } from "../_models/MediaView";
-import { usePersonServices } from "./hooks/usePersonServices";
+import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
+import { MediaViewGrid } from "../../_models/MediaView";
+import { useFeedServices } from "./useFeedServices";
 
-import ViewGrid from "../_media/ViewGrid";
-import ErrorMessage from "../_components/error/ErrorMessage";
-import SkeletonGrid from "../_components/loading/SkeletonGrid";
-import ToolbarFilters from "./components/ToolbarFilters";
+import EmptyClanMessage from "./EmptyClanMessage";
+import ErrorMessage from "../../_components/error/ErrorMessage";
+import SkeletonGrid from "../../_components/loading/SkeletonGrid";
+import ToolbarFilters from "./ToolbarFilters";
+import ViewGrid from "../ViewGrid";
 
 const Grid: Component = () => {
     const {
         mediaService,
         slideshowService,
-        person,
+        subjectName,
+        subjectPhrase,
+        subjectIsEmpty,
+        isClan,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,
@@ -21,7 +25,7 @@ const Grid: Component = () => {
         isLoading,
         loadError,
         retryLoad
-    } = usePersonServices(MediaViewGrid);
+    } = useFeedServices(MediaViewGrid);
     const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
         useMediaGridViewSettingsContext();
 
@@ -41,9 +45,18 @@ const Grid: Component = () => {
 
     return (
         <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
+            {/* checked before the error: an empty clan answers 404 too */}
+            <Match when={subjectIsEmpty()}>
+                <EmptyClanMessage name={subjectName()} />
+            </Match>
+
             <Match when={loadError()}>
                 <ErrorMessage
-                    title="Could not load media for this person"
+                    title={
+                        isClan()
+                            ? "Could not load media for this clan"
+                            : "Could not load media for this person"
+                    }
                     error={loadError()}
                     onRetry={retryLoad}
                 />
@@ -54,7 +67,7 @@ const Grid: Component = () => {
                     mediaService={mediaService}
                     slideshowService={slideshowService}
                     gridSettings={settings}
-                    title={person()?.name}
+                    title={subjectName()}
                     toolbarExtras={
                         <ToolbarFilters
                             favoritesOnly={favoritesOnly()}
@@ -66,8 +79,8 @@ const Grid: Component = () => {
                     emptyState={
                         <p class="text-center my-8">
                             {favoritesOnly()
-                                ? `None of the media ${person()?.name ?? "this person"} appears in has been marked as a favorite.`
-                                : "There is nothing to show for this person."}
+                                ? `None of the media ${subjectPhrase()} appears in has been marked as a favorite.`
+                                : "There is nothing to show here."}
                         </p>
                     }
                     showBreadcrumbsOnGrid={false}

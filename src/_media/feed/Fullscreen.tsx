@@ -1,18 +1,24 @@
 import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
 
-import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
-import { MediaViewDetail } from "../_models/MediaView";
-import { usePersonServices } from "./hooks/usePersonServices";
+import { useFullscreenContext } from "../../_contexts/FullscreenContext";
+import { useMediaFullscreenViewSettingsContext } from "../../_contexts/settings/MediaFullscreenViewSettingsContext";
+import { MediaViewFullscreen } from "../../_models/MediaView";
+import { useFeedServices } from "./useFeedServices";
 
-import ViewDetail from "../_media/ViewDetail";
-import ErrorMessage from "../_components/error/ErrorMessage";
-import Loading from "../_components/loading/Loading";
-import ToolbarFilters from "./components/ToolbarFilters";
+import EmptyClanMessage from "./EmptyClanMessage";
+import ErrorMessage from "../../_components/error/ErrorMessage";
+import Loading from "../../_components/loading/Loading";
+import ToolbarFilters from "./ToolbarFilters";
+import ViewFullscreen from "../ViewFullscreen";
 
-const Detail: Component = () => {
+const Fullscreen: Component = () => {
+    const [settings, { setShowFavoritesBadge }] = useMediaFullscreenViewSettingsContext();
     const {
         mediaService,
         slideshowService,
+        subjectName,
+        subjectIsEmpty,
+        isClan,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,
@@ -20,8 +26,8 @@ const Detail: Component = () => {
         isLoading,
         loadError,
         retryLoad
-    } = usePersonServices(MediaViewDetail);
-    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
+    } = useFeedServices(MediaViewFullscreen);
+    const [, { setFullscreen }] = useFullscreenContext();
 
     /*
        See the note in Grid: nothing can be decided before the first page lands.
@@ -35,23 +41,34 @@ const Detail: Component = () => {
         }
     });
 
+    setFullscreen(true);
+
     onCleanup(() => {
         slideshowService.stop();
+        setFullscreen(false);
     });
 
     return (
         // a single photo, so a spinner rather than skeleton tiles
         <Switch fallback={<Loading />}>
+            <Match when={subjectIsEmpty()}>
+                <EmptyClanMessage name={subjectName()} />
+            </Match>
+
             <Match when={loadError()}>
                 <ErrorMessage
-                    title="Could not load media for this person"
+                    title={
+                        isClan()
+                            ? "Could not load media for this clan"
+                            : "Could not load media for this person"
+                    }
                     error={loadError()}
                     onRetry={retryLoad}
                 />
             </Match>
 
             <Match when={!isLoading()}>
-                <ViewDetail
+                <ViewFullscreen
                     mediaService={mediaService}
                     slideshowService={slideshowService}
                     toolbarExtras={
@@ -62,9 +79,6 @@ const Detail: Component = () => {
                             setShuffled={setShuffled}
                         />
                     }
-                    detailSettings={settings}
-                    showBreadcrumbTitleAsLink={true}
-                    enableCategoryTeaserChooser={false}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     setShowFavoritesBadge={() =>
                         setShowFavoritesBadge(!settings.showFavoritesBadge)
@@ -75,4 +89,4 @@ const Detail: Component = () => {
     );
 };
 
-export default Detail;
+export default Fullscreen;

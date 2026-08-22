@@ -1,5 +1,8 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
+import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 import {
+    InfiniteData,
+    useInfiniteQuery,
+    UseInfiniteQueryResult,
     useMutation,
     UseMutationResult,
     useQuery,
@@ -10,6 +13,9 @@ import {
 import { useAuthContext } from "../AuthContext";
 import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Clan, ClanDto, mapClan } from "../../_models/Clan";
+import { Media } from "../../_models/Media";
+import { PersonMediaFilter } from "./PeopleContext";
+import { SearchResults } from "../../_models/SearchResults";
 import {
     CreateClanRequest,
     RenameClanRequest,
@@ -19,6 +25,10 @@ import { Uuid } from "../../_models/Uuid";
 
 export interface ClansService {
     clansQuery: () => UseQueryResult<Clan[], Error>;
+    clanMediaQuery: (
+        id: Accessor<Uuid | undefined>,
+        filter: Accessor<PersonMediaFilter>
+    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
     createClanMutation: UseMutationResult<Clan, Error, CreateClanRequest, unknown>;
     renameClanMutation: UseMutationResult<Clan, Error, RenameClanRequest, unknown>;
     setClanPersonsMutation: UseMutationResult<Clan, Error, SetClanPersonsRequest, unknown>;
@@ -69,6 +79,27 @@ export const ClansProvider: ParentComponent = props => {
             )
         );
 
+    /*
+       Identical in shape to the person feed, because it is the same feed - a
+       clan matches media holding any of its members, and a photo with three of
+       them still counts once.
+    */
+    const fetchClanMedia = async (id: Uuid, offset: number, filter: PersonMediaFilter) => {
+        const params: Record<string, string> = { o: offset.toString() };
+
+        if (filter.favoritesOnly) {
+            params.f = "true";
+        }
+
+        if (filter.seed !== undefined) {
+            params.seed = filter.seed.toString();
+        }
+
+        return runWithAccessToken(getToken, accessToken =>
+            queryApi<SearchResults<Media>>(accessToken, `clans/${id}/media`, params)
+        );
+    };
+
     const removeClan = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken => deleteApi(accessToken, `clans/${id}`));
 
@@ -78,6 +109,17 @@ export const ClansProvider: ParentComponent = props => {
             queryFn: fetchClans,
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
+        }));
+
+    const clanMediaQuery = (id: Accessor<Uuid | undefined>, filter: Accessor<PersonMediaFilter>) =>
+        useInfiniteQuery(() => ({
+            queryKey: ["clans", id(), "media", filter()],
+            queryFn: data => fetchClanMedia(id()!, data.pageParam, filter()),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000,
+            initialPageParam: 0,
+            getNextPageParam: (lastPage, _pages) =>
+                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
     /*
@@ -115,6 +157,7 @@ export const ClansProvider: ParentComponent = props => {
         <ClansContext.Provider
             value={{
                 clansQuery,
+                clanMediaQuery,
                 createClanMutation,
                 renameClanMutation,
                 setClanPersonsMutation,
