@@ -16,7 +16,7 @@ const PersonFilterBar: Component<Props> = props => {
             <input
                 type="text"
                 placeholder="Filter by Name"
-                class="input input-bordered input-md w-[400px]"
+                class="input input-bordered input-md w-100"
                 value={props.filter}
                 onInput={evt => props.setFilter(evt.currentTarget.value)}
                 onKeyDown={evt => evt.stopPropagation()}

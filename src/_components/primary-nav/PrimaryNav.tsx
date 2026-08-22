@@ -21,7 +21,7 @@ const PrimaryNav: Component = () => {
 
     return (
         <div
-            class="flex md:flex-col border-b-1 md:border-r-1 border-base-content/30
+            class="flex md:flex-col border-b md:border-r border-base-content/30
                 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
         >
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={categories} />
@@ -30,7 +30,7 @@ const PrimaryNav: Component = () => {
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />
 
-            <span class="flex-grow" />
+            <span class="grow" />
 
             <Show when={authContext.isLoggedIn}>
                 <UserInfo showTitle={!state.isPrimaryNavCollapsed} />

@@ -52,7 +52,7 @@ const PersonCard: Component<Props> = props => {
     return (
         <A
             href={getPersonPath(props.person.id)}
-            class="grid group border-1 rounded-sm bg-base-200 border-secondary/20 cursor-pointer
+            class="grid group border rounded-sm bg-base-200 border-secondary/20 cursor-pointer
                 hover:bg-base-300 hover:border-primary hover:text-primary
                 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20
                 transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out"
@@ -124,7 +124,7 @@ const PersonCard: Component<Props> = props => {
                 </div>
 
                 <Show when={props.showMediaCount}>
-                    <div class="col-start-2 row-start-2 z-10 justify-self-end self-end badge badge-sm m-[2px] opacity-70">
+                    <div class="col-start-2 row-start-2 z-10 justify-self-end self-end badge badge-sm m-0.5 opacity-70">
                         {props.person.mediaCount}
                     </div>
                 </Show>
