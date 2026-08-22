@@ -17,7 +17,12 @@ interface Props {
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
     eager: boolean;
+    // while people are being picked for a clan the card selects instead of
+    // opening - it stays an anchor so its href still means something
+    selectable: boolean;
+    selected: boolean;
     setIsFavorite: (person: Person, isFavorite: boolean) => void;
+    toggleSelected: (person: Person) => void;
 }
 
 const PersonCard: Component<Props> = props => {
@@ -49,13 +54,27 @@ const PersonCard: Component<Props> = props => {
 
     const onClickFavorite = () => props.setIsFavorite(props.person, !props.person.isFavorite);
 
+    const onClick = (evt: MouseEvent) => {
+        if (props.selectable) {
+            evt.preventDefault();
+
+            props.toggleSelected(props.person);
+        }
+    };
+
     return (
         <A
             href={getPersonPath(props.person.id)}
-            class="grid group border rounded-sm bg-base-200 border-secondary/20 cursor-pointer
+            onClick={onClick}
+            class="grid group border rounded-sm bg-base-200 cursor-pointer
                 hover:bg-base-300 hover:border-primary hover:text-primary
                 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20
                 transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out"
+            classList={{
+                "border-secondary/20": !props.selected,
+                "border-primary": props.selected,
+                "bg-primary/10": props.selected
+            }}
             title={`${props.person.name} (${props.person.mediaCount})`}
         >
             <div
@@ -122,6 +141,22 @@ const PersonCard: Component<Props> = props => {
                         />
                     </IconButton>
                 </div>
+
+                <Show when={props.selectable}>
+                    <div class="col-start-1 row-start-1 z-10 justify-self-start self-start m-[2px]">
+                        <span
+                            classList={{
+                                "flex items-center justify-center w-[20px] h-[20px] rounded-full border": true,
+                                "bg-primary text-primary-content border-primary": props.selected,
+                                "bg-base-100/70 border-base-content/40": !props.selected
+                            }}
+                        >
+                            <Show when={props.selected}>
+                                <Icon classes="icon-[ic--round-check] text-sm" />
+                            </Show>
+                        </span>
+                    </div>
+                </Show>
 
                 <Show when={props.showMediaCount}>
                     <div class="col-start-2 row-start-2 z-10 justify-self-end self-end badge badge-sm m-0.5 opacity-70">

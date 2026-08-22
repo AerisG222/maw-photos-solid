@@ -45,6 +45,9 @@ export const postApi = (accessToken: string, relativeUrl: string, content: unkno
 export const putApi = (accessToken: string, relativeUrl: string, content: unknown) =>
     callApi("PUT", relativeUrl, content, accessToken);
 
+export const deleteApi = (accessToken: string, relativeUrl: string) =>
+    callApi("DELETE", relativeUrl, undefined, accessToken);
+
 const callApi = async (
     method: string,
     relativeUrl: string,

@@ -19,6 +19,7 @@ import { ApiError } from "../../_contexts/api/ApiError";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 import { AuthProvider } from "../../_contexts/AuthContext";
 import { CategoriesProvider } from "../../_contexts/api/CategoriesContext";
+import { ClansProvider } from "../../_contexts/api/ClansContext";
 import { ConfigProvider } from "../../_contexts/api/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
@@ -62,9 +63,11 @@ const AppContext: ParentComponent = props => {
                                             <CategoriesProvider>
                                                 <MediaProvider>
                                                     <PeopleProvider>
-                                                        <FullscreenProvider>
-                                                            {props.children}
-                                                        </FullscreenProvider>
+                                                        <ClansProvider>
+                                                            <FullscreenProvider>
+                                                                {props.children}
+                                                            </FullscreenProvider>
+                                                        </ClansProvider>
                                                     </PeopleProvider>
                                                 </MediaProvider>
                                             </CategoriesProvider>
