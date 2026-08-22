@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, onMount, Show } from "solid-js";
+import { Component, createEffect, createSignal, JSXElement, onMount, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
@@ -25,6 +25,13 @@ interface Props {
     // names the feed when it is not self-evident from the media - a person's
     // photos span categories, so the breadcrumbs alone do not say whose they are
     title?: string;
+    // controls belonging to the feed rather than to the grid, e.g. the filters
+    // on a person's media. They sit in the toolbar so they stay reachable when
+    // the feed they narrow comes back empty
+    toolbarExtras?: JSXElement;
+    // shown in place of the tiles when the feed holds nothing, which a filtered
+    // feed legitimately can
+    emptyState?: JSXElement;
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
     enableToggleBreadcrumbsOnActiveMedia: boolean;
@@ -97,6 +104,8 @@ const ViewGrid: Component<Props> = props => {
                             setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                             setShowTypesBadge={() => props.setShowTypesBadge()}
                         />
+
+                        {props.toolbarExtras}
                     </Toolbar>
                 }
             >
@@ -130,18 +139,23 @@ const ViewGrid: Component<Props> = props => {
                         <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
                     </Show>
 
-                    <MediaGrid
-                        mediaLinkBuilder={(media: Media) =>
-                            props.mediaService.getMediaPathByView(MediaViewGrid, media)
-                        }
-                        items={props.mediaService.getMediaList()}
-                        thumbnailSize={props.gridSettings.thumbnailSize}
-                        dimThumbnails={props.gridSettings.dimThumbnails}
-                        activeRoute={gridRoute}
-                        showFavoritesBadge={props.showFavoritesBadge}
-                        showTypesBadge={props.showTypesBadge}
-                        setIsFavorite={setIsFavorite}
-                    />
+                    <Show
+                        when={props.mediaService.getMediaList().length > 0}
+                        fallback={props.emptyState}
+                    >
+                        <MediaGrid
+                            mediaLinkBuilder={(media: Media) =>
+                                props.mediaService.getMediaPathByView(MediaViewGrid, media)
+                            }
+                            items={props.mediaService.getMediaList()}
+                            thumbnailSize={props.gridSettings.thumbnailSize}
+                            dimThumbnails={props.gridSettings.dimThumbnails}
+                            activeRoute={gridRoute}
+                            showFavoritesBadge={props.showFavoritesBadge}
+                            showTypesBadge={props.showTypesBadge}
+                            setIsFavorite={setIsFavorite}
+                        />
+                    </Show>
                 </div>
             </Layout>
         </Show>

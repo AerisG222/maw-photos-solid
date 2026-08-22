@@ -7,10 +7,21 @@ import { usePersonServices } from "./hooks/usePersonServices";
 import ViewGrid from "../_media/ViewGrid";
 import ErrorMessage from "../_components/error/ErrorMessage";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
+import ToolbarFilters from "./components/ToolbarFilters";
 
 const Grid: Component = () => {
-    const { mediaService, slideshowService, person, isLoading, loadError, retryLoad } =
-        usePersonServices(MediaViewGrid);
+    const {
+        mediaService,
+        slideshowService,
+        person,
+        favoritesOnly,
+        isShuffled,
+        setFavoritesOnly,
+        setShuffled,
+        isLoading,
+        loadError,
+        retryLoad
+    } = usePersonServices(MediaViewGrid);
     const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
         useMediaGridViewSettingsContext();
 
@@ -44,6 +55,21 @@ const Grid: Component = () => {
                     slideshowService={slideshowService}
                     gridSettings={settings}
                     title={person()?.name}
+                    toolbarExtras={
+                        <ToolbarFilters
+                            favoritesOnly={favoritesOnly()}
+                            isShuffled={isShuffled()}
+                            setFavoritesOnly={setFavoritesOnly}
+                            setShuffled={setShuffled}
+                        />
+                    }
+                    emptyState={
+                        <p class="text-center my-8">
+                            {favoritesOnly()
+                                ? `None of the media ${person()?.name ?? "this person"} appears in has been marked as a favorite.`
+                                : "There is nothing to show for this person."}
+                        </p>
+                    }
                     showBreadcrumbsOnGrid={false}
                     showBreadcrumbsOnMedia={settings.showMainBreadcrumbs}
                     enableToggleBreadcrumbsOnActiveMedia={true}

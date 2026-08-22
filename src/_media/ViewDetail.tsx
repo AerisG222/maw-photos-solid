@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, JSXElement, Show } from "solid-js";
 
 import { MediaDetailViewSettingsState } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { detailRoute } from "../category/_routes";
@@ -21,6 +21,9 @@ interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
     detailSettings: MediaDetailViewSettingsState;
+    // controls belonging to the feed rather than to this view, e.g. the filters
+    // on a person's media - see the note in ViewGrid
+    toolbarExtras?: JSXElement;
     showBreadcrumbTitleAsLink: boolean;
     enableCategoryTeaserChooser: boolean;
     showFavoritesBadge: boolean;
@@ -65,6 +68,8 @@ const ViewDetail: Component<Props> = props => {
                             requestMore={() => props.mediaService.requestMore()}
                             setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                         />
+
+                        {props.toolbarExtras}
                     </Toolbar>
                 }
                 sidebar={

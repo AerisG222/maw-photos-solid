@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, JSXElement, Show } from "solid-js";
 
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
@@ -14,6 +14,9 @@ import MainItem from "./MainItem";
 interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
+    // controls belonging to the feed rather than to this view, e.g. the filters
+    // on a person's media - see the note in ViewGrid
+    toolbarExtras?: JSXElement;
     showFavoritesBadge: boolean;
     setShowFavoritesBadge: () => void;
 }
@@ -52,6 +55,8 @@ const ViewFullscreen: Component<Props> = props => {
                             requestMore={() => props.mediaService.requestMore()}
                             setShowFavoritesBadge={props.setShowFavoritesBadge}
                         />
+
+                        {props.toolbarExtras}
                     </Toolbar>
                 }
             >

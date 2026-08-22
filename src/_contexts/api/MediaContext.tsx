@@ -14,6 +14,7 @@ import { Comment, CommentDto, mapComment } from "../../_models/Comment";
 import { useAuthContext } from "../AuthContext";
 import { postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
+import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { MediaMetadata } from "../../_models/MediaMetadata";
 import { AddCommentRequest } from "../../_models/AddCommentRequest";
@@ -207,6 +208,48 @@ export const MediaProvider: ParentComponent = props => {
                     query.queryKey[0] === "categories" && query.queryKey[2] === "media"
             },
             prev => (prev ? patchOne(prev) : prev)
+        );
+
+        /*
+           The feeds behind each person, which hold pages of search results
+           rather than plain arrays. There is one cache entry per filter, and a
+           person can be favorited from any of them, so this matches on the shape
+           of the key rather than naming a single feed.
+
+           Note an item is deliberately left in place when it is un-favorited
+           while the favorites filter is on: it belongs to the page that was
+           fetched, and dropping it under the pointer would move everything the
+           user was looking at.
+        */
+        queryClient.setQueriesData<InfiniteData<SearchResults<Media> | undefined>>(
+            {
+                predicate: query => query.queryKey[0] === "people" && query.queryKey[2] === "media"
+            },
+            prev => {
+                if (!prev) {
+                    return prev;
+                }
+
+                let changed = false;
+
+                const pages = prev.pages.map(page => {
+                    if (!page) {
+                        return page;
+                    }
+
+                    const results = patchOne(page.results);
+
+                    if (results === page.results) {
+                        return page;
+                    }
+
+                    changed = true;
+
+                    return { ...page, results };
+                });
+
+                return changed ? { ...prev, pages } : prev;
+            }
         );
     };
 

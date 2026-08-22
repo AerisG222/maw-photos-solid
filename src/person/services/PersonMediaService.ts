@@ -20,6 +20,9 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
         navigate: Navigator,
         params: Params,
         view: MediaView,
+        // the query string the feed is being browsed under, so every path this
+        // service hands out keeps the filter and shuffle the user chose
+        protected search: () => string,
         protected categoryQuery: UseQueryResult<Category | undefined, Error>,
         protected mediaListQuery: UseInfiniteQueryResult<
             InfiniteData<SearchResults<Media> | undefined>,
@@ -35,7 +38,15 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
        service with it - is reused while only the id changes.
     */
     // the route cannot match without the id, so it is always there
-    private routes = () => getPersonMediaRoutes(this.params.personId!);
+    private routes = () => getPersonMediaRoutes(this.params.personId!, this.search());
+
+    private entryPath = (view: MediaView) =>
+        `${this.getEntryPathWithoutFilter(view)}${this.search()}`;
+
+    // the same path with no query string, for a caller that is about to apply a
+    // filter of its own rather than carry the current one forward
+    getEntryPathWithoutFilter = (view: MediaView) =>
+        stripMediaParams(this.getRouteForView(view).absolutePath);
 
     override navigateToMedia = (view: MediaView, media: Media | undefined) => {
         this.navigate(this.getMediaPathByView(view, media));
@@ -79,13 +90,10 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
         return list;
     };
 
-    getEntryPathByView = (view: MediaView) =>
-        stripMediaParams(this.getRouteForView(view).absolutePath);
+    getEntryPathByView = (view: MediaView) => this.entryPath(view);
 
     getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media
-            ? this.getMediaPath(this.getRouteForView(view), media)
-            : stripMediaParams(this.getRouteForView(view).absolutePath);
+        media ? this.getMediaPath(this.getRouteForView(view), media) : this.entryPath(view);
 
     getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
         route.buildPathForMedia(undefined, media);
@@ -109,6 +117,22 @@ export class PersonMediaService extends BaseMediaService implements IMediaServic
         const routes = this.routes();
 
         return [routes.grid, routes.detail, routes.fullscreen];
+    };
+
+    /*
+       Filtering can empty the feed outright - a person with no favorites is a
+       real answer, not a broken link. Detail and fullscreen render around an
+       active item and so have nowhere to say that, which leaves a blank screen;
+       the grid is the one view that can, so they hand back to it.
+    */
+    navigateToGridIfEmpty = () => {
+        if (this.getMediaList().length > 0) {
+            return false;
+        }
+
+        this.navigate(this.entryPath(MediaViewGrid), { replace: true });
+
+        return true;
     };
 
     // the feed is paged, so "more" is only offered while the API says another

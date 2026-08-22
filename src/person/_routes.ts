@@ -34,8 +34,13 @@ export const stripMediaParams = (path: string) =>
    screen - which the router only knows as a parameter. Passing the literal
    ":personId" yields the definitions the router is registered with; passing a
    real id yields the ones the media service navigates by.
+
+   `search` is baked in for the same reason: the favorites filter and the
+   shuffle seed live in the query string, and the shared toolbar builds its view
+   links straight from these definitions. Left out, switching from grid to detail
+   would silently drop the filter the user is browsing under.
 */
-const buildRoutes = (personId: string) => {
+const buildRoutes = (personId: string, search = "") => {
     const base = `/people/${personId}`;
 
     const grid: MediaAppRouteDefinition = {
@@ -48,7 +53,7 @@ const buildRoutes = (personId: string) => {
         absolutePath: `${base}/grid${mediaParams}`,
         component: gridComponent,
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${base}/grid${mediaSlugOrBlank(media)}`
+            `${base}/grid${mediaSlugOrBlank(media)}${search}`
     };
 
     const detail: MediaAppRouteDefinition = {
@@ -61,7 +66,7 @@ const buildRoutes = (personId: string) => {
         absolutePath: `${base}/detail${mediaParams}`,
         component: detailComponent,
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${base}/detail${mediaSlugOrBlank(media)}`
+            `${base}/detail${mediaSlugOrBlank(media)}${search}`
     };
 
     const fullscreen: MediaAppRouteDefinition = {
@@ -74,13 +79,14 @@ const buildRoutes = (personId: string) => {
         absolutePath: `${base}/fullscreen${mediaParams}`,
         component: fullscreenComponent,
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${base}/fullscreen${mediaSlugOrBlank(media)}`
+            `${base}/fullscreen${mediaSlugOrBlank(media)}${search}`
     };
 
     return { grid, detail, fullscreen };
 };
 
-export const getPersonMediaRoutes = (personId: string) => buildRoutes(personId);
+export const getPersonMediaRoutes = (personId: string, search = "") =>
+    buildRoutes(personId, search);
 
 const routes = buildRoutes(":personId");
 

@@ -7,15 +7,29 @@ import { usePersonServices } from "./hooks/usePersonServices";
 import ViewDetail from "../_media/ViewDetail";
 import ErrorMessage from "../_components/error/ErrorMessage";
 import Loading from "../_components/loading/Loading";
+import ToolbarFilters from "./components/ToolbarFilters";
 
 const Detail: Component = () => {
-    const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
-        usePersonServices(MediaViewDetail);
+    const {
+        mediaService,
+        slideshowService,
+        favoritesOnly,
+        isShuffled,
+        setFavoritesOnly,
+        setShuffled,
+        isLoading,
+        loadError,
+        retryLoad
+    } = usePersonServices(MediaViewDetail);
     const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
 
-    // see the note in Grid: nothing can be decided before the first page lands
+    /*
+       See the note in Grid: nothing can be decided before the first page lands.
+       An empty feed hands back to the grid, the one view that can show that a
+       filter matched nothing rather than rendering blank.
+    */
     createEffect(() => {
-        if (!isLoading()) {
+        if (!isLoading() && !mediaService.navigateToGridIfEmpty()) {
             mediaService.navigateToFirstMediaIfNeeded();
             mediaService.navigateToViewIfMediaNotInList();
         }
@@ -40,6 +54,14 @@ const Detail: Component = () => {
                 <ViewDetail
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarExtras={
+                        <ToolbarFilters
+                            favoritesOnly={favoritesOnly()}
+                            isShuffled={isShuffled()}
+                            setFavoritesOnly={setFavoritesOnly}
+                            setShuffled={setShuffled}
+                        />
+                    }
                     detailSettings={settings}
                     showBreadcrumbTitleAsLink={true}
                     enableCategoryTeaserChooser={false}

@@ -8,16 +8,30 @@ import { usePersonServices } from "./hooks/usePersonServices";
 import ViewFullscreen from "../_media/ViewFullscreen";
 import ErrorMessage from "../_components/error/ErrorMessage";
 import Loading from "../_components/loading/Loading";
+import ToolbarFilters from "./components/ToolbarFilters";
 
 const Fullscreen: Component = () => {
     const [settings, { setShowFavoritesBadge }] = useMediaFullscreenViewSettingsContext();
-    const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
-        usePersonServices(MediaViewFullscreen);
+    const {
+        mediaService,
+        slideshowService,
+        favoritesOnly,
+        isShuffled,
+        setFavoritesOnly,
+        setShuffled,
+        isLoading,
+        loadError,
+        retryLoad
+    } = usePersonServices(MediaViewFullscreen);
     const [, { setFullscreen }] = useFullscreenContext();
 
-    // see the note in Grid: nothing can be decided before the first page lands
+    /*
+       See the note in Grid: nothing can be decided before the first page lands.
+       An empty feed hands back to the grid, the one view that can show that a
+       filter matched nothing rather than rendering blank.
+    */
     createEffect(() => {
-        if (!isLoading()) {
+        if (!isLoading() && !mediaService.navigateToGridIfEmpty()) {
             mediaService.navigateToFirstMediaIfNeeded();
             mediaService.navigateToViewIfMediaNotInList();
         }
@@ -45,6 +59,14 @@ const Fullscreen: Component = () => {
                 <ViewFullscreen
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarExtras={
+                        <ToolbarFilters
+                            favoritesOnly={favoritesOnly()}
+                            isShuffled={isShuffled()}
+                            setFavoritesOnly={setFavoritesOnly}
+                            setShuffled={setShuffled}
+                        />
+                    }
                     showFavoritesBadge={settings.showFavoritesBadge}
                     setShowFavoritesBadge={() =>
                         setShowFavoritesBadge(!settings.showFavoritesBadge)
