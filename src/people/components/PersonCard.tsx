@@ -6,7 +6,9 @@ import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSi
 import { hasRevealed, markRevealed } from "../../_components/loading/_imageReveal";
 import { getPersonPath } from "../_routes";
 
+import FavoriteIcon from "../../_components/icon/FavoriteIcon";
 import Icon from "../../_components/icon/Icon";
+import IconButton from "../../_components/icon/IconButton";
 
 interface Props {
     person: Person;
@@ -15,6 +17,7 @@ interface Props {
     thumbnailSize: ThumbnailSizeIdType;
     dimThumbnails: boolean;
     eager: boolean;
+    setIsFavorite: (person: Person, isFavorite: boolean) => void;
 }
 
 const PersonCard: Component<Props> = props => {
@@ -43,6 +46,8 @@ const PersonCard: Component<Props> = props => {
             reveal();
         }
     });
+
+    const onClickFavorite = () => props.setIsFavorite(props.person, !props.person.isFavorite);
 
     return (
         <A
@@ -100,6 +105,23 @@ const PersonCard: Component<Props> = props => {
                         onError={reveal}
                     />
                 </Show>
+
+                {/*
+                    Always offered, unlike the badge toggles elsewhere: this is
+                    the only way to mark a person, so hiding it behind a
+                    preference would hide the feature itself.
+                */}
+                <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
+                    <IconButton
+                        buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
+                        onClick={onClickFavorite}
+                    >
+                        <FavoriteIcon
+                            isFavorite={props.person.isFavorite}
+                            subjectId={props.person.id}
+                        />
+                    </IconButton>
+                </div>
 
                 <Show when={props.showMediaCount}>
                     <div class="col-start-2 row-start-2 z-10 justify-self-end self-end badge badge-sm m-[2px] opacity-70">

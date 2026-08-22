@@ -2,6 +2,7 @@ import { Component, createMemo, createSignal, For, Match, Show, Switch } from "s
 
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
 import { usePeopleGridViewSettingsContext } from "../_contexts/settings/PeopleGridViewSettingsContext";
+import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { Person } from "../_models/Person";
 import { PersonSortName } from "../_models/PersonSort";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
@@ -15,17 +16,33 @@ import Toolbar from "./components/Toolbar";
 
 const GridView: Component = () => {
     const [settings] = usePeopleGridViewSettingsContext();
-    const { peopleQuery } = usePeopleContext();
+    const { peopleQuery, setIsFavoriteMutation } = usePeopleContext();
     const [filter, setFilter] = createSignal("");
 
     const people = peopleQuery();
 
-    const byName = (a: Person, b: Person) => a.name.localeCompare(b.name);
+    /*
+       Favorites lead either ordering, mirroring the list the API hands back.
+       Marking someone is how a caller gets the handful of people they actually
+       look for to the top, so it outranks whichever key they chose.
+    */
+    const byFavoriteFirst = (a: Person, b: Person) => Number(b.isFavorite) - Number(a.isFavorite);
+
+    const byName = (a: Person, b: Person) => byFavoriteFirst(a, b) || a.name.localeCompare(b.name);
 
     // most photographed first, and alphabetical within a tie so the order does
     // not shuffle between renders
     const byMediaCount = (a: Person, b: Person) =>
-        b.mediaCount - a.mediaCount || a.name.localeCompare(b.name);
+        byFavoriteFirst(a, b) || b.mediaCount - a.mediaCount || a.name.localeCompare(b.name);
+
+    const setIsFavorite = (person: Person, isFavorite: boolean) => {
+        const req: IsFavoriteRequest<Person> = {
+            item: person,
+            isFavorite
+        };
+
+        setIsFavoriteMutation.mutate(req);
+    };
 
     const peopleToDisplay = createMemo(() => {
         const term = filter().trim().toLocaleLowerCase();
@@ -68,6 +85,7 @@ const GridView: Component = () => {
                                             thumbnailSize={settings.thumbnailSize}
                                             dimThumbnails={settings.dimThumbnails}
                                             eager={idx() <= EAGER_THRESHOLD}
+                                            setIsFavorite={setIsFavorite}
                                         />
                                     )}
                                 </For>

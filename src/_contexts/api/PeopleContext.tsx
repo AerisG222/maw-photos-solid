@@ -3,12 +3,18 @@ import {
     InfiniteData,
     useInfiniteQuery,
     UseInfiniteQueryResult,
+    useMutation,
+    UseMutationResult,
     useQuery,
+    useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
 
 import { useAuthContext } from "../AuthContext";
-import { queryApi, runWithAccessToken } from "./_shared";
+import { putApi, queryApi, runWithAccessToken } from "./_shared";
+import { patchById } from "./_cacheUtils";
+import { pulseFavorite } from "../../_components/icon/_favoritePulse";
+import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { SearchResults } from "../../_models/SearchResults";
@@ -39,12 +45,14 @@ export interface PeopleService {
         id: Accessor<Uuid | undefined>,
         filter: Accessor<PersonMediaFilter>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
+    setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Person>, unknown>;
 }
 
 const PeopleContext = createContext<PeopleService>();
 
 export const PeopleProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
+    const queryClient = useQueryClient();
 
     const fetchPeople = async () =>
         runWithAccessToken(getToken, accessToken => queryApi<Person[]>(accessToken, "persons"));
@@ -66,6 +74,13 @@ export const PeopleProvider: ParentComponent = props => {
             queryApi<SearchResults<Media>>(accessToken, `persons/${id}/media`, params)
         );
     };
+
+    const postIsFavorite = async (req: IsFavoriteRequest<Person>) =>
+        runWithAccessToken(getToken, accessToken =>
+            putApi(accessToken, `persons/${req.item.id}/favorite`, {
+                isFavorite: req.isFavorite
+            })
+        );
 
     /*
        The whole list in one request - the API returns a few hundred at most and
@@ -101,8 +116,35 @@ export const PeopleProvider: ParentComponent = props => {
                 lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
+    /*
+       Patched into the cached list rather than refetched - see the note in
+       CategoriesContext for why reference stability matters to a grid keyed on
+       object identity. The API answers with the updated person, but the only
+       field that can have moved is the one just sent, so patching it in keeps
+       every other card's reference untouched.
+
+       The list is ordered favorites first, so the card visibly moves once this
+       lands. That reordering is the point of the mark, and it is why this does
+       not try to hold the card still.
+    */
+    const applyPersonIsFavorite = (id: Uuid, isFavorite: boolean) => {
+        queryClient.setQueryData<Person[]>(["people"], prev =>
+            prev ? patchById(prev, id, { isFavorite }) : prev
+        );
+    };
+
+    const setIsFavoriteMutation = useMutation(() => ({
+        mutationFn: (req: IsFavoriteRequest<Person>) => postIsFavorite(req),
+        onSuccess: (response, request) => {
+            applyPersonIsFavorite(request.item.id, request.isFavorite);
+
+            // the value is now on screen, so let its heart celebrate
+            pulseFavorite(request.item.id);
+        }
+    }));
+
     return (
-        <PeopleContext.Provider value={{ peopleQuery, personMediaQuery }}>
+        <PeopleContext.Provider value={{ peopleQuery, personMediaQuery, setIsFavoriteMutation }}>
             {props.children}
         </PeopleContext.Provider>
     );
