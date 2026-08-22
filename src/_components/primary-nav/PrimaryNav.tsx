@@ -1,6 +1,7 @@
 import { Component, Show } from "solid-js";
 
 import { categories } from "../../categories/_routes";
+import { people } from "../../people/_routes";
 import { search } from "../../search/_routes";
 import { randomMediaRoutes } from "../../random/_routes";
 import { stats } from "../../stats/_routes";
@@ -24,6 +25,7 @@ const PrimaryNav: Component = () => {
                 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
         >
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={categories} />
+            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={people} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={search} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />

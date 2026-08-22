@@ -28,6 +28,15 @@ export const settingsMedia: AppRouteDefinition = {
     component: lazy(() => import("./Media"))
 };
 
+export const settingsPeople: AppRouteDefinition = {
+    icon: "icon-[ic--round-people]",
+    name: "People",
+    tooltip: "People Settings",
+    path: "/people",
+    absolutePath: `${basePath}/people`,
+    component: lazy(() => import("./People"))
+};
+
 export const settingsSearch: AppRouteDefinition = {
     icon: "icon-[ic--round-search]",
     name: "Search",
@@ -45,5 +54,5 @@ export const settings: AppRouteDefinition = {
     absolutePath: basePath,
     path: basePath,
     component: lazy(() => import("./Layout")),
-    children: [settingsRedirect, settingsCategories, settingsMedia, settingsSearch]
+    children: [settingsRedirect, settingsCategories, settingsMedia, settingsPeople, settingsSearch]
 };

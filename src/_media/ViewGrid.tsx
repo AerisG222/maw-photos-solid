@@ -22,6 +22,9 @@ interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
     gridSettings: MediaGridViewSettingsState;
+    // names the feed when it is not self-evident from the media - a person's
+    // photos span categories, so the breadcrumbs alone do not say whose they are
+    title?: string;
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
     enableToggleBreadcrumbsOnActiveMedia: boolean;
@@ -68,6 +71,7 @@ const ViewGrid: Component<Props> = props => {
         <Show when={props.mediaService.getMediaList()}>
             <Layout
                 margin={props.gridSettings.margin}
+                title={props.title}
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}

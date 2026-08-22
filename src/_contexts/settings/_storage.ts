@@ -14,6 +14,8 @@ export const KEY_SETTINGS_MEDIA_VIEW_GRID = `${PREFIX}|mediagridview`;
 export const KEY_SETTINGS_MEDIA_VIEW_MAP = `${PREFIX}|mediamapview`;
 export const KEY_SETTINGS_MEDIA_INFO_PANEL = `${PREFIX}|mediainfopanel`;
 
+export const KEY_SETTINGS_PEOPLE_VIEW_GRID = `${PREFIX}|peoplegridview`;
+
 export const KEY_SETTINGS_SEARCH_PAGE = `${PREFIX}|searchpage`;
 export const KEY_SETTINGS_SEARCH_VIEW_GRID = `${PREFIX}|searchgridview`;
 export const KEY_SETTINGS_SEARCH_VIEW_LIST = `${PREFIX}|searchlistview`;

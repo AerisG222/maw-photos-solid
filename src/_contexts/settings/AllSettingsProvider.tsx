@@ -10,6 +10,7 @@ import { MediaGridSettingsProvider } from "./MediaGridViewSettingsContext";
 import { MediaInfoPanelSettingsProvider } from "./MediaInfoPanelSettingsContext";
 import { MediaMapSettingsProvider } from "./MediaMapViewSettingsContext";
 import { MediaPageSettingsProvider } from "./MediaPageSettingsContext";
+import { PeopleGridSettingsProvider } from "./PeopleGridViewSettingsContext";
 import { SearchGridSettingsProvider } from "./SearchGridViewSettingsContext";
 import { SearchListSettingsProvider } from "./SearchListViewSettingsContext";
 import { SearchPageSettingsProvider } from "./SearchPageSettingsContext";
@@ -28,13 +29,15 @@ export const AllSettingsProvider: ParentComponent = props => {
                                         <MediaInfoPanelSettingsProvider>
                                             <MediaMapSettingsProvider>
                                                 <MediaPageSettingsProvider>
-                                                    <SearchGridSettingsProvider>
-                                                        <SearchListSettingsProvider>
-                                                            <SearchPageSettingsProvider>
-                                                                {props.children}
-                                                            </SearchPageSettingsProvider>
-                                                        </SearchListSettingsProvider>
-                                                    </SearchGridSettingsProvider>
+                                                    <PeopleGridSettingsProvider>
+                                                        <SearchGridSettingsProvider>
+                                                            <SearchListSettingsProvider>
+                                                                <SearchPageSettingsProvider>
+                                                                    {props.children}
+                                                                </SearchPageSettingsProvider>
+                                                            </SearchListSettingsProvider>
+                                                        </SearchGridSettingsProvider>
+                                                    </PeopleGridSettingsProvider>
                                                 </MediaPageSettingsProvider>
                                             </MediaMapSettingsProvider>
                                         </MediaInfoPanelSettingsProvider>

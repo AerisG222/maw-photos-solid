@@ -55,7 +55,8 @@ export const AuthProvider: ParentComponent = props => {
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/media:write`,
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:read`,
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:write`,
-        `${import.meta.env.VITE_AUTH0_AUDIENCE}/stats:read`
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/stats:read`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/face-recognition:read`
     ];
 
     const authParams = {

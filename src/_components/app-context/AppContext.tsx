@@ -23,6 +23,7 @@ import { ConfigProvider } from "../../_contexts/api/ConfigContext";
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import { MediaProvider } from "../../_contexts/api/MediaContext";
+import { PeopleProvider } from "../../_contexts/api/PeopleContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
@@ -60,9 +61,11 @@ const AppContext: ParentComponent = props => {
                                         <AccountActivatedGuard>
                                             <CategoriesProvider>
                                                 <MediaProvider>
-                                                    <FullscreenProvider>
-                                                        {props.children}
-                                                    </FullscreenProvider>
+                                                    <PeopleProvider>
+                                                        <FullscreenProvider>
+                                                            {props.children}
+                                                        </FullscreenProvider>
+                                                    </PeopleProvider>
                                                 </MediaProvider>
                                             </CategoriesProvider>
                                         </AccountActivatedGuard>

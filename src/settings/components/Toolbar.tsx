@@ -1,6 +1,6 @@
 import { ParentComponent } from "solid-js";
 
-import { settingsCategories, settingsMedia, settingsSearch } from "../_routes";
+import { settingsCategories, settingsMedia, settingsPeople, settingsSearch } from "../_routes";
 
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import ToolbarLink from "../../_components/toolbar/ToolbarLink";
@@ -10,6 +10,7 @@ const Toolbar: ParentComponent = () => {
         <ToolbarLayout>
             <ToolbarLink href={settingsCategories.absolutePath} route={settingsCategories} />
             <ToolbarLink href={settingsMedia.absolutePath} route={settingsMedia} />
+            <ToolbarLink href={settingsPeople.absolutePath} route={settingsPeople} />
             <ToolbarLink href={settingsSearch.absolutePath} route={settingsSearch} />
         </ToolbarLayout>
     );
