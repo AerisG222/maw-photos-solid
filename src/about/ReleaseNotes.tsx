@@ -6,6 +6,20 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.3.0</span> : <span class="date">2026-08-23</span>
+            </h3>
+            <p>Major update: Add new section to browse media by individuals</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Choose a person and view media they are in</li>
+                <li>Favorite the people you look for most to keep them at the top of the list</li>
+                <li>Build a clan, like "the kids", and browse media that contains any of them</li>
+                <li>Randomize photos for selected people or clans, or filter to just include media you marked as favorites</li>
+                <li>Show names of known people with a border around their face</li>
+                <li>Several other UI improvements and fixes</li>
+                <li>Numerous dependency updates</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.2.0</span> : <span class="date">2026-07-25</span>
             </h3>
             <p>Set Claude loose for more improvements:</p>

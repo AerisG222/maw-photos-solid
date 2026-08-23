@@ -15,10 +15,7 @@ import {
 import { SearchResults } from "../../_models/SearchResults";
 import { FeedRoutes, stripMediaParams } from "./_routes";
 
-export type FeedMediaQuery = UseInfiniteQueryResult<
-    InfiniteData<SearchResults<Media> | undefined>,
-    Error
->;
+type FeedMediaQuery = UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
 
 /*
    Drives a face feed - one person's media, or a clan's - over the shared media

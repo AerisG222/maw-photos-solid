@@ -7,7 +7,7 @@ import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { Uuid } from "../../_models/Uuid";
 
-export interface HighlightedFace {
+interface HighlightedFace {
     face: DetectedFace;
     // absent while a face is unassigned, or when the person is not one this
     // caller can see - the box is still drawn, just anonymously
