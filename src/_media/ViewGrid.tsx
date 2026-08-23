@@ -135,6 +135,7 @@ const ViewGrid: Component<Props> = props => {
                         >
                             <MainItem
                                 media={props.mediaService.getActiveMedia()!}
+                                highlightFaces={props.gridSettings.highlightFaces}
                                 showFavoriteBadge={props.showFavoritesBadge}
                                 moveNext={() => props.mediaService.moveNext()}
                                 movePrevious={() => props.mediaService.movePrevious()}

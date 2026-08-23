@@ -1,5 +1,6 @@
 import { Component } from "solid-js";
 
+import { useFaceFeedSettingsContext } from "../_contexts/settings/FaceFeedSettingsContext";
 import { usePeopleGridViewSettingsContext } from "../_contexts/settings/PeopleGridViewSettingsContext";
 import { allMargins } from "../_models/Margin";
 import { allPersonSorts } from "../_models/PersonSort";
@@ -24,6 +25,7 @@ const ViewPeople: Component = () => {
             setSortBy
         }
     ] = usePeopleGridViewSettingsContext();
+    const [feedSettings, { setFavoritesOnly, setShuffle }] = useFaceFeedSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="People">
@@ -67,6 +69,26 @@ const ViewPeople: Component = () => {
                         name="gridDimThumbnails"
                         isSelected={gridSettings.dimThumbnails}
                         onChange={setDimThumbnails}
+                    />
+                </Panel>
+
+                {/*
+                    Defaults rather than live state: a feed carries its own filter
+                    in the address so a link keeps working, and these decide what
+                    that address says when it is opened without one.
+                */}
+                <Panel title="Person & Clan Media">
+                    <Toggle
+                        title="Show Favorites Only"
+                        name="feedFavoritesOnly"
+                        isSelected={feedSettings.favoritesOnly}
+                        onChange={setFavoritesOnly}
+                    />
+                    <Toggle
+                        title="Shuffle Media"
+                        name="feedShuffle"
+                        isSelected={feedSettings.shuffle}
+                        onChange={setShuffle}
                     />
                 </Panel>
             </PanelContainer>

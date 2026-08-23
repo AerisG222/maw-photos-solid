@@ -15,6 +15,7 @@ export const KEY_SETTINGS_MEDIA_VIEW_MAP = `${PREFIX}|mediamapview`;
 export const KEY_SETTINGS_MEDIA_INFO_PANEL = `${PREFIX}|mediainfopanel`;
 
 export const KEY_SETTINGS_PEOPLE_VIEW_GRID = `${PREFIX}|peoplegridview`;
+export const KEY_SETTINGS_FACE_FEED = `${PREFIX}|facefeed`;
 
 /*
    Not a setting - a note of how much space the clan section needed last time, so

@@ -44,7 +44,8 @@ const GridToolbar: Component<Props> = props => {
             setShowMainBreadcrumbs,
             setThumbnailSize,
             setMargin,
-            setDimThumbnails
+            setDimThumbnails,
+            setHighlightFaces
         }
     ] = useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
@@ -98,7 +99,10 @@ const GridToolbar: Component<Props> = props => {
                 isActive={settings.showTypesBadge}
                 setShowTypesBadge={props.setShowTypesBadge}
             />
-            <ToggleHighlightFacesButton />
+            <ToggleHighlightFacesButton
+                isActive={settings.highlightFaces}
+                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
+            />
 
             <ToolbarDivider />
 

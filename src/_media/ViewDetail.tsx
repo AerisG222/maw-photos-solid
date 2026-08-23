@@ -93,6 +93,7 @@ const ViewDetail: Component<Props> = props => {
                     <div class="flex flex-1 min-h-0 justify-center">
                         <MainItem
                             media={props.mediaService.getActiveMedia()!}
+                            highlightFaces={props.detailSettings.highlightFaces}
                             showFavoriteBadge={props.showFavoritesBadge}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}

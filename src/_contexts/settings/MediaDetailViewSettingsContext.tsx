@@ -5,6 +5,7 @@ import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/Thu
 import { KEY_SETTINGS_MEDIA_VIEW_DETAIL, loadJson, saveJson } from "./_storage";
 
 export interface MediaDetailViewSettingsState {
+    readonly highlightFaces: boolean;
     readonly showBreadcrumbs: boolean;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly showMediaList: boolean;
@@ -13,6 +14,7 @@ export interface MediaDetailViewSettingsState {
 }
 
 export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
+    highlightFaces: false,
     showBreadcrumbs: true,
     thumbnailSize: defaultGridThumbnailSize,
     showMediaList: true,
@@ -23,6 +25,7 @@ export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
 export type MediaDetailViewSettingsContextValue = [
     state: MediaDetailViewSettingsState,
     actions: {
+        setHighlightFaces: (highlightFaces: boolean) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowMediaList: (showMediaList: boolean) => void;
@@ -43,6 +46,8 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
 
+    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
+
     const updateState = (update: Partial<MediaDetailViewSettingsState>) => {
         setState(update);
         saveState(state);
@@ -53,6 +58,7 @@ export const MediaDetailSettingsProvider: ParentComponent = props => {
             value={[
                 state,
                 {
+                    setHighlightFaces,
                     setShowBreadcrumbs,
                     setShowMediaList,
                     setThumbnailSize,

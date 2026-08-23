@@ -2,7 +2,6 @@ import { Accessor, createEffect, createMemo, createSignal, on, onCleanup } from 
 
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 import { DetectedFace } from "../../_models/DetectedFace";
 import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
@@ -27,9 +26,11 @@ export interface HighlightedFace {
 */
 export const useFaceHighlight = (
     media: Accessor<Media | undefined>,
-    element: Accessor<HTMLImageElement | HTMLVideoElement | undefined>
+    element: Accessor<HTMLImageElement | HTMLVideoElement | undefined>,
+    // the hosting view's own setting - grid, detail and fullscreen each keep
+    // their own, so this hook is told rather than looking it up
+    enabled: Accessor<boolean>
 ) => {
-    const [settings] = useMediaPageSettingsContext();
     const { facesQuery } = useMediaContext();
     const { peopleQuery } = usePeopleContext();
 
@@ -38,7 +39,7 @@ export const useFaceHighlight = (
     const [pinned, setPinned] = createSignal<Uuid | undefined>();
     const [natural, setNatural] = createSignal<{ width: number; height: number }>();
 
-    const isEnabled = () => settings.highlightFaces;
+    const isEnabled = () => enabled();
 
     // nothing is fetched until the mode is switched on, so the overlay costs
     // exactly nothing for the people who never use it

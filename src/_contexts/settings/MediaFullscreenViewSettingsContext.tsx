@@ -4,16 +4,19 @@ import { createStore } from "solid-js/store";
 import { KEY_SETTINGS_MEDIA_VIEW_FULLSCREEN, loadJson, saveJson } from "./_storage";
 
 export interface MediaFullscreenViewSettingsState {
+    readonly highlightFaces: boolean;
     readonly showFavoritesBadge: boolean;
 }
 
 export const defaultMediaFullscreenViewSettings: MediaFullscreenViewSettingsState = {
+    highlightFaces: false,
     showFavoritesBadge: false
 };
 
 export type MediaFullscreenViewSettingsContextValue = [
     state: MediaFullscreenViewSettingsState,
     actions: {
+        setHighlightFaces: (highlightFaces: boolean) => void;
         setShowFavoritesBadge: (showFavoritesBadge: boolean) => void;
     }
 ];
@@ -26,13 +29,17 @@ export const MediaFullscreenSettingsProvider: ParentComponent = props => {
     const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
         updateState({ showFavoritesBadge });
 
+    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
+
     const updateState = (update: Partial<MediaFullscreenViewSettingsState>) => {
         setState(update);
         saveState(state);
     };
 
     return (
-        <MediaFullscreenViewSettingsContext.Provider value={[state, { setShowFavoritesBadge }]}>
+        <MediaFullscreenViewSettingsContext.Provider
+            value={[state, { setShowFavoritesBadge, setHighlightFaces }]}
+        >
             {props.children}
         </MediaFullscreenViewSettingsContext.Provider>
     );

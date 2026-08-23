@@ -20,6 +20,9 @@ import { useFaceHighlight } from "./faces/useFaceHighlight";
 
 interface Props {
     media: Media;
+    // the hosting view's setting: each of grid, detail and fullscreen keeps its
+    // own, so the overlay follows whichever view is on screen
+    highlightFaces: boolean;
     showFavoriteBadge: boolean;
     moveNext: () => void;
     movePrevious: () => void;
@@ -37,7 +40,11 @@ const MainItem: Component<Props> = props => {
         HTMLImageElement | HTMLVideoElement | undefined
     >();
 
-    const highlight = useFaceHighlight(() => props.media, mediaElement);
+    const highlight = useFaceHighlight(
+        () => props.media,
+        mediaElement,
+        () => props.highlightFaces
+    );
 
     let mediaHolderDiv!: HTMLDivElement;
 

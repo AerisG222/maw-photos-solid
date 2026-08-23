@@ -1,10 +1,11 @@
-import { createEffect, createSignal } from "solid-js";
-import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
+import { createEffect, createSignal, onMount } from "solid-js";
+import { useLocation, useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
+import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
@@ -19,9 +20,12 @@ const first = (value: string | string[] | undefined) =>
 
 export const useFeedServices = (view: MediaView) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const params = useParams();
     const [searchParams] = useSearchParams();
     const [mediaPageSettings] = useMediaPageSettingsContext();
+    const [feedSettings, { setFavoritesOnly: rememberFavoritesOnly, setShuffle: rememberShuffle }] =
+        useFaceFeedSettingsContext();
     const { categoryQuery } = useCategoriesContext();
     const { peopleQuery, personMediaQuery } = usePeopleContext();
     const { clansQuery, clanMediaQuery } = useClansContext();
@@ -143,11 +147,48 @@ export const useFeedServices = (view: MediaView) => {
         );
     };
 
-    const setFavoritesOnly = (on: boolean) => applyFilter(on, seed());
+    /*
+       Each toggle also records the choice, so the next person or clan opens the
+       way this one was left. Only an explicit toggle writes it - arriving on a
+       link someone else shared says nothing about how this user likes to browse.
+    */
+    const setFavoritesOnly = (on: boolean) => {
+        rememberFavoritesOnly(on);
+        applyFilter(on, seed());
+    };
 
     // a fresh seed each time it is switched on, so turning shuffle off and back
     // on reshuffles rather than replaying the same order
-    const setShuffled = (on: boolean) => applyFilter(favoritesOnly(), on ? newSeed() : undefined);
+    const setShuffled = (on: boolean) => {
+        rememberShuffle(on);
+        applyFilter(favoritesOnly(), on ? newSeed() : undefined);
+    };
+
+    /*
+       A feed opened without a filter of its own takes the remembered one, and
+       says so in the address - the url stays the single account of what is being
+       shown, rather than the screen quietly disagreeing with it.
+
+       Replaces rather than pushes: this is the same destination expressed fully,
+       not somewhere the back button should have to walk through.
+    */
+    onMount(() => {
+        if (first(searchParams.f) !== undefined || first(searchParams.seed) !== undefined) {
+            return;
+        }
+
+        if (!feedSettings.favoritesOnly && !feedSettings.shuffle) {
+            return;
+        }
+
+        navigate(
+            `${location.pathname}${buildSearch(
+                feedSettings.favoritesOnly,
+                feedSettings.shuffle ? newSeed() : undefined
+            )}`,
+            { replace: true }
+        );
+    });
 
     createEffect(() => {
         const currMedia = mediaService.getActiveMedia();

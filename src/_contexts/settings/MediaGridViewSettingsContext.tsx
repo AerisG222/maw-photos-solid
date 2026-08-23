@@ -6,6 +6,7 @@ import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/Thu
 import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from "./_storage";
 
 export interface MediaGridViewSettingsState {
+    readonly highlightFaces: boolean;
     readonly margin: MarginIdType;
     readonly showBreadcrumbs: boolean;
     readonly showMainBreadcrumbs: boolean;
@@ -16,6 +17,7 @@ export interface MediaGridViewSettingsState {
 }
 
 export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
+    highlightFaces: false,
     margin: defaultMargin,
     showBreadcrumbs: true,
     showMainBreadcrumbs: true,
@@ -28,6 +30,7 @@ export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
 export type MediaGridViewSettingsContextValue = [
     state: MediaGridViewSettingsState,
     actions: {
+        setHighlightFaces: (highlightFaces: boolean) => void;
         setMargin: (margin: MarginIdType) => void;
         setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
@@ -53,6 +56,8 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
         updateState({ showFavoritesBadge });
     const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
 
+    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
+
     const updateState = (update: Partial<MediaGridViewSettingsState>) => {
         setState(update);
         saveState(state);
@@ -63,6 +68,7 @@ export const MediaGridSettingsProvider: ParentComponent = props => {
             value={[
                 state,
                 {
+                    setHighlightFaces,
                     setMargin,
                     setShowBreadcrumbs,
                     setShowMainBreadcrumbs,

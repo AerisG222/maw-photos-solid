@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
+import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { useMediaInfoPanelSettingsContext } from "../_contexts/settings/MediaInfoPanelSettingsContext";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { allMapTypes } from "../_models/MapType";
@@ -22,10 +23,8 @@ import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
 const ViewMedia: Component = () => {
-    const [
-        pageSettings,
-        { setView: setViewMode, setSlideshowDisplayDurationSeconds, setHighlightFaces }
-    ] = useMediaPageSettingsContext();
+    const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
+        useMediaPageSettingsContext();
     const [mapSettings, { setMapType: setMapMapType, setZoom: setMapZoom }] =
         useMediaMapViewSettingsContext();
     const [
@@ -35,20 +34,28 @@ const ViewMedia: Component = () => {
             setShowMediaList: setDetailShowMediaList,
             setThumbnailSize: setDetailThumbnailSize,
             setDimThumbnails: setDetailDimThumbnails,
-            setShowFavoritesBadge: setDetailShowFavoritesBadge
+            setShowFavoritesBadge: setDetailShowFavoritesBadge,
+            setHighlightFaces: setDetailHighlightFaces
         }
     ] = useMediaDetailViewSettingsContext();
-    const [fullscreenSettings, { setShowFavoritesBadge: setFullscreenShowFavoritesBadge }] =
-        useMediaGridViewSettingsContext();
+    const [
+        fullscreenSettings,
+        {
+            setShowFavoritesBadge: setFullscreenShowFavoritesBadge,
+            setHighlightFaces: setFullscreenHighlightFaces
+        }
+    ] = useMediaFullscreenViewSettingsContext();
     const [
         gridSettings,
         {
             setMargin: setGridMargin,
             setShowBreadcrumbs: setGridShowBreadcrumbs,
+            setShowMainBreadcrumbs: setGridShowMainBreadcrumbs,
             setThumbnailSize: setGridThumbnailSize,
             setDimThumbnails: setGridDimThumbnails,
             setShowFavoritesBadge: setGridShowFavoritesBadge,
-            setShowTypesBadge: setGridShowTypesBadge
+            setShowTypesBadge: setGridShowTypesBadge,
+            setHighlightFaces: setGridHighlightFaces
         }
     ] = useMediaGridViewSettingsContext();
     const [
@@ -85,12 +92,6 @@ const ViewMedia: Component = () => {
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
                         onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
                     />
-                    <Toggle
-                        title="Highlight Faces"
-                        name="pageHighlightFaces"
-                        isSelected={pageSettings.highlightFaces}
-                        onChange={setHighlightFaces}
-                    />
                 </Panel>
 
                 <Panel title="Detail View">
@@ -124,6 +125,12 @@ const ViewMedia: Component = () => {
                         name="detailShowFavoriteBadges"
                         isSelected={detailSettings.showFavoritesBadge}
                         onChange={setDetailShowFavoritesBadge}
+                    />
+                    <Toggle
+                        title="Highlight Faces"
+                        name="detailHighlightFaces"
+                        isSelected={detailSettings.highlightFaces}
+                        onChange={setDetailHighlightFaces}
                     />
 
                     <h3 class="head3 mt-4 text-secondary">Info Panel</h3>
@@ -201,6 +208,12 @@ const ViewMedia: Component = () => {
                         isSelected={fullscreenSettings.showFavoritesBadge}
                         onChange={setFullscreenShowFavoritesBadge}
                     />
+                    <Toggle
+                        title="Highlight Faces"
+                        name="fullscreenHighlightFaces"
+                        isSelected={fullscreenSettings.highlightFaces}
+                        onChange={setFullscreenHighlightFaces}
+                    />
                 </Panel>
 
                 <Panel title="Grid View">
@@ -209,6 +222,16 @@ const ViewMedia: Component = () => {
                         name="gridShowBreadcrumbs"
                         isSelected={gridSettings.showBreadcrumbs}
                         onChange={setGridShowBreadcrumbs}
+                    />
+                    {/*
+                        The grid's other breadcrumb: this one rides over the
+                        enlarged photo, where the grid's own is behind it
+                    */}
+                    <Toggle
+                        title="Show Breadcrumbs on Active Media"
+                        name="gridShowMainBreadcrumbs"
+                        isSelected={gridSettings.showMainBreadcrumbs}
+                        onChange={setGridShowMainBreadcrumbs}
                     />
                     <RadioGroup
                         title="Margins"
@@ -241,6 +264,12 @@ const ViewMedia: Component = () => {
                         name="gridShowTypeBadges"
                         isSelected={gridSettings.showTypesBadge}
                         onChange={setGridShowTypesBadge}
+                    />
+                    <Toggle
+                        title="Highlight Faces"
+                        name="gridHighlightFaces"
+                        isSelected={gridSettings.highlightFaces}
+                        onChange={setGridHighlightFaces}
                     />
                 </Panel>
 

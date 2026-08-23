@@ -1,5 +1,7 @@
 import { Component, Show } from "solid-js";
 
+import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
+
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
@@ -26,6 +28,10 @@ interface Props {
 }
 
 const FullscreenToolbar: Component<Props> = props => {
+    // its own view's settings, the way the grid and detail toolbars read theirs.
+    // the favorites badge arrives as a prop only because it predates this
+    const [settings, { setHighlightFaces }] = useMediaFullscreenViewSettingsContext();
+
     return (
         <>
             <Show when={props.canRequestMore}>
@@ -55,7 +61,10 @@ const FullscreenToolbar: Component<Props> = props => {
                 isActive={props.showFavoritesBadge}
                 setShowFavoritesBadge={props.setShowFavoritesBadge}
             />
-            <ToggleHighlightFacesButton />
+            <ToggleHighlightFacesButton
+                isActive={settings.highlightFaces}
+                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
+            />
         </>
     );
 };

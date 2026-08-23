@@ -3,6 +3,7 @@ import { Component, JSXElement, Show } from "solid-js";
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
+import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { Media } from "../_models/Media";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
@@ -23,6 +24,9 @@ interface Props {
 
 const ViewFullscreen: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
+    // read here rather than threaded from every caller: all three of them hand
+    // this view the same context's values already
+    const [settings] = useMediaFullscreenViewSettingsContext();
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Media> = {
@@ -63,6 +67,7 @@ const ViewFullscreen: Component<Props> = props => {
                 <div class="grid h-dvh w-full justify-center">
                     <MainItem
                         media={props.mediaService.getActiveMedia()!}
+                        highlightFaces={settings.highlightFaces}
                         showFavoriteBadge={props.showFavoritesBadge}
                         moveNext={() => props.mediaService.moveNext()}
                         movePrevious={() => props.mediaService.movePrevious()}

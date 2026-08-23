@@ -37,8 +37,16 @@ interface Props {
 }
 
 const DetailToolbar: Component<Props> = props => {
-    const [settings, { setShowBreadcrumbs, setShowMediaList, setThumbnailSize, setDimThumbnails }] =
-        useMediaDetailViewSettingsContext();
+    const [
+        settings,
+        {
+            setShowBreadcrumbs,
+            setShowMediaList,
+            setThumbnailSize,
+            setDimThumbnails,
+            setHighlightFaces
+        }
+    ] = useMediaDetailViewSettingsContext();
 
     const onToggleBreadcrumbs = () => {
         setShowBreadcrumbs(!settings.showBreadcrumbs);
@@ -96,7 +104,10 @@ const DetailToolbar: Component<Props> = props => {
                 <ToolbarDivider />
             </Show>
 
-            <ToggleHighlightFacesButton />
+            <ToggleHighlightFacesButton
+                isActive={settings.highlightFaces}
+                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
+            />
 
             <ToolbarButton
                 icon="icon-[ic--round-title]"
