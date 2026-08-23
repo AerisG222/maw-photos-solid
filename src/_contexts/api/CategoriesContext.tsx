@@ -184,12 +184,20 @@ export const CategoriesProvider: ParentComponent = props => {
             staleTime: 1 * 60 * 1000
         }));
 
+    /*
+       Holds the last category while the next one loads. In feeds that walk
+       across categories - a person, a clan, the random stack - the id changes
+       with every photo, and without this the breadcrumb blinks out and back on
+       each move. Views that stay inside one category never re-key it, so this
+       does nothing there.
+    */
     const categoryQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: ["categories", id()],
             queryFn: () => fetchCategory(id()!),
             enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
+            staleTime: 5 * 60 * 1000,
+            placeholderData: (previous: Category | undefined) => previous
         }));
 
     const categoryMediaQuery = (id: Accessor<Uuid | undefined>) =>

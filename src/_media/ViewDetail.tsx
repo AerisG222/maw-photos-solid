@@ -44,8 +44,18 @@ const ViewDetail: Component<Props> = props => {
         setIsFavoriteMutation.mutate(req);
     };
 
+    /*
+       Gated on the media alone. Requiring the category as well tore the whole
+       view down between photos in a person or clan feed: consecutive items there
+       usually belong to different categories, so moving next re-keys the category
+       query and leaves this undefined until it answers. The toolbar, the
+       filmstrip and its scroll position were all rebuilt on every move.
+
+       Nothing below needs it to exist - the breadcrumb, the sidebar and the
+       download button each treat it as optional already.
+    */
     return (
-        <Show when={props.mediaService.getActiveMedia() && props.mediaService.getActiveCategory()}>
+        <Show when={props.mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
                 fill
