@@ -1,21 +1,34 @@
 # build container
-FROM docker.io/node:24-bookworm
+#
+# bun runs the build, so this is bun's own image rather than node with bun
+# curled into it - no download step, nothing to source from .bashrc, and no node
+# runtime that never gets used.  debian rather than alpine: the tailwind and
+# lightningcss binaries are prebuilt against glibc.
+FROM docker.io/oven/bun:1-debian AS build
+
+# the image may set a non-root user, and the workdir below is created as root
+USER root
 
 WORKDIR /usr/src/maw-photos
-COPY package.json .
-COPY bun.lock .
 
-RUN curl -fsSL https://bun.com/install | bash
+# manifests first, so a source change does not re-resolve the dependencies
+COPY package.json bun.lock ./
 
-RUN . /root/.bashrc && bun install --frozen-lockfile
+RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN . /root/.bashrc && bun run build_staging
+RUN bun run build_staging
+
+# compressed once here, as hard as is worthwhile, rather than on every request -
+# see gzip_static in nginx.conf.  the originals stay for clients that ask for them
+RUN find dist -type f \
+        \( -name '*.js' -o -name '*.css' -o -name '*.html' -o -name '*.svg' -o -name '*.json' \) \
+        -exec gzip -9 -k {} +
 
 
 # runtime container
-FROM nginx:1.29-trixie
+FROM docker.io/nginx:1.31-alpine AS runtime
 
 WORKDIR /maw-photos
 
@@ -25,7 +38,8 @@ COPY etc/nginx/tls.conf                       /etc/nginx
 COPY etc/nginx/nginx.conf                     /etc/nginx/nginx.conf
 COPY etc/nginx/h5bp                           /etc/nginx/h5bp
 COPY etc/nginx/conf.d/staging.maw-photos.conf /etc/nginx/conf.d/maw-photos.conf
-COPY --from=0                                 /usr/src/maw-photos/dist .
+COPY --from=build                             /usr/src/maw-photos/dist .
+
+EXPOSE 4200
 
 CMD [ "nginx", "-g", "daemon off;" ]
-EXPOSE 4200

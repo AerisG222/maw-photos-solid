@@ -1,10 +1,13 @@
-dist
-node_modules
+.ansible
 .dockerignore
 .git
 .gitignore
 .vscode
-Dockerfile*
+Containerfile*
+deploy
+dist
+image.iid
+node_modules
 npm-debug.log
 obj
 README.md
