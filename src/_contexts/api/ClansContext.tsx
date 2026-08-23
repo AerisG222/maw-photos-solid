@@ -123,34 +123,55 @@ export const ClansProvider: ParentComponent = props => {
         }));
 
     /*
-       Invalidated rather than patched, unlike the favorite toggles elsewhere.
-       There are only ever a handful of clans, the server decides where a new or
-       renamed one sorts, and a membership change rewrites a list of whole people
-       - so there is no small, well understood field to write in place, and a
-       refetch is both simpler and certainly correct.
+       Every write answers with the clan as it now stands, so the list is updated
+       from that answer rather than refetched.
+
+       This used to invalidate and await the refetch. An `onSuccess` that returns
+       a promise holds the mutation open until it resolves, so a save that had
+       already succeeded still sat there for a second round trip before the
+       dialog would close - the work was done, the screen just had not been told.
+
+       The API orders clans by name, so the same rule is applied here and a
+       renamed clan lands where a refetch would have put it. Postgres and
+       `localeCompare` can disagree on the exotic edges of that ordering; the
+       next natural refetch settles any such difference.
     */
-    const invalidateClans = async () => {
-        await queryClient.invalidateQueries({ queryKey: ["clans"], refetchType: "all" });
+    const upsertClan = (clan: Clan) => {
+        queryClient.setQueryData<Clan[]>(["clans"], prev =>
+            prev
+                ? [...prev.filter(existing => existing.id !== clan.id), clan].sort((a, b) =>
+                      a.name.localeCompare(b.name)
+                  )
+                : // nothing cached yet means the list is still on its way, and it
+                  // will arrive holding this clan already
+                  prev
+        );
+    };
+
+    const dropClan = (id: Uuid) => {
+        queryClient.setQueryData<Clan[]>(["clans"], prev =>
+            prev?.filter(existing => existing.id !== id)
+        );
     };
 
     const createClanMutation = useMutation(() => ({
         mutationFn: (req: CreateClanRequest) => postClan(req),
-        onSuccess: invalidateClans
+        onSuccess: upsertClan
     }));
 
     const renameClanMutation = useMutation(() => ({
         mutationFn: (req: RenameClanRequest) => putClan(req),
-        onSuccess: invalidateClans
+        onSuccess: upsertClan
     }));
 
     const setClanPersonsMutation = useMutation(() => ({
         mutationFn: (req: SetClanPersonsRequest) => putClanPersons(req),
-        onSuccess: invalidateClans
+        onSuccess: upsertClan
     }));
 
     const deleteClanMutation = useMutation(() => ({
         mutationFn: (id: Uuid) => removeClan(id),
-        onSuccess: invalidateClans
+        onSuccess: (_response, id) => dropClan(id)
     }));
 
     return (
