@@ -16,6 +16,14 @@ export const KEY_SETTINGS_MEDIA_INFO_PANEL = `${PREFIX}|mediainfopanel`;
 
 export const KEY_SETTINGS_PEOPLE_VIEW_GRID = `${PREFIX}|peoplegridview`;
 
+/*
+   Not a setting - a note of how much space the clan section needed last time, so
+   its placeholder can reserve about the right amount rather than a guess. The
+   clan list is markedly slower to arrive than the people below it, and a section
+   that grows after the fact shoves the whole grid down.
+*/
+export const KEY_UI_CLAN_COUNT = `${PREFIX}|clancount`;
+
 export const KEY_SETTINGS_SEARCH_PAGE = `${PREFIX}|searchpage`;
 export const KEY_SETTINGS_SEARCH_VIEW_GRID = `${PREFIX}|searchgridview`;
 export const KEY_SETTINGS_SEARCH_VIEW_LIST = `${PREFIX}|searchlistview`;
