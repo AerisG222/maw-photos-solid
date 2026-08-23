@@ -16,6 +16,7 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
+import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 import ToggleShowTypesBadgeButton from "./toolbar/ToggleShowTypesButton";
 
@@ -97,6 +98,7 @@ const GridToolbar: Component<Props> = props => {
                 isActive={settings.showTypesBadge}
                 setShowTypesBadge={props.setShowTypesBadge}
             />
+            <ToggleHighlightFacesButton />
 
             <ToolbarDivider />
 

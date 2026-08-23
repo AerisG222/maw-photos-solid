@@ -6,6 +6,7 @@ import { Category } from "../_models/Category";
 import { Media } from "../_models/Media";
 
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
@@ -94,6 +95,8 @@ const DetailToolbar: Component<Props> = props => {
 
                 <ToolbarDivider />
             </Show>
+
+            <ToggleHighlightFacesButton />
 
             <ToolbarButton
                 icon="icon-[ic--round-title]"

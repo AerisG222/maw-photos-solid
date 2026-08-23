@@ -7,11 +7,19 @@ import { KEY_SETTINGS_MEDIA_PAGE, loadJson, saveJson } from "./_storage";
 export interface MediaPageSettingsState {
     readonly view: MediaView;
     readonly slideshowDisplayDurationSeconds: number;
+    /*
+       Face highlighting is a mode rather than a per-view preference: someone who
+       turned it on in the grid means it in detail and fullscreen too, so it
+       lives here with the settings the media views share instead of being
+       repeated - and separately toggled - in all three.
+    */
+    readonly highlightFaces: boolean;
 }
 
 export const defaultMediaPageSettings: MediaPageSettingsState = {
     view: defaultMediaView,
-    slideshowDisplayDurationSeconds: 2
+    slideshowDisplayDurationSeconds: 2,
+    highlightFaces: false
 };
 
 export type MediaPageSettingsContextValue = [
@@ -19,6 +27,7 @@ export type MediaPageSettingsContextValue = [
     actions: {
         setView: (view: MediaView) => void;
         setSlideshowDisplayDurationSeconds: (slideshowDurationSeconds: number) => void;
+        setHighlightFaces: (highlightFaces: boolean) => void;
     }
 ];
 
@@ -30,6 +39,7 @@ export const MediaPageSettingsProvider: ParentComponent = props => {
     const setViewMode = (view: MediaView) => updateState({ view: view });
     const setSlideshowDisplayDurationSeconds = (slideshowDisplayDurationSeconds: number) =>
         updateState({ slideshowDisplayDurationSeconds });
+    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
 
     const updateState = (update: Partial<MediaPageSettingsState>) => {
         setState(update);
@@ -38,7 +48,10 @@ export const MediaPageSettingsProvider: ParentComponent = props => {
 
     return (
         <MediaPageSettingsContext.Provider
-            value={[state, { setView: setViewMode, setSlideshowDisplayDurationSeconds }]}
+            value={[
+                state,
+                { setView: setViewMode, setSlideshowDisplayDurationSeconds, setHighlightFaces }
+            ]}
         >
             {props.children}
         </MediaPageSettingsContext.Provider>

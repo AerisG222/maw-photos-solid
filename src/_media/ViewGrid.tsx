@@ -110,7 +110,17 @@ const ViewGrid: Component<Props> = props => {
                 }
             >
                 <Show when={props.mediaService.getActiveMedia()}>
-                    <div class="absolute z-30 bg-base-100/92" style={absoluteDivStyle()}>
+                    {/*
+                       A column, so the photo gets the height the breadcrumb does
+                       not. This box is sized to the visible stage; a breadcrumb
+                       above a link that then claimed the full height again put
+                       everything inside it - the foot of the photo included -
+                       that much below the bottom of the screen.
+                    */}
+                    <div
+                        class="absolute z-30 flex flex-col overflow-hidden bg-base-100/92"
+                        style={absoluteDivStyle()}
+                    >
                         <Show when={props.showBreadcrumbsOnMedia}>
                             <CategoryBreadcrumb
                                 showTitleAsLink={true}
@@ -119,7 +129,7 @@ const ViewGrid: Component<Props> = props => {
                         </Show>
 
                         <A
-                            class="flex h-full"
+                            class="flex flex-1 min-h-0"
                             href={props.mediaService.getEntryPathByView(MediaViewGrid)}
                             onClick={() => props.slideshowService.stop()}
                         >

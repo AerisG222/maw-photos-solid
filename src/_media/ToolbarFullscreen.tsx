@@ -9,6 +9,7 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "./toolbar/RequestMoreButton";
+import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
 interface Props {
@@ -54,6 +55,7 @@ const FullscreenToolbar: Component<Props> = props => {
                 isActive={props.showFavoritesBadge}
                 setShowFavoritesBadge={props.setShowFavoritesBadge}
             />
+            <ToggleHighlightFacesButton />
         </>
     );
 };

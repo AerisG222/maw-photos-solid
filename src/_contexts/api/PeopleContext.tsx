@@ -40,7 +40,9 @@ export interface PersonMediaFilter {
    user can see, so the naming splits at this boundary and nowhere else.
 */
 export interface PeopleService {
-    peopleQuery: () => UseQueryResult<Person[], Error>;
+    // `enabled` is for callers that only sometimes need the list - the face
+    // overlay mounts with every photo but fetches nothing until switched on
+    peopleQuery: (enabled?: Accessor<boolean>) => UseQueryResult<Person[], Error>;
     personMediaQuery: (
         id: Accessor<Uuid | undefined>,
         filter: Accessor<PersonMediaFilter>
@@ -87,11 +89,11 @@ export const PeopleProvider: ParentComponent = props => {
        deliberately does not page it, so the picker can filter locally instead of
        spending a round trip per keystroke.
     */
-    const peopleQuery = () =>
+    const peopleQuery = (enabled?: Accessor<boolean>) =>
         useQuery(() => ({
             queryKey: ["people"],
             queryFn: fetchPeople,
-            enabled: authContext.isLoggedIn,
+            enabled: (enabled?.() ?? true) && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
         }));
 

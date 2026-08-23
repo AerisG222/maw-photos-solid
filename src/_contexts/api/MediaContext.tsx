@@ -11,6 +11,7 @@ import {
 } from "@tanstack/solid-query";
 
 import { Comment, CommentDto, mapComment } from "../../_models/Comment";
+import { DetectedFace } from "../../_models/DetectedFace";
 import { useAuthContext } from "../AuthContext";
 import { postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
@@ -30,6 +31,7 @@ export interface MediaService {
     metadataQuery: (id: Accessor<Uuid>) => UseQueryResult<MediaMetadata, Error>;
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
+    facesQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<DetectedFace[], Error>;
     randomMediaQuery: (
         count: number
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
@@ -77,6 +79,20 @@ export const MediaProvider: ParentComponent = props => {
                 } satisfies GpsDetail;
             }
         });
+
+    /*
+       The faces detected in one media item, for the highlight overlay.
+
+       This is the one call in the app that has no counterpart in maw-media yet:
+       media.face holds the boxes, but nothing reads them back out. The shape
+       below mirrors that table, so exposing it should be a read route over the
+       existing rows rather than a new model - and if it lands under a different
+       name, this function is the only thing that has to change.
+    */
+    const fetchFaces = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<DetectedFace[]>(accessToken, `media/${id}/faces`)
+        );
 
     const postComment = async (req: AddCommentRequest) =>
         runWithAccessToken(getToken, accessToken =>
@@ -146,6 +162,20 @@ export const MediaProvider: ParentComponent = props => {
             queryFn: () => fetchGps(id()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
+        }));
+
+    /*
+       Held for a good while: a face box is a property of the image itself, and
+       the pipeline republishes rarely. A 404 or 403 - which is what an API
+       without this route answers - is not retried, so an overlay that cannot be
+       drawn costs one request per media item and then stays quiet.
+    */
+    const facesQuery = (id: Accessor<Uuid | undefined>) =>
+        useQuery(() => ({
+            queryKey: ["media", id(), "faces"],
+            queryFn: () => fetchFaces(id()!),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 30 * 60 * 1000
         }));
 
     const addCommentMutation = useMutation(() => ({
@@ -303,6 +333,7 @@ export const MediaProvider: ParentComponent = props => {
                 metadataQuery,
                 commentsQuery,
                 gpsQuery,
+                facesQuery,
                 randomMediaQuery,
                 addCommentMutation,
                 setIsFavoriteMutation,

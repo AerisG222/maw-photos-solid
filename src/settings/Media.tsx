@@ -22,8 +22,10 @@ import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
 const ViewMedia: Component = () => {
-    const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
-        useMediaPageSettingsContext();
+    const [
+        pageSettings,
+        { setView: setViewMode, setSlideshowDisplayDurationSeconds, setHighlightFaces }
+    ] = useMediaPageSettingsContext();
     const [mapSettings, { setMapType: setMapMapType, setZoom: setMapZoom }] =
         useMediaMapViewSettingsContext();
     const [
@@ -82,6 +84,12 @@ const ViewMedia: Component = () => {
                         itemArray={allSlideshowDurations}
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
                         onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
+                    />
+                    <Toggle
+                        title="Highlight Faces"
+                        name="pageHighlightFaces"
+                        isSelected={pageSettings.highlightFaces}
+                        onChange={setHighlightFaces}
                     />
                 </Panel>
 
