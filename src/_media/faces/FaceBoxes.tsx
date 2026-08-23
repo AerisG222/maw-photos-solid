@@ -14,10 +14,13 @@ interface Props {
    turned or mirrored photo takes its boxes with it rather than needing the same
    arithmetic done twice.
 
-   Nothing here takes pointer events: the image underneath handles swipes, taps
-   and - in the grid - a click that opens the photo, and a face sitting in the
-   middle of the frame would otherwise swallow all three. Pointing at a person
-   is done from the strip instead.
+   The layer takes no pointer events, so the image underneath keeps the whole
+   frame for swipes and taps. The identified boxes do take them, which is what
+   lets a face be pointed at directly - and costs nothing, because they sit
+   inside the element those gestures are bound to and inside the link the grid
+   wraps the photo in, so both still see the events by bubbling.
+
+   An unassigned face stays inert: there is nobody to highlight.
 */
 const FaceBoxes: Component<Props> = props => {
     const [el, setEl] = createSignal<HTMLDivElement>();
@@ -69,10 +72,15 @@ const FaceBoxes: Component<Props> = props => {
                         return (
                             <div
                                 class="absolute rounded-sm transition-[border-color,box-shadow,opacity] duration-200 ease-out"
+                                onMouseEnter={() =>
+                                    entry.person && props.highlight.setHovered(entry.person.id)
+                                }
+                                onMouseLeave={() => props.highlight.setHovered(undefined)}
                                 classList={{
                                     // an unassigned face is real but nameless, so
                                     // it is marked more quietly and dashed
                                     "border-2": true,
+                                    "pointer-events-auto": !!entry.person,
                                     "border-dashed": !entry.person,
                                     "border-base-100/60": !entry.person,
                                     "border-primary": !!entry.person && isActive(),
@@ -89,8 +97,18 @@ const FaceBoxes: Component<Props> = props => {
                                     height: `${entry.face.boxHeight * area().height}px`
                                 }}
                             >
-                                <Show when={entry.person && isActive()}>
-                                    <span class="absolute left-1/2 -translate-x-1/2 top-full mt-1 whitespace-nowrap rounded-sm bg-primary text-primary-content text-xs px-1 py-[1px]">
+                                {/* the point of identifying somebody is saying who they are */}
+                                <Show when={entry.person}>
+                                    <span
+                                        class="absolute left-1/2 -translate-x-1/2 top-full mt-1 whitespace-nowrap rounded-sm text-xs px-1 py-[1px]"
+                                        classList={{
+                                            "bg-primary text-primary-content": isActive(),
+                                            // the one being pointed at speaks up;
+                                            // the rest stay quiet so a crowded
+                                            // photo does not shout
+                                            "bg-base-100/80": !isActive()
+                                        }}
+                                    >
                                         {entry.person!.name}
                                     </span>
                                 </Show>
