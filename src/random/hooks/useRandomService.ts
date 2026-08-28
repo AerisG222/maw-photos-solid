@@ -9,6 +9,7 @@ import { RandomMediaService } from "../services/RandomMediaService";
 import { createEffect, createSignal } from "solid-js";
 import { Uuid } from "../../_models/Uuid";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
+import { MEDIA_PAGE_SIZE } from "../../_models/utils/Constants";
 
 export const useRandomServices = (view: MediaView) => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const useRandomServices = (view: MediaView) => {
     const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
 
     const cq = categoryQuery(catId);
-    const mq = randomMediaQuery(24);
+    const mq = randomMediaQuery(MEDIA_PAGE_SIZE);
     const mediaService = new RandomMediaService(navigate, params, view, cq, mq);
     const slideshowService = new SlideshowService(
         mediaService,
