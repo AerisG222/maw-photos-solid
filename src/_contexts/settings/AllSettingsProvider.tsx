@@ -6,6 +6,7 @@ import { CategoryGridSettingsProvider } from "./CategoryGridViewSettingsContext"
 import { CategoryListSettingsProvider } from "./CategoryListViewSettingsContext";
 import { CategoryPageSettingsProvider } from "./CategoryPageSettingsContext";
 import { FaceFeedSettingsProvider } from "./FaceFeedSettingsContext";
+import { FeedCategorySettingsProvider } from "./FeedCategoryViewSettingsContext";
 import { MediaDetailSettingsProvider } from "./MediaDetailViewSettingsContext";
 import { MediaGridSettingsProvider } from "./MediaGridViewSettingsContext";
 import { MediaInfoPanelSettingsProvider } from "./MediaInfoPanelSettingsContext";
@@ -25,27 +26,29 @@ export const AllSettingsProvider: ParentComponent = props => {
                     <CategoryListSettingsProvider>
                         <CategoryPageSettingsProvider>
                             <FaceFeedSettingsProvider>
-                                <MediaDetailSettingsProvider>
-                                    <MediaFullscreenSettingsProvider>
-                                        <MediaGridSettingsProvider>
-                                            <MediaInfoPanelSettingsProvider>
-                                                <MediaMapSettingsProvider>
-                                                    <MediaPageSettingsProvider>
-                                                        <PeopleGridSettingsProvider>
-                                                            <SearchGridSettingsProvider>
-                                                                <SearchListSettingsProvider>
-                                                                    <SearchPageSettingsProvider>
-                                                                        {props.children}
-                                                                    </SearchPageSettingsProvider>
-                                                                </SearchListSettingsProvider>
-                                                            </SearchGridSettingsProvider>
-                                                        </PeopleGridSettingsProvider>
-                                                    </MediaPageSettingsProvider>
-                                                </MediaMapSettingsProvider>
-                                            </MediaInfoPanelSettingsProvider>
-                                        </MediaGridSettingsProvider>
-                                    </MediaFullscreenSettingsProvider>
-                                </MediaDetailSettingsProvider>
+                                <FeedCategorySettingsProvider>
+                                    <MediaDetailSettingsProvider>
+                                        <MediaFullscreenSettingsProvider>
+                                            <MediaGridSettingsProvider>
+                                                <MediaInfoPanelSettingsProvider>
+                                                    <MediaMapSettingsProvider>
+                                                        <MediaPageSettingsProvider>
+                                                            <PeopleGridSettingsProvider>
+                                                                <SearchGridSettingsProvider>
+                                                                    <SearchListSettingsProvider>
+                                                                        <SearchPageSettingsProvider>
+                                                                            {props.children}
+                                                                        </SearchPageSettingsProvider>
+                                                                    </SearchListSettingsProvider>
+                                                                </SearchGridSettingsProvider>
+                                                            </PeopleGridSettingsProvider>
+                                                        </MediaPageSettingsProvider>
+                                                    </MediaMapSettingsProvider>
+                                                </MediaInfoPanelSettingsProvider>
+                                            </MediaGridSettingsProvider>
+                                        </MediaFullscreenSettingsProvider>
+                                    </MediaDetailSettingsProvider>
+                                </FeedCategorySettingsProvider>
                             </FaceFeedSettingsProvider>
                         </CategoryPageSettingsProvider>
                     </CategoryListSettingsProvider>

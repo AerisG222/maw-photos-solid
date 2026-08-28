@@ -28,7 +28,9 @@ const ToolbarFilters: Component<Props> = props => {
                 active={props.isShuffled}
             />
             <ToolbarButton
-                icon="icon-[mdi--heart]"
+                // the boxed heart is the filter, in both listings; the plain one
+                // beside it toggles the badge drawn on each card
+                icon="icon-[mdi--heart-box]"
                 name="Favorites"
                 tooltip="Show Favorites Only"
                 shortcutKeys={["u"]}

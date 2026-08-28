@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 
-import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
+import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
 import { getNextMarginSize } from "../../_models/Margin";
-import { getNextThumbnailSize } from "../../_models/ThumbnailSize";
+import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
@@ -23,8 +23,40 @@ interface Props {
    categories and takes no seed. Switching back to the media brings both back.
 */
 const ToolbarCategories: Component<Props> = props => {
-    const [settings, { setThumbnailSize, setMargin, setDimThumbnails }] =
-        useMediaGridViewSettingsContext();
+    const [
+        settings,
+        {
+            setShowTitles,
+            setShowYears,
+            setThumbnailSize,
+            setMargin,
+            setDimThumbnails,
+            setShowFavoritesBadge,
+            setShowTypesBadge
+        }
+    ] = useFeedCategoryViewSettingsContext();
+
+    // a card only has room for its title and year at the full size, so turning
+    // either back on restores it - the same rule the search results follow
+    const ensureLargeThumbnails = () => {
+        setThumbnailSize(defaultGridThumbnailSize);
+    };
+
+    const onToggleYears = () => {
+        setShowYears(!settings.showYears);
+
+        if (settings.showYears) {
+            ensureLargeThumbnails();
+        }
+    };
+
+    const onToggleTitles = () => {
+        setShowTitles(!settings.showTitles);
+
+        if (settings.showTitles) {
+            ensureLargeThumbnails();
+        }
+    };
 
     return (
         <ToolbarLayout>
@@ -37,7 +69,7 @@ const ToolbarCategories: Component<Props> = props => {
             <ToolbarDivider />
 
             <ToolbarButton
-                icon="icon-[mdi--heart]"
+                icon="icon-[mdi--heart-box]"
                 name="Favorites"
                 tooltip="Show Favorites Only"
                 shortcutKeys={["u"]}
@@ -48,18 +80,35 @@ const ToolbarCategories: Component<Props> = props => {
             <ToolbarDivider />
 
             <ToolbarButton
+                icon="icon-[ic--round-today]"
+                name="Years"
+                tooltip="Toggle Years"
+                shortcutKeys={["y"]}
+                clickHandler={onToggleYears}
+                active={settings.showYears}
+            />
+            <ToolbarButton
+                icon="icon-[ic--round-title]"
+                name="Titles"
+                tooltip="Toggle Category Titles"
+                shortcutKeys={["t"]}
+                clickHandler={onToggleTitles}
+                active={settings.showTitles}
+            />
+            <ToolbarButton
                 icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnails"
+                name="Thumbnail"
                 tooltip="Toggle Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={() =>
                     setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
                 }
+                disabled={settings.showTitles || settings.showYears}
             />
             <ToolbarButton
                 icon="icon-[ic--round-format-indent-increase]"
                 name="Margins"
-                tooltip="Toggle Margins"
+                tooltip="Toggle Category Margins"
                 shortcutKeys={["m"]}
                 clickHandler={() => setMargin(getNextMarginSize(settings.margin).id)}
             />
@@ -70,6 +119,22 @@ const ToolbarCategories: Component<Props> = props => {
                 shortcutKeys={["b"]}
                 clickHandler={() => setDimThumbnails(!settings.dimThumbnails)}
                 active={!settings.dimThumbnails}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--heart]"
+                name="Favorite Badges"
+                tooltip="Toggle Favorites Badge"
+                shortcutKeys={["h"]}
+                clickHandler={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+                active={settings.showFavoritesBadge}
+            />
+            <ToolbarButton
+                icon="icon-[mdi--label]"
+                name="Media Types"
+                tooltip="Toggle Media Types Badge"
+                shortcutKeys={["e"]}
+                clickHandler={() => setShowTypesBadge(!settings.showTypesBadge)}
+                active={settings.showTypesBadge}
             />
         </ToolbarLayout>
     );

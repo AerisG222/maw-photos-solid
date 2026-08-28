@@ -1,10 +1,15 @@
-import { Component } from "solid-js";
+import { Component, batch } from "solid-js";
 
 import { useFaceFeedSettingsContext } from "../_contexts/settings/FaceFeedSettingsContext";
+import { useFeedCategoryViewSettingsContext } from "../_contexts/settings/FeedCategoryViewSettingsContext";
 import { usePeopleGridViewSettingsContext } from "../_contexts/settings/PeopleGridViewSettingsContext";
 import { allMargins } from "../_models/Margin";
 import { allPersonSorts } from "../_models/PersonSort";
-import { allThumbnailSizes } from "../_models/ThumbnailSize";
+import {
+    ThumbnailSizeDefault,
+    ThumbnailSizeIdType,
+    allThumbnailSizes
+} from "../_models/ThumbnailSize";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
@@ -27,6 +32,54 @@ const ViewPeople: Component = () => {
     ] = usePeopleGridViewSettingsContext();
     const [feedSettings, { setFavoritesOnly, setShuffle, setShowCategories }] =
         useFaceFeedSettingsContext();
+    const [
+        categorySettings,
+        {
+            setShowTitles: setCategoryShowTitles,
+            setShowYears: setCategoryShowYears,
+            setMargin: setCategoryMargin,
+            setThumbnailSize: setCategoryThumbnailSize,
+            setDimThumbnails: setCategoryDimThumbnails,
+            setShowFavoritesBadge: setCategoryShowFavoritesBadge,
+            setShowTypesBadge: setCategoryShowTypesBadge
+        }
+    ] = useFeedCategoryViewSettingsContext();
+
+    /*
+       A card only has room for its title and year at the full thumbnail size, so
+       the two settings hold each other in check - the same pairing the search
+       results make.
+    */
+    const categorySetShowTitles = (doShow: boolean) => {
+        batch(() => {
+            setCategoryShowTitles(doShow);
+
+            if (doShow) {
+                setCategoryThumbnailSize(ThumbnailSizeDefault);
+            }
+        });
+    };
+
+    const categorySetShowYears = (doShow: boolean) => {
+        batch(() => {
+            setCategoryShowYears(doShow);
+
+            if (doShow) {
+                setCategoryThumbnailSize(ThumbnailSizeDefault);
+            }
+        });
+    };
+
+    const categorySetThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
+        batch(() => {
+            setCategoryThumbnailSize(thumbnailSize);
+
+            if (thumbnailSize !== ThumbnailSizeDefault) {
+                setCategoryShowTitles(false);
+                setCategoryShowYears(false);
+            }
+        });
+    };
 
     return (
         <Layout toolbar={<Toolbar />} title="People">
@@ -96,6 +149,53 @@ const ViewPeople: Component = () => {
                         name="feedShowCategories"
                         isSelected={feedSettings.showCategories}
                         onChange={setShowCategories}
+                    />
+                </Panel>
+
+                <Panel title="Person & Clan Categories">
+                    <Toggle
+                        title="Show Category Titles"
+                        name="feedCategoryShowTitles"
+                        isSelected={categorySettings.showTitles}
+                        onChange={categorySetShowTitles}
+                    />
+                    <Toggle
+                        title="Show Category Years"
+                        name="feedCategoryShowYears"
+                        isSelected={categorySettings.showYears}
+                        onChange={categorySetShowYears}
+                    />
+                    <RadioGroup
+                        title="Margins"
+                        groupName="feedCategoryMargins"
+                        itemArray={allMargins}
+                        selectedValue={categorySettings.margin}
+                        onChange={setCategoryMargin}
+                    />
+                    <RadioGroup
+                        title="Thumbnail Size"
+                        groupName="feedCategoryThumbnails"
+                        itemArray={allThumbnailSizes}
+                        selectedValue={categorySettings.thumbnailSize}
+                        onChange={categorySetThumbnailSize}
+                    />
+                    <Toggle
+                        title="Dim Thumbnails"
+                        name="feedCategoryDimThumbnails"
+                        isSelected={categorySettings.dimThumbnails}
+                        onChange={setCategoryDimThumbnails}
+                    />
+                    <Toggle
+                        title="Show Favorite Badges"
+                        name="feedCategoryShowFavoriteBadges"
+                        isSelected={categorySettings.showFavoritesBadge}
+                        onChange={setCategoryShowFavoritesBadge}
+                    />
+                    <Toggle
+                        title="Show Media Type Badges"
+                        name="feedCategoryShowTypeBadges"
+                        isSelected={categorySettings.showTypesBadge}
+                        onChange={setCategoryShowTypesBadge}
                     />
                 </Panel>
             </PanelContainer>

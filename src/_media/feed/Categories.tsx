@@ -1,7 +1,7 @@
 import { Component, For, Match, Show, Switch } from "solid-js";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
+import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
 import { Category } from "../../_models/Category";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
@@ -22,7 +22,7 @@ import ToolbarCategories from "./ToolbarCategories";
 */
 const Categories: Component = () => {
     const feed = useFeedCategories();
-    const [settings] = useMediaGridViewSettingsContext();
+    const [settings] = useFeedCategoryViewSettingsContext();
     const { setIsFavoriteMutation } = useCategoriesContext();
 
     const setIsFavorite = (category: Category, isFavorite: boolean) => {
@@ -78,10 +78,8 @@ const Categories: Component = () => {
                                 {(category, idx) => (
                                     <CategoryCard
                                         category={category}
-                                        showTitles={true}
-                                        // somebody turns up across years, so the
-                                        // year is part of telling two apart here
-                                        showYears={true}
+                                        showTitles={settings.showTitles}
+                                        showYears={settings.showYears}
                                         thumbnailSize={settings.thumbnailSize}
                                         dimThumbnails={settings.dimThumbnails}
                                         showFavoriteBadge={settings.showFavoritesBadge}
