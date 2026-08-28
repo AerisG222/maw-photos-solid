@@ -35,6 +35,13 @@ interface Props {
     requestMore: () => void;
     setShowFavoritesBadge: () => void;
     /*
+       Whether this listing is a category. The download hands back a whole
+       category as a zip, which only answers a question somebody browsing one is
+       asking - in a person's or clan's photos the category is just wherever the
+       current photo happens to live, and changes with every move.
+    */
+    enableCategoryDownload: boolean;
+    /*
        Controls belonging to the feed rather than to this view - a person's
        favorites filter and shuffle. First in the group, ahead of request more
        and the slideshow: they decide *what* the list holds, which outranks
@@ -100,9 +107,11 @@ const DetailToolbar: Component<Props> = props => {
             />
             <MoveNextButton isLast={props.activeMediaIsLast} moveNext={props.moveNext} />
 
-            <ToolbarDivider />
+            <Show when={props.enableCategoryDownload}>
+                <ToolbarDivider />
 
-            <DownloadCategoryButton category={props.activeCategory} />
+                <DownloadCategoryButton category={props.activeCategory} />
+            </Show>
 
             <ToolbarDivider />
 

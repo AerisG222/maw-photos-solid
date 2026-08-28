@@ -28,6 +28,8 @@ interface Props {
     toolbarLeading?: JSXElement;
     showBreadcrumbTitleAsLink: boolean;
     enableCategoryTeaserChooser: boolean;
+    // see the note on the same prop in ToolbarDetail
+    enableCategoryDownload: boolean;
     showFavoritesBadge: boolean;
     setShowFavoritesBadge: () => void;
 }
@@ -70,6 +72,7 @@ const ViewDetail: Component<Props> = props => {
                     >
                         <DetailToolbar
                             extras={props.toolbarExtras}
+                            enableCategoryDownload={props.enableCategoryDownload}
                             activeCategory={props.mediaService.getActiveCategory()}
                             activeMedia={props.mediaService.getActiveMedia()}
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}

@@ -35,6 +35,7 @@ const Detail: Component = () => {
                     slideshowService={slideshowService}
                     detailSettings={settings}
                     showBreadcrumbTitleAsLink={false}
+                    enableCategoryDownload={true}
                     enableCategoryTeaserChooser={true}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     setShowFavoritesBadge={() =>

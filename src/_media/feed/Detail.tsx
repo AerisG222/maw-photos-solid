@@ -85,6 +85,7 @@ const Detail: Component = () => {
                     }
                     detailSettings={settings}
                     showBreadcrumbTitleAsLink={true}
+                    enableCategoryDownload={false}
                     enableCategoryTeaserChooser={false}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     setShowFavoritesBadge={() =>
