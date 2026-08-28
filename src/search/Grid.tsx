@@ -11,7 +11,6 @@ import GridToolbar from "./components/ToolbarGrid";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryCard from "../_components/categories/CategoryCard";
-import SearchResultStatus from "./components/SearchResultStatus";
 import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ViewGrid: Component = () => {
@@ -37,7 +36,10 @@ const ViewGrid: Component = () => {
     return (
         <Layout
             toolbar={
-                <Toolbar>
+                <Toolbar
+                    canRequestMore={searchQuery.hasNextPage}
+                    requestMore={() => void searchQuery.fetchNextPage()}
+                >
                     <GridToolbar />
                 </Toolbar>
             }
@@ -75,11 +77,6 @@ const ViewGrid: Component = () => {
                         )}
                     </For>
                 </div>
-
-                <SearchResultStatus
-                    hasMore={searchQuery.hasNextPage}
-                    continueSearch={() => searchQuery.fetchNextPage()}
-                />
             </Show>
         </Layout>
     );

@@ -11,7 +11,6 @@ import ListToolbar from "./components/ToolbarList";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryListItem from "../_components/categories/CategoryListItem";
-import SearchResultStatus from "./components/SearchResultStatus";
 import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ViewList: Component = () => {
@@ -37,7 +36,10 @@ const ViewList: Component = () => {
     return (
         <Layout
             toolbar={
-                <Toolbar>
+                <Toolbar
+                    canRequestMore={searchQuery.hasNextPage}
+                    requestMore={() => void searchQuery.fetchNextPage()}
+                >
                     <ListToolbar />
                 </Toolbar>
             }
@@ -72,11 +74,6 @@ const ViewList: Component = () => {
                         )}
                     </For>
                 </div>
-
-                <SearchResultStatus
-                    hasMore={searchQuery.hasNextPage}
-                    continueSearch={() => searchQuery.fetchNextPage()}
-                />
             </Show>
         </Layout>
     );

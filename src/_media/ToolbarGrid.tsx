@@ -1,4 +1,4 @@
-import { Component, JSXElement, Show } from "solid-js";
+import { Component, JSXElement, Show, children } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { getNextMarginSize } from "../_models/Margin";
@@ -15,7 +15,7 @@ import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton
 import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
-import RequestMoreButton from "./toolbar/RequestMoreButton";
+import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 import ToggleShowTypesBadgeButton from "./toolbar/ToggleShowTypesButton";
@@ -77,9 +77,22 @@ const GridToolbar: Component<Props> = props => {
         setDimThumbnails(!settings.dimThumbnails);
     };
 
+    /*
+       Resolved once. Reading a JSX prop twice - here and in the Show below -
+       builds the component twice, and each copy registers its own keyboard
+       shortcuts, so the filter keys would fire in pairs and cancel out.
+    */
+    const extras = children(() => props.extras);
+
     return (
         <>
-            {props.extras}
+            {extras()}
+
+            {/* a group of their own: they decide what the listing holds, where
+                everything after them acts on what is already in it */}
+            <Show when={extras()}>
+                <ToolbarDivider />
+            </Show>
 
             <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 

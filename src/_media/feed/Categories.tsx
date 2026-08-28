@@ -42,7 +42,9 @@ const Categories: Component = () => {
                 <ToolbarCategories
                     basePath={feed.basePath()}
                     favoritesOnly={feed.favoritesOnly()}
+                    canRequestMore={feed.query().hasNextPage}
                     setFavoritesOnly={feed.setFavoritesOnly}
+                    requestMore={() => void feed.query().fetchNextPage()}
                 />
             }
         >
@@ -90,19 +92,6 @@ const Categories: Component = () => {
                                 )}
                             </For>
                         </div>
-
-                        <Show when={feed.query().hasNextPage}>
-                            <div class="flex justify-center my-3">
-                                <button
-                                    class="btn btn-primary btn-outline"
-                                    disabled={feed.query().isFetchingNextPage}
-                                    onClick={() => void feed.query().fetchNextPage()}
-                                >
-                                    <span class="text-lg icon-[ic--round-keyboard-arrow-down]" />
-                                    Show More
-                                </button>
-                            </div>
-                        </Show>
                     </Show>
                 </Match>
             </Switch>

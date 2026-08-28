@@ -31,6 +31,8 @@ const Toolbar: ParentComponent<Props> = props => {
     const [, { gteMd }] = useMediaBreakpointContext();
 
     const c = children(() => props.children);
+    // resolved once - see the note in ToolbarGrid on reading a slot twice
+    const leading = children(() => props.leading);
 
     const mediaViewDetail = createMemo(() =>
         props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewDetail)
@@ -50,8 +52,8 @@ const Toolbar: ParentComponent<Props> = props => {
 
     return (
         <ToolbarLayout>
-            <Show when={props.leading}>
-                {props.leading}
+            <Show when={leading()}>
+                {leading()}
                 <ToolbarDivider />
             </Show>
 

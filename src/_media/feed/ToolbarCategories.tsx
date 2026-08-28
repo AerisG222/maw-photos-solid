@@ -4,6 +4,7 @@ import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/Fee
 import { getNextMarginSize } from "../../_models/Margin";
 import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
+import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
@@ -12,7 +13,9 @@ import ToolbarListing from "./ToolbarListing";
 interface Props {
     basePath: string;
     favoritesOnly: boolean;
+    canRequestMore: boolean;
     setFavoritesOnly: (favoritesOnly: boolean) => void;
+    requestMore: () => void;
 }
 
 /*
@@ -76,6 +79,10 @@ const ToolbarCategories: Component<Props> = props => {
                 clickHandler={() => props.setFavoritesOnly(!props.favoritesOnly)}
                 active={props.favoritesOnly}
             />
+
+            <ToolbarDivider />
+
+            <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 
             <ToolbarDivider />
 

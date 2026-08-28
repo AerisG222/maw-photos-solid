@@ -1,4 +1,4 @@
-import { Component, JSXElement } from "solid-js";
+import { Component, JSXElement, Show, children } from "solid-js";
 
 import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 
@@ -10,7 +10,7 @@ import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton
 import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
-import RequestMoreButton from "./toolbar/RequestMoreButton";
+import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
@@ -39,9 +39,22 @@ const FullscreenToolbar: Component<Props> = props => {
     // the favorites badge arrives as a prop only because it predates this
     const [settings, { setHighlightFaces }] = useMediaFullscreenViewSettingsContext();
 
+    /*
+       Resolved once. Reading a JSX prop twice - here and in the Show below -
+       builds the component twice, and each copy registers its own keyboard
+       shortcuts, so the filter keys would fire in pairs and cancel out.
+    */
+    const extras = children(() => props.extras);
+
     return (
         <>
-            {props.extras}
+            {extras()}
+
+            {/* a group of their own: they decide what the listing holds, where
+                everything after them acts on what is already in it */}
+            <Show when={extras()}>
+                <ToolbarDivider />
+            </Show>
 
             <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 

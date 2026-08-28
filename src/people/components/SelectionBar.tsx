@@ -26,7 +26,7 @@ const SelectionBar: Component<Props> = props => {
     const overLimit = () => props.selectedCount > ClanRules.maxMembers;
 
     return (
-        <div class="sticky top-0 z-20 chrome-glass border-b-1 border-base-content/20 py-2 px-3 mb-2">
+        <div class="sticky top-0 z-20 chrome-glass border-b border-base-content/20 py-2 px-3 mb-2">
             <div class="flex flex-row flex-wrap items-center justify-center gap-3">
                 <span class="font-bold">{props.title}</span>
 

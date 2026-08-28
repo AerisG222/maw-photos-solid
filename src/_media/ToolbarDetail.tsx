@@ -1,4 +1,4 @@
-import { Component, JSXElement, Show } from "solid-js";
+import { Component, JSXElement, Show, children } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
@@ -19,7 +19,7 @@ import DownloadCategoryButton from "./toolbar/DownloadCategoryButton";
 import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
-import RequestMoreButton from "./toolbar/RequestMoreButton";
+import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
 
 interface Props {
@@ -71,9 +71,22 @@ const DetailToolbar: Component<Props> = props => {
         setDimThumbnails(!settings.dimThumbnails);
     };
 
+    /*
+       Resolved once. Reading a JSX prop twice - here and in the Show below -
+       builds the component twice, and each copy registers its own keyboard
+       shortcuts, so the filter keys would fire in pairs and cancel out.
+    */
+    const extras = children(() => props.extras);
+
     return (
         <>
-            {props.extras}
+            {extras()}
+
+            {/* a group of their own: they decide what the listing holds, where
+                everything after them acts on what is already in it */}
+            <Show when={extras()}>
+                <ToolbarDivider />
+            </Show>
 
             <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 
