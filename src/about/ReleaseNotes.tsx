@@ -6,6 +6,17 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.4.0</span> : <span class="date">2026-08-28</span>
+            </h3>
+            <p>Additional improvements to the people section</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Add ability to view categories for a person or clan, not just their media</li>
+                <li>Improve toolbar layout in the people area so most important actions appear first</li>
+                <li>Improved consistency when requesting more media as there is now a dedicated toolbar button to load more, rather than a button at the bottom of some screens</li>
+                <li>Other minor tweaks and improvements</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.3.0</span> : <span class="date">2026-08-23</span>
             </h3>
             <p>Major update: Add new section to browse media by individuals</p>
