@@ -29,6 +29,8 @@ interface Props {
     // on a person's media. They sit in the toolbar so they stay reachable when
     // the feed they narrow comes back empty
     toolbarExtras?: JSXElement;
+    // rendered ahead of the view links - see Toolbar
+    toolbarLeading?: JSXElement;
     // shown in place of the tiles when the feed holds nothing, which a filtered
     // feed legitimately can
     emptyState?: JSXElement;
@@ -84,8 +86,10 @@ const ViewGrid: Component<Props> = props => {
                         mediaService={props.mediaService}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
+                        leading={props.toolbarLeading}
                     >
                         <GridToolbar
+                            extras={props.toolbarExtras}
                             activeMedia={props.mediaService.getActiveMedia()}
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
@@ -104,8 +108,6 @@ const ViewGrid: Component<Props> = props => {
                             setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                             setShowTypesBadge={() => props.setShowTypesBadge()}
                         />
-
-                        {props.toolbarExtras}
                     </Toolbar>
                 }
             >

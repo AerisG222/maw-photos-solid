@@ -41,7 +41,9 @@ const ToolbarDownloadLink: Component<Props> = props => {
         "hover:bg-secondary": true,
         "hover:text-secondary-content": true,
         "disabled:bg-transparent!": true,
-        "disabled:color-base-content/20": true,
+        // was disabled:color-base-content/20, which is not a tailwind utility
+        // and so never rendered anything
+        "disabled:opacity-40": true,
         ...props.textClassList!
     });
 

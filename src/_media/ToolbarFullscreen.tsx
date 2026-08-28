@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, JSXElement } from "solid-js";
 
 import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 
@@ -25,6 +25,13 @@ interface Props {
     toggleSlideshow: () => void;
     requestMore: () => void;
     setShowFavoritesBadge: () => void;
+    /*
+       Controls belonging to the feed rather than to this view - a person's
+       favorites filter and shuffle. First in the group, ahead of request more
+       and the slideshow: they decide *what* the list holds, which outranks
+       moving around inside it.
+    */
+    extras?: JSXElement;
 }
 
 const FullscreenToolbar: Component<Props> = props => {
@@ -34,9 +41,9 @@ const FullscreenToolbar: Component<Props> = props => {
 
     return (
         <>
-            <Show when={props.canRequestMore}>
-                <RequestMoreButton requestMore={props.requestMore} />
-            </Show>
+            {props.extras}
+
+            <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 
             <ToggleSlideshowButton
                 isPlaying={props.slideshowIsPlaying}

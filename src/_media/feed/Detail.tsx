@@ -8,6 +8,7 @@ import EmptyClanMessage from "./EmptyClanMessage";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
+import ToolbarListing from "./ToolbarListing";
 import ViewDetail from "../ViewDetail";
 
 const Detail: Component = () => {
@@ -17,6 +18,7 @@ const Detail: Component = () => {
         subjectName,
         subjectIsEmpty,
         isClan,
+        basePath,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,
@@ -66,6 +68,13 @@ const Detail: Component = () => {
                 <ViewDetail
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarLeading={
+                        <ToolbarListing
+                            basePath={basePath()}
+                            showingCategories={false}
+                            favoritesOnly={favoritesOnly()}
+                        />
+                    }
                     toolbarExtras={
                         <ToolbarFilters
                             favoritesOnly={favoritesOnly()}

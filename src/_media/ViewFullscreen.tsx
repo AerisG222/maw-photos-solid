@@ -18,6 +18,8 @@ interface Props {
     // controls belonging to the feed rather than to this view, e.g. the filters
     // on a person's media - see the note in ViewGrid
     toolbarExtras?: JSXElement;
+    // rendered ahead of the view links - see Toolbar
+    toolbarLeading?: JSXElement;
     showFavoritesBadge: boolean;
     setShowFavoritesBadge: () => void;
 }
@@ -46,8 +48,10 @@ const ViewFullscreen: Component<Props> = props => {
                         mediaService={props.mediaService}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
+                        leading={props.toolbarLeading}
                     >
                         <FullscreenToolbar
+                            extras={props.toolbarExtras}
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
@@ -59,8 +63,6 @@ const ViewFullscreen: Component<Props> = props => {
                             requestMore={() => props.mediaService.requestMore()}
                             setShowFavoritesBadge={props.setShowFavoritesBadge}
                         />
-
-                        {props.toolbarExtras}
                     </Toolbar>
                 }
             >

@@ -1,4 +1,4 @@
-import { ParentComponent, Show, children, createMemo } from "solid-js";
+import { JSXElement, ParentComponent, Show, children, createMemo } from "solid-js";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
@@ -21,6 +21,9 @@ interface Props {
     mediaService: IMediaService;
     activeCategory: Category | undefined;
     activeMedia: Media | undefined;
+    // sits ahead of the view links, for a choice they are subordinate to - a
+    // face feed puts its media / categories switch here
+    leading?: JSXElement;
 }
 
 const Toolbar: ParentComponent<Props> = props => {
@@ -47,6 +50,11 @@ const Toolbar: ParentComponent<Props> = props => {
 
     return (
         <ToolbarLayout>
+            <Show when={props.leading}>
+                {props.leading}
+                <ToolbarDivider />
+            </Show>
+
             <Show when={mediaViewGrid()}>
                 <ToolbarLink
                     href={mediaViewGrid()!.buildPathForMedia(

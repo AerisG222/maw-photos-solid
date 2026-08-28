@@ -25,7 +25,8 @@ const ViewPeople: Component = () => {
             setSortBy
         }
     ] = usePeopleGridViewSettingsContext();
-    const [feedSettings, { setFavoritesOnly, setShuffle }] = useFaceFeedSettingsContext();
+    const [feedSettings, { setFavoritesOnly, setShuffle, setShowCategories }] =
+        useFaceFeedSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="People">
@@ -89,6 +90,12 @@ const ViewPeople: Component = () => {
                         name="feedShuffle"
                         isSelected={feedSettings.shuffle}
                         onChange={setShuffle}
+                    />
+                    <Toggle
+                        title="Open on Categories"
+                        name="feedShowCategories"
+                        isSelected={feedSettings.showCategories}
+                        onChange={setShowCategories}
                     />
                 </Panel>
             </PanelContainer>

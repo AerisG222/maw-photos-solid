@@ -15,6 +15,7 @@ import { putApi, queryApi, runWithAccessToken } from "./_shared";
 import { patchById } from "./_cacheUtils";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
+import { Category, CategoryDto, mapCategory } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { SearchResults } from "../../_models/SearchResults";
@@ -47,6 +48,10 @@ export interface PeopleService {
         id: Accessor<Uuid | undefined>,
         filter: Accessor<PersonMediaFilter>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
+    personCategoriesQuery: (
+        id: Accessor<Uuid | undefined>,
+        favoritesOnly: Accessor<boolean>
+    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Person>, unknown>;
 }
 
@@ -75,6 +80,29 @@ export const PeopleProvider: ParentComponent = props => {
         return runWithAccessToken(getToken, accessToken =>
             queryApi<SearchResults<Media>>(accessToken, `persons/${id}/media`, params)
         );
+    };
+
+    /*
+       The categories a person turns up in, as an alternative to the media
+       itself. Paged like the media feed and filtered the same way, but with no
+       seed - a shuffled list of categories would mean nothing.
+    */
+    const fetchPersonCategories = async (id: Uuid, offset: number, favoritesOnly: boolean) => {
+        const params: Record<string, string> = { o: offset.toString() };
+
+        if (favoritesOnly) {
+            params.f = "true";
+        }
+
+        return runWithAccessToken(getToken, async accessToken => {
+            const results = await queryApi<SearchResults<CategoryDto>>(
+                accessToken,
+                `persons/${id}/categories`,
+                params
+            );
+
+            return { ...results, results: results.results.map(mapCategory) };
+        });
     };
 
     const postIsFavorite = async (req: IsFavoriteRequest<Person>) =>
@@ -118,6 +146,20 @@ export const PeopleProvider: ParentComponent = props => {
                 lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
         }));
 
+    const personCategoriesQuery = (
+        id: Accessor<Uuid | undefined>,
+        favoritesOnly: Accessor<boolean>
+    ) =>
+        useInfiniteQuery(() => ({
+            queryKey: ["people", id(), "categories", { favoritesOnly: favoritesOnly() }],
+            queryFn: data => fetchPersonCategories(id()!, data.pageParam, favoritesOnly()),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000,
+            initialPageParam: 0,
+            getNextPageParam: (lastPage, _pages) =>
+                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+        }));
+
     /*
        Patched into the cached list rather than refetched - see the note in
        CategoriesContext for why reference stability matters to a grid keyed on
@@ -146,7 +188,14 @@ export const PeopleProvider: ParentComponent = props => {
     }));
 
     return (
-        <PeopleContext.Provider value={{ peopleQuery, personMediaQuery, setIsFavoriteMutation }}>
+        <PeopleContext.Provider
+            value={{
+                peopleQuery,
+                personMediaQuery,
+                personCategoriesQuery,
+                setIsFavoriteMutation
+            }}
+        >
             {props.children}
         </PeopleContext.Provider>
     );

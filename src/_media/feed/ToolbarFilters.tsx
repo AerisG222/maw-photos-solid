@@ -10,8 +10,8 @@ interface Props {
 }
 
 /*
-   The two controls that shape a face feed. Both write to the query string, so
-   they survive a move into detail or fullscreen and a reload.
+   The controls that shape the media listing of a face feed. Both write to the
+   query string, so they survive a move into detail or fullscreen and a reload.
 
    Their keys avoid f, h and e, which the view links and the badge toggles
    already own on these screens.

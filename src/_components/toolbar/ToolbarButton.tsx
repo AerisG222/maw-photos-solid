@@ -19,10 +19,23 @@ interface Props {
 
 const ToolbarButton: Component<Props> = props => {
     const [state] = useAppSettingsContext();
+
+    /*
+       The one way this button fires. A disabled <button> ignores clicks on its
+       own, but the keyboard shortcut reaches the handler directly - so without
+       this, a button shown as unavailable still answers its key. That went
+       unnoticed while such buttons were hidden rather than disabled.
+    */
+    const activate = () => {
+        if (!props.disabled) {
+            props.clickHandler();
+        }
+    };
+
     const handleClick = (data: null, evt: Event) => {
         evt.preventDefault();
 
-        props.clickHandler();
+        activate();
     };
 
     const iconClasses = () => {
@@ -47,10 +60,10 @@ const ToolbarButton: Component<Props> = props => {
     });
 
     return (
-        <ShortcutWrapper {...props}>
+        <ShortcutWrapper {...props} clickHandler={activate}>
             <button
                 disabled={props.disabled}
-                class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:hover:cursor-not-allowed transition-colors duration-150 ease-out"
+                class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:opacity-40 disabled:hover:cursor-not-allowed transition-colors duration-150 ease-out"
                 classList={{
                     "bg-secondary": props.active,
                     "text-secondary-content": props.active

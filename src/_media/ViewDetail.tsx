@@ -24,6 +24,8 @@ interface Props {
     // controls belonging to the feed rather than to this view, e.g. the filters
     // on a person's media - see the note in ViewGrid
     toolbarExtras?: JSXElement;
+    // rendered ahead of the view links - see Toolbar
+    toolbarLeading?: JSXElement;
     showBreadcrumbTitleAsLink: boolean;
     enableCategoryTeaserChooser: boolean;
     showFavoritesBadge: boolean;
@@ -64,8 +66,10 @@ const ViewDetail: Component<Props> = props => {
                         mediaService={props.mediaService}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
+                        leading={props.toolbarLeading}
                     >
                         <DetailToolbar
+                            extras={props.toolbarExtras}
                             activeCategory={props.mediaService.getActiveCategory()}
                             activeMedia={props.mediaService.getActiveMedia()}
                             activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
@@ -78,8 +82,6 @@ const ViewDetail: Component<Props> = props => {
                             requestMore={() => props.mediaService.requestMore()}
                             setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                         />
-
-                        {props.toolbarExtras}
                     </Toolbar>
                 }
                 sidebar={

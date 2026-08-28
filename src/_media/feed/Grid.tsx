@@ -8,12 +8,14 @@ import EmptyClanMessage from "./EmptyClanMessage";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarFilters from "./ToolbarFilters";
+import ToolbarListing from "./ToolbarListing";
 import ViewGrid from "../ViewGrid";
 
 const Grid: Component = () => {
     const {
         mediaService,
         slideshowService,
+        basePath,
         subjectName,
         subjectPhrase,
         subjectIsEmpty,
@@ -52,11 +54,7 @@ const Grid: Component = () => {
 
             <Match when={loadError()}>
                 <ErrorMessage
-                    title={
-                        isClan()
-                            ? "Could not load media for this clan"
-                            : "Could not load media for this person"
-                    }
+                    title={`Could not load media for this ${isClan() ? "clan" : "person"}`}
                     error={loadError()}
                     onRetry={retryLoad}
                 />
@@ -68,6 +66,13 @@ const Grid: Component = () => {
                     slideshowService={slideshowService}
                     gridSettings={settings}
                     title={subjectName()}
+                    toolbarLeading={
+                        <ToolbarListing
+                            basePath={basePath()}
+                            showingCategories={false}
+                            favoritesOnly={favoritesOnly()}
+                        />
+                    }
                     toolbarExtras={
                         <ToolbarFilters
                             favoritesOnly={favoritesOnly()}

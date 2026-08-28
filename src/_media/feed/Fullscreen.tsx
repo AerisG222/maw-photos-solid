@@ -9,6 +9,7 @@ import EmptyClanMessage from "./EmptyClanMessage";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
+import ToolbarListing from "./ToolbarListing";
 import ViewFullscreen from "../ViewFullscreen";
 
 const Fullscreen: Component = () => {
@@ -19,6 +20,7 @@ const Fullscreen: Component = () => {
         subjectName,
         subjectIsEmpty,
         isClan,
+        basePath,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,
@@ -71,6 +73,13 @@ const Fullscreen: Component = () => {
                 <ViewFullscreen
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarLeading={
+                        <ToolbarListing
+                            basePath={basePath()}
+                            showingCategories={false}
+                            favoritesOnly={favoritesOnly()}
+                        />
+                    }
                     toolbarExtras={
                         <ToolbarFilters
                             favoritesOnly={favoritesOnly()}

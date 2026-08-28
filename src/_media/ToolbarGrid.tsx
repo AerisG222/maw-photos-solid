@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, JSXElement, Show } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { getNextMarginSize } from "../_models/Margin";
@@ -34,6 +34,13 @@ interface Props {
     requestMore: () => void;
     setShowFavoritesBadge: () => void;
     setShowTypesBadge: () => void;
+    /*
+       Controls belonging to the feed rather than to this view - a person's
+       favorites filter and shuffle. First in the group, ahead of request more
+       and the slideshow: they decide *what* the list holds, which outranks
+       moving around inside it.
+    */
+    extras?: JSXElement;
 }
 
 const GridToolbar: Component<Props> = props => {
@@ -72,9 +79,9 @@ const GridToolbar: Component<Props> = props => {
 
     return (
         <>
-            <Show when={props.canRequestMore}>
-                <RequestMoreButton requestMore={props.requestMore} />
-            </Show>
+            {props.extras}
+
+            <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
 
             <ToggleSlideshowButton
                 isPlaying={props.slideshowIsPlaying}

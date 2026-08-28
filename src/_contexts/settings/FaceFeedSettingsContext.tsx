@@ -18,11 +18,14 @@ import { KEY_SETTINGS_FACE_FEED, loadJson, saveJson } from "./_storage";
 export interface FaceFeedSettingsState {
     readonly favoritesOnly: boolean;
     readonly shuffle: boolean;
+    // browse the categories somebody turns up in rather than the media itself
+    readonly showCategories: boolean;
 }
 
 export const defaultFaceFeedSettings: FaceFeedSettingsState = {
     favoritesOnly: false,
-    shuffle: false
+    shuffle: false,
+    showCategories: false
 };
 
 export type FaceFeedSettingsContextValue = [
@@ -30,6 +33,7 @@ export type FaceFeedSettingsContextValue = [
     actions: {
         setFavoritesOnly: (favoritesOnly: boolean) => void;
         setShuffle: (shuffle: boolean) => void;
+        setShowCategories: (showCategories: boolean) => void;
     }
 ];
 
@@ -40,6 +44,7 @@ export const FaceFeedSettingsProvider: ParentComponent = props => {
 
     const setFavoritesOnly = (favoritesOnly: boolean) => updateState({ favoritesOnly });
     const setShuffle = (shuffle: boolean) => updateState({ shuffle });
+    const setShowCategories = (showCategories: boolean) => updateState({ showCategories });
 
     const updateState = (update: Partial<FaceFeedSettingsState>) => {
         setState(update);
@@ -47,7 +52,9 @@ export const FaceFeedSettingsProvider: ParentComponent = props => {
     };
 
     return (
-        <FaceFeedSettingsContext.Provider value={[state, { setFavoritesOnly, setShuffle }]}>
+        <FaceFeedSettingsContext.Provider
+            value={[state, { setFavoritesOnly, setShuffle, setShowCategories }]}
+        >
             {props.children}
         </FaceFeedSettingsContext.Provider>
     );

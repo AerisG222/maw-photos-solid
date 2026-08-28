@@ -13,7 +13,10 @@ const ViewApplication: Component = () => {
                 <li>Choose a person and view media they are in</li>
                 <li>Favorite the people you look for most to keep them at the top of the list</li>
                 <li>Build a clan, like "the kids", and browse media that contains any of them</li>
-                <li>Randomize photos for selected people or clans, or filter to just include media you marked as favorites</li>
+                <li>
+                    Randomize photos for selected people or clans, or filter to just include media
+                    you marked as favorites
+                </li>
                 <li>Show names of known people with a border around their face</li>
                 <li>Several other UI improvements and fixes</li>
                 <li>Numerous dependency updates</li>

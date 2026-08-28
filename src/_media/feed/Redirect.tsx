@@ -1,36 +1,17 @@
 import { Component } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 
+import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
-import { MediaViewDetail, MediaViewFullscreen } from "../../_models/MediaView";
 import { isUuid } from "../../_models/Uuid";
 import { people } from "../../people/_routes";
-import { buildFeedRoutes, clanFeedBasePath, personFeedBasePath, stripMediaParams } from "./_routes";
+import { clanFeedBasePath, feedListingPath, feedMediaListing, personFeedBasePath } from "./_routes";
 
 const Redirect: Component = () => {
     const params = useParams();
     const navigate = useNavigate();
-    const [settings] = useMediaPageSettingsContext();
-
-    /*
-       Map and bulk edit only make sense within one category, so a preference for
-       either lands on the grid here rather than on a view this feed cannot offer.
-    */
-    const route = () => {
-        const basePath = params.clanId
-            ? clanFeedBasePath(params.clanId)
-            : personFeedBasePath(params.personId!);
-        const routes = buildFeedRoutes(basePath);
-
-        switch (settings.view) {
-            case MediaViewDetail:
-                return routes.detail;
-            case MediaViewFullscreen:
-                return routes.fullscreen;
-            default:
-                return routes.grid;
-        }
-    };
+    const [mediaSettings] = useMediaPageSettingsContext();
+    const [feedSettings] = useFaceFeedSettingsContext();
 
     /*
        A clan lives under /people/clans/{id}, so /people/clans on its own matches
@@ -41,7 +22,26 @@ const Redirect: Component = () => {
     if (!isUuid(params.clanId ?? params.personId)) {
         navigate(people.absolutePath, { replace: true });
     } else {
-        navigate(stripMediaParams(route().absolutePath), { replace: true });
+        const basePath = params.clanId
+            ? clanFeedBasePath(params.clanId)
+            : personFeedBasePath(params.personId!);
+
+        /*
+           A feed opens on whatever was last chosen: the listing from the switch
+           in its toolbar, and - for the media - the view from the links beside
+           it. The same two preferences those controls write, read back here.
+
+           The favorites filter is applied only for the categories listing. The
+           media pages settle their own query string on mount, where the shuffle
+           seed is decided too, and arriving with `f` already set would make them
+           skip it.
+        */
+        navigate(
+            feedSettings.showCategories
+                ? feedListingPath(basePath, "categories", feedSettings.favoritesOnly)
+                : feedListingPath(basePath, feedMediaListing(mediaSettings.view), false),
+            { replace: true }
+        );
     }
 
     return <></>;

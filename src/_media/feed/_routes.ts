@@ -4,7 +4,12 @@ import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
-import { MediaViewDetail, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
+import {
+    MediaView,
+    MediaViewDetail,
+    MediaViewFullscreen,
+    MediaViewGrid
+} from "../../_models/MediaView";
 
 /*
    The routes behind a face driven feed: the media one person appears in, or the
@@ -24,6 +29,7 @@ const mediaParams = "/:categoryYear?/:categorySlug?/:mediaSlug?";
 // create a second lazy wrapper around the same chunk
 const redirectComponent = lazy(() => import("./Redirect"));
 const gridComponent = lazy(() => import("./Grid"));
+const categoriesComponent = lazy(() => import("./Categories"));
 const detailComponent = lazy(() => import("./Detail"));
 const fullscreenComponent = lazy(() => import("./Fullscreen"));
 const rootComponent = lazy(() => import("../MediaRoot"));
@@ -50,6 +56,11 @@ export interface FeedRoutes {
     grid: MediaAppRouteDefinition;
     detail: MediaAppRouteDefinition;
     fullscreen: MediaAppRouteDefinition;
+    // a listing of the categories the subject turns up in, rather than of their
+    // media. its own route rather than a flag on the grid: it lists a different
+    // thing, so it has a different toolbar and a different query, and neither
+    // has to ask which mode it is in
+    categories: AppRouteDefinition;
 }
 
 /*
@@ -97,8 +108,39 @@ export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
         component: fullscreenComponent,
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
             `${basePath}/fullscreen${mediaSlugOrBlank(media)}${search}`
+    },
+    categories: {
+        icon: "icon-[ic--round-collections]",
+        name: "Categories",
+        tooltip: "Show Categories",
+        shortcutKeys: ["k"],
+        path: "/categories",
+        absolutePath: `${basePath}/categories`,
+        component: categoriesComponent
     }
 });
+
+/*
+   Which media view a feed can open on. Map and bulk edit belong to a single
+   category, so a saved preference for either falls back to the grid - the same
+   rule the feed's redirect applies.
+*/
+export const feedMediaListing = (view: MediaView) => {
+    switch (view) {
+        case MediaViewDetail:
+            return "detail";
+        case MediaViewFullscreen:
+            return "fullscreen";
+        default:
+            return "grid";
+    }
+};
+
+// a path to one of a feed's listings. only the favorites filter carries across:
+// a seeded shuffle has no meaning for a list of categories, and the API takes no
+// seed for them
+export const feedListingPath = (basePath: string, listing: string, favoritesOnly: boolean) =>
+    `${basePath}/${listing}${favoritesOnly ? "?f=true" : ""}`;
 
 // the tree handed to the router, one per subject kind
 export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefinition => {
@@ -116,6 +158,6 @@ export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefi
         absolutePath: basePath,
         name,
         component: rootComponent,
-        children: [redirect, routes.grid, routes.detail, routes.fullscreen]
+        children: [redirect, routes.grid, routes.detail, routes.fullscreen, routes.categories]
     };
 };

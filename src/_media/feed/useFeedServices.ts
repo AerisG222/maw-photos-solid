@@ -10,13 +10,9 @@ import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageS
 import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
 import { SlideshowService } from "../services/SlideshowService";
-import { buildFeedRoutes, clanFeedBasePath, personFeedBasePath } from "./_routes";
+import { buildFeedRoutes } from "./_routes";
+import { first, useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
-
-// a repeated key parses as an array; the last value wins, matching how the
-// browser would have filled the control that wrote it
-const first = (value: string | string[] | undefined) =>
-    Array.isArray(value) ? value[value.length - 1] : value;
 
 export const useFeedServices = (view: MediaView) => {
     const navigate = useNavigate();
@@ -27,25 +23,11 @@ export const useFeedServices = (view: MediaView) => {
     const [feedSettings, { setFavoritesOnly: rememberFavoritesOnly, setShuffle: rememberShuffle }] =
         useFaceFeedSettingsContext();
     const { categoryQuery } = useCategoriesContext();
-    const { peopleQuery, personMediaQuery } = usePeopleContext();
-    const { clansQuery, clanMediaQuery } = useClansContext();
+    const { personMediaQuery } = usePeopleContext();
+    const { clanMediaQuery } = useClansContext();
 
-    // which route matched decides what this feed is about; the two never appear
-    // together, and a page is only ever reached through one of them
-    const personId = () => params.personId as Uuid | undefined;
-    const clanId = () => params.clanId as Uuid | undefined;
-    const isClan = () => !!clanId();
-
-    const basePath = () =>
-        isClan() ? clanFeedBasePath(clanId()!) : personFeedBasePath(personId()!);
-
-    /*
-       The filter lives in the url rather than in a store. It has to survive
-       switching between grid, detail and fullscreen - which are separate routes -
-       and putting it in the address makes a reload or a shared link reproduce the
-       same feed, which matters most for the shuffle: the seed *is* the ordering.
-    */
-    const favoritesOnly = () => first(searchParams.f) === "true";
+    const subject = useFeedSubject();
+    const { personId, clanId, isClan, basePath, favoritesOnly } = subject;
 
     const seed = () => {
         const raw = first(searchParams.seed);
@@ -85,34 +67,6 @@ export const useFeedServices = (view: MediaView) => {
     const personMq = personMediaQuery(personId, filter);
     const clanMq = clanMediaQuery(clanId, filter);
     const mq = () => (isClan() ? clanMq : personMq);
-
-    // both lists are already cached for the picker, so naming the subject on its
-    // own page costs nothing beyond a lookup
-    const pq = peopleQuery();
-    const cq = clansQuery();
-
-    const clan = () => cq.data?.find(c => c.id === clanId());
-    const subjectName = () =>
-        isClan() ? clan()?.name : pq.data?.find(p => p.id === personId())?.name;
-
-    // "None of the media <x> appears in..." reads differently for a group
-    const subjectPhrase = () => {
-        const name = subjectName();
-
-        if (!name) {
-            return isClan() ? "anyone in this clan" : "this person";
-        }
-
-        return isClan() ? `anyone in ${name}` : name;
-    };
-
-    /*
-       A clan with nobody in it answers the media call with a 404, exactly as a
-       person the caller cannot see does - the API cannot tell those apart
-       without leaking which. Reading the clan itself can, and an empty clan is a
-       state worth explaining rather than reporting as a failure.
-    */
-    const subjectIsEmpty = () => isClan() && cq.isSuccess && clan()?.members.length === 0;
 
     const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
 
@@ -204,18 +158,14 @@ export const useFeedServices = (view: MediaView) => {
        so none of them failing is a reason to withhold the photos.
     */
     const loadError = () => findQueryError([mq()]);
-    const retryLoad = () => refetchQueries([mq(), categoryResult, pq, cq]);
+    const retryLoad = () => refetchQueries([mq(), categoryResult, subject.people, subject.clans]);
 
     const isLoading = () => mq().isLoading;
 
     return {
+        ...subject,
         mediaService,
         slideshowService,
-        subjectName,
-        subjectPhrase,
-        subjectIsEmpty,
-        isClan,
-        favoritesOnly,
         isShuffled,
         setFavoritesOnly,
         setShuffled,
@@ -224,6 +174,8 @@ export const useFeedServices = (view: MediaView) => {
         retryLoad
     };
 };
+
+export type FeedServices = ReturnType<typeof useFeedServices>;
 
 // postgres takes the seed as a bigint, but it only has to be stable and varied -
 // a 32 bit value is plenty and stays exact in a javascript number

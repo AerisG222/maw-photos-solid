@@ -12,6 +12,7 @@ import {
 
 import { useAuthContext } from "../AuthContext";
 import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
+import { Category, CategoryDto, mapCategory } from "../../_models/Category";
 import { Clan, ClanDto, mapClan } from "../../_models/Clan";
 import { Media } from "../../_models/Media";
 import { PersonMediaFilter } from "./PeopleContext";
@@ -29,6 +30,10 @@ export interface ClansService {
         id: Accessor<Uuid | undefined>,
         filter: Accessor<PersonMediaFilter>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
+    clanCategoriesQuery: (
+        id: Accessor<Uuid | undefined>,
+        favoritesOnly: Accessor<boolean>
+    ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     createClanMutation: UseMutationResult<Clan, Error, CreateClanRequest, unknown>;
     renameClanMutation: UseMutationResult<Clan, Error, RenameClanRequest, unknown>;
     setClanPersonsMutation: UseMutationResult<Clan, Error, SetClanPersonsRequest, unknown>;
@@ -100,6 +105,26 @@ export const ClansProvider: ParentComponent = props => {
         );
     };
 
+    // the categories any member turns up in - the clan counterpart of the person
+    // list, and paged and filtered identically
+    const fetchClanCategories = async (id: Uuid, offset: number, favoritesOnly: boolean) => {
+        const params: Record<string, string> = { o: offset.toString() };
+
+        if (favoritesOnly) {
+            params.f = "true";
+        }
+
+        return runWithAccessToken(getToken, async accessToken => {
+            const results = await queryApi<SearchResults<CategoryDto>>(
+                accessToken,
+                `clans/${id}/categories`,
+                params
+            );
+
+            return { ...results, results: results.results.map(mapCategory) };
+        });
+    };
+
     const removeClan = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken => deleteApi(accessToken, `clans/${id}`));
 
@@ -115,6 +140,20 @@ export const ClansProvider: ParentComponent = props => {
         useInfiniteQuery(() => ({
             queryKey: ["clans", id(), "media", filter()],
             queryFn: data => fetchClanMedia(id()!, data.pageParam, filter()),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000,
+            initialPageParam: 0,
+            getNextPageParam: (lastPage, _pages) =>
+                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+        }));
+
+    const clanCategoriesQuery = (
+        id: Accessor<Uuid | undefined>,
+        favoritesOnly: Accessor<boolean>
+    ) =>
+        useInfiniteQuery(() => ({
+            queryKey: ["clans", id(), "categories", { favoritesOnly: favoritesOnly() }],
+            queryFn: data => fetchClanCategories(id()!, data.pageParam, favoritesOnly()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
             initialPageParam: 0,
@@ -179,6 +218,7 @@ export const ClansProvider: ParentComponent = props => {
             value={{
                 clansQuery,
                 clanMediaQuery,
+                clanCategoriesQuery,
                 createClanMutation,
                 renameClanMutation,
                 setClanPersonsMutation,
