@@ -21,9 +21,12 @@ type FeedMediaQuery = UseInfiniteQueryResult<InfiniteData<SearchResults<Media> |
    Drives a face feed - one person's media, or a clan's - over the shared media
    views.
 
-   Both the routes and the query arrive as accessors rather than values: the
-   subject can change under a mounted page (one person to the next), and the feed
-   is re-keyed rather than re-created when it does.
+       Queries arrive as accessors, not as the results themselves. Both forms
+       happen to work - a query result is a reactive store, so reading it later
+       still tracks - but only one of them survives the query being *replaced*,
+       which is what happens when a feed is re-keyed by a new filter or subject.
+       Taking accessors throughout means every service reads the query that is
+       current at the moment it is asked, and there is one rule rather than two.
 */
 export class FeedMediaService extends BaseMediaService implements IMediaService {
     constructor(
@@ -34,7 +37,7 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         // the query string the feed is being browsed under, so every path this
         // service hands out keeps the filter and shuffle the user chose
         protected search: () => string,
-        protected categoryQuery: UseQueryResult<Category | undefined, Error>,
+        protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
         protected mediaListQuery: () => FeedMediaQuery
     ) {
         super(navigate, params, view);
@@ -72,7 +75,7 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         }
     };
 
-    getActiveCategory = () => this.categoryQuery?.data;
+    getActiveCategory = () => this.categoryQuery().data;
 
     getMediaList = () => {
         const query = this.mediaListQuery();

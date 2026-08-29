@@ -11,6 +11,7 @@ import {
 } from "@tanstack/solid-query";
 
 import { useAuthContext } from "../AuthContext";
+import { queryKeys } from "./_queryKeys";
 import { putApi, queryApi, runWithAccessToken } from "./_shared";
 import { patchById } from "./_cacheUtils";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
@@ -119,7 +120,7 @@ export const PeopleProvider: ParentComponent = props => {
     */
     const peopleQuery = (enabled?: Accessor<boolean>) =>
         useQuery(() => ({
-            queryKey: ["people"],
+            queryKey: queryKeys.people.all(),
             queryFn: fetchPeople,
             enabled: (enabled?.() ?? true) && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -137,7 +138,7 @@ export const PeopleProvider: ParentComponent = props => {
         filter: Accessor<PersonMediaFilter>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: ["people", id(), "media", filter()],
+            queryKey: queryKeys.people.media(id(), filter()),
             queryFn: data => fetchPersonMedia(id()!, data.pageParam, filter()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -151,7 +152,7 @@ export const PeopleProvider: ParentComponent = props => {
         favoritesOnly: Accessor<boolean>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: ["people", id(), "categories", { favoritesOnly: favoritesOnly() }],
+            queryKey: queryKeys.people.categories(id(), { favoritesOnly: favoritesOnly() }),
             queryFn: data => fetchPersonCategories(id()!, data.pageParam, favoritesOnly()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -172,7 +173,7 @@ export const PeopleProvider: ParentComponent = props => {
        not try to hold the card still.
     */
     const applyPersonIsFavorite = (id: Uuid, isFavorite: boolean) => {
-        queryClient.setQueryData<Person[]>(["people"], prev =>
+        queryClient.setQueryData<Person[]>(queryKeys.people.all(), prev =>
             prev ? patchById(prev, id, { isFavorite }) : prev
         );
     };

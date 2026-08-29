@@ -25,6 +25,7 @@ import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
+import { queryKeys, queryKeyMatches } from "./_queryKeys";
 
 export interface MediaService {
     mediaQuery: (id: Accessor<Uuid>) => UseQueryResult<Media | undefined, Error>;
@@ -124,7 +125,7 @@ export const MediaProvider: ParentComponent = props => {
 
     const randomMediaQuery = (count: number) =>
         useInfiniteQuery(() => ({
-            queryKey: ["media", "random"],
+            queryKey: queryKeys.media.random(),
             queryFn: () => fetchRandom(count),
             enabled: count > 0 && authContext.isLoggedIn,
             staleTime: Infinity,
@@ -135,7 +136,7 @@ export const MediaProvider: ParentComponent = props => {
 
     const mediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: ["media", id()],
+            queryKey: queryKeys.media.detail(id()),
             queryFn: () => fetchMedia(id()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -143,7 +144,7 @@ export const MediaProvider: ParentComponent = props => {
 
     const metadataQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id(), "metadata"],
+            queryKey: queryKeys.media.metadata(id()),
             queryFn: () => fetchMetadata(id()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -151,14 +152,14 @@ export const MediaProvider: ParentComponent = props => {
 
     const commentsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id(), "comments"],
+            queryKey: queryKeys.media.comments(id()),
             queryFn: () => fetchComments(id()),
             enabled: !!id() && authContext.isLoggedIn
         }));
 
     const gpsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: ["media", id(), "gps"],
+            queryKey: queryKeys.media.gps(id()),
             queryFn: () => fetchGps(id()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -172,7 +173,7 @@ export const MediaProvider: ParentComponent = props => {
     */
     const facesQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: ["media", id(), "faces"],
+            queryKey: queryKeys.media.faces(id()),
             queryFn: () => fetchFaces(id()!),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 30 * 60 * 1000
@@ -180,9 +181,16 @@ export const MediaProvider: ParentComponent = props => {
 
     const addCommentMutation = useMutation(() => ({
         mutationFn: (req: AddCommentRequest) => postComment(req),
-        onSuccess: async (data, req) => {
-            await queryClient.invalidateQueries({
-                queryKey: ["media", req.mediaId, "comments"],
+        /*
+           Not awaited. A promise returned from a mutation callback keeps the
+           mutation pending until it settles, so awaiting a refetch here leaves
+           the control that triggered it disabled through a second round trip
+           after the write already succeeded. The refetch still happens; the
+           screen just stops waiting on it.
+        */
+        onSuccess: (data, req) => {
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.media.comments(req.mediaId),
                 refetchType: "all"
             });
         }
@@ -201,41 +209,43 @@ export const MediaProvider: ParentComponent = props => {
     const applyMediaIsFavorite = (id: Uuid, isFavorite: boolean) => {
         const patchOne = (media: Media[]) => patchById(media, id, { isFavorite });
 
-        queryClient.setQueryData<Media>(["media", id], prev =>
+        queryClient.setQueryData<Media>(queryKeys.media.detail(id), prev =>
             prev ? { ...prev, isFavorite } : prev
         );
 
-        queryClient.setQueryData<InfiniteData<Media[] | undefined>>(["media", "random"], prev => {
-            if (!prev) {
-                return prev;
+        queryClient.setQueryData<InfiniteData<Media[] | undefined>>(
+            queryKeys.media.random(),
+            prev => {
+                if (!prev) {
+                    return prev;
+                }
+
+                let changed = false;
+
+                const pages = prev.pages.map(page => {
+                    if (!page) {
+                        return page;
+                    }
+
+                    const next = patchOne(page);
+
+                    if (next === page) {
+                        return page;
+                    }
+
+                    changed = true;
+
+                    return next;
+                });
+
+                return changed ? { ...prev, pages } : prev;
             }
-
-            let changed = false;
-
-            const pages = prev.pages.map(page => {
-                if (!page) {
-                    return page;
-                }
-
-                const next = patchOne(page);
-
-                if (next === page) {
-                    return page;
-                }
-
-                changed = true;
-
-                return next;
-            });
-
-            return changed ? { ...prev, pages } : prev;
-        });
+        );
 
         // the media list held for each category
         queryClient.setQueriesData<Media[]>(
             {
-                predicate: query =>
-                    query.queryKey[0] === "categories" && query.queryKey[2] === "media"
+                predicate: query => queryKeyMatches.categoryMedia(query.queryKey)
             },
             prev => (prev ? patchOne(prev) : prev)
         );
@@ -253,9 +263,7 @@ export const MediaProvider: ParentComponent = props => {
         */
         queryClient.setQueriesData<InfiniteData<SearchResults<Media> | undefined>>(
             {
-                predicate: query =>
-                    (query.queryKey[0] === "people" || query.queryKey[0] === "clans") &&
-                    query.queryKey[2] === "media"
+                predicate: query => queryKeyMatches.faceFeedMedia(query.queryKey)
             },
             prev => {
                 if (!prev) {
@@ -297,14 +305,21 @@ export const MediaProvider: ParentComponent = props => {
 
     const setGpsOverrideMutation = useMutation(() => ({
         mutationFn: (gpsOverrideRequest: GpsOverrideRequest) => postGpsOverride(gpsOverrideRequest),
-        onSettled: async (data, errs, variables) => {
-            await queryClient.invalidateQueries({
-                queryKey: ["media", variables.mediaId, "gps"],
+        /*
+           Not awaited. A promise returned from a mutation callback keeps the
+           mutation pending until it settles, so awaiting a refetch here leaves
+           the control that triggered it disabled through a second round trip
+           after the write already succeeded. The refetch still happens; the
+           screen just stops waiting on it.
+        */
+        onSettled: (data, errs, variables) => {
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.media.gps(variables.mediaId),
                 refetchType: "all"
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories"],
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.all(),
                 refetchType: "all"
             });
         }
@@ -313,14 +328,21 @@ export const MediaProvider: ParentComponent = props => {
     const bulkGpsOverrideMutation = useMutation(() => ({
         mutationFn: (overrideRequest: BulkGpsOverrideRequest) =>
             postBulkGpsOverride(overrideRequest),
-        onSettled: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: ["media"],
+        /*
+           Not awaited. A promise returned from a mutation callback keeps the
+           mutation pending until it settles, so awaiting a refetch here leaves
+           the control that triggered it disabled through a second round trip
+           after the write already succeeded. The refetch still happens; the
+           screen just stops waiting on it.
+        */
+        onSettled: () => {
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.media.all(),
                 refetchType: "all"
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories"],
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.all(),
                 refetchType: "all"
             });
         }

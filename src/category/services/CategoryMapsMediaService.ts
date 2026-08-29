@@ -16,9 +16,9 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         navigate: Navigator,
         params: Params,
         view: MediaView,
-        categoryQuery: UseQueryResult<Category | undefined, Error>,
-        mediaListQuery: UseQueryResult<Media[], Error>,
-        protected gpsListQuery: UseQueryResult<GpsDetail[], Error>
+        categoryQuery: () => UseQueryResult<Category | undefined, Error>,
+        mediaListQuery: () => UseQueryResult<Media[], Error>,
+        protected gpsListQuery: () => UseQueryResult<GpsDetail[], Error>
     ) {
         super(navigate, params, view, categoryQuery, mediaListQuery);
     }
@@ -119,18 +119,23 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
     };
 
     isReady = () =>
-        this.gpsListQuery.isSuccess &&
-        this.mediaListQuery.isSuccess &&
-        this.categoryQuery.isSuccess &&
+        this.gpsListQuery().isSuccess &&
+        this.mediaListQuery().isSuccess &&
+        this.categoryQuery().isSuccess &&
         (!this.params.mediaSlug || !!this.getActiveMedia());
 
-    getGpsList = () => (this.gpsListQuery.isSuccess ? this.gpsListQuery.data : []);
+    // read once, so `isSuccess` narrows the data on the same value
+    getGpsList = () => {
+        const query = this.gpsListQuery();
+
+        return query.isSuccess ? query.data : [];
+    };
 
     preferredGpsLocation = (mediaWithGps: MediaWithGps | undefined): GpsCoordinate | undefined =>
         mediaWithGps?.gps?.override ?? mediaWithGps?.gps?.recorded;
 
     mediaWithGps = () => {
-        if (this.mediaListQuery?.isSuccess && this.gpsListQuery?.isSuccess) {
+        if (this.mediaListQuery().isSuccess && this.gpsListQuery().isSuccess) {
             const mediaWithGps: MediaWithGps[] = [];
 
             // iterate over the original list to maintain sort order that is consistent w/ other views

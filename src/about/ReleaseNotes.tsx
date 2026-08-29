@@ -11,8 +11,13 @@ const ViewApplication: Component = () => {
             <p>Additional improvements to the people section</p>
             <ul class="list-inside list-disc mb-4">
                 <li>Add ability to view categories for a person or clan, not just their media</li>
-                <li>Improve toolbar layout in the people area so most important actions appear first</li>
-                <li>Improved consistency when requesting more media as there is now a dedicated toolbar button to load more, rather than a button at the bottom of some screens</li>
+                <li>
+                    Improve toolbar layout in the people area so most important actions appear first
+                </li>
+                <li>
+                    Improved consistency when requesting more media as there is now a dedicated
+                    toolbar button to load more, rather than a button at the bottom of some screens
+                </li>
                 <li>Other minor tweaks and improvements</li>
             </ul>
 

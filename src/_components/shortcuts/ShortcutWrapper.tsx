@@ -1,4 +1,12 @@
-import { ParentComponent, children, createEffect, createUniqueId, onCleanup } from "solid-js";
+import {
+    ParentComponent,
+    children,
+    createEffect,
+    createRoot,
+    createUniqueId,
+    on,
+    onCleanup
+} from "solid-js";
 import { createShortcut } from "@solid-primitives/keyboard";
 
 import { useShortcutContext } from "../../_contexts/ShortcutContext";
@@ -38,11 +46,39 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
         });
     };
 
-    // todo: not sure why, but this is unhappy if it runs in createEffect,
-    // so we are leaving this here for now...
-    if (props.shortcutKeys) {
-        createShortcut(props.shortcutKeys, () => props.clickHandler());
-    }
+    /*
+       Bound in an effect keyed on the keys themselves, with each binding owned by
+       its own root so that replacing them disposes the previous one.
+
+       `createShortcut` registers against whatever owner is current and is cleaned
+       up with it, so calling it from the component body - as this did - read the
+       keys untracked and tied the binding's life to the component. A component
+       rebuilt underneath its own key (a toolbar slot read twice, say) then left
+       the old binding listening, and one press acted twice.
+    */
+    createEffect(
+        on(
+            () => props.shortcutKeys,
+            keys => {
+                if (!keys) {
+                    return;
+                }
+
+                const dispose = createRoot(dispose => {
+                    createShortcut(keys, () => {
+                        // a control drawn as unavailable must not answer its key
+                        if (!props.disabled) {
+                            props.clickHandler();
+                        }
+                    });
+
+                    return dispose;
+                });
+
+                onCleanup(dispose);
+            }
+        )
+    );
 
     createEffect(() => {
         if (!props.shortcutKeys || props.disabled) {

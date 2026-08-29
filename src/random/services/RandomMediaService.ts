@@ -21,8 +21,12 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         navigate: Navigator,
         params: Params,
         view: MediaView,
-        protected categoryQuery: UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>
+        // accessors throughout - see the note in FeedMediaService
+        protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
+        protected mediaListQuery: () => UseInfiniteQueryResult<
+            InfiniteData<Media[] | undefined>,
+            Error
+        >
     ) {
         super(navigate, params, view);
     }
@@ -51,16 +55,18 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         }
     };
 
-    getActiveCategory = () => this.categoryQuery?.data;
+    getActiveCategory = () => this.categoryQuery().data;
 
     getMediaList = () => {
-        if (!this.mediaListQuery.isSuccess) {
+        const query = this.mediaListQuery();
+
+        if (!query.isSuccess) {
             return [];
         }
 
         const list: Media[] = [];
 
-        for (const page of this.mediaListQuery.data?.pages ?? []) {
+        for (const page of query.data?.pages ?? []) {
             if (page) {
                 list.push(...page);
             }
@@ -107,7 +113,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         }
 
         this.intervalId = window.setInterval(() => {
-            void this.mediaListQuery.fetchNextPage();
+            void this.mediaListQuery().fetchNextPage();
         }, 20 * 1000);
     };
 
@@ -121,12 +127,12 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
     };
 
     fetchNextPage = async () => {
-        await this.mediaListQuery.fetchNextPage();
+        await this.mediaListQuery().fetchNextPage();
     };
 
     override canRequestMore = () => true;
 
     override requestMore = () => {
-        void this.mediaListQuery.fetchNextPage();
+        void this.mediaListQuery().fetchNextPage();
     };
 }

@@ -20,7 +20,13 @@ export const useCategoryServices = (view: MediaView) => {
         )?.id;
     const cq = categoryQuery(categoryId);
     const mq = categoryMediaQuery(categoryId);
-    const mediaService = new CategoryMediaService(navigate, params, view, cq, mq);
+    const mediaService = new CategoryMediaService(
+        navigate,
+        params,
+        view,
+        () => cq,
+        () => mq
+    );
 
     const slideshowService = new SlideshowService(
         mediaService,

@@ -19,7 +19,14 @@ export const useCategoryMapServices = (view: MediaView) => {
     const cq = categoryQuery(categoryId);
     const mq = categoryMediaQuery(categoryId);
     const gpsList = categoryMediaGpsQuery(categoryId);
-    const mediaService = new CategoryMapsMediaService(navigate, params, view, cq, mq, gpsList);
+    const mediaService = new CategoryMapsMediaService(
+        navigate,
+        params,
+        view,
+        () => cq,
+        () => mq,
+        () => gpsList
+    );
 
     const loadError = () => findQueryError([categoriesQuery, cq, mq, gpsList]);
     const retryLoad = () => refetchQueries([categoriesQuery, cq, mq, gpsList]);

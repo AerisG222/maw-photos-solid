@@ -23,6 +23,7 @@ import { CategoryTeaserRequest } from "../../_models/CategoryTeaserRequest";
 import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
+import { queryKeys, queryKeyMatches } from "./_queryKeys";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -134,7 +135,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const yearsQuery = () =>
         useQuery(() => ({
-            queryKey: ["categories", "years"],
+            queryKey: queryKeys.categories.years(),
             queryFn: fetchYears,
             enabled: authContext.isLoggedIn,
             staleTime: 15 * 60 * 1000
@@ -149,7 +150,7 @@ export const CategoriesProvider: ParentComponent = props => {
     const categoriesForAllYearsQuery = (years: Accessor<number[]>) =>
         useQueries(() => ({
             queries: years().map(year => ({
-                queryKey: ["categories", "year", year],
+                queryKey: queryKeys.categories.forYear(year),
                 queryFn: () => fetchCategoriesForYear(year),
                 enabled: authContext.isLoggedIn,
                 staleTime: 1 * 60 * 1000
@@ -158,7 +159,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoriesForYearQuery = (year: Accessor<number>) =>
         useQuery(() => ({
-            queryKey: ["categories", "year", year()],
+            queryKey: queryKeys.categories.forYear(year()),
             queryFn: () => fetchCategoriesForYear(year()),
             enabled: year() > 0 && authContext.isLoggedIn,
             staleTime: 1 * 60 * 1000
@@ -169,7 +170,7 @@ export const CategoriesProvider: ParentComponent = props => {
     const categoriesWithoutGpsForAllYearsQuery = (years: Accessor<number[]>) =>
         useQueries(() => ({
             queries: years().map(year => ({
-                queryKey: ["categories", "year", year, "no-gps"],
+                queryKey: queryKeys.categories.withoutGpsForYear(year),
                 queryFn: () => fetchCategoriesWithoutGpsForYear(year),
                 enabled: authContext.isLoggedIn,
                 staleTime: 1 * 60 * 1000
@@ -178,7 +179,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoriesWithoutGpsForYearQuery = (year: Accessor<number>) =>
         useQuery(() => ({
-            queryKey: ["categories", "year", year(), "no-gps"],
+            queryKey: queryKeys.categories.withoutGpsForYear(year()),
             queryFn: () => fetchCategoriesWithoutGpsForYear(year()),
             enabled: year() > 0 && authContext.isLoggedIn,
             staleTime: 1 * 60 * 1000
@@ -193,7 +194,7 @@ export const CategoriesProvider: ParentComponent = props => {
     */
     const categoryQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: ["categories", id()],
+            queryKey: queryKeys.categories.detail(id()),
             queryFn: () => fetchCategory(id()!),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -202,7 +203,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoryMediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: ["categories", id(), "media"],
+            queryKey: queryKeys.categories.media(id()),
             queryFn: () => fetchCategoryMedia(id()!),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
@@ -210,7 +211,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const categoryMediaGpsQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: ["categories", id(), "gps"],
+            queryKey: queryKeys.categories.gps(id()),
             queryFn: () => fetchCategoryMediaGps(id()!),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
@@ -220,7 +221,7 @@ export const CategoriesProvider: ParentComponent = props => {
     // caller having to build a replacement query for every search
     const categorySearchQuery = (query: Accessor<string>) =>
         useInfiniteQuery(() => ({
-            queryKey: ["categories", "search", query()],
+            queryKey: queryKeys.categories.search(query()),
             queryFn: data => fetchCategorySearch(query(), data.pageParam),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -248,10 +249,7 @@ export const CategoriesProvider: ParentComponent = props => {
         // exact previous value, so nothing downstream re-renders for them.
         queryClient.setQueriesData<CategoriesForYearResult>(
             {
-                predicate: query =>
-                    query.queryKey[0] === "categories" &&
-                    query.queryKey[1] === "year" &&
-                    query.queryKey.length === 3
+                predicate: query => queryKeyMatches.categoriesForAnyYear(query.queryKey)
             },
             prev => {
                 if (!prev) {
@@ -268,8 +266,7 @@ export const CategoriesProvider: ParentComponent = props => {
         // undefined for an empty query, so a page is not guaranteed to be there
         queryClient.setQueriesData<InfiniteData<SearchResults<Category> | undefined>>(
             {
-                predicate: query =>
-                    query.queryKey[0] === "categories" && query.queryKey[1] === "search"
+                predicate: query => queryKeyMatches.categorySearch(query.queryKey)
             },
             prev => {
                 if (!prev) {
@@ -299,7 +296,7 @@ export const CategoriesProvider: ParentComponent = props => {
         );
 
         // the single-category query behind the detail views
-        queryClient.setQueryData<Category>(["categories", id], prev =>
+        queryClient.setQueryData<Category>(queryKeys.categories.detail(id), prev =>
             prev ? { ...prev, isFavorite } : prev
         );
     };
@@ -316,21 +313,28 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const setCategoryTeaserMutation = useMutation(() => ({
         mutationFn: (teaserReq: CategoryTeaserRequest) => postCategoryTeaser(teaserReq),
-        onSettled: async (response, error, request) => {
+        /*
+           Not awaited. A promise returned from a mutation callback keeps the
+           mutation pending until it settles, so awaiting a refetch here leaves
+           the control that triggered it disabled through a second round trip
+           after the write already succeeded. The refetch still happens; the
+           screen just stops waiting on it.
+        */
+        onSettled: (response, error, request) => {
             const year = request.category.effectiveDate.getFullYear();
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories", "year", year],
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.forYear(year),
                 refetchType: "all"
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories", request.category.id],
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.detail(request.category.id),
                 refetchType: "all"
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ["categories", "search"],
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.searchRoot(),
                 refetchType: "all"
             });
         }

@@ -13,6 +13,7 @@ const CommentsCard: Component<Props> = props => {
     const { commentsQuery, addCommentMutation } = useMediaContext();
     const [commentText, setCommentText] = createSignal("");
 
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const comments = commentsQuery(() => props.activeMedia!.id);
 
     const clearComment = (evt: Event) => {

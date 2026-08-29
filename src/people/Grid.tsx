@@ -78,6 +78,7 @@ const GridView: Component = () => {
     };
 
     const peopleToDisplay = createMemo(() => {
+        // eslint-disable-next-line solid/reactivity -- read by the filter below, which runs now rather than later
         const term = filter().trim().toLocaleLowerCase();
         const all = people.data ?? [];
         const matches = term

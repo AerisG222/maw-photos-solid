@@ -20,9 +20,16 @@ export const useRandomServices = (view: MediaView) => {
 
     const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
 
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const cq = categoryQuery(catId);
     const mq = randomMediaQuery(MEDIA_PAGE_SIZE);
-    const mediaService = new RandomMediaService(navigate, params, view, cq, mq);
+    const mediaService = new RandomMediaService(
+        navigate,
+        params,
+        view,
+        () => cq,
+        () => mq
+    );
     const slideshowService = new SlideshowService(
         mediaService,
         mediaPageSettings.slideshowDisplayDurationSeconds

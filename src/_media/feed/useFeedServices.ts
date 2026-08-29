@@ -70,6 +70,7 @@ export const useFeedServices = (view: MediaView) => {
 
     const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
 
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const categoryResult = categoryQuery(catId);
 
     const mediaService = new FeedMediaService(
@@ -78,7 +79,7 @@ export const useFeedServices = (view: MediaView) => {
         view,
         routes,
         search,
-        categoryResult,
+        () => categoryResult,
         mq
     );
 

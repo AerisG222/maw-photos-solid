@@ -21,8 +21,9 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         navigate: Navigator,
         params: Params,
         view: MediaView,
-        protected categoryQuery: UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: UseQueryResult<Media[], Error>
+        // accessors throughout - see the note in FeedMediaService
+        protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
+        protected mediaListQuery: () => UseQueryResult<Media[], Error>
     ) {
         super(navigate, params, view);
     }
@@ -45,9 +46,20 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         }
     };
 
-    getActiveCategory = () => (this.categoryQuery.isSuccess ? this.categoryQuery.data : undefined);
+    // read once and narrowed from that read: calling the accessor twice hands
+    // back two separate values, and typescript cannot carry `isSuccess` across
+    // them
+    getActiveCategory = () => {
+        const query = this.categoryQuery();
 
-    getMediaList = () => (this.mediaListQuery.isSuccess ? this.mediaListQuery.data : []);
+        return query.isSuccess ? query.data : undefined;
+    };
+
+    getMediaList = () => {
+        const query = this.mediaListQuery();
+
+        return query.isSuccess ? query.data : [];
+    };
 
     getEntryPathByView = (view: MediaView) =>
         this.getActiveCategory()

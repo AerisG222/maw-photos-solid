@@ -13,6 +13,7 @@ interface Props {
 const ExifCard: Component<Props> = props => {
     const { metadataQuery } = useMediaContext();
     const [currentTab, setCurrentTab] = createSignal("");
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const metadata = metadataQuery(() => props.activeMedia!.id);
 
     return (

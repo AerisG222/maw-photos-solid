@@ -21,6 +21,7 @@ const MinimapCard: Component<Props> = props => {
     const { gpsQuery } = useMediaContext();
     const [infoState, { setMinimapMapType, setMinimapZoom }] = useMediaInfoPanelSettingsContext();
 
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const gps = gpsQuery(() => props.activeMedia!.id);
     const effectiveGps = createMemo(() => gps.data?.override ?? gps.data?.recorded);
 

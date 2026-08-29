@@ -11,6 +11,7 @@ import {
 } from "@tanstack/solid-query";
 
 import { useAuthContext } from "../AuthContext";
+import { queryKeys } from "./_queryKeys";
 import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Category, CategoryDto, mapCategory } from "../../_models/Category";
 import { Clan, ClanDto, mapClan } from "../../_models/Clan";
@@ -130,7 +131,7 @@ export const ClansProvider: ParentComponent = props => {
 
     const clansQuery = () =>
         useQuery(() => ({
-            queryKey: ["clans"],
+            queryKey: queryKeys.clans.all(),
             queryFn: fetchClans,
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000
@@ -138,7 +139,7 @@ export const ClansProvider: ParentComponent = props => {
 
     const clanMediaQuery = (id: Accessor<Uuid | undefined>, filter: Accessor<PersonMediaFilter>) =>
         useInfiniteQuery(() => ({
-            queryKey: ["clans", id(), "media", filter()],
+            queryKey: queryKeys.clans.media(id(), filter()),
             queryFn: data => fetchClanMedia(id()!, data.pageParam, filter()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -152,7 +153,7 @@ export const ClansProvider: ParentComponent = props => {
         favoritesOnly: Accessor<boolean>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: ["clans", id(), "categories", { favoritesOnly: favoritesOnly() }],
+            queryKey: queryKeys.clans.categories(id(), { favoritesOnly: favoritesOnly() }),
             queryFn: data => fetchClanCategories(id()!, data.pageParam, favoritesOnly()),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
@@ -176,7 +177,7 @@ export const ClansProvider: ParentComponent = props => {
        next natural refetch settles any such difference.
     */
     const upsertClan = (clan: Clan) => {
-        queryClient.setQueryData<Clan[]>(["clans"], prev =>
+        queryClient.setQueryData<Clan[]>(queryKeys.clans.all(), prev =>
             prev
                 ? [...prev.filter(existing => existing.id !== clan.id), clan].sort((a, b) =>
                       a.name.localeCompare(b.name)
@@ -188,7 +189,7 @@ export const ClansProvider: ParentComponent = props => {
     };
 
     const dropClan = (id: Uuid) => {
-        queryClient.setQueryData<Clan[]>(["clans"], prev =>
+        queryClient.setQueryData<Clan[]>(queryKeys.clans.all(), prev =>
             prev?.filter(existing => existing.id !== id)
         );
     };

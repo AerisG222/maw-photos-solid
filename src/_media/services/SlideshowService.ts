@@ -9,6 +9,9 @@ export class SlideshowService {
         private displayDurationSeconds: number
     ) {}
 
+    /* eslint-disable solid/reactivity -- start, stop and toggle are called from
+       click handlers and isPlaying is read from JSX, so every read below is
+       already inside a scope the rule cannot see from here */
     start = () => {
         if (intervalId()) {
             clearInterval(intervalId());
@@ -42,4 +45,5 @@ export class SlideshowService {
     };
 
     isPlaying = () => intervalId() !== undefined;
+    /* eslint-enable solid/reactivity */
 }

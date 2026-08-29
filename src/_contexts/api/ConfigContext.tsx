@@ -3,6 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/solid-query";
 
 import { Scale } from "../../_models/Scale";
 import { useAuthContext } from "../AuthContext";
+import { queryKeys } from "./_queryKeys";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
@@ -40,14 +41,14 @@ export const ConfigProvider: ParentComponent = props => {
        caller could reliably read the shared loading/error state.
     */
     const scales = useQuery(() => ({
-        queryKey: ["config", "scales"],
+        queryKey: queryKeys.config.scales(),
         queryFn: fetchScales,
         enabled: authContext.isLoggedIn,
         staleTime: 15 * 60 * 1000
     }));
 
     const accountStatus = useQuery(() => ({
-        queryKey: ["auth", "account-status"],
+        queryKey: queryKeys.auth.accountStatus(),
         queryFn: fetchAccountStatus,
         enabled: authContext.isLoggedIn,
         staleTime: 5 * 60 * 1000
