@@ -1,4 +1,4 @@
-import { Component, JSXElement, Show } from "solid-js";
+import { Component, JSXElement, Show, createSignal } from "solid-js";
 
 import { MediaDetailViewSettingsState } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { detailRoute } from "../category/_routes";
@@ -37,7 +37,16 @@ interface Props {
 const ViewDetail: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
 
-    let mediaElement: HTMLImageElement | HTMLVideoElement | undefined;
+    /*
+       A signal rather than a plain variable. The sidebar's histogram works from
+       this element, and assigning a bare `let` notifies nobody - it happened to
+       work only because the sidebar is built after the photo, so the value was
+       already there when it first read it, and because the <img> is reused
+       across navigation so its load handler kept firing.
+    */
+    const [mediaElement, setMediaElement] = createSignal<
+        HTMLImageElement | HTMLVideoElement | undefined
+    >();
 
     const setIsFavorite = (media: Media, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Media> = {
@@ -92,7 +101,7 @@ const ViewDetail: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         enableCategoryTeaser={props.enableCategoryTeaserChooser}
-                        mediaElement={mediaElement}
+                        mediaElement={mediaElement()}
                         requestMoveNext={() => props.mediaService.moveNext()}
                     />
                 }
@@ -112,7 +121,7 @@ const ViewDetail: Component<Props> = props => {
                             showFavoriteBadge={props.showFavoritesBadge}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
-                            setActiveMediaElement={el => (mediaElement = el)}
+                            setActiveMediaElement={el => setMediaElement(el)}
                             setIsFavorite={setIsFavorite}
                         />
                     </div>

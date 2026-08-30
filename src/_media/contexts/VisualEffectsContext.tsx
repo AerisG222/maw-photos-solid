@@ -1,4 +1,4 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
+import { createContext, JSX, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 export interface VisualEffectsState {
@@ -48,13 +48,13 @@ export type VisualEffectsContextValue = [
         setSaturation: (value: number) => void;
         setInvert: (value: number) => void;
         setHueRotate: (value: number) => void;
-        getFilterStyles: () => string;
+        getFilterStyles: () => JSX.CSSProperties;
 
         rotateClockwise: () => void;
         rotateCounterClockwise: () => void;
         flipHorizontal: () => void;
         flipVertical: () => void;
-        getTransformStyles: () => string;
+        getTransformStyles: () => JSX.CSSProperties;
     }
 ];
 
@@ -74,7 +74,7 @@ export const VisualEffectsProvider: ParentComponent = props => {
     const setInvert = (value: number) => setState({ invert: value });
     const setHueRotate = (value: number) => setState({ hueRotate: value });
 
-    const getFilterStyles = () => {
+    const getFilterStyles = (): JSX.CSSProperties => {
         const style: string[] = [];
 
         if (state.grayscale > 0) {
@@ -110,10 +110,10 @@ export const VisualEffectsProvider: ParentComponent = props => {
         }
 
         if (style.length > 0) {
-            return `filter: ${style.join(" ")};`;
+            return { filter: style.join(" ") };
         }
 
-        return "";
+        return {};
     };
 
     const rotateClockwise = () => setState(s => ({ ...s, rotation: s.rotation + 90 }));
@@ -121,7 +121,7 @@ export const VisualEffectsProvider: ParentComponent = props => {
     const flipHorizontal = () => setState(s => ({ ...s, flipHorizontal: !s.flipHorizontal }));
     const flipVertical = () => setState(s => ({ ...s, flipVertical: !s.flipVertical }));
 
-    const getTransformStyles = () => {
+    const getTransformStyles = (): JSX.CSSProperties => {
         const style: string[] = [];
 
         if (state.rotation !== 0) {
@@ -137,10 +137,10 @@ export const VisualEffectsProvider: ParentComponent = props => {
         }
 
         if (style.length > 0) {
-            return `transform: ${style.join(" ")};`;
+            return { transform: style.join(" ") };
         }
 
-        return "";
+        return {};
     };
 
     return (

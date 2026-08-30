@@ -94,13 +94,21 @@ const MainItem: Component<Props> = props => {
             <div class="relative h-full w-full self-center">
                 <div
                     ref={mediaHolderDiv}
-                    use:swipe={handleSwipe}
+                    use:swipe={
+                        /* a directive is handed the handler itself; solid wraps it in the
+                           accessor swipe reads */
+                        // eslint-disable-next-line solid/reactivity
+                        handleSwipe
+                    }
                     use:tap={handleTap}
                     // relative so the face boxes measure against the photo's own
                     // box - a transform would establish that too, but only while
                     // one is actually applied
                     class="relative h-full w-full max-h-dvh max-w-full object-contain"
-                    style={`${getTransformStyles()} ${getFilterStyles()}`}
+                    // an object rather than a string: solid then diffs the two
+                    // properties individually instead of rewriting cssText on
+                    // every effect change
+                    style={{ ...getTransformStyles(), ...getFilterStyles() }}
                 >
                     <Switch>
                         <Match when={props.media.type === "photo"}>

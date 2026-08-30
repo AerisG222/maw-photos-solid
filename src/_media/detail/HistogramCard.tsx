@@ -217,6 +217,14 @@ const HistogramCard: Component<Props> = props => {
         ctx.closePath();
     };
 
+    /*
+       Re-runs whenever the element changes, and covers the case where it has
+       already loaded by the time this sees it - an <img> that is complete will
+       not fire load again, so the histogram would otherwise stay empty until the
+       next photo. This used to be two pieces: an effect for the load handler and
+       a separate block at setup for the already-loaded case, which read the
+       element untracked and only worked because of render order.
+    */
     createEffect(() => {
         const el = props.mediaElement;
 
@@ -232,29 +240,26 @@ const HistogramCard: Component<Props> = props => {
 
                 updateHistogramFromImage(img);
             };
+
+            if (img.complete) {
+                updateHistogramFromImage(img);
+            }
         }
 
         if (el.nodeName === "VIDEO") {
             (el as HTMLVideoElement).requestVideoFrameCallback(
+                // run by the browser on the next decoded frame, not a tracked computation
+                // eslint-disable-next-line solid/reactivity
                 () => void updateHistogramFromVideoFrame()
             );
+
+            void updateHistogramFromVideoFrame();
         }
     });
 
     createEffect(() => {
         renderHistogram(histogram(), channel());
     });
-
-    // render the initial histogram if media is already loaded
-    if (props.mediaElement) {
-        const el = props.mediaElement;
-
-        if (el.nodeName === "IMG" && (props.mediaElement as HTMLImageElement).complete) {
-            updateHistogramFromImage(el as HTMLImageElement);
-        } else if (el.nodeName === "VIDEO") {
-            void updateHistogramFromVideoFrame();
-        }
-    }
 
     return (
         <>

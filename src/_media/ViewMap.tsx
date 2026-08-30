@@ -41,6 +41,9 @@ const ViewMap: Component<Props> = props => {
         if (el) {
             const options = defaultMapOptions(initialLocation);
             map = new Map(el, options);
+            /* eslint-disable solid/reactivity -- these are event handlers, registered
+               with the maps api rather than with jsx, so the rule cannot see that they
+               only ever run in response to a user action */
             map.addListener("zoom_changed", () => {
                 const zoom = map.getZoom();
 
@@ -55,6 +58,7 @@ const ViewMap: Component<Props> = props => {
                     props.setMapType(mapType);
                 }
             });
+            /* eslint-enable solid/reactivity */
             infoWindow = new InfoWindow({ content: "" });
 
             google.maps.event.addListenerOnce(map, "idle", async () => {

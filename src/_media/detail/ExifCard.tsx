@@ -16,26 +16,34 @@ const ExifCard: Component<Props> = props => {
     // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const metadata = metadataQuery(() => props.activeMedia!.id);
 
+    const tabs = () => Object.keys(metadata.data ?? {});
+
+    /*
+       Derived rather than seeded by writing state while rendering, which is what
+       the <For> below used to do on its first item. That write happened during
+       render, and left the card pointing at a tab that no longer exists when the
+       photo changed to one with different metadata groups.
+    */
+    const activeTab = () => {
+        const chosen = currentTab();
+
+        return chosen && tabs().includes(chosen) ? chosen : (tabs()[0] ?? "");
+    };
+
     return (
         <>
             <Show when={metadata.data}>
                 <div class="tabs tabs-border">
-                    <For each={Object.keys(metadata.data!)}>
-                        {(key, index) => {
-                            if (index() === 0) {
-                                setCurrentTab(key);
-                            }
-
-                            return (
-                                <a
-                                    class="tab"
-                                    classList={{ "tab-active": currentTab() === key }}
-                                    onClick={() => setCurrentTab(key)}
-                                >
-                                    {key}
-                                </a>
-                            );
-                        }}
+                    <For each={tabs()}>
+                        {key => (
+                            <a
+                                class="tab"
+                                classList={{ "tab-active": activeTab() === key }}
+                                onClick={() => setCurrentTab(key)}
+                            >
+                                {key}
+                            </a>
+                        )}
                     </For>
 
                     <span class="grow tab-border" />
@@ -43,7 +51,7 @@ const ExifCard: Component<Props> = props => {
 
                 <table class="table table-xs table-zebra w-full">
                     <tbody>
-                        <For each={Object.entries(metadata.data![currentTab()])}>
+                        <For each={Object.entries(metadata.data![activeTab()] ?? {})}>
                             {entry => (
                                 <tr>
                                     <td>{entry[1].desc}</td>
