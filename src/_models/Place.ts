@@ -82,6 +82,18 @@ export interface Place {
     ancestorNames: string[];
     coverUrl: string | null;
     coverMediaId: Uuid | null;
+    /*
+       How many places sit directly inside this one that the caller can see.
+
+       What it is for: a tile with none of them leads nowhere, so the browse sends
+       it straight to the photographs instead of to a page that would only say
+       there was nothing inside.
+
+       It has to come from the API. A city having no children follows from `kind`,
+       but a state whose only cities sit in categories this caller cannot reach is
+       just as much a leaf to them, and nothing else here says so.
+    */
+    childCount: number;
 }
 
 /*
@@ -104,3 +116,8 @@ export interface PlaceAncestor {
 // which is how an address reads
 export const describePlaceAncestry = (place: Place) =>
     [...place.ancestorNames].reverse().join(", ");
+
+// whether drilling into a place would show anything. A place with nothing inside
+// it is not a lesser place - at the bottom of the tree the photographs are the
+// answer, so this decides where a tile points rather than whether it works
+export const isLeafPlace = (place: Place) => place.childCount === 0;

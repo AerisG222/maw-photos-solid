@@ -15,6 +15,10 @@ interface Props {
     // anywhere in it, and two cities can share a name and even a parent
     showAncestry: boolean;
     eager: boolean;
+    // whether the tile opens the photographs rather than the places inside. Shown
+    // rather than left to be discovered by clicking, so a tile's destination is
+    // legible before it is followed
+    leadsToMedia?: boolean;
     // offered only where a cover can be chosen, which is the admin screen. Absent
     // on the browse, where the tile does one thing
     onChooseCover?: (place: Place) => void;
@@ -100,6 +104,12 @@ const PlaceCard: Component<Props> = props => {
                 <div class="absolute bottom-0 right-0 m-0.5 badge badge-sm opacity-70">
                     {props.place.mediaCount}
                 </div>
+
+                <Show when={props.leadsToMedia}>
+                    <div class="absolute bottom-0 left-0 m-0.5 badge badge-sm opacity-70">
+                        <Icon classes="icon-[ic--round-image]" />
+                    </div>
+                </Show>
             </div>
 
             <div class="flex items-center gap-1 px-2 py-1">

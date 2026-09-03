@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { getPlaceAdminPath, getPlacePath } from "./_routes";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
-import { allPlaceKinds, Place, PlaceKind } from "../_models/Place";
+import { allPlaceKinds, isLeafPlace, Place, PlaceKind } from "../_models/Place";
 import { firstParam } from "../_models/utils/RouteUtils";
 import { isUuid, Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
@@ -91,6 +91,32 @@ const Places: Component = () => {
     // "Cities", to say what a filtered listing is a listing of
     const kindLabel = () => allPlaceKinds.find(k => k.id === kind())?.name;
 
+    /*
+       Left out entirely at a leaf rather than shown empty, as on the browse. The
+       tiles are the way further down and there is no further down; what an admin
+       came here for is the panel above, which is why the tile still leads here
+       rather than to the photographs the way the browse's does.
+
+       A search or a kind filter keeps the section, because there an empty answer
+       is about what was asked for rather than about the place.
+    */
+    const showsChildren = () => {
+        if (search() || kind() || !placeId()) {
+            return true;
+        }
+
+        // once the listing has landed it is the truth, error included - a failure
+        // belongs on screen rather than hidden as if the place were a leaf
+        if (places.isSuccess) {
+            return places.data.length > 0;
+        }
+
+        // until then the place itself already knows, and it lands first: without
+        // this a city would flash a heading and a grid of skeletons on the way to
+        // showing nothing
+        return !place.data || !isLeafPlace(place.data);
+    };
+
     const listTitle = () => {
         if (search()) {
             return `Places matching "${search()}"`;
@@ -118,10 +144,6 @@ const Places: Component = () => {
         */
         if (kind()) {
             return `There are no ${kindPhrase} at this level. The kind filter narrows the level you are on - search to look across the whole tree.`;
-        }
-
-        if (placeId()) {
-            return "Nothing sits beneath this place.";
         }
 
         return "None of the media you can see has a location the geocoder recognised yet.";
@@ -179,44 +201,46 @@ const Places: Component = () => {
 
             <PlaceSearchBar search={search()} kind={kind()} onSearch={setSearch} onKind={setKind} />
 
-            <h2 class="text-lg font-bold">{listTitle()}</h2>
+            <Show when={showsChildren()}>
+                <h2 class="text-lg font-bold">{listTitle()}</h2>
 
-            <Show when={search()}>
-                <p class="text-sm opacity-70 mb-2">
-                    Searching every level of the tree, not just this one.
-                </p>
+                <Show when={search()}>
+                    <p class="text-sm opacity-70 mb-2">
+                        Searching every level of the tree, not just this one.
+                    </p>
+                </Show>
+
+                <Switch fallback={<SkeletonGrid />}>
+                    <Match when={places.isError}>
+                        <ErrorMessage
+                            title="Could not load places"
+                            error={places.error}
+                            onRetry={() => void places.refetch()}
+                        />
+                    </Match>
+
+                    <Match when={places.isSuccess}>
+                        <Show
+                            when={places.data!.length > 0}
+                            fallback={<p class="text-center my-8">{emptyMessage()}</p>}
+                        >
+                            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                                <For each={places.data}>
+                                    {(item, idx) => (
+                                        <PlaceCard
+                                            place={item}
+                                            href={getPlaceAdminPath(item.id)}
+                                            showAncestry={!!search()}
+                                            eager={idx() <= EAGER_THRESHOLD}
+                                            onChooseCover={chosen => setCoverForId(chosen.id)}
+                                        />
+                                    )}
+                                </For>
+                            </div>
+                        </Show>
+                    </Match>
+                </Switch>
             </Show>
-
-            <Switch fallback={<SkeletonGrid />}>
-                <Match when={places.isError}>
-                    <ErrorMessage
-                        title="Could not load places"
-                        error={places.error}
-                        onRetry={() => void places.refetch()}
-                    />
-                </Match>
-
-                <Match when={places.isSuccess}>
-                    <Show
-                        when={places.data!.length > 0}
-                        fallback={<p class="text-center my-8">{emptyMessage()}</p>}
-                    >
-                        <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
-                            <For each={places.data}>
-                                {(item, idx) => (
-                                    <PlaceCard
-                                        place={item}
-                                        href={getPlaceAdminPath(item.id)}
-                                        showAncestry={!!search()}
-                                        eager={idx() <= EAGER_THRESHOLD}
-                                        onChooseCover={chosen => setCoverForId(chosen.id)}
-                                    />
-                                )}
-                            </For>
-                        </div>
-                    </Show>
-                </Match>
-            </Switch>
 
             <PlaceCoverDialog
                 place={findPlace(coverForId())}

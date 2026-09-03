@@ -5,7 +5,7 @@ import { getPlaceAdminPath, getPlacePath } from "./_routes";
 import { placeFeedBasePath } from "../_media/feed/_routes";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
 import { useAuthContext } from "../_contexts/AuthContext";
-import { allPlaceKinds, PlaceKind } from "../_models/Place";
+import { allPlaceKinds, isLeafPlace, Place, PlaceKind } from "../_models/Place";
 import { firstParam } from "../_models/utils/RouteUtils";
 import { isUuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
@@ -74,6 +74,44 @@ const Browse: Component = () => {
 
     const kindLabel = () => allPlaceKinds.find(k => k.id === kind())?.name;
 
+    /*
+       A tile leads to whatever is actually inside it. At the bottom of the tree
+       that is the photographs, so a city opens its feed rather than a page whose
+       only content would be that there is nothing further down.
+
+       `childCount` is what makes this possible, and it has to come from the API:
+       a city having no children follows from its kind, but a state whose only
+       cities sit in categories this caller cannot reach is just as much a leaf to
+       them.
+    */
+    const tileHref = (place: Place) =>
+        isLeafPlace(place) ? placeFeedBasePath(place.id) : getPlacePath(place.id);
+
+    /*
+       The listing is left out entirely at a leaf rather than shown empty. Its
+       heading and its tiles are the way further down, and there is no further
+       down - the photographs are offered above, by the summary.
+
+       A search or a kind filter keeps it, because there an empty answer is about
+       what was asked for rather than about the place, and saying so is the point.
+    */
+    const showsChildren = () => {
+        if (search() || kind() || !placeId()) {
+            return true;
+        }
+
+        // once the listing has landed it is the truth, error included - a failure
+        // belongs on screen rather than hidden as if the place were a leaf
+        if (places.isSuccess) {
+            return places.data.length > 0;
+        }
+
+        // until then the place itself already knows, and it lands first: without
+        // this a city would flash a heading and a grid of skeletons on the way to
+        // showing nothing
+        return !place.data || !isLeafPlace(place.data);
+    };
+
     const listTitle = () => {
         if (search()) {
             return `Places matching "${search()}"`;
@@ -100,12 +138,6 @@ const Browse: Component = () => {
         */
         if (kind()) {
             return `There are no ${kindPhrase} at this level. The kind filter narrows the level you are on - search to look across the whole tree.`;
-        }
-
-        // the common one: a city has nothing inside it, and the photographs are
-        // the point of having drilled this far
-        if (placeId()) {
-            return "Nothing sits inside this place - its photos and videos are above.";
         }
 
         return "None of the media you can see has a location we recognised yet.";
@@ -169,43 +201,46 @@ const Browse: Component = () => {
 
             <PlaceSearchBar search={search()} kind={kind()} onSearch={setSearch} onKind={setKind} />
 
-            <h2 class="text-lg font-bold">{listTitle()}</h2>
+            <Show when={showsChildren()}>
+                <h2 class="text-lg font-bold">{listTitle()}</h2>
 
-            <Show when={search()}>
-                <p class="text-sm opacity-70 mb-2">
-                    Searching every level of the tree, not just this one.
-                </p>
+                <Show when={search()}>
+                    <p class="text-sm opacity-70 mb-2">
+                        Searching every level of the tree, not just this one.
+                    </p>
+                </Show>
+
+                <Switch fallback={<SkeletonGrid />}>
+                    <Match when={places.isError}>
+                        <ErrorMessage
+                            title="Could not load places"
+                            error={places.error}
+                            onRetry={() => void places.refetch()}
+                        />
+                    </Match>
+
+                    <Match when={places.isSuccess}>
+                        <Show
+                            when={places.data!.length > 0}
+                            fallback={<p class="text-center my-8">{emptyMessage()}</p>}
+                        >
+                            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                                <For each={places.data}>
+                                    {(item, idx) => (
+                                        <PlaceCard
+                                            place={item}
+                                            href={tileHref(item)}
+                                            leadsToMedia={isLeafPlace(item)}
+                                            showAncestry={!!search()}
+                                            eager={idx() <= EAGER_THRESHOLD}
+                                        />
+                                    )}
+                                </For>
+                            </div>
+                        </Show>
+                    </Match>
+                </Switch>
             </Show>
-
-            <Switch fallback={<SkeletonGrid />}>
-                <Match when={places.isError}>
-                    <ErrorMessage
-                        title="Could not load places"
-                        error={places.error}
-                        onRetry={() => void places.refetch()}
-                    />
-                </Match>
-
-                <Match when={places.isSuccess}>
-                    <Show
-                        when={places.data!.length > 0}
-                        fallback={<p class="text-center my-8">{emptyMessage()}</p>}
-                    >
-                        <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
-                            <For each={places.data}>
-                                {(item, idx) => (
-                                    <PlaceCard
-                                        place={item}
-                                        href={getPlacePath(item.id)}
-                                        showAncestry={!!search()}
-                                        eager={idx() <= EAGER_THRESHOLD}
-                                    />
-                                )}
-                            </For>
-                        </div>
-                    </Show>
-                </Match>
-            </Switch>
         </Layout>
     );
 };
