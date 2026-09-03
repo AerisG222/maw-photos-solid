@@ -33,7 +33,8 @@ const Sidebar: Component<Props> = props => {
             setShowHistogram,
             setShowMinimap,
             setShowMetadataEditor,
-            setShowCategoryTeaserChooser
+            setShowCategoryTeaserChooser,
+            setShowPlaceCovers
         }
     ] = useMediaInfoPanelSettingsContext();
 
@@ -67,6 +68,10 @@ const Sidebar: Component<Props> = props => {
 
     const toggleCategoryTeaser = () => {
         setShowCategoryTeaserChooser(!settings.showCategoryTeaserChooser);
+    };
+
+    const togglePlaceCovers = () => {
+        setShowPlaceCovers(!settings.showPlaceCovers);
     };
 
     const cards = [
@@ -140,6 +145,22 @@ const Sidebar: Component<Props> = props => {
                 props.enableCategoryTeaser && authContext.accountStatus?.isAdmin,
             active: () => settings.expandInfoPanel && settings.showCategoryTeaserChooser,
             component: lazy(() => import("./CategoryTeaserCard"))
+        },
+        {
+            /*
+               The teaser treatment, for the places a photograph was taken. Not
+               gated on the feed it is being viewed in, unlike the teaser above:
+               a category teaser only means something while browsing that
+               category, while where a photograph was taken travels with it.
+            */
+            title: "Place Covers",
+            tooltip: "Sidebar: Place Covers",
+            icon: "icon-[ic--round-place]",
+            shortcutKeys: ["y"],
+            clickHandler: togglePlaceCovers,
+            enable: (_media: Media) => authContext.accountStatus?.isAdmin,
+            active: () => settings.expandInfoPanel && settings.showPlaceCovers,
+            component: lazy(() => import("./PlaceCoversCard"))
         }
     ];
 

@@ -25,6 +25,7 @@ import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import { MediaProvider } from "../../_contexts/api/MediaContext";
 import { PeopleProvider } from "../../_contexts/api/PeopleContext";
+import { PlacesProvider } from "../../_contexts/api/PlacesContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
@@ -64,9 +65,11 @@ const AppContext: ParentComponent = props => {
                                                 <MediaProvider>
                                                     <PeopleProvider>
                                                         <ClansProvider>
-                                                            <FullscreenProvider>
-                                                                {props.children}
-                                                            </FullscreenProvider>
+                                                            <PlacesProvider>
+                                                                <FullscreenProvider>
+                                                                    {props.children}
+                                                                </FullscreenProvider>
+                                                            </PlacesProvider>
                                                         </ClansProvider>
                                                     </PeopleProvider>
                                                 </MediaProvider>

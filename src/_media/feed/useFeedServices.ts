@@ -11,7 +11,9 @@ import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
 import { SlideshowService } from "../services/SlideshowService";
 import { buildFeedRoutes } from "./_routes";
-import { first, useFeedSubject } from "./_subject";
+import { newMediaSeed } from "../../_models/utils/MediaUtils";
+import { firstParam } from "../../_models/utils/RouteUtils";
+import { useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
 
 export const useFeedServices = (view: MediaView) => {
@@ -30,7 +32,7 @@ export const useFeedServices = (view: MediaView) => {
     const { personId, clanId, isClan, basePath, favoritesOnly } = subject;
 
     const seed = () => {
-        const raw = first(searchParams.seed);
+        const raw = firstParam(searchParams.seed);
         const parsed = raw === undefined ? Number.NaN : Number.parseInt(raw, 10);
 
         return Number.isSafeInteger(parsed) ? parsed : undefined;
@@ -116,7 +118,7 @@ export const useFeedServices = (view: MediaView) => {
     // on reshuffles rather than replaying the same order
     const setShuffled = (on: boolean) => {
         rememberShuffle(on);
-        applyFilter(favoritesOnly(), on ? newSeed() : undefined);
+        applyFilter(favoritesOnly(), on ? newMediaSeed() : undefined);
     };
 
     /*
@@ -128,7 +130,10 @@ export const useFeedServices = (view: MediaView) => {
        not somewhere the back button should have to walk through.
     */
     onMount(() => {
-        if (first(searchParams.f) !== undefined || first(searchParams.seed) !== undefined) {
+        if (
+            firstParam(searchParams.f) !== undefined ||
+            firstParam(searchParams.seed) !== undefined
+        ) {
             return;
         }
 
@@ -139,7 +144,7 @@ export const useFeedServices = (view: MediaView) => {
         navigate(
             `${location.pathname}${buildSearch(
                 feedSettings.favoritesOnly,
-                feedSettings.shuffle ? newSeed() : undefined
+                feedSettings.shuffle ? newMediaSeed() : undefined
             )}`,
             { replace: true }
         );
@@ -177,7 +182,3 @@ export const useFeedServices = (view: MediaView) => {
 };
 
 export type FeedServices = ReturnType<typeof useFeedServices>;
-
-// postgres takes the seed as a bigint, but it only has to be stable and varied -
-// a 32 bit value is plenty and stays exact in a javascript number
-const newSeed = () => Math.floor(Math.random() * 2 ** 31);

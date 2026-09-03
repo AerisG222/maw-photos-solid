@@ -8,6 +8,7 @@ import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLe
 export interface MediaInfoPanelSettingsState {
     readonly expandInfoPanel: boolean;
     readonly showCategoryTeaserChooser: boolean;
+    readonly showPlaceCovers: boolean;
     readonly showComments: boolean;
     readonly showExif: boolean;
     readonly showEffects: boolean;
@@ -21,6 +22,7 @@ export interface MediaInfoPanelSettingsState {
 export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
     expandInfoPanel: false,
     showCategoryTeaserChooser: false,
+    showPlaceCovers: false,
     showComments: true,
     showExif: false,
     showEffects: false,
@@ -36,6 +38,7 @@ export type MediaInfoPanelSettingsContextValue = [
     actions: {
         setExpandInfoPanel: (expandInfoPanel: boolean) => void;
         setShowCategoryTeaserChooser: (showCategoryTeaserChooser: boolean) => void;
+        setShowPlaceCovers: (showPlaceCovers: boolean) => void;
         setShowComments: (showComments: boolean) => void;
         setShowExif: (showExif: boolean) => void;
         setShowEffects: (showEffects: boolean) => void;
@@ -55,6 +58,7 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
     const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({ expandInfoPanel });
     const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) =>
         updateState({ showCategoryTeaserChooser });
+    const setShowPlaceCovers = (showPlaceCovers: boolean) => updateState({ showPlaceCovers });
     const setShowComments = (showComments: boolean) => updateState({ showComments });
     const setShowExif = (showExif: boolean) => updateState({ showExif });
     const setShowEffects = (showEffects: boolean) => updateState({ showEffects });
@@ -77,6 +81,7 @@ export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
                 {
                     setExpandInfoPanel,
                     setShowCategoryTeaserChooser,
+                    setShowPlaceCovers,
                     setShowComments,
                     setShowExif,
                     setShowEffects,

@@ -1,5 +1,10 @@
 import { AppRouteDefinition } from "../AppRouteDefinition";
 
+// a repeated query string key parses as an array; the last value wins, matching
+// how the browser would have filled the control that wrote it
+export const firstParam = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[value.length - 1] : value;
+
 type RouteParamValues = Record<string, string | number | undefined>;
 
 const buildRootPath = (route: AppRouteDefinition, routeParams?: RouteParamValues) => {

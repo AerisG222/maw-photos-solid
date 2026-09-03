@@ -56,7 +56,11 @@ export const AuthProvider: ParentComponent = props => {
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:read`,
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/comments:write`,
         `${import.meta.env.VITE_AUTH0_AUDIENCE}/stats:read`,
-        `${import.meta.env.VITE_AUTH0_AUDIENCE}/face-recognition:read`
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/face-recognition:read`,
+        // administering places: choosing the photograph that represents one, and
+        // correcting a tree the geocoder derived. Reading places needs nothing
+        // beyond media:read, so a caller without this simply cannot write
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/location:write`
     ];
 
     const authParams = {

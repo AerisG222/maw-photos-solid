@@ -3,12 +3,8 @@ import { useParams, useSearchParams } from "@solidjs/router";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { Uuid } from "../../_models/Uuid";
+import { firstParam } from "../../_models/utils/RouteUtils";
 import { clanFeedBasePath, personFeedBasePath } from "./_routes";
-
-// a repeated key parses as an array; the last value wins, matching how the
-// browser would have filled the control that wrote it
-export const first = (value: string | string[] | undefined) =>
-    Array.isArray(value) ? value[value.length - 1] : value;
 
 /*
    Who a feed is about, and the one filter both of its listings share.
@@ -37,7 +33,7 @@ export const useFeedSubject = () => {
        listings, which are separate routes, and putting it in the address makes a
        reload or a shared link reproduce the same feed.
     */
-    const favoritesOnly = () => first(searchParams.f) === "true";
+    const favoritesOnly = () => firstParam(searchParams.f) === "true";
 
     // both lists are already cached for the picker, so naming the subject on its
     // own page costs nothing beyond a lookup

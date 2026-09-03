@@ -11,3 +11,13 @@ export const getMediaTeaserUrl = (media: Media, _size: ThumbnailSizeIdType) => {
 };
 
 export const getMediaShareUrl = (_media: Media) => "TODO";
+
+/*
+   A seed for a shuffled feed.
+
+   Postgres takes it as a bigint, but it only has to be stable and varied - a 32
+   bit value is plenty and stays exact in a javascript number. The order is a
+   function of the seed, so paging through a shuffle keeps its place instead of
+   repeating and skipping rows.
+*/
+export const newMediaSeed = () => Math.floor(Math.random() * 2 ** 31);

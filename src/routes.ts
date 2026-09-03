@@ -2,6 +2,7 @@ import { login } from "./auth/_routes";
 import { categories } from "./categories/_routes";
 import { about } from "./about/_routes";
 import { people } from "./people/_routes";
+import { places } from "./places/_routes";
 import { personMediaRoutes } from "./person/_routes";
 import { clanMediaRoutes } from "./clan/_routes";
 import { search } from "./search/_routes";
@@ -16,6 +17,7 @@ export const appRoutes = [
     categories,
     mediaRoutes,
     people,
+    places,
     clanMediaRoutes,
     personMediaRoutes,
     randomMediaRoutes,

@@ -2,6 +2,7 @@ import { Component, Show } from "solid-js";
 
 import { categories } from "../../categories/_routes";
 import { people } from "../../people/_routes";
+import { places } from "../../places/_routes";
 import { search } from "../../search/_routes";
 import { randomMediaRoutes } from "../../random/_routes";
 import { stats } from "../../stats/_routes";
@@ -29,6 +30,15 @@ const PrimaryNav: Component = () => {
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={search} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />
+
+            {/*
+                Administration rather than browsing, so it is offered only to the
+                people who can actually change anything - every write behind it is
+                refused for everybody else.
+            */}
+            <Show when={authContext.accountStatus?.isAdmin}>
+                <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={places} />
+            </Show>
 
             <span class="grow" />
 
