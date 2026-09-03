@@ -21,6 +21,25 @@ export const allPlaceKinds: KeyValuePair<PlaceKind>[] = [
     { id: PlaceKindCity, name: "Cities" }
 ];
 
+/*
+   A stand-in for a place with no cover chosen yet.
+
+   Covers are hand picked, so most places have none - which is why the hierarchy
+   is drawn with an icon behind each name rather than assuming a photograph is
+   there. A country, a state and a city are different enough to be worth telling
+   apart at a glance while walking back up the chain.
+*/
+export const getPlaceKindIcon = (kind: PlaceKind) => {
+    switch (kind) {
+        case PlaceKindCountry:
+            return "icon-[ic--round-public]";
+        case PlaceKindState:
+            return "icon-[ic--round-map]";
+        default:
+            return "icon-[ic--round-location-city]";
+    }
+};
+
 // singular, for labelling one place rather than a listing of them
 export const getPlaceKindName = (kind: PlaceKind) => {
     switch (kind) {

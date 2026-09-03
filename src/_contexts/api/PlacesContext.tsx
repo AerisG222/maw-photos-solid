@@ -5,6 +5,7 @@ import {
     UseInfiniteQueryResult,
     useMutation,
     UseMutationResult,
+    useQueries,
     useQuery,
     useQueryClient,
     UseQueryResult
@@ -65,6 +66,15 @@ export interface PlaceMediaFilter {
 export interface PlacesService {
     placesQuery: (filter: Accessor<PlaceFilter>) => UseQueryResult<Place[], Error>;
     placeQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Place, Error>;
+    /*
+       Several places at once, by id - the chain above the one being looked at.
+
+       Keyed exactly as `placeQuery` keys a single place, which is the point:
+       drilling down reads each level on the way through, so walking back up finds
+       the whole chain already cached and only a deep link pays for it - at most
+       two small requests, since the tree is three deep.
+    */
+    placesByIdQuery: (ids: Accessor<Uuid[]>) => UseQueryResult<Place, Error>[];
     placeAncestorsQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<PlaceAncestor[], Error>;
     placeMediaQuery: (
         id: Accessor<Uuid | undefined>,
@@ -230,6 +240,16 @@ export const PlacesProvider: ParentComponent = props => {
             staleTime: 30 * 1000
         }));
 
+    const placesByIdQuery = (ids: Accessor<Uuid[]>) =>
+        useQueries(() => ({
+            queries: ids().map(id => ({
+                queryKey: queryKeys.places.detail(id),
+                queryFn: () => fetchPlace(id),
+                enabled: authContext.isLoggedIn,
+                staleTime: 30 * 1000
+            }))
+        }));
+
     const placeAncestorsQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
             queryKey: queryKeys.places.ancestors(id()),
@@ -350,6 +370,7 @@ export const PlacesProvider: ParentComponent = props => {
             value={{
                 placesQuery,
                 placeQuery,
+                placesByIdQuery,
                 placeAncestorsQuery,
                 placeMediaQuery,
                 placeCategoriesQuery,

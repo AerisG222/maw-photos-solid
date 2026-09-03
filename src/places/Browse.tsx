@@ -12,13 +12,12 @@ import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import ErrorMessage from "../_components/error/ErrorMessage";
 import Layout from "../_components/layout/Layout";
-import PlaceBreadcrumb from "./components/PlaceBreadcrumb";
 import PlaceCard from "./components/PlaceCard";
+import PlaceChain, { PlaceChainLink } from "./components/PlaceChain";
 import PlaceCoverDialog from "./components/PlaceCoverDialog";
 import PlaceMergeDialog from "./components/PlaceMergeDialog";
 import PlaceMoveDialog from "./components/PlaceMoveDialog";
 import PlaceSearchBar from "./components/PlaceSearchBar";
-import PlaceSummary from "./components/PlaceSummary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
 
@@ -42,7 +41,7 @@ const Browse: Component = () => {
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [authContext] = useAuthContext();
-    const { placesQuery, placeQuery, placeAncestorsQuery } = usePlacesContext();
+    const { placesQuery, placeQuery, placesByIdQuery, placeAncestorsQuery } = usePlacesContext();
 
     // a route parameter matches on shape alone, so a typed url can hand this page
     // a segment that was never an id - treated as the root rather than requested
@@ -77,6 +76,27 @@ const Browse: Component = () => {
     const places = placesQuery(filter);
     const place = placeQuery(placeId);
     const ancestors = placeAncestorsQuery(placeId);
+
+    /*
+       The chain above the current place, as whole places rather than the names
+       the ancestors endpoint returns - the strip shows each rung's cover and the
+       current rung's count, and neither is in an ancestor.
+
+       These share the cache with the read above, so drilling down populates them
+       on the way through and walking back up costs nothing. Only a deep link
+       fetches, and then two at most.
+    */
+    const ancestorIds = () => (ancestors.data ?? []).map(ancestor => ancestor.id);
+    const chainPlaces = placesByIdQuery(ancestorIds);
+
+    const chain = (): PlaceChainLink[] =>
+        (ancestors.data ?? []).map((ancestor, idx) => ({
+            id: ancestor.id,
+            name: ancestor.name,
+            kind: ancestor.kind,
+            coverUrl: chainPlaces[idx]?.data?.coverUrl,
+            mediaCount: chainPlaces[idx]?.data?.mediaCount
+        }));
 
     /*
        The dialogs are held by id rather than by value, and the place is looked up
@@ -147,17 +167,9 @@ const Browse: Component = () => {
         return !place.data || !isLeafPlace(place.data);
     };
 
-    const listTitle = () => {
-        if (search()) {
-            return `Places matching "${search()}"`;
-        }
-
-        if (kindLabel()) {
-            return `${kindLabel()!} Here`;
-        }
-
-        return placeId() ? "Within This Place" : "Countries";
-    };
+    // only ever read for a narrowed listing - see where it is rendered
+    const listTitle = () =>
+        search() ? `Places matching "${search()}"` : `${kindLabel() ?? "Places"} Here`;
 
     const emptyMessage = () => {
         const kindPhrase = kindLabel()?.toLocaleLowerCase() ?? "places";
@@ -186,12 +198,24 @@ const Browse: Component = () => {
                     canEdit={isAdmin()}
                     editing={editing()}
                     toggleEditing={toggleEditing}
+                    chooseCover={() => setCoverForId(placeId())}
+                    move={() => setMoveId(placeId())}
+                    merge={() => setMergeIntoId(placeId())}
                 />
             }
         >
-            <h1 class="head1">Places</h1>
+            {/*
+                Only at the root, where there is no chain to name the screen. Below
+                it the strip says where you are, and a heading repeating "Places"
+                above it would be a second answer to a question already answered.
+            */}
+            <Show when={!placeId()}>
+                <h1 class="head1">Places</h1>
+            </Show>
 
-            <PlaceBreadcrumb ancestors={ancestors.data ?? []} buildPath={treePath} />
+            <Show when={placeId()}>
+                <PlaceChain links={chain()} buildPath={treePath} />
+            </Show>
 
             {/*
                 A place id in the path that answers 404 - a stale link, or a place
@@ -207,19 +231,18 @@ const Browse: Component = () => {
                 />
             </Show>
 
-            <Show when={place.data}>
-                <PlaceSummary
-                    place={place.data!}
-                    onChooseCover={editing() ? () => setCoverForId(place.data!.id) : undefined}
-                    onMerge={editing() ? () => setMergeIntoId(place.data!.id) : undefined}
-                    onMove={editing() ? () => setMoveId(place.data!.id) : undefined}
-                />
-            </Show>
-
             <PlaceSearchBar search={search()} kind={kind()} onSearch={setSearch} onKind={setKind} />
 
             <Show when={showsChildren()}>
-                <h2 class="text-lg font-bold">{listTitle()}</h2>
+                {/*
+                    Only when something narrowed the listing. Unfiltered, the grid
+                    under the chain is self-evidently what is inside the place the
+                    chain ends on, and "Within This Place" was a label for a thing
+                    that had just been said.
+                */}
+                <Show when={search() || kind()}>
+                    <h2 class="text-lg font-bold">{listTitle()}</h2>
+                </Show>
 
                 <Show when={search()}>
                     <p class="text-sm opacity-70 mb-2">
