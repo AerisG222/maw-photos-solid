@@ -8,11 +8,20 @@ import Icon from "../../_components/icon/Icon";
 
 interface Props {
     place: Place;
+    /*
+       The three corrections, present only while an admin has edit mode on. All
+       three or none: they are one job - the tree is only as good as the geocoder,
+       and these are how it is told otherwise - so a screen showing some of them
+       and not others would be describing a state that does not exist.
+    */
+    onChooseCover?: () => void;
+    onMerge?: () => void;
+    onMove?: () => void;
 }
 
 /*
-   The place currently being looked at, and the two ways into what was taken
-   there.
+   The place currently being looked at: what it is, what is in it, and the two
+   ways into what was taken there.
 
    The photographs link points at the feed's own entry rather than at a named
    view, so it opens on whichever the caller last used - the same preference the
@@ -69,6 +78,33 @@ const PlaceSummary: Component<Props> = props => {
                         Categories
                     </A>
                 </div>
+
+                <Show when={props.onChooseCover}>
+                    {/*
+                        Kept apart from the two above rather than mixed in with
+                        them: those are where anybody goes next, these change what
+                        everybody else sees.
+                    */}
+                    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-secondary/20">
+                        <button
+                            class="btn btn-sm btn-secondary"
+                            onClick={() => props.onChooseCover?.()}
+                        >
+                            <Icon classes="icon-[ic--round-photo-camera]" />
+                            {props.place.coverUrl ? "Replace Cover" : "Choose Cover"}
+                        </button>
+
+                        <button class="btn btn-sm btn-outline" onClick={() => props.onMove?.()}>
+                            <Icon classes="icon-[ic--round-drive-file-move]" />
+                            Move
+                        </button>
+
+                        <button class="btn btn-sm btn-outline" onClick={() => props.onMerge?.()}>
+                            <Icon classes="icon-[ic--round-merge-type]" />
+                            Merge
+                        </button>
+                    </div>
+                </Show>
             </div>
         </div>
     );

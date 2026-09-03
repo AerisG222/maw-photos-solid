@@ -1,19 +1,22 @@
-import { Component, For, Match, Show, Switch } from "solid-js";
+import { Component, For, Match, Show, Switch, createSignal } from "solid-js";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
-import { getPlaceAdminPath, getPlacePath } from "./_routes";
+import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
 import { placeFeedBasePath } from "../_media/feed/_routes";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
 import { useAuthContext } from "../_contexts/AuthContext";
 import { allPlaceKinds, isLeafPlace, Place, PlaceKind } from "../_models/Place";
 import { firstParam } from "../_models/utils/RouteUtils";
-import { isUuid } from "../_models/Uuid";
+import { isUuid, Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import ErrorMessage from "../_components/error/ErrorMessage";
 import Layout from "../_components/layout/Layout";
 import PlaceBreadcrumb from "./components/PlaceBreadcrumb";
 import PlaceCard from "./components/PlaceCard";
+import PlaceCoverDialog from "./components/PlaceCoverDialog";
+import PlaceMergeDialog from "./components/PlaceMergeDialog";
+import PlaceMoveDialog from "./components/PlaceMoveDialog";
 import PlaceSearchBar from "./components/PlaceSearchBar";
 import PlaceSummary from "./components/PlaceSummary";
 import PlaceTreeToolbar from "./components/PlaceTreeToolbar";
@@ -21,17 +24,20 @@ import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 /*
-   Browsing by where a photograph was taken.
+   Browsing by where a photograph was taken, and - for an administrator with edit
+   mode on - correcting the tree while looking at it.
 
    A drill-down rather than a list: countries, then their states, then their
-   cities, with the photographs of a whole subtree one click away at every level -
-   a country's feed holds everything in its states and their cities, so the tree
-   is a way of narrowing rather than a set of dead ends.
+   cities, with the photographs of a whole subtree one click away at every level.
+   A place with nothing inside it goes straight to its photographs instead, so no
+   tile leads to a page that only says there is nothing further down.
 
    Every listing is scoped to what the caller can see, so a place holding nothing
-   visible to them is absent rather than empty. That is the whole access story
-   here: there is no permission to check in the client, because a place the caller
-   may not browse never arrives.
+   visible to them is absent rather than empty. That is the whole read access
+   story: there is no permission to check here, because a place the caller may not
+   browse never arrives. Editing is different - it is offered on `isAdmin`, and
+   then refused again by the API and by the database, which is what actually
+   enforces it.
 */
 const Browse: Component = () => {
     const navigate = useNavigate();
@@ -52,6 +58,18 @@ const Browse: Component = () => {
         return allPlaceKinds.find(k => k.id === value)?.id;
     };
 
+    const isAdmin = () => !!authContext.accountStatus?.isAdmin;
+
+    /*
+       Edit mode. Read from the url so it survives a reload and can be linked, and
+       gated on the account rather than on the parameter alone - a non-admin who
+       types it gets the plain browse rather than buttons that would be refused.
+    */
+    const editing = () => isAdmin() && firstParam(searchParams[PLACE_EDIT_PARAM]) === "1";
+
+    const toggleEditing = () =>
+        setSearchParams({ [PLACE_EDIT_PARAM]: editing() ? undefined : "1" });
+
     const filter = (): PlaceFilter => ({
         parentId: placeId(),
         kind: kind(),
@@ -62,12 +80,34 @@ const Browse: Component = () => {
     const place = placeQuery(placeId);
     const ancestors = placeAncestorsQuery(placeId);
 
+    /*
+       The dialogs are held by id rather than by value, and the place is looked up
+       again on every read. Choosing a cover patches the cached place, and that is
+       how the dialog sees the copy it just published - it never has to track the
+       result of its own write.
+    */
+    const [coverForId, setCoverForId] = createSignal<Uuid>();
+    const [mergeIntoId, setMergeIntoId] = createSignal<Uuid>();
+    const [moveId, setMoveId] = createSignal<Uuid>();
+
+    const findPlace = (id: Uuid | undefined): Place | undefined => {
+        if (!id) {
+            return undefined;
+        }
+
+        return place.data?.id === id ? place.data : places.data?.find(p => p.id === id);
+    };
+
     // the chain includes the place itself, so its parent is the rung before it
     const parentId = () => {
         const chain = ancestors.data ?? [];
 
         return chain.length > 1 ? chain[chain.length - 2].id : undefined;
     };
+
+    // every link that moves around the tree keeps the mode, so drilling in while
+    // editing does not quietly drop back to the plain browse
+    const treePath = (id?: Uuid) => getPlacePath(id, editing());
 
     const setSearch = (term: string) => setSearchParams({ q: term || undefined });
     const setKind = (value: PlaceKind | undefined) => setSearchParams({ kind: value });
@@ -83,9 +123,13 @@ const Browse: Component = () => {
        a city having no children follows from its kind, but a state whose only
        cities sit in categories this caller cannot reach is just as much a leaf to
        them.
+
+       Editing overrides it. A leaf still has a cover to choose and a duplicate to
+       be merged into, and the panel holding those is on its own page - so while
+       editing, every tile drills in.
     */
-    const tileHref = (place: Place) =>
-        isLeafPlace(place) ? placeFeedBasePath(place.id) : getPlacePath(place.id);
+    const tileHref = (item: Place) =>
+        !editing() && isLeafPlace(item) ? placeFeedBasePath(item.id) : treePath(item.id);
 
     /*
        The listing is left out entirely at a leaf rather than shown empty. Its
@@ -146,11 +190,7 @@ const Browse: Component = () => {
     return (
         <Layout
             toolbar={
-                <PlaceTreeToolbar
-                    parentId={parentId()}
-                    atRoot={!placeId()}
-                    buildPath={getPlacePath}
-                >
+                <PlaceTreeToolbar parentId={parentId()} atRoot={!placeId()} buildPath={treePath}>
                     <ToolbarButton
                         icon="icon-[ic--round-image]"
                         name="Photos"
@@ -161,17 +201,20 @@ const Browse: Component = () => {
                     />
 
                     {/*
-                        The same tree, with the corrections attached. Offered only
-                        to the people who can actually change anything - every
-                        write behind it is refused for everybody else.
+                        The corrections, offered only to the people who can
+                        actually make them - every write behind this is refused
+                        for everybody else. A mode rather than a second screen:
+                        it is the same tree either way, and crossing to a separate
+                        one used to drop the primary nav highlight.
                     */}
-                    <Show when={authContext.accountStatus?.isAdmin}>
+                    <Show when={isAdmin()}>
                         <ToolbarButton
                             icon="icon-[ic--round-edit]"
-                            name="Administer"
+                            name="Edit"
                             tooltip="Administer These Places"
                             shortcutKeys={["e"]}
-                            clickHandler={() => navigate(getPlaceAdminPath(placeId()))}
+                            active={editing()}
+                            clickHandler={toggleEditing}
                         />
                     </Show>
                 </PlaceTreeToolbar>
@@ -179,7 +222,7 @@ const Browse: Component = () => {
         >
             <h1 class="head1">Places</h1>
 
-            <PlaceBreadcrumb ancestors={ancestors.data ?? []} />
+            <PlaceBreadcrumb ancestors={ancestors.data ?? []} buildPath={treePath} />
 
             {/*
                 A place id in the path that answers 404 - a stale link, or a place
@@ -196,7 +239,12 @@ const Browse: Component = () => {
             </Show>
 
             <Show when={place.data}>
-                <PlaceSummary place={place.data!} />
+                <PlaceSummary
+                    place={place.data!}
+                    onChooseCover={editing() ? () => setCoverForId(place.data!.id) : undefined}
+                    onMerge={editing() ? () => setMergeIntoId(place.data!.id) : undefined}
+                    onMove={editing() ? () => setMoveId(place.data!.id) : undefined}
+                />
             </Show>
 
             <PlaceSearchBar search={search()} kind={kind()} onSearch={setSearch} onKind={setKind} />
@@ -230,9 +278,14 @@ const Browse: Component = () => {
                                         <PlaceCard
                                             place={item}
                                             href={tileHref(item)}
-                                            leadsToMedia={isLeafPlace(item)}
+                                            leadsToMedia={!editing() && isLeafPlace(item)}
                                             showAncestry={!!search()}
                                             eager={idx() <= EAGER_THRESHOLD}
+                                            onChooseCover={
+                                                editing()
+                                                    ? chosen => setCoverForId(chosen.id)
+                                                    : undefined
+                                            }
                                         />
                                     )}
                                 </For>
@@ -240,6 +293,25 @@ const Browse: Component = () => {
                         </Show>
                     </Match>
                 </Switch>
+            </Show>
+
+            {/*
+                Mounted only for the people who can open them. They are closed
+                until one of the buttons above sets its id, and those only exist
+                in edit mode.
+            */}
+            <Show when={isAdmin()}>
+                <PlaceCoverDialog
+                    place={findPlace(coverForId())}
+                    onClose={() => setCoverForId(undefined)}
+                />
+
+                <PlaceMergeDialog
+                    place={findPlace(mergeIntoId())}
+                    onClose={() => setMergeIntoId(undefined)}
+                />
+
+                <PlaceMoveDialog place={findPlace(moveId())} onClose={() => setMoveId(undefined)} />
             </Show>
         </Layout>
     );
