@@ -2,6 +2,7 @@ import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
 import { MediaViewGrid } from "../../_models/MediaView";
+import { getPlacePath } from "../../places/_routes";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
@@ -17,9 +18,11 @@ const Grid: Component = () => {
         slideshowService,
         basePath,
         subjectName,
-        subjectPhrase,
+        mediaScope,
         subjectIsEmpty,
-        isClan,
+        subjectKindName,
+        isPlace,
+        placeId,
         favoritesOnly,
         isShuffled,
         setFavoritesOnly,
@@ -54,7 +57,7 @@ const Grid: Component = () => {
 
             <Match when={loadError()}>
                 <ErrorMessage
-                    title={`Could not load media for this ${isClan() ? "clan" : "person"}`}
+                    title={`Could not load media for this ${subjectKindName()}`}
                     error={loadError()}
                     onRetry={retryLoad}
                 />
@@ -71,6 +74,7 @@ const Grid: Component = () => {
                             basePath={basePath()}
                             showingCategories={false}
                             favoritesOnly={favoritesOnly()}
+                            upHref={isPlace() ? getPlacePath(placeId()) : undefined}
                         />
                     }
                     toolbarExtras={
@@ -84,7 +88,7 @@ const Grid: Component = () => {
                     emptyState={
                         <p class="text-center my-8">
                             {favoritesOnly()
-                                ? `None of the media ${subjectPhrase()} appears in has been marked as a favorite.`
+                                ? `None of the media ${mediaScope()} has been marked as a favorite.`
                                 : "There is nothing to show here."}
                         </p>
                     }

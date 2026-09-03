@@ -5,6 +5,7 @@ import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/Fee
 import { Category } from "../../_models/Category";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
+import { getPlacePath } from "../../places/_routes";
 import { useFeedCategories } from "./useFeedCategories";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
@@ -15,7 +16,8 @@ import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarCategories from "./ToolbarCategories";
 
 /*
-   The categories a person or clan turns up in.
+   The categories a person or clan turns up in, or the ones holding media taken at
+   a place.
 
    Paged like the media listing, so it grows on request rather than loading a
    lifetime of categories at once.
@@ -41,6 +43,7 @@ const Categories: Component = () => {
             toolbar={
                 <ToolbarCategories
                     basePath={feed.basePath()}
+                    upHref={feed.isPlace() ? getPlacePath(feed.placeId()) : undefined}
                     favoritesOnly={feed.favoritesOnly()}
                     canRequestMore={feed.query().hasNextPage}
                     setFavoritesOnly={feed.setFavoritesOnly}
@@ -56,9 +59,7 @@ const Categories: Component = () => {
 
                 <Match when={feed.loadError()}>
                     <ErrorMessage
-                        title={`Could not load categories for this ${
-                            feed.isClan() ? "clan" : "person"
-                        }`}
+                        title={`Could not load categories for this ${feed.subjectKindName()}`}
                         error={feed.loadError()}
                         onRetry={feed.retryLoad}
                     />
@@ -70,7 +71,7 @@ const Categories: Component = () => {
                         fallback={
                             <p class="text-center my-8">
                                 {feed.favoritesOnly()
-                                    ? `None of the categories ${feed.subjectPhrase()} appears in have been marked as a favorite.`
+                                    ? `None of the categories ${feed.categoryScope()} have been marked as a favorite.`
                                     : "There is nothing to show here."}
                             </p>
                         }

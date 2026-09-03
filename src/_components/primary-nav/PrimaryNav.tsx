@@ -27,18 +27,10 @@ const PrimaryNav: Component = () => {
         >
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={categories} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={people} />
+            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={places} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={search} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />
             <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />
-
-            {/*
-                Administration rather than browsing, so it is offered only to the
-                people who can actually change anything - every write behind it is
-                refused for everybody else.
-            */}
-            <Show when={authContext.accountStatus?.isAdmin}>
-                <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={places} />
-            </Show>
 
             <span class="grow" />
 

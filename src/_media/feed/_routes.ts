@@ -12,11 +12,11 @@ import {
 } from "../../_models/MediaView";
 
 /*
-   The routes behind a face driven feed: the media one person appears in, or the
-   media anyone in a clan appears in.
+   The routes behind a feed over a subject: the media one person appears in, the
+   media anyone in a clan appears in, or the media taken at a place.
 
-   The two differ only in the path they hang from and the query they read, so
-   they share one set of pages rather than one set each. Everything else - the
+   They differ only in the path they hang from and the query they read, so they
+   share one set of pages rather than one set each. Everything else - the
    favorites filter, the seeded shuffle, paging, the slideshow - is identical by
    construction instead of by maintenance.
 */
@@ -45,6 +45,14 @@ const rootComponent = lazy(() => import("../MediaRoot"));
 */
 export const personFeedBasePath = (personId: string) => `/people/${personId}`;
 export const clanFeedBasePath = (clanId: string) => `/people/clans/${clanId}`;
+
+/*
+   A place's feed hangs below the place itself rather than replacing it, because
+   /places/{id} is already the drill-down - the states inside a country, the
+   cities inside a state. The static segment is what separates the two, the same
+   job `clans` does for the path above.
+*/
+export const placeFeedBasePath = (placeId: string) => `/places/${placeId}/media`;
 
 const mediaSlugOrBlank = (media: Media | undefined) =>
     media ? `/${media.categoryYear}/${media.categorySlug}/${media.slug}` : "";

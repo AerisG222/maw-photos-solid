@@ -5,7 +5,14 @@ import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSet
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 import { isUuid } from "../../_models/Uuid";
 import { people } from "../../people/_routes";
-import { clanFeedBasePath, feedListingPath, feedMediaListing, personFeedBasePath } from "./_routes";
+import { places } from "../../places/_routes";
+import {
+    clanFeedBasePath,
+    feedListingPath,
+    feedMediaListing,
+    personFeedBasePath,
+    placeFeedBasePath
+} from "./_routes";
 
 const Redirect: Component = () => {
     const params = useParams();
@@ -17,14 +24,22 @@ const Redirect: Component = () => {
        A clan lives under /people/clans/{id}, so /people/clans on its own matches
        the person feed with "clans" as the id - and redirecting it would bounce
        between the two patterns forever. Anything that is not an id goes back to
-       the picker instead.
+       the picker it came from instead.
+
+       A place cannot land here without an id - the segment after it is what
+       distinguishes its feed from the drill-down - but it is checked all the same,
+       because a typed url is a typed url.
     */
-    if (!isUuid(params.clanId ?? params.personId)) {
-        navigate(people.absolutePath, { replace: true });
+    const id = params.clanId ?? params.placeId ?? params.personId;
+
+    if (!isUuid(id)) {
+        navigate(params.placeId ? places.absolutePath : people.absolutePath, { replace: true });
     } else {
         const basePath = params.clanId
             ? clanFeedBasePath(params.clanId)
-            : personFeedBasePath(params.personId!);
+            : params.placeId
+              ? placeFeedBasePath(params.placeId)
+              : personFeedBasePath(params.personId!);
 
         /*
            A feed opens on whatever was last chosen: the listing from the switch

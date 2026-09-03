@@ -11,6 +11,13 @@ import Icon from "../icon/Icon";
 interface Props {
     href: string;
     route: AppRouteDefinition;
+    /*
+       Whether the highlight requires an exact match. False by default, because
+       most of these point within the screen they sit on - a view link stays lit
+       while a photo below it is open. A link that leaves the screen wants true,
+       or it reads as "you are here" from everywhere beneath it.
+    */
+    end?: boolean;
     clickHandler?: () => void;
 }
 
@@ -43,7 +50,7 @@ const ToolbarLink: Component<Props> = props => {
             <A
                 href={props.href}
                 onClick={() => handleClick()}
-                end={false}
+                end={props.end ?? false}
                 activeClass="text-primary-content bg-primary mr[-1px]"
                 inactiveClass="text-primary"
                 class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"

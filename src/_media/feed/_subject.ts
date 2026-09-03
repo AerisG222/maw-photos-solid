@@ -2,31 +2,53 @@ import { useParams, useSearchParams } from "@solidjs/router";
 
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
+import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Uuid } from "../../_models/Uuid";
 import { firstParam } from "../../_models/utils/RouteUtils";
-import { clanFeedBasePath, personFeedBasePath } from "./_routes";
+import { clanFeedBasePath, personFeedBasePath, placeFeedBasePath } from "./_routes";
 
 /*
-   Who a feed is about, and the one filter both of its listings share.
+   What a feed is about, and the one filter both of its listings share.
 
    The media pages and the categories page are separate routes over the same
-   subject, so this is the part they have in common: which person or clan the url
-   names, what to call them, and whether the caller has asked for favorites only.
+   subject, so this is the part they have in common: which person, clan or place
+   the url names, what to call it, and whether the caller has asked for favorites
+   only.
+
+   Three subjects, one at a time. Which route matched decides: the parameters
+   never appear together, because a page is only ever reached through one of the
+   three trees.
 */
 export const useFeedSubject = () => {
     const params = useParams();
     const [searchParams] = useSearchParams();
     const { peopleQuery } = usePeopleContext();
     const { clansQuery } = useClansContext();
+    const { placeQuery } = usePlacesContext();
 
-    // which route matched decides what this feed is about; the two never appear
-    // together, and a page is only ever reached through one of them
     const personId = () => params.personId as Uuid | undefined;
     const clanId = () => params.clanId as Uuid | undefined;
+    const placeId = () => params.placeId as Uuid | undefined;
     const isClan = () => !!clanId();
+    const isPlace = () => !!placeId();
 
-    const basePath = () =>
-        isClan() ? clanFeedBasePath(clanId()!) : personFeedBasePath(personId()!);
+    const basePath = () => {
+        if (isClan()) {
+            return clanFeedBasePath(clanId()!);
+        }
+
+        return isPlace() ? placeFeedBasePath(placeId()!) : personFeedBasePath(personId()!);
+    };
+
+    // what to call the thing in a sentence about a failure - "media for this
+    // place" rather than a subject the screen has to work out for itself
+    const subjectKindName = () => {
+        if (isClan()) {
+            return "clan";
+        }
+
+        return isPlace() ? "place" : "person";
+    };
 
     /*
        In the url rather than a store: it has to survive moving between the
@@ -35,25 +57,52 @@ export const useFeedSubject = () => {
     */
     const favoritesOnly = () => firstParam(searchParams.f) === "true";
 
-    // both lists are already cached for the picker, so naming the subject on its
-    // own page costs nothing beyond a lookup
+    // the people and clan lists are already cached for the picker, so naming
+    // either subject on its own page costs nothing beyond a lookup. a place is
+    // read singly - the tree is browsed a level at a time, so there is no whole
+    // list to look one up in
     const people = peopleQuery();
     const clans = clansQuery();
+    const place = placeQuery(placeId);
 
     const clan = () => clans.data?.find(c => c.id === clanId());
 
-    const subjectName = () =>
-        isClan() ? clan()?.name : people.data?.find(p => p.id === personId())?.name;
-
-    // "None of the media <x> appears in..." reads differently for a group
-    const subjectPhrase = () => {
-        const name = subjectName();
-
-        if (!name) {
-            return isClan() ? "anyone in this clan" : "this person";
+    const subjectName = () => {
+        if (isClan()) {
+            return clan()?.name;
         }
 
-        return isClan() ? `anyone in ${name}` : name;
+        return isPlace() ? place.data?.name : people.data?.find(p => p.id === personId())?.name;
+    };
+
+    /*
+       The middle of "None of the media ... has been marked as a favorite."
+
+       A whole phrase rather than a noun, because the sentence differs by more
+       than the name: a photograph is somewhere a person *appears in*, and
+       somewhere a place was *taken in*. Each subject supplies its own middle so
+       the screens hold one sentence rather than a branch per subject.
+    */
+    const mediaScope = () => {
+        const name = subjectName();
+
+        if (isPlace()) {
+            return name ? `taken in ${name}` : "taken here";
+        }
+
+        if (isClan()) {
+            return name ? `anyone in ${name} appears in` : "anyone in this clan appears in";
+        }
+
+        return name ? `${name} appears in` : "this person appears in";
+    };
+
+    // the same, for a listing of categories rather than of media. a category is
+    // not "in" a place; it holds media that is
+    const categoryScope = () => {
+        const name = subjectName();
+
+        return isPlace() ? `holding media taken in ${name ?? "this place"}` : mediaScope();
     };
 
     /*
@@ -67,13 +116,18 @@ export const useFeedSubject = () => {
     return {
         personId,
         clanId,
+        placeId,
         isClan,
+        isPlace,
+        subjectKindName,
         basePath,
         favoritesOnly,
         subjectName,
-        subjectPhrase,
+        mediaScope,
+        categoryScope,
         subjectIsEmpty,
         people,
-        clans
+        clans,
+        place
     };
 };

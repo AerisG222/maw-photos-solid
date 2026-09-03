@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
@@ -11,11 +11,16 @@ interface Props {
     basePath: string;
     showingCategories: boolean;
     favoritesOnly: boolean;
+    // the way back out of a feed that hangs below something browsable - a place
+    // sits in a tree, so leaving its photographs means returning to the level
+    // they were reached from rather than to the top of the app. Absent for a
+    // person or a clan, which are reached from a flat list
+    upHref?: string;
 }
 
 /*
-   Moves between the two things a feed can list: the media somebody appears in,
-   or the categories they turn up in.
+   Moves between the two things a feed can list: the media somebody appears in -
+   or that was taken somewhere - and the categories holding it.
 
    First in the toolbar, because it decides what everything after it applies to -
    the view links and the filters below only make sense once you know which
@@ -49,14 +54,32 @@ const ToolbarListing: Component<Props> = props => {
         absolutePath: href()
     });
 
+    const upRoute = (): AppRouteDefinition => ({
+        icon: "icon-[ic--round-place]",
+        name: "Place",
+        tooltip: "Back to This Place",
+        path: props.upHref!,
+        absolutePath: props.upHref!
+    });
+
     return (
-        <ToolbarLink
-            href={href()}
-            route={route()}
-            // remembered, so the next person or clan opens on the listing this
-            // one was left on - the view links do the same for grid vs detail
-            clickHandler={() => setShowCategories(!props.showingCategories)}
-        />
+        <>
+            <Show when={props.upHref}>
+                {/*
+                    Exact, unlike the switch below it: this one leaves the feed,
+                    so it must not stay lit for every photograph inside it.
+                */}
+                <ToolbarLink href={props.upHref!} route={upRoute()} end={true} />
+            </Show>
+
+            <ToolbarLink
+                href={href()}
+                route={route()}
+                // remembered, so the next subject opens on the listing this one
+                // was left on - the view links do the same for grid vs detail
+                clickHandler={() => setShowCategories(!props.showingCategories)}
+            />
+        </>
     );
 };
 

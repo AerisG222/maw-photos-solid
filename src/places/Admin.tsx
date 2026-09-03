@@ -1,6 +1,7 @@
 import { Component, For, Match, Show, Switch, createSignal } from "solid-js";
-import { useParams, useSearchParams } from "@solidjs/router";
+import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
+import { getPlaceAdminPath, getPlacePath } from "./_routes";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
 import { allPlaceKinds, Place, PlaceKind } from "../_models/Place";
 import { firstParam } from "../_models/utils/RouteUtils";
@@ -17,7 +18,8 @@ import PlaceMergeDialog from "./components/PlaceMergeDialog";
 import PlaceMoveDialog from "./components/PlaceMoveDialog";
 import PlaceSearchBar from "./components/PlaceSearchBar";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
-import Toolbar from "./components/Toolbar";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import PlaceTreeToolbar from "./components/PlaceTreeToolbar";
 
 /*
    Administering the place tree.
@@ -31,6 +33,7 @@ import Toolbar from "./components/Toolbar";
    duplicate survives a reload and can be handed to another tab.
 */
 const Places: Component = () => {
+    const navigate = useNavigate();
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const { placesQuery, placeQuery, placeAncestorsQuery } = usePlacesContext();
@@ -125,7 +128,28 @@ const Places: Component = () => {
     };
 
     return (
-        <Layout toolbar={<Toolbar parentId={parentId()} atRoot={!placeId()} />}>
+        <Layout
+            toolbar={
+                <PlaceTreeToolbar
+                    parentId={parentId()}
+                    atRoot={!placeId()}
+                    buildPath={getPlaceAdminPath}
+                >
+                    {/*
+                        The way back to the browse, which is where an admin
+                        arrived from and where the result of a correction is
+                        seen the way everybody else will see it.
+                    */}
+                    <ToolbarButton
+                        icon="icon-[ic--round-visibility]"
+                        name="Browse"
+                        tooltip="Browse These Places"
+                        shortcutKeys={["v"]}
+                        clickHandler={() => navigate(getPlacePath(placeId()))}
+                    />
+                </PlaceTreeToolbar>
+            }
+        >
             <h1 class="head1">Places</h1>
 
             <PlaceBreadcrumb ancestors={ancestors.data ?? []} />
@@ -182,6 +206,7 @@ const Places: Component = () => {
                                 {(item, idx) => (
                                     <PlaceCard
                                         place={item}
+                                        href={getPlaceAdminPath(item.id)}
                                         showAncestry={!!search()}
                                         eager={idx() <= EAGER_THRESHOLD}
                                         onChooseCover={chosen => setCoverForId(chosen.id)}

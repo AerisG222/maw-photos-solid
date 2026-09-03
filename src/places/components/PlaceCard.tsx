@@ -3,23 +3,27 @@ import { A } from "@solidjs/router";
 
 import { describePlaceAncestry, getPlaceKindName, Place } from "../../_models/Place";
 import { hasRevealed, markRevealed } from "../../_components/loading/_imageReveal";
-import { getPlaceAdminPath } from "../_routes";
 
 import Icon from "../../_components/icon/Icon";
 
 interface Props {
     place: Place;
+    // where the tile leads. The browse drills into the places inside this one;
+    // the admin screen drills to the panel where this one is changed
+    href: string;
     // where the place sits in the tree, shown while searching - results come from
     // anywhere in it, and two cities can share a name and even a parent
     showAncestry: boolean;
     eager: boolean;
-    onChooseCover: (place: Place) => void;
+    // offered only where a cover can be chosen, which is the admin screen. Absent
+    // on the browse, where the tile does one thing
+    onChooseCover?: (place: Place) => void;
 }
 
 /*
-   One place in a listing. The tile itself drills in - to the places beneath it,
-   and to the panel where this one is administered - so the cover button is the
-   only thing on it that does something else.
+   One place in a listing, shared by the browse and by the administration of the
+   same tree. The tile itself drills in, so the cover button is the only thing on
+   it that does something else.
 */
 const PlaceCard: Component<Props> = props => {
     const coverUrl = () => props.place.coverUrl ?? undefined;
@@ -45,12 +49,12 @@ const PlaceCard: Component<Props> = props => {
         evt.preventDefault();
         evt.stopPropagation();
 
-        props.onChooseCover(props.place);
+        props.onChooseCover?.(props.place);
     };
 
     return (
         <A
-            href={getPlaceAdminPath(props.place.id)}
+            href={props.href}
             class="group flex flex-col w-60 border border-secondary/20 rounded-sm bg-base-200
                 hover:bg-base-300 hover:border-primary hover:text-primary
                 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20
@@ -109,13 +113,15 @@ const PlaceCard: Component<Props> = props => {
                     </Show>
                 </div>
 
-                <button
-                    class="btn btn-xs btn-ghost text-primary"
-                    title={props.place.coverUrl ? "Replace Cover" : "Choose Cover"}
-                    onClick={chooseCover}
-                >
-                    <Icon classes="icon-[ic--round-photo-camera] text-lg" />
-                </button>
+                <Show when={props.onChooseCover}>
+                    <button
+                        class="btn btn-xs btn-ghost text-primary"
+                        title={props.place.coverUrl ? "Replace Cover" : "Choose Cover"}
+                        onClick={chooseCover}
+                    >
+                        <Icon classes="icon-[ic--round-photo-camera] text-lg" />
+                    </button>
+                </Show>
             </div>
         </A>
     );

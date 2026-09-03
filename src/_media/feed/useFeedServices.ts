@@ -5,6 +5,7 @@ import { findQueryError, refetchQueries } from "../../_components/error/_queryEr
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
+import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
 import { MediaView } from "../../_models/MediaView";
@@ -27,9 +28,10 @@ export const useFeedServices = (view: MediaView) => {
     const { categoryQuery } = useCategoriesContext();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
+    const { placeMediaQuery } = usePlacesContext();
 
     const subject = useFeedSubject();
-    const { personId, clanId, isClan, basePath, favoritesOnly } = subject;
+    const { personId, clanId, placeId, isClan, isPlace, basePath, favoritesOnly } = subject;
 
     const seed = () => {
         const raw = firstParam(searchParams.seed);
@@ -61,14 +63,25 @@ export const useFeedServices = (view: MediaView) => {
     const routes = () => buildFeedRoutes(basePath(), search());
 
     /*
-       Both queries are created, and the one this feed is not about is switched
-       off by its own id being undefined. Creating them conditionally would mean
-       a different set of observers per render, which is not something a
-       subscription can survive; an idle observer costs nothing.
+       All three queries are created, and the two this feed is not about are
+       switched off by their own ids being undefined. Creating them conditionally
+       would mean a different set of observers per render, which is not something
+       a subscription can survive; an idle observer costs nothing.
+
+       A place's feed is paged, filtered and seeded exactly like a person's, so
+       the same filter drives whichever one is live.
     */
     const personMq = personMediaQuery(personId, filter);
     const clanMq = clanMediaQuery(clanId, filter);
-    const mq = () => (isClan() ? clanMq : personMq);
+    const placeMq = placeMediaQuery(placeId, filter);
+
+    const mq = () => {
+        if (isClan()) {
+            return clanMq;
+        }
+
+        return isPlace() ? placeMq : personMq;
+    };
 
     const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
 
@@ -160,11 +173,12 @@ export const useFeedServices = (view: MediaView) => {
 
     /*
        Only the media feed can block the screen. The category follows whichever
-       item is active and the person and clan lists only supply a display name,
-       so none of them failing is a reason to withhold the photos.
+       item is active and the person, clan and place reads only supply a display
+       name, so none of them failing is a reason to withhold the photos.
     */
     const loadError = () => findQueryError([mq()]);
-    const retryLoad = () => refetchQueries([mq(), categoryResult, subject.people, subject.clans]);
+    const retryLoad = () =>
+        refetchQueries([mq(), categoryResult, subject.people, subject.clans, subject.place]);
 
     const isLoading = () => mq().isLoading;
 
