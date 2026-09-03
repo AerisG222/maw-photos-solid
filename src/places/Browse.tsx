@@ -1,5 +1,5 @@
 import { Component, For, Match, Show, Switch, createSignal } from "solid-js";
-import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
+import { useParams, useSearchParams } from "@solidjs/router";
 
 import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
 import { placeFeedBasePath } from "../_media/feed/_routes";
@@ -19,9 +19,8 @@ import PlaceMergeDialog from "./components/PlaceMergeDialog";
 import PlaceMoveDialog from "./components/PlaceMoveDialog";
 import PlaceSearchBar from "./components/PlaceSearchBar";
 import PlaceSummary from "./components/PlaceSummary";
-import PlaceTreeToolbar from "./components/PlaceTreeToolbar";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
-import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import Toolbar from "./components/Toolbar";
 
 /*
    Browsing by where a photograph was taken, and - for an administrator with edit
@@ -40,7 +39,6 @@ import ToolbarButton from "../_components/toolbar/ToolbarButton";
    enforces it.
 */
 const Browse: Component = () => {
-    const navigate = useNavigate();
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [authContext] = useAuthContext();
@@ -96,13 +94,6 @@ const Browse: Component = () => {
         }
 
         return place.data?.id === id ? place.data : places.data?.find(p => p.id === id);
-    };
-
-    // the chain includes the place itself, so its parent is the rung before it
-    const parentId = () => {
-        const chain = ancestors.data ?? [];
-
-        return chain.length > 1 ? chain[chain.length - 2].id : undefined;
     };
 
     // every link that moves around the tree keeps the mode, so drilling in while
@@ -190,34 +181,12 @@ const Browse: Component = () => {
     return (
         <Layout
             toolbar={
-                <PlaceTreeToolbar parentId={parentId()} atRoot={!placeId()} buildPath={treePath}>
-                    <ToolbarButton
-                        icon="icon-[ic--round-image]"
-                        name="Photos"
-                        tooltip="Photos and Videos Taken Here"
-                        shortcutKeys={["p"]}
-                        disabled={!placeId()}
-                        clickHandler={() => navigate(placeFeedBasePath(placeId()!))}
-                    />
-
-                    {/*
-                        The corrections, offered only to the people who can
-                        actually make them - every write behind this is refused
-                        for everybody else. A mode rather than a second screen:
-                        it is the same tree either way, and crossing to a separate
-                        one used to drop the primary nav highlight.
-                    */}
-                    <Show when={isAdmin()}>
-                        <ToolbarButton
-                            icon="icon-[ic--round-edit]"
-                            name="Edit"
-                            tooltip="Administer These Places"
-                            shortcutKeys={["e"]}
-                            active={editing()}
-                            clickHandler={toggleEditing}
-                        />
-                    </Show>
-                </PlaceTreeToolbar>
+                <Toolbar
+                    placeId={placeId()}
+                    canEdit={isAdmin()}
+                    editing={editing()}
+                    toggleEditing={toggleEditing}
+                />
             }
         >
             <h1 class="head1">Places</h1>
