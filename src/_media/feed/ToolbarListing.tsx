@@ -14,15 +14,24 @@ interface Props {
 }
 
 /*
-   Moves between the two things a feed can list: the media somebody appears in -
-   or that was taken somewhere - and the categories holding it.
+   The two things a feed can list: the media somebody appears in - or that was
+   taken somewhere - and the categories holding it.
+
+   Both are always shown, with the one you are in lit, which is how the view links
+   below already behave and how the places screen offers the same two listings
+   before you are in either. This used to be a single item naming the *other*
+   listing; that saved a slot at the cost of the toolbar reading differently
+   depending on where you stood, which is exactly the inconsistency it looked
+   like.
 
    First in the toolbar, because it decides what everything after it applies to -
    the view links and the filters below only make sense once you know which
    listing you are in.
 
-   It names where it goes rather than where you are, so there is one item rather
-   than two, and no second highlighted link pointing at the page you are on.
+   `k` stays on whichever you are not in, so the key still means "switch
+   listing". It cannot sit on both: every other letter on this screen is spoken
+   for, `p` included - that one plays the slideshow here, while the places screen
+   is free to use it for the media listing.
 */
 const ToolbarListing: Component<Props> = props => {
     const [mediaSettings] = useMediaPageSettingsContext();
@@ -31,32 +40,54 @@ const ToolbarListing: Component<Props> = props => {
     /*
        Going back to the media returns to whichever view was last used, rather
        than always the grid - the same preference the feed's redirect opens a
-       fresh person on, so the two agree.
+       fresh subject on, so the two agree.
     */
-    const href = () =>
-        feedListingPath(
-            props.basePath,
-            props.showingCategories ? feedMediaListing(mediaSettings.view) : "categories",
-            props.favoritesOnly
-        );
+    const mediaHref = () =>
+        feedListingPath(props.basePath, feedMediaListing(mediaSettings.view), props.favoritesOnly);
 
-    const route = (): AppRouteDefinition => ({
-        icon: props.showingCategories ? "icon-[ic--round-image]" : "icon-[ic--round-collections]",
-        name: props.showingCategories ? "Media" : "Categories",
-        tooltip: props.showingCategories ? "Show Media" : "Show Categories",
-        shortcutKeys: ["k"],
-        path: href(),
-        absolutePath: href()
+    const categoriesHref = () => feedListingPath(props.basePath, "categories", props.favoritesOnly);
+
+    const mediaRoute = (): AppRouteDefinition => ({
+        icon: "icon-[ic--round-image]",
+        name: "Media",
+        tooltip: "Show Media",
+        shortcutKeys: props.showingCategories ? ["k"] : undefined,
+        path: mediaHref(),
+        absolutePath: mediaHref()
+    });
+
+    const categoriesRoute = (): AppRouteDefinition => ({
+        icon: "icon-[ic--round-collections]",
+        name: "Categories",
+        tooltip: "Show Categories",
+        shortcutKeys: props.showingCategories ? undefined : ["k"],
+        path: categoriesHref(),
+        absolutePath: categoriesHref()
     });
 
     return (
         <>
+            {/*
+                Told which is current rather than left to the router: the media
+                href names whichever view was last used, so on any other view the
+                url and the link would disagree and neither would light up.
+
+                The choice is remembered on the way through, so the next subject
+                opens on the listing this one was left on - the view links do the
+                same for grid against detail.
+            */}
             <ToolbarLink
-                href={href()}
-                route={route()}
-                // remembered, so the next subject opens on the listing this one
-                // was left on - the view links do the same for grid vs detail
-                clickHandler={() => setShowCategories(!props.showingCategories)}
+                href={mediaHref()}
+                route={mediaRoute()}
+                active={!props.showingCategories}
+                clickHandler={() => setShowCategories(false)}
+            />
+
+            <ToolbarLink
+                href={categoriesHref()}
+                route={categoriesRoute()}
+                active={props.showingCategories}
+                clickHandler={() => setShowCategories(true)}
             />
         </>
     );

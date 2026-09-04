@@ -1,12 +1,14 @@
 import { Component, Show } from "solid-js";
-import { useNavigate } from "@solidjs/router";
 
-import { feedListingPath, placeFeedBasePath } from "../../_media/feed/_routes";
+import { feedListingPath, feedMediaListing, placeFeedBasePath } from "../../_media/feed/_routes";
+import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Uuid } from "../../_models/Uuid";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import ToolbarLink from "../../_components/toolbar/ToolbarLink";
 
 interface Props {
     // undefined at the root, where there is no one place to act on
@@ -28,9 +30,13 @@ interface Props {
    only promises a direction.
 
    The two listings are here rather than beside the place they apply to, for the
-   same reason every other area puts them here: a fixed position and a key, and
-   the feed they lead to switches between them from its own toolbar on the same
-   `k`.
+   same reason every other area puts them here: a fixed position and a key. They
+   are the same pair the feed itself shows, drawn the same way - neither is lit,
+   because standing on a place is standing in neither of them.
+
+   At the root they are dead rather than absent: there is no one place to list,
+   and a toolbar that changed width as you drilled would be worse than one with a
+   pair of grey entries in it.
 
    The corrections appear only while editing, next to the toggle that revealed
    them. They act on the place the chain says you are on, so at the root - where
@@ -38,27 +44,51 @@ interface Props {
    which keeps the toolbar from changing width as you drill.
 */
 const Toolbar: Component<Props> = props => {
-    const navigate = useNavigate();
+    const [mediaSettings] = useMediaPageSettingsContext();
 
     const feedPath = () => placeFeedBasePath(props.placeId!);
 
+    // opens on whichever view was last used, exactly as the feed's own switch
+    // does - the two are the same journey started from different screens
+    const mediaHref = () =>
+        props.placeId
+            ? feedListingPath(feedPath(), feedMediaListing(mediaSettings.view), false)
+            : "";
+
+    const categoriesHref = () =>
+        props.placeId ? feedListingPath(feedPath(), "categories", false) : "";
+
+    const mediaRoute = (): AppRouteDefinition => ({
+        icon: "icon-[ic--round-image]",
+        name: "Media",
+        tooltip: "Media Taken Here",
+        shortcutKeys: ["p"],
+        path: mediaHref(),
+        absolutePath: mediaHref()
+    });
+
+    const categoriesRoute = (): AppRouteDefinition => ({
+        icon: "icon-[ic--round-collections]",
+        name: "Categories",
+        tooltip: "Categories With Media Taken Here",
+        shortcutKeys: ["k"],
+        path: categoriesHref(),
+        absolutePath: categoriesHref()
+    });
+
     return (
         <ToolbarLayout>
-            <ToolbarButton
-                icon="icon-[ic--round-image]"
-                name="Photos"
-                tooltip="Photos and Videos Taken Here"
-                shortcutKeys={["p"]}
+            <ToolbarLink
+                href={mediaHref()}
+                route={mediaRoute()}
+                active={false}
                 disabled={!props.placeId}
-                clickHandler={() => navigate(feedPath())}
             />
-            <ToolbarButton
-                icon="icon-[ic--round-collections]"
-                name="Categories"
-                tooltip="Categories With Media Taken Here"
-                shortcutKeys={["k"]}
+            <ToolbarLink
+                href={categoriesHref()}
+                route={categoriesRoute()}
+                active={false}
                 disabled={!props.placeId}
-                clickHandler={() => navigate(feedListingPath(feedPath(), "categories", false))}
             />
 
             <Show when={props.canEdit}>

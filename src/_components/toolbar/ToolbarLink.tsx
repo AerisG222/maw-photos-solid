@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
@@ -8,16 +8,29 @@ import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsConte
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
 
+// one definition, so the forced and the routed highlight cannot drift apart
+const ACTIVE_CLASS = "text-primary-content bg-primary mr[-1px]";
+const INACTIVE_CLASS = "text-primary";
+
 interface Props {
     href: string;
     route: AppRouteDefinition;
     /*
-       Whether the highlight requires an exact match. False by default, because
-       most of these point within the screen they sit on - a view link stays lit
-       while a photo below it is open. A link that leaves the screen wants true,
-       or it reads as "you are here" from everywhere beneath it.
+       Overrides the router's own match. For a link whose href is a *destination*
+       rather than the path you are on: the media listing points at whichever view
+       was last used, so a caller standing on a different one still knows the
+       listing is the current one, and the router does not.
+
+       Left undefined, the highlight follows the url, which is what a view link
+       wants - it stays lit while a photo below it is open.
     */
-    end?: boolean;
+    active?: boolean;
+    /*
+       Rendered as a dead entry rather than dropped, so a toolbar keeps its shape
+       as the thing it acts on comes and goes - the places screen offers both
+       listings at the root, where there is no one place to list.
+    */
+    disabled?: boolean;
     clickHandler?: () => void;
 }
 
@@ -40,29 +53,52 @@ const ToolbarLink: Component<Props> = props => {
         "md:inline": state.isToolbarCollapsed
     });
 
+    const label = () => props.route.tooltip ?? props.route.name;
+
+    const body = () => (
+        <>
+            <Icon classes={props.route.icon!} />
+            <span classList={nameClass()}>{props.route.name}</span>
+        </>
+    );
+
     return (
         <ShortcutWrapper
-            name={props.route.tooltip ?? props.route.name}
+            name={label()}
             shortcutKeys={props.route.shortcutKeys}
-            disabled={!props.route.shortcutKeys}
+            disabled={!props.route.shortcutKeys || !!props.disabled}
             clickHandler={() => el.click()}
         >
-            <A
-                href={props.href}
-                onClick={() => handleClick()}
-                end={false}
-                activeClass="text-primary-content bg-primary mr[-1px]"
-                inactiveClass="text-primary"
-                class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"
-                title={getNameWithShortcut(
-                    props.route.tooltip ?? props.route.name,
-                    props.route.shortcutKeys
-                )}
-                ref={el}
+            <Show
+                when={!props.disabled}
+                fallback={
+                    <span
+                        class="flex px-3 py-2 text-base-content opacity-40 cursor-not-allowed"
+                        title={label()}
+                        aria-disabled={true}
+                    >
+                        {body()}
+                    </span>
+                }
             >
-                <Icon classes={props.route.icon!} />
-                <span classList={nameClass()}>{props.route.name}</span>
-            </A>
+                <A
+                    href={props.href}
+                    onClick={() => handleClick()}
+                    end={false}
+                    activeClass={props.active === undefined ? ACTIVE_CLASS : ""}
+                    inactiveClass={props.active === undefined ? INACTIVE_CLASS : ""}
+                    classList={
+                        props.active === undefined
+                            ? {}
+                            : { [ACTIVE_CLASS]: props.active, [INACTIVE_CLASS]: !props.active }
+                    }
+                    class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"
+                    title={getNameWithShortcut(label(), props.route.shortcutKeys)}
+                    ref={el}
+                >
+                    {body()}
+                </A>
+            </Show>
         </ShortcutWrapper>
     );
 };
