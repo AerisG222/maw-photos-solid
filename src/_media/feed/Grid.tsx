@@ -1,12 +1,14 @@
-import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
+import { Component, createEffect, Match, onCleanup, Show, Switch } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
 import { MediaViewGrid } from "../../_models/MediaView";
 import { getPlacePath } from "../../places/_routes";
+import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
 import ErrorMessage from "../../_components/error/ErrorMessage";
+import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarFilters from "./ToolbarFilters";
 import ToolbarListing from "./ToolbarListing";
@@ -33,6 +35,7 @@ const Grid: Component = () => {
     } = useFeedServices(MediaViewGrid);
     const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
         useMediaGridViewSettingsContext();
+    const chain = usePlaceChain(placeId);
 
     /*
        Held until the first page has landed. Deciding earlier would rewrite a
@@ -68,13 +71,22 @@ const Grid: Component = () => {
                     mediaService={mediaService}
                     slideshowService={slideshowService}
                     gridSettings={settings}
-                    title={subjectName()}
+                    /*
+                       A place names itself in its chain, so a title above it
+                       would say the same thing twice. A person or a clan has no
+                       chain and keeps the title.
+                    */
+                    title={isPlace() ? undefined : subjectName()}
+                    header={
+                        <Show when={isPlace()}>
+                            <PlaceChain links={chain()} buildPath={getPlacePath} />
+                        </Show>
+                    }
                     toolbarLeading={
                         <ToolbarListing
                             basePath={basePath()}
                             showingCategories={false}
                             favoritesOnly={favoritesOnly()}
-                            upHref={isPlace() ? getPlacePath(placeId()) : undefined}
                         />
                     }
                     toolbarExtras={

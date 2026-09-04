@@ -14,8 +14,6 @@ interface Props {
     basePath: string;
     favoritesOnly: boolean;
     canRequestMore: boolean;
-    // handed straight to the listing switch - see ToolbarListing
-    upHref?: string;
     setFavoritesOnly: (favoritesOnly: boolean) => void;
     requestMore: () => void;
 }
@@ -69,7 +67,6 @@ const ToolbarCategories: Component<Props> = props => {
                 basePath={props.basePath}
                 showingCategories={true}
                 favoritesOnly={props.favoritesOnly}
-                upHref={props.upHref}
             />
 
             <ToolbarDivider />

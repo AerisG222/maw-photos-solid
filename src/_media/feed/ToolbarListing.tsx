@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component } from "solid-js";
 
 import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
@@ -11,11 +11,6 @@ interface Props {
     basePath: string;
     showingCategories: boolean;
     favoritesOnly: boolean;
-    // the way back out of a feed that hangs below something browsable - a place
-    // sits in a tree, so leaving its photographs means returning to the level
-    // they were reached from rather than to the top of the app. Absent for a
-    // person or a clan, which are reached from a flat list
-    upHref?: string;
 }
 
 /*
@@ -54,24 +49,8 @@ const ToolbarListing: Component<Props> = props => {
         absolutePath: href()
     });
 
-    const upRoute = (): AppRouteDefinition => ({
-        icon: "icon-[ic--round-place]",
-        name: "Place",
-        tooltip: "Back to This Place",
-        path: props.upHref!,
-        absolutePath: props.upHref!
-    });
-
     return (
         <>
-            <Show when={props.upHref}>
-                {/*
-                    Exact, unlike the switch below it: this one leaves the feed,
-                    so it must not stay lit for every photograph inside it.
-                */}
-                <ToolbarLink href={props.upHref!} route={upRoute()} end={true} />
-            </Show>
-
             <ToolbarLink
                 href={href()}
                 route={route()}

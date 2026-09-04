@@ -6,12 +6,14 @@ import { Category } from "../../_models/Category";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 import { getPlacePath } from "../../places/_routes";
+import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedCategories } from "./useFeedCategories";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
 import EmptyClanMessage from "./EmptyClanMessage";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Layout from "../../_components/layout/Layout";
+import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarCategories from "./ToolbarCategories";
 
@@ -26,6 +28,7 @@ const Categories: Component = () => {
     const feed = useFeedCategories();
     const [settings] = useFeedCategoryViewSettingsContext();
     const { setIsFavoriteMutation } = useCategoriesContext();
+    const chain = usePlaceChain(feed.placeId);
 
     const setIsFavorite = (category: Category, isFavorite: boolean) => {
         const req: IsFavoriteRequest<Category> = {
@@ -39,11 +42,16 @@ const Categories: Component = () => {
     return (
         <Layout
             margin={settings.margin}
-            title={feed.subjectName()}
+            // see the note in the media listing: a place names itself in its chain
+            title={feed.isPlace() ? undefined : feed.subjectName()}
+            header={
+                <Show when={feed.isPlace()}>
+                    <PlaceChain links={chain()} buildPath={getPlacePath} />
+                </Show>
+            }
             toolbar={
                 <ToolbarCategories
                     basePath={feed.basePath()}
-                    upHref={feed.isPlace() ? getPlacePath(feed.placeId()) : undefined}
                     favoritesOnly={feed.favoritesOnly()}
                     canRequestMore={feed.query().hasNextPage}
                     setFavoritesOnly={feed.setFavoritesOnly}

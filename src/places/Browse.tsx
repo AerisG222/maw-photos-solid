@@ -1,5 +1,5 @@
-import { Component, For, Match, Show, Switch, createSignal } from "solid-js";
-import { useParams, useSearchParams } from "@solidjs/router";
+import { Component, For, Match, Show, Switch, createEffect, createSignal } from "solid-js";
+import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
 import { placeFeedBasePath } from "../_media/feed/_routes";
@@ -13,13 +13,14 @@ import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 import ErrorMessage from "../_components/error/ErrorMessage";
 import Layout from "../_components/layout/Layout";
 import PlaceCard from "./components/PlaceCard";
-import PlaceChain, { PlaceChainLink } from "./components/PlaceChain";
+import PlaceChain from "./components/PlaceChain";
 import PlaceCoverDialog from "./components/PlaceCoverDialog";
 import PlaceMergeDialog from "./components/PlaceMergeDialog";
 import PlaceMoveDialog from "./components/PlaceMoveDialog";
 import PlaceSearchBar from "./components/PlaceSearchBar";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
+import { usePlaceChain } from "./usePlaceChain";
 
 /*
    Browsing by where a photograph was taken, and - for an administrator with edit
@@ -38,10 +39,11 @@ import Toolbar from "./components/Toolbar";
    enforces it.
 */
 const Browse: Component = () => {
+    const navigate = useNavigate();
     const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [authContext] = useAuthContext();
-    const { placesQuery, placeQuery, placesByIdQuery, placeAncestorsQuery } = usePlacesContext();
+    const { placesQuery, placeQuery } = usePlacesContext();
 
     // a route parameter matches on shape alone, so a typed url can hand this page
     // a segment that was never an id - treated as the root rather than requested
@@ -75,28 +77,7 @@ const Browse: Component = () => {
 
     const places = placesQuery(filter);
     const place = placeQuery(placeId);
-    const ancestors = placeAncestorsQuery(placeId);
-
-    /*
-       The chain above the current place, as whole places rather than the names
-       the ancestors endpoint returns - the strip shows each rung's cover and the
-       current rung's count, and neither is in an ancestor.
-
-       These share the cache with the read above, so drilling down populates them
-       on the way through and walking back up costs nothing. Only a deep link
-       fetches, and then two at most.
-    */
-    const ancestorIds = () => (ancestors.data ?? []).map(ancestor => ancestor.id);
-    const chainPlaces = placesByIdQuery(ancestorIds);
-
-    const chain = (): PlaceChainLink[] =>
-        (ancestors.data ?? []).map((ancestor, idx) => ({
-            id: ancestor.id,
-            name: ancestor.name,
-            kind: ancestor.kind,
-            coverUrl: chainPlaces[idx]?.data?.coverUrl,
-            mediaCount: chainPlaces[idx]?.data?.mediaCount
-        }));
+    const chain = usePlaceChain(placeId);
 
     /*
        The dialogs are held by id rather than by value, and the place is looked up
@@ -107,6 +88,27 @@ const Browse: Component = () => {
     const [coverForId, setCoverForId] = createSignal<Uuid>();
     const [mergeIntoId, setMergeIntoId] = createSignal<Uuid>();
     const [moveId, setMoveId] = createSignal<Uuid>();
+
+    /*
+       A place with nothing inside it *is* its photographs, so its own page has
+       nothing left to say - the chain names it, and the listing below would be
+       empty. The tiles already skip it for that reason; this applies the same
+       rule to the page, which is how a leaf is reached by a link, a bookmark, or
+       by turning edit mode back off while standing on one.
+
+       Replaced rather than pushed, so Back returns to the level the place was
+       reached from rather than bouncing through the redirect.
+
+       Not while editing - administering a leaf is done on this page, and it is
+       the only way to reach its cover, its move and its merge. Not while a search
+       or a filter is on either: those answer about the whole tree, and a redirect
+       would throw the answer away.
+    */
+    createEffect(() => {
+        if (!editing() && !search() && !kind() && place.data && isLeafPlace(place.data)) {
+            navigate(placeFeedBasePath(place.data.id), { replace: true });
+        }
+    });
 
     const findPlace = (id: Uuid | undefined): Place | undefined => {
         if (!id) {

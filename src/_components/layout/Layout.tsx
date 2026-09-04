@@ -9,6 +9,13 @@ interface Props {
     // available space with flex/grid instead of computing pixel offsets.
     fill?: boolean;
     title?: string;
+    /*
+       Rendered where the title would be, for a screen whose heading is a
+       component rather than a string - the place chain, which names where you
+       are *and* is the way back out of it. A screen passes one or the other,
+       never both: they answer the same question.
+    */
+    header?: JSXElement;
     margin?: MarginIdType;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
@@ -19,6 +26,7 @@ const Layout: ParentComponent<Props> = props => {
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
+    const header = children(() => props.header);
 
     return (
         <div
@@ -44,6 +52,8 @@ const Layout: ParentComponent<Props> = props => {
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
                     </Show>
+
+                    {header()}
 
                     {content()}
                 </div>

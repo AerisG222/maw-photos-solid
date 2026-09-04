@@ -3,7 +3,6 @@ import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { useMediaFullscreenViewSettingsContext } from "../../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { MediaViewFullscreen } from "../../_models/MediaView";
-import { getPlacePath } from "../../places/_routes";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
@@ -21,8 +20,6 @@ const Fullscreen: Component = () => {
         subjectName,
         subjectIsEmpty,
         subjectKindName,
-        isPlace,
-        placeId,
         basePath,
         favoritesOnly,
         isShuffled,
@@ -77,7 +74,6 @@ const Fullscreen: Component = () => {
                             basePath={basePath()}
                             showingCategories={false}
                             favoritesOnly={favoritesOnly()}
-                            upHref={isPlace() ? getPlacePath(placeId()) : undefined}
                         />
                     }
                     toolbarExtras={

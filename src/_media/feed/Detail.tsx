@@ -2,7 +2,6 @@ import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../../_contexts/settings/MediaDetailViewSettingsContext";
 import { MediaViewDetail } from "../../_models/MediaView";
-import { getPlacePath } from "../../places/_routes";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
@@ -19,8 +18,6 @@ const Detail: Component = () => {
         subjectName,
         subjectIsEmpty,
         subjectKindName,
-        isPlace,
-        placeId,
         basePath,
         favoritesOnly,
         isShuffled,
@@ -72,7 +69,6 @@ const Detail: Component = () => {
                             basePath={basePath()}
                             showingCategories={false}
                             favoritesOnly={favoritesOnly()}
-                            upHref={isPlace() ? getPlacePath(placeId()) : undefined}
                         />
                     }
                     toolbarExtras={

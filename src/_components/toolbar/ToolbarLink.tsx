@@ -50,7 +50,7 @@ const ToolbarLink: Component<Props> = props => {
             <A
                 href={props.href}
                 onClick={() => handleClick()}
-                end={props.end ?? false}
+                end={false}
                 activeClass="text-primary-content bg-primary mr[-1px]"
                 inactiveClass="text-primary"
                 class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"

@@ -25,6 +25,9 @@ interface Props {
     // names the feed when it is not self-evident from the media - a person's
     // photos span categories, so the breadcrumbs alone do not say whose they are
     title?: string;
+    // a heading that is a component rather than a string - see Layout. The place
+    // feeds pass their chain, which names the place and walks back up the tree
+    header?: JSXElement;
     // controls belonging to the feed rather than to the grid, e.g. the filters
     // on a person's media. They sit in the toolbar so they stay reachable when
     // the feed they narrow comes back empty
@@ -81,6 +84,7 @@ const ViewGrid: Component<Props> = props => {
             <Layout
                 margin={props.gridSettings.margin}
                 title={props.title}
+                header={props.header}
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}
