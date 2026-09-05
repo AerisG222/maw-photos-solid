@@ -6,6 +6,14 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v4.5.0</span> : <span class="date">2026-09-05</span>
+            </h3>
+            <p>Add new section to browse media by places</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Traverse places and view media or categories from there</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.4.0</span> : <span class="date">2026-08-28</span>
             </h3>
             <p>Additional improvements to the people section</p>
