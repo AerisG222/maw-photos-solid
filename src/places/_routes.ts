@@ -37,7 +37,7 @@ export const places: AppRouteDefinition = {
     icon: "icon-[ic--round-place]",
     name: "Places",
     helpText:
-        "Browse photos and videos by where in the world they were taken. Administrators can also choose the photograph that represents each place, and correct places the geocoder derived wrongly.",
+        "Browse photos and videos by where in the world they were taken.",
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import("./Layout")),
