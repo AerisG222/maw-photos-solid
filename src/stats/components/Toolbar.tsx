@@ -37,7 +37,7 @@ const Toolbar: Component<Props> = props => {
             />
             <ToolbarButton
                 active={search?.type === "photo"}
-                icon="icon-[ic--outline-photo-camera]"
+                icon="icon-[ic--round-photo-camera]"
                 name="Photos"
                 tooltip="Include only Photos"
                 clickHandler={() => selectType("photo")}
@@ -55,7 +55,7 @@ const Toolbar: Component<Props> = props => {
             <Show when={props.showSummarizeByCategoryCount}>
                 <ToolbarButton
                     active={search?.mode === "category-count"}
-                    icon="icon-[mdi--folder]"
+                    icon="icon-[ic--round-folder]"
                     name="Categories"
                     tooltip="Summarize by Category Count"
                     clickHandler={() => selectMode("category-count")}
@@ -63,14 +63,14 @@ const Toolbar: Component<Props> = props => {
             </Show>
             <ToolbarButton
                 active={search?.mode === "count"}
-                icon="icon-[mdi--file-multiple]"
+                icon="icon-[ic--round-file-copy]"
                 name="Media"
                 tooltip="Summarize by Media Count"
                 clickHandler={() => selectMode("count")}
             />
             <ToolbarButton
                 active={search?.mode === "size"}
-                icon="icon-[mdi--weight]"
+                icon="icon-[ic--round-storage]"
                 name="Storage"
                 tooltip="Summarize by Storage"
                 clickHandler={() => selectMode("size")}

@@ -85,7 +85,7 @@ const CategoryListItem: Component<Props> = props => {
 
             <Show when={props.showYear}>
                 <span class="ml-2 md:ml-4">{props.category.effectiveDate.getFullYear()}</span>
-                <span class="mr-[-0.5rem] md:mr-0 md:ml-4 icon-md icon-[ic--baseline-arrow-right]" />
+                <span class="mr-[-0.5rem] md:mr-0 md:ml-4 icon-md icon-[ic--round-arrow-right]" />
             </Show>
 
             <span class="ml-2 md:ml-4">{props.category.name}</span>

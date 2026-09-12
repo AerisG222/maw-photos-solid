@@ -6,7 +6,7 @@ import { Uuid } from "../_models/Uuid";
 const basePath = "/people";
 
 export const peopleGrid: AppRouteDefinition = {
-    icon: "icon-[ic--outline-apps]",
+    icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
     path: "/",

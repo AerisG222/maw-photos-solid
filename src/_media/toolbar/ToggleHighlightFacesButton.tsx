@@ -15,7 +15,7 @@ interface Props {
 const ToggleHighlightFacesButton: Component<Props> = props => {
     return (
         <ToolbarButton
-            icon="icon-[mdi--face-recognition]"
+            icon="icon-[ic--round-face-retouching-natural]"
             name="Faces"
             tooltip="Toggle Face Highlighting"
             shortcutKeys={["q"]}

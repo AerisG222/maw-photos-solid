@@ -82,7 +82,7 @@ export interface FeedRoutes {
 */
 export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
     grid: {
-        icon: "icon-[ic--outline-apps]",
+        icon: "icon-[ic--round-apps]",
         name: "Grid",
         tooltip: "Grid View",
         mediaView: MediaViewGrid,

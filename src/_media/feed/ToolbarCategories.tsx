@@ -72,7 +72,7 @@ const ToolbarCategories: Component<Props> = props => {
             <ToolbarDivider />
 
             <ToolbarButton
-                icon="icon-[mdi--heart-box]"
+                icon="icon-[ic--round-filter-alt]"
                 name="Favorites"
                 tooltip="Show Favorites Only"
                 shortcutKeys={["u"]}
@@ -120,7 +120,7 @@ const ToolbarCategories: Component<Props> = props => {
                 clickHandler={() => setMargin(getNextMarginSize(settings.margin).id)}
             />
             <ToolbarButton
-                icon="icon-[mdi--lightbulb-dimmer-50]"
+                icon="icon-[ic--round-tonality]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}
@@ -128,7 +128,7 @@ const ToolbarCategories: Component<Props> = props => {
                 active={!settings.dimThumbnails}
             />
             <ToolbarButton
-                icon="icon-[mdi--heart]"
+                icon="icon-[ic--round-favorite]"
                 name="Favorite Badges"
                 tooltip="Toggle Favorites Badge"
                 shortcutKeys={["h"]}
@@ -136,7 +136,7 @@ const ToolbarCategories: Component<Props> = props => {
                 active={settings.showFavoritesBadge}
             />
             <ToolbarButton
-                icon="icon-[mdi--label]"
+                icon="icon-[ic--round-label]"
                 name="Media Types"
                 tooltip="Toggle Media Types Badge"
                 shortcutKeys={["e"]}

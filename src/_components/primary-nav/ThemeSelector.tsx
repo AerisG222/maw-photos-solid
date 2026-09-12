@@ -25,7 +25,7 @@ const ThemeSelector: Component<Props> = props => {
             class="flex primary-nav-link cursor-pointer"
             title="Toggle Theme"
         >
-            <Icon classes="block icon-[mdi--theme-light-dark]" />
+            <Icon classes="block icon-[ic--round-brightness-6]" />
             <span classList={nameClass()}>Theme</span>
         </button>
     );

@@ -192,8 +192,8 @@ const Sidebar: Component<Props> = props => {
                     tooltip="Sidebar: Expand / Collapse"
                     icon={
                         settings.expandInfoPanel
-                            ? "icon-[ic--chevron-right]"
-                            : "icon-[ic--chevron-left]"
+                            ? "icon-[ic--round-chevron-right]"
+                            : "icon-[ic--round-chevron-left]"
                     }
                     shortcutKeys={["i"]}
                     clickHandler={toggleExpandedState}

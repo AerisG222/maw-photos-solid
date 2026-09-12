@@ -41,7 +41,7 @@ const Toolbar: Component = () => {
                 active={settings.showNames}
             />
             <ToolbarButton
-                icon="icon-[mdi--counter]"
+                icon="icon-[ic--round-numbers]"
                 name="Counts"
                 tooltip="Toggle Media Counts"
                 shortcutKeys={["c"]}
@@ -65,7 +65,7 @@ const Toolbar: Component = () => {
                 clickHandler={() => setMargin(getNextMarginSize(settings.margin).id)}
             />
             <ToolbarButton
-                icon="icon-[mdi--lightbulb-dimmer-50]"
+                icon="icon-[ic--round-tonality]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}

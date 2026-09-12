@@ -13,7 +13,7 @@ export const categoriesRedirect: AppRouteDefinition = {
 };
 
 export const categoriesGrid: AppRouteDefinition = {
-    icon: "icon-[ic--outline-apps]",
+    icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
     path: "/grid",

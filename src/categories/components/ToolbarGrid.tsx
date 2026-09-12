@@ -75,7 +75,7 @@ const GridToolbar: Component = () => {
                 clickHandler={onToggleMargins}
             />
             <ToolbarButton
-                icon="icon-[mdi--lightbulb-dimmer-50]"
+                icon="icon-[ic--round-tonality]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}
@@ -83,7 +83,7 @@ const GridToolbar: Component = () => {
                 active={!settings.dimThumbnails}
             />
             <ToolbarButton
-                icon="icon-[mdi--heart]"
+                icon="icon-[ic--round-favorite]"
                 name="Favorites"
                 tooltip="Toggle Favorites Badge"
                 shortcutKeys={["h"]}
@@ -91,7 +91,7 @@ const GridToolbar: Component = () => {
                 active={settings.showFavoritesBadge}
             />
             <ToolbarButton
-                icon="icon-[mdi--label]"
+                icon="icon-[ic--round-label]"
                 name="Media Types"
                 tooltip="Toggle Media Types Badge"
                 shortcutKeys={["e"]}

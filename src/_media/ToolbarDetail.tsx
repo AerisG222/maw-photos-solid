@@ -155,14 +155,14 @@ const DetailToolbar: Component<Props> = props => {
                 active={settings.showMediaList}
             />
             <ToolbarButton
-                icon="icon-[mdi--image-size-select-large]"
+                icon="icon-[ic--round-photo-size-select-large]"
                 name="Thumbnail"
                 tooltip="Toggle Thumbnail Size"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
             />
             <ToolbarButton
-                icon="icon-[mdi--lightbulb-dimmer-50]"
+                icon="icon-[ic--round-tonality]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}

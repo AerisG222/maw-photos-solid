@@ -9,11 +9,11 @@ interface Props {
 const ShortcutKey: Component<Props> = props => {
     const getDisplayIcon = (key: string) => {
         if (key === "arrowright") {
-            return "icon-[mdi--arrow-right-thin]";
+            return "icon-[ic--round-arrow-right-alt]";
         }
 
         if (key === "arrowleft") {
-            return "icon-[mdi--arrow-right-thin] rotate-180";
+            return "icon-[ic--round-arrow-right-alt] rotate-180";
         }
 
         return "";

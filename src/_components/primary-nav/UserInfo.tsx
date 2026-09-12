@@ -46,7 +46,7 @@ const UserInfo: Component<Props> = props => {
                             class="cursor-pointer hover:bg-primary hover:text-primary-content"
                             href={logout.absolutePath}
                         >
-                            <Icon classes="icon-[mdi--logout]" />
+                            <Icon classes="icon-[ic--round-logout]" />
                             <span>Logout</span>
                         </A>
                     </li>

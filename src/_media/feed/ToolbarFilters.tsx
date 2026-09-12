@@ -30,7 +30,7 @@ const ToolbarFilters: Component<Props> = props => {
             <ToolbarButton
                 // the boxed heart is the filter, in both listings; the plain one
                 // beside it toggles the badge drawn on each card
-                icon="icon-[mdi--heart-box]"
+                icon="icon-[ic--round-filter-alt]"
                 name="Favorites"
                 tooltip="Show Favorites Only"
                 shortcutKeys={["u"]}

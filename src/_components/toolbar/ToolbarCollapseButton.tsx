@@ -10,7 +10,7 @@ const ToolbarCollapseButton: Component = () => {
     const collapseIconClasses = () => {
         const classes = [
             "text-lg",
-            "icon-[mdi--chevron-double-left]",
+            "icon-[ic--round-keyboard-double-arrow-left]",
             "inline-block",
             "transition-transform",
             "duration-300",

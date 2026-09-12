@@ -39,7 +39,7 @@ const ListToolbar: Component = () => {
                 clickHandler={onToggleMargins}
             />
             <ToolbarButton
-                icon="icon-[mdi--lightbulb-dimmer-50]"
+                icon="icon-[ic--round-tonality]"
                 name="Dim Thumbnails"
                 tooltip="Toggle Thumbnail Dimming"
                 shortcutKeys={["b"]}

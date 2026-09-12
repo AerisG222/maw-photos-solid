@@ -24,7 +24,7 @@ const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
 const slugOrBlank = (media: Media | undefined) => (media ? `/${media.slug}` : "");
 
 const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
-    icon: "icon-[ic--outline-apps]",
+    icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
     mediaView: MediaViewGrid,

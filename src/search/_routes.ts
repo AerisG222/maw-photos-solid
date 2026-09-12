@@ -12,7 +12,7 @@ export const searchRedirect: AppRouteDefinition = {
 };
 
 export const searchGrid: AppRouteDefinition = {
-    icon: "icon-[ic--outline-apps]",
+    icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
     path: "/grid",

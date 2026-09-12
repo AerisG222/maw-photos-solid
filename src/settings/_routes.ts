@@ -47,7 +47,7 @@ export const settingsSearch: AppRouteDefinition = {
 };
 
 export const settings: AppRouteDefinition = {
-    icon: "icon-[ic--baseline-settings]",
+    icon: "icon-[ic--round-settings]",
     name: "Settings",
     helpText:
         "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",

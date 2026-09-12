@@ -24,7 +24,7 @@ const mediaSlugOrBlank = (category: Category | undefined, media: Media | undefin
 };
 
 const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
-    icon: "icon-[ic--outline-apps]",
+    icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
     mediaView: MediaViewGrid,

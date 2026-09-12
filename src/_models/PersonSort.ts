@@ -16,6 +16,4 @@ export const getNextPersonSort = (sort: PersonSortIdType): PersonSortIdType =>
     sort === PersonSortName ? PersonSortMediaCount : PersonSortName;
 
 export const getPersonSortIcon = (sort: PersonSortIdType) =>
-    sort === PersonSortName
-        ? "icon-[mdi--sort-alphabetical-variant]"
-        : "icon-[mdi--sort-numeric-variant]";
+    sort === PersonSortName ? "icon-[ic--round-sort-by-alpha]" : "icon-[ic--round-sort]";

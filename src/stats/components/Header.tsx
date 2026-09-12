@@ -22,7 +22,7 @@ const Header: Component<Props> = props => {
                     >
                         Stats
                     </A>
-                    <Icon classes="text-lg icon-[ic--sharp-keyboard-arrow-right]" />
+                    <Icon classes="text-lg icon-[ic--round-keyboard-arrow-right]" />
                     <h3>{props.year}</h3>
                 </Show>
             </div>

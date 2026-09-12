@@ -27,11 +27,11 @@ const FavoriteIcon: Component<Props> = props => {
         const klass = [];
 
         if (props.isFavorite) {
-            klass.push("icon-[mdi--heart]");
-            // klass.push("hover:icon-[mdi--heart-outline]");
+            klass.push("icon-[ic--round-favorite]");
+            // klass.push("hover:icon-[ic--round-favorite-border]");
         } else {
-            klass.push("icon-[mdi--heart-outline]");
-            // klass.push("hover:icon-[mdi--heart]");
+            klass.push("icon-[ic--round-favorite-border]");
+            // klass.push("hover:icon-[ic--round-favorite]");
         }
 
         if (props.extraClasses) {

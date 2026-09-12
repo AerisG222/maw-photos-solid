@@ -9,7 +9,7 @@ const EffectsResetButton: Component<Props> = props => {
     return (
         <Show when={props.enabled}>
             <span
-                class="ml-2 cursor-pointer icon-[ic--baseline-remove-circle]"
+                class="ml-2 cursor-pointer icon-[ic--round-remove-circle]"
                 onClick={() => props.handleClick()}
             />
         </Show>

@@ -10,7 +10,7 @@ interface Props {
 const ToggleShowFavoritesBadgeButton: Component<Props> = props => {
     return (
         <ToolbarButton
-            icon="icon-[mdi--label]"
+            icon="icon-[ic--round-label]"
             name="Media Types"
             tooltip="Toggle Media Types Badge"
             shortcutKeys={["e"]}

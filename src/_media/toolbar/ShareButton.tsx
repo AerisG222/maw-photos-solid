@@ -20,7 +20,7 @@ const ShareButton: Component<Props> = props => {
 
     return (
         <ToolbarButton
-            icon="icon-[ic--baseline-share]"
+            icon="icon-[ic--round-share]"
             name="Share"
             tooltip="Share"
             clickHandler={onShare}

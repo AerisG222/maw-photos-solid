@@ -15,7 +15,7 @@ const DownloadCategoryButton: Component<Props> = props => {
             name="Download"
             tooltip="Download All Photos in Category (.zip)"
             url={props.category?.id ? buildCategoryDownloadUrl(props.category.id) : ""}
-            iconClass="icon-[ic--outline-file-download]"
+            iconClass="icon-[ic--round-file-download]"
             downloadFileName={`${props.category?.year}-${props.category?.slug}.zip`}
         />
     );

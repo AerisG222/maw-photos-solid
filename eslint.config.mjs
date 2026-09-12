@@ -67,6 +67,26 @@ export default defineConfig(
                 { checksVoidReturn: { attributes: false } }
             ],
 
+            /*
+               One icon vocabulary: `ic--round-*`. The app previously drew from six
+               (mdi, plus ic's round / outline / baseline / sharp / bare variants), which
+               is why the same action could carry two different glyphs depending on the
+               view you happened to be in. Catch a seventh before it lands.
+            */
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector: "Literal[value=/icon-\\[(?!ic--round-)/]",
+                    message:
+                        "Use an `ic--round-*` icon. The app draws from one icon family; see docs/ui-redesign-plan.md section 6."
+                },
+                {
+                    selector: "TemplateElement[value.raw=/icon-\\[(?!ic--round-)/]",
+                    message:
+                        "Use an `ic--round-*` icon. The app draws from one icon family; see docs/ui-redesign-plan.md section 6."
+                }
+            ],
+
             // Note: you must disable the base rule as it can report incorrect errors
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [

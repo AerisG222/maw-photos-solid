@@ -28,7 +28,7 @@ export const aboutReleaseNotes: AppRouteDefinition = {
 };
 
 export const aboutAndroid: AppRouteDefinition = {
-    icon: "icon-[ic--android]",
+    icon: "icon-[ic--round-android]",
     name: "Android",
     tooltip: "Android Application",
     path: "/android",

@@ -10,7 +10,7 @@ interface Props {
 const ToggleShowFavoritesBadgeButton: Component<Props> = props => {
     return (
         <ToolbarButton
-            icon="icon-[mdi--heart]"
+            icon="icon-[ic--round-favorite]"
             name="Favorites"
             tooltip="Toggle Favorites Badge"
             shortcutKeys={["h"]}
