@@ -658,6 +658,30 @@ confusable and the role assertions read the wrong one. The fix is one file per c
 `document.body.innerHTML = ""` teardown. Kobalte is not at fault - `AlertDialogContent` passes its role per
 instance, verified in the library source - but any future portal test needs the same teardown.
 
+### A regression step 5 shipped, and why nothing caught it (2026-09-12)
+
+The Kobalte wrappers borrowed daisyUI's `.modal-box` for the dialog surface. That class sets **`opacity: 0`
+on itself** and is only revealed by rules requiring an open `.modal` ancestor - `.modal[open] > .modal-box`
+and friends. Outside a native `<dialog>` there is no such ancestor, so **all six dialogs rendered fully
+transparent**: correct markup, correct roles, correct focus behaviour, completely invisible. It was reported
+as "I am not seeing a dialog when I type ?", which was the cheapest of the six to notice.
+
+Fixed by styling the surface from the app's own tokens - `bg-base-100 rounded-box p-6 elev-overlay` - rather
+than borrowing a component class whose visibility depends on where it sits. `.modal-action` went the same way,
+for coherence rather than necessity.
+
+**The lesson is about the tests, not the CSS.** Twelve assertions covered these dialogs - roles, labelling,
+error announcement, confirm-versus-cancel - and every one passed, because jsdom applies no stylesheet. An
+attempt to close that gap by injecting the built CSS and asserting `getComputedStyle(...).opacity !== "0"`
+looked promising (jsdom does resolve simple class-based declarations) but was then verified against the broken
+code and **passed there too**: the built stylesheet has eleven `@layer` blocks and jsdom parsed 30 rules out of
+several thousand, never seeing `.modal-box` at all. That test was deleted rather than kept, because a guard
+that cannot fail on the bug it names is worse than no guard.
+
+So: **anything whose correctness is "can you see it" needs a browser.** The unit tests in this repo can say a
+dialog exists, is labelled and responds; they cannot say it is visible. Steps that change rendered appearance
+should be looked at in the running app before being called done - which is how this one was found.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

@@ -22,8 +22,13 @@ interface Props {
 
    Each of the five that came before this hand-rolled the same thing: a
    `<dialog class="modal">`, an effect calling `showModal()` and `close()` to
-   follow a prop, and a `modal-box` holding a heading, a body, an error line and
-   a pair of buttons. What they did not do consistently was the part that is
+   follow a prop, and a box holding a heading, a body, an error line and a pair
+   of buttons.
+
+   The surface is styled from the app's own tokens rather than daisyUI's
+   `.modal-box`, which carries `opacity: 0` and is only revealed by a rule
+   requiring an open `.modal` ancestor - so borrowing it outside a native
+   `<dialog>` renders a perfectly laid-out, completely invisible dialog. What they did not do consistently was the part that is
    hard - the focus trap, returning focus to whatever opened them, labelling
    themselves for a screen reader, and locking the page behind them. Kobalte
    does all of that; the markup below is only the dressing.
@@ -46,7 +51,7 @@ const Dialog: ParentComponent<Props> = props => {
 
                 <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <KobalteDialog.Content
-                        class="modal-box elev-overlay max-h-full w-full overflow-y-auto"
+                        class="bg-base-100 rounded-box p-6 elev-overlay max-h-full w-full overflow-y-auto"
                         classList={{ "max-w-5xl": !!props.wide, "max-w-xl": !props.wide }}
                     >
                         <KobalteDialog.Title class="head2 mt-0">{props.title}</KobalteDialog.Title>
@@ -59,7 +64,7 @@ const Dialog: ParentComponent<Props> = props => {
                             </p>
                         </Show>
 
-                        <div class="modal-action">
+                        <div class="mt-6 flex justify-end gap-2">
                             <KobalteDialog.CloseButton class="btn btn-sm">
                                 {props.cancelLabel ?? "Cancel"}
                             </KobalteDialog.CloseButton>

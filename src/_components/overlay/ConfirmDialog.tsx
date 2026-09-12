@@ -37,7 +37,7 @@ const ConfirmDialog: ParentComponent<Props> = props => {
                 <AlertDialog.Overlay class="fixed inset-0 z-50 bg-black/50" />
 
                 <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <AlertDialog.Content class="modal-box elev-overlay w-full max-w-md">
+                    <AlertDialog.Content class="bg-base-100 rounded-box p-6 elev-overlay w-full max-w-md">
                         <AlertDialog.Title class="head2 mt-0">{props.title}</AlertDialog.Title>
 
                         <AlertDialog.Description>{c()}</AlertDialog.Description>
@@ -48,7 +48,7 @@ const ConfirmDialog: ParentComponent<Props> = props => {
                             </p>
                         </Show>
 
-                        <div class="modal-action">
+                        <div class="mt-6 flex justify-end gap-2">
                             <AlertDialog.CloseButton class="btn btn-sm">
                                 Cancel
                             </AlertDialog.CloseButton>
