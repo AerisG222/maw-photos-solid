@@ -803,9 +803,24 @@ neighbour and never renamed. `e` is freed as a listing key; what remains on it i
 Places edit mode, which decision 6 separates in step 9.
 
 **The general shape of it:** every setting that step 3 collapsed is a candidate for this. Two controls that
-used to mean different things now mean one thing, and nothing in the type system notices. The remaining
-merges to audit when their toolbars are rebuilt in step 8 are labels - titles, years, names and media counts
-were four controls over what is now `showLabels`, and three of those four still have their own button.
+used to mean different things now mean one thing, and nothing in the type system notices.
+
+Auditing the rest immediately turned up the same fault in **labels**, and something worse alongside it. Titles,
+years, names and media counts were four buttons over what is now one `showLabels`, so Search, People and a
+feed's categories each had _two_ buttons doing one job. They are one **Labels** control on `t` now, which frees
+`y` and `c`.
+
+Worse, though: those toolbars carried the title-to-thumbnail coupling §2 had flagged for deletion - "turning
+titles on forces the largest thumbnail, and the size button goes disabled". Both halves had rotted once density
+became three named steps behind one store:
+
+- `ensureLargeThumbnails()` called `setThumbnailSize(...)`, which the adapter maps to `cycleDensity()`. So
+  **pressing the titles button changed the density.**
+- The guard `disabled={settings.showTitles}` read a flag that now defaults to _true_, so **the density button
+  was greyed out by default** in the categories grid, and dead behind an `if` in Search and the feed.
+
+The coupling is gone rather than repaired: it existed because the tile reserved no room for a label, and it
+has nothing to say about a three-step density.
 
 ### Deliberately deferred from step 1
 

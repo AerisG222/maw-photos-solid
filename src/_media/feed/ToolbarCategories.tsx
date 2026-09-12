@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 
 import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
-import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
 import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
@@ -25,31 +24,14 @@ interface Props {
    categories and takes no seed. Switching back to the media brings both back.
 */
 const ToolbarCategories: Component<Props> = props => {
-    const [
-        settings,
-        { setShowTitles, setShowYears, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }
-    ] = useFeedCategoryViewSettingsContext();
+    const [settings, { setShowTitles, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }] =
+        useFeedCategoryViewSettingsContext();
 
     // a card only has room for its title and year at the full size, so turning
     // either back on restores it - the same rule the search results follow
-    const ensureLargeThumbnails = () => {
-        setThumbnailSize(defaultGridThumbnailSize);
-    };
 
-    const onToggleYears = () => {
-        setShowYears(!settings.showYears);
-
-        if (settings.showYears) {
-            ensureLargeThumbnails();
-        }
-    };
-
-    const onToggleTitles = () => {
+    const onToggleLabels = () => {
         setShowTitles(!settings.showTitles);
-
-        if (settings.showTitles) {
-            ensureLargeThumbnails();
-        }
     };
 
     return (
@@ -78,19 +60,11 @@ const ToolbarCategories: Component<Props> = props => {
             <ToolbarDivider />
 
             <ToolbarButton
-                icon="icon-[ic--round-today]"
-                name="Years"
-                tooltip="Toggle Years"
-                shortcutKeys={["y"]}
-                clickHandler={onToggleYears}
-                active={settings.showYears}
-            />
-            <ToolbarButton
                 icon="icon-[ic--round-title]"
-                name="Titles"
-                tooltip="Toggle Category Titles"
+                name="Labels"
+                tooltip="Toggle Labels"
                 shortcutKeys={["t"]}
-                clickHandler={onToggleTitles}
+                clickHandler={onToggleLabels}
                 active={settings.showTitles}
             />
             <ToolbarButton
@@ -98,10 +72,8 @@ const ToolbarCategories: Component<Props> = props => {
                 name="Density"
                 tooltip="Cycle Density"
                 shortcutKeys={["s"]}
-                clickHandler={() =>
-                    setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
-                }
-                disabled={settings.showTitles || settings.showYears}
+                // the size is one of three named steps now, and this cycles them
+                clickHandler={() => setThumbnailSize(settings.thumbnailSize)}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

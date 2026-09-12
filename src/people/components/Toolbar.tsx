@@ -2,16 +2,13 @@ import { Component } from "solid-js";
 
 import { usePeopleGridViewSettingsContext } from "../../_contexts/settings/PeopleGridViewSettingsContext";
 import { getNextPersonSort, getPersonSortIcon, PersonSortName } from "../../_models/PersonSort";
-import { getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 
 const Toolbar: Component = () => {
-    const [
-        settings,
-        { setShowNames, setShowMediaCounts, setThumbnailSize, setDimThumbnails, setSortBy }
-    ] = usePeopleGridViewSettingsContext();
+    const [settings, { setShowNames, setThumbnailSize, setDimThumbnails, setSortBy }] =
+        usePeopleGridViewSettingsContext();
 
     return (
         <ToolbarLayout>
@@ -26,28 +23,19 @@ const Toolbar: Component = () => {
             />
             <ToolbarButton
                 icon="icon-[ic--round-title]"
-                name="Names"
-                tooltip="Toggle Names"
+                name="Labels"
+                tooltip="Toggle Labels"
                 shortcutKeys={["t"]}
                 clickHandler={() => setShowNames(!settings.showNames)}
                 active={settings.showNames}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-numbers]"
-                name="Counts"
-                tooltip="Toggle Media Counts"
-                shortcutKeys={["c"]}
-                clickHandler={() => setShowMediaCounts(!settings.showMediaCounts)}
-                active={settings.showMediaCounts}
             />
             <ToolbarButton
                 icon="icon-[ic--round-density-medium]"
                 name="Density"
                 tooltip="Cycle Density"
                 shortcutKeys={["s"]}
-                clickHandler={() =>
-                    setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
-                }
+                // the size is one of three named steps now, and this cycles them
+                clickHandler={() => setThumbnailSize(settings.thumbnailSize)}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"
