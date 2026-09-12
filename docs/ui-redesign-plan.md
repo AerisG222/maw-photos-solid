@@ -604,6 +604,32 @@ down to a single control each.
 and one of the four targets. Its consumers moved with it: `isPrimaryNavCollapsed` is now `navExpanded`, which
 reads the way the code uses it.
 
+### Step 4 notes (2026-09-12)
+
+**`stats/Year` was rendering an empty treemap** both while its query was in flight _and_ after it had failed —
+it only guarded the error case around a sibling `<Show>`, so the chart drew itself from no data. It has a real
+loading state now.
+
+**The order of the branches is the load-bearing part.** `AsyncBoundary` tests the error first, because a failed
+query leaves its data undefined, which is indistinguishable from still-arriving. Testing for data first is what
+leaves a broken screen skeletoning forever, and it is a mistake that is easy to make once per screen and
+impossible to make once the component owns it. There is a test for the ordering.
+
+**`ErrorMessage` kept its name** rather than becoming `ErrorState` as §4 proposed. It is already the single
+error surface and is imported directly by nine call sites where a whole boundary does not apply — the app
+bootstrap, a section inside the people grid, the nested pickers in the place-cover dialogs. Renaming it would
+have churned those files to no benefit; `AsyncBoundary` uses it internally.
+
+**Five nested pickers still hold their own triad** (`PlacePicker`, `PlaceCoverCategories`,
+`PlaceCoverCategoryMedia`, `PlaceCoverDialog`, `PlaceCoversCard`). They are components inside dialogs rather
+than screens, where a page-level skeleton would be wrong. They use the shared `ErrorMessage` and `EmptyState`,
+so they are consistent without being converted.
+
+**`PermissionState` was not built.** §4 listed it, but the unauthorized path is a redirect in `AuthGuard`, the
+admin path is a redirect in `AdminGuard`, and the inactive-account path is a whole page. There is exactly one
+thing it would render today, and inventing a component for one caller is how the duplication being removed
+here got started. It belongs with the admin surfaces in step 10.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -708,7 +734,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **1**   | **DONE 2026-09-12 — visual system.** Type scale (`--text-display/title/label/body/meta`) and motion tokens in `@theme`; `head1/2/3` rebuilt on the scale; `.icon-sm`/`.icon-md` replacing the step-0 `text-2xl` stopgap; `.elev-hover`/`.elev-overlay` with the hover treatment now applying on `:focus-visible`; the app's first focus ring; body set to the body step; fonts self-hosted via `@fontsource` and the Google Fonts `<link>` + preconnects removed; `_contract.ts` + `theme.test.ts` (49 assertions).                         | 20 files, +2 deps                       | low                        |
 | **2**   | **DONE 2026-09-12 — icon consolidation.** 52 references rewritten across 34 files; the app now draws from `ic--round-*` only, down from six vocabularies. `@iconify-json/mdi` removed. An eslint `no-restricted-syntax` rule (covering both string literals and template elements, so `.ts` route definitions are caught too) rejects a seventh. All 82 unique icons verified present in the production CSS.                                                                                                                                | 34 files, −1 dep                        | low                        |
 | **3**   | **DONE 2026-09-12 — the four stores.** 16 settings keys become 4; 15 of the old contexts are now adapters that own nothing, so no screen had to change. `_migrate.ts` carries the legacy keys across without deleting them. `AllSettingsProvider` goes from 18 providers to 4. Theme gains `system` (decision 13), including the pre-mount script. 41 tests: migration fixtures plus a runtime pass over the adapters.                                                                                                                      | 40 files                                | done                       |
-| **4**   | **States.** `AsyncBoundary`, `EmptyState`, `ErrorState`, `PermissionState`, `SkeletonChart`. Convert Categories first, then the other ~14 sites.                                                                                                                                                                                                                                                                                                                                                                                            | ~18 files                               | low                        |
+| **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files                                | low                        |
 | **5**   | **Dialogs — and Kobalte lands here.** Add `@kobalte/core`; build `Dialog` / `ConfirmDialog` on its `Dialog` + `AlertDialog` rather than hand-rolling focus traps. Convert the six. Delete `ClanDeleteDialog`. Later steps adopt the other primitives per §11.                                                                                                                                                                                                                                                                               | 6 files + 1 dependency                  | low                        |
 | **6**   | **`NavGroup` + digit shortcuts.** Convert the seven nav rows. Ships the navigation half of the shortcut map.                                                                                                                                                                                                                                                                                                                                                                                                                                | 7 files                                 | low                        |
 | **7**   | **`Tile` + `ListingSurface`.** Convert the four cards and the six grid containers. Keyboard cursor arrives here.                                                                                                                                                                                                                                                                                                                                                                                                                            | ~12 files                               | medium                     |

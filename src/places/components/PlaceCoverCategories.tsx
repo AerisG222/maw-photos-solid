@@ -9,6 +9,7 @@ import { Uuid } from "../../_models/Uuid";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Icon from "../../_components/icon/Icon";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
+import EmptyState from "../../_components/state/EmptyState";
 
 interface Props {
     placeId: Uuid | undefined;
@@ -60,11 +61,19 @@ const PlaceCoverCategories: Component<Props> = props => {
                 <Show
                     when={items().length > 0}
                     fallback={
-                        <p class="text-center my-8">
-                            {props.favoritesOnly
-                                ? "None of the categories here has been favorited."
-                                : "Nothing here belongs to a category you can see."}
-                        </p>
+                        <EmptyState
+                            icon="icon-[ic--round-collections]"
+                            title={
+                                props.favoritesOnly
+                                    ? "No favorites here"
+                                    : "Nothing here belongs to a category you can see"
+                            }
+                            detail={
+                                props.favoritesOnly
+                                    ? "None of the categories here has been favorited."
+                                    : undefined
+                            }
+                        />
                     }
                 >
                     <div class="flex gap-2 flex-wrap place-content-center">

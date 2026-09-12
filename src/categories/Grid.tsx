@@ -1,4 +1,4 @@
-import { Component, For, Match, Switch } from "solid-js";
+import { Component, For } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
@@ -11,7 +11,7 @@ import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 
 const GridView: Component = () => {
     const [settings] = useCategoryGridViewSettingsContext();
@@ -45,39 +45,31 @@ const GridView: Component = () => {
             }
             margin={settings.margin}
         >
-            {/*
-                error is checked first: a failed year query also leaves
-                categoriesToDisplay undefined, which would otherwise skeleton forever
-            */}
-            <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-                <Match when={loadError()}>
-                    <ErrorMessage
-                        title="Could not load categories"
-                        error={loadError()}
-                        onRetry={retryLoad}
-                    />
-                </Match>
+            <AsyncBoundary
+                error={loadError()}
+                onRetry={retryLoad}
+                errorTitle="Could not load categories"
+                when={categoriesToDisplay()}
+                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+            >
+                <CategoryFilterBar />
 
-                <Match when={categoriesToDisplay()}>
-                    <CategoryFilterBar />
-
-                    <For
-                        each={Object.keys(categoriesToDisplay()!)
-                            .map(x => parseInt(x, 10))
-                            .sort()
-                            .reverse()}
-                    >
-                        {(year, idx) => (
-                            <YearGrid
-                                year={year}
-                                categories={categoriesToDisplay()![year] ?? []}
-                                enableEagerLoading={idx() <= 3}
-                                setIsFavorite={setIsFavorite}
-                            />
-                        )}
-                    </For>
-                </Match>
-            </Switch>
+                <For
+                    each={Object.keys(categoriesToDisplay()!)
+                        .map(x => parseInt(x, 10))
+                        .sort()
+                        .reverse()}
+                >
+                    {(year, idx) => (
+                        <YearGrid
+                            year={year}
+                            categories={categoriesToDisplay()![year] ?? []}
+                            enableEagerLoading={idx() <= 3}
+                            setIsFavorite={setIsFavorite}
+                        />
+                    )}
+                </For>
+            </AsyncBoundary>
         </Layout>
     );
 };

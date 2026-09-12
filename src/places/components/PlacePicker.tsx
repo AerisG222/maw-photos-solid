@@ -6,6 +6,7 @@ import { Uuid } from "../../_models/Uuid";
 
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Loading from "../../_components/loading/Loading";
+import EmptyState from "../../_components/state/EmptyState";
 
 interface Props {
     // which kinds may be picked. Applied here rather than by the API, which
@@ -87,7 +88,12 @@ const PlacePicker: Component<Props> = props => {
                     <Match when={places.isSuccess}>
                         <Show
                             when={matches().length > 0}
-                            fallback={<p class="text-center my-8">No places match that name.</p>}
+                            fallback={
+                                <EmptyState
+                                    icon="icon-[ic--round-search-off]"
+                                    title="No places match that name"
+                                />
+                            }
                         >
                             <For each={matches()}>
                                 {place => (

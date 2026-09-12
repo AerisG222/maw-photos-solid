@@ -1,11 +1,11 @@
-import { Component, createEffect, Match, Switch } from "solid-js";
+import { Component, createEffect } from "solid-js";
 
 import { MediaViewMap } from "../_models/MediaView";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { useCategoryMapServices } from "./hooks/useCategoryMapServices";
 
 import ViewMap from "../_media/ViewMap";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Map: Component = () => {
@@ -15,24 +15,20 @@ const Map: Component = () => {
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
     return (
-        <Switch fallback={<Loading />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load this category"
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
-                <ViewMap
-                    mediaService={mediaService}
-                    mapState={state}
-                    setMapType={setMapType}
-                    setZoom={setZoom}
-                />
-            </Match>
-        </Switch>
+        <AsyncBoundary
+            error={loadError()}
+            onRetry={retryLoad}
+            errorTitle="Could not load this category"
+            when={!isLoading()}
+            skeleton={<Loading />}
+        >
+            <ViewMap
+                mediaService={mediaService}
+                mapState={state}
+                setMapType={setMapType}
+                setZoom={setZoom}
+            />
+        </AsyncBoundary>
     );
 };
 

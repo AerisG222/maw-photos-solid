@@ -1,11 +1,11 @@
-import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
+import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../../_contexts/settings/MediaDetailViewSettingsContext";
 import { MediaViewDetail } from "../../_models/MediaView";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
-import ErrorMessage from "../../_components/error/ErrorMessage";
+import AsyncBoundary from "../../_components/state/AsyncBoundary";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
 import ToolbarListing from "./ToolbarListing";
@@ -47,20 +47,14 @@ const Detail: Component = () => {
 
     return (
         // a single photo, so a spinner rather than skeleton tiles
-        <Switch fallback={<Loading />}>
-            <Match when={subjectIsEmpty()}>
-                <EmptyClanMessage name={subjectName()} />
-            </Match>
-
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title={`Could not load media for this ${subjectKindName()}`}
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
+        <Show when={!subjectIsEmpty()} fallback={<EmptyClanMessage name={subjectName()} />}>
+            <AsyncBoundary
+                error={loadError()}
+                onRetry={retryLoad}
+                errorTitle={`Could not load media for this ${subjectKindName()}`}
+                when={!isLoading()}
+                skeleton={<Loading />}
+            >
                 <ViewDetail
                     mediaService={mediaService}
                     slideshowService={slideshowService}
@@ -88,8 +82,8 @@ const Detail: Component = () => {
                         setShowFavoritesBadge(!settings.showFavoritesBadge)
                     }
                 />
-            </Match>
-        </Switch>
+            </AsyncBoundary>
+        </Show>
     );
 };
 

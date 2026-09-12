@@ -1,11 +1,11 @@
-import { Component, Match, onCleanup, Show, Switch } from "solid-js";
+import { Component, onCleanup, Show } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useCategoryServices } from "./hooks/useCategoryServices";
 import { MediaViewGrid } from "../_models/MediaView";
 
 import ViewGrid from "../_media/ViewGrid";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 
 const Grid: Component = () => {
@@ -19,35 +19,31 @@ const Grid: Component = () => {
     });
 
     return (
-        <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load this category"
-                    error={loadError()}
-                    onRetry={retryLoad}
+        <AsyncBoundary
+            error={loadError()}
+            onRetry={retryLoad}
+            errorTitle="Could not load this category"
+            when={!isLoading()}
+            skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+        >
+            <Show when={mediaService.getActiveCategory()}>
+                <ViewGrid
+                    mediaService={mediaService}
+                    slideshowService={slideshowService}
+                    gridSettings={settings}
+                    showBreadcrumbsOnGrid={settings.showBreadcrumbs}
+                    showBreadcrumbsOnMedia={false}
+                    enableToggleBreadcrumbsOnActiveMedia={false}
+                    enableToggleBreadcrumbsOnInactiveMedia={true}
+                    showFavoritesBadge={settings.showFavoritesBadge}
+                    showTypesBadge={settings.showTypesBadge}
+                    setShowFavoritesBadge={() =>
+                        setShowFavoritesBadge(!settings.showFavoritesBadge)
+                    }
+                    setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
                 />
-            </Match>
-
-            <Match when={!isLoading()}>
-                <Show when={mediaService.getActiveCategory()}>
-                    <ViewGrid
-                        mediaService={mediaService}
-                        slideshowService={slideshowService}
-                        gridSettings={settings}
-                        showBreadcrumbsOnGrid={settings.showBreadcrumbs}
-                        showBreadcrumbsOnMedia={false}
-                        enableToggleBreadcrumbsOnActiveMedia={false}
-                        enableToggleBreadcrumbsOnInactiveMedia={true}
-                        showFavoritesBadge={settings.showFavoritesBadge}
-                        showTypesBadge={settings.showTypesBadge}
-                        setShowFavoritesBadge={() =>
-                            setShowFavoritesBadge(!settings.showFavoritesBadge)
-                        }
-                        setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
-                    />
-                </Show>
-            </Match>
-        </Switch>
+            </Show>
+        </AsyncBoundary>
     );
 };
 

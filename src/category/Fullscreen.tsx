@@ -1,4 +1,4 @@
-import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
+import { Component, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { MediaViewFullscreen } from "../_models/MediaView";
@@ -6,7 +6,7 @@ import { MediaViewFullscreen } from "../_models/MediaView";
 import ViewFullscreen from "../_media/ViewFullscreen";
 import { useCategoryServices } from "./hooks/useCategoryServices";
 import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Fullscreen: Component = () => {
@@ -25,26 +25,20 @@ const Fullscreen: Component = () => {
     });
 
     return (
-        <Switch fallback={<Loading />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load this category"
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
-                <ViewFullscreen
-                    mediaService={mediaService}
-                    slideshowService={slideshowService}
-                    showFavoritesBadge={settings.showFavoritesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
-                />
-            </Match>
-        </Switch>
+        <AsyncBoundary
+            error={loadError()}
+            onRetry={retryLoad}
+            errorTitle="Could not load this category"
+            when={!isLoading()}
+            skeleton={<Loading />}
+        >
+            <ViewFullscreen
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                showFavoritesBadge={settings.showFavoritesBadge}
+                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+            />
+        </AsyncBoundary>
     );
 };
 

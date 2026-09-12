@@ -1,4 +1,4 @@
-import { Component, createMemo, Show } from "solid-js";
+import { Component, createMemo } from "solid-js";
 import { useNavigate, useSearchParams } from "@solidjs/router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
@@ -12,8 +12,8 @@ import Layout from "../_components/layout/Layout";
 import StatBar from "./components/StatBar";
 import StatLayout from "./components/StatLayout";
 import Treemap from "./components/Treemap";
-import Loading from "../_components/loading/Loading";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
+import SkeletonChart from "../_components/state/SkeletonChart";
 import Header from "./components/Header";
 
 const ViewCombined: Component = () => {
@@ -136,19 +136,12 @@ const ViewCombined: Component = () => {
                 />
             }
         >
-            <Show when={stats.isLoading}>
-                <Loading />
-            </Show>
-
-            <Show when={stats.isError}>
-                <ErrorMessage
-                    title="Could not load statistics"
-                    error={stats.error}
-                    onRetry={() => void stats.refetch()}
-                />
-            </Show>
-
-            <Show when={stats.isSuccess}>
+            <AsyncBoundary
+                queries={[stats]}
+                errorTitle="Could not load statistics"
+                when={stats.isSuccess}
+                skeleton={<SkeletonChart />}
+            >
                 <StatLayout>
                     <div class="my-2">
                         <Header year={search.year as string} />
@@ -168,7 +161,7 @@ const ViewCombined: Component = () => {
                         />
                     </div>
                 </StatLayout>
-            </Show>
+            </AsyncBoundary>
         </Layout>
     );
 };

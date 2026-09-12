@@ -14,6 +14,7 @@ import Icon from "../../_components/icon/Icon";
 import PlaceCoverCategories from "./PlaceCoverCategories";
 import PlaceCoverCategoryMedia from "./PlaceCoverCategoryMedia";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
+import EmptyState from "../../_components/state/EmptyState";
 
 interface Props {
     // the place being given a cover, or undefined when the dialog is closed.
@@ -280,11 +281,19 @@ const PlaceCoverDialog: Component<Props> = props => {
                                     <Show
                                         when={candidates().length > 0}
                                         fallback={
-                                            <p class="text-center my-8">
-                                                {favoritesOnly()
-                                                    ? "None of the media here has been marked as a favorite."
-                                                    : "There is nothing here to choose from."}
-                                            </p>
+                                            <EmptyState
+                                                icon="icon-[ic--round-photo-library]"
+                                                title={
+                                                    favoritesOnly()
+                                                        ? "No favorites here"
+                                                        : "There is nothing here to choose from"
+                                                }
+                                                detail={
+                                                    favoritesOnly()
+                                                        ? "None of the media here has been marked as a favorite."
+                                                        : undefined
+                                                }
+                                            />
                                         }
                                     >
                                         <CoverCandidateGrid

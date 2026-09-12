@@ -1,4 +1,4 @@
-import { Component, createEffect, Match, onCleanup, Show, Switch } from "solid-js";
+import { Component, createEffect, onCleanup, Show } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
 import { MediaViewGrid } from "../../_models/MediaView";
@@ -7,7 +7,8 @@ import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
-import ErrorMessage from "../../_components/error/ErrorMessage";
+import AsyncBoundary from "../../_components/state/AsyncBoundary";
+import EmptyState from "../../_components/state/EmptyState";
 import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarFilters from "./ToolbarFilters";
@@ -51,22 +52,16 @@ const Grid: Component = () => {
         slideshowService.stop();
     });
 
+    // the empty check comes ahead of everything else: an empty clan answers 404 too
     return (
-        <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-            {/* checked before the error: an empty clan answers 404 too */}
-            <Match when={subjectIsEmpty()}>
-                <EmptyClanMessage name={subjectName()} />
-            </Match>
-
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title={`Could not load media for this ${subjectKindName()}`}
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
+        <Show when={!subjectIsEmpty()} fallback={<EmptyClanMessage name={subjectName()} />}>
+            <AsyncBoundary
+                error={loadError()}
+                onRetry={retryLoad}
+                errorTitle={`Could not load media for this ${subjectKindName()}`}
+                when={!isLoading()}
+                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+            >
                 <ViewGrid
                     mediaService={mediaService}
                     slideshowService={slideshowService}
@@ -98,11 +93,19 @@ const Grid: Component = () => {
                         />
                     }
                     emptyState={
-                        <p class="text-center my-8">
-                            {favoritesOnly()
-                                ? `None of the media ${mediaScope()} has been marked as a favorite.`
-                                : "There is nothing to show here."}
-                        </p>
+                        <EmptyState
+                            icon="icon-[ic--round-photo-library]"
+                            title={
+                                favoritesOnly()
+                                    ? "No favorites here yet"
+                                    : "There is nothing to show here"
+                            }
+                            detail={
+                                favoritesOnly()
+                                    ? `None of the media ${mediaScope()} has been marked as a favorite.`
+                                    : undefined
+                            }
+                        />
                     }
                     showBreadcrumbsOnGrid={false}
                     showBreadcrumbsOnMedia={settings.showMainBreadcrumbs}
@@ -115,8 +118,8 @@ const Grid: Component = () => {
                     }
                     setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
                 />
-            </Match>
-        </Switch>
+            </AsyncBoundary>
+        </Show>
     );
 };
 

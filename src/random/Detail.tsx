@@ -1,11 +1,11 @@
-import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
+import { Component, createEffect, onCleanup } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { MediaViewDetail } from "../_models/MediaView";
 import { useRandomServices } from "./hooks/useRandomService";
 
 import ViewDetail from "../_media/ViewDetail";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Detail: Component = () => {
@@ -25,30 +25,24 @@ const Detail: Component = () => {
 
     return (
         // a single photo, so a spinner rather than skeleton tiles
-        <Switch fallback={<Loading />}>
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title="Could not load random media"
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
-                <ViewDetail
-                    mediaService={mediaService}
-                    slideshowService={slideshowService}
-                    detailSettings={settings}
-                    showBreadcrumbTitleAsLink={true}
-                    enableCategoryDownload={false}
-                    enableCategoryTeaserChooser={false}
-                    showFavoritesBadge={settings.showFavoritesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
-                />
-            </Match>
-        </Switch>
+        <AsyncBoundary
+            error={loadError()}
+            onRetry={retryLoad}
+            errorTitle="Could not load random media"
+            when={!isLoading()}
+            skeleton={<Loading />}
+        >
+            <ViewDetail
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                detailSettings={settings}
+                showBreadcrumbTitleAsLink={true}
+                enableCategoryDownload={false}
+                enableCategoryTeaserChooser={false}
+                showFavoritesBadge={settings.showFavoritesBadge}
+                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
+            />
+        </AsyncBoundary>
     );
 };
 

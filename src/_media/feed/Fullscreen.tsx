@@ -1,4 +1,4 @@
-import { Component, createEffect, Match, onCleanup, Switch } from "solid-js";
+import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { useMediaFullscreenViewSettingsContext } from "../../_contexts/settings/MediaFullscreenViewSettingsContext";
@@ -6,7 +6,7 @@ import { MediaViewFullscreen } from "../../_models/MediaView";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
-import ErrorMessage from "../../_components/error/ErrorMessage";
+import AsyncBoundary from "../../_components/state/AsyncBoundary";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
 import ToolbarListing from "./ToolbarListing";
@@ -52,20 +52,14 @@ const Fullscreen: Component = () => {
 
     return (
         // a single photo, so a spinner rather than skeleton tiles
-        <Switch fallback={<Loading />}>
-            <Match when={subjectIsEmpty()}>
-                <EmptyClanMessage name={subjectName()} />
-            </Match>
-
-            <Match when={loadError()}>
-                <ErrorMessage
-                    title={`Could not load media for this ${subjectKindName()}`}
-                    error={loadError()}
-                    onRetry={retryLoad}
-                />
-            </Match>
-
-            <Match when={!isLoading()}>
+        <Show when={!subjectIsEmpty()} fallback={<EmptyClanMessage name={subjectName()} />}>
+            <AsyncBoundary
+                error={loadError()}
+                onRetry={retryLoad}
+                errorTitle={`Could not load media for this ${subjectKindName()}`}
+                when={!isLoading()}
+                skeleton={<Loading />}
+            >
                 <ViewFullscreen
                     mediaService={mediaService}
                     slideshowService={slideshowService}
@@ -89,8 +83,8 @@ const Fullscreen: Component = () => {
                         setShowFavoritesBadge(!settings.showFavoritesBadge)
                     }
                 />
-            </Match>
-        </Switch>
+            </AsyncBoundary>
+        </Show>
     );
 };
 

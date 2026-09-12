@@ -1,4 +1,4 @@
-import { Component, For, Match, Show, Switch } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
@@ -11,7 +11,8 @@ import { useFeedCategories } from "./useFeedCategories";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
 import EmptyClanMessage from "./EmptyClanMessage";
-import ErrorMessage from "../../_components/error/ErrorMessage";
+import AsyncBoundary from "../../_components/state/AsyncBoundary";
+import EmptyState from "../../_components/state/EmptyState";
 import Layout from "../../_components/layout/Layout";
 import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
@@ -59,51 +60,53 @@ const Categories: Component = () => {
                 />
             }
         >
-            <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-                {/* checked before the error: an empty clan answers 404 too */}
-                <Match when={feed.subjectIsEmpty()}>
-                    <EmptyClanMessage name={feed.subjectName()} />
-                </Match>
-
-                <Match when={feed.loadError()}>
-                    <ErrorMessage
-                        title={`Could not load categories for this ${feed.subjectKindName()}`}
-                        error={feed.loadError()}
-                        onRetry={feed.retryLoad}
-                    />
-                </Match>
-
-                <Match when={!feed.isLoading()}>
-                    <Show
-                        when={feed.categories().length > 0}
-                        fallback={
-                            <p class="text-center my-8">
-                                {feed.favoritesOnly()
+            {/* checked ahead of everything else: an empty clan answers 404 too */}
+            <Show
+                when={!feed.subjectIsEmpty()}
+                fallback={<EmptyClanMessage name={feed.subjectName()} />}
+            >
+                <AsyncBoundary
+                    error={feed.loadError()}
+                    onRetry={feed.retryLoad}
+                    errorTitle={`Could not load categories for this ${feed.subjectKindName()}`}
+                    when={!feed.isLoading()}
+                    skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                    isEmpty={feed.categories().length === 0}
+                    empty={
+                        <EmptyState
+                            icon="icon-[ic--round-collections]"
+                            title={
+                                feed.favoritesOnly()
+                                    ? "No favorites here yet"
+                                    : "There is nothing to show here"
+                            }
+                            detail={
+                                feed.favoritesOnly()
                                     ? `None of the categories ${feed.categoryScope()} have been marked as a favorite.`
-                                    : "There is nothing to show here."}
-                            </p>
-                        }
-                    >
-                        <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
-                            <For each={feed.categories()}>
-                                {(category, idx) => (
-                                    <CategoryCard
-                                        category={category}
-                                        showTitles={settings.showTitles}
-                                        showYears={settings.showYears}
-                                        thumbnailSize={settings.thumbnailSize}
-                                        dimThumbnails={settings.dimThumbnails}
-                                        showFavoriteBadge={settings.showFavoritesBadge}
-                                        showTypesBadge={settings.showTypesBadge}
-                                        eager={idx() <= EAGER_THRESHOLD}
-                                        setIsFavorite={setIsFavorite}
-                                    />
-                                )}
-                            </For>
-                        </div>
-                    </Show>
-                </Match>
-            </Switch>
+                                    : undefined
+                            }
+                        />
+                    }
+                >
+                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                        <For each={feed.categories()}>
+                            {(category, idx) => (
+                                <CategoryCard
+                                    category={category}
+                                    showTitles={settings.showTitles}
+                                    showYears={settings.showYears}
+                                    thumbnailSize={settings.thumbnailSize}
+                                    dimThumbnails={settings.dimThumbnails}
+                                    showFavoriteBadge={settings.showFavoritesBadge}
+                                    showTypesBadge={settings.showTypesBadge}
+                                    eager={idx() <= EAGER_THRESHOLD}
+                                    setIsFavorite={setIsFavorite}
+                                />
+                            )}
+                        </For>
+                    </div>
+                </AsyncBoundary>
+            </Show>
         </Layout>
     );
 };

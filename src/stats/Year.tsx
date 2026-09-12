@@ -1,4 +1,4 @@
-import { Component, createMemo, Show } from "solid-js";
+import { Component, createMemo } from "solid-js";
 import { useParams, useSearchParams } from "@solidjs/router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
@@ -12,7 +12,8 @@ import StatBar from "./components/StatBar";
 import Treemap from "./components/Treemap";
 import StatLayout from "./components/StatLayout";
 import Header from "./components/Header";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
+import SkeletonChart from "../_components/state/SkeletonChart";
 
 const ViewYear: Component = () => {
     const { statsForYearQuery } = useStatsContext();
@@ -115,16 +116,16 @@ const ViewYear: Component = () => {
                 />
             }
         >
-            {/* this screen previously rendered an empty treemap on failure */}
-            <Show when={stats.isError}>
-                <ErrorMessage
-                    title="Could not load statistics"
-                    error={stats.error}
-                    onRetry={() => void stats.refetch()}
-                />
-            </Show>
-
-            <Show when={!stats.isError}>
+            {/*
+                this screen previously rendered an empty treemap both while the
+                statistics were still arriving and after they had failed
+            */}
+            <AsyncBoundary
+                queries={[stats]}
+                errorTitle="Could not load statistics"
+                when={stats.isSuccess}
+                skeleton={<SkeletonChart />}
+            >
                 <StatLayout>
                     <div class="my-2">
                         <Header year={route.year} mode={searchMode()} type={searchType()} />
@@ -143,7 +144,7 @@ const ViewYear: Component = () => {
                         />
                     </div>
                 </StatLayout>
-            </Show>
+            </AsyncBoundary>
         </Layout>
     );
 };

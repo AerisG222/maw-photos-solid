@@ -9,6 +9,7 @@ import { Uuid } from "../_models/Uuid";
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
+import EmptyState from "../_components/state/EmptyState";
 
 interface Props {
     mediaService: IMapsMediaService;
@@ -165,9 +166,11 @@ const ViewMap: Component<Props> = props => {
                 }
             >
                 <Show when={props.mediaService.mediaWithGps().length === 0}>
-                    <div class="text-center p-4 text-secondary italic">
-                        Sorry, we do not have GPS data for this category.
-                    </div>
+                    <EmptyState
+                        icon="icon-[ic--round-location-off]"
+                        title="Nothing here has a location"
+                        detail="None of this media carries the GPS data a map needs."
+                    />
                 </Show>
                 <div class="h-dvh w-full" ref={el} />
             </Layout>

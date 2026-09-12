@@ -1,4 +1,4 @@
-import { Component, createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
+import { Component, createMemo, createSignal, For, Show } from "solid-js";
 
 import { useClansContext } from "../_contexts/api/ClansContext";
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
@@ -13,11 +13,12 @@ import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 import ClanDeleteDialog from "./components/ClanDeleteDialog";
 import ClanNameDialog from "./components/ClanNameDialog";
 import ClanSection from "./components/ClanSection";
-import ErrorMessage from "../_components/error/ErrorMessage";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Layout from "../_components/layout/Layout";
 import PersonCard from "./components/PersonCard";
 import PersonFilterBar from "./components/PersonFilterBar";
 import SelectionBar from "./components/SelectionBar";
+import EmptyState from "../_components/state/EmptyState";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
 
@@ -211,68 +212,61 @@ const GridView: Component = () => {
            by settings alone, so they are safe to show while the list is in flight.
         */
         <Layout toolbar={<Toolbar />} margin={settings.margin}>
-            <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
-                <Match when={people.isError}>
-                    <ErrorMessage
-                        title="Could not load people"
-                        error={people.error}
-                        onRetry={() => void people.refetch()}
+            <AsyncBoundary
+                queries={[people]}
+                errorTitle="Could not load people"
+                when={people.isSuccess}
+                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                isEmpty={people.data?.length === 0}
+                empty={<EmptyLibrary />}
+            >
+                <Show
+                    when={isPicking()}
+                    fallback={
+                        <ClanSection
+                            clans={clans}
+                            onCreate={startCreate}
+                            onEditMembers={startEditMembers}
+                            onRename={startRename}
+                            onDelete={setDeleting}
+                        />
+                    }
+                >
+                    <SelectionBar
+                        title={pickingTitle()}
+                        selectedCount={selected().size}
+                        submitLabel={picking().kind === "create" ? "Name Clan" : "Save People"}
+                        canSubmit={picking().kind !== "create" || selected().size > 0}
+                        pending={setClanPersonsMutation.isPending}
+                        onSubmit={submitPicking}
+                        onClear={() => setSelected(new Set<Uuid>())}
+                        onCancel={stopPicking}
                     />
-                </Match>
+                </Show>
 
-                <Match when={people.isSuccess}>
-                    <Show when={people.data!.length > 0} fallback={<EmptyLibrary />}>
-                        <Show
-                            when={isPicking()}
-                            fallback={
-                                <ClanSection
-                                    clans={clans}
-                                    onCreate={startCreate}
-                                    onEditMembers={startEditMembers}
-                                    onRename={startRename}
-                                    onDelete={setDeleting}
+                <PersonFilterBar filter={filter()} setFilter={setFilter} />
+
+                <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
+                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                        <For each={peopleToDisplay()}>
+                            {(person, idx) => (
+                                <PersonCard
+                                    person={person}
+                                    showName={settings.showNames}
+                                    showMediaCount={settings.showMediaCounts}
+                                    thumbnailSize={settings.thumbnailSize}
+                                    dimThumbnails={settings.dimThumbnails}
+                                    eager={idx() <= EAGER_THRESHOLD}
+                                    selectable={isPicking()}
+                                    selected={selected().has(person.id)}
+                                    setIsFavorite={setIsFavorite}
+                                    toggleSelected={toggleSelected}
                                 />
-                            }
-                        >
-                            <SelectionBar
-                                title={pickingTitle()}
-                                selectedCount={selected().size}
-                                submitLabel={
-                                    picking().kind === "create" ? "Name Clan" : "Save People"
-                                }
-                                canSubmit={picking().kind !== "create" || selected().size > 0}
-                                pending={setClanPersonsMutation.isPending}
-                                onSubmit={submitPicking}
-                                onClear={() => setSelected(new Set<Uuid>())}
-                                onCancel={stopPicking}
-                            />
-                        </Show>
-
-                        <PersonFilterBar filter={filter()} setFilter={setFilter} />
-
-                        <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
-                            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
-                                <For each={peopleToDisplay()}>
-                                    {(person, idx) => (
-                                        <PersonCard
-                                            person={person}
-                                            showName={settings.showNames}
-                                            showMediaCount={settings.showMediaCounts}
-                                            thumbnailSize={settings.thumbnailSize}
-                                            dimThumbnails={settings.dimThumbnails}
-                                            eager={idx() <= EAGER_THRESHOLD}
-                                            selectable={isPicking()}
-                                            selected={selected().has(person.id)}
-                                            setIsFavorite={setIsFavorite}
-                                            toggleSelected={toggleSelected}
-                                        />
-                                    )}
-                                </For>
-                            </div>
-                        </Show>
-                    </Show>
-                </Match>
-            </Switch>
+                            )}
+                        </For>
+                    </div>
+                </Show>
+            </AsyncBoundary>
 
             <ClanNameDialog
                 open={naming() !== "off"}
@@ -298,12 +292,15 @@ const GridView: Component = () => {
 };
 
 const EmptyLibrary: Component = () => (
-    <p class="text-center my-8">
-        Nobody has been identified in the photos and videos you can see yet. Once faces have been
-        recognised, everyone found will show up here.
-    </p>
+    <EmptyState
+        icon="icon-[ic--round-people]"
+        title="Nobody has been identified yet"
+        detail="Once faces have been recognised in the photos and videos you can see, everyone found will show up here."
+    />
 );
 
-const NoMatches: Component = () => <p class="text-center my-8">No people match that name.</p>;
+const NoMatches: Component = () => (
+    <EmptyState icon="icon-[ic--round-search-off]" title="No people match that name" />
+);
 
 export default GridView;

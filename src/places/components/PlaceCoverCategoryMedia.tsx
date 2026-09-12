@@ -10,6 +10,7 @@ import CoverCandidateGrid from "./CoverCandidateGrid";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Icon from "../../_components/icon/Icon";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
+import EmptyState from "../../_components/state/EmptyState";
 
 interface Props {
     category: Category;
@@ -60,7 +61,12 @@ const PlaceCoverCategoryMedia: Component<Props> = props => {
                 <Match when={media.isSuccess}>
                     <Show
                         when={(media.data?.length ?? 0) > 0}
-                        fallback={<p class="text-center my-8">This category is empty.</p>}
+                        fallback={
+                            <EmptyState
+                                icon="icon-[ic--round-photo-library]"
+                                title="This category is empty"
+                            />
+                        }
                     >
                         <p class="text-xs opacity-70 mb-2">
                             A category can span several places. Anything here that was taken

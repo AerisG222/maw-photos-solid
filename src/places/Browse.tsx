@@ -1,4 +1,4 @@
-import { Component, For, Match, Show, Switch, createEffect, createSignal } from "solid-js";
+import { Component, For, Show, createEffect, createSignal } from "solid-js";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
@@ -10,7 +10,9 @@ import { firstParam } from "../_models/utils/RouteUtils";
 import { isUuid, Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
+import AsyncBoundary from "../_components/state/AsyncBoundary";
 import ErrorMessage from "../_components/error/ErrorMessage";
+import EmptyState from "../_components/state/EmptyState";
 import Layout from "../_components/layout/Layout";
 import PlaceCard from "./components/PlaceCard";
 import PlaceChain from "./components/PlaceChain";
@@ -252,41 +254,31 @@ const Browse: Component = () => {
                     </p>
                 </Show>
 
-                <Switch fallback={<SkeletonGrid />}>
-                    <Match when={places.isError}>
-                        <ErrorMessage
-                            title="Could not load places"
-                            error={places.error}
-                            onRetry={() => void places.refetch()}
-                        />
-                    </Match>
-
-                    <Match when={places.isSuccess}>
-                        <Show
-                            when={places.data!.length > 0}
-                            fallback={<p class="text-center my-8">{emptyMessage()}</p>}
-                        >
-                            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
-                                <For each={places.data}>
-                                    {(item, idx) => (
-                                        <PlaceCard
-                                            place={item}
-                                            href={tileHref(item)}
-                                            leadsToMedia={!editing() && isLeafPlace(item)}
-                                            showAncestry={!!search()}
-                                            eager={idx() <= EAGER_THRESHOLD}
-                                            onChooseCover={
-                                                editing()
-                                                    ? chosen => setCoverForId(chosen.id)
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
-                                </For>
-                            </div>
-                        </Show>
-                    </Match>
-                </Switch>
+                <AsyncBoundary
+                    queries={[places]}
+                    errorTitle="Could not load places"
+                    when={places.isSuccess}
+                    skeleton={<SkeletonGrid />}
+                    isEmpty={places.data?.length === 0}
+                    empty={<EmptyState icon="icon-[ic--round-place]" title={emptyMessage()} />}
+                >
+                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                        <For each={places.data}>
+                            {(item, idx) => (
+                                <PlaceCard
+                                    place={item}
+                                    href={tileHref(item)}
+                                    leadsToMedia={!editing() && isLeafPlace(item)}
+                                    showAncestry={!!search()}
+                                    eager={idx() <= EAGER_THRESHOLD}
+                                    onChooseCover={
+                                        editing() ? chosen => setCoverForId(chosen.id) : undefined
+                                    }
+                                />
+                            )}
+                        </For>
+                    </div>
+                </AsyncBoundary>
             </Show>
 
             {/*
