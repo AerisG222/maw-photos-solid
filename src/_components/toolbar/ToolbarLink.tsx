@@ -9,7 +9,7 @@ import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
 
 // one definition, so the forced and the routed highlight cannot drift apart
-const ACTIVE_CLASS = "text-primary-content bg-primary mr[-1px]";
+const ACTIVE_CLASS = "text-primary-content bg-primary mr-[-1px]";
 const INACTIVE_CLASS = "text-primary";
 
 interface Props {
@@ -50,7 +50,7 @@ const ToolbarLink: Component<Props> = props => {
         "font-bold": true,
         "align-middle": true,
         hidden: true,
-        "md:inline": state.isToolbarCollapsed
+        "md:inline": state.showToolbarLabels
     });
 
     const label = () => props.route.tooltip ?? props.route.name;

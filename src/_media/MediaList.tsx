@@ -45,7 +45,7 @@ const MediaList: Component<Props> = props => {
     });
 
     return (
-        <div class="flex flex-nowrap overflow-x-auto scrollable">
+        <div class="flex flex-nowrap overflow-x-auto">
             <For each={props.media}>
                 {(media, idx) => (
                     <MediaLink

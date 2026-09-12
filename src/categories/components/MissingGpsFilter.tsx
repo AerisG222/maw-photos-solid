@@ -4,11 +4,7 @@ import Checkbox from "../../_components/input/Checkbox";
 
 import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
-interface Props {
-    horizontal: boolean;
-}
-
-const MissingGpsFilter: Component<Props> = _props => {
+const MissingGpsFilter: Component = () => {
     const [filter, { setMissingGpsFilter }] = useCategoryFilterSettingsContext();
 
     const updateFilter = (enableFilter: boolean) => {

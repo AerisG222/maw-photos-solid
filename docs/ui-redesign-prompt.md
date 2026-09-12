@@ -10,7 +10,7 @@ everywhere, with fewer controls than exist today.
 
 ## The core complaint
 
-Tools and information are bound to *views* rather than to the *thing being looked at*.
+Tools and information are bound to _views_ rather than to the _thing being looked at_.
 The grid is the best way to browse, but to see EXIF, comments, a histogram, a minimap, or
 to edit metadata you must leave it for the detail view. That pattern repeats outward:
 every listing surface in the app re-implements the same handful of toggles, with the same
@@ -63,7 +63,7 @@ listing does not follow you to the next.
 ### Chrome, states and visual system
 
 - `src/_components/layout/Layout.tsx` is the single page shell (toolbar / content /
-  sidebar grid). Areas pass `title` *or* `header`, toolbars, and optional sidebars.
+  sidebar grid). Areas pass `title` _or_ `header`, toolbars, and optional sidebars.
 - Navigation: `src/_components/primary-nav/` (collapsible rail: Categories, People,
   Places, Search, Random, Stats, then user, theme, About, Settings), breadcrumbs
   (`src/_components/categories/CategoryBreadcrumb.tsx`), the place chain

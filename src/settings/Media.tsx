@@ -86,7 +86,6 @@ const ViewMedia: Component = () => {
                         onChange={setViewMode}
                     />
                     <Select
-                        horizontal={false}
                         title="Slideshow Display Duration"
                         itemArray={allSlideshowDurations}
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
@@ -193,7 +192,6 @@ const ViewMedia: Component = () => {
                         onChange={setInfoPanelMapType}
                     />
                     <Select
-                        horizontal={false}
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
                         selectedValue={infoPanelSettings.minimapZoom}
@@ -282,7 +280,6 @@ const ViewMedia: Component = () => {
                         onChange={setMapMapType}
                     />
                     <Select
-                        horizontal={false}
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
                         selectedValue={mapSettings.zoom}

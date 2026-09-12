@@ -6,11 +6,7 @@ import { useCategoryFilterSettingsContext } from "../../_contexts/settings/Categ
 
 import Select from "../../_components/input/Select";
 
-interface Props {
-    horizontal: boolean;
-}
-
-const YearFilter: Component<Props> = props => {
+const YearFilter: Component = () => {
     const { yearsQuery } = useCategoriesContext();
     const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -54,7 +50,6 @@ const YearFilter: Component<Props> = props => {
     return (
         <Show when={years.isSuccess}>
             <Select
-                horizontal={props.horizontal}
                 title="Year"
                 itemArray={toKvp(years.data!)}
                 selectedValue={filter.yearFilter ?? "all"}

@@ -27,7 +27,7 @@ const PersonFilterBar: Component<Props> = props => {
                 title="Clear"
                 onClick={() => props.setFilter("")}
             >
-                <span class="text-6 icon-[ic--round-close]" />
+                <span class="text-2xl icon-[ic--round-close]" />
             </button>
         </div>
     );

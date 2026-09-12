@@ -56,7 +56,7 @@ const ToolbarButton: Component<Props> = props => {
         "font-bold": true,
         "align-middle": true,
         hidden: true,
-        "md:inline": state.isToolbarCollapsed
+        "md:inline": state.showToolbarLabels
     });
 
     return (

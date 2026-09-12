@@ -7,7 +7,7 @@ interface Props {
     onChange: (isSelected: boolean) => void;
 }
 
-const Select: Component<Props> = props => {
+const Toggle: Component<Props> = props => {
     return (
         <>
             <h3 class="head3">{props.title}</h3>
@@ -26,4 +26,4 @@ const Select: Component<Props> = props => {
     );
 };
 
-export default Select;
+export default Toggle;

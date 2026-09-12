@@ -6,13 +6,13 @@ import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
 export interface AppSettingsState {
     readonly theme: string;
     readonly isPrimaryNavCollapsed: boolean;
-    readonly isToolbarCollapsed: boolean;
+    readonly showToolbarLabels: boolean;
 }
 
 export const defaultAppSettings: AppSettingsState = {
     theme: "dark",
     isPrimaryNavCollapsed: false,
-    isToolbarCollapsed: false
+    showToolbarLabels: false
 };
 
 export type AppSettingsContextValue = [
@@ -20,7 +20,7 @@ export type AppSettingsContextValue = [
     actions: {
         toggleTheme: () => void;
         togglePrimaryNavCollapsed: () => void;
-        toggleToolbarCollapsed: () => void;
+        toggleToolbarLabels: () => void;
     }
 ];
 
@@ -40,14 +40,14 @@ export const AppSettingsProvider: ParentComponent = props => {
         saveState(state);
     };
 
-    const toggleToolbarCollapsed = () => {
-        setState({ isToolbarCollapsed: !state.isToolbarCollapsed });
+    const toggleToolbarLabels = () => {
+        setState({ showToolbarLabels: !state.showToolbarLabels });
         saveState(state);
     };
 
     return (
         <AppSettingsContext.Provider
-            value={[state, { toggleTheme, togglePrimaryNavCollapsed, toggleToolbarCollapsed }]}
+            value={[state, { toggleTheme, togglePrimaryNavCollapsed, toggleToolbarLabels }]}
         >
             {props.children}
         </AppSettingsContext.Provider>
@@ -70,6 +70,18 @@ function loadState() {
     // handle legacy theme
     if (state.theme === "dusk") {
         state = { ...state, theme: "dark" };
+    }
+
+    /*
+       `showToolbarLabels` was stored as `isToolbarCollapsed`, which named it
+       backwards - every reader showed labels when the flag was *true*. The
+       stored value was never wrong, only its name, so it carries across as-is.
+    */
+    const legacy = (state as AppSettingsState & { isToolbarCollapsed?: boolean })
+        .isToolbarCollapsed;
+
+    if (state.showToolbarLabels === undefined && legacy !== undefined) {
+        state = { ...state, showToolbarLabels: legacy };
     }
 
     return state;

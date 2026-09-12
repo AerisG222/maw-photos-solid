@@ -7,7 +7,7 @@ interface Props {
     onChange: (isSelected: boolean) => void;
 }
 
-const Select: Component<Props> = props => {
+const Checkbox: Component<Props> = props => {
     return (
         <div class="form-control">
             <label class="label cursor-pointer justify-start">
@@ -23,4 +23,4 @@ const Select: Component<Props> = props => {
     );
 };
 
-export default Select;
+export default Checkbox;

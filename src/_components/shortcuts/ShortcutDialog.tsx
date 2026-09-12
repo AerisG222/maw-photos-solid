@@ -61,7 +61,7 @@ const ShortcutDialog: Component = () => {
             <form method="dialog" class="modal-box">
                 <h3 class="font-bold text-lg mb-4 text-secondary">Active Shortcuts</h3>
 
-                <div class="max-h-[400px] overflow-y-auto scrollable">
+                <div class="max-h-[400px] overflow-y-auto">
                     <For each={getShortcuts()}>
                         {shortcut => <ShortcutKey shortcut={shortcut} />}
                     </For>

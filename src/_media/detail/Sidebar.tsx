@@ -167,7 +167,7 @@ const Sidebar: Component<Props> = props => {
     return (
         <div class="flex">
             <Show when={settings.expandInfoPanel}>
-                <div class="w-[500px] bg-base-200 border-l-1 border-l-base-content/30 overflow-y-auto overflow-x-hidden scrollable">
+                <div class="w-[500px] bg-base-200 border-l-1 border-l-base-content/30 overflow-y-auto overflow-x-hidden">
                     <For each={cards.filter(card => card.enable(props.activeMedia!))}>
                         {card => (
                             <Show when={card.active()}>

@@ -2,7 +2,6 @@ import { Component, For } from "solid-js";
 import { KeyValuePair } from "../../_models/KeyValuePair";
 
 interface Props<T> {
-    horizontal: boolean;
     title: string;
     itemArray: KeyValuePair<T>[];
     selectedValue: T;
@@ -14,7 +13,6 @@ const Select: Component<Props<string | number>> = props => {
         <fieldset class="fieldset">
             <legend class="fieldset-legend text-sm text-secondary font-bold">{props.title}</legend>
             <select
-                name="theme"
                 class="select min-w-[10rem]"
                 value={props.selectedValue}
                 onChange={evt => props.onChange(evt.currentTarget.value)}

@@ -5,7 +5,7 @@ import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsConte
 import Icon from "../icon/Icon";
 
 const ToolbarCollapseButton: Component = () => {
-    const [settingsState, { toggleToolbarCollapsed }] = useAppSettingsContext();
+    const [settingsState, { toggleToolbarLabels }] = useAppSettingsContext();
 
     const collapseIconClasses = () => {
         const classes = [
@@ -17,7 +17,7 @@ const ToolbarCollapseButton: Component = () => {
             "ease-out"
         ];
 
-        if (!settingsState.isToolbarCollapsed) {
+        if (!settingsState.showToolbarLabels) {
             classes.push("rotate-180");
         }
 
@@ -27,7 +27,7 @@ const ToolbarCollapseButton: Component = () => {
     return (
         <button
             class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer transition-colors duration-150 ease-out"
-            onClick={toggleToolbarCollapsed}
+            onClick={toggleToolbarLabels}
             title="Expand/Collapse Toolbar"
         >
             <Icon classes={collapseIconClasses()} />

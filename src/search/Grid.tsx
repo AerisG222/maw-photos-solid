@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, Match, Switch } from "solid-js";
 
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
@@ -11,6 +11,7 @@ import GridToolbar from "./components/ToolbarGrid";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryCard from "../_components/categories/CategoryCard";
+import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import ErrorMessage from "../_components/error/ErrorMessage";
 
 const ViewGrid: Component = () => {
@@ -49,35 +50,42 @@ const ViewGrid: Component = () => {
                 <SearchBar />
             </div>
 
-            {/* the toolbar and search bar stay put so the term can be retried or edited */}
-            <Show
-                when={!searchQuery.isError}
-                fallback={
+            {/*
+                the toolbar and search bar stay put so the term can be retried or
+                edited. Error first, for the same reason as the categories grid.
+                The results branch also covers "no term yet": that query never
+                runs, so it sits pending-but-idle forever and would otherwise
+                skeleton an empty page.
+            */}
+            <Switch fallback={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}>
+                <Match when={searchQuery.isError}>
                     <ErrorMessage
                         title="Search could not be completed"
                         error={searchQuery.error}
                         onRetry={() => void searchQuery.refetch()}
                     />
-                }
-            >
-                <div class="flex gap-2 flex-wrap place-content-center my-4">
-                    <For each={allSearchResults(searchQuery) ?? []}>
-                        {(category, idx) => (
-                            <CategoryCard
-                                category={category}
-                                showTitles={settings.showTitles}
-                                thumbnailSize={settings.thumbnailSize}
-                                dimThumbnails={settings.dimThumbnails}
-                                showYears={settings.showYears}
-                                showFavoriteBadge={settings.showFavoritesBadge}
-                                showTypesBadge={settings.showTypesBadge}
-                                eager={idx() <= EAGER_THRESHOLD}
-                                setIsFavorite={setIsFavorite}
-                            />
-                        )}
-                    </For>
-                </div>
-            </Show>
+                </Match>
+
+                <Match when={!state.activeTerm || searchQuery.isSuccess}>
+                    <div class="flex gap-2 flex-wrap place-content-center my-4">
+                        <For each={allSearchResults(searchQuery) ?? []}>
+                            {(category, idx) => (
+                                <CategoryCard
+                                    category={category}
+                                    showTitles={settings.showTitles}
+                                    thumbnailSize={settings.thumbnailSize}
+                                    dimThumbnails={settings.dimThumbnails}
+                                    showYears={settings.showYears}
+                                    showFavoriteBadge={settings.showFavoritesBadge}
+                                    showTypesBadge={settings.showTypesBadge}
+                                    eager={idx() <= EAGER_THRESHOLD}
+                                    setIsFavorite={setIsFavorite}
+                                />
+                            )}
+                        </For>
+                    </div>
+                </Match>
+            </Switch>
         </Layout>
     );
 };
