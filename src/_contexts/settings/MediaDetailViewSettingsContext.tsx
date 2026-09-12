@@ -1,8 +1,16 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_MEDIA_VIEW_DETAIL, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
+import { useMediaSettingsContext } from "./MediaSettingsContext";
 
 export interface MediaDetailViewSettingsState {
     readonly highlightFaces: boolean;
@@ -12,15 +20,6 @@ export interface MediaDetailViewSettingsState {
     readonly dimThumbnails: boolean;
     readonly showFavoritesBadge: boolean;
 }
-
-export const defaultMediaDetailViewSettings: MediaDetailViewSettingsState = {
-    highlightFaces: false,
-    showBreadcrumbs: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    showMediaList: true,
-    dimThumbnails: true,
-    showFavoritesBadge: false
-};
 
 export type MediaDetailViewSettingsContextValue = [
     state: MediaDetailViewSettingsState,
@@ -34,61 +33,41 @@ export type MediaDetailViewSettingsContextValue = [
     }
 ];
 
-const MediaDetailViewSettingsContext = createContext<MediaDetailViewSettingsContextValue>();
+export const useMediaDetailViewSettingsContext = (): MediaDetailViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
+    const [media, mediaActions] = useMediaSettingsContext();
 
-export const MediaDetailSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadMediaDetailViewSettings());
-
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setShowMediaList = (showMediaList: boolean) => updateState({ showMediaList });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-
-    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
-
-    const updateState = (update: Partial<MediaDetailViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: MediaDetailViewSettingsState = {
+        get highlightFaces() {
+            return listing.highlightFaces;
+        },
+        get showBreadcrumbs() {
+            return true;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get showMediaList() {
+            return media.showFilmstrip;
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get showFavoritesBadge() {
+            return listing.showBadges;
+        }
     };
 
-    return (
-        <MediaDetailViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setHighlightFaces,
-                    setShowBreadcrumbs,
-                    setShowMediaList,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setShowFavoritesBadge
-                }
-            ]}
-        >
-            {props.children}
-        </MediaDetailViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setHighlightFaces: on => listingActions.setHighlightFaces(on),
+            setShowBreadcrumbs: () => undefined,
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setShowMediaList: show => mediaActions.setShowFilmstrip(show),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setShowFavoritesBadge: show => listingActions.setShowBadges(show)
+        }
+    ];
 };
-
-export const useMediaDetailViewSettingsContext = () => {
-    const ctx = useContext(MediaDetailViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("MediaDetailViewSettings context not provided by ancestor component!");
-};
-
-function loadMediaDetailViewSettings() {
-    return {
-        ...defaultMediaDetailViewSettings,
-        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, defaultMediaDetailViewSettings)
-    };
-}
-
-function saveState(state: MediaDetailViewSettingsState) {
-    saveJson(KEY_SETTINGS_MEDIA_VIEW_DETAIL, state);
-}

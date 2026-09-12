@@ -2,20 +2,14 @@ import { Component } from "solid-js";
 
 import { useSearchListViewSettingsContext } from "../../_contexts/settings/SearchListViewSettingsContext";
 import { getNextThumbnailSize } from "../../_models/ThumbnailSize";
-import { getNextMarginSize } from "../../_models/Margin";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 const ListToolbar: Component = () => {
-    const [settings, { setMargin, setThumbnailSize, setDimThumbnails }] =
-        useSearchListViewSettingsContext();
+    const [settings, { setThumbnailSize, setDimThumbnails }] = useSearchListViewSettingsContext();
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    };
-
-    const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settings.margin).id);
     };
 
     const onToggleDimThumbnails = () => {
@@ -25,18 +19,11 @@ const ListToolbar: Component = () => {
     return (
         <>
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-format-indent-increase]"
-                name="Margins"
-                tooltip="Toggle Category Margins"
-                shortcutKeys={["m"]}
-                clickHandler={onToggleMargins}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

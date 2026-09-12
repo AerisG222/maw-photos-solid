@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 
 import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/CategoryGridViewSettingsContext";
 import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
-import { getNextMarginSize } from "../../_models/Margin";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
@@ -11,7 +10,6 @@ const GridToolbar: Component = () => {
         settings,
         {
             setShowTitles,
-            setMargin,
             setThumbnailSize,
             setDimThumbnails,
             setShowFavoritesBadge,
@@ -31,10 +29,6 @@ const GridToolbar: Component = () => {
         if (!settings.showTitles) {
             setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
         }
-    };
-
-    const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settings.margin).id);
     };
 
     const onToggleDimThumbnails = () => {
@@ -60,19 +54,12 @@ const GridToolbar: Component = () => {
                 active={settings.showTitles}
             />
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-format-indent-increase]"
-                name="Margins"
-                tooltip="Toggle Category Margins"
-                shortcutKeys={["m"]}
-                clickHandler={onToggleMargins}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

@@ -51,20 +51,8 @@ interface Props {
 }
 
 const DetailToolbar: Component<Props> = props => {
-    const [
-        settings,
-        {
-            setShowBreadcrumbs,
-            setShowMediaList,
-            setThumbnailSize,
-            setDimThumbnails,
-            setHighlightFaces
-        }
-    ] = useMediaDetailViewSettingsContext();
-
-    const onToggleBreadcrumbs = () => {
-        setShowBreadcrumbs(!settings.showBreadcrumbs);
-    };
+    const [settings, { setShowMediaList, setThumbnailSize, setDimThumbnails, setHighlightFaces }] =
+        useMediaDetailViewSettingsContext();
 
     const onTogglePhotoList = () => {
         setShowMediaList(!settings.showMediaList);
@@ -139,14 +127,6 @@ const DetailToolbar: Component<Props> = props => {
             />
 
             <ToolbarButton
-                icon="icon-[ic--round-title]"
-                name="Breadcrumbs"
-                tooltip="Toggle Category Breadcrumbs"
-                shortcutKeys={["t"]}
-                clickHandler={onToggleBreadcrumbs}
-                active={settings.showBreadcrumbs}
-            />
-            <ToolbarButton
                 icon="icon-[ic--round-remove-red-eye]"
                 name="Media List"
                 tooltip="Toggle Media List"
@@ -155,9 +135,9 @@ const DetailToolbar: Component<Props> = props => {
                 active={settings.showMediaList}
             />
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
             />

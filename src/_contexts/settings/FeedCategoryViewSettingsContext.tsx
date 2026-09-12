@@ -1,16 +1,17 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
-
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_FEED_VIEW_CATEGORY, loadJson, saveJson } from "./_storage";
-
 /*
-   The categories listing of a person or clan feed. Its own settings rather than
-   the search page's or the media grid's: it draws category cards like the search
-   results do, but somebody browsing faces is making a different choice about
-   what they want to see than somebody searching.
+   An adapter, not a store.
+
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
 */
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
+
 export interface FeedCategoryViewSettingsState {
     readonly margin: MarginIdType;
     readonly showTitles: boolean;
@@ -20,16 +21,6 @@ export interface FeedCategoryViewSettingsState {
     readonly showFavoritesBadge: boolean;
     readonly showTypesBadge: boolean;
 }
-
-export const defaultFeedCategoryViewSettings: FeedCategoryViewSettingsState = {
-    margin: defaultMargin,
-    showTitles: true,
-    showYears: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true,
-    showFavoritesBadge: false,
-    showTypesBadge: false
-};
 
 export type FeedCategoryViewSettingsContextValue = [
     state: FeedCategoryViewSettingsState,
@@ -44,62 +35,44 @@ export type FeedCategoryViewSettingsContextValue = [
     }
 ];
 
-const FeedCategoryViewSettingsContext = createContext<FeedCategoryViewSettingsContextValue>();
+export const useFeedCategoryViewSettingsContext = (): FeedCategoryViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const FeedCategorySettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
-    const setShowYears = (showYears: boolean) => updateState({ showYears });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
-
-    const updateState = (update: Partial<FeedCategoryViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: FeedCategoryViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get showTitles() {
+            return listing.showLabels;
+        },
+        get showYears() {
+            return listing.showLabels;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get showFavoritesBadge() {
+            return listing.showBadges;
+        },
+        get showTypesBadge() {
+            return listing.showBadges;
+        }
     };
 
-    return (
-        <FeedCategoryViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setMargin,
-                    setShowTitles,
-                    setShowYears,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setShowFavoritesBadge,
-                    setShowTypesBadge
-                }
-            ]}
-        >
-            {props.children}
-        </FeedCategoryViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setShowTitles: show => listingActions.setShowLabels(show),
+            setShowYears: show => listingActions.setShowLabels(show),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setShowFavoritesBadge: show => listingActions.setShowBadges(show),
+            setShowTypesBadge: show => listingActions.setShowBadges(show)
+        }
+    ];
 };
-
-export const useFeedCategoryViewSettingsContext = () => {
-    const ctx = useContext(FeedCategoryViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("FeedCategoryViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultFeedCategoryViewSettings,
-        ...loadJson(KEY_SETTINGS_FEED_VIEW_CATEGORY, defaultFeedCategoryViewSettings)
-    };
-}
-
-function saveState(state: FeedCategoryViewSettingsState) {
-    saveJson(KEY_SETTINGS_FEED_VIEW_CATEGORY, state);
-}

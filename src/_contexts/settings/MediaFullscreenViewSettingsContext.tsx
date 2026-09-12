@@ -1,17 +1,18 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { KEY_SETTINGS_MEDIA_VIEW_FULLSCREEN, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface MediaFullscreenViewSettingsState {
     readonly highlightFaces: boolean;
     readonly showFavoritesBadge: boolean;
 }
-
-export const defaultMediaFullscreenViewSettings: MediaFullscreenViewSettingsState = {
-    highlightFaces: false,
-    showFavoritesBadge: false
-};
 
 export type MediaFullscreenViewSettingsContextValue = [
     state: MediaFullscreenViewSettingsState,
@@ -21,47 +22,25 @@ export type MediaFullscreenViewSettingsContextValue = [
     }
 ];
 
-const MediaFullscreenViewSettingsContext = createContext<MediaFullscreenViewSettingsContextValue>();
+export const useMediaFullscreenViewSettingsContext =
+    (): MediaFullscreenViewSettingsContextValue => {
+        const [listing, listingActions] = useListingSettingsContext();
 
-export const MediaFullscreenSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
+        // getters, so reading a field inside a tracking scope still subscribes to it
+        const state: MediaFullscreenViewSettingsState = {
+            get highlightFaces() {
+                return listing.highlightFaces;
+            },
+            get showFavoritesBadge() {
+                return listing.showBadges;
+            }
+        };
 
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-
-    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
-
-    const updateState = (update: Partial<MediaFullscreenViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+        return [
+            state,
+            {
+                setHighlightFaces: on => listingActions.setHighlightFaces(on),
+                setShowFavoritesBadge: show => listingActions.setShowBadges(show)
+            }
+        ];
     };
-
-    return (
-        <MediaFullscreenViewSettingsContext.Provider
-            value={[state, { setShowFavoritesBadge, setHighlightFaces }]}
-        >
-            {props.children}
-        </MediaFullscreenViewSettingsContext.Provider>
-    );
-};
-
-export const useMediaFullscreenViewSettingsContext = () => {
-    const ctx = useContext(MediaFullscreenViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("MediaFullscreenViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultMediaFullscreenViewSettings,
-        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_FULLSCREEN, defaultMediaFullscreenViewSettings)
-    };
-}
-
-function saveState(state: MediaFullscreenViewSettingsState) {
-    saveJson(KEY_SETTINGS_MEDIA_VIEW_FULLSCREEN, state);
-}

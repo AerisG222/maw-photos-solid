@@ -1,64 +1,21 @@
-import { Component, batch } from "solid-js";
+import { Component } from "solid-js";
 
 import { useCategoryPageSettingsContext } from "../_contexts/settings/CategoryPageSettingsContext";
-import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
-import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
-import { allMargins } from "../_models/Margin";
-import {
-    ThumbnailSizeDefault,
-    ThumbnailSizeIdType,
-    allThumbnailSizes
-} from "../_models/ThumbnailSize";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import RadioGroup from "../_components/input/RadioGroup";
 import Toolbar from "./components/Toolbar";
-import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
+/*
+   Only what is particular to this area. How its grid and list present their
+   items is the same question every other listing in the application asks, and
+   is answered once, under Browsing.
+*/
 const ViewCategories: Component = () => {
     const [pageSettings, { setViewMode }] = useCategoryPageSettingsContext();
-    const [
-        gridSettings,
-        {
-            setShowTitles: setGridShowTitles,
-            setMargin: setGridMargin,
-            setThumbnailSize: setGridThumbnailSize,
-            setDimThumbnails: setGridDimThumbnails,
-            setShowFavoritesBadge: setGridShowFavoritesBadge,
-            setShowTypesBadge: setGridShowTypesBadge
-        }
-    ] = useCategoryGridViewSettingsContext();
-    const [
-        listSettings,
-        {
-            setMargin: setListMargin,
-            setThumbnailSize: setListThumbnailSize,
-            setDimThumbnails: setListDimThumbnails
-        }
-    ] = useCategoryListViewSettingsContext();
-
-    const gridSetShowTitles = (doShow: boolean) => {
-        batch(() => {
-            setGridShowTitles(doShow);
-
-            if (doShow) {
-                setGridThumbnailSize(ThumbnailSizeDefault);
-            }
-        });
-    };
-
-    const gridSetThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
-        batch(() => {
-            setGridThumbnailSize(thumbnailSize);
-
-            if (thumbnailSize !== ThumbnailSizeDefault) {
-                setGridShowTitles(false);
-            }
-        });
-    };
 
     return (
         <Layout toolbar={<Toolbar />} title="Categories">
@@ -70,70 +27,6 @@ const ViewCategories: Component = () => {
                         groupName="pageView"
                         selectedValue={pageSettings.viewMode}
                         onChange={setViewMode}
-                    />
-                </Panel>
-
-                <Panel title="Grid View">
-                    <Toggle
-                        title="Show Titles"
-                        name="gridTitles"
-                        isSelected={gridSettings.showTitles}
-                        onChange={gridSetShowTitles}
-                    />
-                    <RadioGroup
-                        title="Margins"
-                        groupName="gridMargins"
-                        itemArray={allMargins}
-                        selectedValue={gridSettings.margin}
-                        onChange={setGridMargin}
-                    />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="gridThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={gridSettings.thumbnailSize}
-                        onChange={gridSetThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="gridDimThumbnails"
-                        isSelected={gridSettings.dimThumbnails}
-                        onChange={setGridDimThumbnails}
-                    />
-                    <Toggle
-                        title="Show Favorite Badges"
-                        name="gridShowFavoriteBadges"
-                        isSelected={gridSettings.showFavoritesBadge}
-                        onChange={setGridShowFavoritesBadge}
-                    />
-                    <Toggle
-                        title="Show Media Type Badges"
-                        name="gridShowTypesBadge"
-                        isSelected={gridSettings.showTypesBadge}
-                        onChange={setGridShowTypesBadge}
-                    />
-                </Panel>
-
-                <Panel title="List View">
-                    <RadioGroup
-                        title="Margins"
-                        groupName="listMargins"
-                        itemArray={allMargins}
-                        selectedValue={listSettings.margin}
-                        onChange={setListMargin}
-                    />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="listThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={listSettings.thumbnailSize}
-                        onChange={setListThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="listDimThumbnails"
-                        isSelected={listSettings.dimThumbnails}
-                        onChange={setListDimThumbnails}
                     />
                 </Panel>
             </PanelContainer>

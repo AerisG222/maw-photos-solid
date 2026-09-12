@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 
 import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
-import { getNextMarginSize } from "../../_models/Margin";
 import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
 import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
@@ -32,7 +31,6 @@ const ToolbarCategories: Component<Props> = props => {
             setShowTitles,
             setShowYears,
             setThumbnailSize,
-            setMargin,
             setDimThumbnails,
             setShowFavoritesBadge,
             setShowTypesBadge
@@ -103,21 +101,14 @@ const ToolbarCategories: Component<Props> = props => {
                 active={settings.showTitles}
             />
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={() =>
                     setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
                 }
                 disabled={settings.showTitles || settings.showYears}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-format-indent-increase]"
-                name="Margins"
-                tooltip="Toggle Category Margins"
-                shortcutKeys={["m"]}
-                clickHandler={() => setMargin(getNextMarginSize(settings.margin).id)}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

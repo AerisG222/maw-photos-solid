@@ -1,7 +1,6 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
 import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { getNextMarginSize } from "../_models/Margin";
 import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
@@ -44,33 +43,12 @@ interface Props {
 }
 
 const GridToolbar: Component<Props> = props => {
-    const [
-        settings,
-        {
-            setShowBreadcrumbs,
-            setShowMainBreadcrumbs,
-            setThumbnailSize,
-            setMargin,
-            setDimThumbnails,
-            setHighlightFaces
-        }
-    ] = useMediaGridViewSettingsContext();
+    const [settings, { setThumbnailSize, setDimThumbnails, setHighlightFaces }] =
+        useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
-
-    const onToggleBreadcrumbs = () => {
-        setShowBreadcrumbs(!settings.showBreadcrumbs);
-    };
-
-    const onToggleMainBreadcrumbs = () => {
-        setShowMainBreadcrumbs(!settings.showMainBreadcrumbs);
-    };
 
     const onToggleThumbnailSize = () => {
         setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    };
-
-    const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settings.margin).id);
     };
 
     const onToggleDimThumbnails = () => {
@@ -127,31 +105,12 @@ const GridToolbar: Component<Props> = props => {
             <ToolbarDivider />
 
             <Show when={!props.activeMedia}>
-                <Show when={props.enableToggleBreadcrumbsOnInactiveMedia}>
-                    <ToolbarButton
-                        icon="icon-[ic--round-title]"
-                        name="Breadcrumbs"
-                        tooltip="Toggle Category Breadcrumbs"
-                        shortcutKeys={["t"]}
-                        clickHandler={onToggleBreadcrumbs}
-                        active={settings.showBreadcrumbs}
-                    />
-                </Show>
-
                 <ToolbarButton
-                    icon="icon-[ic--round-photo-size-select-large]"
-                    name="Thumbnails"
-                    tooltip="Toggle Thumbnail Size"
+                    icon="icon-[ic--round-density-medium]"
+                    name="Density"
+                    tooltip="Cycle Density"
                     shortcutKeys={["s"]}
                     clickHandler={onToggleThumbnailSize}
-                />
-
-                <ToolbarButton
-                    icon="icon-[ic--round-format-indent-increase]"
-                    name="Margins"
-                    tooltip="Toggle Margins"
-                    shortcutKeys={["m"]}
-                    clickHandler={onToggleMargins}
                 />
 
                 <ToolbarButton
@@ -165,16 +124,6 @@ const GridToolbar: Component<Props> = props => {
             </Show>
 
             <Show when={props.activeMedia}>
-                <Show when={props.enableToggleBreadcrumbsOnActiveMedia}>
-                    <ToolbarButton
-                        icon="icon-[ic--round-title]"
-                        name="Breadcrumbs"
-                        tooltip="Toggle Category Breadcrumbs"
-                        shortcutKeys={["t"]}
-                        clickHandler={onToggleMainBreadcrumbs}
-                    />
-                </Show>
-
                 <RotateCounterClockwiseButton />
                 <RotateClockwiseButton />
                 <FlipHorizontalButton />

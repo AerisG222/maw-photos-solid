@@ -1,9 +1,16 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_MEDIA_VIEW_GRID, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface MediaGridViewSettingsState {
     readonly highlightFaces: boolean;
@@ -16,91 +23,62 @@ export interface MediaGridViewSettingsState {
     readonly showTypesBadge: boolean;
 }
 
-export const defaultMediaGridViewSettings: MediaGridViewSettingsState = {
-    highlightFaces: false,
-    margin: defaultMargin,
-    showBreadcrumbs: true,
-    showMainBreadcrumbs: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true,
-    showFavoritesBadge: false,
-    showTypesBadge: false
-};
-
 export type MediaGridViewSettingsContextValue = [
     state: MediaGridViewSettingsState,
     actions: {
         setHighlightFaces: (highlightFaces: boolean) => void;
         setMargin: (margin: MarginIdType) => void;
-        setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setShowBreadcrumbs: (showBreadcrumbs: boolean) => void;
         setShowMainBreadcrumbs: (showBreadcrumbs: boolean) => void;
+        setThumbnailSize: (thumbnailSize: ThumbnailSizeIdType) => void;
         setDimThumbnails: (dimThumbnails: boolean) => void;
         setShowFavoritesBadge: (showFavoritesBadge: boolean) => void;
         setShowTypesBadge: (showBadge: boolean) => void;
     }
 ];
 
-const MediaGridViewSettingsContext = createContext<MediaGridViewSettingsContextValue>();
+export const useMediaGridViewSettingsContext = (): MediaGridViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const MediaGridSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setShowBreadcrumbs = (showBreadcrumbs: boolean) => updateState({ showBreadcrumbs });
-    const setShowMainBreadcrumbs = (showMainBreadcrumbs: boolean) =>
-        updateState({ showMainBreadcrumbs });
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
-
-    const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
-
-    const updateState = (update: Partial<MediaGridViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: MediaGridViewSettingsState = {
+        get highlightFaces() {
+            return listing.highlightFaces;
+        },
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get showBreadcrumbs() {
+            return true;
+        },
+        get showMainBreadcrumbs() {
+            return true;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get showFavoritesBadge() {
+            return listing.showBadges;
+        },
+        get showTypesBadge() {
+            return listing.showBadges;
+        }
     };
 
-    return (
-        <MediaGridViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setHighlightFaces,
-                    setMargin,
-                    setShowBreadcrumbs,
-                    setShowMainBreadcrumbs,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setShowFavoritesBadge,
-                    setShowTypesBadge
-                }
-            ]}
-        >
-            {props.children}
-        </MediaGridViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setHighlightFaces: on => listingActions.setHighlightFaces(on),
+            setMargin: () => listingActions.cycleDensity(),
+            setShowBreadcrumbs: () => undefined,
+            setShowMainBreadcrumbs: () => undefined,
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setShowFavoritesBadge: show => listingActions.setShowBadges(show),
+            setShowTypesBadge: show => listingActions.setShowBadges(show)
+        }
+    ];
 };
-
-export const useMediaGridViewSettingsContext = () => {
-    const ctx = useContext(MediaGridViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("MediaGridViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultMediaGridViewSettings,
-        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_GRID, defaultMediaGridViewSettings)
-    };
-}
-
-function saveState(state: MediaGridViewSettingsState) {
-    saveJson(KEY_SETTINGS_MEDIA_VIEW_GRID, state);
-}

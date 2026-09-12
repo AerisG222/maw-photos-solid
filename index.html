@@ -10,23 +10,39 @@
         <script>
             /*
                The app applies `data-theme` to a wrapper inside #root, so nothing
-               themes the page until Solid mounts - which shows as a flash of white
-               on load for dark-theme users. Pin the persisted theme onto <html>
-               up front so the very first paint is already correct. ThemeWrapper
-               keeps this in sync afterwards.
+               themes the page until Solid mounts - which shows as a flash of the
+               wrong colour on load. Pin the resolved theme onto <html> up front so
+               the very first paint is already correct. ThemeWrapper keeps this in
+               sync afterwards.
+
+               This has to stay inline and synchronous: it is the no-flash path.
             */
             (() => {
-                let theme = "dark";
-
-                try {
-                    const saved = JSON.parse(localStorage.getItem("maw-photos|app") || "{}");
-
-                    // anything else (including the legacy "dusk") falls back to dark
-                    if (saved.theme === "light") {
-                        theme = "light";
+                const read = key => {
+                    try {
+                        return JSON.parse(localStorage.getItem(key) || "{}");
+                    } catch {
+                        return {};
                     }
-                } catch {
-                    // swallow - the default already covers us
+                };
+
+                // the legacy key is still read so a reader who has not yet been
+                // migrated by the app does not get a flash of the wrong theme
+                const saved = read("maw-photos|v2|app").theme ?? read("maw-photos|app").theme;
+
+                let theme;
+
+                if (saved === "light" || saved === "dark") {
+                    theme = saved;
+                } else {
+                    /*
+                       Anything else - never chosen, "system", or the legacy
+                       "dusk" - follows the operating system, which is what the
+                       theme-color meta tags above already do.
+                    */
+                    theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "dark"
+                        : "light";
                 }
 
                 document.documentElement.setAttribute("data-theme", theme);

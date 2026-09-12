@@ -1,5 +1,22 @@
 const PREFIX = `maw-photos`;
 
+/*
+   The settings the application keeps today. Four stores, because there are four
+   questions a preference can answer: what the app looks like, how a listing
+   presents its items, how an item is looked at, and where in an area you were.
+
+   The sixteen keys below these are what it used to keep - one per view, per
+   area - which is why the same preference could be set in one listing and not
+   follow you to the next. They are still read, once, by `_migrate.ts`, and are
+   deliberately not deleted: a reader who rolls back to the previous build finds
+   their preferences intact.
+*/
+export const KEY_SETTINGS_V2_APP = `${PREFIX}|v2|app`;
+export const KEY_SETTINGS_V2_LISTING = `${PREFIX}|v2|listing`;
+export const KEY_SETTINGS_V2_MEDIA = `${PREFIX}|v2|media`;
+export const KEY_SETTINGS_V2_AREA = `${PREFIX}|v2|area`;
+export const KEY_SETTINGS_V2_MIGRATED = `${PREFIX}|v2|migrated`;
+
 export const KEY_SETTINGS_APP = `${PREFIX}|app`;
 
 export const KEY_SETTINGS_CATEGORY_PAGE = `${PREFIX}|categorypage`;

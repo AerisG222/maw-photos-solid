@@ -1,9 +1,16 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_SEARCH_VIEW_GRID, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface SearchGridViewSettingsState {
     readonly margin: MarginIdType;
@@ -14,16 +21,6 @@ export interface SearchGridViewSettingsState {
     readonly showFavoritesBadge: boolean;
     readonly showTypesBadge: boolean;
 }
-
-export const defaultSearchGridViewSettings: SearchGridViewSettingsState = {
-    margin: defaultMargin,
-    showTitles: true,
-    showYears: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true,
-    showFavoritesBadge: false,
-    showTypesBadge: false
-};
 
 export type SearchGridViewSettingsContextValue = [
     state: SearchGridViewSettingsState,
@@ -38,62 +35,44 @@ export type SearchGridViewSettingsContextValue = [
     }
 ];
 
-const SearchGridViewSettingsContext = createContext<SearchGridViewSettingsContextValue>();
+export const useSearchGridViewSettingsContext = (): SearchGridViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const SearchGridSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
-    const setShowYears = (showYears: boolean) => updateState({ showYears });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
-
-    const updateState = (update: Partial<SearchGridViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: SearchGridViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get showTitles() {
+            return listing.showLabels;
+        },
+        get showYears() {
+            return listing.showLabels;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get showFavoritesBadge() {
+            return listing.showBadges;
+        },
+        get showTypesBadge() {
+            return listing.showBadges;
+        }
     };
 
-    return (
-        <SearchGridViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setMargin,
-                    setShowTitles,
-                    setShowYears,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setShowFavoritesBadge,
-                    setShowTypesBadge
-                }
-            ]}
-        >
-            {props.children}
-        </SearchGridViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setShowTitles: show => listingActions.setShowLabels(show),
+            setShowYears: show => listingActions.setShowLabels(show),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setShowFavoritesBadge: show => listingActions.setShowBadges(show),
+            setShowTypesBadge: show => listingActions.setShowBadges(show)
+        }
+    ];
 };
-
-export const useSearchGridViewSettingsContext = () => {
-    const ctx = useContext(SearchGridViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("SearchGridViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultSearchGridViewSettings,
-        ...loadJson(KEY_SETTINGS_SEARCH_VIEW_GRID, defaultSearchGridViewSettings)
-    };
-}
-
-function saveState(state: SearchGridViewSettingsState) {
-    saveJson(KEY_SETTINGS_SEARCH_VIEW_GRID, state);
-}

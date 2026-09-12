@@ -1,10 +1,17 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultPersonSort, PersonSortIdType } from "../../_models/PersonSort";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_PEOPLE_VIEW_GRID, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getGridThumbnailSize } from "../../_models/Density";
+import { PersonSortIdType } from "../../_models/PersonSort";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface PeopleGridViewSettingsState {
     readonly margin: MarginIdType;
@@ -14,15 +21,6 @@ export interface PeopleGridViewSettingsState {
     readonly dimThumbnails: boolean;
     readonly sortBy: PersonSortIdType;
 }
-
-export const defaultPeopleGridViewSettings: PeopleGridViewSettingsState = {
-    margin: defaultMargin,
-    showNames: true,
-    showMediaCounts: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true,
-    sortBy: defaultPersonSort
-};
 
 export type PeopleGridViewSettingsContextValue = [
     state: PeopleGridViewSettingsState,
@@ -36,59 +34,40 @@ export type PeopleGridViewSettingsContextValue = [
     }
 ];
 
-const PeopleGridViewSettingsContext = createContext<PeopleGridViewSettingsContextValue>();
+export const usePeopleGridViewSettingsContext = (): PeopleGridViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const PeopleGridSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setShowNames = (showNames: boolean) => updateState({ showNames });
-    const setShowMediaCounts = (showMediaCounts: boolean) => updateState({ showMediaCounts });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setSortBy = (sortBy: PersonSortIdType) => updateState({ sortBy });
-
-    const updateState = (update: Partial<PeopleGridViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: PeopleGridViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get showNames() {
+            return listing.showLabels;
+        },
+        get showMediaCounts() {
+            return listing.showLabels;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get sortBy() {
+            return listing.peopleSort;
+        }
     };
 
-    return (
-        <PeopleGridViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setMargin,
-                    setShowNames,
-                    setShowMediaCounts,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setSortBy
-                }
-            ]}
-        >
-            {props.children}
-        </PeopleGridViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setShowNames: show => listingActions.setShowLabels(show),
+            setShowMediaCounts: show => listingActions.setShowLabels(show),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setSortBy: sort => listingActions.setPeopleSort(sort)
+        }
+    ];
 };
-
-export const usePeopleGridViewSettingsContext = () => {
-    const ctx = useContext(PeopleGridViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("PeopleGridViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultPeopleGridViewSettings,
-        ...loadJson(KEY_SETTINGS_PEOPLE_VIEW_GRID, defaultPeopleGridViewSettings)
-    };
-}
-
-function saveState(state: PeopleGridViewSettingsState) {
-    saveJson(KEY_SETTINGS_PEOPLE_VIEW_GRID, state);
-}

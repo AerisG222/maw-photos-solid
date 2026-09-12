@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 
 import { useSearchGridViewSettingsContext } from "../../_contexts/settings/SearchGridViewSettingsContext";
 import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/ThumbnailSize";
-import { getNextMarginSize } from "../../_models/Margin";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
@@ -13,7 +12,6 @@ const GridToolbar: Component = () => {
             setShowTitles,
             setShowYears,
             setThumbnailSize,
-            setMargin,
             setDimThumbnails,
             setShowFavoritesBadge,
             setShowTypesBadge
@@ -44,10 +42,6 @@ const GridToolbar: Component = () => {
         if (!settings.showTitles && !settings.showYears) {
             setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
         }
-    };
-
-    const onToggleMargins = () => {
-        setMargin(getNextMarginSize(settings.margin).id);
     };
 
     const onToggleDimThumbnails = () => {
@@ -81,19 +75,12 @@ const GridToolbar: Component = () => {
                 active={settings.showTitles}
             />
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={onToggleThumbnailSize}
                 disabled={settings.showTitles || settings.showYears}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-format-indent-increase]"
-                name="Margins"
-                tooltip="Toggle Category Margins"
-                shortcutKeys={["m"]}
-                clickHandler={onToggleMargins}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

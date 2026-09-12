@@ -1,21 +1,22 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_SEARCH_VIEW_LIST, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getListThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface SearchListViewSettingsState {
     readonly margin: MarginIdType;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
 }
-
-export const defaultSearchListViewSettings: SearchListViewSettingsState = {
-    margin: defaultMargin,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true
-};
 
 export type SearchListViewSettingsContextValue = [
     state: SearchListViewSettingsState,
@@ -26,46 +27,28 @@ export type SearchListViewSettingsContextValue = [
     }
 ];
 
-const SearchListViewSettingsContext = createContext<SearchListViewSettingsContextValue>();
+export const useSearchListViewSettingsContext = (): SearchListViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const SearchListSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-
-    const updateState = (update: Partial<SearchListViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: SearchListViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get thumbnailSize() {
+            return getListThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        }
     };
 
-    return (
-        <SearchListViewSettingsContext.Provider
-            value={[state, { setMargin, setThumbnailSize, setDimThumbnails }]}
-        >
-            {props.children}
-        </SearchListViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim)
+        }
+    ];
 };
-
-export const useSearchListViewSettingsContext = () => {
-    const ctx = useContext(SearchListViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("SearchListViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultSearchListViewSettings,
-        ...loadJson(KEY_SETTINGS_SEARCH_VIEW_LIST, defaultSearchListViewSettings)
-    };
-}
-
-function saveState(state: SearchListViewSettingsState) {
-    saveJson(KEY_SETTINGS_SEARCH_VIEW_LIST, state);
-}

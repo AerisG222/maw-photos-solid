@@ -1,76 +1,21 @@
-import { Component, batch } from "solid-js";
+import { Component } from "solid-js";
 
 import { useSearchPageSettingsContext } from "../_contexts/settings/SearchPageSettingsContext";
-import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
-import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
-import {
-    ThumbnailSizeDefault,
-    ThumbnailSizeIdType,
-    allThumbnailSizes
-} from "../_models/ThumbnailSize";
-import { allMargins } from "../_models/Margin";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import RadioGroup from "../_components/input/RadioGroup";
 import Toolbar from "./components/Toolbar";
-import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
+/*
+   Only what is particular to this area - see the note in Categories. Search
+   results are categories, and how a listing of them looks is answered once,
+   under Browsing.
+*/
 const ViewSearch: Component = () => {
     const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
-    const [
-        listSettings,
-        {
-            setMargin: setListMargin,
-            setThumbnailSize: setListThumbnailSize,
-            setDimThumbnails: setListDimThumbnails
-        }
-    ] = useSearchListViewSettingsContext();
-    const [
-        gridSettings,
-        {
-            setShowTitles: setGridShowTitles,
-            setShowYears: setGridShowYears,
-            setMargin: setGridMargin,
-            setThumbnailSize: setGridThumbnailSize,
-            setDimThumbnails: setGridDimThumbnails,
-            setShowFavoritesBadge: setGridShowFavoritesBadge,
-            setShowTypesBadge: setGridShowTypesBadge
-        }
-    ] = useSearchGridViewSettingsContext();
-
-    const gridSetShowTitles = (doShow: boolean) => {
-        batch(() => {
-            setGridShowTitles(doShow);
-
-            if (doShow) {
-                setGridThumbnailSize(ThumbnailSizeDefault);
-            }
-        });
-    };
-
-    const gridSetShowYears = (doShow: boolean) => {
-        batch(() => {
-            setGridShowYears(doShow);
-
-            if (doShow) {
-                setGridThumbnailSize(ThumbnailSizeDefault);
-            }
-        });
-    };
-
-    const gridSetThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
-        batch(() => {
-            setGridThumbnailSize(thumbnailSize);
-
-            if (thumbnailSize !== ThumbnailSizeDefault) {
-                setGridShowTitles(false);
-                setGridShowYears(false);
-            }
-        });
-    };
 
     return (
         <Layout toolbar={<Toolbar />} title="Search">
@@ -78,80 +23,10 @@ const ViewSearch: Component = () => {
                 <Panel title="Search Page">
                     <RadioGroup
                         title="View Mode"
-                        groupName="pageViewMode"
                         itemArray={allCategoryViewModes}
+                        groupName="pageView"
                         selectedValue={pageSettings.viewMode}
                         onChange={setViewMode}
-                    />
-                </Panel>
-
-                <Panel title="Grid View">
-                    <Toggle
-                        title="Show Category Titles"
-                        name="gridShowTitles"
-                        isSelected={gridSettings.showTitles}
-                        onChange={gridSetShowTitles}
-                    />
-                    <Toggle
-                        title="Show Category Years"
-                        name="gridShowYears"
-                        isSelected={gridSettings.showYears}
-                        onChange={gridSetShowYears}
-                    />
-                    <RadioGroup
-                        title="Margins"
-                        groupName="gridMargin"
-                        itemArray={allMargins}
-                        selectedValue={gridSettings.margin}
-                        onChange={setGridMargin}
-                    />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="gridThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={gridSettings.thumbnailSize}
-                        onChange={gridSetThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="gridDimThumbnails"
-                        isSelected={gridSettings.dimThumbnails}
-                        onChange={setGridDimThumbnails}
-                    />
-                    <Toggle
-                        title="Show Favorite Badges"
-                        name="gridShowFavoriteBadges"
-                        isSelected={gridSettings.showFavoritesBadge}
-                        onChange={setGridShowFavoritesBadge}
-                    />
-                    <Toggle
-                        title="Show Media Type Badges"
-                        name="gridShowTypeBadges"
-                        isSelected={gridSettings.showTypesBadge}
-                        onChange={setGridShowTypesBadge}
-                    />
-                </Panel>
-
-                <Panel title="List View">
-                    <RadioGroup
-                        title="Margins"
-                        groupName="listMargin"
-                        itemArray={allMargins}
-                        selectedValue={listSettings.margin}
-                        onChange={setListMargin}
-                    />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="listThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={listSettings.thumbnailSize}
-                        onChange={setListThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="listDimThumbnails"
-                        isSelected={listSettings.dimThumbnails}
-                        onChange={setListDimThumbnails}
                     />
                 </Panel>
             </PanelContainer>

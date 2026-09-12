@@ -25,24 +25,24 @@ const PrimaryNav: Component = () => {
             class="flex md:flex-col border-b md:border-r border-base-content/30
                 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
         >
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={categories} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={people} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={places} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={search} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={randomMediaRoutes} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={stats} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={categories} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={people} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={places} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={search} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={randomMediaRoutes} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={stats} />
 
             <span class="grow" />
 
             <Show when={authContext.isLoggedIn}>
-                <UserInfo showTitle={!state.isPrimaryNavCollapsed} />
+                <UserInfo showTitle={state.navExpanded} />
 
                 <div class="divider my-0 h-auto" />
             </Show>
 
-            <ThemeSelector showTitle={!state.isPrimaryNavCollapsed} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={about} />
-            <PrimaryNavLink showTitle={!state.isPrimaryNavCollapsed} route={settings} />
+            <ThemeSelector showTitle={state.navExpanded} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={about} />
+            <PrimaryNavLink showTitle={state.navExpanded} route={settings} />
 
             <div class="divider my-0 h-auto" />
 

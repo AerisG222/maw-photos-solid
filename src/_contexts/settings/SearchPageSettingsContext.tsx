@@ -1,16 +1,18 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { CategoryViewModeIdType, defaultCategoryViewMode } from "../../_models/CategoryViewMode";
-import { KEY_SETTINGS_SEARCH_PAGE, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { CategoryViewModeIdType } from "../../_models/CategoryViewMode";
+import { useAreaSettingsContext } from "./AreaSettingsContext";
 
 export interface SearchPageSettingsState {
     readonly viewMode: CategoryViewModeIdType;
 }
-
-export const defaultSearchPageSettings: SearchPageSettingsState = {
-    viewMode: defaultCategoryViewMode
-};
 
 export type SearchPageSettingsContextValue = [
     state: SearchPageSettingsState,
@@ -19,40 +21,20 @@ export type SearchPageSettingsContextValue = [
     }
 ];
 
-const SearchPageSettingsContext = createContext<SearchPageSettingsContextValue>();
+export const useSearchPageSettingsContext = (): SearchPageSettingsContextValue => {
+    const [area, areaActions] = useAreaSettingsContext();
 
-export const SearchPageSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setViewMode = (viewMode: CategoryViewModeIdType) => {
-        setState({ viewMode });
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: SearchPageSettingsState = {
+        get viewMode() {
+            return area.searchView;
+        }
     };
 
-    return (
-        <SearchPageSettingsContext.Provider value={[state, { setViewMode }]}>
-            {props.children}
-        </SearchPageSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setViewMode: mode => areaActions.setSearchView(mode)
+        }
+    ];
 };
-
-export const useSearchPageSettingsContext = () => {
-    const ctx = useContext(SearchPageSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("SearchPageSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultSearchPageSettings,
-        ...loadJson(KEY_SETTINGS_SEARCH_PAGE, defaultSearchPageSettings)
-    };
-}
-
-function saveState(state: SearchPageSettingsState) {
-    saveJson(KEY_SETTINGS_SEARCH_PAGE, state);
-}

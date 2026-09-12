@@ -1,21 +1,22 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultListThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_CATEGORY_VIEW_LIST, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getListThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface CategoryListViewSettingsState {
     readonly margin: MarginIdType;
     readonly thumbnailSize: ThumbnailSizeIdType;
     readonly dimThumbnails: boolean;
 }
-
-export const defaultCategoryListViewSettings: CategoryListViewSettingsState = {
-    margin: defaultMargin,
-    thumbnailSize: defaultListThumbnailSize,
-    dimThumbnails: true
-};
 
 export type CategoryListViewSettingsContextValue = [
     state: CategoryListViewSettingsState,
@@ -26,46 +27,28 @@ export type CategoryListViewSettingsContextValue = [
     }
 ];
 
-const CategoryListViewSettingsContext = createContext<CategoryListViewSettingsContextValue>();
+export const useCategoryListViewSettingsContext = (): CategoryListViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const CategoryListSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-
-    const updateState = (update: Partial<CategoryListViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: CategoryListViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get thumbnailSize() {
+            return getListThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        }
     };
 
-    return (
-        <CategoryListViewSettingsContext.Provider
-            value={[state, { setMargin, setThumbnailSize, setDimThumbnails }]}
-        >
-            {props.children}
-        </CategoryListViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim)
+        }
+    ];
 };
-
-export const useCategoryListViewSettingsContext = () => {
-    const ctx = useContext(CategoryListViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("CategoryListViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultCategoryListViewSettings,
-        ...loadJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, defaultCategoryListViewSettings)
-    };
-}
-
-function saveState(state: CategoryListViewSettingsState) {
-    saveJson(KEY_SETTINGS_CATEGORY_VIEW_LIST, state);
-}

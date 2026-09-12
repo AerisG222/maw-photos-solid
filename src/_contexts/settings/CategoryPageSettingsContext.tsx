@@ -1,16 +1,18 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { CategoryViewModeIdType, defaultCategoryViewMode } from "../../_models/CategoryViewMode";
-import { KEY_SETTINGS_CATEGORY_PAGE, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { CategoryViewModeIdType } from "../../_models/CategoryViewMode";
+import { useAreaSettingsContext } from "./AreaSettingsContext";
 
 export interface CategoryPageSettingsState {
     readonly viewMode: CategoryViewModeIdType;
 }
-
-export const defaultCategoryPageSettings: CategoryPageSettingsState = {
-    viewMode: defaultCategoryViewMode
-};
 
 export type CategoryPageSettingsContextValue = [
     state: CategoryPageSettingsState,
@@ -19,40 +21,20 @@ export type CategoryPageSettingsContextValue = [
     }
 ];
 
-const CategoryPageSettingsContext = createContext<CategoryPageSettingsContextValue>();
+export const useCategoryPageSettingsContext = (): CategoryPageSettingsContextValue => {
+    const [area, areaActions] = useAreaSettingsContext();
 
-export const CategoryPageSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setViewMode = (viewMode: CategoryViewModeIdType) => {
-        setState({ viewMode });
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: CategoryPageSettingsState = {
+        get viewMode() {
+            return area.categoriesView;
+        }
     };
 
-    return (
-        <CategoryPageSettingsContext.Provider value={[state, { setViewMode }]}>
-            {props.children}
-        </CategoryPageSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setViewMode: mode => areaActions.setCategoriesView(mode)
+        }
+    ];
 };
-
-export const useCategoryPageSettingsContext = () => {
-    const ctx = useContext(CategoryPageSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("CategoryPageSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultCategoryPageSettings,
-        ...loadJson(KEY_SETTINGS_CATEGORY_PAGE, defaultCategoryPageSettings)
-    };
-}
-
-function saveState(state: CategoryPageSettingsState) {
-    saveJson(KEY_SETTINGS_CATEGORY_PAGE, state);
-}

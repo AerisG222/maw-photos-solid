@@ -1,9 +1,26 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMapType, MapTypeIdType } from "../../_models/MapType";
-import { KEY_SETTINGS_MEDIA_INFO_PANEL, loadJson, saveJson } from "./_storage";
-import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
+   The panel's eight independent `show*` booleans are one ordered list of card
+   ids now, which is what lets a reader's choice of cards travel between views
+   instead of belonging to the detail view alone. The booleans below are that
+   list, read one card at a time, for the callers that still expect them.
+*/
+
+import {
+    InspectorCardCategoryTeaser,
+    InspectorCardComments,
+    InspectorCardEffects,
+    InspectorCardExif,
+    InspectorCardHistogram,
+    InspectorCardIdType,
+    InspectorCardMetadata,
+    InspectorCardMinimap,
+    InspectorCardPlaceCovers
+} from "../../_models/InspectorCard";
+import { MapTypeIdType } from "../../_models/MapType";
+import { MapZoomLevelIdType } from "../../_models/MapZoomLevel";
+import { useMediaSettingsContext } from "./MediaSettingsContext";
 
 export interface MediaInfoPanelSettingsState {
     readonly expandInfoPanel: boolean;
@@ -19,102 +36,94 @@ export interface MediaInfoPanelSettingsState {
     readonly minimapMapType: MapTypeIdType;
 }
 
-export const defaultMediaInfoPanelSettings: MediaInfoPanelSettingsState = {
-    expandInfoPanel: false,
-    showCategoryTeaserChooser: false,
-    showPlaceCovers: false,
-    showComments: true,
-    showExif: false,
-    showEffects: false,
-    showHistogram: false,
-    showMetadataEditor: false,
-    showMinimap: false,
-    minimapMapType: defaultMapType,
-    minimapZoom: defaultMapZoomLevel
-};
-
 export type MediaInfoPanelSettingsContextValue = [
     state: MediaInfoPanelSettingsState,
     actions: {
         setExpandInfoPanel: (expandInfoPanel: boolean) => void;
-        setShowCategoryTeaserChooser: (showCategoryTeaserChooser: boolean) => void;
-        setShowPlaceCovers: (showPlaceCovers: boolean) => void;
-        setShowComments: (showComments: boolean) => void;
-        setShowExif: (showExif: boolean) => void;
-        setShowEffects: (showEffects: boolean) => void;
-        setShowMetadataEditor: (showMetadataEditor: boolean) => void;
-        setShowHistogram: (showHistogram: boolean) => void;
-        setShowMinimap: (showMinimap: boolean) => void;
-        setMinimapZoom: (minimapZoom: MapZoomLevelIdType) => void;
-        setMinimapMapType: (minimapMapType: MapTypeIdType) => void;
+        setShowCategoryTeaserChooser: (show: boolean) => void;
+        setShowPlaceCovers: (show: boolean) => void;
+        setShowComments: (show: boolean) => void;
+        setShowExif: (show: boolean) => void;
+        setShowEffects: (show: boolean) => void;
+        setShowMetadataEditor: (show: boolean) => void;
+        setShowHistogram: (show: boolean) => void;
+        setShowMinimap: (show: boolean) => void;
+        setMinimapZoom: (zoom: MapZoomLevelIdType) => void;
+        setMinimapMapType: (mapType: MapTypeIdType) => void;
     }
 ];
 
-const MediaInfoPanelSettingsContext = createContext<MediaInfoPanelSettingsContextValue>();
+export const useMediaInfoPanelSettingsContext = (): MediaInfoPanelSettingsContextValue => {
+    const [media, mediaActions] = useMediaSettingsContext();
 
-export const MediaInfoPanelSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
+    const shows = (card: InspectorCardIdType) => media.inspectorCards.includes(card);
 
-    const setExpandInfoPanel = (expandInfoPanel: boolean) => updateState({ expandInfoPanel });
-    const setShowCategoryTeaserChooser = (showCategoryTeaserChooser: boolean) =>
-        updateState({ showCategoryTeaserChooser });
-    const setShowPlaceCovers = (showPlaceCovers: boolean) => updateState({ showPlaceCovers });
-    const setShowComments = (showComments: boolean) => updateState({ showComments });
-    const setShowExif = (showExif: boolean) => updateState({ showExif });
-    const setShowEffects = (showEffects: boolean) => updateState({ showEffects });
-    const setShowMetadataEditor = (showMetadataEditor: boolean) =>
-        updateState({ showMetadataEditor });
-    const setShowHistogram = (showHistogram: boolean) => updateState({ showHistogram });
-    const setShowMinimap = (showMinimap: boolean) => updateState({ showMinimap });
-    const setMinimapZoom = (minimapZoom: MapZoomLevelIdType) => updateState({ minimapZoom });
-    const setMinimapMapType = (minimapMapType: MapTypeIdType) => updateState({ minimapMapType });
-
-    const updateState = (update: Partial<MediaInfoPanelSettingsState>) => {
-        setState(update);
-        saveState(state);
+    /*
+       The old setters took a boolean; the store takes a toggle. Only act when
+       the two disagree, so `setShowExif(true)` on an already-open card is the
+       no-op its callers assume rather than a close.
+    */
+    const set = (card: InspectorCardIdType, show: boolean) => {
+        if (shows(card) !== show) {
+            mediaActions.toggleInspectorCard(card);
+        }
     };
 
-    return (
-        <MediaInfoPanelSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setExpandInfoPanel,
-                    setShowCategoryTeaserChooser,
-                    setShowPlaceCovers,
-                    setShowComments,
-                    setShowExif,
-                    setShowEffects,
-                    setShowMetadataEditor,
-                    setShowHistogram,
-                    setShowMinimap,
-                    setMinimapZoom,
-                    setMinimapMapType
-                }
-            ]}
-        >
-            {props.children}
-        </MediaInfoPanelSettingsContext.Provider>
-    );
-};
-
-export const useMediaInfoPanelSettingsContext = () => {
-    const ctx = useContext(MediaInfoPanelSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("MediaInfoPanelSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultMediaInfoPanelSettings,
-        ...loadJson(KEY_SETTINGS_MEDIA_INFO_PANEL, defaultMediaInfoPanelSettings)
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: MediaInfoPanelSettingsState = {
+        get expandInfoPanel() {
+            return media.inspectorOpen;
+        },
+        get showCategoryTeaserChooser() {
+            return shows(InspectorCardCategoryTeaser);
+        },
+        get showPlaceCovers() {
+            return shows(InspectorCardPlaceCovers);
+        },
+        get showComments() {
+            return shows(InspectorCardComments);
+        },
+        get showExif() {
+            return shows(InspectorCardExif);
+        },
+        get showEffects() {
+            return shows(InspectorCardEffects);
+        },
+        get showMetadataEditor() {
+            return shows(InspectorCardMetadata);
+        },
+        get showHistogram() {
+            return shows(InspectorCardHistogram);
+        },
+        get showMinimap() {
+            return shows(InspectorCardMinimap);
+        },
+        /*
+           The panel used to keep its own copy of both of these, so the minimap
+           and the map view could disagree about the same map. There is one now.
+        */
+        get minimapZoom() {
+            return media.mapZoom;
+        },
+        get minimapMapType() {
+            return media.mapType;
+        }
     };
-}
 
-function saveState(state: MediaInfoPanelSettingsState) {
-    saveJson(KEY_SETTINGS_MEDIA_INFO_PANEL, state);
-}
+    return [
+        state,
+        {
+            setExpandInfoPanel: open => mediaActions.setInspectorOpen(open),
+            setShowCategoryTeaserChooser: show => set(InspectorCardCategoryTeaser, show),
+            setShowPlaceCovers: show => set(InspectorCardPlaceCovers, show),
+            setShowComments: show => set(InspectorCardComments, show),
+            setShowExif: show => set(InspectorCardExif, show),
+            setShowEffects: show => set(InspectorCardEffects, show),
+            setShowMetadataEditor: show => set(InspectorCardMetadata, show),
+            setShowHistogram: show => set(InspectorCardHistogram, show),
+            setShowMinimap: show => set(InspectorCardMinimap, show),
+            setMinimapZoom: zoom => mediaActions.setMapZoom(zoom),
+            setMinimapMapType: mapType => mediaActions.setMapType(mapType)
+        }
+    ];
+};

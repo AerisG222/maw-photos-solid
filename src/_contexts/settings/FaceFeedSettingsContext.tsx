@@ -1,32 +1,19 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
-
-import { KEY_SETTINGS_FACE_FEED, loadJson, saveJson } from "./_storage";
-
 /*
-   How a person's or clan's media is shaped when it is opened.
+   An adapter, not a store.
 
-   Unlike the other view settings these are remembered *defaults* rather than the
-   live state. A feed reads its filter from the url - that is what lets a link
-   reproduce an ordering, and what keeps paging stable across a shuffle - so
-   these say what the url should be when it does not say anything itself.
-
-   The seed is deliberately not stored. It identifies one shuffle, and a
-   remembered one would hand back the same "random" order every time; only the
-   preference to shuffle at all is worth keeping.
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
 */
+
+import { useAreaSettingsContext } from "./AreaSettingsContext";
+
 export interface FaceFeedSettingsState {
     readonly favoritesOnly: boolean;
     readonly shuffle: boolean;
-    // browse the categories somebody turns up in rather than the media itself
     readonly showCategories: boolean;
 }
-
-export const defaultFaceFeedSettings: FaceFeedSettingsState = {
-    favoritesOnly: false,
-    shuffle: false,
-    showCategories: false
-};
 
 export type FaceFeedSettingsContextValue = [
     state: FaceFeedSettingsState,
@@ -37,46 +24,28 @@ export type FaceFeedSettingsContextValue = [
     }
 ];
 
-const FaceFeedSettingsContext = createContext<FaceFeedSettingsContextValue>();
+export const useFaceFeedSettingsContext = (): FaceFeedSettingsContextValue => {
+    const [area, areaActions] = useAreaSettingsContext();
 
-export const FaceFeedSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setFavoritesOnly = (favoritesOnly: boolean) => updateState({ favoritesOnly });
-    const setShuffle = (shuffle: boolean) => updateState({ shuffle });
-    const setShowCategories = (showCategories: boolean) => updateState({ showCategories });
-
-    const updateState = (update: Partial<FaceFeedSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: FaceFeedSettingsState = {
+        get favoritesOnly() {
+            return area.feedFavoritesOnly;
+        },
+        get shuffle() {
+            return area.feedShuffle;
+        },
+        get showCategories() {
+            return area.feedListing === "categories";
+        }
     };
 
-    return (
-        <FaceFeedSettingsContext.Provider
-            value={[state, { setFavoritesOnly, setShuffle, setShowCategories }]}
-        >
-            {props.children}
-        </FaceFeedSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setFavoritesOnly: on => areaActions.setFeedFavoritesOnly(on),
+            setShuffle: on => areaActions.setFeedShuffle(on),
+            setShowCategories: show => areaActions.setFeedListing(show ? "categories" : "media")
+        }
+    ];
 };
-
-export const useFaceFeedSettingsContext = () => {
-    const ctx = useContext(FaceFeedSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("FaceFeedSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultFaceFeedSettings,
-        ...loadJson(KEY_SETTINGS_FACE_FEED, defaultFaceFeedSettings)
-    };
-}
-
-function saveState(state: FaceFeedSettingsState) {
-    saveJson(KEY_SETTINGS_FACE_FEED, state);
-}

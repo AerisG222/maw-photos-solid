@@ -1,19 +1,20 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMapType, MapTypeIdType } from "../../_models/MapType";
-import { KEY_SETTINGS_MEDIA_VIEW_MAP, loadJson, saveJson } from "./_storage";
-import { defaultMapZoomLevel, MapZoomLevelIdType } from "../../_models/MapZoomLevel";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MapTypeIdType } from "../../_models/MapType";
+import { MapZoomLevelIdType } from "../../_models/MapZoomLevel";
+import { useMediaSettingsContext } from "./MediaSettingsContext";
 
 export interface MediaMapViewSettingsState {
     readonly mapType: MapTypeIdType;
     readonly zoom: MapZoomLevelIdType;
 }
-
-export const defaultMediaMapViewSettings: MediaMapViewSettingsState = {
-    mapType: defaultMapType,
-    zoom: defaultMapZoomLevel
-};
 
 export type MediaMapViewSettingsContextValue = [
     state: MediaMapViewSettingsState,
@@ -23,43 +24,24 @@ export type MediaMapViewSettingsContextValue = [
     }
 ];
 
-const MediaMapViewSettingsContext = createContext<MediaMapViewSettingsContextValue>();
+export const useMediaMapViewSettingsContext = (): MediaMapViewSettingsContextValue => {
+    const [media, mediaActions] = useMediaSettingsContext();
 
-export const MediaMapSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMapType = (mapType: MapTypeIdType) => updateState({ mapType });
-    const setZoom = (zoom: MapZoomLevelIdType) => updateState({ zoom: Math.round(zoom) });
-
-    const updateState = (update: Partial<MediaMapViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: MediaMapViewSettingsState = {
+        get mapType() {
+            return media.mapType;
+        },
+        get zoom() {
+            return media.mapZoom;
+        }
     };
 
-    return (
-        <MediaMapViewSettingsContext.Provider value={[state, { setMapType, setZoom }]}>
-            {props.children}
-        </MediaMapViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMapType: type => mediaActions.setMapType(type),
+            setZoom: zoom => mediaActions.setMapZoom(zoom)
+        }
+    ];
 };
-
-export const useMediaMapViewSettingsContext = () => {
-    const ctx = useContext(MediaMapViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("MediaMapViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultMediaMapViewSettings,
-        ...loadJson(KEY_SETTINGS_MEDIA_VIEW_MAP, defaultMediaMapViewSettings)
-    };
-}
-
-function saveState(state: MediaMapViewSettingsState) {
-    saveJson(KEY_SETTINGS_MEDIA_VIEW_MAP, state);
-}

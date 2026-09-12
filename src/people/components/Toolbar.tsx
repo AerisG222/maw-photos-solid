@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 
 import { usePeopleGridViewSettingsContext } from "../../_contexts/settings/PeopleGridViewSettingsContext";
-import { getNextMarginSize } from "../../_models/Margin";
 import { getNextPersonSort, getPersonSortIcon, PersonSortName } from "../../_models/PersonSort";
 import { getNextThumbnailSize } from "../../_models/ThumbnailSize";
 
@@ -11,14 +10,7 @@ import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 const Toolbar: Component = () => {
     const [
         settings,
-        {
-            setShowNames,
-            setShowMediaCounts,
-            setThumbnailSize,
-            setMargin,
-            setDimThumbnails,
-            setSortBy
-        }
+        { setShowNames, setShowMediaCounts, setThumbnailSize, setDimThumbnails, setSortBy }
     ] = usePeopleGridViewSettingsContext();
 
     return (
@@ -49,20 +41,13 @@ const Toolbar: Component = () => {
                 active={settings.showMediaCounts}
             />
             <ToolbarButton
-                icon="icon-[ic--round-photo-size-select-large]"
-                name="Thumbnail"
-                tooltip="Toggle Thumbnail Size"
+                icon="icon-[ic--round-density-medium]"
+                name="Density"
+                tooltip="Cycle Density"
                 shortcutKeys={["s"]}
                 clickHandler={() =>
                     setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id)
                 }
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-format-indent-increase]"
-                name="Margins"
-                tooltip="Toggle Margins"
-                shortcutKeys={["m"]}
-                clickHandler={() => setMargin(getNextMarginSize(settings.margin).id)}
             />
             <ToolbarButton
                 icon="icon-[ic--round-tonality]"

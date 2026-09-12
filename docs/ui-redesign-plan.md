@@ -574,6 +574,36 @@ Converging the families also fixed a live inconsistency §6 had not called out: 
 `ic--round-photo-size-select-large` in six toolbars and `mdi--image-size-select-large` in `ToolbarDetail` — the
 same action wearing two different glyphs depending on which view you were standing in.
 
+### What step 3 changed beyond the plan (2026-09-12)
+
+**Two of §5's migration rules were wrong, and a runtime test caught it.** §5 described `showBadges` as an OR
+across the six old flags. But all six _shipped off_, so the only preference anyone could ever have expressed
+was turning them on — there is no "off" to preserve, and decision 5 puts them on for everyone. It is now not
+migrated at all; the new default applies. The mirror-image mistake was `showLabels`: titles, years, names and
+counts all shipped _on_, so the deliberate act there was switching them off, and it needs the opposite rule.
+It migrates as "off if switched off anywhere". The general principle, now stated in the code: **the
+non-default choice wins**, whichever direction that runs in.
+
+**Density's mapping is pinned so that today's defaults are unchanged.** `comfortable` resolves to exactly what
+the app shipped — the default grid size, the default list size, the default margin — so a reader who never
+touched either old control sees no difference. `compact` and `dense` tighten from there. Grid and list resolve
+the same density to different sizes, which is how one knob serves both without a list of rows suddenly
+carrying 160px thumbnails.
+
+**The size and margin buttons had become the same button.** Once both wrote to `density`, `s` and `m` did
+identical things. They are one "Density" control now (6 margin buttons removed across the toolbars), and the
+three breadcrumb toggles went with them, which is decision 3 arriving in step 3 rather than step 8.
+
+**Settings → Browsing was pulled forward from step 13.** The four settings pages each presented density,
+labels, badges and dimming for _their_ surface. Once those became one global setting each, the pages were
+showing the same control two and three times over, all bound to the same value. The global ones moved to one
+new Browsing page and the four existing pages keep only what is genuinely theirs — Categories and Search are
+down to a single control each.
+
+**`AppSettings` became a real store rather than an adapter over itself**, since it is both the legacy context
+and one of the four targets. Its consumers moved with it: `isPrimaryNavCollapsed` is now `navExpanded`, which
+reads the way the code uses it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -677,7 +707,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **0**   | **DONE 2026-09-11 — hygiene, no behaviour change.** Dropped the 5 dead `.scrollable` uses; fixed `mr[-1px]`, `border-l-base-content:30%`, `flex-items-center`; replaced 9 `text-6` with `text-2xl` (the tenth was a real `text-6xl`); renamed the two components misnamed `Select` to `Toggle` / `Checkbox`; removed the dead `horizontal` prop chain and the hardcoded `name="theme"`; renamed `isToolbarCollapsed` → `showToolbarLabels` with a legacy read; added the missing loading states to `search/Grid.tsx` and `search/List.tsx`. | 27 files                                | none                       |
 | **1**   | **DONE 2026-09-12 — visual system.** Type scale (`--text-display/title/label/body/meta`) and motion tokens in `@theme`; `head1/2/3` rebuilt on the scale; `.icon-sm`/`.icon-md` replacing the step-0 `text-2xl` stopgap; `.elev-hover`/`.elev-overlay` with the hover treatment now applying on `:focus-visible`; the app's first focus ring; body set to the body step; fonts self-hosted via `@fontsource` and the Google Fonts `<link>` + preconnects removed; `_contract.ts` + `theme.test.ts` (49 assertions).                         | 20 files, +2 deps                       | low                        |
 | **2**   | **DONE 2026-09-12 — icon consolidation.** 52 references rewritten across 34 files; the app now draws from `ic--round-*` only, down from six vocabularies. `@iconify-json/mdi` removed. An eslint `no-restricted-syntax` rule (covering both string literals and template elements, so `.ts` route definitions are caught too) rejects a seventh. All 82 unique icons verified present in the production CSS.                                                                                                                                | 34 files, −1 dep                        | low                        |
-| **3**   | **Preference registry + four contexts + migration.** New stores; the fifteen old contexts become thin adapters reading/writing the new store, so **no consumer changes yet**. Migration tests.                                                                                                                                                                                                                                                                                                                                              | `_contexts/settings/*`                  | **highest — do it alone**  |
+| **3**   | **DONE 2026-09-12 — the four stores.** 16 settings keys become 4; 15 of the old contexts are now adapters that own nothing, so no screen had to change. `_migrate.ts` carries the legacy keys across without deleting them. `AllSettingsProvider` goes from 18 providers to 4. Theme gains `system` (decision 13), including the pre-mount script. 41 tests: migration fixtures plus a runtime pass over the adapters.                                                                                                                      | 40 files                                | done                       |
 | **4**   | **States.** `AsyncBoundary`, `EmptyState`, `ErrorState`, `PermissionState`, `SkeletonChart`. Convert Categories first, then the other ~14 sites.                                                                                                                                                                                                                                                                                                                                                                                            | ~18 files                               | low                        |
 | **5**   | **Dialogs — and Kobalte lands here.** Add `@kobalte/core`; build `Dialog` / `ConfirmDialog` on its `Dialog` + `AlertDialog` rather than hand-rolling focus traps. Convert the six. Delete `ClanDeleteDialog`. Later steps adopt the other primitives per §11.                                                                                                                                                                                                                                                                               | 6 files + 1 dependency                  | low                        |
 | **6**   | **`NavGroup` + digit shortcuts.** Convert the seven nav rows. Ships the navigation half of the shortcut map.                                                                                                                                                                                                                                                                                                                                                                                                                                | 7 files                                 | low                        |

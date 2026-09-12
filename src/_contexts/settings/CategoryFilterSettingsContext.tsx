@@ -1,17 +1,18 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { KEY_SETTINGS_CATEGORY_FILTER, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { useAreaSettingsContext } from "./AreaSettingsContext";
 
 export interface CategoryFilterSettingsState {
     readonly yearFilter: number | "all";
     readonly missingGpsFilter: boolean;
 }
-
-export const defaultCategoryFilterSettings: CategoryFilterSettingsState = {
-    yearFilter: "all",
-    missingGpsFilter: false
-};
 
 export type CategoryFilterSettingsContextValue = [
     state: CategoryFilterSettingsState,
@@ -21,45 +22,24 @@ export type CategoryFilterSettingsContextValue = [
     }
 ];
 
-const CategoryFilterSettingsContext = createContext<CategoryFilterSettingsContextValue>();
+export const useCategoryFilterSettingsContext = (): CategoryFilterSettingsContextValue => {
+    const [area, areaActions] = useAreaSettingsContext();
 
-export const CategoryFilterSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setYearFilter = (yearFilter: number | "all") => updateState({ yearFilter });
-    const setMissingGpsFilter = (missingGpsFilter: boolean) => updateState({ missingGpsFilter });
-
-    const updateState = (update: Partial<CategoryFilterSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: CategoryFilterSettingsState = {
+        get yearFilter() {
+            return area.categoryYearFilter;
+        },
+        get missingGpsFilter() {
+            return area.categoryMissingGpsFilter;
+        }
     };
 
-    return (
-        <CategoryFilterSettingsContext.Provider
-            value={[state, { setYearFilter, setMissingGpsFilter }]}
-        >
-            {props.children}
-        </CategoryFilterSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setYearFilter: year => areaActions.setCategoryYearFilter(year),
+            setMissingGpsFilter: on => areaActions.setCategoryMissingGpsFilter(on)
+        }
+    ];
 };
-
-export const useCategoryFilterSettingsContext = () => {
-    const ctx = useContext(CategoryFilterSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("CategoryFilterSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultCategoryFilterSettings,
-        ...loadJson(KEY_SETTINGS_CATEGORY_FILTER, defaultCategoryFilterSettings)
-    };
-}
-
-function saveState(state: CategoryFilterSettingsState) {
-    saveJson(KEY_SETTINGS_CATEGORY_FILTER, state);
-}

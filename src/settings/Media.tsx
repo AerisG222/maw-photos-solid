@@ -1,16 +1,12 @@
 import { Component } from "solid-js";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
-import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { useMediaInfoPanelSettingsContext } from "../_contexts/settings/MediaInfoPanelSettingsContext";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { allMapTypes } from "../_models/MapType";
 import { allMapZoomLevels } from "../_models/MapZoomLevel";
-import { allMargins } from "../_models/Margin";
 import { allMediaViews } from "../_models/MediaView";
-import { allThumbnailSizes } from "../_models/ThumbnailSize";
 import { allSlideshowDurations } from "../_models/SlideshowDuration";
 
 import Panel from "./components/Panel";
@@ -22,57 +18,31 @@ import Toolbar from "./components/Toolbar";
 import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
+/*
+   Looking at one photograph, rather than at a listing of them. Density, labels,
+   badges and face highlighting are the same question everywhere in the
+   application and are answered once, under Browsing.
+*/
 const ViewMedia: Component = () => {
     const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
         useMediaPageSettingsContext();
-    const [mapSettings, { setMapType: setMapMapType, setZoom: setMapZoom }] =
-        useMediaMapViewSettingsContext();
-    const [
-        detailSettings,
-        {
-            setShowBreadcrumbs: setDetailShowBreadcrumbs,
-            setShowMediaList: setDetailShowMediaList,
-            setThumbnailSize: setDetailThumbnailSize,
-            setDimThumbnails: setDetailDimThumbnails,
-            setShowFavoritesBadge: setDetailShowFavoritesBadge,
-            setHighlightFaces: setDetailHighlightFaces
-        }
-    ] = useMediaDetailViewSettingsContext();
-    const [
-        fullscreenSettings,
-        {
-            setShowFavoritesBadge: setFullscreenShowFavoritesBadge,
-            setHighlightFaces: setFullscreenHighlightFaces
-        }
-    ] = useMediaFullscreenViewSettingsContext();
-    const [
-        gridSettings,
-        {
-            setMargin: setGridMargin,
-            setShowBreadcrumbs: setGridShowBreadcrumbs,
-            setShowMainBreadcrumbs: setGridShowMainBreadcrumbs,
-            setThumbnailSize: setGridThumbnailSize,
-            setDimThumbnails: setGridDimThumbnails,
-            setShowFavoritesBadge: setGridShowFavoritesBadge,
-            setShowTypesBadge: setGridShowTypesBadge,
-            setHighlightFaces: setGridHighlightFaces
-        }
-    ] = useMediaGridViewSettingsContext();
+    const [detailSettings, { setShowMediaList }] = useMediaDetailViewSettingsContext();
     const [
         infoPanelSettings,
         {
             setExpandInfoPanel,
-            setShowCategoryTeaserChooser,
             setShowComments,
             setShowExif,
-            setShowEffects,
-            setShowMetadataEditor,
             setShowHistogram,
+            setShowEffects,
             setShowMinimap,
-            setMinimapZoom,
-            setMinimapMapType: setInfoPanelMapType
+            setShowMetadataEditor,
+            setShowCategoryTeaserChooser,
+            setShowPlaceCovers
         }
     ] = useMediaInfoPanelSettingsContext();
+    // one map preference now, shared by the map view and the inspector's minimap
+    const [mapSettings, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
@@ -80,7 +50,7 @@ const ViewMedia: Component = () => {
                 <Panel title="Media Page">
                     <RadioGroup
                         title="View"
-                        groupName="pageView"
+                        groupName="mediaView"
                         itemArray={allMediaViews}
                         selectedValue={pageSettings.view}
                         onChange={setViewMode}
@@ -91,199 +61,84 @@ const ViewMedia: Component = () => {
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
                         onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
                     />
-                </Panel>
-
-                <Panel title="Detail View">
-                    <Toggle
-                        title="Show Breadcrumbs"
-                        name="detailShowBreadcrumbs"
-                        isSelected={detailSettings.showBreadcrumbs}
-                        onChange={setDetailShowBreadcrumbs}
-                    />
                     <Toggle
                         title="Show Media List"
                         name="detailShowMediaList"
                         isSelected={detailSettings.showMediaList}
-                        onChange={setDetailShowMediaList}
+                        onChange={setShowMediaList}
                     />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="detailThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={detailSettings.thumbnailSize}
-                        onChange={setDetailThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="detailDimThumbnails"
-                        isSelected={detailSettings.dimThumbnails}
-                        onChange={setDetailDimThumbnails}
-                    />
-                    <Toggle
-                        title="Show Favorite Badges"
-                        name="detailShowFavoriteBadges"
-                        isSelected={detailSettings.showFavoritesBadge}
-                        onChange={setDetailShowFavoritesBadge}
-                    />
-                    <Toggle
-                        title="Highlight Faces"
-                        name="detailHighlightFaces"
-                        isSelected={detailSettings.highlightFaces}
-                        onChange={setDetailHighlightFaces}
-                    />
+                </Panel>
 
-                    <h3 class="head3 mt-4 text-secondary">Info Panel</h3>
-                    <div>
-                        <Checkbox
-                            title="Show Expanded Panel"
-                            name="showInfoPanel"
-                            isSelected={infoPanelSettings.expandInfoPanel}
-                            onChange={setExpandInfoPanel}
-                        />
-                        <Checkbox
-                            title="Show Comments"
-                            name="showCommentsPanel"
-                            isSelected={infoPanelSettings.showComments}
-                            onChange={setShowComments}
-                        />
-                        <Checkbox
-                            title="Show EXIF"
-                            name="showExifPanel"
-                            isSelected={infoPanelSettings.showExif}
-                            onChange={setShowExif}
-                        />
-                        <Checkbox
-                            title="Show Histogram"
-                            name="showHistogramPanel"
-                            isSelected={infoPanelSettings.showHistogram}
-                            onChange={setShowHistogram}
-                        />
-                        <Checkbox
-                            title="Show Effects"
-                            name="showEffectsPanel"
-                            isSelected={infoPanelSettings.showEffects}
-                            onChange={setShowEffects}
-                        />
-                        <Checkbox
-                            title="Show Mini-map"
-                            name="showMiniMapPanel"
-                            isSelected={infoPanelSettings.showMinimap}
-                            onChange={setShowMinimap}
-                        />
-                        <Checkbox
-                            title="Show Metadata Editor"
-                            name="showMetadataEditorPanel"
-                            isSelected={infoPanelSettings.showMetadataEditor}
-                            onChange={setShowMetadataEditor}
-                        />
-                        <Checkbox
-                            title="Show Category Teaser Chooser"
-                            name="showCategoryTeaserChooserPanel"
-                            isSelected={infoPanelSettings.showCategoryTeaserChooser}
-                            onChange={setShowCategoryTeaserChooser}
-                        />
-                    </div>
+                <Panel title="Info Panel">
+                    <Toggle
+                        title="Show Expanded Panel"
+                        name="showInfoPanel"
+                        isSelected={infoPanelSettings.expandInfoPanel}
+                        onChange={setExpandInfoPanel}
+                    />
+                    <Checkbox
+                        title="Show Comments"
+                        name="showCommentsPanel"
+                        isSelected={infoPanelSettings.showComments}
+                        onChange={setShowComments}
+                    />
+                    <Checkbox
+                        title="Show EXIF"
+                        name="showExifPanel"
+                        isSelected={infoPanelSettings.showExif}
+                        onChange={setShowExif}
+                    />
+                    <Checkbox
+                        title="Show Histogram"
+                        name="showHistogramPanel"
+                        isSelected={infoPanelSettings.showHistogram}
+                        onChange={setShowHistogram}
+                    />
+                    <Checkbox
+                        title="Show Effects"
+                        name="showEffectsPanel"
+                        isSelected={infoPanelSettings.showEffects}
+                        onChange={setShowEffects}
+                    />
+                    <Checkbox
+                        title="Show Mini-map"
+                        name="showMiniMapPanel"
+                        isSelected={infoPanelSettings.showMinimap}
+                        onChange={setShowMinimap}
+                    />
+                    <Checkbox
+                        title="Show Metadata Editor"
+                        name="showMetadataEditorPanel"
+                        isSelected={infoPanelSettings.showMetadataEditor}
+                        onChange={setShowMetadataEditor}
+                    />
+                    <Checkbox
+                        title="Show Category Teaser Chooser"
+                        name="showCategoryTeaserPanel"
+                        isSelected={infoPanelSettings.showCategoryTeaserChooser}
+                        onChange={setShowCategoryTeaserChooser}
+                    />
+                    <Checkbox
+                        title="Show Place Covers"
+                        name="showPlaceCoversPanel"
+                        isSelected={infoPanelSettings.showPlaceCovers}
+                        onChange={setShowPlaceCovers}
+                    />
+                </Panel>
 
+                <Panel title="Maps">
                     <RadioGroup
                         title="Map Type"
-                        groupName="detailMapType"
-                        itemArray={allMapTypes}
-                        selectedValue={infoPanelSettings.minimapMapType}
-                        onChange={setInfoPanelMapType}
-                    />
-                    <Select
-                        title="Map Zoom Level"
-                        itemArray={allMapZoomLevels}
-                        selectedValue={infoPanelSettings.minimapZoom}
-                        onChange={val => setMinimapZoom(parseInt(val))}
-                    />
-                </Panel>
-
-                <Panel title="Fullscreen View">
-                    <Toggle
-                        title="Show Favorite Badges"
-                        name="fullscreenShowFavoriteBadges"
-                        isSelected={fullscreenSettings.showFavoritesBadge}
-                        onChange={setFullscreenShowFavoritesBadge}
-                    />
-                    <Toggle
-                        title="Highlight Faces"
-                        name="fullscreenHighlightFaces"
-                        isSelected={fullscreenSettings.highlightFaces}
-                        onChange={setFullscreenHighlightFaces}
-                    />
-                </Panel>
-
-                <Panel title="Grid View">
-                    <Toggle
-                        title="Show Breadcrumbs"
-                        name="gridShowBreadcrumbs"
-                        isSelected={gridSettings.showBreadcrumbs}
-                        onChange={setGridShowBreadcrumbs}
-                    />
-                    {/*
-                        The grid's other breadcrumb: this one rides over the
-                        enlarged photo, where the grid's own is behind it
-                    */}
-                    <Toggle
-                        title="Show Breadcrumbs on Active Media"
-                        name="gridShowMainBreadcrumbs"
-                        isSelected={gridSettings.showMainBreadcrumbs}
-                        onChange={setGridShowMainBreadcrumbs}
-                    />
-                    <RadioGroup
-                        title="Margins"
-                        groupName="gridMargin"
-                        itemArray={allMargins}
-                        selectedValue={gridSettings.margin}
-                        onChange={setGridMargin}
-                    />
-                    <RadioGroup
-                        title="Thumbnail Size"
-                        groupName="gridThumbnails"
-                        itemArray={allThumbnailSizes}
-                        selectedValue={gridSettings.thumbnailSize}
-                        onChange={setGridThumbnailSize}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="gridDimThumbnails"
-                        isSelected={gridSettings.dimThumbnails}
-                        onChange={setGridDimThumbnails}
-                    />
-                    <Toggle
-                        title="Show Favorite Badges"
-                        name="gridShowFavoriteBadges"
-                        isSelected={gridSettings.showFavoritesBadge}
-                        onChange={setGridShowFavoritesBadge}
-                    />
-                    <Toggle
-                        title="Show Media Type Badges"
-                        name="gridShowTypeBadges"
-                        isSelected={gridSettings.showTypesBadge}
-                        onChange={setGridShowTypesBadge}
-                    />
-                    <Toggle
-                        title="Highlight Faces"
-                        name="gridHighlightFaces"
-                        isSelected={gridSettings.highlightFaces}
-                        onChange={setGridHighlightFaces}
-                    />
-                </Panel>
-
-                <Panel title="Map View">
-                    <RadioGroup
-                        title="Map Type"
-                        groupName="mapMapType"
+                        groupName="mapType"
                         itemArray={allMapTypes}
                         selectedValue={mapSettings.mapType}
-                        onChange={setMapMapType}
+                        onChange={setMapType}
                     />
                     <Select
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
                         selectedValue={mapSettings.zoom}
-                        onChange={val => setMapZoom(parseInt(val))}
+                        onChange={val => setZoom(parseInt(val))}
                     />
                 </Panel>
             </PanelContainer>

@@ -1,25 +1,38 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
+import {
+    Accessor,
+    createContext,
+    createSignal,
+    onCleanup,
+    ParentComponent,
+    useContext
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { KEY_SETTINGS_APP, loadJson, saveJson } from "./_storage";
+import {
+    DARK_SCHEME_QUERY,
+    ResolvedThemeIdType,
+    ThemeIdType,
+    getNextTheme,
+    prefersDark,
+    resolveTheme
+} from "../../_models/Theme";
+import { AppSettingsState, defaultAppSettings } from "./_state";
+import { loadMigrated } from "./_migrate";
+import { KEY_SETTINGS_V2_APP, saveJson } from "./_storage";
 
-export interface AppSettingsState {
-    readonly theme: string;
-    readonly isPrimaryNavCollapsed: boolean;
-    readonly showToolbarLabels: boolean;
-}
-
-export const defaultAppSettings: AppSettingsState = {
-    theme: "dark",
-    isPrimaryNavCollapsed: false,
-    showToolbarLabels: false
-};
+export type { AppSettingsState } from "./_state";
+export { defaultAppSettings } from "./_state";
 
 export type AppSettingsContextValue = [
     state: AppSettingsState,
     actions: {
+        // what `data-theme` should be right now - `system` resolved against the os
+        resolvedTheme: Accessor<ResolvedThemeIdType>;
+        setTheme: (theme: ThemeIdType) => void;
         toggleTheme: () => void;
-        togglePrimaryNavCollapsed: () => void;
+        setNavExpanded: (navExpanded: boolean) => void;
+        toggleNavExpanded: () => void;
+        setShowToolbarLabels: (showToolbarLabels: boolean) => void;
         toggleToolbarLabels: () => void;
     }
 ];
@@ -27,27 +40,50 @@ export type AppSettingsContextValue = [
 const AppSettingsContext = createContext<AppSettingsContextValue>();
 
 export const AppSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
+    const [state, setState] = createStore(loadMigrated(KEY_SETTINGS_V2_APP, defaultAppSettings));
 
-    const toggleTheme = () => {
-        const newTheme = state.theme === "dark" ? "light" : "dark";
-        setState({ theme: newTheme });
-        saveState(state);
+    /*
+       Tracked rather than read once: someone on `system` who changes their
+       operating system's appearance should see this follow without reloading.
+    */
+    const [systemDark, setSystemDark] = createSignal(prefersDark());
+
+    if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+        const query = window.matchMedia(DARK_SCHEME_QUERY);
+        const onChange = (evt: MediaQueryListEvent) => setSystemDark(evt.matches);
+
+        query.addEventListener("change", onChange);
+        onCleanup(() => query.removeEventListener("change", onChange));
+    }
+
+    const resolvedTheme = () => resolveTheme(state.theme, systemDark());
+
+    const updateState = (update: Partial<AppSettingsState>) => {
+        setState(update);
+        saveJson(KEY_SETTINGS_V2_APP, state);
     };
 
-    const togglePrimaryNavCollapsed = () => {
-        setState({ isPrimaryNavCollapsed: !state.isPrimaryNavCollapsed });
-        saveState(state);
-    };
-
-    const toggleToolbarLabels = () => {
-        setState({ showToolbarLabels: !state.showToolbarLabels });
-        saveState(state);
-    };
+    const setTheme = (theme: ThemeIdType) => updateState({ theme });
+    const toggleTheme = () => updateState({ theme: getNextTheme(state.theme) });
+    const setNavExpanded = (navExpanded: boolean) => updateState({ navExpanded });
+    const toggleNavExpanded = () => updateState({ navExpanded: !state.navExpanded });
+    const setShowToolbarLabels = (showToolbarLabels: boolean) => updateState({ showToolbarLabels });
+    const toggleToolbarLabels = () => updateState({ showToolbarLabels: !state.showToolbarLabels });
 
     return (
         <AppSettingsContext.Provider
-            value={[state, { toggleTheme, togglePrimaryNavCollapsed, toggleToolbarLabels }]}
+            value={[
+                state,
+                {
+                    resolvedTheme,
+                    setTheme,
+                    toggleTheme,
+                    setNavExpanded,
+                    toggleNavExpanded,
+                    setShowToolbarLabels,
+                    toggleToolbarLabels
+                }
+            ]}
         >
             {props.children}
         </AppSettingsContext.Provider>
@@ -63,30 +99,3 @@ export const useAppSettingsContext = () => {
 
     throw new Error("AppSettings context not provided by ancestor component!");
 };
-
-function loadState() {
-    let state = loadJson(KEY_SETTINGS_APP, defaultAppSettings);
-
-    // handle legacy theme
-    if (state.theme === "dusk") {
-        state = { ...state, theme: "dark" };
-    }
-
-    /*
-       `showToolbarLabels` was stored as `isToolbarCollapsed`, which named it
-       backwards - every reader showed labels when the flag was *true*. The
-       stored value was never wrong, only its name, so it carries across as-is.
-    */
-    const legacy = (state as AppSettingsState & { isToolbarCollapsed?: boolean })
-        .isToolbarCollapsed;
-
-    if (state.showToolbarLabels === undefined && legacy !== undefined) {
-        state = { ...state, showToolbarLabels: legacy };
-    }
-
-    return state;
-}
-
-function saveState(state: AppSettingsState) {
-    saveJson(KEY_SETTINGS_APP, state);
-}

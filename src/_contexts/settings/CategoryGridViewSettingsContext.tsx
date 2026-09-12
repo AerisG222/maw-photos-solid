@@ -1,9 +1,16 @@
-import { createContext, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+/*
+   An adapter, not a store.
 
-import { defaultMargin, MarginIdType } from "../../_models/Margin";
-import { defaultGridThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { KEY_SETTINGS_CATEGORY_VIEW_GRID, loadJson, saveJson } from "./_storage";
+   This preference now lives in one of the four stores beside this file; what
+   remains here is the shape its callers already expect, so that consolidating
+   the stores did not have to mean touching every screen at once. The callers
+   move over in the steps that replace the toolbars, and then this file goes.
+*/
+
+import { MarginIdType } from "../../_models/Margin";
+import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getDensityMargin, getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "./ListingSettingsContext";
 
 export interface CategoryGridViewSettingsState {
     readonly margin: MarginIdType;
@@ -13,15 +20,6 @@ export interface CategoryGridViewSettingsState {
     readonly showFavoritesBadge: boolean;
     readonly showTypesBadge: boolean;
 }
-
-export const defaultCategoryGridViewSettings: CategoryGridViewSettingsState = {
-    margin: defaultMargin,
-    showTitles: true,
-    thumbnailSize: defaultGridThumbnailSize,
-    dimThumbnails: true,
-    showFavoritesBadge: false,
-    showTypesBadge: false
-};
 
 export type CategoryGridViewSettingsContextValue = [
     state: CategoryGridViewSettingsState,
@@ -35,60 +33,40 @@ export type CategoryGridViewSettingsContextValue = [
     }
 ];
 
-const CategoryGridViewSettingsContext = createContext<CategoryGridViewSettingsContextValue>();
+export const useCategoryGridViewSettingsContext = (): CategoryGridViewSettingsContextValue => {
+    const [listing, listingActions] = useListingSettingsContext();
 
-export const CategoryGridSettingsProvider: ParentComponent = props => {
-    const [state, setState] = createStore(loadState());
-
-    const setMargin = (margin: MarginIdType) => updateState({ margin });
-    const setShowTitles = (showTitles: boolean) => updateState({ showTitles });
-    const setThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => updateState({ thumbnailSize });
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-    const setShowFavoritesBadge = (showFavoritesBadge: boolean) =>
-        updateState({ showFavoritesBadge });
-    const setShowTypesBadge = (showTypesBadge: boolean) => updateState({ showTypesBadge });
-
-    const updateState = (update: Partial<CategoryGridViewSettingsState>) => {
-        setState(update);
-        saveState(state);
+    // getters, so reading a field inside a tracking scope still subscribes to it
+    const state: CategoryGridViewSettingsState = {
+        get margin() {
+            return getDensityMargin(listing.density);
+        },
+        get showTitles() {
+            return listing.showLabels;
+        },
+        get thumbnailSize() {
+            return getGridThumbnailSize(listing.density);
+        },
+        get dimThumbnails() {
+            return listing.dimThumbnails;
+        },
+        get showFavoritesBadge() {
+            return listing.showBadges;
+        },
+        get showTypesBadge() {
+            return listing.showBadges;
+        }
     };
 
-    return (
-        <CategoryGridViewSettingsContext.Provider
-            value={[
-                state,
-                {
-                    setMargin,
-                    setShowTitles,
-                    setThumbnailSize,
-                    setDimThumbnails,
-                    setShowFavoritesBadge,
-                    setShowTypesBadge
-                }
-            ]}
-        >
-            {props.children}
-        </CategoryGridViewSettingsContext.Provider>
-    );
+    return [
+        state,
+        {
+            setMargin: () => listingActions.cycleDensity(),
+            setShowTitles: showTitles => listingActions.setShowLabels(showTitles),
+            setThumbnailSize: () => listingActions.cycleDensity(),
+            setDimThumbnails: dim => listingActions.setDimThumbnails(dim),
+            setShowFavoritesBadge: show => listingActions.setShowBadges(show),
+            setShowTypesBadge: show => listingActions.setShowBadges(show)
+        }
+    ];
 };
-
-export const useCategoryGridViewSettingsContext = () => {
-    const ctx = useContext(CategoryGridViewSettingsContext);
-
-    if (ctx) {
-        return ctx;
-    }
-
-    throw new Error("CategoryGridViewSettings context not provided by ancestor component!");
-};
-
-function loadState() {
-    return {
-        ...defaultCategoryGridViewSettings,
-        ...loadJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, defaultCategoryGridViewSettings)
-    };
-}
-
-function saveState(state: CategoryGridViewSettingsState) {
-    saveJson(KEY_SETTINGS_CATEGORY_VIEW_GRID, state);
-}

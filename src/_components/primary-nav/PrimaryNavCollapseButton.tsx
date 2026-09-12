@@ -4,7 +4,7 @@ import Icon from "../icon/Icon";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 const PrimaryNavCollapseButton: Component = () => {
-    const [settingsState, { togglePrimaryNavCollapsed }] = useAppSettingsContext();
+    const [settingsState, { toggleNavExpanded }] = useAppSettingsContext();
 
     const collapseIconClass = () => {
         const classes = [
@@ -16,7 +16,7 @@ const PrimaryNavCollapseButton: Component = () => {
             "ease-out"
         ];
 
-        if (settingsState.isPrimaryNavCollapsed) {
+        if (!settingsState.navExpanded) {
             classes.push("rotate-180");
         }
 
@@ -26,7 +26,7 @@ const PrimaryNavCollapseButton: Component = () => {
     return (
         <button
             class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer transition-colors duration-150 ease-out"
-            onClick={togglePrimaryNavCollapsed}
+            onClick={toggleNavExpanded}
             title="Expand/Collapse Nav"
         >
             <Icon classes={collapseIconClass()} />
