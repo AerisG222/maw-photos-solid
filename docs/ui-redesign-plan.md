@@ -853,6 +853,41 @@ nothing in the console behind it. The boundary logs what it caught now.
 The regression test asserts what actually matters - that children which reach into absent data do not run
 during the loading or error states - and was checked against the eager version first, where it fails.
 
+### Re-reading §11 against the installed library (2026-09-12)
+
+§11's mapping table was written before anything was built, and two of its rows do not survive contact.
+
+**Kobalte has no `Toolbar` primitive.** The table named one for the roving-tabindex work in step 8. It is not
+in the package. That behaviour - one tab stop per toolbar, arrow keys between the controls - has to be
+hand-rolled, which is perhaps thirty lines of keydown handling, and is still worth doing.
+
+**`Select` and `RadioGroup` should stay native.** Both are real `<select>` and `<input type="radio">` elements
+today, which already carry keyboard behaviour, grouping and labelling from the browser - and a native
+`<select>` opens the operating system's own picker on a phone. Kobalte's versions are custom listboxes: better
+to style, worse on touch, more code. Replacing a working native control to gain styling nobody asked for is not
+a trade this rework should make. Struck.
+
+What is still worth adopting, the rule being that a primitive earns its place where the hard part is
+_behaviour_ rather than markup:
+
+| Where                                               | Primitive          | Why it is worth a dependency                                                                                     |
+| --------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `ItemActions` (the `⋮`), step 10                    | `DropdownMenu`     | Focus trap, typeahead, arrow keys, escape, click-outside, placement. The one thing here nobody should hand-roll. |
+| Inspector overlay and sheet, step 12                | `Popover`          | Dismissal, focus return and scroll locking, which is most of that step                                           |
+| Stats type/mode and the places kind filter, step 13 | `SegmentedControl` | A real primitive in the package, and an exact fit                                                                |
+| `input/Switch`, step 14                             | `Switch`           | Modest: `role="switch"` is right for a toggle, where a checkbox is not                                           |
+
+Worth adding to the list: **`Combobox` for `PlacePicker`**, which is hand-rolled filter-then-choose and is
+precisely what that primitive is.
+
+**Cost, measured.** `Dialog` + `AlertDialog` took the main chunk from 302.77 kB to 318.86 kB - about 16 kB raw
+for two primitives. Worth knowing per-primitive rather than assuming the library is free.
+
+**And one that looks like a Kobalte problem but is not.** The application has **127 `title=` attributes and two
+`aria-label`s**. A tooltip primitive would make those prettier without making a single icon-only button
+announce itself, and tooltips are a dead end on touch anyway. The fix is §8's: a required label prop on
+`ToolbarButton`, `ToolbarLink`, `SidebarButton` and `IconButton` rendering `aria-label`. No dependency.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1036,16 +1071,16 @@ Version 0.13.14, published 2026-09-07, peer `solid-js ^1.9.8` against this proje
 
 The case is that §4's hand-rolled list is Kobalte's catalogue:
 
-| §4 component                                | Kobalte primitive       | Lands in step |
-| ------------------------------------------- | ----------------------- | ------------- |
-| `overlay/Dialog.tsx`, `ConfirmDialog.tsx`   | `Dialog`, `AlertDialog` | 5             |
-| `input/Switch.tsx`                          | `Switch`                | 14            |
-| `input/Select.tsx`                          | `Select`                | 14            |
-| `input/RadioGroup.tsx`                      | `RadioGroup`            | 14            |
-| `input/SegmentedControl.tsx`                | `ToggleGroup`           | 13            |
-| `listing/ItemActions.tsx` (the `⋮` menu)    | `DropdownMenu`          | 10            |
-| `toolbar/ToolbarLayout.tsx` roving tabindex | `Toolbar`               | 8             |
-| Inspector overlay / bottom sheet            | `Popover` / `Dialog`    | 12            |
+| §4 component                                | Kobalte primitive                              | Lands in step |
+| ------------------------------------------- | ---------------------------------------------- | ------------- |
+| `overlay/Dialog.tsx`, `ConfirmDialog.tsx`   | `Dialog`, `AlertDialog`                        | 5             |
+| `input/Switch.tsx`                          | `Switch`                                       | 14            |
+| `input/Select.tsx`                          | `Select`                                       | 14            |
+| `input/RadioGroup.tsx`                      | `RadioGroup`                                   | 14            |
+| `input/SegmentedControl.tsx`                | `ToggleGroup`                                  | 13            |
+| `listing/ItemActions.tsx` (the `⋮` menu)    | `DropdownMenu`                                 | 10            |
+| `toolbar/ToolbarLayout.tsx` roving tabindex | ~~`Toolbar`~~ — no such primitive; hand-rolled | 8             |
+| Inspector overlay / bottom sheet            | `Popover` / `Dialog`                           | 12            |
 
 §8's accessibility findings are exactly the class of work this removes: focus traps, roving tabindex, `aria-*` wiring, escape-to-dismiss, scroll locking. Five ARIA attributes in the entire codebase is reasonable evidence that hand-rolling this has not been going well. Roughly 8 of the 18 new components in §4 become thin styled wrappers rather than from-scratch implementations — net one dependency, net less hand-written accessibility code.
 
