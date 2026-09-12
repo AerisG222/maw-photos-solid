@@ -617,11 +617,11 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | # | Step | Scope | Risk |
 |---|---|---|---|
 | **0** | **Hygiene, no behaviour change.** Delete `.scrollable` uses (or define it); fix `mr[-1px]`, `border-l-base-content:30%`, `flex-items-center`; replace the 10 `text-6` with a real size; rename the three components exported as `Select`; drop `Select.horizontal` and `name="theme"`. | ~15 files | none |
-| **1** | **Visual system.** `@theme` type/motion tokens, `.type-*`, `.tile`, `.elev-*`, `.stage`; `head1/2/3` aliased. Theme contract + contrast test. Focus-visible ring. | `index.css`, `_themes/*` | low |
+| **1** | **Visual system.** `@theme` type/motion tokens, `.type-*`, `.tile`, `.elev-*`, `.stage`; `head1/2/3` aliased. Theme contract + contrast test. Focus-visible ring. Self-host the fonts via `@fontsource` and drop the Google Fonts `<link>` + preconnects (§11). | `index.css`, `_themes/*`, `index.html` | low |
 | **2** | **Icon consolidation.** mdi→ic-round, style unification, drop `@iconify-json/mdi`, add the lint rule. | ~40 files, mechanical | low |
 | **3** | **Preference registry + four contexts + migration.** New stores; the fifteen old contexts become thin adapters reading/writing the new store, so **no consumer changes yet**. Migration tests. | `_contexts/settings/*` | **highest — do it alone** |
 | **4** | **States.** `AsyncBoundary`, `EmptyState`, `ErrorState`, `PermissionState`, `SkeletonChart`. Convert Categories first, then the other ~14 sites. | ~18 files | low |
-| **5** | **Dialogs.** `Dialog` + `ConfirmDialog`; convert the six. Delete `ClanDeleteDialog`. | 6 files | low |
+| **5** | **Dialogs — and Kobalte lands here.** Add `@kobalte/core`; build `Dialog` / `ConfirmDialog` on its `Dialog` + `AlertDialog` rather than hand-rolling focus traps. Convert the six. Delete `ClanDeleteDialog`. Later steps adopt the other primitives per §11. | 6 files + 1 dependency | low |
 | **6** | **`NavGroup` + digit shortcuts.** Convert the seven nav rows. Ships the navigation half of the shortcut map. | 7 files | low |
 | **7** | **`Tile` + `ListingSurface`.** Convert the four cards and the six grid containers. Keyboard cursor arrives here. | ~12 files | medium |
 | **8** | **`ListingToolbar`.** Delete the eight density/label/badge copies. Ships the letter half of the shortcut map, and removes dim/margins/size/titles/years/counts/badge-toggles. | 8 deletions | medium |
@@ -630,6 +630,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **10** | **`ItemActions`.** `⋮` on the tile and in the toolbar; move downloads + share off Detail. | 5 files | medium |
 | **11** | **`MediaToolbar`.** Collapse the five media toolbars into one capability-driven component; extend `IMediaService` with `capabilities()`. | `_media/Toolbar*.tsx` | medium |
 | **12** | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`. | ~10 files | medium |
+| **12b** | **View Transitions.** Morph the thumbnail into the photo on grid → active item and grid → fullscreen, behind a `prefers-reduced-motion` guard. No dependency (§11). | 3–4 files | low |
 | **13** | **Settings area from the registry.** Delete the four hand-written pages; add Appearance / Browsing / Media / Shortcuts. | `settings/*` | low |
 | **14** | **Remove the adapters** from step 3; delete the fifteen old context files; `Toggle`+`Checkbox`→`Switch`; `TextFilter` adoption. | 20 deletions | low |
 
@@ -679,3 +680,53 @@ Steps 0–2 are safe to land in any order and are worth doing immediately regard
 - `src/_media/ToolbarGrid.tsx` — the canonical copy of the density/label/badge block that `listing/ListingToolbar.tsx` replaces in eight places
 - `src/_components/layout/Layout.tsx` — owns the toolbar/content/sidebar grid, the margin application and the stage backdrop; the responsive bottom bar, `.stage` and the Inspector's three presentations all attach here
 - `src/index.css` — the type scale, spacing rhythm, `.tile`, `.elev-*`, motion tokens and the focus ring; also where the four dead utility classes are resolved
+
+---
+
+## 11. Tooling assessment — styling framework and dependencies
+
+Asked directly: should the app move to a different styling framework to look beautiful? **No.** One dependency is worth adding, two cheap wins are worth taking, and one tempting direction is explicitly ruled out.
+
+### Keep Tailwind 4 + daisyUI
+
+Measured, counting only class tokens inside string literals: ~300 daisyUI class occurrences across ~40 files, dominated by `btn` (150 occurrences, 30 files), then `input` (28), `range` (24), `modal` (18), `badge` (16), `radio` (12). The deeper dependency is not those classes though — it is the **token layer**. Both `src/_themes/light.css` and `dark.css` are written in daisyUI's semantic tokens, and essentially every colour in the application resolves through `base-100/200/300`, `base-content`, `primary` and `primary-content`. Replacing daisyUI means re-authoring both themes and every colour reference in the app.
+
+More to the point, the framework is not the cause. §0 and §6 already located the reasons this app does not feel designed: ~83 ad-hoc `text-*` utilities applied at call sites instead of a type scale, six icon vocabularies, five class names that emit no CSS at all, zero focus styling anywhere, and two themes that declare 8–9 tokens and let the rest be derived. Panda, vanilla-extract, UnoCSS or CSS modules would fix none of those. A framework migration here is the kind of change that looks like progress, costs a rewrite of every component, collides with a roadmap already deleting ~35 files, and produces nothing a user can see.
+
+### Add `@kobalte/core`
+
+Version 0.13.14, published 2026-09-07, peer `solid-js ^1.9.8` against this project's `^1.9.15`. Unstyled Solid-native primitives — the Radix equivalent — so it composes with Tailwind and daisyUI instead of displacing them.
+
+The case is that §4's hand-rolled list is Kobalte's catalogue:
+
+| §4 component | Kobalte primitive | Lands in step |
+|---|---|---|
+| `overlay/Dialog.tsx`, `ConfirmDialog.tsx` | `Dialog`, `AlertDialog` | 5 |
+| `input/Switch.tsx` | `Switch` | 14 |
+| `input/Select.tsx` | `Select` | 14 |
+| `input/RadioGroup.tsx` | `RadioGroup` | 14 |
+| `input/SegmentedControl.tsx` | `ToggleGroup` | 13 |
+| `listing/ItemActions.tsx` (the `⋮` menu) | `DropdownMenu` | 10 |
+| `toolbar/ToolbarLayout.tsx` roving tabindex | `Toolbar` | 8 |
+| Inspector overlay / bottom sheet | `Popover` / `Dialog` | 12 |
+
+§8's accessibility findings are exactly the class of work this removes: focus traps, roving tabindex, `aria-*` wiring, escape-to-dismiss, scroll locking. Five ARIA attributes in the entire codebase is reasonable evidence that hand-rolling this has not been going well. Roughly 8 of the 18 new components in §4 become thin styled wrappers rather than from-scratch implementations — net one dependency, net less hand-written accessibility code.
+
+Alternatives weighed: **Ark UI Solid** (5.39.1, also actively maintained, Zag-based — more machinery than this app needs) and **Corvu** (last published January 2025; not worth the staleness risk).
+
+### Self-host the fonts
+
+`index.html` pulls Nunito Sans and Tangerine from Google Fonts through a render-blocking `<link>` plus two `preconnect`s on every cold load. `@fontsource` / `@fontsource-variable` removes the third-party round trip and the external point of failure. Worth doing in step 1 alongside the type scale — and since typeface is arguably the highest-leverage single decision in "beautiful", worth deliberately *choosing* Nunito Sans at that moment rather than continuing to inherit it.
+
+### View Transitions (step 12b)
+
+Use the native View Transitions API so a thumbnail morphs into the photograph on grid → active item and grid → fullscreen, rather than cutting. No dependency, a handful of `view-transition-name` assignments plus `document.startViewTransition` at the navigation boundary, and it is the largest perceived-polish gain available without touching the backend. Gate it on `prefers-reduced-motion` alongside the existing kill switch in `index.css`.
+
+### Explicitly out of scope — justified layout and API changes
+
+Considered and **excluded by decision**, recorded here so it is not rediscovered and re-proposed later.
+
+`getMediaTeaserUrl` requests the `qqvg-fill` scale — a server-side crop-to-fill — and neither `Media` nor `MediaFile` carries width or height. An aspect-ratio-preserving justified-row layout (the Flickr / Google Photos treatment) would therefore require a new thumbnail scale or dimension metadata from the API. **We are not doing this, and we are not asking the backend for it.**
+
+Practical consequence for the build: thumbnails stay uniform crops, so `listing/Tile.tsx` (§4) should assume a **fixed box** and does not need aspect-ratio handling, intrinsic sizing, or layout-shift mitigation for varying dimensions. That simplifies it — the `{ width, height, aspect }` props sketched in §4 collapse to the density-derived box size.
+
