@@ -737,6 +737,36 @@ running browser. The snapshots are in place precisely so that work can be review
 Worth noting while in there: `MediaLink` takes a `route` prop that is **read zero times**, threaded to it by
 both `MediaGrid` and `MediaList` at every call site. It goes with the `Tile` work.
 
+### The shortcut guard was half a fix (2026-09-12)
+
+Step 5 moved the "do not fire while somebody is typing" check into `ShortcutWrapper` and deleted five
+per-input `stopPropagation` workarounds. The check was correct and the workarounds really were redundant - but
+the fix was incomplete, and the result was worse than what it replaced: **no text field in the application
+could accept a letter that was bound to a toolbar button.** Reported as not being able to type a `t` into a
+clan's name, `t` being "Titles" in four toolbars.
+
+`createShortcut` from `@solid-primitives/keyboard` defaults to `preventDefault: true`, and cancels the
+keystroke _before_ it calls back:
+
+```js
+if (equalsKeyHoldSequence(sequence, keys)) {
+    preventDefault && e && e.preventDefault(); // ← before the callback
+    callback(e);
+}
+```
+
+So declining to act stopped the _action_ while the character was already gone. The callback does receive the
+event, so the fix is to pass `preventDefault: false` and cancel it in the handler instead - only on a press
+that actually does something.
+
+Writing the test for it turned up a second case nobody had reported: a **disabled** control also swallowed its
+key. It declined to act, and the keystroke vanished anyway.
+
+The lesson is the same one as the dialogs, in a different costume: the guard was verified by reasoning about
+what it prevented, not by checking what a reader could still do. The test now asserts both halves - the
+handler does not fire _and_ `defaultPrevented` is false - and was confirmed to fail on the old code before
+being kept.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

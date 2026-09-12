@@ -19,11 +19,19 @@ const ShortcutDialog: Component = () => {
             description: "Show this help dialog"
         });
 
-        createShortcut(["Shift", "?"], () => {
-            if (!isEditableTarget(document.activeElement)) {
+        // see the note in ShortcutWrapper on owning preventDefault
+        createShortcut(
+            ["Shift", "?"],
+            event => {
+                if (isEditableTarget(document.activeElement)) {
+                    return;
+                }
+
+                event?.preventDefault();
                 setShowDialog(true);
-            }
-        });
+            },
+            { preventDefault: false }
+        );
     });
 
     onCleanup(() => {

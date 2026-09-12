@@ -38,8 +38,6 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
 
         id = createUniqueId();
 
-        // createShortcut(props.shortcutKeys, () => { props.clickHandler() });
-
         addShortcut({
             id,
             shortcut: props.shortcutKeys,
@@ -66,17 +64,34 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
                 }
 
                 const dispose = createRoot(dispose => {
-                    createShortcut(keys, () => {
-                        // somebody typing into a field is not pressing a button
-                        if (isEditableTarget(document.activeElement)) {
-                            return;
-                        }
+                    /*
+                       `preventDefault: false`, and done here instead.
 
-                        // a control drawn as unavailable must not answer its key
-                        if (!props.disabled) {
+                       The primitive cancels the keystroke *before* it calls back,
+                       so declining to act was not enough: a letter bound to a
+                       toolbar button was swallowed by every text field in the
+                       application, which is a shortcut eating the thing it was
+                       supposed to stay out of the way of. Cancelling it here
+                       means only a press that actually does something does so.
+                    */
+                    createShortcut(
+                        keys,
+                        event => {
+                            // somebody typing into a field is not pressing a button
+                            if (isEditableTarget(document.activeElement)) {
+                                return;
+                            }
+
+                            // a control drawn as unavailable must not answer its key
+                            if (props.disabled) {
+                                return;
+                            }
+
+                            event?.preventDefault();
                             props.clickHandler();
-                        }
-                    });
+                        },
+                        { preventDefault: false }
+                    );
 
                     return dispose;
                 });
