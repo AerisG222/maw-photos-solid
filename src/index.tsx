@@ -6,6 +6,10 @@ import { appRoutes } from "./routes";
 import AppContext from "./_components/app-context/AppContext";
 import AppErrorBoundary from "./_components/error/AppErrorBoundary";
 
+// self-hosted webfonts - no render-blocking request to fonts.googleapis.com
+import "@fontsource-variable/nunito-sans";
+import "@fontsource/tangerine/400.css";
+
 import "./index.css";
 import App from "./App";
 

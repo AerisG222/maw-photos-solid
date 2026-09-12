@@ -56,7 +56,7 @@ const PlaceSearchBar: Component<Props> = props => {
             />
 
             <button class="btn btn-primary btn-outline" title="Search" onClick={submit}>
-                <span class="text-2xl icon-[ic--round-search]" />
+                <span class="icon-md icon-[ic--round-search]" />
             </button>
 
             <button
@@ -64,7 +64,7 @@ const PlaceSearchBar: Component<Props> = props => {
                 title="Clear"
                 onClick={clear}
             >
-                <span class="text-2xl icon-[ic--round-close]" />
+                <span class="icon-md icon-[ic--round-close]" />
             </button>
 
             <select

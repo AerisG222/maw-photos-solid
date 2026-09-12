@@ -33,7 +33,7 @@ const SearchBar: Component = () => {
                 title="Search"
                 onClick={executeSearch}
             >
-                <span class="text-2xl icon-[ic--round-search]" />
+                <span class="icon-md icon-[ic--round-search]" />
             </button>
 
             <button
@@ -44,7 +44,7 @@ const SearchBar: Component = () => {
                     setActiveTerm("");
                 }}
             >
-                <span class="text-2xl icon-[ic--round-close]" />
+                <span class="icon-md icon-[ic--round-close]" />
             </button>
         </div>
     );

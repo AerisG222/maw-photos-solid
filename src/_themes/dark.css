@@ -7,15 +7,24 @@
     --color-base-100: oklch(20.07% 0.0199 284.46);
     --color-base-200: oklch(24.85% 0.0207 284.79);
     --color-base-300: oklch(30.08% 0.0199 281.04);
-    --color-base-content: oklch(64.02% 0.0193 282.33);
+    /*
+       Lightened from 64.02%. At the old value body text on a base-300 surface -
+       an InfoCard, a dropdown - came to 4.04:1, under the 4.5:1 the contract
+       requires. Hue and chroma are untouched; only the lightness moved.
+    */
+    --color-base-content: oklch(67.2% 0.0193 282.33);
     --color-primary: oklch(80.04% 0.1642 84.18);
     --color-primary-content: oklch(24.85% 0.0207 284.79);
-    --color-secondary: oklch(59.9% 0.1009 289.84);
+    /*
+       Lightened from 59.9% for the same reason, and it had further to go: an
+       InfoCard heading is `text-secondary` on `bg-base-300`, which was 3.34:1.
+    */
+    --color-secondary: oklch(68% 0.1009 289.84);
+    --color-secondary-content: oklch(20.07% 0.0199 284.46);
     --color-accent: oklch(59.9% 0.1009 289.84);
     --color-neutral: oklch(30.08% 0.0199 281.04);
 
     /*
-    --color-secondary-content: oklch(98% 0.01 200);
     --color-accent-content: oklch(98% 0.01 160);
     --color-neutral-content: oklch(98% 0.01 240);
     --color-info: oklch(70% 0.2 220);

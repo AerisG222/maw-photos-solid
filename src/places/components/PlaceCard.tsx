@@ -60,9 +60,7 @@ const PlaceCard: Component<Props> = props => {
         <A
             href={props.href}
             class="group flex flex-col w-60 border border-secondary/20 rounded-sm bg-base-200
-                hover:bg-base-300 hover:border-primary hover:text-primary
-                hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20
-                transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out"
+                hover:bg-base-300 hover:border-primary hover:text-primary elev-hover"
             title={`${props.place.name} (${props.place.mediaCount})`}
         >
             {/* covers are published at 320x240, so the tile is shaped to match */}

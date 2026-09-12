@@ -11,7 +11,7 @@ const InfoCard: ParentComponent<Props> = props => {
     return (
         <div class="bg-base-300 rounded m-1 p-2 border-1 border-secondary/20 max-h-164 overflow-y-auto">
             <div class="flex items-center text-secondary">
-                <span class={`block mr-2 text-2xl ${props.icon}`} />
+                <span class={`block mr-2 icon-md ${props.icon}`} />
                 <span class="block text-sm font-bold">{props.title}</span>
             </div>
 

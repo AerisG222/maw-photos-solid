@@ -537,6 +537,41 @@ Also delete the dead `.stage-backdrop` light-theme special case only if the cont
 
 ---
 
+### Corrections found while implementing (2026-09-12)
+
+Two claims in §6 were wrong, and one real defect surfaced that §6 had not predicted.
+
+1. **`--radius-selector` is not unused.** §6 said to delete it. daisyUI's `checkbox`, `badge` and `range`
+   components all reference it, and this app uses all three (`checkbox` 9 occurrences, `badge` 16, `range` 24).
+   It stays, and it is in the contract's required list.
+2. **`--color-accent` _is_ unused** — zero references across every `.tsx` in the app. §6 did not notice this one.
+   It is still declared by both themes and still in the contract for symmetry, but nothing renders it, so it has
+   no contrast pair. A candidate for deletion in a later step, once it is clear daisyUI itself is not deriving
+   anything from it.
+3. **The dark theme failed three contrast pairs**, which is what the contract test was for:
+
+    | pair                         | was    | now    | where it shows                      |
+    | ---------------------------- | ------ | ------ | ----------------------------------- |
+    | `base-content` on `base-300` | 4.04:1 | 4.55:1 | text on info cards and dropdowns    |
+    | `secondary` on `base-200`    | 3.95:1 | 5.32:1 | toolbar and sidebar buttons at rest |
+    | `secondary` on `base-300`    | 3.34:1 | 4.50:1 | InfoCard headings                   |
+
+    Fixed by raising lightness only — hue and chroma are untouched in both cases. `--color-base-content`
+    64.02% → 67.2%, `--color-secondary` 59.9% → 68%. The `secondary` change is the larger of the two and is
+    visible in dark mode, which is the default theme. It matters more than it looks: `InfoCard` is
+    `text-secondary` on `bg-base-300`, and §3 promotes that card into every view as the Inspector.
+
+    Both themes also now state `--color-secondary-content` explicitly (it is used in 8 components for the
+    button hover state) rather than leaving it to daisyUI's derivation.
+
+### Deliberately deferred from step 1
+
+`.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
+(step 7). Defining them now would add exactly the kind of CSS that emits and matches nothing which step 0
+just finished removing, so they land with the components that use them. `MediaLink` keeps its own copy of the
+hover utilities for the same reason — it is conditional on a prop that only the filmstrip sets, and the
+filmstrip is deleted in step 9b.
+
 ## 7. Unified shortcut map
 
 **The structural idea: digits navigate, letters act.** Digits are assigned by _position in the navigation row_, once, inside `NavGroup` — so they cannot collide by construction, and a user learns one rule instead of twenty-two letters.
@@ -630,7 +665,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | #       | Step                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Scope                                   | Risk                       |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------- |
 | **0**   | **DONE 2026-09-11 — hygiene, no behaviour change.** Dropped the 5 dead `.scrollable` uses; fixed `mr[-1px]`, `border-l-base-content:30%`, `flex-items-center`; replaced 9 `text-6` with `text-2xl` (the tenth was a real `text-6xl`); renamed the two components misnamed `Select` to `Toggle` / `Checkbox`; removed the dead `horizontal` prop chain and the hardcoded `name="theme"`; renamed `isToolbarCollapsed` → `showToolbarLabels` with a legacy read; added the missing loading states to `search/Grid.tsx` and `search/List.tsx`. | 27 files                                | none                       |
-| **1**   | **Visual system.** `@theme` type/motion tokens, `.type-*`, `.tile`, `.elev-*`, `.stage`; `head1/2/3` aliased. Theme contract + contrast test. Focus-visible ring. Self-host the fonts via `@fontsource` and drop the Google Fonts `<link>` + preconnects (§11).                                                                                                                                                                                                                                                                             | `index.css`, `_themes/*`, `index.html`  | low                        |
+| **1**   | **DONE 2026-09-12 — visual system.** Type scale (`--text-display/title/label/body/meta`) and motion tokens in `@theme`; `head1/2/3` rebuilt on the scale; `.icon-sm`/`.icon-md` replacing the step-0 `text-2xl` stopgap; `.elev-hover`/`.elev-overlay` with the hover treatment now applying on `:focus-visible`; the app's first focus ring; body set to the body step; fonts self-hosted via `@fontsource` and the Google Fonts `<link>` + preconnects removed; `_contract.ts` + `theme.test.ts` (49 assertions).                         | 20 files, +2 deps                       | low                        |
 | **2**   | **Icon consolidation.** mdi→ic-round, style unification, drop `@iconify-json/mdi`, add the lint rule.                                                                                                                                                                                                                                                                                                                                                                                                                                       | ~40 files, mechanical                   | low                        |
 | **3**   | **Preference registry + four contexts + migration.** New stores; the fifteen old contexts become thin adapters reading/writing the new store, so **no consumer changes yet**. Migration tests.                                                                                                                                                                                                                                                                                                                                              | `_contexts/settings/*`                  | **highest — do it alone**  |
 | **4**   | **States.** `AsyncBoundary`, `EmptyState`, `ErrorState`, `PermissionState`, `SkeletonChart`. Convert Categories first, then the other ~14 sites.                                                                                                                                                                                                                                                                                                                                                                                            | ~18 files                               | low                        |

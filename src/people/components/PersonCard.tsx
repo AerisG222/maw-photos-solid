@@ -67,9 +67,7 @@ const PersonCard: Component<Props> = props => {
             href={getPersonPath(props.person.id)}
             onClick={onClick}
             class="grid group border rounded-sm bg-base-200 cursor-pointer
-                hover:bg-base-300 hover:border-primary hover:text-primary
-                hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20
-                transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out"
+                hover:bg-base-300 hover:border-primary hover:text-primary elev-hover"
             classList={{
                 "border-secondary/20": !props.selected,
                 "border-primary": props.selected,

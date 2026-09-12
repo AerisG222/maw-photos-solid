@@ -10,8 +10,43 @@
 @import "./_themes/dark.css";
 
 @theme {
-    --font-brand: "Tangerine", sans-serif;
-    --font-sans: "Nunito Sans", sans-serif;
+    /* self-hosted - see the @fontsource imports in index.tsx */
+    --font-brand: "Tangerine", cursive;
+    --font-sans: "Nunito Sans Variable", "Nunito Sans", sans-serif;
+
+    /*
+       The type scale. Five steps, and nothing between them: a size is chosen by
+       what the text *is*, not by eye at the call site. Tailwind generates
+       `text-display`, `text-title`, `text-label`, `text-body` and `text-meta`
+       from these, each carrying its own line-height.
+
+         display  page titles
+         title    section and card headings
+         label    toolbar labels, form legends, badges with text
+         body     default, set on <body> below
+         meta     counts, ancestry, timestamps
+    */
+    --text-display: 1.5rem;
+    --text-display--line-height: 1.25;
+    --text-title: 1.125rem;
+    --text-title--line-height: 1.4;
+    --text-label: 0.8125rem;
+    --text-label--line-height: 1.4;
+    --text-body: 0.9375rem;
+    --text-body--line-height: 1.55;
+    --text-meta: 0.75rem;
+    --text-meta--line-height: 1.35;
+
+    /*
+       Motion. Colour and opacity move at `fast`, transforms at `base`, image
+       reveals at `slow`. The two bespoke animations below (the brand entrance
+       and the heart overshoot) keep their own timings deliberately - they are
+       one-off gestures, not part of the system.
+    */
+    --motion-fast: 150ms;
+    --motion-base: 200ms;
+    --motion-slow: 400ms;
+    --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
@@ -21,6 +56,24 @@
 */
 html {
     background-color: var(--color-base-100);
+}
+
+@layer base {
+    body {
+        font-size: var(--text-body);
+        line-height: var(--text-body--line-height);
+    }
+
+    /*
+       One focus ring for the whole application. Before this there was no focus
+       styling at all, so keyboard users had nothing to follow. `outline`
+       follows the element's own border-radius, so rounded controls get a
+       rounded ring without anything being told about it.
+    */
+    :focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
 }
 
 @layer components {
@@ -65,8 +118,14 @@ html {
         }
     }
 
+    /*
+       The three heading names predate the type scale; they now sit on it rather
+       than carrying sizes of their own. head1 is the display step, head2 the
+       title step, head3 the label step.
+    */
     .head1 {
-        font-size: var(--text-lg);
+        font-size: var(--text-display);
+        line-height: var(--text-display--line-height);
         font-weight: bold;
         color: var(--color-primary);
 
@@ -75,6 +134,8 @@ html {
     }
 
     .head2 {
+        font-size: var(--text-title);
+        line-height: var(--text-title--line-height);
         font-weight: bold;
         color: var(--color-primary);
 
@@ -83,12 +144,55 @@ html {
     }
 
     .head3 {
-        font-size: var(--text-sm);
+        font-size: var(--text-label);
+        line-height: var(--text-label--line-height);
         font-weight: bold;
         color: var(--color-secondary);
 
         margin-top: calc(var(--spacing));
         margin-bottom: calc(var(--spacing));
+    }
+
+    /*
+       Icon sizing. The iconify plugin renders at 1.2em, so these are the two
+       box sizes the app actually uses - 1.35rem and 1.8rem. They replace the
+       `text-6` that appeared at ten call sites and emitted no CSS at all.
+    */
+    .icon-sm {
+        font-size: 1.125rem;
+    }
+
+    .icon-md {
+        font-size: 1.5rem;
+    }
+
+    /*
+       Elevation. Three steps and no others: flat is the default and needs no
+       class, `elev-hover` is what a pickable tile does under the pointer *or
+       the keyboard*, and `elev-overlay` is for chrome floating above the stage.
+
+       The hover treatment used to be the same four utilities copied into every
+       card. Applying it on :focus-visible as well is the reason a keyboard user
+       can now see where they are in a grid.
+    */
+    .elev-hover {
+        transition-property: background-color, border-color, color, box-shadow, transform, filter;
+        transition-duration: var(--motion-base);
+        transition-timing-function: var(--motion-ease);
+
+        &:hover,
+        &:focus-visible {
+            transform: translateY(-2px);
+            box-shadow:
+                0 10px 15px -3px color-mix(in oklab, var(--color-primary) 20%, transparent),
+                0 4px 6px -4px color-mix(in oklab, var(--color-primary) 20%, transparent);
+        }
+    }
+
+    .elev-overlay {
+        box-shadow:
+            0 25px 50px -12px color-mix(in oklab, black 40%, transparent),
+            0 0 0 1px color-mix(in oklab, var(--color-base-content) 12%, transparent);
     }
 
     /*
@@ -99,7 +203,7 @@ html {
 
     /* thumbnails / cards easing into place as their group renders */
     .rise-in {
-        animation: maw-rise-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation: maw-rise-in var(--motion-slow) var(--motion-ease) both;
     }
 
     /* login brand mark: logo settles, wordmarks follow */

@@ -19,7 +19,7 @@ interface Props {
 const ErrorMessage: Component<Props> = props => {
     return (
         <div class="flex flex-col items-center text-center gap-3 my-8 mx-4" role="alert">
-            <span class="text-2xl text-error icon-[ic--round-error-outline]" />
+            <span class="icon-md text-error icon-[ic--round-error-outline]" />
 
             <div>
                 <p class="font-bold text-error">{props.title ?? "Something went wrong"}</p>

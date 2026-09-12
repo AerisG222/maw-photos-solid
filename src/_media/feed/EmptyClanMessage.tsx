@@ -15,7 +15,7 @@ interface Props {
 const EmptyClanMessage: Component<Props> = props => {
     return (
         <div class="flex flex-col items-center text-center gap-3 my-8 mx-4">
-            <span class="text-2xl icon-[ic--round-group]" />
+            <span class="icon-md icon-[ic--round-group]" />
 
             <div>
                 <p class="font-bold">{props.name ?? "This clan"} has nobody in it yet</p>
