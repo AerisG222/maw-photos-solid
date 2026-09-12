@@ -58,8 +58,6 @@ const PlacePicker: Component<Props> = props => {
                     value={term()}
                     onInput={evt => setTerm(evt.currentTarget.value)}
                     onKeyDown={evt => {
-                        evt.stopPropagation();
-
                         if (evt.key === "Enter") {
                             setSearch(term().trim());
                         }

@@ -70,7 +70,6 @@ const CommentsCard: Component<Props> = props => {
                 <textarea
                     class="textarea w-full"
                     placeholder="Comment"
-                    onKeyDown={evt => evt.stopPropagation()}
                     onInput={evt => setCommentText(evt.currentTarget.value)}
                     value={commentText()}
                 />

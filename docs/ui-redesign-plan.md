@@ -630,6 +630,34 @@ admin path is a redirect in `AdminGuard`, and the inactive-account path is a who
 thing it would render today, and inventing a component for one caller is how the duplication being removed
 here got started. It belongs with the admin surfaces in step 10.
 
+### Step 5 notes (2026-09-12)
+
+**`skipLibCheck` is now on.** Kobalte's bundled declarations contain `declare const X: typeof X` for a number
+of type-only exports - a rollup-dts artifact that TypeScript 6 rejects - so `tsc` failed inside `node_modules`
+before it ever reached `src`. This stops type-checking _inside_ `.d.ts` files and changes nothing about how the
+application's own code is checked, which is still `strict`. The trade-off worth naming: a future dependency's
+broken declarations will now also pass unnoticed.
+
+**The shortcut guard replaced five workarounds.** The app binds single letters, so every keystroke in a text
+field also pressed a toolbar button. Five inputs defended themselves with `evt.stopPropagation()` in their own
+keydown handlers, which meant each new input was broken by default until someone noticed. `ShortcutWrapper`
+now declines to fire while focus is in an input, textarea, select or contenteditable, and the five local
+workarounds are gone. This is §7's change, arriving here because converting the dialogs surfaced a sixth
+instance of it.
+
+**What Kobalte actually bought.** The five dialogs already got a focus trap and Escape from the native
+`<dialog>` element. What they did _not_ have was consistent labelling for a screen reader, and each needed an
+effect calling `showModal()`/`close()` to chase a prop - `PlaceCoverDialog` had a fifteen-line comment
+explaining why its version of that effect had to be guarded on the element's current state to avoid yanking
+focus mid-choice. `open` is declarative now and that whole class of problem is gone, along with the comment.
+
+**A test-isolation trap worth knowing about.** Portals mount on `document.body`, _outside_ the container that
+testing-library's cleanup removes, so a dialog from one test is still in the document during the next. Combined
+with `isolate: false` in the vitest config, exercising both dialogs in a single file left the two portals
+confusable and the role assertions read the wrong one. The fix is one file per component plus an explicit
+`document.body.innerHTML = ""` teardown. Kobalte is not at fault - `AlertDialogContent` passes its role per
+instance, verified in the library source - but any future portal test needs the same teardown.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -735,7 +763,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **2**   | **DONE 2026-09-12 — icon consolidation.** 52 references rewritten across 34 files; the app now draws from `ic--round-*` only, down from six vocabularies. `@iconify-json/mdi` removed. An eslint `no-restricted-syntax` rule (covering both string literals and template elements, so `.ts` route definitions are caught too) rejects a seventh. All 82 unique icons verified present in the production CSS.                                                                                                                                | 34 files, −1 dep                        | low                        |
 | **3**   | **DONE 2026-09-12 — the four stores.** 16 settings keys become 4; 15 of the old contexts are now adapters that own nothing, so no screen had to change. `_migrate.ts` carries the legacy keys across without deleting them. `AllSettingsProvider` goes from 18 providers to 4. Theme gains `system` (decision 13), including the pre-mount script. 41 tests: migration fixtures plus a runtime pass over the adapters.                                                                                                                      | 40 files                                | done                       |
 | **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files                                | low                        |
-| **5**   | **Dialogs — and Kobalte lands here.** Add `@kobalte/core`; build `Dialog` / `ConfirmDialog` on its `Dialog` + `AlertDialog` rather than hand-rolling focus traps. Convert the six. Delete `ClanDeleteDialog`. Later steps adopt the other primitives per §11.                                                                                                                                                                                                                                                                               | 6 files + 1 dependency                  | low                        |
+| **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep                        | low                        |
 | **6**   | **`NavGroup` + digit shortcuts.** Convert the seven nav rows. Ships the navigation half of the shortcut map.                                                                                                                                                                                                                                                                                                                                                                                                                                | 7 files                                 | low                        |
 | **7**   | **`Tile` + `ListingSurface`.** Convert the four cards and the six grid containers. Keyboard cursor arrives here.                                                                                                                                                                                                                                                                                                                                                                                                                            | ~12 files                               | medium                     |
 | **8**   | **`ListingToolbar`.** Delete the eight density/label/badge copies. Ships the letter half of the shortcut map, and removes dim/margins/size/titles/years/counts/badge-toggles.                                                                                                                                                                                                                                                                                                                                                               | 8 deletions                             | medium                     |

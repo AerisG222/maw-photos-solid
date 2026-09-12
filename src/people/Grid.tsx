@@ -10,8 +10,8 @@ import { PersonSortName } from "../_models/PersonSort";
 import { Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
-import ClanDeleteDialog from "./components/ClanDeleteDialog";
 import ClanNameDialog from "./components/ClanNameDialog";
+import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import ClanSection from "./components/ClanSection";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Layout from "../_components/layout/Layout";
@@ -280,13 +280,23 @@ const GridView: Component = () => {
                 onCancel={cancelName}
             />
 
-            <ClanDeleteDialog
-                clan={deleting()}
+            <ConfirmDialog
+                open={!!deleting()}
+                title="Delete Clan"
+                confirmLabel="Delete"
+                destructive
                 pending={deleteClanMutation.isPending}
-                error={deleteClanMutation.error}
+                error={
+                    deleteClanMutation.error
+                        ? "The clan could not be deleted. Please try again."
+                        : undefined
+                }
                 onConfirm={confirmDelete}
                 onCancel={cancelDelete}
-            />
+            >
+                Delete <span class="font-bold">{deleting()?.name}</span>? The people in it are left
+                alone - only the grouping goes away.
+            </ConfirmDialog>
         </Layout>
     );
 };

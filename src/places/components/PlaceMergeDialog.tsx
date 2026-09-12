@@ -1,9 +1,10 @@
-import { Component, Show, createEffect, createSignal } from "solid-js";
+import { Component, Show, createSignal } from "solid-js";
 
 import { ApiError, describeError } from "../../_contexts/api/ApiError";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Place } from "../../_models/Place";
 
+import Dialog from "../../_components/overlay/Dialog";
 import PlacePicker from "./PlacePicker";
 
 interface Props {
@@ -27,16 +28,7 @@ interface Props {
 */
 const PlaceMergeDialog: Component<Props> = props => {
     const { mergePlacesMutation } = usePlacesContext();
-    const [dialog, setDialog] = createSignal<HTMLDialogElement>();
     const [source, setSource] = createSignal<Place>();
-
-    createEffect(() => {
-        if (props.place) {
-            dialog()?.showModal();
-        } else {
-            dialog()?.close();
-        }
-    });
 
     const close = () => {
         setSource(undefined);
@@ -71,50 +63,43 @@ const PlaceMergeDialog: Component<Props> = props => {
     };
 
     return (
-        <dialog class="modal" ref={setDialog} onClose={close}>
-            <div class="modal-box">
-                <h3 class="font-bold text-lg text-secondary">Merge Into {props.place?.name}</h3>
+        <Dialog
+            open={!!props.place}
+            title={`Merge Into ${props.place?.name ?? ""}`}
+            error={errorMessage()}
+            onClose={close}
+            actions={
+                <button
+                    class="btn btn-sm btn-error"
+                    disabled={!source() || mergePlacesMutation.isPending}
+                    onClick={submit}
+                >
+                    Merge
+                </button>
+            }
+        >
+            <p class="text-sm my-3">
+                The place picked below is folded into{" "}
+                <span class="font-bold">{props.place?.name}</span> and then deleted. Its media, its
+                children and the geocoder's names for it all move here, so the next time those
+                coordinates are looked up they resolve here too.
+            </p>
 
-                <p class="text-sm my-3">
-                    The place picked below is folded into{" "}
-                    <span class="font-bold">{props.place?.name}</span> and then deleted. Its media,
-                    its children and the geocoder's names for it all move here, so the next time
-                    those coordinates are looked up they resolve here too.
+            <Show when={props.place}>
+                <PlacePicker
+                    kinds={[props.place!.kind]}
+                    excludeIds={[props.place!.id]}
+                    selected={source()}
+                    onSelect={setSource}
+                />
+            </Show>
+
+            <Show when={source()}>
+                <p class="text-sm mt-3">
+                    <span class="font-bold">{source()!.name}</span> will be deleted.
                 </p>
-
-                <Show when={props.place}>
-                    <PlacePicker
-                        kinds={[props.place!.kind]}
-                        excludeIds={[props.place!.id]}
-                        selected={source()}
-                        onSelect={setSource}
-                    />
-                </Show>
-
-                <Show when={source()}>
-                    <p class="text-sm mt-3">
-                        <span class="font-bold">{source()!.name}</span> will be deleted.
-                    </p>
-                </Show>
-
-                <Show when={errorMessage()}>
-                    <p class="text-sm text-error mt-2">{errorMessage()}</p>
-                </Show>
-
-                <div class="modal-action">
-                    <button class="btn btn-sm" onClick={close}>
-                        Cancel
-                    </button>
-                    <button
-                        class="btn btn-sm btn-error"
-                        disabled={!source() || mergePlacesMutation.isPending}
-                        onClick={submit}
-                    >
-                        Merge
-                    </button>
-                </div>
-            </div>
-        </dialog>
+            </Show>
+        </Dialog>
     );
 };
 

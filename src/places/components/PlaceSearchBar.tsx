@@ -45,10 +45,6 @@ const PlaceSearchBar: Component<Props> = props => {
                 value={term()}
                 onInput={evt => setTerm(evt.currentTarget.value)}
                 onKeyDown={evt => {
-                    // the page listens for single key shortcuts, which would
-                    // otherwise fire for every letter typed here
-                    evt.stopPropagation();
-
                     if (evt.key === "Enter") {
                         submit();
                     }

@@ -13,8 +13,6 @@ const SearchBar: Component = () => {
         if (evt.key === "Enter") {
             executeSearch();
         }
-
-        evt.stopPropagation();
     };
 
     return (

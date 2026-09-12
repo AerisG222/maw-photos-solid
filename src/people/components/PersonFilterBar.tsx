@@ -19,7 +19,6 @@ const PersonFilterBar: Component<Props> = props => {
                 class="input input-bordered input-md w-100"
                 value={props.filter}
                 onInput={evt => props.setFilter(evt.currentTarget.value)}
-                onKeyDown={evt => evt.stopPropagation()}
             />
 
             <button

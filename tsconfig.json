@@ -11,6 +11,15 @@
         "jsxImportSource": "solid-js",
         "types": ["vite/client", "google.maps"],
         "noEmit": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+
+        /*
+           Kobalte's bundled declarations contain `declare const X: typeof X`
+           for a handful of type-only exports - a rollup-dts artifact that
+           TypeScript 6 rejects. This stops type-checking *inside* .d.ts files;
+           it does not relax anything about the code in src, which is still
+           checked under `strict`.
+        */
+        "skipLibCheck": true
     }
 }

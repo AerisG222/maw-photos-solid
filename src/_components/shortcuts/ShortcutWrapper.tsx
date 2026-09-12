@@ -10,6 +10,7 @@ import {
 import { createShortcut } from "@solid-primitives/keyboard";
 
 import { useShortcutContext } from "../../_contexts/ShortcutContext";
+import { isEditableTarget } from "./_util";
 
 interface Props {
     name: string;
@@ -66,6 +67,11 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
 
                 const dispose = createRoot(dispose => {
                     createShortcut(keys, () => {
+                        // somebody typing into a field is not pressing a button
+                        if (isEditableTarget(document.activeElement)) {
+                            return;
+                        }
+
                         // a control drawn as unavailable must not answer its key
                         if (!props.disabled) {
                             props.clickHandler();

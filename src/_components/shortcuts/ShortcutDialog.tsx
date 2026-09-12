@@ -1,38 +1,18 @@
-import {
-    Component,
-    For,
-    createEffect,
-    createSignal,
-    createUniqueId,
-    onCleanup,
-    onMount
-} from "solid-js";
+import { Component, For, createUniqueId, onCleanup, onMount } from "solid-js";
 
 import { ShortcutInfo, useShortcutContext } from "../../_contexts/ShortcutContext";
 import { createShortcut } from "@solid-primitives/keyboard";
 
+import { isEditableTarget } from "./_util";
+
+import Dialog from "../overlay/Dialog";
 import ShortcutKey from "./ShortcutKey";
 
 const ShortcutDialog: Component = () => {
-    const [dialog, setDialog] = createSignal<HTMLDialogElement>();
     const [shortcutContext, { addShortcut, removeShortcut, setShowDialog }] = useShortcutContext();
     const id = createUniqueId();
 
-    createEffect(() => {
-        if (shortcutContext.showDialog) {
-            dialog()?.showModal();
-        } else {
-            dialog()?.close();
-        }
-    });
-
     onMount(() => {
-        const el = dialog();
-
-        if (el) {
-            el.onclose = () => setShowDialog(false);
-        }
-
         addShortcut({
             id: id,
             shortcut: ["?"],
@@ -40,7 +20,9 @@ const ShortcutDialog: Component = () => {
         });
 
         createShortcut(["Shift", "?"], () => {
-            setShowDialog(true);
+            if (!isEditableTarget(document.activeElement)) {
+                setShowDialog(true);
+            }
         });
     });
 
@@ -57,23 +39,16 @@ const ShortcutDialog: Component = () => {
     };
 
     return (
-        <dialog class="modal" ref={setDialog}>
-            <form method="dialog" class="modal-box">
-                <h3 class="font-bold text-lg mb-4 text-secondary">Active Shortcuts</h3>
-
-                <div class="max-h-[400px] overflow-y-auto">
-                    <For each={getShortcuts()}>
-                        {shortcut => <ShortcutKey shortcut={shortcut} />}
-                    </For>
-                </div>
-
-                <div class="modal-action">
-                    <button class="btn btn-sm" onClick={() => setShowDialog(false)}>
-                        Close
-                    </button>
-                </div>
-            </form>
-        </dialog>
+        <Dialog
+            open={shortcutContext.showDialog}
+            title="Active Shortcuts"
+            cancelLabel="Close"
+            onClose={() => setShowDialog(false)}
+        >
+            <div class="max-h-[400px] overflow-y-auto">
+                <For each={getShortcuts()}>{shortcut => <ShortcutKey shortcut={shortcut} />}</For>
+            </div>
+        </Dialog>
     );
 };
 

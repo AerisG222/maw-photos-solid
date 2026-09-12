@@ -1,9 +1,10 @@
-import { Component, Show, createEffect, createSignal } from "solid-js";
+import { Component, Show, createSignal } from "solid-js";
 
 import { ApiError, describeError } from "../../_contexts/api/ApiError";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { getParentPlaceKinds, Place, PlaceKindCountry } from "../../_models/Place";
 
+import Dialog from "../../_components/overlay/Dialog";
 import PlacePicker from "./PlacePicker";
 
 interface Props {
@@ -24,18 +25,9 @@ interface Props {
 */
 const PlaceMoveDialog: Component<Props> = props => {
     const { setParentMutation } = usePlacesContext();
-    const [dialog, setDialog] = createSignal<HTMLDialogElement>();
     const [parent, setParent] = createSignal<Place>();
     // separate from "no parent picked yet", which cannot be submitted at all
     const [toRoot, setToRoot] = createSignal(false);
-
-    createEffect(() => {
-        if (props.place) {
-            dialog()?.showModal();
-        } else {
-            dialog()?.close();
-        }
-    });
 
     const close = () => {
         setParent(undefined);
@@ -79,69 +71,62 @@ const PlaceMoveDialog: Component<Props> = props => {
     };
 
     return (
-        <dialog class="modal" ref={setDialog} onClose={close}>
-            <div class="modal-box">
-                <h3 class="font-bold text-lg text-secondary">Move {props.place?.name}</h3>
+        <Dialog
+            open={!!props.place}
+            title={`Move ${props.place?.name ?? ""}`}
+            error={errorMessage()}
+            onClose={close}
+            actions={
+                <button
+                    class="btn btn-sm btn-primary"
+                    disabled={(!parent() && !toRoot()) || setParentMutation.isPending}
+                    onClick={submit}
+                >
+                    Move
+                </button>
+            }
+        >
+            <p class="text-sm my-3">
+                Pick where <span class="font-bold">{props.place?.name}</span> belongs. Its media and
+                its own children move with it.
+            </p>
 
-                <p class="text-sm my-3">
-                    Pick where <span class="font-bold">{props.place?.name}</span> belongs. Its media
-                    and its own children move with it.
-                </p>
+            <Show when={canGoToRoot()}>
+                <label class="flex items-center gap-2 text-sm mb-2">
+                    <input
+                        type="checkbox"
+                        class="checkbox checkbox-sm"
+                        checked={toRoot()}
+                        onChange={evt => setToRoot(evt.currentTarget.checked)}
+                    />
+                    Move to the root of the tree
+                </label>
+            </Show>
 
-                <Show when={canGoToRoot()}>
-                    <label class="flex items-center gap-2 text-sm mb-2">
-                        <input
-                            type="checkbox"
-                            class="checkbox checkbox-sm"
-                            checked={toRoot()}
-                            onChange={evt => setToRoot(evt.currentTarget.checked)}
-                        />
-                        Move to the root of the tree
-                    </label>
-                </Show>
-
-                <Show when={props.place && !toRoot()}>
-                    {/*
+            <Show when={props.place && !toRoot()}>
+                {/*
                         A country has nowhere else to go, so saying so beats
                         offering an empty picker and leaving the reason to be
                         guessed at.
                     */}
-                    <Show
-                        when={getParentPlaceKinds(props.place!.kind).length > 0}
-                        fallback={
-                            <p class="text-sm">
-                                A country sits at the root of the tree - there is no level above it
-                                to move it under.
-                            </p>
-                        }
-                    >
-                        <PlacePicker
-                            kinds={getParentPlaceKinds(props.place!.kind)}
-                            excludeIds={[props.place!.id]}
-                            selected={parent()}
-                            onSelect={setParent}
-                        />
-                    </Show>
+                <Show
+                    when={getParentPlaceKinds(props.place!.kind).length > 0}
+                    fallback={
+                        <p class="text-sm">
+                            A country sits at the root of the tree - there is no level above it to
+                            move it under.
+                        </p>
+                    }
+                >
+                    <PlacePicker
+                        kinds={getParentPlaceKinds(props.place!.kind)}
+                        excludeIds={[props.place!.id]}
+                        selected={parent()}
+                        onSelect={setParent}
+                    />
                 </Show>
-
-                <Show when={errorMessage()}>
-                    <p class="text-sm text-error mt-2">{errorMessage()}</p>
-                </Show>
-
-                <div class="modal-action">
-                    <button class="btn btn-sm" onClick={close}>
-                        Cancel
-                    </button>
-                    <button
-                        class="btn btn-sm btn-primary"
-                        disabled={(!parent() && !toRoot()) || setParentMutation.isPending}
-                        onClick={submit}
-                    >
-                        Move
-                    </button>
-                </div>
-            </div>
-        </dialog>
+            </Show>
+        </Dialog>
     );
 };
 

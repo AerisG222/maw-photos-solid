@@ -3,6 +3,8 @@ import { Component, Show, createEffect, createSignal } from "solid-js";
 import { ApiError } from "../../_contexts/api/ApiError";
 import { ClanRules } from "../_clanRules";
 
+import Dialog from "../../_components/overlay/Dialog";
+
 interface Props {
     open: boolean;
     title: string;
@@ -23,7 +25,6 @@ interface Props {
    markup with a different heading.
 */
 const ClanNameDialog: Component<Props> = props => {
-    const [dialog, setDialog] = createSignal<HTMLDialogElement>();
     const [name, setName] = createSignal(props.initialName);
 
     let input: HTMLInputElement | undefined;
@@ -31,10 +32,8 @@ const ClanNameDialog: Component<Props> = props => {
     createEffect(() => {
         if (props.open) {
             setName(props.initialName);
-            dialog()?.showModal();
-            input?.focus();
-        } else {
-            dialog()?.close();
+            // the dialog takes focus to itself on open; put it in the field
+            queueMicrotask(() => input?.focus());
         }
     });
 
@@ -74,51 +73,40 @@ const ClanNameDialog: Component<Props> = props => {
     };
 
     return (
-        <dialog class="modal" ref={setDialog} onClose={() => props.onCancel()}>
-            <div class="modal-box">
-                <h3 class="font-bold text-lg mb-4 text-secondary">{props.title}</h3>
+        <Dialog
+            open={props.open}
+            title={props.title}
+            error={errorMessage()}
+            onClose={props.onCancel}
+            actions={
+                <button class="btn btn-sm btn-primary" disabled={!canSubmit()} onClick={submit}>
+                    {props.submitLabel}
+                </button>
+            }
+        >
+            <input
+                ref={input}
+                type="text"
+                class="input input-bordered w-full"
+                placeholder="Clan Name"
+                maxLength={ClanRules.maxNameLength}
+                value={name()}
+                onInput={evt => setName(evt.currentTarget.value)}
+                onKeyDown={evt => {
+                    if (evt.key === "Enter") {
+                        submit();
+                    }
+                }}
+            />
 
-                <input
-                    ref={input}
-                    type="text"
-                    class="input input-bordered w-full"
-                    placeholder="Clan Name"
-                    maxLength={ClanRules.maxNameLength}
-                    value={name()}
-                    onInput={evt => setName(evt.currentTarget.value)}
-                    onKeyDown={evt => {
-                        // the page listens for single key shortcuts, which would
-                        // otherwise fire for every letter typed here
-                        evt.stopPropagation();
-
-                        if (evt.key === "Enter") {
-                            submit();
-                        }
-                    }}
-                />
-
-                <Show when={props.memberCount !== undefined}>
-                    <p class="text-sm mt-2">
-                        {props.memberCount === 1
-                            ? "1 person selected"
-                            : `${props.memberCount ?? 0} people selected`}
-                    </p>
-                </Show>
-
-                <Show when={errorMessage()}>
-                    <p class="text-sm text-error mt-2">{errorMessage()}</p>
-                </Show>
-
-                <div class="modal-action">
-                    <button class="btn btn-sm" onClick={() => props.onCancel()}>
-                        Cancel
-                    </button>
-                    <button class="btn btn-sm btn-primary" disabled={!canSubmit()} onClick={submit}>
-                        {props.submitLabel}
-                    </button>
-                </div>
-            </div>
-        </dialog>
+            <Show when={props.memberCount !== undefined}>
+                <p class="text-sm mt-2">
+                    {props.memberCount === 1
+                        ? "1 person selected"
+                        : `${props.memberCount ?? 0} people selected`}
+                </p>
+            </Show>
+        </Dialog>
     );
 };
 

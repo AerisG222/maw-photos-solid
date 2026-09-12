@@ -1,4 +1,4 @@
-import { Component, Match, Show, Switch, createEffect, createMemo, createSignal } from "solid-js";
+import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-js";
 
 import { ApiError, describeError } from "../../_contexts/api/ApiError";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
@@ -10,6 +10,7 @@ import { Place } from "../../_models/Place";
 
 import CoverCandidateGrid from "./CoverCandidateGrid";
 import ErrorMessage from "../../_components/error/ErrorMessage";
+import Dialog from "../../_components/overlay/Dialog";
 import Icon from "../../_components/icon/Icon";
 import PlaceCoverCategories from "./PlaceCoverCategories";
 import PlaceCoverCategoryMedia from "./PlaceCoverCategoryMedia";
@@ -47,7 +48,6 @@ type Browsing = "media" | "categories";
 */
 const PlaceCoverDialog: Component<Props> = props => {
     const { placeMediaQuery, setCoverMutation, clearCoverMutation } = usePlacesContext();
-    const [dialog, setDialog] = createSignal<HTMLDialogElement>();
     const [browsing, setBrowsing] = createSignal<Browsing>("media");
     const [category, setCategory] = createSignal<Category>();
     const [favoritesOnly, setFavoritesOnly] = createSignal(false);
@@ -59,27 +59,6 @@ const PlaceCoverDialog: Component<Props> = props => {
     const mediaFilter = () => ({ favoritesOnly: favoritesOnly(), seed: seed() });
     // eslint-disable-next-line solid/reactivity -- both are accessors, and the query re-keys itself when either changes
     const media = placeMediaQuery(placeId, mediaFilter);
-
-    /*
-       Guarded on what the element is already doing, unlike the dialogs that open
-       over a value they were handed. The place here is re-read from the cache on
-       every render, so publishing a cover hands this a new object while the
-       dialog is open - and re-opening an open dialog would at best be a no-op
-       and at worst move the focus back to the top of it mid-choice.
-    */
-    createEffect(() => {
-        const el = dialog();
-
-        if (!el) {
-            return;
-        }
-
-        if (props.place && !el.open) {
-            el.showModal();
-        } else if (!props.place && el.open) {
-            el.close();
-        }
-    });
 
     const candidates = createMemo(() => {
         const items: Media[] = [];
@@ -151,184 +130,178 @@ const PlaceCoverDialog: Component<Props> = props => {
     };
 
     return (
-        <dialog class="modal" ref={setDialog} onClose={close}>
-            <div class="modal-box max-w-5xl">
-                <h3 class="font-bold text-lg text-secondary">
-                    Cover for {props.place?.name ?? "this place"}
-                </h3>
+        <Dialog
+            open={!!props.place}
+            wide
+            title={`Cover for ${props.place?.name ?? "this place"}`}
+            cancelLabel="Done"
+            onClose={close}
+        >
+            <div class="flex flex-wrap items-center gap-3 my-3">
+                <Show
+                    when={props.place?.coverUrl}
+                    fallback={
+                        <div class="flex items-center justify-center w-40 aspect-4/3 rounded-sm bg-base-300 text-base-content/40">
+                            <Icon classes="icon-[ic--round-add-photo-alternate] text-3xl" />
+                        </div>
+                    }
+                >
+                    <img
+                        src={props.place!.coverUrl!}
+                        alt={`Cover of ${props.place!.name}`}
+                        class="w-40 aspect-4/3 object-cover rounded-sm"
+                    />
+                </Show>
 
-                <div class="flex flex-wrap items-center gap-3 my-3">
-                    <Show
-                        when={props.place?.coverUrl}
-                        fallback={
-                            <div class="flex items-center justify-center w-40 aspect-4/3 rounded-sm bg-base-300 text-base-content/40">
-                                <Icon classes="icon-[ic--round-add-photo-alternate] text-3xl" />
-                            </div>
-                        }
-                    >
-                        <img
-                            src={props.place!.coverUrl!}
-                            alt={`Cover of ${props.place!.name}`}
-                            class="w-40 aspect-4/3 object-cover rounded-sm"
-                        />
-                    </Show>
+                <div class="flex flex-col gap-2">
+                    <p class="text-sm">
+                        The cover is published as a copy anyone signed in can see, whether or not
+                        they can reach the photograph it came from.
+                    </p>
 
-                    <div class="flex flex-col gap-2">
-                        <p class="text-sm">
-                            The cover is published as a copy anyone signed in can see, whether or
-                            not they can reach the photograph it came from.
-                        </p>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            class="btn btn-sm"
+                            classList={{ "btn-active": favoritesOnly() }}
+                            onClick={() => setFavoritesOnly(!favoritesOnly())}
+                        >
+                            <Icon classes="icon-[ic--round-favorite]" />
+                            Favorites Only
+                        </button>
 
-                        <div class="flex flex-wrap gap-2">
-                            <button
-                                class="btn btn-sm"
-                                classList={{ "btn-active": favoritesOnly() }}
-                                onClick={() => setFavoritesOnly(!favoritesOnly())}
-                            >
-                                <Icon classes="icon-[ic--round-favorite]" />
-                                Favorites Only
-                            </button>
-
-                            {/*
+                        {/*
                                 A fresh seed each time, so pressing it again
                                 reshuffles rather than replaying the same order.
                                 Only the media feed has an order to shuffle - a
                                 shuffled list of categories would mean nothing.
                             */}
-                            <Show when={browsing() === "media"}>
-                                <button
-                                    class="btn btn-sm"
-                                    classList={{ "btn-active": seed() !== undefined }}
-                                    onClick={() => setSeed(newMediaSeed())}
-                                >
-                                    <Icon classes="icon-[ic--round-shuffle]" />
-                                    Shuffle
-                                </button>
-                            </Show>
-
+                        <Show when={browsing() === "media"}>
                             <button
-                                class="btn btn-sm btn-error btn-outline"
-                                disabled={!props.place?.coverMediaId || pending()}
-                                onClick={clear}
+                                class="btn btn-sm"
+                                classList={{ "btn-active": seed() !== undefined }}
+                                onClick={() => setSeed(newMediaSeed())}
                             >
-                                <Icon classes="icon-[ic--round-delete]" />
-                                Remove Cover
+                                <Icon classes="icon-[ic--round-shuffle]" />
+                                Shuffle
                             </button>
-                        </div>
+                        </Show>
+
+                        <button
+                            class="btn btn-sm btn-error btn-outline"
+                            disabled={!props.place?.coverMediaId || pending()}
+                            onClick={clear}
+                        >
+                            <Icon classes="icon-[ic--round-delete]" />
+                            Remove Cover
+                        </button>
                     </div>
                 </div>
-
-                <div role="tablist" class="tabs tabs-border mb-2">
-                    <button
-                        role="tab"
-                        class="tab"
-                        classList={{ "tab-active": browsing() === "media" }}
-                        onClick={() => browse("media")}
-                    >
-                        <Icon classes="icon-[ic--round-photo-library] mr-1" />
-                        All Media
-                    </button>
-                    <button
-                        role="tab"
-                        class="tab"
-                        classList={{ "tab-active": browsing() === "categories" }}
-                        onClick={() => browse("categories")}
-                    >
-                        <Icon classes="icon-[ic--round-collections] mr-1" />
-                        By Category
-                    </button>
-                </div>
-
-                <Show when={errorMessage()}>
-                    <p class="text-sm text-error mb-2">{errorMessage()}</p>
-                </Show>
-
-                <div class="max-h-[50vh] overflow-y-auto">
-                    <Switch>
-                        <Match when={browsing() === "categories" && category()}>
-                            <PlaceCoverCategoryMedia
-                                category={category()!}
-                                coverMediaId={props.place?.coverMediaId}
-                                disabled={pending()}
-                                onChoose={choose}
-                                onBack={() => setCategory(undefined)}
-                            />
-                        </Match>
-
-                        <Match when={browsing() === "categories"}>
-                            <PlaceCoverCategories
-                                placeId={placeId()}
-                                favoritesOnly={favoritesOnly()}
-                                onSelect={setCategory}
-                            />
-                        </Match>
-
-                        <Match when={browsing() === "media"}>
-                            <Switch
-                                fallback={
-                                    <SkeletonGrid thumbnailSize={ThumbnailSizeSmall} count={12} />
-                                }
-                            >
-                                <Match when={media.isError}>
-                                    <ErrorMessage
-                                        title="Could not load the media at this place"
-                                        error={media.error}
-                                        onRetry={() => void media.refetch()}
-                                    />
-                                </Match>
-
-                                <Match when={media.isSuccess}>
-                                    <Show
-                                        when={candidates().length > 0}
-                                        fallback={
-                                            <EmptyState
-                                                icon="icon-[ic--round-photo-library]"
-                                                title={
-                                                    favoritesOnly()
-                                                        ? "No favorites here"
-                                                        : "There is nothing here to choose from"
-                                                }
-                                                detail={
-                                                    favoritesOnly()
-                                                        ? "None of the media here has been marked as a favorite."
-                                                        : undefined
-                                                }
-                                            />
-                                        }
-                                    >
-                                        <CoverCandidateGrid
-                                            items={candidates()}
-                                            coverMediaId={props.place?.coverMediaId}
-                                            disabled={pending()}
-                                            onChoose={choose}
-                                        />
-
-                                        <Show when={media.hasNextPage}>
-                                            <div class="flex justify-center my-3">
-                                                <button
-                                                    class="btn btn-sm btn-primary btn-outline"
-                                                    disabled={media.isFetchingNextPage}
-                                                    onClick={() => void media.fetchNextPage()}
-                                                >
-                                                    <Icon classes="icon-[ic--round-fast-forward]" />
-                                                    Request More
-                                                </button>
-                                            </div>
-                                        </Show>
-                                    </Show>
-                                </Match>
-                            </Switch>
-                        </Match>
-                    </Switch>
-                </div>
-
-                <div class="modal-action">
-                    <button class="btn btn-sm" onClick={close}>
-                        Done
-                    </button>
-                </div>
             </div>
-        </dialog>
+
+            <div role="tablist" class="tabs tabs-border mb-2">
+                <button
+                    role="tab"
+                    class="tab"
+                    classList={{ "tab-active": browsing() === "media" }}
+                    onClick={() => browse("media")}
+                >
+                    <Icon classes="icon-[ic--round-photo-library] mr-1" />
+                    All Media
+                </button>
+                <button
+                    role="tab"
+                    class="tab"
+                    classList={{ "tab-active": browsing() === "categories" }}
+                    onClick={() => browse("categories")}
+                >
+                    <Icon classes="icon-[ic--round-collections] mr-1" />
+                    By Category
+                </button>
+            </div>
+
+            <Show when={errorMessage()}>
+                <p class="text-sm text-error mb-2">{errorMessage()}</p>
+            </Show>
+
+            <div class="max-h-[50vh] overflow-y-auto">
+                <Switch>
+                    <Match when={browsing() === "categories" && category()}>
+                        <PlaceCoverCategoryMedia
+                            category={category()!}
+                            coverMediaId={props.place?.coverMediaId}
+                            disabled={pending()}
+                            onChoose={choose}
+                            onBack={() => setCategory(undefined)}
+                        />
+                    </Match>
+
+                    <Match when={browsing() === "categories"}>
+                        <PlaceCoverCategories
+                            placeId={placeId()}
+                            favoritesOnly={favoritesOnly()}
+                            onSelect={setCategory}
+                        />
+                    </Match>
+
+                    <Match when={browsing() === "media"}>
+                        <Switch
+                            fallback={
+                                <SkeletonGrid thumbnailSize={ThumbnailSizeSmall} count={12} />
+                            }
+                        >
+                            <Match when={media.isError}>
+                                <ErrorMessage
+                                    title="Could not load the media at this place"
+                                    error={media.error}
+                                    onRetry={() => void media.refetch()}
+                                />
+                            </Match>
+
+                            <Match when={media.isSuccess}>
+                                <Show
+                                    when={candidates().length > 0}
+                                    fallback={
+                                        <EmptyState
+                                            icon="icon-[ic--round-photo-library]"
+                                            title={
+                                                favoritesOnly()
+                                                    ? "No favorites here"
+                                                    : "There is nothing here to choose from"
+                                            }
+                                            detail={
+                                                favoritesOnly()
+                                                    ? "None of the media here has been marked as a favorite."
+                                                    : undefined
+                                            }
+                                        />
+                                    }
+                                >
+                                    <CoverCandidateGrid
+                                        items={candidates()}
+                                        coverMediaId={props.place?.coverMediaId}
+                                        disabled={pending()}
+                                        onChoose={choose}
+                                    />
+
+                                    <Show when={media.hasNextPage}>
+                                        <div class="flex justify-center my-3">
+                                            <button
+                                                class="btn btn-sm btn-primary btn-outline"
+                                                disabled={media.isFetchingNextPage}
+                                                onClick={() => void media.fetchNextPage()}
+                                            >
+                                                <Icon classes="icon-[ic--round-fast-forward]" />
+                                                Request More
+                                            </button>
+                                        </div>
+                                    </Show>
+                                </Show>
+                            </Match>
+                        </Switch>
+                    </Match>
+                </Switch>
+            </div>
+        </Dialog>
     );
 };
 
