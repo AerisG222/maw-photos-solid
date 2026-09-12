@@ -10,6 +10,15 @@ export const settingsRedirect: AppRouteDefinition = {
     component: lazy(() => import("./Redirect"))
 };
 
+export const settingsAppearance: AppRouteDefinition = {
+    icon: "icon-[ic--round-brightness-6]",
+    name: "Appearance",
+    tooltip: "Appearance Settings",
+    path: "/appearance",
+    absolutePath: `${basePath}/appearance`,
+    component: lazy(() => import("./Appearance"))
+};
+
 export const settingsBrowsing: AppRouteDefinition = {
     icon: "icon-[ic--round-density-medium]",
     name: "Browsing",
@@ -65,6 +74,7 @@ export const settings: AppRouteDefinition = {
     component: lazy(() => import("./Layout")),
     children: [
         settingsRedirect,
+        settingsAppearance,
         settingsBrowsing,
         settingsCategories,
         settingsMedia,

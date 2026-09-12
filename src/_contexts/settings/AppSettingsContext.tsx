@@ -12,7 +12,7 @@ import {
     DARK_SCHEME_QUERY,
     ResolvedThemeIdType,
     ThemeIdType,
-    getNextTheme,
+    getToggledTheme,
     prefersDark,
     resolveTheme
 } from "../../_models/Theme";
@@ -64,7 +64,7 @@ export const AppSettingsProvider: ParentComponent = props => {
     };
 
     const setTheme = (theme: ThemeIdType) => updateState({ theme });
-    const toggleTheme = () => updateState({ theme: getNextTheme(state.theme) });
+    const toggleTheme = () => updateState({ theme: getToggledTheme(resolvedTheme()) });
     const setNavExpanded = (navExpanded: boolean) => updateState({ navExpanded });
     const toggleNavExpanded = () => updateState({ navExpanded: !state.navExpanded });
     const setShowToolbarLabels = (showToolbarLabels: boolean) => updateState({ showToolbarLabels });

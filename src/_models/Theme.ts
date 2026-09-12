@@ -40,14 +40,15 @@ export const resolveTheme = (
     return systemPrefersDark ? ThemeDark : ThemeLight;
 };
 
-// light -> dark -> system -> light
-export const getNextTheme = (theme: ThemeIdType): ThemeIdType => {
-    switch (theme) {
-        case ThemeLight:
-            return ThemeDark;
-        case ThemeDark:
-            return ThemeSystem;
-        default:
-            return ThemeLight;
-    }
-};
+/*
+   What the toggle in the navigation switches to.
+
+   Deliberately not a three-way cycle through `system`. `system` renders as
+   whichever of light or dark the operating system asks for, so on a dark
+   desktop a cycle reads as dark, dark, light - one of the three presses appears
+   to do nothing at all. The toggle flips away from what is actually on screen,
+   which is always a visible change; `system` is chosen in settings, where it can
+   say what it means.
+*/
+export const getToggledTheme = (resolved: ResolvedThemeIdType): ThemeIdType =>
+    resolved === ThemeDark ? ThemeLight : ThemeDark;

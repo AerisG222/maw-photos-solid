@@ -767,6 +767,26 @@ what it prevented, not by checking what a reader could still do. The test now as
 handler does not fire _and_ `defaultPrevented` is false - and was confirmed to fail on the old code before
 being kept.
 
+### `system` cannot be a step in a cycle (2026-09-12)
+
+Decision 13 added a third theme, and step 3 put it in the navigation toggle as a third step:
+light -> dark -> system -> light. But `system` is not a third appearance - it renders as one of the other two.
+On a dark desktop the cycle reads as **dark, dark, light**, and one press in three appears to do nothing.
+Reported as having to click twice to reach light mode.
+
+The toggle now flips away from what is _resolved_ - whatever is on screen, to the other one - so a press is
+always a visible change, and it always lands on an explicit choice rather than back on `system`.
+
+That leaves `system` needing somewhere to be chosen, which §5 had planned anyway: **Settings -> Appearance**,
+holding the three-way theme choice plus the navigation rail and toolbar-label preferences that step 3 had
+consolidated into `AppSettings` without giving them a home. The nav button's tooltip now names its
+destination - "Switch to Light Theme" - rather than saying "Toggle Theme" and leaving the outcome to be
+discovered.
+
+The test asserts the property rather than the mapping: for every starting choice, on both a light and a dark
+desktop, toggling changes the resolved theme. The old cycle fails it on exactly one case - starting from dark,
+on a dark desktop - which is the press that was reported.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

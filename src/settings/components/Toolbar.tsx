@@ -1,6 +1,7 @@
 import { ParentComponent } from "solid-js";
 
 import {
+    settingsAppearance,
     settingsBrowsing,
     settingsCategories,
     settingsMedia,
@@ -16,6 +17,7 @@ const Toolbar: ParentComponent = () => {
         <ToolbarLayout>
             <NavGroup
                 entries={[
+                    { route: settingsAppearance, href: settingsAppearance.absolutePath },
                     { route: settingsBrowsing, href: settingsBrowsing.absolutePath },
                     { route: settingsCategories, href: settingsCategories.absolutePath },
                     { route: settingsMedia, href: settingsMedia.absolutePath },
