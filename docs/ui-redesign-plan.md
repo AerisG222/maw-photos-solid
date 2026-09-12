@@ -787,6 +787,26 @@ The test asserts the property rather than the mapping: for every starting choice
 desktop, toggling changes the resolved theme. The old cycle fails it on exactly one case - starting from dark,
 on a dark desktop - which is the press that was reported.
 
+### Two buttons, one setting (2026-09-12)
+
+Step 3 merged `showFavoritesBadge` and `showTypesBadge` into a single `showBadges`, per decision 5 - but left
+**both buttons** in five toolbars. They read the same flag and wrote the same flag, so pressing either one did
+the same thing. Reported as "toggle favorites and toggle media types seem to do the same thing".
+
+This is the same mistake as the density controls in that step, where `s` and `m` both ended up cycling
+density. That one was caught while writing the code; this one was not, because the two badge buttons live in
+different files from each other and the duplication is only visible once you know both write to one store.
+
+They are one **Badges** control now, on `h`, and `ToggleShowTypesButton` is deleted - a file whose component
+was also, incidentally, _declared_ as `ToggleShowFavoritesBadgeButton`, having been copy-pasted from its
+neighbour and never renamed. `e` is freed as a listing key; what remains on it is the Effects card and the
+Places edit mode, which decision 6 separates in step 9.
+
+**The general shape of it:** every setting that step 3 collapsed is a candidate for this. Two controls that
+used to mean different things now mean one thing, and nothing in the type system notices. The remaining
+merges to audit when their toolbars are rebuilt in step 8 are labels - titles, years, names and media counts
+were four controls over what is now `showLabels`, and three of those four still have their own button.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

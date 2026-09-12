@@ -6,16 +6,8 @@ import { defaultGridThumbnailSize, getNextThumbnailSize } from "../../_models/Th
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 
 const GridToolbar: Component = () => {
-    const [
-        settings,
-        {
-            setShowTitles,
-            setThumbnailSize,
-            setDimThumbnails,
-            setShowFavoritesBadge,
-            setShowTypesBadge
-        }
-    ] = useCategoryGridViewSettingsContext();
+    const [settings, { setShowTitles, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }] =
+        useCategoryGridViewSettingsContext();
 
     const onToggleTitles = () => {
         setShowTitles(!settings.showTitles);
@@ -37,10 +29,6 @@ const GridToolbar: Component = () => {
 
     const onToggleFavoritesBadge = () => {
         setShowFavoritesBadge(!settings.showFavoritesBadge);
-    };
-
-    const onToggleTypesBadge = () => {
-        setShowTypesBadge(!settings.showTypesBadge);
     };
 
     return (
@@ -70,20 +58,12 @@ const GridToolbar: Component = () => {
                 active={!settings.dimThumbnails}
             />
             <ToolbarButton
-                icon="icon-[ic--round-favorite]"
-                name="Favorites"
-                tooltip="Toggle Favorites Badge"
+                icon="icon-[ic--round-label]"
+                name="Badges"
+                tooltip="Toggle Badges"
                 shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
                 active={settings.showFavoritesBadge}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-label]"
-                name="Media Types"
-                tooltip="Toggle Media Types Badge"
-                shortcutKeys={["e"]}
-                clickHandler={onToggleTypesBadge}
-                active={settings.showTypesBadge}
             />
         </>
     );

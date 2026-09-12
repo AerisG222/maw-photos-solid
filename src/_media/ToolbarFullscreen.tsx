@@ -12,7 +12,7 @@ import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
-import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
+import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeMediaIsFirst: boolean;
@@ -77,9 +77,9 @@ const FullscreenToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowFavoritesBadgeButton
+            <ToggleShowBadgesButton
                 isActive={props.showFavoritesBadge}
-                setShowFavoritesBadge={props.setShowFavoritesBadge}
+                setShowBadges={props.setShowFavoritesBadge}
             />
             <ToggleHighlightFacesButton
                 isActive={settings.highlightFaces}

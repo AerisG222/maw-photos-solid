@@ -16,8 +16,7 @@ import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
-import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
-import ToggleShowTypesBadgeButton from "./toolbar/ToggleShowTypesButton";
+import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -89,13 +88,9 @@ const GridToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowFavoritesBadgeButton
+            <ToggleShowBadgesButton
                 isActive={settings.showFavoritesBadge}
-                setShowFavoritesBadge={props.setShowFavoritesBadge}
-            />
-            <ToggleShowTypesBadgeButton
-                isActive={settings.showTypesBadge}
-                setShowTypesBadge={props.setShowTypesBadge}
+                setShowBadges={props.setShowFavoritesBadge}
             />
             <ToggleHighlightFacesButton
                 isActive={settings.highlightFaces}

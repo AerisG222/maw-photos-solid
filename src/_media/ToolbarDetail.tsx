@@ -20,7 +20,7 @@ import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
-import ToggleShowFavoritesBadgeButton from "./toolbar/ToggleShowFavoritesButton";
+import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -150,9 +150,9 @@ const DetailToolbar: Component<Props> = props => {
                 active={!settings.dimThumbnails}
             />
 
-            <ToggleShowFavoritesBadgeButton
+            <ToggleShowBadgesButton
                 isActive={settings.showFavoritesBadge}
-                setShowFavoritesBadge={props.setShowFavoritesBadge}
+                setShowBadges={props.setShowFavoritesBadge}
             />
         </>
     );

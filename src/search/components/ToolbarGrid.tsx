@@ -8,14 +8,7 @@ import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 const GridToolbar: Component = () => {
     const [
         settings,
-        {
-            setShowTitles,
-            setShowYears,
-            setThumbnailSize,
-            setDimThumbnails,
-            setShowFavoritesBadge,
-            setShowTypesBadge
-        }
+        { setShowTitles, setShowYears, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }
     ] = useSearchGridViewSettingsContext();
 
     const ensureLargeThumbnails = () => {
@@ -50,10 +43,6 @@ const GridToolbar: Component = () => {
 
     const onToggleFavoritesBadge = () => {
         setShowFavoritesBadge(!settings.showFavoritesBadge);
-    };
-
-    const onToggleTypesBadge = () => {
-        setShowTypesBadge(!settings.showTypesBadge);
     };
 
     return (
@@ -91,20 +80,12 @@ const GridToolbar: Component = () => {
                 active={!settings.dimThumbnails}
             />
             <ToolbarButton
-                icon="icon-[ic--round-favorite]"
-                name="Favorites"
-                tooltip="Toggle Favorites Badge"
+                icon="icon-[ic--round-label]"
+                name="Badges"
+                tooltip="Toggle Badges"
                 shortcutKeys={["h"]}
                 clickHandler={onToggleFavoritesBadge}
                 active={settings.showFavoritesBadge}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-label]"
-                name="Media Types"
-                tooltip="Toggle Media Types Badge"
-                shortcutKeys={["e"]}
-                clickHandler={onToggleTypesBadge}
-                active={settings.showTypesBadge}
             />
         </>
     );

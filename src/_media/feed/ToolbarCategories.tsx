@@ -27,14 +27,7 @@ interface Props {
 const ToolbarCategories: Component<Props> = props => {
     const [
         settings,
-        {
-            setShowTitles,
-            setShowYears,
-            setThumbnailSize,
-            setDimThumbnails,
-            setShowFavoritesBadge,
-            setShowTypesBadge
-        }
+        { setShowTitles, setShowYears, setThumbnailSize, setDimThumbnails, setShowFavoritesBadge }
     ] = useFeedCategoryViewSettingsContext();
 
     // a card only has room for its title and year at the full size, so turning
@@ -119,20 +112,12 @@ const ToolbarCategories: Component<Props> = props => {
                 active={!settings.dimThumbnails}
             />
             <ToolbarButton
-                icon="icon-[ic--round-favorite]"
-                name="Favorite Badges"
-                tooltip="Toggle Favorites Badge"
+                icon="icon-[ic--round-label]"
+                name="Badges"
+                tooltip="Toggle Badges"
                 shortcutKeys={["h"]}
                 clickHandler={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
                 active={settings.showFavoritesBadge}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-label]"
-                name="Media Types"
-                tooltip="Toggle Media Types Badge"
-                shortcutKeys={["e"]}
-                clickHandler={() => setShowTypesBadge(!settings.showTypesBadge)}
-                active={settings.showTypesBadge}
             />
         </ToolbarLayout>
     );
