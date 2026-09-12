@@ -8,7 +8,7 @@ import { Uuid } from "../../_models/Uuid";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
-import ToolbarLink from "../../_components/toolbar/ToolbarLink";
+import NavGroup from "../../_components/toolbar/NavGroup";
 
 interface Props {
     // undefined at the root, where there is no one place to act on
@@ -30,7 +30,7 @@ interface Props {
    only promises a direction.
 
    The two listings are here rather than beside the place they apply to, for the
-   same reason every other area puts them here: a fixed position and a key. They
+   same reason every other area puts them here: a fixed position and a digit. They
    are the same pair the feed itself shows, drawn the same way - neither is lit,
    because standing on a place is standing in neither of them.
 
@@ -62,7 +62,6 @@ const Toolbar: Component<Props> = props => {
         icon: "icon-[ic--round-image]",
         name: "Media",
         tooltip: "Media Taken Here",
-        shortcutKeys: ["p"],
         path: mediaHref(),
         absolutePath: mediaHref()
     });
@@ -71,24 +70,27 @@ const Toolbar: Component<Props> = props => {
         icon: "icon-[ic--round-collections]",
         name: "Categories",
         tooltip: "Categories With Media Taken Here",
-        shortcutKeys: ["k"],
         path: categoriesHref(),
         absolutePath: categoriesHref()
     });
 
     return (
         <ToolbarLayout>
-            <ToolbarLink
-                href={mediaHref()}
-                route={mediaRoute()}
-                active={false}
-                disabled={!props.placeId}
-            />
-            <ToolbarLink
-                href={categoriesHref()}
-                route={categoriesRoute()}
-                active={false}
-                disabled={!props.placeId}
+            <NavGroup
+                entries={[
+                    {
+                        route: mediaRoute(),
+                        href: mediaHref(),
+                        active: false,
+                        disabled: !props.placeId
+                    },
+                    {
+                        route: categoriesRoute(),
+                        href: categoriesHref(),
+                        active: false,
+                        disabled: !props.placeId
+                    }
+                ]}
             />
 
             <Show when={props.canEdit}>

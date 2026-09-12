@@ -20,6 +20,8 @@ interface Props {
     toolbarExtras?: JSXElement;
     // rendered ahead of the view links - see Toolbar
     toolbarLeading?: JSXElement;
+    // how many navigation entries `toolbarLeading` holds - see Toolbar
+    toolbarLeadingNavCount?: number;
     showFavoritesBadge: boolean;
     setShowFavoritesBadge: () => void;
 }
@@ -49,6 +51,7 @@ const ViewFullscreen: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         leading={props.toolbarLeading}
+                        leadingNavCount={props.toolbarLeadingNavCount}
                     >
                         <FullscreenToolbar
                             extras={props.toolbarExtras}

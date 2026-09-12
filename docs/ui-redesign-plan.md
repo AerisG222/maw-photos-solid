@@ -682,6 +682,31 @@ So: **anything whose correctness is "can you see it" needs a browser.** The unit
 dialog exists, is labelled and responds; they cannot say it is visible. Steps that change rendered appearance
 should be looked at in the running app before being called done - which is how this one was found.
 
+### Step 6 notes (2026-09-12)
+
+**One collision was live, and the code knew it.** `ToolbarListing` carried a comment explaining that its `k`
+had to sit on whichever listing you were _not_ in, because "every other letter on this screen is spoken for".
+It was worse than that: the Category Teaser card in the info sidebar also binds `k`, and the sidebar is present
+on a feed's detail view - so on that screen `k` was registered twice. The other two overlaps were inconsistent
+rather than live: `g` meant Grid on a media screen and Merge on the places screen, `p` meant the places media
+listing and the slideshow. Navigation has vacated all of `g`, `w`, `f`, `z`, `/`, `k` and `p`; what is left on
+those letters is a single action each.
+
+**`ToolbarLink` is now private to `NavGroup`.** No screen constructs one directly any more, which is what makes
+"numbered by position" true by construction rather than by discipline. The twelve `shortcutKeys` declarations
+in `category`, `random` and `feed` route files are gone - `NavGroup` overrode them, so they were dead config
+that still read as authoritative.
+
+**Digits run across groups, not within them.** A feed's toolbar is two navigation groups - the listing switch,
+then the view links - and `1`-`5` has to run through both. `NavGroup` takes an explicit `digitOffset` and
+`ToolbarListing` exports the count it occupies, threaded through the three view components that expose a
+`leading` slot. A context handing out the next digit would have avoided the threading, but it would also have
+made the numbering depend on mount order, which is exactly the kind of quiet fragility this step is removing.
+
+**The dev-mode collision assertion is still deferred.** §7 wants `ShortcutContext` to throw when two different
+descriptions claim one key. It cannot go in yet: the letter collisions inside the toolbars are real and stay
+until step 8 replaces them, so the assertion would fail on startup today. It belongs with `ListingToolbar`.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -788,7 +813,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **3**   | **DONE 2026-09-12 — the four stores.** 16 settings keys become 4; 15 of the old contexts are now adapters that own nothing, so no screen had to change. `_migrate.ts` carries the legacy keys across without deleting them. `AllSettingsProvider` goes from 18 providers to 4. Theme gains `system` (decision 13), including the pre-mount script. 41 tests: migration fixtures plus a runtime pass over the adapters.                                                                                                                      | 40 files                                | done                       |
 | **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files                                | low                        |
 | **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep                        | low                        |
-| **6**   | **`NavGroup` + digit shortcuts.** Convert the seven nav rows. Ships the navigation half of the shortcut map.                                                                                                                                                                                                                                                                                                                                                                                                                                | 7 files                                 | low                        |
+| **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files                                | low                        |
 | **7**   | **`Tile` + `ListingSurface`.** Convert the four cards and the six grid containers. Keyboard cursor arrives here.                                                                                                                                                                                                                                                                                                                                                                                                                            | ~12 files                               | medium                     |
 | **8**   | **`ListingToolbar`.** Delete the eight density/label/badge copies. Ships the letter half of the shortcut map, and removes dim/margins/size/titles/years/counts/badge-toggles.                                                                                                                                                                                                                                                                                                                                                               | 8 deletions                             | medium                     |
 | **9**   | **Inspector.** Generalise `Sidebar` into `Inspector` + registry; mount in Grid, Fullscreen, Map; move rotate/flip into the _Adjust_ card; fold the bulk-edit cards in.                                                                                                                                                                                                                                                                                                                                                                      | `_media/detail/*`, `_media/bulk-edit/*` | **high — the payoff step** |

@@ -2,15 +2,19 @@ import { Component } from "solid-js";
 
 import { aboutAndroid, aboutHelp, aboutReleaseNotes } from "../_routes";
 
+import NavGroup from "../../_components/toolbar/NavGroup";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
-import ToolbarLink from "../../_components/toolbar/ToolbarLink";
 
 const Toolbar: Component = () => {
     return (
         <ToolbarLayout>
-            <ToolbarLink href={aboutHelp.absolutePath} route={aboutHelp} />
-            <ToolbarLink href={aboutReleaseNotes.absolutePath} route={aboutReleaseNotes} />
-            <ToolbarLink href={aboutAndroid.absolutePath} route={aboutAndroid} />
+            <NavGroup
+                entries={[
+                    { route: aboutHelp, href: aboutHelp.absolutePath },
+                    { route: aboutReleaseNotes, href: aboutReleaseNotes.absolutePath },
+                    { route: aboutAndroid, href: aboutAndroid.absolutePath }
+                ]}
+            />
         </ToolbarLayout>
     );
 };

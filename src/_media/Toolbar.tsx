@@ -4,18 +4,20 @@ import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSett
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
+import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { IMediaService } from "./services/IMediaService";
 import {
-    MediaViewGrid,
+    MediaView,
+    MediaViewBulkEdit,
     MediaViewDetail,
     MediaViewFullscreen,
-    MediaViewMap,
-    MediaViewBulkEdit
+    MediaViewGrid,
+    MediaViewMap
 } from "../_models/MediaView";
 
+import NavGroup, { NavEntry } from "../_components/toolbar/NavGroup";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
-import ToolbarLink from "../_components/toolbar/ToolbarLink";
 
 interface Props {
     mediaService: IMediaService;
@@ -24,7 +26,25 @@ interface Props {
     // sits ahead of the view links, for a choice they are subordinate to - a
     // face feed puts its media / categories switch here
     leading?: JSXElement;
+    /*
+       How many navigation entries the `leading` slot holds, so the view links
+       carry on numbering from there instead of starting over at 1. Callers pass
+       the count exported by whatever they put in the slot.
+    */
+    leadingNavCount?: number;
 }
+
+/*
+   The order the views are offered in. Grid first because it is where browsing
+   starts, and because it is the one every feed has.
+*/
+const viewOrder: MediaView[] = [
+    MediaViewGrid,
+    MediaViewDetail,
+    MediaViewFullscreen,
+    MediaViewMap,
+    MediaViewBulkEdit
+];
 
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaPageSettingsContext();
@@ -34,21 +54,28 @@ const Toolbar: ParentComponent<Props> = props => {
     // resolved once - see the note in ToolbarGrid on reading a slot twice
     const leading = children(() => props.leading);
 
-    const mediaViewDetail = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewDetail)
-    );
-    const mediaViewFullscreen = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewFullscreen)
-    );
-    const mediaViewGrid = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewGrid)
-    );
-    const mediaViewMap = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewMap)
-    );
-    const mediaViewBulkEdit = createMemo(() =>
-        props.mediaService.getAvailableRoutes().find(r => r.mediaView === MediaViewBulkEdit)
-    );
+    /*
+       Only the views this feed actually offers, in one list, so the digits are
+       positional over what is on screen. Below `md` that is the grid alone -
+       which keeps the grid on 1 either way, since everything hidden comes after
+       it.
+    */
+    const entries = createMemo<NavEntry[]>(() => {
+        const available = props.mediaService.getAvailableRoutes();
+
+        return viewOrder
+            .filter(view => view === MediaViewGrid || gteMd())
+            .map(view => ({ view, route: available.find(r => r.mediaView === view) }))
+            .filter(
+                (candidate): candidate is { view: MediaView; route: MediaAppRouteDefinition } =>
+                    !!candidate.route
+            )
+            .map(({ view, route }) => ({
+                route,
+                href: route.buildPathForMedia(props.activeCategory, props.activeMedia),
+                clickHandler: () => setViewMode(view)
+            }));
+    });
 
     return (
         <ToolbarLayout>
@@ -57,62 +84,7 @@ const Toolbar: ParentComponent<Props> = props => {
                 <ToolbarDivider />
             </Show>
 
-            <Show when={mediaViewGrid()}>
-                <ToolbarLink
-                    href={mediaViewGrid()!.buildPathForMedia(
-                        props.activeCategory,
-                        props.activeMedia
-                    )}
-                    route={mediaViewGrid()!}
-                    clickHandler={() => setViewMode(MediaViewGrid)}
-                />
-            </Show>
-
-            <Show when={gteMd()}>
-                <Show when={mediaViewDetail()}>
-                    <ToolbarLink
-                        href={mediaViewDetail()!.buildPathForMedia(
-                            props.activeCategory,
-                            props.activeMedia
-                        )}
-                        route={mediaViewDetail()!}
-                        clickHandler={() => setViewMode(MediaViewDetail)}
-                    />
-                </Show>
-
-                <Show when={mediaViewFullscreen()}>
-                    <ToolbarLink
-                        href={mediaViewFullscreen()!.buildPathForMedia(
-                            props.activeCategory,
-                            props.activeMedia
-                        )}
-                        route={mediaViewFullscreen()!}
-                        clickHandler={() => setViewMode(MediaViewFullscreen)}
-                    />
-                </Show>
-
-                <Show when={mediaViewMap()}>
-                    <ToolbarLink
-                        href={mediaViewMap()!.buildPathForMedia(
-                            props.activeCategory,
-                            props.activeMedia
-                        )}
-                        route={mediaViewMap()!}
-                        clickHandler={() => setViewMode(MediaViewMap)}
-                    />
-                </Show>
-
-                <Show when={mediaViewBulkEdit()}>
-                    <ToolbarLink
-                        href={mediaViewBulkEdit()!.buildPathForMedia(
-                            props.activeCategory,
-                            props.activeMedia
-                        )}
-                        route={mediaViewBulkEdit()!}
-                        clickHandler={() => setViewMode(MediaViewBulkEdit)}
-                    />
-                </Show>
-            </Show>
+            <NavGroup entries={entries()} digitOffset={props.leadingNavCount ?? 0} />
 
             <Show when={!!c()}>
                 <ToolbarDivider />

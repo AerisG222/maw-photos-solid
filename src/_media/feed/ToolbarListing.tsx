@@ -5,7 +5,7 @@ import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageS
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { feedListingPath, feedMediaListing } from "./_routes";
 
-import ToolbarLink from "../../_components/toolbar/ToolbarLink";
+import NavGroup from "../../_components/toolbar/NavGroup";
 
 interface Props {
     basePath: string;
@@ -26,13 +26,16 @@ interface Props {
 
    First in the toolbar, because it decides what everything after it applies to -
    the view links and the filters below only make sense once you know which
-   listing you are in.
+   listing you are in. That is also why it takes the first digits and the view
+   links carry on from there.
 
-   `k` stays on whichever you are not in, so the key still means "switch
-   listing". It cannot sit on both: every other letter on this screen is spoken
-   for, `p` included - that one plays the slideshow here, while the places screen
-   is free to use it for the media listing.
+   Both entries can carry a key now. They could not before: the switch had a
+   single letter, `k`, which had to sit on whichever listing you were *not* in,
+   because every other letter on this screen was already spoken for.
 */
+// what the `leading` slot of the media toolbar holds, so its view links know
+// where to start numbering
+export const LISTING_NAV_COUNT = 2;
 const ToolbarListing: Component<Props> = props => {
     const [mediaSettings] = useMediaPageSettingsContext();
     const [, { setShowCategories }] = useFaceFeedSettingsContext();
@@ -51,7 +54,6 @@ const ToolbarListing: Component<Props> = props => {
         icon: "icon-[ic--round-image]",
         name: "Media",
         tooltip: "Show Media",
-        shortcutKeys: props.showingCategories ? ["k"] : undefined,
         path: mediaHref(),
         absolutePath: mediaHref()
     });
@@ -60,36 +62,36 @@ const ToolbarListing: Component<Props> = props => {
         icon: "icon-[ic--round-collections]",
         name: "Categories",
         tooltip: "Show Categories",
-        shortcutKeys: props.showingCategories ? undefined : ["k"],
         path: categoriesHref(),
         absolutePath: categoriesHref()
     });
 
     return (
-        <>
-            {/*
-                Told which is current rather than left to the router: the media
-                href names whichever view was last used, so on any other view the
-                url and the link would disagree and neither would light up.
+        /*
+            Told which is current rather than left to the router: the media href
+            names whichever view was last used, so on any other view the url and
+            the link would disagree and neither would light up.
 
-                The choice is remembered on the way through, so the next subject
-                opens on the listing this one was left on - the view links do the
-                same for grid against detail.
-            */}
-            <ToolbarLink
-                href={mediaHref()}
-                route={mediaRoute()}
-                active={!props.showingCategories}
-                clickHandler={() => setShowCategories(false)}
-            />
-
-            <ToolbarLink
-                href={categoriesHref()}
-                route={categoriesRoute()}
-                active={props.showingCategories}
-                clickHandler={() => setShowCategories(true)}
-            />
-        </>
+            The choice is remembered on the way through, so the next subject opens
+            on the listing this one was left on - the view links do the same for
+            grid against fullscreen.
+        */
+        <NavGroup
+            entries={[
+                {
+                    route: mediaRoute(),
+                    href: mediaHref(),
+                    active: !props.showingCategories,
+                    clickHandler: () => setShowCategories(false)
+                },
+                {
+                    route: categoriesRoute(),
+                    href: categoriesHref(),
+                    active: props.showingCategories,
+                    clickHandler: () => setShowCategories(true)
+                }
+            ]}
+        />
     );
 };
 

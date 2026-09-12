@@ -2,10 +2,10 @@ import { ParentComponent, Show, children } from "solid-js";
 
 import { searchGrid, searchList } from "../_routes";
 
+import NavGroup from "../../_components/toolbar/NavGroup";
 import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
-import ToolbarLink from "../../_components/toolbar/ToolbarLink";
 
 interface Props {
     canRequestMore: boolean;
@@ -17,8 +17,12 @@ const Toolbar: ParentComponent<Props> = props => {
 
     return (
         <ToolbarLayout>
-            <ToolbarLink href={searchGrid.absolutePath} route={searchGrid} />
-            <ToolbarLink href={searchList.absolutePath} route={searchList} />
+            <NavGroup
+                entries={[
+                    { route: searchGrid, href: searchGrid.absolutePath },
+                    { route: searchList, href: searchList.absolutePath }
+                ]}
+            />
 
             <ToolbarDivider />
 

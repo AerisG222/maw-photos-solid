@@ -9,7 +9,7 @@ import EmptyClanMessage from "./EmptyClanMessage";
 import AsyncBoundary from "../../_components/state/AsyncBoundary";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
-import ToolbarListing from "./ToolbarListing";
+import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewFullscreen from "../ViewFullscreen";
 
 const Fullscreen: Component = () => {
@@ -63,6 +63,7 @@ const Fullscreen: Component = () => {
                 <ViewFullscreen
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarLeadingNavCount={LISTING_NAV_COUNT}
                     toolbarLeading={
                         <ToolbarListing
                             basePath={basePath()}

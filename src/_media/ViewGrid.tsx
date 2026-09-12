@@ -34,6 +34,8 @@ interface Props {
     toolbarExtras?: JSXElement;
     // rendered ahead of the view links - see Toolbar
     toolbarLeading?: JSXElement;
+    // how many navigation entries `toolbarLeading` holds - see Toolbar
+    toolbarLeadingNavCount?: number;
     // shown in place of the tiles when the feed holds nothing, which a filtered
     // feed legitimately can
     emptyState?: JSXElement;
@@ -91,6 +93,7 @@ const ViewGrid: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         leading={props.toolbarLeading}
+                        leadingNavCount={props.toolbarLeadingNavCount}
                     >
                         <GridToolbar
                             extras={props.toolbarExtras}

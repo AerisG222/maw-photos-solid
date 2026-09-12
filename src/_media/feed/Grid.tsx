@@ -12,7 +12,7 @@ import EmptyState from "../../_components/state/EmptyState";
 import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarFilters from "./ToolbarFilters";
-import ToolbarListing from "./ToolbarListing";
+import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewGrid from "../ViewGrid";
 
 const Grid: Component = () => {
@@ -77,6 +77,7 @@ const Grid: Component = () => {
                             <PlaceChain links={chain()} buildPath={getPlacePath} />
                         </Show>
                     }
+                    toolbarLeadingNavCount={LISTING_NAV_COUNT}
                     toolbarLeading={
                         <ToolbarListing
                             basePath={basePath()}

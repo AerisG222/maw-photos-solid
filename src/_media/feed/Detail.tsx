@@ -8,7 +8,7 @@ import EmptyClanMessage from "./EmptyClanMessage";
 import AsyncBoundary from "../../_components/state/AsyncBoundary";
 import Loading from "../../_components/loading/Loading";
 import ToolbarFilters from "./ToolbarFilters";
-import ToolbarListing from "./ToolbarListing";
+import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewDetail from "../ViewDetail";
 
 const Detail: Component = () => {
@@ -58,6 +58,7 @@ const Detail: Component = () => {
                 <ViewDetail
                     mediaService={mediaService}
                     slideshowService={slideshowService}
+                    toolbarLeadingNavCount={LISTING_NAV_COUNT}
                     toolbarLeading={
                         <ToolbarListing
                             basePath={basePath()}
