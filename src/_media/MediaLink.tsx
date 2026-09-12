@@ -1,15 +1,14 @@
-import { Component, Show, createSignal, onMount } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../_models/ThumbnailSize";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { hasRevealed, markRevealed } from "../_components/loading/_imageReveal";
+import { createImageReveal } from "../_components/loading/_imageReveal";
 
-import FavoriteIcon from "../_components/icon/FavoriteIcon";
 import MediaTypeIcon from "../_components/icon/MediaTypeIcon";
-import IconButton from "../_components/icon/IconButton";
+import FavoriteBadge from "../_components/listing/FavoriteBadge";
 
 interface Props {
     href: string;
@@ -31,22 +30,7 @@ interface Props {
 
 const MediaLink: Component<Props> = props => {
     const thumbUrl = () => getMediaTeaserUrl(props.media, props.thumbnailSize);
-
-    // a thumbnail already seen this session starts visible - see _imageReveal
-    const [thumbLoaded, setThumbLoaded] = createSignal(hasRevealed(thumbUrl()));
-
-    let img!: HTMLImageElement;
-
-    const reveal = () => {
-        markRevealed(thumbUrl());
-        setThumbLoaded(true);
-    };
-
-    onMount(() => {
-        if (img.complete) {
-            reveal();
-        }
-    });
+    const { loaded: thumbLoaded, reveal, ref: imgRef } = createImageReveal(thumbUrl);
 
     const onClickFavorite = () => {
         if (props.setIsFavorite) {
@@ -89,7 +73,7 @@ const MediaLink: Component<Props> = props => {
             ref={el => (props.scroll ? props.scroll(el, props.media) : {})}
         >
             <img
-                ref={img}
+                ref={imgRef}
                 src={thumbUrl()}
                 classList={{
                     "col-span-full": true,
@@ -120,17 +104,11 @@ const MediaLink: Component<Props> = props => {
             </Show>
 
             <Show when={props.showFavoritesBadge}>
-                <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-                    <IconButton
-                        buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
-                        onClick={onClickFavorite}
-                    >
-                        <FavoriteIcon
-                            isFavorite={props.media.isFavorite}
-                            subjectId={props.media.id}
-                        />
-                    </IconButton>
-                </div>
+                <FavoriteBadge
+                    isFavorite={props.media.isFavorite}
+                    subjectId={props.media.id}
+                    onToggle={onClickFavorite}
+                />
             </Show>
         </A>
     );

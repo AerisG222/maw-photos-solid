@@ -1,15 +1,14 @@
-import { Component, For, Show, createSignal, onMount } from "solid-js";
+import { Component, For, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
-import { hasRevealed, markRevealed } from "../loading/_imageReveal";
+import { createImageReveal } from "../loading/_imageReveal";
 
-import FavoriteIcon from "../icon/FavoriteIcon";
 import MediaTypeIcon from "../icon/MediaTypeIcon";
-import IconButton from "../icon/IconButton";
+import FavoriteBadge from "../listing/FavoriteBadge";
 
 interface Props {
     category: Category;
@@ -25,26 +24,7 @@ interface Props {
 
 const CategoryCard: Component<Props> = props => {
     const teaserUrl = () => getMediaTeaserUrl(props.category.teaser, props.thumbnailSize);
-
-    // teasers arrive lazily; fading each one in keeps a long scroll from
-    // reading as a stuttering checkerboard of hard pop-ins. A teaser already
-    // seen this session starts visible - see _imageReveal for why that matters.
-    const [teaserLoaded, setTeaserLoaded] = createSignal(hasRevealed(teaserUrl()));
-
-    let img!: HTMLImageElement;
-
-    const reveal = () => {
-        markRevealed(teaserUrl());
-        setTeaserLoaded(true);
-    };
-
-    // onMount runs after src is applied and the element is attached, so a
-    // cached teaser whose load event we missed is still revealed
-    onMount(() => {
-        if (img.complete) {
-            reveal();
-        }
-    });
+    const { loaded: teaserLoaded, reveal, ref: imgRef } = createImageReveal(teaserUrl);
 
     const onClickFavorite = () => {
         if (props.setIsFavorite) {
@@ -80,7 +60,7 @@ const CategoryCard: Component<Props> = props => {
                 }}
             >
                 <img
-                    ref={img}
+                    ref={imgRef}
                     src={teaserUrl()}
                     classList={{
                         "col-span-full": true,
@@ -122,19 +102,11 @@ const CategoryCard: Component<Props> = props => {
                 </Show>
 
                 <Show when={props.showFavoriteBadge}>
-                    <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-                        <IconButton
-                            buttonClasses={
-                                "btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"
-                            }
-                            onClick={onClickFavorite}
-                        >
-                            <FavoriteIcon
-                                isFavorite={props.category.isFavorite}
-                                subjectId={props.category.id}
-                            />
-                        </IconButton>
-                    </div>
+                    <FavoriteBadge
+                        isFavorite={props.category.isFavorite}
+                        subjectId={props.category.id}
+                        onToggle={onClickFavorite}
+                    />
                 </Show>
             </div>
 

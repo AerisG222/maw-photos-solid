@@ -1,8 +1,8 @@
-import { Component, Show, createSignal, onMount } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { describePlaceAncestry, getPlaceKindName, Place } from "../../_models/Place";
-import { hasRevealed, markRevealed } from "../../_components/loading/_imageReveal";
+import { createImageReveal } from "../../_components/loading/_imageReveal";
 
 import Icon from "../../_components/icon/Icon";
 
@@ -31,23 +31,7 @@ interface Props {
 */
 const PlaceCard: Component<Props> = props => {
     const coverUrl = () => props.place.coverUrl ?? undefined;
-
-    // a cover already seen this session starts visible, so rebuilding the list
-    // does not flash every tile back to transparent - see _imageReveal
-    const [coverLoaded, setCoverLoaded] = createSignal(hasRevealed(coverUrl()));
-
-    let img: HTMLImageElement | undefined;
-
-    const reveal = () => {
-        markRevealed(coverUrl());
-        setCoverLoaded(true);
-    };
-
-    onMount(() => {
-        if (img?.complete) {
-            reveal();
-        }
-    });
+    const { loaded: coverLoaded, reveal, ref: imgRef } = createImageReveal(coverUrl);
 
     const chooseCover = (evt: MouseEvent) => {
         evt.preventDefault();
@@ -74,7 +58,7 @@ const PlaceCard: Component<Props> = props => {
                     }
                 >
                     <img
-                        ref={img}
+                        ref={imgRef}
                         src={coverUrl()}
                         alt={props.place.name}
                         classList={{

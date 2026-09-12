@@ -1,3 +1,5 @@
+import { createSignal, onMount } from "solid-js";
+
 /*
    Which image urls have recently been shown.
 
@@ -42,4 +44,42 @@ export const markRevealed = (url: string | undefined) => {
             revealed.delete(oldest);
         }
     }
+};
+
+/*
+   The four-line dance every tile does around the set above.
+
+   Each of the cards that shows a thumbnail had its own copy of this: a signal
+   seeded from `hasRevealed`, a `reveal` that marks and sets, and an `onMount`
+   that checks `complete` because a cached image fires its load event before the
+   handler is attached. That last part is the subtle one, and it was reasoned out
+   again in a comment in every copy.
+*/
+export const createImageReveal = (url: () => string | undefined) => {
+    const [loaded, setLoaded] = createSignal(hasRevealed(url()));
+
+    let el: HTMLImageElement | undefined;
+
+    const reveal = () => {
+        markRevealed(url());
+        setLoaded(true);
+    };
+
+    /*
+       onMount runs after the src is applied and the element is attached, so an
+       image the browser already had - whose load event we were never going to
+       hear - is still revealed.
+    */
+    onMount(() => {
+        if (el?.complete) {
+            reveal();
+        }
+    });
+
+    return {
+        loaded,
+        // both load and error: a failed load must not be left as an invisible gap
+        reveal,
+        ref: (element: HTMLImageElement) => (el = element)
+    };
 };

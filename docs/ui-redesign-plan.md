@@ -707,6 +707,36 @@ made the numbering depend on mount order, which is exactly the kind of quiet fra
 descriptions claim one key. It cannot go in yet: the letter collisions inside the toolbars are real and stay
 until step 8 replaces them, so the assertion would fail on startup today. It belongs with `ListingToolbar`.
 
+### Step 7 is half done, deliberately (2026-09-12)
+
+`CategoryCard`, `PersonCard`, `PlaceCard` and `MediaLink` really are four copies of one tile. But unifying
+them into `Tile` _changes the markup_ - that is the whole point of it - and step 5 had just finished proving
+that this repo's tests pass happily while the result is invisible to anyone using it. Rewriting every tile in
+the application on that basis, with no way to look at the outcome, is not a trade worth making.
+
+So the step was split at the line where "no visual change" can be _proved_ rather than hoped for.
+
+**First, the markup was pinned.** `listing/cards.snapshot.test.tsx` renders all four tiles and snapshots what
+they emit, character for character. Anything that moves now shows up as a diff to read.
+
+**Then only what is provably identical was extracted:**
+
+- `createImageReveal` - the signal seeded from `hasRevealed`, the `reveal` that marks and sets, and the
+  `onMount` that checks `complete` because a cached image fires its load event before the handler exists.
+  That last part is the subtle one, and it had been reasoned out again in a comment in all four copies.
+- `FavoriteBadge` - byte-identical in three of them, including the pinning to the second column of the shared
+  two-by-two grid.
+
+89 lines left the four files and the snapshots did not move.
+
+**What remains, and what it needs.** `Tile`, `Row`, `ListingSurface`, the keyboard cursor, and collapsing
+`MediaGrid`/`YearGrid` plus the four inline `flex gap-2 flex-wrap place-content-center` blocks. Every one of
+those alters what is rendered, so each wants the snapshots read as a diff and the result looked at in a
+running browser. The snapshots are in place precisely so that work can be reviewed rather than trusted.
+
+Worth noting while in there: `MediaLink` takes a `route` prop that is **read zero times**, threaded to it by
+both `MediaGrid` and `MediaList` at every call site. It goes with the `Tile` work.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -814,7 +844,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files                                | low                        |
 | **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep                        | low                        |
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files                                | low                        |
-| **7**   | **`Tile` + `ListingSurface`.** Convert the four cards and the six grid containers. Keyboard cursor arrives here.                                                                                                                                                                                                                                                                                                                                                                                                                            | ~12 files                               | medium                     |
+| **7**   | **PARTIAL 2026-09-12 — the safe half.** The four tiles' markup is pinned by snapshot; the reveal machinery (`createImageReveal`) and the favourite badge are extracted, byte-identical, −89 lines. `Tile`, `Row`, `ListingSurface` and the keyboard cursor are **not** done: they change markup by design and need a browser.                                                                                                                                                                                                               | 9 files                                 | medium                     |
 | **8**   | **`ListingToolbar`.** Delete the eight density/label/badge copies. Ships the letter half of the shortcut map, and removes dim/margins/size/titles/years/counts/badge-toggles.                                                                                                                                                                                                                                                                                                                                                               | 8 deletions                             | medium                     |
 | **9**   | **Inspector.** Generalise `Sidebar` into `Inspector` + registry; mount in Grid, Fullscreen, Map; move rotate/flip into the _Adjust_ card; fold the bulk-edit cards in.                                                                                                                                                                                                                                                                                                                                                                      | `_media/detail/*`, `_media/bulk-edit/*` | **high — the payoff step** |
 | **9b**  | **Delete the Detail view** (§0.5). Remove the six view/toolbar/service files, redirect `/detail/*` → `/grid/*`, migrate the saved view, shorten the nav rows, and teach grid's active-media overlay to share width with a docked Inspector.                                                                                                                                                                                                                                                                                                 | 12 files                                | medium — strictly after 9  |

@@ -1,14 +1,13 @@
-import { Component, Show, createSignal, onMount } from "solid-js";
+import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { Person } from "../../_models/Person";
 import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { hasRevealed, markRevealed } from "../../_components/loading/_imageReveal";
+import { createImageReveal } from "../../_components/loading/_imageReveal";
 import { getPersonPath } from "../_routes";
 
-import FavoriteIcon from "../../_components/icon/FavoriteIcon";
 import Icon from "../../_components/icon/Icon";
-import IconButton from "../../_components/icon/IconButton";
+import FavoriteBadge from "../../_components/listing/FavoriteBadge";
 
 interface Props {
     person: Person;
@@ -34,23 +33,7 @@ const PersonCard: Component<Props> = props => {
     // face crops are square, so the tile is square too - the thumbnail widths
     // are what the rest of the app sizes cards by, so they set the edge here
     const edge = () => getThumbnailSize(props.thumbnailSize).width;
-
-    // see CategoryCard: a face already seen this session starts visible so a
-    // rebuild of the list does not flash every tile back to transparent
-    const [faceLoaded, setFaceLoaded] = createSignal(hasRevealed(faceUrl()));
-
-    let img: HTMLImageElement | undefined;
-
-    const reveal = () => {
-        markRevealed(faceUrl());
-        setFaceLoaded(true);
-    };
-
-    onMount(() => {
-        if (img?.complete) {
-            reveal();
-        }
-    });
+    const { loaded: faceLoaded, reveal, ref: imgRef } = createImageReveal(faceUrl);
 
     const onClickFavorite = () => props.setIsFavorite(props.person, !props.person.isFavorite);
 
@@ -96,7 +79,7 @@ const PersonCard: Component<Props> = props => {
                     }
                 >
                     <img
-                        ref={img}
+                        ref={imgRef}
                         src={faceUrl()}
                         alt={props.person.name}
                         classList={{
@@ -128,17 +111,11 @@ const PersonCard: Component<Props> = props => {
                     the only way to mark a person, so hiding it behind a
                     preference would hide the feature itself.
                 */}
-                <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-                    <IconButton
-                        buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
-                        onClick={onClickFavorite}
-                    >
-                        <FavoriteIcon
-                            isFavorite={props.person.isFavorite}
-                            subjectId={props.person.id}
-                        />
-                    </IconButton>
-                </div>
+                <FavoriteBadge
+                    isFavorite={props.person.isFavorite}
+                    subjectId={props.person.id}
+                    onToggle={onClickFavorite}
+                />
 
                 <Show when={props.selectable}>
                     <div class="col-start-1 row-start-1 z-10 justify-self-start self-start m-[2px]">
