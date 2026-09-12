@@ -1,4 +1,4 @@
-import { ParentComponent, Show, children } from "solid-js";
+import { ParentComponent, Show } from "solid-js";
 import { AlertDialog } from "@kobalte/core/alert-dialog";
 
 interface Props {
@@ -22,8 +22,6 @@ interface Props {
    not be indistinguishable from answering it.
 */
 const ConfirmDialog: ParentComponent<Props> = props => {
-    const c = children(() => props.children);
-
     return (
         <AlertDialog
             open={props.open}
@@ -40,7 +38,7 @@ const ConfirmDialog: ParentComponent<Props> = props => {
                     <AlertDialog.Content class="bg-base-100 rounded-box p-6 elev-overlay w-full max-w-md">
                         <AlertDialog.Title class="head2 mt-0">{props.title}</AlertDialog.Title>
 
-                        <AlertDialog.Description>{c()}</AlertDialog.Description>
+                        <AlertDialog.Description>{props.children}</AlertDialog.Description>
 
                         <Show when={props.error}>
                             <p class="text-sm text-error mt-2" role="alert">

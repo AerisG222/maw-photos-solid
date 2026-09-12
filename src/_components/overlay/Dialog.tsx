@@ -1,4 +1,4 @@
-import { JSXElement, ParentComponent, Show, children } from "solid-js";
+import { JSXElement, ParentComponent, Show } from "solid-js";
 import { Dialog as KobalteDialog } from "@kobalte/core/dialog";
 
 interface Props {
@@ -34,9 +34,6 @@ interface Props {
    does all of that; the markup below is only the dressing.
 */
 const Dialog: ParentComponent<Props> = props => {
-    const c = children(() => props.children);
-    const actions = children(() => props.actions);
-
     return (
         <KobalteDialog
             open={props.open}
@@ -56,7 +53,7 @@ const Dialog: ParentComponent<Props> = props => {
                     >
                         <KobalteDialog.Title class="head2 mt-0">{props.title}</KobalteDialog.Title>
 
-                        {c()}
+                        {props.children}
 
                         <Show when={props.error}>
                             <p class="text-sm text-error mt-2" role="alert">
@@ -69,7 +66,7 @@ const Dialog: ParentComponent<Props> = props => {
                                 {props.cancelLabel ?? "Cancel"}
                             </KobalteDialog.CloseButton>
 
-                            {actions()}
+                            {props.actions}
                         </div>
                     </KobalteDialog.Content>
                 </div>

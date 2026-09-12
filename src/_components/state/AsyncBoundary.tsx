@@ -1,4 +1,4 @@
-import { JSXElement, Match, Show, Switch, children } from "solid-js";
+import { JSXElement, Match, Show, Switch } from "solid-js";
 
 import { RetryableQuery, findQueryError, refetchQueries } from "../error/_queryError";
 
@@ -37,24 +37,27 @@ interface Props {
    The error is checked first, deliberately: a failed query leaves its data
    undefined, which is indistinguishable from still-loading, so testing for the
    data first would leave a broken screen showing a skeleton forever.
+
+   None of the three slots is resolved through the `children()` helper, for the
+   same reason AppErrorBoundary avoids it: that helper evaluates them here, in
+   this component's own scope, rather than where they are rendered. A screen
+   whose children reach into data that has not arrived - `Object.keys(data()!)`,
+   say - then throws while the skeleton is supposed to be showing. Read the slots
+   only inside the branch that renders them.
 */
 const AsyncBoundary = (props: Props) => {
     const failure = () => props.error ?? findQueryError(props.queries ?? []);
     const retry = () => (props.onRetry ? props.onRetry() : refetchQueries(props.queries ?? []));
 
-    const c = children(() => props.children);
-    const skeleton = children(() => props.skeleton);
-    const empty = children(() => props.empty);
-
     return (
-        <Switch fallback={skeleton()}>
+        <Switch fallback={props.skeleton}>
             <Match when={failure()}>
                 <ErrorMessage title={props.errorTitle} error={failure()} onRetry={retry} />
             </Match>
 
             <Match when={props.when}>
-                <Show when={!props.isEmpty} fallback={empty()}>
-                    {c()}
+                <Show when={!props.isEmpty} fallback={props.empty}>
+                    {props.children}
                 </Show>
             </Match>
         </Switch>

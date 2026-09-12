@@ -20,6 +20,7 @@ interface Options {
     when?: unknown;
     isEmpty?: boolean;
     empty?: JSXElement;
+    children?: JSXElement;
 }
 
 /*
@@ -39,7 +40,7 @@ const boundary = (options: Options = {}) =>
             isEmpty={options.isEmpty}
             empty={options.empty}
         >
-            <div>loaded</div>
+            {options.children ?? <div>loaded</div>}
         </AsyncBoundary>
     ));
 
@@ -119,5 +120,59 @@ describe("AsyncBoundary", () => {
 
         expect(queryByText("nothing here")).toBeNull();
         expect(getByRole("alert")).toBeTruthy();
+    });
+
+    /*
+       The bug this exists for.
+
+       `children()` resolves a slot in the wrapping component's own scope rather
+       than where it is rendered, so children that reach into data which has not
+       arrived - `Object.keys(data()!)` in the categories grid - ran during the
+       loading state and threw. It surfaced as "This page could not be displayed"
+       on a cold load, and the repo already warned about exactly this in
+       AppErrorBoundary.
+
+       Written as real JSX children rather than passed through the helper: the
+       compiler only defers them when they are children, which is the whole
+       point being tested.
+    */
+    test("children do not run while the data is still on its way", () => {
+        const reachIntoMissingData = () => {
+            throw new TypeError("Cannot convert undefined or null to object");
+        };
+
+        expect(() =>
+            render(() => (
+                <AsyncBoundary
+                    queries={[]}
+                    errorTitle="Could not load the things"
+                    when={undefined}
+                    skeleton={<div>skeleton</div>}
+                >
+                    <div>{reachIntoMissingData()}</div>
+                </AsyncBoundary>
+            ))
+        ).not.toThrow();
+
+        expect(document.body.textContent).toContain("skeleton");
+    });
+
+    test("nor while a failure is being reported", () => {
+        const reachIntoMissingData = () => {
+            throw new TypeError("Cannot convert undefined or null to object");
+        };
+
+        expect(() =>
+            render(() => (
+                <AsyncBoundary
+                    queries={[query({ isError: true, error: new Error("nope") })]}
+                    errorTitle="Could not load the things"
+                    when={undefined}
+                    skeleton={<div>skeleton</div>}
+                >
+                    <div>{reachIntoMissingData()}</div>
+                </AsyncBoundary>
+            ))
+        ).not.toThrow();
     });
 });

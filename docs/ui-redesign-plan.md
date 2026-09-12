@@ -822,6 +822,37 @@ became three named steps behind one store:
 The coupling is gone rather than repaired: it existed because the tile reserved no room for a label, and it
 has nothing to say about a three-step density.
 
+### `children()` runs a slot where it is written, not where it is rendered (2026-09-12)
+
+`AsyncBoundary` resolved all three of its slots through Solid's `children()` helper. That helper evaluates
+them **in the wrapping component's own scope**, so the categories grid's
+
+```tsx
+<For each={Object.keys(categoriesToDisplay()!)...}>
+```
+
+ran while the query was still in flight, and `Object.keys(undefined)` threw. Every screen converted in step 4
+was exposed; it showed up as "This page could not be displayed" on a cold load, because that is the page-level
+boundary in `App.tsx`.
+
+The repo already warned about this, in `AppErrorBoundary`, which avoids the same helper for the same reason
+and says so in a comment. It was written, read, and then walked into anyway.
+
+**It was invisible because the boundary threw the evidence away.** `describeError` turns a failure into a
+sentence a reader can act on, which means discarding everything specific about it - and the fallback rendered
+that sentence without logging the original. A report of "I get the generic error" had no message, no stack and
+nothing in the console behind it. The boundary logs what it caught now.
+
+**The same fault was in three more places**, two of which matter more than the one that was reported:
+
+- `Dialog` and `ConfirmDialog` built their children while closed.
+- **`AuthGuard` and `AdminGuard` built theirs regardless of the guard.** A screen behind either one ran its
+  component bodies and fired its queries before anyone had been let in; the `<Show>` governed only what
+  reached the document. Both predate this work.
+
+The regression test asserts what actually matters - that children which reach into absent data do not run
+during the loading or error states - and was checked against the eager version first, where it fails.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
