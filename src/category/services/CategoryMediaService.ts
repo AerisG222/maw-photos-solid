@@ -7,13 +7,12 @@ import { Media } from "../../_models/Media";
 import {
     MediaView,
     MediaViewBulkEdit,
-    MediaViewDetail,
     MediaViewFullscreen,
     MediaViewGrid,
     MediaViewMap
 } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { bulkEditRoute, detailRoute, fullscreenRoute, gridRoute, mapRoute } from "../_routes";
+import { bulkEditRoute, fullscreenRoute, gridRoute, mapRoute } from "../_routes";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 
 export class CategoryMediaService extends BaseMediaService implements IMediaService {
@@ -77,8 +76,6 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
 
     getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
         switch (view) {
-            case MediaViewDetail:
-                return detailRoute;
             case MediaViewFullscreen:
                 return fullscreenRoute;
             case MediaViewGrid:
@@ -92,5 +89,5 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         }
     };
 
-    getAvailableRoutes = () => [gridRoute, detailRoute, fullscreenRoute, mapRoute, bulkEditRoute];
+    getAvailableRoutes = () => [gridRoute, fullscreenRoute, mapRoute, bulkEditRoute];
 }

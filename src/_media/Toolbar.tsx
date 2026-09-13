@@ -9,7 +9,6 @@ import { IMediaService } from "./services/IMediaService";
 import {
     MediaView,
     MediaViewBulkEdit,
-    MediaViewDetail,
     MediaViewFullscreen,
     MediaViewGrid,
     MediaViewMap
@@ -40,7 +39,6 @@ interface Props {
 */
 const viewOrder: MediaView[] = [
     MediaViewGrid,
-    MediaViewDetail,
     MediaViewFullscreen,
     MediaViewMap,
     MediaViewBulkEdit

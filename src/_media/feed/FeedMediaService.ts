@@ -6,12 +6,7 @@ import { IMediaService } from "../services/IMediaService";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
-import {
-    MediaView,
-    MediaViewDetail,
-    MediaViewFullscreen,
-    MediaViewGrid
-} from "../../_models/MediaView";
+import { MediaView, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
 import { SearchResults } from "../../_models/SearchResults";
 import { FeedRoutes, stripMediaParams } from "./_routes";
 
@@ -107,8 +102,6 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         const routes = this.routes();
 
         switch (view) {
-            case MediaViewDetail:
-                return routes.detail;
             case MediaViewFullscreen:
                 return routes.fullscreen;
             case MediaViewGrid:
@@ -121,7 +114,7 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
     getAvailableRoutes = () => {
         const routes = this.routes();
 
-        return [routes.grid, routes.detail, routes.fullscreen];
+        return [routes.grid, routes.fullscreen];
     };
 
     /*

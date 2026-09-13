@@ -9,7 +9,6 @@ import {
 } from "../../_models/InspectorCard";
 import {
     MediaView,
-    MediaViewDetail,
     MediaViewFullscreen,
     MediaViewGrid,
     MediaViewMap
@@ -17,7 +16,7 @@ import {
 import { InspectorContext, applicableCards, inspectorCards } from "./registry";
 
 const context = (over: Partial<InspectorContext> = {}): InspectorContext => ({
-    view: MediaViewDetail,
+    view: MediaViewGrid,
     media: { id: "media-1" } as unknown as InspectorContext["media"],
     category: undefined,
     isAdmin: false,
@@ -34,10 +33,10 @@ describe("which cards apply", () => {
        the detail view alone, so browsing a grid and wanting to know when
        something was taken meant leaving the grid.
     */
-    test.each<MediaView>([MediaViewGrid, MediaViewDetail, MediaViewFullscreen])(
+    test.each<MediaView>([MediaViewGrid, MediaViewFullscreen])(
         "the same cards are offered in %s",
         view => {
-            expect(ids(context({ view }))).toEqual(ids(context({ view: MediaViewDetail })));
+            expect(ids(context({ view }))).toEqual(ids(context({ view: MediaViewGrid })));
         }
     );
 

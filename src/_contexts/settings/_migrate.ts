@@ -10,6 +10,7 @@ import {
     InspectorCardMinimap,
     InspectorCardPlaceCovers
 } from "../../_models/InspectorCard";
+import { MediaViewAll } from "../../_models/MediaView";
 import { ThemeDark, ThemeIdType, ThemeLight, ThemeSystem } from "../../_models/Theme";
 import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import {
@@ -76,6 +77,11 @@ const str = (value: unknown) => (typeof value === "string" ? value : undefined);
 */
 const anyTrue = (values: (boolean | undefined)[]) => values.some(v => v === true);
 const anyFalse = (values: (boolean | undefined)[]) => !values.some(v => v === false);
+
+const migrateView = (stored: string | undefined): MediaSettingsState["view"] =>
+    stored && (MediaViewAll as string[]).includes(stored)
+        ? (stored as MediaSettingsState["view"])
+        : defaultMediaSettings.view;
 
 const migrateTheme = (stored: unknown): ThemeIdType => {
     /*
@@ -192,13 +198,11 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 defaultListingSettings.peopleSort
         },
         media: {
-            view:
-                (str(mediaPage.view) as MediaSettingsState["view"] | undefined) ??
-                defaultMediaSettings.view,
+            // "detail" was a view once; it redirects to the grid now
+            view: migrateView(str(mediaPage.view)),
             slideshowSeconds:
                 num(mediaPage.slideshowDisplayDurationSeconds) ??
                 defaultMediaSettings.slideshowSeconds,
-            showFilmstrip: bool(mediaDetail.showMediaList) ?? defaultMediaSettings.showFilmstrip,
             // the info panel kept a second copy of both; the map view's wins
             mapType: str(mediaMap.mapType) ?? defaultMediaSettings.mapType,
             mapZoom: num(mediaMap.zoom) ?? defaultMediaSettings.mapZoom,

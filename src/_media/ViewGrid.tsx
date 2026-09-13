@@ -52,7 +52,7 @@ const ViewGrid: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
     /*
        The enlarged photograph reads its pixels for the histogram card, which can
-       now be opened from the grid - see ViewDetail for why this is a signal.
+       now be opened here - a plain variable would notify nobody when it is set.
     */
     const [mediaElement, setMediaElement] = createSignal<
         HTMLImageElement | HTMLVideoElement | undefined

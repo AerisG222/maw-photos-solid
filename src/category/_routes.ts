@@ -2,7 +2,6 @@ import { lazy } from "solid-js";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import {
     MediaViewBulkEdit,
-    MediaViewDetail,
     MediaViewFullscreen,
     MediaViewGrid,
     MediaViewMap
@@ -33,18 +32,6 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     component: lazy(() => import("./Grid")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
         `${getCategoryPath(category!.year, category!.slug)}/grid${slugOrBlank(media)}`
-});
-
-const buildDetailRoute = (basePath: string): MediaAppRouteDefinition => ({
-    icon: "icon-[ic--round-dashboard]",
-    name: "Detail",
-    tooltip: "Detail View",
-    mediaView: MediaViewDetail,
-    path: "/detail/:mediaSlug?",
-    absolutePath: `${basePath}/detail/:mediaSlug?`,
-    component: lazy(() => import("./Detail")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${getCategoryPath(category!.year, category!.slug)}/detail${slugOrBlank(media)}`
 });
 
 const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -85,7 +72,16 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
 
 const redirectRoute = buildRedirectRoute(basePath);
 export const gridRoute = buildGridRoute(basePath);
-export const detailRoute = buildDetailRoute(basePath);
+/*
+   Kept only so old links resolve - see DetailRedirect. No `mediaView`, so it
+   never appears among the views a toolbar offers.
+*/
+export const detailRedirectRoute: AppRouteDefinition = {
+    name: "Detail",
+    path: "/detail/:mediaSlug?",
+    absolutePath: `${basePath}/detail/:mediaSlug?`,
+    component: lazy(() => import("../_media/DetailRedirect"))
+};
 export const fullscreenRoute = buildFullscreenRoute(basePath);
 export const mapRoute = buildMapRoute(basePath);
 export const bulkEditRoute = buildBulkEditRoute(basePath);
@@ -95,5 +91,12 @@ export const mediaRoutes: AppRouteDefinition = {
     absolutePath: basePath,
     name: "Category",
     component: lazy(() => import("../_media/MediaRoot")),
-    children: [redirectRoute, gridRoute, detailRoute, fullscreenRoute, mapRoute, bulkEditRoute]
+    children: [
+        redirectRoute,
+        gridRoute,
+        detailRedirectRoute,
+        fullscreenRoute,
+        mapRoute,
+        bulkEditRoute
+    ]
 };

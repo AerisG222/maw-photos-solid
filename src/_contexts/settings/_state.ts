@@ -60,7 +60,6 @@ export const defaultListingSettings: ListingSettingsState = {
 export interface MediaSettingsState {
     readonly view: MediaView;
     readonly slideshowSeconds: number;
-    readonly showFilmstrip: boolean;
     // one map preference, read by the map view and the inspector's minimap card
     readonly mapType: MapTypeIdType;
     readonly mapZoom: MapZoomLevelIdType;
@@ -71,7 +70,6 @@ export interface MediaSettingsState {
 export const defaultMediaSettings: MediaSettingsState = {
     view: defaultMediaView,
     slideshowSeconds: 2,
-    showFilmstrip: true,
     mapType: defaultMapType,
     mapZoom: defaultMapZoomLevel,
     inspectorOpen: false,

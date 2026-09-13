@@ -248,4 +248,21 @@ describe("migrating from the per-view settings", () => {
         expect(migrated.media.slideshowSeconds).toBe(5);
         expect(migrated.area.categoriesView).toBe("list");
     });
+
+    /*
+       The detail view was deleted. A reader whose saved view was "detail" would
+       otherwise be sent to a route that is now only a redirect, on every visit.
+    */
+    test("a view that no longer exists falls back to the grid", () => {
+        expect(
+            buildMigratedSettings(reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "detail" } })).media
+                .view
+        ).toBe("grid");
+
+        // one that still exists is left alone
+        expect(
+            buildMigratedSettings(reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "fullscreen" } }))
+                .media.view
+        ).toBe("fullscreen");
+    });
 });

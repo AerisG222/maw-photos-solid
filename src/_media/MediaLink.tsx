@@ -21,8 +21,6 @@ interface Props {
     isActiveItem: boolean;
     route: AppRouteDefinition;
     eager: boolean;
-    // grid usage lifts on hover; the detail-view filmstrip stays put so the
-    // scroll-into-view math in MediaList is unaffected
     elevate?: boolean;
     scroll?: (el: HTMLAnchorElement, media: Media) => void;
     setIsFavorite?: (media: Media, isFavorite: boolean) => void;

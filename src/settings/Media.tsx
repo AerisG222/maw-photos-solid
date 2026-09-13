@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 
 import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
 import { useMediaInfoPanelSettingsContext } from "../_contexts/settings/MediaInfoPanelSettingsContext";
 import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { allMapTypes } from "../_models/MapType";
@@ -26,7 +25,6 @@ import Layout from "../_components/layout/Layout";
 const ViewMedia: Component = () => {
     const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
         useMediaPageSettingsContext();
-    const [detailSettings, { setShowMediaList }] = useMediaDetailViewSettingsContext();
     const [
         infoPanelSettings,
         {
@@ -60,12 +58,6 @@ const ViewMedia: Component = () => {
                         itemArray={allSlideshowDurations}
                         selectedValue={pageSettings.slideshowDisplayDurationSeconds}
                         onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
-                    />
-                    <Toggle
-                        title="Show Media List"
-                        name="detailShowMediaList"
-                        isSelected={detailSettings.showMediaList}
-                        onChange={setShowMediaList}
                     />
                 </Panel>
 

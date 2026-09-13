@@ -4,12 +4,7 @@ import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
-import {
-    MediaView,
-    MediaViewDetail,
-    MediaViewFullscreen,
-    MediaViewGrid
-} from "../../_models/MediaView";
+import { MediaView, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
 
 /*
    The routes behind a feed over a subject: the media one person appears in, the
@@ -30,9 +25,17 @@ const mediaParams = "/:categoryYear?/:categorySlug?/:mediaSlug?";
 const redirectComponent = lazy(() => import("./Redirect"));
 const gridComponent = lazy(() => import("./Grid"));
 const categoriesComponent = lazy(() => import("./Categories"));
-const detailComponent = lazy(() => import("./Detail"));
 const fullscreenComponent = lazy(() => import("./Fullscreen"));
 const rootComponent = lazy(() => import("../MediaRoot"));
+const detailRedirectComponent = lazy(() => import("../DetailRedirect"));
+
+// kept only so old links resolve - see DetailRedirect
+const detailRedirect = (basePath: string): AppRouteDefinition => ({
+    name: "Detail",
+    path: `/detail${mediaParams}`,
+    absolutePath: `${basePath}/detail${mediaParams}`,
+    component: detailRedirectComponent
+});
 
 /*
    One source of truth for where each feed lives. The route definitions register
@@ -62,7 +65,6 @@ export const stripMediaParams = (path: string) =>
 
 export interface FeedRoutes {
     grid: MediaAppRouteDefinition;
-    detail: MediaAppRouteDefinition;
     fullscreen: MediaAppRouteDefinition;
     // a listing of the categories the subject turns up in, rather than of their
     // media. its own route rather than a flag on the grid: it lists a different
@@ -92,17 +94,6 @@ export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
             `${basePath}/grid${mediaSlugOrBlank(media)}${search}`
     },
-    detail: {
-        icon: "icon-[ic--round-dashboard]",
-        name: "Detail",
-        tooltip: "Detail View",
-        mediaView: MediaViewDetail,
-        path: `/detail${mediaParams}`,
-        absolutePath: `${basePath}/detail${mediaParams}`,
-        component: detailComponent,
-        buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${basePath}/detail${mediaSlugOrBlank(media)}${search}`
-    },
     fullscreen: {
         icon: "icon-[ic--round-fullscreen]",
         name: "Fullscreen",
@@ -131,8 +122,6 @@ export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
 */
 export const feedMediaListing = (view: MediaView) => {
     switch (view) {
-        case MediaViewDetail:
-            return "detail";
         case MediaViewFullscreen:
             return "fullscreen";
         default:
@@ -162,6 +151,12 @@ export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefi
         absolutePath: basePath,
         name,
         component: rootComponent,
-        children: [redirect, routes.grid, routes.detail, routes.fullscreen, routes.categories]
+        children: [
+            redirect,
+            routes.grid,
+            detailRedirect(basePath),
+            routes.fullscreen,
+            routes.categories
+        ]
     };
 };

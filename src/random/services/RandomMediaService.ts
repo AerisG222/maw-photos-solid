@@ -4,14 +4,9 @@ import { BaseMediaService } from "../../_media/services/BaseMediaService";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import {
-    MediaView,
-    MediaViewDetail,
-    MediaViewFullscreen,
-    MediaViewGrid
-} from "../../_models/MediaView";
+import { MediaView, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { detailRoute, fullscreenRoute, gridRoute } from "../_routes";
+import { fullscreenRoute, gridRoute } from "../_routes";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 
 export class RandomMediaService extends BaseMediaService implements IMediaService {
@@ -94,8 +89,6 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
 
     getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
         switch (view) {
-            case MediaViewDetail:
-                return detailRoute;
             case MediaViewFullscreen:
                 return fullscreenRoute;
             case MediaViewGrid:
@@ -105,7 +98,7 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         }
     };
 
-    getAvailableRoutes = () => [gridRoute, detailRoute, fullscreenRoute];
+    getAvailableRoutes = () => [gridRoute, fullscreenRoute];
 
     startPeriodicFetching = () => {
         if (this.intervalId) {
