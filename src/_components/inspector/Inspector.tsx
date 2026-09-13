@@ -9,6 +9,7 @@ import { InspectorCardIdType } from "../../_models/InspectorCard";
 import { MediaView } from "../../_models/MediaView";
 import { applicableCards } from "./registry";
 
+import EmptyState from "../state/EmptyState";
 import InspectorCard from "./InspectorCard";
 import InspectorRail from "./InspectorRail";
 import InspectorRailButton from "./InspectorRailButton";
@@ -61,21 +62,41 @@ const Inspector: Component<Props> = props => {
         <div class="flex">
             <Show when={settings.inspectorOpen}>
                 <div class="w-[500px] bg-base-200 border-l-1 border-l-base-content/30 overflow-y-auto overflow-x-hidden">
-                    <For each={cards()}>
-                        {card => (
-                            <Show when={isOpen(card.id)}>
-                                <InspectorCard title={card.title} icon={card.icon}>
-                                    <Dynamic
-                                        component={card.component}
-                                        activeCategory={props.activeCategory}
-                                        activeMedia={props.activeMedia}
-                                        mediaElement={props.mediaElement}
-                                        requestMoveNext={props.requestMoveNext ?? (() => undefined)}
-                                    />
-                                </InspectorCard>
-                            </Show>
-                        )}
-                    </For>
+                    {/*
+                        Every card is about one photograph, and reaches into it
+                        without checking - the detail view could only ever render
+                        them with one open, so none of them had to. A grid or a
+                        map can be looked at with nothing selected at all, which
+                        is a state the panel has to answer rather than crash on.
+                    */}
+                    <Show
+                        when={props.activeMedia}
+                        fallback={
+                            <EmptyState
+                                icon="icon-[ic--round-photo-library]"
+                                title="Nothing selected"
+                                detail="Choose a photograph to see its details here."
+                            />
+                        }
+                    >
+                        <For each={cards()}>
+                            {card => (
+                                <Show when={isOpen(card.id)}>
+                                    <InspectorCard title={card.title} icon={card.icon}>
+                                        <Dynamic
+                                            component={card.component}
+                                            activeCategory={props.activeCategory}
+                                            activeMedia={props.activeMedia}
+                                            mediaElement={props.mediaElement}
+                                            requestMoveNext={
+                                                props.requestMoveNext ?? (() => undefined)
+                                            }
+                                        />
+                                    </InspectorCard>
+                                </Show>
+                            )}
+                        </For>
+                    </Show>
                 </div>
             </Show>
 

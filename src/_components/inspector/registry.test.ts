@@ -18,7 +18,7 @@ import { InspectorContext, applicableCards, inspectorCards } from "./registry";
 
 const context = (over: Partial<InspectorContext> = {}): InspectorContext => ({
     view: MediaViewDetail,
-    media: undefined,
+    media: { id: "media-1" } as unknown as InspectorContext["media"],
     category: undefined,
     isAdmin: false,
     enableCategoryTeaser: false,
@@ -82,5 +82,18 @@ describe("which cards apply", () => {
 
         expect(declared).toEqual([...new Set(declared)]);
         expect(ids(context({ isAdmin: true, enableCategoryTeaser: true }))).toEqual(declared);
+    });
+
+    /*
+       The bug this exists for. The detail view was gated on having a photograph
+       open, so every card could reach into one without checking. Mounting the
+       inspector in a grid and a map - which can be looked at with nothing
+       selected - meant the comments card asked the API for the comments of
+       `undefined` and the page fell over.
+    */
+    test("nothing applies when nothing is selected", () => {
+        expect(
+            ids(context({ media: undefined, isAdmin: true, enableCategoryTeaser: true }))
+        ).toEqual([]);
     });
 });

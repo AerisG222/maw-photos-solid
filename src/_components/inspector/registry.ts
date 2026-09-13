@@ -124,5 +124,13 @@ export const inspectorCards: InspectorCardDescriptor[] = [
     }
 ];
 
+/*
+   Nothing applies without a photograph to apply it to.
+
+   Every card reaches into the item without checking, because the detail view
+   could only ever render them with one open - the view itself was gated on it.
+   A grid or a map can be looked at with nothing selected, so the rule lives here
+   rather than in each of the eight cards.
+*/
 export const applicableCards = (context: InspectorContext) =>
-    inspectorCards.filter(card => card.appliesTo(context));
+    context.media ? inspectorCards.filter(card => card.appliesTo(context)) : [];
