@@ -12,7 +12,7 @@ import { useMediaContext } from "../_contexts/api/MediaContext";
 import DetailToolbar from "./ToolbarDetail";
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
-import Sidebar from "./detail/Sidebar";
+import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaList from "./MediaList";
 import MainItem from "./MainItem";
@@ -98,7 +98,8 @@ const ViewDetail: Component<Props> = props => {
                     </Toolbar>
                 }
                 sidebar={
-                    <Sidebar
+                    <Inspector
+                        view={MediaViewDetail}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         enableCategoryTeaser={props.enableCategoryTeaserChooser}

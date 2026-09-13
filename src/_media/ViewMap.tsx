@@ -4,10 +4,12 @@ import { MediaMapViewSettingsState } from "../_contexts/settings/MediaMapViewSet
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
+import { MediaViewMap } from "../_models/MediaView";
 import { Uuid } from "../_models/Uuid";
 
 import MapToolbar from "./ToolbarMap";
 import Toolbar from "./Toolbar";
+import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import EmptyState from "../_components/state/EmptyState";
 
@@ -163,6 +165,14 @@ const ViewMap: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                         />
                     </Toolbar>
+                }
+                sidebar={
+                    <Inspector
+                        view={MediaViewMap}
+                        activeCategory={props.mediaService.getActiveCategory()}
+                        activeMedia={props.mediaService.getActiveMedia()}
+                        requestMoveNext={() => props.mediaService.moveNext()}
+                    />
                 }
             >
                 <Show when={props.mediaService.mediaWithGps().length === 0}>

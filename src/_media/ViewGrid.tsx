@@ -14,6 +14,7 @@ import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import GridToolbar from "./ToolbarGrid";
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
+import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
 import MainItem from "./MainItem";
@@ -49,6 +50,13 @@ interface Props {
 
 const ViewGrid: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
+    /*
+       The enlarged photograph reads its pixels for the histogram card, which can
+       now be opened from the grid - see ViewDetail for why this is a signal.
+    */
+    const [mediaElement, setMediaElement] = createSignal<
+        HTMLImageElement | HTMLVideoElement | undefined
+    >();
     const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
     const [sizeTarget, setSizeTarget] = createSignal<HTMLElement | undefined>(undefined);
     const elSize = createElementSize(sizeTarget);
@@ -64,13 +72,31 @@ const ViewGrid: Component<Props> = props => {
         setIsFavoriteMutation.mutate(req);
     };
 
+    /*
+       Measured from where the stage actually is, rather than assumed to be flush
+       with the bottom-right of the window. It no longer is: the inspector docks
+       to the right of it, and deriving `left` from the window width put the
+       enlarged photograph underneath the panel.
+
+       The element's own size is read first so this re-runs when the panel opens
+       and closes - the rect is not reactive on its own.
+    */
     createEffect(() => {
-        setAbsoluteDivStyle({
-            left: `${windowSize.width - (elSize.width ?? 0)}px`,
-            width: `${elSize.width ?? 0}px`,
-            top: `${windowSize.height - (elSize.height ?? 0)}px`,
-            height: `${elSize.height ?? 0}px`
-        });
+        void elSize.width;
+        void elSize.height;
+        void windowSize.width;
+        void windowSize.height;
+
+        const rect = sizeTarget()?.getBoundingClientRect();
+
+        if (rect) {
+            setAbsoluteDivStyle({
+                left: `${rect.left}px`,
+                width: `${rect.width}px`,
+                top: `${rect.top}px`,
+                height: `${rect.height}px`
+            });
+        }
     });
 
     onMount(() => {
@@ -113,6 +139,15 @@ const ViewGrid: Component<Props> = props => {
                         />
                     </Toolbar>
                 }
+                sidebar={
+                    <Inspector
+                        view={MediaViewGrid}
+                        activeCategory={props.mediaService.getActiveCategory()}
+                        activeMedia={props.mediaService.getActiveMedia()}
+                        mediaElement={mediaElement()}
+                        requestMoveNext={() => props.mediaService.moveNext()}
+                    />
+                }
             >
                 <Show when={props.mediaService.getActiveMedia()}>
                     {/*
@@ -144,6 +179,7 @@ const ViewGrid: Component<Props> = props => {
                                 showFavoriteBadge={props.showFavoritesBadge}
                                 moveNext={() => props.mediaService.moveNext()}
                                 movePrevious={() => props.mediaService.movePrevious()}
+                                setActiveMediaElement={el => setMediaElement(el)}
                                 setIsFavorite={setIsFavorite}
                             />
                         </A>
