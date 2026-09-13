@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js";
 
 import { feedListingPath, feedMediaListing, placeFeedBasePath } from "../../_media/feed/_routes";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Uuid } from "../../_models/Uuid";
 
@@ -44,7 +44,7 @@ interface Props {
    which keeps the toolbar from changing width as you drill.
 */
 const Toolbar: Component<Props> = props => {
-    const [mediaSettings] = useMediaPageSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
 
     const feedPath = () => placeFeedBasePath(props.placeId!);
 

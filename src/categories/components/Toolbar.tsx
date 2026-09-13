@@ -1,8 +1,7 @@
 import { ParentComponent, Show, children } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { buildSearch, categoriesGrid, categoriesList } from "../_routes";
-import { useCategoryPageSettingsContext } from "../../_contexts/settings/CategoryPageSettingsContext";
-import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 import { buildPath } from "../../_models/utils/RouteUtils";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
@@ -10,8 +9,8 @@ import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 
 const Toolbar: ParentComponent = props => {
-    const [, { setViewMode }] = useCategoryPageSettingsContext();
-    const [filterState] = useCategoryFilterSettingsContext();
+    const [area, { setCategoriesView }] = useAreaSettingsContext();
+
     const c = children(() => props.children);
 
     return (
@@ -23,18 +22,18 @@ const Toolbar: ParentComponent = props => {
                         href: buildPath(
                             categoriesGrid,
                             undefined,
-                            buildSearch(filterState.yearFilter)
+                            buildSearch(area.categoryYearFilter)
                         ),
-                        clickHandler: () => setViewMode("grid")
+                        clickHandler: () => setCategoriesView("grid")
                     },
                     {
                         route: categoriesList,
                         href: buildPath(
                             categoriesList,
                             undefined,
-                            buildSearch(filterState.yearFilter)
+                            buildSearch(area.categoryYearFilter)
                         ),
-                        clickHandler: () => setViewMode("list")
+                        clickHandler: () => setCategoriesView("list")
                     }
                 ]}
             />

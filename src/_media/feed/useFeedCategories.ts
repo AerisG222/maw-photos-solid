@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from "@solidjs/router";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
-import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
 import { useFeedSubject } from "./_subject";
 
 /*
@@ -19,7 +19,7 @@ import { useFeedSubject } from "./_subject";
 export const useFeedCategories = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [, { setFavoritesOnly: rememberFavoritesOnly }] = useFaceFeedSettingsContext();
+    const [, { setFeedFavoritesOnly: rememberFavoritesOnly }] = useAreaSettingsContext();
     const { personCategoriesQuery } = usePeopleContext();
     const { clanCategoriesQuery } = useClansContext();
     const { placeCategoriesQuery } = usePlacesContext();

@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useNavigate, useParams } from "@solidjs/router";
 
-import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { isUuid } from "../../_models/Uuid";
 import { people } from "../../people/_routes";
 import { places } from "../../places/_routes";
@@ -17,8 +17,8 @@ import {
 const Redirect: Component = () => {
     const params = useParams();
     const navigate = useNavigate();
-    const [mediaSettings] = useMediaPageSettingsContext();
-    const [feedSettings] = useFaceFeedSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
+    const [area] = useAreaSettingsContext();
 
     /*
        A clan lives under /people/clans/{id}, so /people/clans on its own matches
@@ -52,8 +52,8 @@ const Redirect: Component = () => {
            skip it.
         */
         navigate(
-            feedSettings.showCategories
-                ? feedListingPath(basePath, "categories", feedSettings.favoritesOnly)
+            area.feedListing === "categories"
+                ? feedListingPath(basePath, "categories", area.feedFavoritesOnly)
                 : feedListingPath(basePath, feedMediaListing(mediaSettings.view), false),
             { replace: true }
         );

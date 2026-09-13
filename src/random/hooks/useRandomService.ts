@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "@solidjs/router";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
 import { MediaView } from "../../_models/MediaView";
 import { RandomMediaService } from "../services/RandomMediaService";
@@ -14,7 +14,7 @@ import { MEDIA_PAGE_SIZE } from "../../_models/utils/Constants";
 export const useRandomServices = (view: MediaView) => {
     const navigate = useNavigate();
     const params = useParams();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
     const { categoryQuery } = useCategoriesContext();
     const { randomMediaQuery } = useMediaContext();
 
@@ -30,10 +30,7 @@ export const useRandomServices = (view: MediaView) => {
         () => cq,
         () => mq
     );
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
+    const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
 
     createEffect(() => {
         const currMedia = mediaService.getActiveMedia();

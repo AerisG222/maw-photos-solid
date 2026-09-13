@@ -1,14 +1,13 @@
 import { Component } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import Checkbox from "../../_components/input/Checkbox";
 
-import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
-
 const MissingGpsFilter: Component = () => {
-    const [filter, { setMissingGpsFilter }] = useCategoryFilterSettingsContext();
+    const [area, { setCategoryMissingGpsFilter }] = useAreaSettingsContext();
 
     const updateFilter = (enableFilter: boolean) => {
-        setMissingGpsFilter(enableFilter);
+        setCategoryMissingGpsFilter(enableFilter);
     };
 
     return (
@@ -16,7 +15,7 @@ const MissingGpsFilter: Component = () => {
             <Checkbox
                 title="Missing GPS"
                 name="missing_gps"
-                isSelected={filter.missingGpsFilter}
+                isSelected={area.categoryMissingGpsFilter}
                 onChange={updateFilter}
             />
         </div>

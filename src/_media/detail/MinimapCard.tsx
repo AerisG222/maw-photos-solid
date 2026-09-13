@@ -6,8 +6,8 @@ import {
     createSignal,
     onMount
 } from "solid-js";
-import { useMediaInfoPanelSettingsContext } from "../../_contexts/settings/MediaInfoPanelSettingsContext";
 import { Category } from "../../_models/Category";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 
@@ -19,7 +19,7 @@ interface Props {
 const MinimapCard: Component<Props> = props => {
     const [isMounted, setIsMounted] = createSignal(false);
     const { gpsQuery } = useMediaContext();
-    const [infoState, { setMinimapMapType, setMinimapZoom }] = useMediaInfoPanelSettingsContext();
+    const [media, { setMapType, setMapZoom }] = useMediaSettingsContext();
 
     // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const gps = gpsQuery(() => props.activeMedia!.id);
@@ -31,8 +31,8 @@ const MinimapCard: Component<Props> = props => {
         fullscreenControl: false,
         mapTypeControl: true,
         mapId: "dd8322a8b42d6496",
-        mapTypeId: infoState.minimapMapType,
-        zoom: infoState.minimapZoom
+        mapTypeId: media.mapType,
+        zoom: media.mapZoom
     };
 
     const [initialized, setInitialized] = createSignal(false);
@@ -50,14 +50,14 @@ const MinimapCard: Component<Props> = props => {
                 const zoom = map.getZoom();
 
                 if (zoom !== undefined) {
-                    setMinimapZoom(zoom);
+                    setMapZoom(zoom);
                 }
             });
             map.addListener("maptypeid_changed", () => {
                 const mapType = map.getMapTypeId();
 
                 if (mapType) {
-                    setMinimapMapType(mapType);
+                    setMapType(mapType);
                 }
             });
 

@@ -1,8 +1,7 @@
-import { Component } from "solid-js";
+import { Component, For } from "solid-js";
 
-import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
-import { useMediaInfoPanelSettingsContext } from "../_contexts/settings/MediaInfoPanelSettingsContext";
-import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
+import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
+import { inspectorCards } from "../_components/inspector/registry";
 import { allMapTypes } from "../_models/MapType";
 import { allMapZoomLevels } from "../_models/MapZoomLevel";
 import { allMediaViews } from "../_models/MediaView";
@@ -19,28 +18,25 @@ import Layout from "../_components/layout/Layout";
 
 /*
    Looking at one photograph, rather than at a listing of them. Density, labels,
-   badges and face highlighting are the same question everywhere in the
-   application and are answered once, under Browsing.
+   badges and face highlighting are the same question everywhere and are answered
+   once, under Browsing.
+
+   The inspector's cards come from the registry rather than being listed again
+   here. There were eight checkboxes naming eight cards, which is eight chances
+   for this page and the panel to disagree about what exists.
 */
 const ViewMedia: Component = () => {
-    const [pageSettings, { setView: setViewMode, setSlideshowDisplayDurationSeconds }] =
-        useMediaPageSettingsContext();
     const [
-        infoPanelSettings,
+        settings,
         {
-            setExpandInfoPanel,
-            setShowComments,
-            setShowExif,
-            setShowHistogram,
-            setShowEffects,
-            setShowMinimap,
-            setShowMetadataEditor,
-            setShowCategoryTeaserChooser,
-            setShowPlaceCovers
+            setView,
+            setSlideshowSeconds,
+            setInspectorOpen,
+            toggleInspectorCard,
+            setMapType,
+            setMapZoom
         }
-    ] = useMediaInfoPanelSettingsContext();
-    // one map preference now, shared by the map view and the inspector's minimap
-    const [mapSettings, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
+    ] = useMediaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
@@ -50,87 +46,51 @@ const ViewMedia: Component = () => {
                         title="View"
                         groupName="mediaView"
                         itemArray={allMediaViews}
-                        selectedValue={pageSettings.view}
-                        onChange={setViewMode}
+                        selectedValue={settings.view}
+                        onChange={setView}
                     />
                     <Select
                         title="Slideshow Display Duration"
                         itemArray={allSlideshowDurations}
-                        selectedValue={pageSettings.slideshowDisplayDurationSeconds}
-                        onChange={val => setSlideshowDisplayDurationSeconds(parseInt(val))}
+                        selectedValue={settings.slideshowSeconds}
+                        onChange={val => setSlideshowSeconds(parseInt(val))}
                     />
                 </Panel>
 
-                <Panel title="Info Panel">
+                <Panel title="Inspector">
                     <Toggle
                         title="Show Expanded Panel"
-                        name="showInfoPanel"
-                        isSelected={infoPanelSettings.expandInfoPanel}
-                        onChange={setExpandInfoPanel}
+                        name="inspectorOpen"
+                        isSelected={settings.inspectorOpen}
+                        onChange={setInspectorOpen}
                     />
-                    <Checkbox
-                        title="Show Comments"
-                        name="showCommentsPanel"
-                        isSelected={infoPanelSettings.showComments}
-                        onChange={setShowComments}
-                    />
-                    <Checkbox
-                        title="Show EXIF"
-                        name="showExifPanel"
-                        isSelected={infoPanelSettings.showExif}
-                        onChange={setShowExif}
-                    />
-                    <Checkbox
-                        title="Show Histogram"
-                        name="showHistogramPanel"
-                        isSelected={infoPanelSettings.showHistogram}
-                        onChange={setShowHistogram}
-                    />
-                    <Checkbox
-                        title="Show Effects"
-                        name="showEffectsPanel"
-                        isSelected={infoPanelSettings.showEffects}
-                        onChange={setShowEffects}
-                    />
-                    <Checkbox
-                        title="Show Mini-map"
-                        name="showMiniMapPanel"
-                        isSelected={infoPanelSettings.showMinimap}
-                        onChange={setShowMinimap}
-                    />
-                    <Checkbox
-                        title="Show Metadata Editor"
-                        name="showMetadataEditorPanel"
-                        isSelected={infoPanelSettings.showMetadataEditor}
-                        onChange={setShowMetadataEditor}
-                    />
-                    <Checkbox
-                        title="Show Category Teaser Chooser"
-                        name="showCategoryTeaserPanel"
-                        isSelected={infoPanelSettings.showCategoryTeaserChooser}
-                        onChange={setShowCategoryTeaserChooser}
-                    />
-                    <Checkbox
-                        title="Show Place Covers"
-                        name="showPlaceCoversPanel"
-                        isSelected={infoPanelSettings.showPlaceCovers}
-                        onChange={setShowPlaceCovers}
-                    />
+
+                    <For each={inspectorCards}>
+                        {card => (
+                            <Checkbox
+                                title={card.title}
+                                name={`inspector-${card.id}`}
+                                isSelected={settings.inspectorCards.includes(card.id)}
+                                onChange={() => toggleInspectorCard(card.id)}
+                            />
+                        )}
+                    </For>
                 </Panel>
 
+                {/* one map preference, read by the map view and by the minimap card */}
                 <Panel title="Maps">
                     <RadioGroup
                         title="Map Type"
                         groupName="mapType"
                         itemArray={allMapTypes}
-                        selectedValue={mapSettings.mapType}
+                        selectedValue={settings.mapType}
                         onChange={setMapType}
                     />
                     <Select
                         title="Map Zoom Level"
                         itemArray={allMapZoomLevels}
-                        selectedValue={mapSettings.zoom}
-                        onChange={val => setZoom(parseInt(val))}
+                        selectedValue={settings.mapZoom}
+                        onChange={val => setMapZoom(parseInt(val))}
                     />
                 </Panel>
             </PanelContainer>

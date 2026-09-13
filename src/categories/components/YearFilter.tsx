@@ -1,14 +1,14 @@
 import { Component, Show } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useSearchParams } from "@solidjs/router";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 
 import Select from "../../_components/input/Select";
 
 const YearFilter: Component = () => {
     const { yearsQuery } = useCategoriesContext();
-    const [filter, { setYearFilter }] = useCategoryFilterSettingsContext();
+    const [area, { setCategoryYearFilter }] = useAreaSettingsContext();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const onChangeFilter = (val: string) => {
@@ -24,7 +24,7 @@ const YearFilter: Component = () => {
             }
         }
 
-        setYearFilter(yearFilter);
+        setCategoryYearFilter(yearFilter);
         setSearchParams({ year: yearFilter.toString() });
     };
 
@@ -52,7 +52,7 @@ const YearFilter: Component = () => {
             <Select
                 title="Year"
                 itemArray={toKvp(years.data!)}
-                selectedValue={filter.yearFilter ?? "all"}
+                selectedValue={area.categoryYearFilter ?? "all"}
                 onChange={onChangeFilter}
             />
         </Show>

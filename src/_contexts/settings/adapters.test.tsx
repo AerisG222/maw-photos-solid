@@ -6,8 +6,6 @@ import { AllSettingsProvider } from "./AllSettingsProvider";
 import { useCategoryGridViewSettingsContext } from "./CategoryGridViewSettingsContext";
 import { useCategoryListViewSettingsContext } from "./CategoryListViewSettingsContext";
 import { useListingSettingsContext } from "./ListingSettingsContext";
-import { useMediaInfoPanelSettingsContext } from "./MediaInfoPanelSettingsContext";
-import { useMediaMapViewSettingsContext } from "./MediaMapViewSettingsContext";
 import { usePeopleGridViewSettingsContext } from "./PeopleGridViewSettingsContext";
 import { useSearchGridViewSettingsContext } from "./SearchGridViewSettingsContext";
 
@@ -97,40 +95,6 @@ describe("the settings adapters", () => {
         // three steps, so the fourth press is back at the start
         actions.setThumbnailSize("small");
         expect(settings.thumbnailSize).toBe("default");
-    });
-
-    test("the info panel's booleans are one ordered list of cards", () => {
-        const probe = mount(() => useMediaInfoPanelSettingsContext());
-        const [settings, actions] = probe;
-
-        expect(settings.showComments).toBe(true);
-        expect(settings.showExif).toBe(false);
-
-        actions.setShowExif(true);
-        expect(settings.showExif).toBe(true);
-
-        // setting a card that is already open is a no-op, not a close
-        actions.setShowExif(true);
-        expect(settings.showExif).toBe(true);
-
-        actions.setShowComments(false);
-        expect(settings.showComments).toBe(false);
-        expect(settings.showExif).toBe(true);
-    });
-
-    test("the minimap and the map view share one map", () => {
-        const probe = mount(() => ({
-            map: useMediaMapViewSettingsContext(),
-            panel: useMediaInfoPanelSettingsContext()
-        }));
-
-        const [map, mapActions] = probe.map;
-        const [panel] = probe.panel;
-
-        mapActions.setZoom(17);
-
-        expect(map.zoom).toBe(17);
-        expect(panel.minimapZoom).toBe(17);
     });
 
     test("what a listing setting is written as is what it is read back as", () => {

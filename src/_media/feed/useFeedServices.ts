@@ -1,4 +1,5 @@
 import { createEffect, createSignal, onMount } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useLocation, useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
@@ -6,8 +7,7 @@ import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
-import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
 import { SlideshowService } from "../services/SlideshowService";
@@ -22,9 +22,9 @@ export const useFeedServices = (view: MediaView) => {
     const location = useLocation();
     const params = useParams();
     const [searchParams] = useSearchParams();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
-    const [feedSettings, { setFavoritesOnly: rememberFavoritesOnly, setShuffle: rememberShuffle }] =
-        useFaceFeedSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
+    const [area, { setFeedFavoritesOnly: rememberFavoritesOnly, setFeedShuffle: rememberShuffle }] =
+        useAreaSettingsContext();
     const { categoryQuery } = useCategoriesContext();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
@@ -98,10 +98,7 @@ export const useFeedServices = (view: MediaView) => {
         mq
     );
 
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
+    const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
 
     /*
        One navigation rather than a path change followed by a query change, so
@@ -150,14 +147,14 @@ export const useFeedServices = (view: MediaView) => {
             return;
         }
 
-        if (!feedSettings.favoritesOnly && !feedSettings.shuffle) {
+        if (!area.feedFavoritesOnly && !area.feedShuffle) {
             return;
         }
 
         navigate(
             `${location.pathname}${buildSearch(
-                feedSettings.favoritesOnly,
-                feedSettings.shuffle ? newMediaSeed() : undefined
+                area.feedFavoritesOnly,
+                area.feedShuffle ? newMediaSeed() : undefined
             )}`,
             { replace: true }
         );

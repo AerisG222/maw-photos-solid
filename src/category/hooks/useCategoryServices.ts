@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
 import { MediaView } from "../../_models/MediaView";
 import { CategoryMediaService } from "../services/CategoryMediaService";
@@ -9,7 +9,7 @@ import { findQueryError, refetchQueries } from "../../_components/error/_queryEr
 export const useCategoryServices = (view: MediaView) => {
     const navigate = useNavigate();
     const params = useParams();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
     const { categoryQuery, categoryMediaQuery, categoriesForYearQuery } = useCategoriesContext();
 
     const categoriesQuery = categoriesForYearQuery(() => parseInt(params.categoryYear ?? "", 10));
@@ -28,10 +28,7 @@ export const useCategoryServices = (view: MediaView) => {
         () => mq
     );
 
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
+    const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
 
     // the view renders nothing until the category resolves, so without this a
     // failure anywhere in the chain is just a permanently blank screen

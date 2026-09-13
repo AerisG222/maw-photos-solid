@@ -1,15 +1,15 @@
 import { createMemo } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { Category } from "../../_models/Category";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useCategoryFilterSettingsContext } from "../../_contexts/settings/CategoryFilterSettingsContext";
 import { UseQueryResult } from "@tanstack/solid-query";
 import { CategoryIdsForYearResult } from "../../_contexts/api/models/CategoryIdsForYearResult";
 import { Uuid } from "../../_models/Uuid";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 
 export const useCategoriesByYear = () => {
-    const [filter] = useCategoryFilterSettingsContext();
+    const [area] = useAreaSettingsContext();
     const {
         yearsQuery,
         categoriesForAllYearsQuery,
@@ -27,11 +27,11 @@ export const useCategoriesByYear = () => {
        `useQueries` instead keeps a single subscription that re-targets itself.
     */
     const yearsToLoad = () => {
-        if (filter.yearFilter === "all") {
+        if (area.categoryYearFilter === "all") {
             return years.isSuccess ? years.data : [];
         }
 
-        return [filter.yearFilter];
+        return [area.categoryYearFilter];
     };
 
     /*
@@ -40,7 +40,7 @@ export const useCategoriesByYear = () => {
        visit to the categories page fired one no-gps request per year, around
        thirty of them, for a result nothing was going to read.
     */
-    const gpsYearsToLoad = () => (filter.missingGpsFilter ? yearsToLoad() : []);
+    const gpsYearsToLoad = () => (area.categoryMissingGpsFilter ? yearsToLoad() : []);
 
     const allCategories = categoriesForAllYearsQuery(yearsToLoad);
     const categoryIdsWithoutGps = categoriesWithoutGpsForAllYearsQuery(gpsYearsToLoad);
@@ -62,7 +62,7 @@ export const useCategoriesByYear = () => {
     ) => categoryIdsWithoutGpsResult.find(x => x.data?.year === year)?.data?.categoryIds;
 
     const categoriesToDisplay = createMemo(() => {
-        if (!filter.missingGpsFilter) {
+        if (!area.categoryMissingGpsFilter) {
             if (allCategoriesReady()) {
                 return allCategories.reduce<Record<number, Category[]>>((acc, result) => {
                     if (result.data) {
@@ -97,7 +97,7 @@ export const useCategoriesByYear = () => {
             years,
             ...allCategories,
             // only consulted while the missing-gps filter is on
-            ...(filter.missingGpsFilter ? categoryIdsWithoutGps : [])
+            ...(area.categoryMissingGpsFilter ? categoryIdsWithoutGps : [])
         ]);
 
     const retryLoad = () => refetchQueries([years, ...allCategories, ...categoryIdsWithoutGps]);

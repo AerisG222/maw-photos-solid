@@ -1,16 +1,14 @@
 import { useLocation, useNavigate } from "@solidjs/router";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { Component } from "solid-js";
 
 import { buildPath } from "../_models/utils/RouteUtils";
-import { useCategoryPageSettingsContext } from "../_contexts/settings/CategoryPageSettingsContext";
-import { useCategoryFilterSettingsContext } from "../_contexts/settings/CategoryFilterSettingsContext";
 import { buildSearch, getRouteForViewMode } from "./_routes";
 
 const CategoriesRedirect: Component = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [settings] = useCategoryPageSettingsContext();
-    const [filterState] = useCategoryFilterSettingsContext();
+    const [area] = useAreaSettingsContext();
 
     const updateSearchFromUrl = (search: { year?: number | "all" }, querystring: string) => {
         const searchParams = new URLSearchParams(querystring);
@@ -24,8 +22,8 @@ const CategoriesRedirect: Component = () => {
     };
 
     if (location.pathname.endsWith("/categories")) {
-        const route = getRouteForViewMode(settings.viewMode);
-        const search = buildSearch(filterState.yearFilter);
+        const route = getRouteForViewMode(area.categoriesView);
+        const search = buildSearch(area.categoryYearFilter);
 
         if (location.search) {
             updateSearchFromUrl(search, location.search);

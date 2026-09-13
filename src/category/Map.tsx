@@ -1,7 +1,7 @@
 import { Component, createEffect } from "solid-js";
+import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
 
 import { MediaViewMap } from "../_models/MediaView";
-import { useMediaMapViewSettingsContext } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { useCategoryMapServices } from "./hooks/useCategoryMapServices";
 
 import ViewMap from "../_media/ViewMap";
@@ -9,7 +9,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Map: Component = () => {
-    const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
+    const [media, { setMapType, setMapZoom }] = useMediaSettingsContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryMapServices(MediaViewMap);
 
@@ -26,9 +26,9 @@ const Map: Component = () => {
             <ViewMap
                 mediaService={mediaService}
                 slideshowService={slideshowService}
-                mapState={state}
+                mapState={media}
                 setMapType={setMapType}
-                setZoom={setZoom}
+                setZoom={setMapZoom}
             />
         </AsyncBoundary>
     );

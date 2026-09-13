@@ -1,6 +1,6 @@
 import { JSXElement, ParentComponent, Show, children, createMemo } from "solid-js";
 
-import { useMediaPageSettingsContext } from "../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
@@ -46,7 +46,7 @@ const viewOrder: MediaView[] = [
 ];
 
 const Toolbar: ParentComponent<Props> = props => {
-    const [, { setView: setViewMode }] = useMediaPageSettingsContext();
+    const [, { setView: setViewMode }] = useMediaSettingsContext();
     const [, { gteMd }] = useMediaBreakpointContext();
 
     const c = children(() => props.children);

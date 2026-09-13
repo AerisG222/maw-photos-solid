@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { useSearchPageSettingsContext } from "../_contexts/settings/SearchPageSettingsContext";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 
 import Panel from "./components/Panel";
@@ -9,13 +9,9 @@ import RadioGroup from "../_components/input/RadioGroup";
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 
-/*
-   Only what is particular to this area - see the note in Categories. Search
-   results are categories, and how a listing of them looks is answered once,
-   under Browsing.
-*/
+// see the note in Categories - search results are categories
 const ViewSearch: Component = () => {
-    const [pageSettings, { setViewMode }] = useSearchPageSettingsContext();
+    const [area, { setSearchView }] = useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Search">
@@ -25,8 +21,8 @@ const ViewSearch: Component = () => {
                         title="View Mode"
                         itemArray={allCategoryViewModes}
                         groupName="pageView"
-                        selectedValue={pageSettings.viewMode}
-                        onChange={setViewMode}
+                        selectedValue={area.searchView}
+                        onChange={setSearchView}
                     />
                 </Panel>
             </PanelContainer>

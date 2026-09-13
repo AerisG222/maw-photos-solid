@@ -1,14 +1,14 @@
 import { useNavigate } from "@solidjs/router";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { Component } from "solid-js";
 
 import { getPathForViewMode } from "./_routes";
-import { useSearchPageSettingsContext } from "../_contexts/settings/SearchPageSettingsContext";
 
 const SearchRedirect: Component = () => {
-    const [settings] = useSearchPageSettingsContext();
+    const [area] = useAreaSettingsContext();
     const navigate = useNavigate();
 
-    navigate(getPathForViewMode(settings.viewMode), { replace: true });
+    navigate(getPathForViewMode(area.searchView), { replace: true });
 
     return <></>;
 };

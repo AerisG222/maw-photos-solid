@@ -1061,6 +1061,26 @@ toggles. The two remaining breadcrumb props are real and stay: they decide _wher
 question about the feed rather than a preference. A category's grid names the category above the tiles; a
 person's spans categories, so the trail only means something on the photograph itself.
 
+### Steps 13 and 14, as far as they can go yet (2026-09-13)
+
+The adapters from step 3 split cleanly in two once the work reached them.
+
+**Seven were pure renames** - the page view modes, the category year and GPS filters, the feed's options, the
+map, the info panel and the media page. Those carried no derived values: `viewMode` was `categoriesView`
+spelled differently. All seven are gone and their thirty-odd consumers read the store directly, in the store's
+own vocabulary.
+
+**Eight are not renames**, and they are the listing ones. `CategoryGridViewSettings` and its siblings answer
+`thumbnailSize` by deriving a pixel size from the density, because the tiles need pixels. Deleting those
+adapters does not remove the derivation, it moves it into every screen that draws a tile. It disappears
+properly when `Tile` reads the store and sizes itself - which is the rest of step 7. So they stay, and step 14
+finishes there.
+
+**The settings pages came along with it**, which is most of step 13. They read the stores now, and the Media
+page's inspector section is generated from the card registry rather than listing eight checkboxes by hand -
+eight chances for the page and the panel to disagree about which cards exist. The Appearance and Browsing pages
+already arrived, in step 3 and with the theme fix. A Shortcuts page, generated the same way, is what is left.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1176,8 +1196,8 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
 | **12**  | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`.                                                                                                                                                                                                                                                                                                                                                                 | ~10 files         | medium |
 | **12b** | **View Transitions.** Morph the thumbnail into the photo on grid → active item and grid → fullscreen, behind a `prefers-reduced-motion` guard. No dependency (§11).                                                                                                                                                                                                                                                                                                                                                                         | 3–4 files         | low    |
-| **13**  | **Settings area from the registry.** Delete the four hand-written pages; add Appearance / Browsing / Media / Shortcuts.                                                                                                                                                                                                                                                                                                                                                                                                                     | `settings/*`      | low    |
-| **14**  | **Remove the adapters** from step 3; delete the fifteen old context files; `Toggle`+`Checkbox`→`Switch`; `TextFilter` adoption.                                                                                                                                                                                                                                                                                                                                                                                                             | 20 deletions      | low    |
+| **13**  | **PARTIAL 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. Appearance and Browsing already exist (steps 3 and the theme fix). A Shortcuts page is still to come.                                                                                                                                                                                                                                          | 4 files           | low    |
+| **14**  | **PARTIAL 2026-09-13 — seven adapters gone.** Every adapter that was a pure rename is removed and its consumers read the store: page view modes, the category filters, the feed options, the map, the info panel and the media page. The eight listing adapters remain, blocked on `Tile`.                                                                                                                                                                                                                                                  | 24 files          | medium |
 
 Steps 0–2 are safe to land in any order and are worth doing immediately regardless of whether the rest proceeds. Step 3 is the keystone: everything from 7 onward is deletion enabled by it.
 

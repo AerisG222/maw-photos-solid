@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
-import { useFaceFeedSettingsContext } from "../../_contexts/settings/FaceFeedSettingsContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { feedListingPath, feedMediaListing } from "./_routes";
 
@@ -37,8 +37,8 @@ interface Props {
 // where to start numbering
 export const LISTING_NAV_COUNT = 2;
 const ToolbarListing: Component<Props> = props => {
-    const [mediaSettings] = useMediaPageSettingsContext();
-    const [, { setShowCategories }] = useFaceFeedSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
+    const [, { setFeedListing }] = useAreaSettingsContext();
 
     /*
        Going back to the media returns to whichever view was last used, rather
@@ -82,13 +82,13 @@ const ToolbarListing: Component<Props> = props => {
                     route: mediaRoute(),
                     href: mediaHref(),
                     active: !props.showingCategories,
-                    clickHandler: () => setShowCategories(false)
+                    clickHandler: () => setFeedListing("media")
                 },
                 {
                     route: categoriesRoute(),
                     href: categoriesHref(),
                     active: props.showingCategories,
-                    clickHandler: () => setShowCategories(true)
+                    clickHandler: () => setFeedListing("categories")
                 }
             ]}
         />

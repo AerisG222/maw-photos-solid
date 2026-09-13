@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useMediaPageSettingsContext } from "../../_contexts/settings/MediaPageSettingsContext";
+import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
 import { MediaView } from "../../_models/MediaView";
 import { CategoryMapsMediaService } from "../services/CategoryMapsMediaService";
@@ -9,7 +9,7 @@ import { findQueryError, refetchQueries } from "../../_components/error/_queryEr
 export const useCategoryMapServices = (view: MediaView) => {
     const navigate = useNavigate();
     const params = useParams();
-    const [mediaPageSettings] = useMediaPageSettingsContext();
+    const [mediaSettings] = useMediaSettingsContext();
     const { categoryQuery, categoryMediaQuery, categoryMediaGpsQuery, categoriesForYearQuery } =
         useCategoriesContext();
 
@@ -36,10 +36,7 @@ export const useCategoryMapServices = (view: MediaView) => {
        just because nobody had come back to it. Watching it step between markers
        is the best thing this view does.
     */
-    const slideshowService = new SlideshowService(
-        mediaService,
-        mediaPageSettings.slideshowDisplayDurationSeconds
-    );
+    const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
 
     const loadError = () => findQueryError([categoriesQuery, cq, mq, gpsList]);
     const retryLoad = () => refetchQueries([categoriesQuery, cq, mq, gpsList]);

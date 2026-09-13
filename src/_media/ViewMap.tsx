@@ -1,6 +1,7 @@
 import { Component, Show, createEffect, createResource, createSignal, onMount } from "solid-js";
+import { MapTypeIdType } from "../_models/MapType";
+import { MapZoomLevelIdType } from "../_models/MapZoomLevel";
 
-import { MediaMapViewSettingsState } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { SlideshowService } from "./services/SlideshowService";
@@ -17,7 +18,7 @@ import EmptyState from "../_components/state/EmptyState";
 interface Props {
     mediaService: IMapsMediaService;
     slideshowService: SlideshowService;
-    mapState: MediaMapViewSettingsState;
+    mapState: { mapType: MapTypeIdType; mapZoom: MapZoomLevelIdType };
     setMapType: (mapType: string) => void;
     setZoom: (zoom: number) => void;
 }
@@ -37,7 +38,7 @@ const ViewMap: Component<Props> = props => {
         mapTypeControl: true,
         mapId: "af11584565f27198",
         mapTypeId: props.mapState.mapType,
-        zoom: center ? props.mapState.zoom : 2
+        zoom: center ? props.mapState.mapZoom : 2
     });
 
     async function initMap(initialLocation: GpsCoordinate | undefined): Promise<void> {
