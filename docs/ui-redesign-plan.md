@@ -1016,9 +1016,23 @@ arrow keys, escape and click-outside that §11 said nobody should hand-roll.
 It is mounted in `_media/Toolbar.tsx`, the one place that already knows both the photograph and its category,
 so all four views get it without threading a prop through three toolbars.
 
-**One deliberate widening.** The category zip used to be offered only while browsing that category; it is now
-offered wherever the photograph is. A photograph belongs to a category whether you reached it from that
-category, from a person or from a place, which is the same principle the inspector follows.
+**A widening that was wrong, and the correction.** The category zip was first offered wherever the photograph
+was, on the reasoning that a photograph belongs to a category however you reached it. That is true and beside
+the point: in a person's or a place's feed the current photograph's category is _incidental to the list_, so
+offering to download all of it answers a question nobody asked.
+
+Worse, the action had been attached to the wrong thing entirely. A category download is about what is being
+**listed**, not about the item selected within it - so it also has to be available with nothing selected at
+all, which is how most of a visit to a category is spent, and the `⋮` only appeared once a photograph was
+picked.
+
+Both fixed by asking the service rather than inferring from what happens to be on screen: `IMediaService`
+gains `canDownloadCategory()`, false on the base and true only for `CategoryMediaService`. The menu now
+appears when _either_ scope has something to offer, and holds two groups - the resolutions and the share, which
+need a photograph, and the category zip, which needs a category being browsed.
+
+That method is the first piece of step 11's capability work arriving early, because this is exactly the
+question it exists to answer.
 
 ### Deliberately deferred from step 1
 

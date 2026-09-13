@@ -18,6 +18,8 @@ export abstract class BaseMediaService {
     abstract getMediaPathByView(view: MediaView, media: Media | undefined): string;
 
     canRequestMore = () => false;
+    // only a category listing can answer for a whole category - see IMediaService
+    canDownloadCategory = () => false;
     requestMore = () => {
         /* empty */
     };

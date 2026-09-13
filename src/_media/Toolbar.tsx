@@ -91,12 +91,18 @@ const Toolbar: ParentComponent<Props> = props => {
                 belongs to, so every view gets these without threading a prop
                 through three toolbars to reach them.
             */}
-            <Show when={props.activeMedia}>
+            {/*
+                Shown when either scope has something to offer: a photograph is
+                selected, or a whole category is what is being browsed. A
+                category grid with nothing picked can still be downloaded.
+            */}
+            <Show when={!!props.activeMedia || props.mediaService.canDownloadCategory()}>
                 <ToolbarDivider />
 
                 <ItemActions
                     activeMedia={props.activeMedia}
                     activeCategory={props.activeCategory}
+                    canDownloadCategory={props.mediaService.canDownloadCategory()}
                 />
             </Show>
 

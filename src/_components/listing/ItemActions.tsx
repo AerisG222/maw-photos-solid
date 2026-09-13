@@ -12,6 +12,8 @@ import Icon from "../icon/Icon";
 interface Props {
     activeMedia: Media | undefined;
     activeCategory: Category | undefined;
+    // whether a whole-category download belongs here at all - see IMediaService
+    canDownloadCategory: boolean;
 }
 
 /*
@@ -26,6 +28,11 @@ interface Props {
    A menu rather than four more toolbar buttons: these are used rarely and read
    as a list - "high res", "low res", "the whole category" - where a row of icons
    would be four more things to decode on a toolbar that already has enough.
+
+   Two scopes, not one. The resolutions and the share act on the photograph and
+   need one selected. The category zip acts on what is being *listed*, so it
+   belongs here whenever a category is what you are browsing - including with
+   nothing selected at all, which is how most of a visit to a category is spent.
 */
 const ItemActions: Component<Props> = props => {
     const { downloadFile } = useCategoriesContext();
@@ -67,36 +74,34 @@ const ItemActions: Component<Props> = props => {
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content class="z-50 min-w-56 bg-base-100 rounded-box p-1 elev-overlay">
-                    <DropdownMenu.Item
-                        class={itemClass}
-                        disabled={!highResUrl()}
-                        onSelect={() =>
-                            download(highResUrl(), getFilenameFromUrl(highResUrl(), "high"))
-                        }
-                    >
-                        <Icon classes="icon-[ic--round-image]" />
-                        High Resolution
-                    </DropdownMenu.Item>
+                    <Show when={props.activeMedia}>
+                        <DropdownMenu.Item
+                            class={itemClass}
+                            disabled={!highResUrl()}
+                            onSelect={() =>
+                                download(highResUrl(), getFilenameFromUrl(highResUrl(), "high"))
+                            }
+                        >
+                            <Icon classes="icon-[ic--round-image]" />
+                            High Resolution
+                        </DropdownMenu.Item>
 
-                    <DropdownMenu.Item
-                        class={itemClass}
-                        disabled={!lowResUrl()}
-                        onSelect={() =>
-                            download(lowResUrl(), getFilenameFromUrl(lowResUrl(), "low"))
-                        }
-                    >
-                        <Icon classes="icon-[ic--round-image]" />
-                        Low Resolution
-                    </DropdownMenu.Item>
+                        <DropdownMenu.Item
+                            class={itemClass}
+                            disabled={!lowResUrl()}
+                            onSelect={() =>
+                                download(lowResUrl(), getFilenameFromUrl(lowResUrl(), "low"))
+                            }
+                        >
+                            <Icon classes="icon-[ic--round-image]" />
+                            Low Resolution
+                        </DropdownMenu.Item>
+                    </Show>
 
-                    {/*
-                        Offered wherever the photograph is, not only while
-                        browsing the category itself. A photograph belongs to one
-                        whether you reached it from that category, from a person
-                        or from a place.
-                    */}
-                    <Show when={props.activeCategory}>
-                        <DropdownMenu.Separator class="my-1 border-t border-base-content/20" />
+                    <Show when={props.canDownloadCategory && props.activeCategory}>
+                        <Show when={props.activeMedia}>
+                            <DropdownMenu.Separator class="my-1 border-t border-base-content/20" />
+                        </Show>
 
                         <DropdownMenu.Item
                             class={itemClass}

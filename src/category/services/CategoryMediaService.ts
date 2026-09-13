@@ -90,4 +90,7 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     };
 
     getAvailableRoutes = () => [gridRoute, fullscreenRoute, mapRoute, bulkEditRoute];
+
+    // this listing *is* a category
+    canDownloadCategory = () => true;
 }

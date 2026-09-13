@@ -15,4 +15,14 @@ export interface IMediaService extends INavigable {
     getMediaPathByView(view: MediaView, media: Media | undefined): string;
     canRequestMore(): boolean;
     requestMore(): void;
+    /*
+       Whether "download this whole category" means anything here.
+
+       It does while browsing a category, where the category *is* what is being
+       listed. It does not in a person's or a place's feed: the photograph on
+       screen belongs to some category, but that category is incidental to the
+       list, and offering to download all of it would be answering a question
+       nobody asked.
+    */
+    canDownloadCategory(): boolean;
 }
