@@ -13,22 +13,22 @@ interface Props {
 }
 
 /*
-   The heart in the top-right corner of a tile.
+   The heart on a tile.
 
-   Identical, character for character, in the category, person and media tiles -
-   including the pinning to the second column of their shared two-by-two grid,
-   which is why it carries those classes rather than taking them as a prop.
+   It used to pin itself to the second column of the tile's two-by-two grid,
+   because all three tiles that drew it had independently built the same grid
+   and put it in the same corner. Tile owns the corners now, so this is the
+   heart and nothing about where it sits - which is what let the media tile
+   pass it as `badges.topRight` without ending up wrapped twice.
 */
 const FavoriteBadge: Component<Props> = props => {
     return (
-        <div class="col-start-2 row-start-1 z-10 justify-self-end self-start">
-            <IconButton
-                buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
-                onClick={props.onToggle}
-            >
-                <FavoriteIcon isFavorite={props.isFavorite} subjectId={props.subjectId} />
-            </IconButton>
-        </div>
+        <IconButton
+            buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
+            onClick={props.onToggle}
+        >
+            <FavoriteIcon isFavorite={props.isFavorite} subjectId={props.subjectId} />
+        </IconButton>
     );
 };
 

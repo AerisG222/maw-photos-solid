@@ -3,7 +3,7 @@ import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useClansContext } from "../_contexts/api/ClansContext";
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
-import { usePeopleGridViewSettingsContext } from "../_contexts/settings/PeopleGridViewSettingsContext";
+import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { Clan } from "../_models/Clan";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { Person } from "../_models/Person";
@@ -36,7 +36,7 @@ type Picking =
     | { kind: "members"; clan: Clan };
 
 const GridView: Component = () => {
-    const [settings] = usePeopleGridViewSettingsContext();
+    const [listing] = useListingSettingsContext();
     const { peopleQuery, setIsFavoriteMutation } = usePeopleContext();
     const {
         clansQuery,
@@ -87,7 +87,7 @@ const GridView: Component = () => {
             ? all.filter(person => person.name.toLocaleLowerCase().includes(term))
             : all;
 
-        return [...matches].sort(settings.sortBy === PersonSortName ? byName : byMediaCount);
+        return [...matches].sort(listing.peopleSort === PersonSortName ? byName : byMediaCount);
     });
 
     const isPicking = () => picking().kind !== "off";
@@ -212,12 +212,12 @@ const GridView: Component = () => {
            categories grid: it owns the backdrop and toolbar, and both are driven
            by settings alone, so they are safe to show while the list is in flight.
         */
-        <Layout toolbar={<Toolbar />} margin={settings.margin}>
+        <Layout margin toolbar={<Toolbar />}>
             <AsyncBoundary
                 queries={[people]}
                 errorTitle="Could not load people"
                 when={people.isSuccess}
-                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonGrid />}
                 isEmpty={people.data?.length === 0}
                 empty={<EmptyLibrary />}
             >
@@ -253,10 +253,6 @@ const GridView: Component = () => {
                             {(person, idx) => (
                                 <PersonCard
                                     person={person}
-                                    showName={settings.showNames}
-                                    showMediaCount={settings.showMediaCounts}
-                                    thumbnailSize={settings.thumbnailSize}
-                                    dimThumbnails={settings.dimThumbnails}
                                     eager={idx() <= EAGER_THRESHOLD}
                                     selectable={isPicking()}
                                     selected={selected().has(person.id)}

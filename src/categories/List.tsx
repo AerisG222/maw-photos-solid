@@ -1,6 +1,5 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from "../_contexts/settings/CategoryListViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 import { Category } from "../_models/Category";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
@@ -14,7 +13,6 @@ import SkeletonList from "../_components/loading/SkeletonList";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 
 const ListView: Component = () => {
-    const [settings] = useCategoryListViewSettingsContext();
     const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
@@ -31,12 +29,12 @@ const ListView: Component = () => {
         // Layout wraps every state so the backdrop and toolbar are constant -
         // see the note in Grid.tsx
         <Layout
+            margin
             toolbar={
                 <Toolbar>
                     <ListToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}
         >
             {/*
                 error is checked first: a failed year query also leaves
@@ -47,7 +45,7 @@ const ListView: Component = () => {
                 onRetry={retryLoad}
                 errorTitle="Could not load categories"
                 when={categoriesToDisplay()}
-                skeleton={<SkeletonList thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonList />}
             >
                 <CategoryFilterBar />
 

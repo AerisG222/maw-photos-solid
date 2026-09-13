@@ -1,9 +1,7 @@
 import { Component, For } from "solid-js";
 import ListingSurface from "../../_components/listing/ListingSurface";
 
-import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/CategoryGridViewSettingsContext";
 import { Category } from "../../_models/Category";
-import { defaultGridThumbnailSize } from "../../_models/ThumbnailSize";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
@@ -17,8 +15,6 @@ interface Props {
 }
 
 const YearGrid: Component<Props> = props => {
-    const [settings] = useCategoryGridViewSettingsContext();
-
     return (
         <>
             <YearHeading year={props.year} />
@@ -36,15 +32,6 @@ const YearGrid: Component<Props> = props => {
                     {(category, idx) => (
                         <CategoryCard
                             category={category}
-                            showTitles={
-                                settings.showTitles &&
-                                settings.thumbnailSize === defaultGridThumbnailSize
-                            }
-                            showYears={false}
-                            thumbnailSize={settings.thumbnailSize}
-                            dimThumbnails={settings.dimThumbnails}
-                            showFavoriteBadge={settings.showFavoritesBadge}
-                            showTypesBadge={settings.showTypesBadge}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
                             setIsFavorite={props.setIsFavorite}
                         />

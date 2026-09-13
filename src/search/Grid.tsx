@@ -1,7 +1,6 @@
 import { Component, For } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
 
-import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 import { Category } from "../_models/Category";
@@ -16,7 +15,6 @@ import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 
 const ViewGrid: Component = () => {
-    const [settings] = useSearchGridViewSettingsContext();
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
         useSearchContext();
     /*
@@ -37,6 +35,7 @@ const ViewGrid: Component = () => {
 
     return (
         <Layout
+            margin
             toolbar={
                 <Toolbar
                     canRequestMore={searchQuery.hasNextPage}
@@ -45,7 +44,6 @@ const ViewGrid: Component = () => {
                     <GridToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}
         >
             <div class="mt-4">
                 <SearchBar />
@@ -61,19 +59,13 @@ const ViewGrid: Component = () => {
                 queries={[searchQuery]}
                 errorTitle="Search could not be completed"
                 when={!state.activeTerm || searchQuery.isSuccess}
-                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonGrid />}
             >
                 <ListingSurface keyboardCursor class="my-4">
                     <For each={allSearchResults(searchQuery) ?? []}>
                         {(category, idx) => (
                             <CategoryCard
                                 category={category}
-                                showTitles={settings.showTitles}
-                                thumbnailSize={settings.thumbnailSize}
-                                dimThumbnails={settings.dimThumbnails}
-                                showYears={settings.showYears}
-                                showFavoriteBadge={settings.showFavoritesBadge}
-                                showTypesBadge={settings.showTypesBadge}
                                 eager={idx() <= EAGER_THRESHOLD}
                                 setIsFavorite={setIsFavorite}
                             />

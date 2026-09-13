@@ -3,7 +3,6 @@ import { Component, JSXElement, Show, createSignal } from "solid-js";
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
-import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { Media } from "../_models/Media";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { MediaViewFullscreen } from "../_models/MediaView";
@@ -24,14 +23,12 @@ interface Props {
     toolbarLeading?: JSXElement;
     // how many navigation entries `toolbarLeading` holds - see Toolbar
     toolbarLeadingNavCount?: number;
-    showFavoritesBadge: boolean;
 }
 
 const ViewFullscreen: Component<Props> = props => {
     const { setIsFavoriteMutation } = useMediaContext();
     // read here rather than threaded from every caller: all three of them hand
     // this view the same context's values already
-    const [settings] = useMediaFullscreenViewSettingsContext();
 
     /*
        A signal rather than a plain variable, for the same reason the detail view
@@ -84,8 +81,6 @@ const ViewFullscreen: Component<Props> = props => {
                 <div class="grid h-dvh w-full justify-center">
                     <MainItem
                         media={props.mediaService.getActiveMedia()!}
-                        highlightFaces={settings.highlightFaces}
-                        showFavoriteBadge={props.showFavoritesBadge}
                         moveNext={() => props.mediaService.moveNext()}
                         movePrevious={() => props.mediaService.movePrevious()}
                         setActiveMediaElement={el => setMediaElement(el)}

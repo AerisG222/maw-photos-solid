@@ -1,6 +1,8 @@
 import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
 
-import { MarginIdType, getMarginClass } from "../../_models/Margin";
+import { getMarginClass } from "../../_models/Margin";
+import { getDensityMargin } from "../../_models/Density";
+import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 interface Props {
     xPad?: boolean;
@@ -16,13 +18,24 @@ interface Props {
        never both: they answer the same question.
     */
     header?: JSXElement;
-    margin?: MarginIdType;
+    /*
+       Indent the content, by however much the density asks for.
+
+       A flag rather than a value: seven listing screens were each reading a
+       margin from their own settings store and handing it down, and all seven
+       were deriving it from the same one number. What was never uniform is
+       *which* screens want it - a listing breathes, a settings form does not -
+       so that part stays a decision each screen makes.
+    */
+    margin?: boolean;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
 }
 
 const Layout: ParentComponent<Props> = props => {
     const merged = mergeProps({ xPad: true }, props);
+    const [listing] = useListingSettingsContext();
+    const margin = () => (props.margin ? getDensityMargin(listing.density) : undefined);
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
@@ -46,9 +59,7 @@ const Layout: ParentComponent<Props> = props => {
                     "h-full min-h-0 overflow-hidden": !!merged.fill
                 }}
             >
-                <div
-                    classList={{ ...(getMarginClass(props.margin) ?? {}), "h-full": !!merged.fill }}
-                >
+                <div classList={{ ...(getMarginClass(margin()) ?? {}), "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
                     </Show>

@@ -1,7 +1,6 @@
 import { Component, Match, Show, Switch } from "solid-js";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { ThumbnailSizeSmall } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { Uuid } from "../../_models/Uuid";
@@ -49,7 +48,7 @@ const PlaceCoverCategoryMedia: Component<Props> = props => {
                 </span>
             </div>
 
-            <Switch fallback={<SkeletonGrid thumbnailSize={ThumbnailSizeSmall} count={12} />}>
+            <Switch fallback={<SkeletonGrid count={12} />}>
                 <Match when={media.isError}>
                     <ErrorMessage
                         title="Could not load this category"

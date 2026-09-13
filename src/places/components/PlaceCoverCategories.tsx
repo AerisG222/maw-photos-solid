@@ -48,7 +48,7 @@ const PlaceCoverCategories: Component<Props> = props => {
     const size = () => getThumbnailSize(ThumbnailSizeSmall);
 
     return (
-        <Switch fallback={<SkeletonGrid thumbnailSize={ThumbnailSizeSmall} count={12} />}>
+        <Switch fallback={<SkeletonGrid count={12} />}>
             <Match when={categories.isError}>
                 <ErrorMessage
                     title="Could not load the categories at this place"
@@ -87,7 +87,7 @@ const PlaceCoverCategories: Component<Props> = props => {
                                     onClick={() => props.onSelect(category)}
                                 >
                                     <img
-                                        src={getMediaTeaserUrl(category.teaser, ThumbnailSizeSmall)}
+                                        src={getMediaTeaserUrl(category.teaser)}
                                         class="block w-full object-cover"
                                         style={{ height: `${size().height}px` }}
                                         loading="lazy"

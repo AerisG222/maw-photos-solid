@@ -1,7 +1,7 @@
 import { Media } from "../Media";
-import { ThumbnailSizeIdType } from "../ThumbnailSize";
 
-export const getMediaTeaserUrl = (media: Media, _size: ThumbnailSizeIdType) => {
+// one scale, so no size to choose between - see the note below
+export const getMediaTeaserUrl = (media: Media) => {
     // sizes offered today are all qqvg or smaller, so no need to search for best res at this time
     if (media.type === "photo") {
         return media.files.find(f => f.scale === "qqvg-fill")?.path;

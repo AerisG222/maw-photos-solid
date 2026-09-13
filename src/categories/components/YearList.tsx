@@ -1,6 +1,5 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from "../../_contexts/settings/CategoryListViewSettingsContext";
 import { Category } from "../../_models/Category";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 
@@ -15,8 +14,6 @@ interface Props {
 }
 
 const YearList: Component<Props> = props => {
-    const [settings] = useCategoryListViewSettingsContext();
-
     return (
         <>
             <YearHeading year={props.year} />
@@ -27,8 +24,6 @@ const YearList: Component<Props> = props => {
                     {(category, idx) => (
                         <CategoryListItem
                             category={category}
-                            thumbnailSize={settings.thumbnailSize}
-                            dimThumbnails={settings.dimThumbnails}
                             eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
                             setIsFavorite={props.setIsFavorite}
                         />

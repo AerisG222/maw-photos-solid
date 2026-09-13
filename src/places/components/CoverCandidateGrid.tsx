@@ -46,7 +46,7 @@ const CoverCandidateGrid: Component<Props> = props => {
                         onClick={() => props.onChoose(item)}
                     >
                         <img
-                            src={getMediaTeaserUrl(item, ThumbnailSizeSmall)}
+                            src={getMediaTeaserUrl(item)}
                             class="block w-full h-full object-cover"
                             loading="lazy"
                         />

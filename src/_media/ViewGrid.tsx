@@ -2,8 +2,6 @@ import { Component, createEffect, createSignal, JSXElement, onMount, Show } from
 import { A } from "@solidjs/router";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
-import { MediaGridViewSettingsState } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { gridRoute } from "../category/_routes";
 import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
@@ -22,7 +20,6 @@ import MainItem from "./MainItem";
 interface Props {
     mediaService: IMediaService;
     slideshowService: SlideshowService;
-    gridSettings: MediaGridViewSettingsState;
     // names the feed when it is not self-evident from the media - a person's
     // photos span categories, so the breadcrumbs alone do not say whose they are
     title?: string;
@@ -49,8 +46,6 @@ interface Props {
     */
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
-    showFavoritesBadge: boolean;
-    showTypesBadge: boolean;
 }
 
 const ViewGrid: Component<Props> = props => {
@@ -113,7 +108,7 @@ const ViewGrid: Component<Props> = props => {
     return (
         <Show when={props.mediaService.getMediaList()}>
             <Layout
-                margin={props.gridSettings.margin}
+                margin
                 title={props.title}
                 header={props.header}
                 toolbar={
@@ -168,8 +163,6 @@ const ViewGrid: Component<Props> = props => {
                         >
                             <MainItem
                                 media={props.mediaService.getActiveMedia()!}
-                                highlightFaces={props.gridSettings.highlightFaces}
-                                showFavoriteBadge={props.showFavoritesBadge}
                                 moveNext={() => props.mediaService.moveNext()}
                                 movePrevious={() => props.mediaService.movePrevious()}
                                 setActiveMediaElement={el => setMediaElement(el)}
@@ -193,11 +186,6 @@ const ViewGrid: Component<Props> = props => {
                                 props.mediaService.getMediaPathByView(MediaViewGrid, media)
                             }
                             items={props.mediaService.getMediaList()}
-                            thumbnailSize={props.gridSettings.thumbnailSize}
-                            dimThumbnails={props.gridSettings.dimThumbnails}
-                            activeRoute={gridRoute}
-                            showFavoritesBadge={props.showFavoritesBadge}
-                            showTypesBadge={props.showTypesBadge}
                             setIsFavorite={setIsFavorite}
                         />
                     </Show>

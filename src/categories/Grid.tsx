@@ -1,6 +1,5 @@
 import { Component, For } from "solid-js";
 
-import { useCategoryGridViewSettingsContext } from "../_contexts/settings/CategoryGridViewSettingsContext";
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { Category } from "../_models/Category";
@@ -14,7 +13,6 @@ import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 
 const GridView: Component = () => {
-    const [settings] = useCategoryGridViewSettingsContext();
     const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
@@ -38,19 +36,19 @@ const GridView: Component = () => {
            show while the categories are still on their way.
         */
         <Layout
+            margin
             toolbar={
                 <Toolbar>
                     <GridToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}
         >
             <AsyncBoundary
                 error={loadError()}
                 onRetry={retryLoad}
                 errorTitle="Could not load categories"
                 when={categoriesToDisplay()}
-                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonGrid />}
             >
                 <CategoryFilterBar />
 

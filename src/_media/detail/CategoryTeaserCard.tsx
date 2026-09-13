@@ -34,7 +34,7 @@ const CategoryTeaserCard: Component<Props> = props => {
                 <div class="text-center">
                     <img
                         class="mt-2 mx-auto center"
-                        src={getMediaTeaserUrl(props.activeCategory!.teaser, "default")}
+                        src={getMediaTeaserUrl(props.activeCategory!.teaser)}
                     />
 
                     <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>

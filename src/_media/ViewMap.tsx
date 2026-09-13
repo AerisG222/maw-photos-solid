@@ -85,7 +85,7 @@ const ViewMap: Component<Props> = props => {
             });
 
             marker.addListener("gmp-click", () => {
-                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item.media, "default")}" />`);
+                infoWindow.setContent(`<img src="${getMediaTeaserUrl(item.media)}" />`);
                 infoWindow.open({
                     anchor: marker,
                     map

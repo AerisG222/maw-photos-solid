@@ -3,7 +3,6 @@ import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-
 import { ApiError, describeError } from "../../_contexts/api/ApiError";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { newMediaSeed } from "../../_models/utils/MediaUtils";
-import { ThumbnailSizeSmall } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { Place } from "../../_models/Place";
@@ -244,11 +243,7 @@ const PlaceCoverDialog: Component<Props> = props => {
                     </Match>
 
                     <Match when={browsing() === "media"}>
-                        <Switch
-                            fallback={
-                                <SkeletonGrid thumbnailSize={ThumbnailSizeSmall} count={12} />
-                            }
-                        >
+                        <Switch fallback={<SkeletonGrid count={12} />}>
                             <Match when={media.isError}>
                                 <ErrorMessage
                                     title="Could not load the media at this place"

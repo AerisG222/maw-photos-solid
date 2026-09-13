@@ -1,7 +1,9 @@
 import { Component, Show, createSignal, onMount } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
+import { getThumbnailSize } from "../../_models/ThumbnailSize";
+import { getListThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 import { Category } from "../../_models/Category";
 import { MediaTypePhoto, MediaTypeVideo } from "../../_models/MediaType";
 import { getCategoryPath } from "../../categories/_routes";
@@ -15,15 +17,16 @@ import MediaTypeIcon from "../icon/MediaTypeIcon";
 
 interface Props {
     category: Category;
-    thumbnailSize: ThumbnailSizeIdType;
-    dimThumbnails: boolean;
     eager: boolean;
     showYear?: boolean;
     setIsFavorite: (category: Category, isFavorite: boolean) => void;
 }
 
 const CategoryListItem: Component<Props> = props => {
-    const teaserUrl = () => getMediaTeaserUrl(props.category.teaser, props.thumbnailSize);
+    const [listing] = useListingSettingsContext();
+
+    const size = () => getThumbnailSize(getListThumbnailSize(listing.density));
+    const teaserUrl = () => getMediaTeaserUrl(props.category.teaser);
 
     // a teaser already seen this session starts visible - see _imageReveal
     const [teaserLoaded, setTeaserLoaded] = createSignal(hasRevealed(teaserUrl()));
@@ -57,12 +60,12 @@ const CategoryListItem: Component<Props> = props => {
             <img
                 ref={img}
                 src={teaserUrl()}
-                width={getThumbnailSize(props.thumbnailSize).width}
-                height={getThumbnailSize(props.thumbnailSize).height}
+                width={size().width}
+                height={size().height}
                 classList={{
                     inline: true,
-                    "saturate-50": props.dimThumbnails,
-                    "group-hover:saturate-100": props.dimThumbnails,
+                    "saturate-50": listing.dimThumbnails,
+                    "group-hover:saturate-100": listing.dimThumbnails,
                     "transition-[filter,opacity]": true,
                     "duration-[400ms]": true,
                     "ease-out": true,

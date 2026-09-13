@@ -5,12 +5,10 @@ import { MediaViewFullscreen } from "../_models/MediaView";
 
 import ViewFullscreen from "../_media/ViewFullscreen";
 import { useCategoryServices } from "./hooks/useCategoryServices";
-import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Fullscreen: Component = () => {
-    const [settings] = useMediaFullscreenViewSettingsContext();
     const [, { setFullscreen }] = useFullscreenContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryServices(MediaViewFullscreen);
@@ -32,11 +30,7 @@ const Fullscreen: Component = () => {
             when={!isLoading()}
             skeleton={<Loading />}
         >
-            <ViewFullscreen
-                mediaService={mediaService}
-                slideshowService={slideshowService}
-                showFavoritesBadge={settings.showFavoritesBadge}
-            />
+            <ViewFullscreen mediaService={mediaService} slideshowService={slideshowService} />
         </AsyncBoundary>
     );
 };

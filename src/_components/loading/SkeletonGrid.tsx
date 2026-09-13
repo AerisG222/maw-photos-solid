@@ -1,15 +1,12 @@
 import { Component, For } from "solid-js";
 
-import {
-    ThumbnailSizeIdType,
-    defaultGridThumbnailSize,
-    getThumbnailSize
-} from "../../_models/ThumbnailSize";
+import { getThumbnailSize } from "../../_models/ThumbnailSize";
+import { getGridThumbnailSize } from "../../_models/Density";
+import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 import { STAGGER_LIMIT, STAGGER_STEP_MS } from "../../_models/utils/Constants";
 
 interface Props {
     count?: number;
-    thumbnailSize?: ThumbnailSizeIdType;
 }
 
 /*
@@ -18,7 +15,11 @@ interface Props {
    Staggering the shimmer phase per tile avoids a single synchronised pulse.
 */
 const SkeletonGrid: Component<Props> = props => {
-    const size = () => getThumbnailSize(props.thumbnailSize ?? defaultGridThumbnailSize);
+    const [listing] = useListingSettingsContext();
+
+    // the same density the real tiles read, so the placeholders are the size of
+    // what replaces them
+    const size = () => getThumbnailSize(getGridThumbnailSize(listing.density));
     const tiles = () => Array.from({ length: props.count ?? 24 }, (_, i) => i);
 
     return (

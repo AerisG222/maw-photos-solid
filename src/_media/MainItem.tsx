@@ -1,6 +1,7 @@
 import { Component, createSignal, Match, Show, Switch } from "solid-js";
 
 import { Media } from "../_models/Media";
+import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
 import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
@@ -20,10 +21,6 @@ import { useFaceHighlight } from "./faces/useFaceHighlight";
 
 interface Props {
     media: Media;
-    // the hosting view's setting: each of grid, detail and fullscreen keeps its
-    // own, so the overlay follows whichever view is on screen
-    highlightFaces: boolean;
-    showFavoriteBadge: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     setActiveMediaElement?: (el: HTMLImageElement | HTMLVideoElement) => void;
@@ -31,6 +28,7 @@ interface Props {
 }
 
 const MainItem: Component<Props> = props => {
+    const [listing] = useListingSettingsContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
     const { getScalesForMain } = useConfigContext();
 
@@ -43,7 +41,7 @@ const MainItem: Component<Props> = props => {
     const highlight = useFaceHighlight(
         () => props.media,
         mediaElement,
-        () => props.highlightFaces
+        () => listing.highlightFaces
     );
 
     let mediaHolderDiv!: HTMLDivElement;
@@ -139,7 +137,7 @@ const MainItem: Component<Props> = props => {
                     <FacePeopleStrip highlight={highlight} />
                 </Show>
 
-                <Show when={props.showFavoriteBadge}>
+                <Show when={listing.showBadges}>
                     <div class="absolute top-0 left-0 m-2">
                         <IconButton buttonClasses="hover:text-primary" onClick={onClickFavorite}>
                             <FavoriteIcon

@@ -9,14 +9,12 @@ import { MediaTypePhoto, MediaTypeVideo } from "../../_models/MediaType";
 import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { Place, PlaceKindCity } from "../../_models/Place";
-import { ThumbnailSizeDefault } from "../../_models/ThumbnailSize";
-import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext";
+import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
 
 import CategoryCard from "../categories/CategoryCard";
 import MediaLink from "../../_media/MediaLink";
 import PersonCard from "../../people/components/PersonCard";
 import PlaceCard from "../../places/components/PlaceCard";
-import { gridRoute } from "../../category/_routes";
 
 /*
    What these cards render, character for character.
@@ -100,26 +98,12 @@ const place: Place = {
 const cards = () => (
     <>
         <div data-card="CategoryCard">
-            <CategoryCard
-                category={category}
-                showTitles={true}
-                showYears={true}
-                thumbnailSize={ThumbnailSizeDefault}
-                dimThumbnails={true}
-                showFavoriteBadge={true}
-                showTypesBadge={true}
-                eager={false}
-                setIsFavorite={() => undefined}
-            />
+            <CategoryCard category={category} eager={false} setIsFavorite={() => undefined} />
         </div>
 
         <div data-card="PersonCard">
             <PersonCard
                 person={person}
-                showName={true}
-                showMediaCount={true}
-                thumbnailSize={ThumbnailSizeDefault}
-                dimThumbnails={true}
                 eager={false}
                 selectable={true}
                 selected={false}
@@ -136,14 +120,6 @@ const cards = () => (
             <MediaLink
                 href="/media/1"
                 media={media}
-                thumbnailSize={ThumbnailSizeDefault}
-                dimThumbnails={true}
-                showFavoritesBadge={true}
-                showTypesBadge={true}
-                rounded={true}
-                elevate={true}
-                isActiveItem={false}
-                route={gridRoute}
                 eager={false}
                 setIsFavorite={() => undefined}
             />
@@ -164,7 +140,7 @@ afterEach(() => {
 */
 test("the tiles each listing draws", () => {
     const { container } = render(() => (
-        <Router root={props => <AppSettingsProvider>{props.children}</AppSettingsProvider>}>
+        <Router root={props => <AllSettingsProvider>{props.children}</AllSettingsProvider>}>
             {[{ path: "/", component: cards as never }]}
         </Router>
     ));

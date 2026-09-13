@@ -1,7 +1,6 @@
 import { Component, Show, createEffect, onCleanup } from "solid-js";
 
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
-import { useMediaFullscreenViewSettingsContext } from "../../_contexts/settings/MediaFullscreenViewSettingsContext";
 import { MediaViewFullscreen } from "../../_models/MediaView";
 import { useFeedServices } from "./useFeedServices";
 
@@ -13,7 +12,6 @@ import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewFullscreen from "../ViewFullscreen";
 
 const Fullscreen: Component = () => {
-    const [settings] = useMediaFullscreenViewSettingsContext();
     const {
         mediaService,
         slideshowService,
@@ -79,7 +77,6 @@ const Fullscreen: Component = () => {
                             setShuffled={setShuffled}
                         />
                     }
-                    showFavoritesBadge={settings.showFavoritesBadge}
                 />
             </AsyncBoundary>
         </Show>

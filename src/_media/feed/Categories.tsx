@@ -2,7 +2,6 @@ import { Component, For, Show } from "solid-js";
 import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
 import { Category } from "../../_models/Category";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
@@ -28,7 +27,6 @@ import ToolbarCategories from "./ToolbarCategories";
 */
 const Categories: Component = () => {
     const feed = useFeedCategories();
-    const [settings] = useFeedCategoryViewSettingsContext();
     const { setIsFavoriteMutation } = useCategoriesContext();
     const chain = usePlaceChain(feed.placeId);
 
@@ -43,7 +41,7 @@ const Categories: Component = () => {
 
     return (
         <Layout
-            margin={settings.margin}
+            margin
             // see the note in the media listing: a place names itself in its chain
             title={feed.isPlace() ? undefined : feed.subjectName()}
             header={
@@ -71,7 +69,7 @@ const Categories: Component = () => {
                     onRetry={feed.retryLoad}
                     errorTitle={`Could not load categories for this ${feed.subjectKindName()}`}
                     when={!feed.isLoading()}
-                    skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                    skeleton={<SkeletonGrid />}
                     isEmpty={feed.categories().length === 0}
                     empty={
                         <EmptyState
@@ -94,12 +92,6 @@ const Categories: Component = () => {
                             {(category, idx) => (
                                 <CategoryCard
                                     category={category}
-                                    showTitles={settings.showTitles}
-                                    showYears={settings.showYears}
-                                    thumbnailSize={settings.thumbnailSize}
-                                    dimThumbnails={settings.dimThumbnails}
-                                    showFavoriteBadge={settings.showFavoritesBadge}
-                                    showTypesBadge={settings.showTypesBadge}
                                     eager={idx() <= EAGER_THRESHOLD}
                                     setIsFavorite={setIsFavorite}
                                 />

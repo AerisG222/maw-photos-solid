@@ -1,6 +1,5 @@
 import { Component, createEffect, onCleanup, Show } from "solid-js";
 
-import { useMediaGridViewSettingsContext } from "../../_contexts/settings/MediaGridViewSettingsContext";
 import { MediaViewGrid } from "../../_models/MediaView";
 import { getPlacePath } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
@@ -34,7 +33,6 @@ const Grid: Component = () => {
         loadError,
         retryLoad
     } = useFeedServices(MediaViewGrid);
-    const [settings] = useMediaGridViewSettingsContext();
     const chain = usePlaceChain(placeId);
 
     /*
@@ -59,12 +57,11 @@ const Grid: Component = () => {
                 onRetry={retryLoad}
                 errorTitle={`Could not load media for this ${subjectKindName()}`}
                 when={!isLoading()}
-                skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonGrid />}
             >
                 <ViewGrid
                     mediaService={mediaService}
                     slideshowService={slideshowService}
-                    gridSettings={settings}
                     /*
                        A place names itself in its chain, so a title above it
                        would say the same thing twice. A person or a clan has no
@@ -109,8 +106,6 @@ const Grid: Component = () => {
                     }
                     showBreadcrumbsOnGrid={false}
                     showBreadcrumbsOnMedia={true}
-                    showFavoritesBadge={settings.showFavoritesBadge}
-                    showTypesBadge={settings.showTypesBadge}
                 />
             </AsyncBoundary>
         </Show>

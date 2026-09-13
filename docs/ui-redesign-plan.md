@@ -1141,6 +1141,41 @@ misbehaves in the next one.
 eight adapters are waiting on: those answer `thumbnailSize` by deriving pixels from the density, and the
 derivation only disappears when the tile sizes itself.
 
+### `Tile`, and the eight adapters it was blocking (2026-09-13)
+
+The step-7 note below says `Tile` was deferred because it changes markup and the tests would not have caught
+it. That was right, and the snapshots are what made finishing it reviewable: three of the four tiles were
+rewritten onto `Tile`, the diffs were read line by line, and the two that were wrong showed up immediately.
+
+**The favourite heart got wrapped twice.** `FavoriteBadge` had been extracted in the first half of step 7
+carrying its own `col-start-2 row-start-1` pinning, because it was byte-identical in three tiles _including_
+the pinning. Correct then; wrong the moment `Tile` owned the corners, since passing it as `badges.topRight`
+put a positioned box inside a positioned box. The snapshot showed the doubled `<div>` and nothing else would
+have - it renders almost correctly. The badge is now the heart and nothing about where it sits.
+
+**One rounding was quietly unified.** Three of the four tiles used `rounded-sm`; the media tile alone used
+`rounded-md`. `Tile` takes the majority. That is a real visual change, small and deliberate.
+
+**What the eight adapters were actually for.** Each answered `thumbnailSize` and `margin` by deriving pixels
+from the one density, so a screen could keep asking the question it used to ask. Once `Tile` reads the density
+itself the derivation has nowhere to live, and the same applies to `SkeletonGrid` (its placeholders must be
+the size of what replaces them), `CategoryListItem`, and `Layout`. All four now read rather than being told,
+and the last eight adapters were deleted - seventeen call sites stopped threading values they only forwarded.
+
+**The margin stayed opt-in, on purpose.** Moving it into `Layout` made it tempting to apply it everywhere,
+which would have indented all twenty pages including Settings and Admin - pages that had deliberately passed
+no margin. What was never uniform is _which_ screens want one, so `Layout` takes a `margin` flag and the seven
+listing screens that had one set it. Same rendering, one less thing threaded.
+
+**`Row` was dropped from the step.** It was specified as the list-view counterpart to `Tile`, but step 9b
+deleted the filmstrip and there is exactly one list item left in the application. A shared abstraction over
+one implementation is worse than the implementation.
+
+**Method, again.** The line-wise regex deletion broke three files a second time - `<SkeletonGridcount={12} />`
+
+- in the same way it broke the `switch` statements in step 9b. It is fine for removing a whole `prop={...}`
+  line and wrong for anything inline, and I reached for it inline anyway.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1248,7 +1283,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files          | low    |
 | **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep  | low    |
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files          | low    |
-| **7**   | **PARTIAL 2026-09-13 — reveal, badge and surface.** `createImageReveal` and `FavoriteBadge` extracted byte-identically (−89 lines); `ListingSurface` replaces six hand-written containers and brings **arrow-key movement to listings that had none**. 7 tests. `Tile` and `Row` remain - they change markup, and they are what the last eight adapters wait on.                                                                                                                                                                            | 16 files          | medium |
+| **7**   | **DONE 2026-09-13 — one tile.** `createImageReveal` and `FavoriteBadge` came out byte-identically; `ListingSurface` replaced six hand-written containers and brought **arrow-key movement to listings that had none**; then `Tile` absorbed the category, person and media tiles. It **sizes itself from the density**, which is what unblocked step 14. `Row` was not needed: only one list item was left. 7 tests, snapshots read as a diff.                                                                                              | 24 files          | medium |
 | **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files          | medium |
 | **9**   | **MOSTLY DONE 2026-09-12 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. The _Adjust_ card (rotate/flip) and the bulk-edit fold-in are not done. 8 new tests.                                                                                                                                                                         | 12 files          | high   |
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
@@ -1257,7 +1292,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **12**  | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`.                                                                                                                                                                                                                                                                                                                                                                 | ~10 files         | medium |
 | **12b** | **DONE 2026-09-13 — view transitions.** One `useBeforeLeave` hook wraps navigation in `startViewTransition`; the main photograph carries a `view-transition-name`, so it tweens between grid and fullscreen instead of being torn down and rebuilt. Guarded on support, on `prefers-reduced-motion`, and on a navigation somebody else has claimed. 4 tests.                                                                                                                                                                                | 5 files           | low    |
 | **13**  | **PARTIAL 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. Appearance and Browsing already exist (steps 3 and the theme fix). A Shortcuts page is still to come.                                                                                                                                                                                                                                          | 4 files           | low    |
-| **14**  | **PARTIAL 2026-09-13 — seven adapters gone.** Every adapter that was a pure rename is removed and its consumers read the store: page view modes, the category filters, the feed options, the map, the info panel and the media page. The eight listing adapters remain, blocked on `Tile`.                                                                                                                                                                                                                                                  | 24 files          | medium |
+| **14**  | **DONE 2026-09-13 — every adapter gone.** All fifteen are removed and their consumers read the four stores directly. `Layout`, `SkeletonGrid`, `CategoryListItem` and `Tile` now take the density and work out their own margin and pixels, which is what the last eight adapters existed to do for them. Nine dead model exports pruned with them.                                                                                                                                                                                         | 45 files          | medium |
 
 Steps 0–2 are safe to land in any order and are worth doing immediately regardless of whether the rest proceeds. Step 3 is the keystone: everything from 7 onward is deletion enabled by it.
 

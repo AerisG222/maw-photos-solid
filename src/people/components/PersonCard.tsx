@@ -1,20 +1,15 @@
 import { Component, Show } from "solid-js";
-import { A } from "@solidjs/router";
 
 import { Person } from "../../_models/Person";
-import { getThumbnailSize, ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
-import { createImageReveal } from "../../_components/loading/_imageReveal";
 import { getPersonPath } from "../_routes";
+import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
-import Icon from "../../_components/icon/Icon";
 import FavoriteBadge from "../../_components/listing/FavoriteBadge";
+import Icon from "../../_components/icon/Icon";
+import Tile from "../../_components/listing/Tile";
 
 interface Props {
     person: Person;
-    showName: boolean;
-    showMediaCount: boolean;
-    thumbnailSize: ThumbnailSizeIdType;
-    dimThumbnails: boolean;
     eager: boolean;
     // while people are being picked for a clan the card selects instead of
     // opening - it stays an anchor so its href still means something
@@ -25,15 +20,12 @@ interface Props {
 }
 
 const PersonCard: Component<Props> = props => {
+    const [listing] = useListingSettingsContext();
+
     // an absolute url under /assets, like every media file - so the service
     // worker attaches the bearer token the crop is protected by, and this stays
     // a plain <img> with no auth handling of its own
     const faceUrl = () => props.person.preferredFaceUrl ?? undefined;
-
-    // face crops are square, so the tile is square too - the thumbnail widths
-    // are what the rest of the app sizes cards by, so they set the edge here
-    const edge = () => getThumbnailSize(props.thumbnailSize).width;
-    const { loaded: faceLoaded, reveal, ref: imgRef } = createImageReveal(faceUrl);
 
     const onClickFavorite = () => props.setIsFavorite(props.person, !props.person.isFavorite);
 
@@ -46,82 +38,29 @@ const PersonCard: Component<Props> = props => {
     };
 
     return (
-        <A
+        <Tile
             href={getPersonPath(props.person.id)}
+            src={faceUrl()}
+            square
+            surface
+            selected={props.selected}
             onClick={onClick}
-            class="grid group border rounded-sm bg-base-200 cursor-pointer
-                hover:bg-base-300 hover:border-primary hover:text-primary elev-hover"
-            classList={{
-                "border-secondary/20": !props.selected,
-                "border-primary": props.selected,
-                "bg-primary/10": props.selected
-            }}
             title={`${props.person.name} (${props.person.mediaCount})`}
-        >
-            <div
-                classList={{
-                    "inline-grid": true,
-                    "grid-cols-2": true,
-                    "grid-rows-2": true,
-                    "overflow-hidden": true,
-                    "rounded-t-sm": true,
-                    "rounded-b-sm": !props.showName
-                }}
-                style={{ width: `${edge()}px`, height: `${edge()}px` }}
-            >
-                <Show
-                    when={faceUrl()}
-                    fallback={
-                        /* nobody has published a preferred face for them yet */
-                        <div class="col-span-full row-span-full flex items-center justify-center bg-base-300 text-base-content/40">
-                            <Icon classes="icon-[ic--round-person] text-4xl" />
-                        </div>
-                    }
-                >
-                    <img
-                        ref={imgRef}
-                        src={faceUrl()}
-                        alt={props.person.name}
-                        classList={{
-                            "col-span-full": true,
-                            "row-span-full": true,
-                            block: true,
-                            "w-full": true,
-                            "h-full": true,
-                            "object-cover": true,
-                            "saturate-50": props.dimThumbnails,
-                            "group-hover:saturate-100": props.dimThumbnails,
-                            "rounded-t-sm": true,
-                            "rounded-b-sm": !props.showName,
-                            "transition-[filter,opacity]": true,
-                            "duration-[400ms]": true,
-                            "ease-out": true,
-                            "opacity-0": !faceLoaded(),
-                            "opacity-100": faceLoaded()
-                        }}
-                        loading={props.eager ? "eager" : "lazy"}
-                        onLoad={reveal}
-                        // never leave a failed load as an invisible gap
-                        onError={reveal}
-                    />
-                </Show>
-
-                {/*
-                    Always offered, unlike the badge toggles elsewhere: this is
-                    the only way to mark a person, so hiding it behind a
-                    preference would hide the feature itself.
-                */}
-                <FavoriteBadge
-                    isFavorite={props.person.isFavorite}
-                    subjectId={props.person.id}
-                    onToggle={onClickFavorite}
-                />
-
-                <Show when={props.selectable}>
-                    <div class="col-start-1 row-start-1 z-10 justify-self-start self-start m-[2px]">
+            alt={props.person.name}
+            eager={props.eager}
+            placeholder={
+                /* nobody has published a preferred face for them yet */
+                <div class="col-span-full row-span-full flex items-center justify-center bg-base-300 text-base-content/40">
+                    <Icon classes="icon-[ic--round-person] text-4xl" />
+                </div>
+            }
+            label={<Show when={listing.showLabels}>{props.person.name}</Show>}
+            badges={{
+                topLeft: (
+                    <Show when={props.selectable}>
                         <span
                             classList={{
-                                "flex items-center justify-center w-[20px] h-[20px] rounded-full border": true,
+                                "m-[2px] flex items-center justify-center w-[20px] h-[20px] rounded-full border": true,
                                 "bg-primary text-primary-content border-primary": props.selected,
                                 "bg-base-100/70 border-base-content/40": !props.selected
                             }}
@@ -130,22 +69,27 @@ const PersonCard: Component<Props> = props => {
                                 <Icon classes="icon-[ic--round-check] text-sm" />
                             </Show>
                         </span>
-                    </div>
-                </Show>
-
-                <Show when={props.showMediaCount}>
-                    <div class="col-start-2 row-start-2 z-10 justify-self-end self-end badge badge-sm m-0.5 opacity-70">
-                        {props.person.mediaCount}
-                    </div>
-                </Show>
-            </div>
-
-            <Show when={props.showName}>
-                <div class="text-center truncate px-1" style={{ "max-width": `${edge()}px` }}>
-                    {props.person.name}
-                </div>
-            </Show>
-        </A>
+                    </Show>
+                ),
+                /*
+                   Always offered, unlike the badges elsewhere: this is the only
+                   way to mark a person, so hiding it behind a preference would
+                   hide the feature itself.
+                */
+                topRight: (
+                    <FavoriteBadge
+                        isFavorite={props.person.isFavorite}
+                        subjectId={props.person.id}
+                        onToggle={onClickFavorite}
+                    />
+                ),
+                bottomRight: (
+                    <Show when={listing.showLabels}>
+                        <div class="badge badge-sm m-0.5 opacity-70">{props.person.mediaCount}</div>
+                    </Show>
+                )
+            }}
+        />
     );
 };
 

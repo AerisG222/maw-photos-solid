@@ -32,7 +32,7 @@ const ViewBulkEdit: Component<Props> = props => {
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
-        imageUrl: getMediaTeaserUrl(media, ThumbnailSizeDefault)!,
+        imageUrl: getMediaTeaserUrl(media)!,
         isSelected: false
     });
 

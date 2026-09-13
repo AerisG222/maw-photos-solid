@@ -1,5 +1,4 @@
 import { KeyValuePair } from "./KeyValuePair";
-
 export const ThumbnailSizeDefault = "default";
 export const ThumbnailSizeSmall = "small";
 export const ThumbnailSizeVerySmall = "verySmall";
@@ -43,29 +42,7 @@ const thumbnailSizes: Record<ThumbnailSizeIdType, ThumbnailSize> = {
     }
 };
 
-export const allThumbnailSizes: KeyValuePair<ThumbnailSizeIdType>[] = Object.entries(
-    thumbnailSizes
-).map(([key, value]) => ({
-    id: key as ThumbnailSizeIdType,
-    name: value.name
-}));
-export const defaultGridThumbnailSize = ThumbnailSizeDefault;
 export const defaultListThumbnailSize = ThumbnailSizeVerySmall;
-
-export const getNextThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
-    switch (thumbnailSize) {
-        case ThumbnailSizeDefault:
-            return thumbnailSizes[ThumbnailSizeSmall];
-        case ThumbnailSizeSmall:
-            return thumbnailSizes[ThumbnailSizeVerySmall];
-        case ThumbnailSizeVerySmall:
-            return thumbnailSizes[ThumbnailSizeTiny];
-        case ThumbnailSizeTiny:
-            return thumbnailSizes[ThumbnailSizeDefault];
-    }
-
-    return thumbnailSizes[ThumbnailSizeDefault];
-};
 
 export const getThumbnailSize = (thumbnailSize: ThumbnailSizeIdType) => {
     switch (thumbnailSize) {

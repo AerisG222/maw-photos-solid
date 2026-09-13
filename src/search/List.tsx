@@ -1,6 +1,5 @@
 import { Component, For } from "solid-js";
 
-import { useSearchListViewSettingsContext } from "../_contexts/settings/SearchListViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 import { Category } from "../_models/Category";
@@ -15,7 +14,6 @@ import SkeletonList from "../_components/loading/SkeletonList";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 
 const ViewList: Component = () => {
-    const [settings] = useSearchListViewSettingsContext();
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
         useSearchContext();
     /*
@@ -36,6 +34,7 @@ const ViewList: Component = () => {
 
     return (
         <Layout
+            margin
             toolbar={
                 <Toolbar
                     canRequestMore={searchQuery.hasNextPage}
@@ -44,7 +43,6 @@ const ViewList: Component = () => {
                     <ListToolbar />
                 </Toolbar>
             }
-            margin={settings.margin}
         >
             <div class="mt-4">
                 <SearchBar />
@@ -60,7 +58,7 @@ const ViewList: Component = () => {
                 queries={[searchQuery]}
                 errorTitle="Search could not be completed"
                 when={!state.activeTerm || searchQuery.isSuccess}
-                skeleton={<SkeletonList thumbnailSize={settings.thumbnailSize} />}
+                skeleton={<SkeletonList />}
             >
                 <div class="my-4">
                     <For each={allSearchResults(searchQuery) ?? []}>
@@ -68,8 +66,6 @@ const ViewList: Component = () => {
                             <CategoryListItem
                                 category={category}
                                 showYear={true}
-                                thumbnailSize={settings.thumbnailSize}
-                                dimThumbnails={settings.dimThumbnails}
                                 eager={idx() <= EAGER_THRESHOLD}
                                 setIsFavorite={setIsFavorite}
                             />
