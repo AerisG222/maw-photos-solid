@@ -138,4 +138,44 @@ describe("moving through a listing from the keyboard", () => {
         expect(event.defaultPrevented).toBe(false);
         expect(document.activeElement).toBe(items[0]);
     });
+
+    /*
+       The half that was missing first time round. Arrows alone did not help:
+       every tile was still its own tab stop, so *reaching* the tiles cost a
+       press each and the fortieth was still forty away. One stop for the
+       listing is what makes the arrows worth having.
+    */
+    test("the whole listing is one tab stop", () => {
+        const items = surface(8);
+
+        expect([...items].map(el => el.tabIndex)).toEqual([0, -1, -1, -1, -1, -1, -1, -1]);
+    });
+
+    test("the tab stop follows the cursor, so leaving and returning comes back", () => {
+        const items = surface(8);
+
+        items[0].focus();
+        press(items[0], "ArrowDown");
+
+        expect(document.activeElement).toBe(items[4]);
+        expect(items[4].tabIndex).toBe(0);
+        expect(items[0].tabIndex).toBe(-1);
+    });
+
+    test("focusing an item directly adopts it, so a click is not undone", () => {
+        const items = surface(8);
+
+        items[5].focus();
+        items[5].dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+        expect(items[5].tabIndex).toBe(0);
+        expect(items[0].tabIndex).toBe(-1);
+    });
+
+    // the media grids keep every tile tabbable, since their arrows mean something else
+    test("leaves the tab order alone where the cursor is not asked for", () => {
+        const items = surface(8, false);
+
+        expect([...items].every(el => el.tabIndex === 0)).toBe(true);
+    });
 });

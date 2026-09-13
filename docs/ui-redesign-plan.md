@@ -1109,9 +1109,21 @@ wants to change how a listing behaves, and then it is twelve places.
 
 What the component adds beyond the class string is the thing §8 found missing: **categories, people and places
 could not be moved through from the keyboard at all**. Every tile was a tab stop, so reaching the fortieth
-meant forty presses, and there was no way to move down a row. Arrow keys now step along a row, up and down by a
-row, and Home and End reach the ends. The tiles are still tab stops - this is movement on top of that, not
-instead of it.
+meant forty presses, and there was no way to move down a row.
+
+It was shipped with only half the fix. The arrows were there, but every tile was _still_ its own tab stop -
+which left the original complaint untouched: getting to the tiles cost a press each, and the fortieth was still
+forty away. Reported as "if i click on a tile, like a person, that navigates me into that person", which is the
+point: a click is not a way to place the cursor, so Tab was the only way in, and Tab was exactly what had not
+been fixed.
+
+A roving tabindex is the whole fix. The listing is **one** tab stop; Tab lands on wherever the reader was, the
+arrows move between items, Tab again leaves. The stop follows the cursor, so leaving a listing and coming back
+returns to the same tile, and focusing one directly - by click, or by shift-tabbing in from below - adopts it
+rather than being undone.
+
+The tab stops are reapplied as the children change, through a `MutationObserver`: tiles arrive after the
+listing does, as a query resolves or a filter narrows or paging appends.
 
 **How many fit across is measured, not assumed.** Tiles wrap, their size follows the density, and a listing can
 be any width, so the row length comes from which items share a top edge.
