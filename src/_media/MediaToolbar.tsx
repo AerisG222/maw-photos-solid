@@ -1,0 +1,122 @@
+import { Component, JSXElement, Show, children } from "solid-js";
+
+import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
+import { MediaView, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
+import { IMediaService } from "./services/IMediaService";
+import { SlideshowService } from "./services/SlideshowService";
+
+import ListingToolbar from "../_components/listing/ListingToolbar";
+import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
+import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
+import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
+import FlipVerticalButton from "./toolbar/FlipVerticalButton";
+import MoveNextButton from "./toolbar/MoveNextButton";
+import MovePreviousButton from "./toolbar/MovePreviousButton";
+import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
+import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton";
+import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
+
+interface Props {
+    view: MediaView;
+    mediaService: IMediaService;
+    slideshowService: SlideshowService;
+    /*
+       Controls belonging to the feed rather than to this view - a person's
+       favorites filter and shuffle. First in the group, ahead of request more
+       and the slideshow: they decide *what* the list holds, which outranks
+       moving around inside it.
+    */
+    extras?: JSXElement;
+}
+
+/*
+   One toolbar for every way of looking at media.
+
+   There were three, and they had drifted the way separate copies do. The grid
+   and fullscreen ones were near-identical - the same paging, the same slideshow,
+   the same rotate and flip, in slightly different orders. The map had neither a
+   slideshow nor anything else, just previous and next, because nobody had gone
+   back to it.
+
+   What differs between the views is declared below rather than duplicated: a map
+   shows a map, so there is nothing to rotate and no tile to badge; a grid is the
+   only one that lays out tiles, so it is the only one asking about their
+   density. Everything else is the same everywhere because there was never a
+   reason for it not to be.
+*/
+const MediaToolbar: Component<Props> = props => {
+    const [, { ltMd }] = useMediaBreakpointContext();
+
+    /*
+       Resolved once. Reading a JSX prop twice - here and in the Show below -
+       builds the component twice, and each copy registers its own keyboard
+       shortcuts, so the filter keys would fire in pairs and cancel out.
+    */
+    const extras = children(() => props.extras);
+
+    const activeMedia = () => props.mediaService.getActiveMedia();
+
+    // the map draws markers, not a photograph: nothing to turn over or highlight
+    const showsPhotograph = () => props.view !== MediaViewMap;
+    // only the grid lays out tiles, so only the grid asks how densely
+    const laysOutTiles = () => props.view === MediaViewGrid;
+
+    return (
+        <>
+            {extras()}
+
+            {/* a group of their own: they decide what the listing holds, where
+                everything after them acts on what is already in it */}
+            <Show when={extras()}>
+                <ToolbarDivider />
+            </Show>
+
+            <RequestMoreButton
+                disabled={!props.mediaService.canRequestMore()}
+                requestMore={() => props.mediaService.requestMore()}
+            />
+
+            {/*
+                On the map too, which had no slideshow at all. Watching it step
+                between markers is the best thing that view does.
+            */}
+            <ToggleSlideshowButton
+                isPlaying={props.slideshowService.isPlaying()}
+                toggleSlideshow={() => props.slideshowService.toggle()}
+            />
+
+            <Show when={activeMedia() && !ltMd()}>
+                <MovePreviousButton
+                    isFirst={props.mediaService.isActiveMediaFirst()}
+                    movePrevious={() => props.mediaService.movePrevious()}
+                />
+                <MoveNextButton
+                    isLast={props.mediaService.isActiveMediaLast()}
+                    moveNext={() => props.mediaService.moveNext()}
+                />
+            </Show>
+
+            <Show when={showsPhotograph()}>
+                <ToolbarDivider />
+
+                <Show when={activeMedia()}>
+                    <RotateCounterClockwiseButton />
+                    <RotateClockwiseButton />
+                    <FlipHorizontalButton />
+                    <FlipVerticalButton />
+                </Show>
+
+                <ToolbarDivider />
+
+                <ListingToolbar badges faces />
+            </Show>
+
+            {/* the grid's own geometry, which an opened photograph is not laid out by */}
+            <Show when={laysOutTiles() && !activeMedia()}>
+                <ListingToolbar density dim />
+            </Show>
+        </>
+    );
+};
+
+export default MediaToolbar;

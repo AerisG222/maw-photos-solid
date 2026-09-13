@@ -3,11 +3,12 @@ import { Component, Show, createEffect, createResource, createSignal, onMount } 
 import { MediaMapViewSettingsState } from "../_contexts/settings/MediaMapViewSettingsContext";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
+import { SlideshowService } from "./services/SlideshowService";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
 import { MediaViewMap } from "../_models/MediaView";
 import { Uuid } from "../_models/Uuid";
 
-import MapToolbar from "./ToolbarMap";
+import MediaToolbar from "./MediaToolbar";
 import Toolbar from "./Toolbar";
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
@@ -15,6 +16,7 @@ import EmptyState from "../_components/state/EmptyState";
 
 interface Props {
     mediaService: IMapsMediaService;
+    slideshowService: SlideshowService;
     mapState: MediaMapViewSettingsState;
     setMapType: (mapType: string) => void;
     setZoom: (zoom: number) => void;
@@ -158,11 +160,10 @@ const ViewMap: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                     >
-                        <MapToolbar
-                            activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
-                            activeMediaIsLast={props.mediaService.isActiveMediaLast()}
-                            moveNext={() => props.mediaService.moveNext()}
-                            movePrevious={() => props.mediaService.movePrevious()}
+                        <MediaToolbar
+                            view={MediaViewMap}
+                            mediaService={props.mediaService}
+                            slideshowService={props.slideshowService}
                         />
                     </Toolbar>
                 }

@@ -8,7 +8,7 @@ import { Media } from "../_models/Media";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { MediaViewFullscreen } from "../_models/MediaView";
 
-import FullscreenToolbar from "./ToolbarFullscreen";
+import MediaToolbar from "./MediaToolbar";
 import Toolbar from "./Toolbar";
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
@@ -63,16 +63,11 @@ const ViewFullscreen: Component<Props> = props => {
                         leading={props.toolbarLeading}
                         leadingNavCount={props.toolbarLeadingNavCount}
                     >
-                        <FullscreenToolbar
+                        <MediaToolbar
+                            view={MediaViewFullscreen}
+                            mediaService={props.mediaService}
+                            slideshowService={props.slideshowService}
                             extras={props.toolbarExtras}
-                            activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
-                            activeMediaIsLast={props.mediaService.isActiveMediaLast()}
-                            slideshowIsPlaying={props.slideshowService.isPlaying()}
-                            canRequestMore={props.mediaService.canRequestMore()}
-                            moveNext={() => props.mediaService.moveNext()}
-                            movePrevious={() => props.mediaService.movePrevious()}
-                            toggleSlideshow={() => props.slideshowService.toggle()}
-                            requestMore={() => props.mediaService.requestMore()}
                         />
                     </Toolbar>
                 }

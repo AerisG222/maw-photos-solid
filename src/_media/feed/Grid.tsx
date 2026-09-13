@@ -108,9 +108,7 @@ const Grid: Component = () => {
                         />
                     }
                     showBreadcrumbsOnGrid={false}
-                    showBreadcrumbsOnMedia={settings.showMainBreadcrumbs}
-                    enableToggleBreadcrumbsOnActiveMedia={true}
-                    enableToggleBreadcrumbsOnInactiveMedia={false}
+                    showBreadcrumbsOnMedia={true}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     showTypesBadge={settings.showTypesBadge}
                 />

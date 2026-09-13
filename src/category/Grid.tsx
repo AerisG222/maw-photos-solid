@@ -30,10 +30,8 @@ const Grid: Component = () => {
                     mediaService={mediaService}
                     slideshowService={slideshowService}
                     gridSettings={settings}
-                    showBreadcrumbsOnGrid={settings.showBreadcrumbs}
+                    showBreadcrumbsOnGrid={true}
                     showBreadcrumbsOnMedia={false}
-                    enableToggleBreadcrumbsOnActiveMedia={false}
-                    enableToggleBreadcrumbsOnInactiveMedia={true}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     showTypesBadge={settings.showTypesBadge}
                 />

@@ -11,7 +11,7 @@ import { Media } from "../_models/Media";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
-import GridToolbar from "./ToolbarGrid";
+import MediaToolbar from "./MediaToolbar";
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Inspector from "../_components/inspector/Inspector";
@@ -40,10 +40,15 @@ interface Props {
     // shown in place of the tiles when the feed holds nothing, which a filtered
     // feed legitimately can
     emptyState?: JSXElement;
+    /*
+       Where the breadcrumbs go, which is a question about the feed rather than a
+       preference. A category's grid names the category above the tiles; a
+       person's spans categories, so the trail only means something on the
+       photograph itself. Always shown in one place or the other - the toggles
+       that used to hide them are gone.
+    */
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
-    enableToggleBreadcrumbsOnActiveMedia: boolean;
-    enableToggleBreadcrumbsOnInactiveMedia: boolean;
     showFavoritesBadge: boolean;
     showTypesBadge: boolean;
 }
@@ -119,23 +124,11 @@ const ViewGrid: Component<Props> = props => {
                         leading={props.toolbarLeading}
                         leadingNavCount={props.toolbarLeadingNavCount}
                     >
-                        <GridToolbar
+                        <MediaToolbar
+                            view={MediaViewGrid}
+                            mediaService={props.mediaService}
+                            slideshowService={props.slideshowService}
                             extras={props.toolbarExtras}
-                            activeMedia={props.mediaService.getActiveMedia()}
-                            activeMediaIsFirst={props.mediaService.isActiveMediaFirst()}
-                            activeMediaIsLast={props.mediaService.isActiveMediaLast()}
-                            slideshowIsPlaying={props.slideshowService.isPlaying()}
-                            canRequestMore={props.mediaService.canRequestMore()}
-                            enableToggleBreadcrumbsOnActiveMedia={
-                                props.enableToggleBreadcrumbsOnActiveMedia
-                            }
-                            enableToggleBreadcrumbsOnInactiveMedia={
-                                props.enableToggleBreadcrumbsOnInactiveMedia
-                            }
-                            moveNext={() => props.mediaService.moveNext()}
-                            movePrevious={() => props.mediaService.movePrevious()}
-                            toggleSlideshow={() => props.slideshowService.toggle()}
-                            requestMore={() => props.mediaService.requestMore()}
                         />
                     </Toolbar>
                 }

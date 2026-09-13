@@ -10,7 +10,8 @@ import Loading from "../_components/loading/Loading";
 
 const Map: Component = () => {
     const [state, { setMapType, setZoom }] = useMediaMapViewSettingsContext();
-    const { mediaService, isLoading, loadError, retryLoad } = useCategoryMapServices(MediaViewMap);
+    const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
+        useCategoryMapServices(MediaViewMap);
 
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
@@ -24,6 +25,7 @@ const Map: Component = () => {
         >
             <ViewMap
                 mediaService={mediaService}
+                slideshowService={slideshowService}
                 mapState={state}
                 setMapType={setMapType}
                 setZoom={setZoom}
