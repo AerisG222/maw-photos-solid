@@ -286,6 +286,23 @@ html {
     }
 }
 
+/*
+   The cross-fade every navigation gets for free, slowed from the browser's
+   default quarter-second to the app's own slow step so it reads as deliberate
+   rather than as a flicker. The photograph that carries a
+   `view-transition-name` is tweened between its two positions instead.
+*/
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: var(--motion-base);
+    animation-timing-function: var(--motion-ease);
+}
+
+::view-transition-group(active-media) {
+    animation-duration: var(--motion-slow);
+    animation-timing-function: var(--motion-ease);
+}
+
 @keyframes maw-rise-in {
     from {
         opacity: 0;
@@ -335,6 +352,18 @@ html {
    run (so `both` fill modes land on their final frame) but finish immediately.
 */
 @media (prefers-reduced-motion: reduce) {
+    /*
+       View transitions animate through their own pseudo-elements, which the
+       universal selector below does not reach. The hook that starts them also
+       checks this query - this is the belt to that pair of braces, for a
+       transition already in flight when the preference changes.
+    */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+
     *,
     *::before,
     *::after {

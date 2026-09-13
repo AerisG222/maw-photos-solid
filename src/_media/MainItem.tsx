@@ -107,8 +107,17 @@ const MainItem: Component<Props> = props => {
                     class="relative h-full w-full max-h-dvh max-w-full object-contain"
                     // an object rather than a string: solid then diffs the two
                     // properties individually instead of rewriting cssText on
-                    // every effect change
-                    style={{ ...getTransformStyles(), ...getFilterStyles() }}
+                    // every effect change.
+                    //
+                    // `view-transition-name` is what lets the browser recognise
+                    // the photograph in the grid and the photograph in fullscreen
+                    // as one thing and tween between them. Only ever one of these
+                    // is on screen at a time, which the name requires.
+                    style={{
+                        ...getTransformStyles(),
+                        ...getFilterStyles(),
+                        "view-transition-name": "active-media"
+                    }}
                 >
                     <Switch>
                         <Match when={props.media.type === "photo"}>

@@ -1081,6 +1081,27 @@ page's inspector section is generated from the card registry rather than listing
 eight chances for the page and the panel to disagree about which cards exist. The Appearance and Browsing pages
 already arrived, in step 3 and with the theme fix. A Shortcuts page, generated the same way, is what is left.
 
+### View transitions (2026-09-13)
+
+Going from a photograph in the grid to the same photograph in fullscreen _is_ the same photograph. The
+application knew that; the screen did not, because one view was torn down and another built in its place. The
+browser will tween the two if it is told they are the same thing, which is all a `view-transition-name` is.
+
+**One hook, not an animation per screen.** `useBeforeLeave` claims the navigation, wraps `retry()` in
+`document.startViewTransition`, and everything cross-fades by default. Only the main photograph carries a name,
+so only it morphs - and only one is ever on screen at a time, which the name requires.
+
+**Three guards, all of them tested.** It stands aside where the browser has no View Transitions API, where the
+reader has asked for reduced motion, and - the one worth naming - where `defaultPrevented` is already set,
+which means something else has claimed the navigation. Calling `retry(true)` there would override a guard's
+redirect to the login page.
+
+The reduced-motion guard is doubled in CSS, because a view transition animates through
+`::view-transition-group` and friends, which the universal selector in the existing kill switch does not reach.
+
+Timing comes from the motion tokens rather than the browser's default quarter-second, so it reads as deliberate
+rather than as a flicker.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1195,7 +1216,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files          | medium |
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
 | **12**  | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`.                                                                                                                                                                                                                                                                                                                                                                 | ~10 files         | medium |
-| **12b** | **View Transitions.** Morph the thumbnail into the photo on grid → active item and grid → fullscreen, behind a `prefers-reduced-motion` guard. No dependency (§11).                                                                                                                                                                                                                                                                                                                                                                         | 3–4 files         | low    |
+| **12b** | **DONE 2026-09-13 — view transitions.** One `useBeforeLeave` hook wraps navigation in `startViewTransition`; the main photograph carries a `view-transition-name`, so it tweens between grid and fullscreen instead of being torn down and rebuilt. Guarded on support, on `prefers-reduced-motion`, and on a navigation somebody else has claimed. 4 tests.                                                                                                                                                                                | 5 files           | low    |
 | **13**  | **PARTIAL 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. Appearance and Browsing already exist (steps 3 and the theme fix). A Shortcuts page is still to come.                                                                                                                                                                                                                                          | 4 files           | low    |
 | **14**  | **PARTIAL 2026-09-13 — seven adapters gone.** Every adapter that was a pure rename is removed and its consumers read the store: page view modes, the category filters, the feed options, the map, the info panel and the media page. The eight listing adapters remain, blocked on `Tile`.                                                                                                                                                                                                                                                  | 24 files          | medium |
 

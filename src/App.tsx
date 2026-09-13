@@ -1,6 +1,7 @@
 import { ParentComponent, Show } from "solid-js";
 
 import { useFullscreenContext } from "./_contexts/FullscreenContext";
+import { useViewTransition } from "./_components/transitions/useViewTransition";
 
 import PrimaryNav from "./_components/primary-nav/PrimaryNav";
 import ShortcutDialog from "./_components/shortcuts/ShortcutDialog";
@@ -8,6 +9,8 @@ import AppErrorBoundary from "./_components/error/AppErrorBoundary";
 
 const App: ParentComponent = props => {
     const [fullscreen] = useFullscreenContext();
+
+    useViewTransition();
 
     return (
         <>
