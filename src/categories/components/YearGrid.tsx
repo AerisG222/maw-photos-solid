@@ -1,4 +1,5 @@
 import { Component, For } from "solid-js";
+import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoryGridViewSettingsContext } from "../../_contexts/settings/CategoryGridViewSettingsContext";
 import { Category } from "../../_models/Category";
@@ -30,7 +31,7 @@ const YearGrid: Component<Props> = props => {
                 container instance is keyed by year, so it survives the refetch
                 and animates only when the year first appears.
             */}
-            <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+            <ListingSurface keyboardCursor animate class="mb-4">
                 <For each={props.categories}>
                     {(category, idx) => (
                         <CategoryCard
@@ -49,7 +50,7 @@ const YearGrid: Component<Props> = props => {
                         />
                     )}
                 </For>
-            </div>
+            </ListingSurface>
         </>
     );
 };

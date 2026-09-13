@@ -1,4 +1,5 @@
 import { Component, For } from "solid-js";
+import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useSearchGridViewSettingsContext } from "../_contexts/settings/SearchGridViewSettingsContext";
 import { useSearchContext } from "./contexts/SearchContext";
@@ -62,7 +63,7 @@ const ViewGrid: Component = () => {
                 when={!state.activeTerm || searchQuery.isSuccess}
                 skeleton={<SkeletonGrid thumbnailSize={settings.thumbnailSize} />}
             >
-                <div class="flex gap-2 flex-wrap place-content-center my-4">
+                <ListingSurface keyboardCursor class="my-4">
                     <For each={allSearchResults(searchQuery) ?? []}>
                         {(category, idx) => (
                             <CategoryCard
@@ -78,7 +79,7 @@ const ViewGrid: Component = () => {
                             />
                         )}
                     </For>
-                </div>
+                </ListingSurface>
             </AsyncBoundary>
         </Layout>
     );

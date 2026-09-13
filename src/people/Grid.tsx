@@ -1,4 +1,5 @@
 import { Component, createMemo, createSignal, For, Show } from "solid-js";
+import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useClansContext } from "../_contexts/api/ClansContext";
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
@@ -247,7 +248,7 @@ const GridView: Component = () => {
                 <PersonFilterBar filter={filter()} setFilter={setFilter} />
 
                 <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
-                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                    <ListingSurface keyboardCursor animate class="mb-4">
                         <For each={peopleToDisplay()}>
                             {(person, idx) => (
                                 <PersonCard
@@ -264,7 +265,7 @@ const GridView: Component = () => {
                                 />
                             )}
                         </For>
-                    </div>
+                    </ListingSurface>
                 </Show>
             </AsyncBoundary>
 

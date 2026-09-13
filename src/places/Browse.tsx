@@ -1,4 +1,5 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import ListingSurface from "../_components/listing/ListingSurface";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
 import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
@@ -262,7 +263,7 @@ const Browse: Component = () => {
                     isEmpty={places.data?.length === 0}
                     empty={<EmptyState icon="icon-[ic--round-place]" title={emptyMessage()} />}
                 >
-                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                    <ListingSurface keyboardCursor animate class="mb-4">
                         <For each={places.data}>
                             {(item, idx) => (
                                 <PlaceCard
@@ -277,7 +278,7 @@ const Browse: Component = () => {
                                 />
                             )}
                         </For>
-                    </div>
+                    </ListingSurface>
                 </AsyncBoundary>
             </Show>
 

@@ -1,4 +1,5 @@
 import { Component, For, Show } from "solid-js";
+import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useFeedCategoryViewSettingsContext } from "../../_contexts/settings/FeedCategoryViewSettingsContext";
@@ -88,7 +89,7 @@ const Categories: Component = () => {
                         />
                     }
                 >
-                    <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+                    <ListingSurface keyboardCursor animate class="mb-4">
                         <For each={feed.categories()}>
                             {(category, idx) => (
                                 <CategoryCard
@@ -104,7 +105,7 @@ const Categories: Component = () => {
                                 />
                             )}
                         </For>
-                    </div>
+                    </ListingSurface>
                 </AsyncBoundary>
             </Show>
         </Layout>

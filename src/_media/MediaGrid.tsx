@@ -1,4 +1,5 @@
 import { Component, For } from "solid-js";
+import ListingSurface from "../_components/listing/ListingSurface";
 
 import { Media } from "../_models/Media";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
@@ -21,7 +22,7 @@ interface Props {
 const MediaGrid: Component<Props> = props => {
     // entrance on the group, not each tile - see the note in YearGrid
     return (
-        <div class="flex gap-2 flex-wrap place-content-center mb-4 rise-in">
+        <ListingSurface animate class="mb-4">
             <For each={props.items}>
                 {(media, idx) => (
                     <MediaLink
@@ -40,7 +41,7 @@ const MediaGrid: Component<Props> = props => {
                     />
                 )}
             </For>
-        </div>
+        </ListingSurface>
     );
 };
 

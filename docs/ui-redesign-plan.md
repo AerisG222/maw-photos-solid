@@ -1102,6 +1102,33 @@ The reduced-motion guard is doubled in CSS, because a view transition animates t
 Timing comes from the motion tokens rather than the browser's default quarter-second, so it reads as deliberate
 rather than as a flicker.
 
+### `ListingSurface`, and a cursor where there was none (2026-09-13)
+
+Twelve places wrote out `flex gap-2 flex-wrap place-content-center` for themselves. Harmless until somebody
+wants to change how a listing behaves, and then it is twelve places.
+
+What the component adds beyond the class string is the thing §8 found missing: **categories, people and places
+could not be moved through from the keyboard at all**. Every tile was a tab stop, so reaching the fortieth
+meant forty presses, and there was no way to move down a row. Arrow keys now step along a row, up and down by a
+row, and Home and End reach the ends. The tiles are still tab stops - this is movement on top of that, not
+instead of it.
+
+**How many fit across is measured, not assumed.** Tiles wrap, their size follows the density, and a listing can
+be any width, so the row length comes from which items share a top edge.
+
+**The cursor is opt-in, and off in the media grids.** The arrows there already step through photographs. Two
+things answering one key is precisely the fault steps 6, 8 and 9 spent their time removing, and it would have
+been careless to reintroduce it in the name of a new feature.
+
+A press the surface acts on is **stopped as well as prevented** - the arrows are registered globally as
+shortcuts too, and without that a single press would move the cursor _and_ whatever else claims the key. There
+is a test for exactly that, because it is the sort of thing that works in the listing you tried it in and
+misbehaves in the next one.
+
+**The tiles were not touched**, which the snapshots confirm. `Tile` and `Row` remain, and they are what the last
+eight adapters are waiting on: those answer `thumbnailSize` by deriving pixels from the density, and the
+derivation only disappears when the tile sizes itself.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1209,7 +1236,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **4**   | **DONE 2026-09-12 — states.** `AsyncBoundary` now answers loading / failed / empty / loaded for **20 screens** that each hand-rolled it; `EmptyState` replaces nine inline `<p class="text-center my-8">` variants; `SkeletonChart` replaces the spinner in stats, and `stats/Year` gains the loading state it never had. `EmptyClanMessage` is now three props. 16 new tests.                                                                                                                                                              | 28 files          | low    |
 | **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep  | low    |
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files          | low    |
-| **7**   | **PARTIAL 2026-09-12 — the safe half.** The four tiles' markup is pinned by snapshot; the reveal machinery (`createImageReveal`) and the favourite badge are extracted, byte-identical, −89 lines. `Tile`, `Row`, `ListingSurface` and the keyboard cursor are **not** done: they change markup by design and need a browser.                                                                                                                                                                                                               | 9 files           | medium |
+| **7**   | **PARTIAL 2026-09-13 — reveal, badge and surface.** `createImageReveal` and `FavoriteBadge` extracted byte-identically (−89 lines); `ListingSurface` replaces six hand-written containers and brings **arrow-key movement to listings that had none**. 7 tests. `Tile` and `Row` remain - they change markup, and they are what the last eight adapters wait on.                                                                                                                                                                            | 16 files          | medium |
 | **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files          | medium |
 | **9**   | **MOSTLY DONE 2026-09-12 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. The _Adjust_ card (rotate/flip) and the bulk-edit fold-in are not done. 8 new tests.                                                                                                                                                                         | 12 files          | high   |
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
