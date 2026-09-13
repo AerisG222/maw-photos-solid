@@ -10,7 +10,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Fullscreen: Component = () => {
-    const [settings, { setShowFavoritesBadge }] = useMediaFullscreenViewSettingsContext();
+    const [settings] = useMediaFullscreenViewSettingsContext();
     const [, { setFullscreen }] = useFullscreenContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryServices(MediaViewFullscreen);
@@ -36,7 +36,6 @@ const Fullscreen: Component = () => {
                 mediaService={mediaService}
                 slideshowService={slideshowService}
                 showFavoritesBadge={settings.showFavoritesBadge}
-                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
             />
         </AsyncBoundary>
     );

@@ -23,7 +23,6 @@ interface Props {
     // how many navigation entries `toolbarLeading` holds - see Toolbar
     toolbarLeadingNavCount?: number;
     showFavoritesBadge: boolean;
-    setShowFavoritesBadge: () => void;
 }
 
 const ViewFullscreen: Component<Props> = props => {
@@ -59,12 +58,10 @@ const ViewFullscreen: Component<Props> = props => {
                             activeMediaIsLast={props.mediaService.isActiveMediaLast()}
                             slideshowIsPlaying={props.slideshowService.isPlaying()}
                             canRequestMore={props.mediaService.canRequestMore()}
-                            showFavoritesBadge={props.showFavoritesBadge}
                             moveNext={() => props.mediaService.moveNext()}
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
-                            setShowFavoritesBadge={props.setShowFavoritesBadge}
                         />
                     </Toolbar>
                 }

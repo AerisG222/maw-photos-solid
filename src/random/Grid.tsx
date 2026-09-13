@@ -11,8 +11,7 @@ import SkeletonGrid from "../_components/loading/SkeletonGrid";
 const Grid: Component = () => {
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useRandomServices(MediaViewGrid);
-    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
-        useMediaGridViewSettingsContext();
+    const [settings] = useMediaGridViewSettingsContext();
 
     createEffect(() => {
         mediaService.navigateToViewIfMediaNotInList();
@@ -41,8 +40,6 @@ const Grid: Component = () => {
                 enableToggleBreadcrumbsOnInactiveMedia={false}
                 showFavoritesBadge={settings.showFavoritesBadge}
                 showTypesBadge={settings.showTypesBadge}
-                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
-                setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
             />
         </AsyncBoundary>
     );

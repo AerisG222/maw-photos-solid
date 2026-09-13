@@ -9,7 +9,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Detail: Component = () => {
-    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
+    const [settings] = useMediaDetailViewSettingsContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryServices(MediaViewDetail);
 
@@ -35,7 +35,6 @@ const Detail: Component = () => {
                 enableCategoryDownload={true}
                 enableCategoryTeaserChooser={true}
                 showFavoritesBadge={settings.showFavoritesBadge}
-                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
             />
         </AsyncBoundary>
     );

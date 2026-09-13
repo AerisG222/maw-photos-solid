@@ -1,7 +1,6 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
-import { useMediaFullscreenViewSettingsContext } from "../_contexts/settings/MediaFullscreenViewSettingsContext";
-
+import ListingToolbar from "../_components/listing/ListingToolbar";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
@@ -11,20 +10,16 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
-import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
-import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeMediaIsFirst: boolean;
     activeMediaIsLast: boolean;
     slideshowIsPlaying: boolean;
     canRequestMore: boolean;
-    showFavoritesBadge: boolean;
     moveNext: () => void;
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
-    setShowFavoritesBadge: () => void;
     /*
        Controls belonging to the feed rather than to this view - a person's
        favorites filter and shuffle. First in the group, ahead of request more
@@ -37,7 +32,6 @@ interface Props {
 const FullscreenToolbar: Component<Props> = props => {
     // its own view's settings, the way the grid and detail toolbars read theirs.
     // the favorites badge arrives as a prop only because it predates this
-    const [settings, { setHighlightFaces }] = useMediaFullscreenViewSettingsContext();
 
     /*
        Resolved once. Reading a JSX prop twice - here and in the Show below -
@@ -77,14 +71,7 @@ const FullscreenToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowBadgesButton
-                isActive={props.showFavoritesBadge}
-                setShowBadges={props.setShowFavoritesBadge}
-            />
-            <ToggleHighlightFacesButton
-                isActive={settings.highlightFaces}
-                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
-            />
+            <ListingToolbar badges faces />
         </>
     );
 };

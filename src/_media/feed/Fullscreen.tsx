@@ -13,7 +13,7 @@ import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewFullscreen from "../ViewFullscreen";
 
 const Fullscreen: Component = () => {
-    const [settings, { setShowFavoritesBadge }] = useMediaFullscreenViewSettingsContext();
+    const [settings] = useMediaFullscreenViewSettingsContext();
     const {
         mediaService,
         slideshowService,
@@ -80,9 +80,6 @@ const Fullscreen: Component = () => {
                         />
                     }
                     showFavoritesBadge={settings.showFavoritesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
                 />
             </AsyncBoundary>
         </Show>

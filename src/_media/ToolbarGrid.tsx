@@ -1,11 +1,9 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
-import { useMediaGridViewSettingsContext } from "../_contexts/settings/MediaGridViewSettingsContext";
-import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
 
-import ToolbarButton from "../_components/toolbar/ToolbarButton";
+import ListingToolbar from "../_components/listing/ListingToolbar";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import MoveNextButton from "./toolbar/MoveNextButton";
@@ -15,8 +13,6 @@ import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
 import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
 import FlipVerticalButton from "./toolbar/FlipVerticalButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
-import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
-import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -30,8 +26,6 @@ interface Props {
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
-    setShowFavoritesBadge: () => void;
-    setShowTypesBadge: () => void;
     /*
        Controls belonging to the feed rather than to this view - a person's
        favorites filter and shuffle. First in the group, ahead of request more
@@ -42,17 +36,7 @@ interface Props {
 }
 
 const GridToolbar: Component<Props> = props => {
-    const [settings, { setThumbnailSize, setDimThumbnails, setHighlightFaces }] =
-        useMediaGridViewSettingsContext();
     const [, { ltMd }] = useMediaBreakpointContext();
-
-    const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    };
-
-    const onToggleDimThumbnails = () => {
-        setDimThumbnails(!settings.dimThumbnails);
-    };
 
     /*
        Resolved once. Reading a JSX prop twice - here and in the Show below -
@@ -88,34 +72,13 @@ const GridToolbar: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ToggleShowBadgesButton
-                isActive={settings.showFavoritesBadge}
-                setShowBadges={props.setShowFavoritesBadge}
-            />
-            <ToggleHighlightFacesButton
-                isActive={settings.highlightFaces}
-                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
-            />
+            <ListingToolbar badges faces />
 
             <ToolbarDivider />
 
+            {/* the grid's own geometry, which an opened photo is not laid out by */}
             <Show when={!props.activeMedia}>
-                <ToolbarButton
-                    icon="icon-[ic--round-density-medium]"
-                    name="Density"
-                    tooltip="Cycle Density"
-                    shortcutKeys={["s"]}
-                    clickHandler={onToggleThumbnailSize}
-                />
-
-                <ToolbarButton
-                    icon="icon-[ic--round-tonality]"
-                    name="Dim Thumbnails"
-                    tooltip="Toggle Thumbnail Dimming"
-                    shortcutKeys={["b"]}
-                    clickHandler={onToggleDimThumbnails}
-                    active={!settings.dimThumbnails}
-                />
+                <ListingToolbar density dim />
             </Show>
 
             <Show when={props.activeMedia}>

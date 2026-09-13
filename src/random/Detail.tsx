@@ -11,7 +11,7 @@ import Loading from "../_components/loading/Loading";
 const Detail: Component = () => {
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useRandomServices(MediaViewDetail);
-    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
+    const [settings] = useMediaDetailViewSettingsContext();
 
     createEffect(() => {
         mediaService.navigateToFirstMediaIfNeeded();
@@ -40,7 +40,6 @@ const Detail: Component = () => {
                 enableCategoryDownload={false}
                 enableCategoryTeaserChooser={false}
                 showFavoritesBadge={settings.showFavoritesBadge}
-                setShowFavoritesBadge={() => setShowFavoritesBadge(!settings.showFavoritesBadge)}
             />
         </AsyncBoundary>
     );

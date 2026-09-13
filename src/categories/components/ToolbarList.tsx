@@ -1,40 +1,8 @@
 import { Component } from "solid-js";
 
-import { useCategoryListViewSettingsContext } from "../../_contexts/settings/CategoryListViewSettingsContext";
-import { getNextThumbnailSize } from "../../_models/ThumbnailSize";
+import ListingToolbar from "../../_components/listing/ListingToolbar";
 
-import ToolbarButton from "../../_components/toolbar/ToolbarButton";
-
-const ListToolbar: Component = () => {
-    const [settings, { setThumbnailSize, setDimThumbnails }] = useCategoryListViewSettingsContext();
-
-    const onToggleThumbnail = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    };
-
-    const onToggleDimThumbnails = () => {
-        setDimThumbnails(!settings.dimThumbnails);
-    };
-
-    return (
-        <>
-            <ToolbarButton
-                icon="icon-[ic--round-density-medium]"
-                name="Density"
-                tooltip="Cycle Density"
-                shortcutKeys={["s"]}
-                clickHandler={onToggleThumbnail}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-tonality]"
-                name="Dim Thumbnails"
-                tooltip="Toggle Thumbnail Dimming"
-                shortcutKeys={["b"]}
-                clickHandler={onToggleDimThumbnails}
-                active={!settings.dimThumbnails}
-            />
-        </>
-    );
-};
+// a list row shows its title as part of the row, so there is no label to toggle
+const ListToolbar: Component = () => <ListingToolbar density dim />;
 
 export default ListToolbar;

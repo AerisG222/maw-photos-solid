@@ -27,7 +27,7 @@ const Detail: Component = () => {
         loadError,
         retryLoad
     } = useFeedServices(MediaViewDetail);
-    const [settings, { setShowFavoritesBadge }] = useMediaDetailViewSettingsContext();
+    const [settings] = useMediaDetailViewSettingsContext();
 
     /*
        See the note in Grid: nothing can be decided before the first page lands.
@@ -79,9 +79,6 @@ const Detail: Component = () => {
                     enableCategoryDownload={false}
                     enableCategoryTeaserChooser={false}
                     showFavoritesBadge={settings.showFavoritesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
                 />
             </AsyncBoundary>
         </Show>

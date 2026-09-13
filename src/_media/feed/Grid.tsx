@@ -34,8 +34,7 @@ const Grid: Component = () => {
         loadError,
         retryLoad
     } = useFeedServices(MediaViewGrid);
-    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
-        useMediaGridViewSettingsContext();
+    const [settings] = useMediaGridViewSettingsContext();
     const chain = usePlaceChain(placeId);
 
     /*
@@ -114,10 +113,6 @@ const Grid: Component = () => {
                     enableToggleBreadcrumbsOnInactiveMedia={false}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     showTypesBadge={settings.showTypesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
-                    setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
                 />
             </AsyncBoundary>
         </Show>

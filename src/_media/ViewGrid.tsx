@@ -45,8 +45,6 @@ interface Props {
     enableToggleBreadcrumbsOnInactiveMedia: boolean;
     showFavoritesBadge: boolean;
     showTypesBadge: boolean;
-    setShowFavoritesBadge: () => void;
-    setShowTypesBadge: () => void;
 }
 
 const ViewGrid: Component<Props> = props => {
@@ -112,8 +110,6 @@ const ViewGrid: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
-                            setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
-                            setShowTypesBadge={() => props.setShowTypesBadge()}
                         />
                     </Toolbar>
                 }

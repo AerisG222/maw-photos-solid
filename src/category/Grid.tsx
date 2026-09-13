@@ -9,8 +9,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 
 const Grid: Component = () => {
-    const [settings, { setShowFavoritesBadge, setShowTypesBadge }] =
-        useMediaGridViewSettingsContext();
+    const [settings] = useMediaGridViewSettingsContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryServices(MediaViewGrid);
 
@@ -37,10 +36,6 @@ const Grid: Component = () => {
                     enableToggleBreadcrumbsOnInactiveMedia={true}
                     showFavoritesBadge={settings.showFavoritesBadge}
                     showTypesBadge={settings.showTypesBadge}
-                    setShowFavoritesBadge={() =>
-                        setShowFavoritesBadge(!settings.showFavoritesBadge)
-                    }
-                    setShowTypesBadge={() => setShowTypesBadge(!settings.showTypesBadge)}
                 />
             </Show>
         </AsyncBoundary>

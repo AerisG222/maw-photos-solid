@@ -888,6 +888,39 @@ for two primitives. Worth knowing per-primitive rather than assuming the library
 announce itself, and tooltips are a dead end on touch anyway. The fix is §8's: a required label prop on
 `ToolbarButton`, `ToolbarLink`, `SidebarButton` and `IconButton` rendering `aria-label`. No dependency.
 
+### Step 8 notes (2026-09-12)
+
+The controls had already been reconciled by hand, one report at a time - badges, then labels, then the density
+button that the label coupling had disabled. This step is what stops that happening again: there is one
+component now, so a control cannot exist in one listing and not the next, cannot be named differently, cannot
+answer a different key, and cannot sit in a different order.
+
+**Which controls a listing offers is still its own decision** - a list row shows its title as part of the row,
+people have no badges, media have no labels - but that is the only decision left to it. The flags are explicit
+rather than inferred, because "does this listing have labels worth toggling" is a real question with a
+per-listing answer.
+
+**`ListingToolbar` reads `ListingSettings` directly**, not through a screen's adapter. That is what makes a
+change in one listing show up in the next, and it is the first real consumer to move off the step 3 adapters -
+the rest follow in step 14.
+
+**A large unwinding fell out of it.** Once the toolbars wrote to the store themselves, every
+`setShowFavoritesBadge` and `setShowTypesBadge` threaded from nine screens, through three view components, into
+three toolbars was dead. The _reader_ props stay for now - a tile still has to be told whether to draw a badge -
+and they go when `Tile` reads the store itself in step 7.
+
+**The dev-mode key-collision assertion still cannot go in**, and now there is a number on it: three keys carry
+two meanings each, and all three are the info-sidebar card letters -
+
+| key | meanings                                      |
+| --- | --------------------------------------------- |
+| `c` | Sidebar: Comments · Choose This Place's Cover |
+| `e` | Sidebar: Effects · Administer These Places    |
+| `o` | Sidebar: Histogram · Sort                     |
+
+Decision 6 removes those letters in step 9. Every other key in the application - twenty-two of them - already
+carries exactly one meaning. The assertion goes in with step 9, where it can pass.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -996,7 +1029,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **5**   | **DONE 2026-09-12 — dialogs, and Kobalte lands.** `@kobalte/core` added; `overlay/Dialog` and `overlay/ConfirmDialog` replace five hand-rolled `<dialog class="modal">` implementations and `ClanDeleteDialog` is deleted. `isEditableTarget` moves the shortcut guard into `ShortcutWrapper`, removing five per-input `stopPropagation` workarounds. 10 new tests.                                                                                                                                                                         | 13 files, +1 dep                        | low                        |
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files                                | low                        |
 | **7**   | **PARTIAL 2026-09-12 — the safe half.** The four tiles' markup is pinned by snapshot; the reveal machinery (`createImageReveal`) and the favourite badge are extracted, byte-identical, −89 lines. `Tile`, `Row`, `ListingSurface` and the keyboard cursor are **not** done: they change markup by design and need a browser.                                                                                                                                                                                                               | 9 files                                 | medium                     |
-| **8**   | **`ListingToolbar`.** Delete the eight density/label/badge copies. Ships the letter half of the shortcut map, and removes dim/margins/size/titles/years/counts/badge-toggles.                                                                                                                                                                                                                                                                                                                                                               | 8 deletions                             | medium                     |
+| **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files                                | medium                     |
 | **9**   | **Inspector.** Generalise `Sidebar` into `Inspector` + registry; mount in Grid, Fullscreen, Map; move rotate/flip into the _Adjust_ card; fold the bulk-edit cards in.                                                                                                                                                                                                                                                                                                                                                                      | `_media/detail/*`, `_media/bulk-edit/*` | **high — the payoff step** |
 | **9b**  | **Delete the Detail view** (§0.5). Remove the six view/toolbar/service files, redirect `/detail/*` → `/grid/*`, migrate the saved view, shorten the nav rows, and teach grid's active-media overlay to share width with a docked Inspector.                                                                                                                                                                                                                                                                                                 | 12 files                                | medium — strictly after 9  |
 | **10**  | **`ItemActions`.** `⋮` on the tile and in the toolbar; move downloads + share off Detail.                                                                                                                                                                                                                                                                                                                                                                                                                                                   | 5 files                                 | medium                     |

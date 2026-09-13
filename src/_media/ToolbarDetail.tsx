@@ -1,12 +1,11 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
 import { useMediaDetailViewSettingsContext } from "../_contexts/settings/MediaDetailViewSettingsContext";
-import { getNextThumbnailSize } from "../_models/ThumbnailSize";
 import { Category } from "../_models/Category";
 import { Media } from "../_models/Media";
 
+import ListingToolbar from "../_components/listing/ListingToolbar";
 import ToolbarButton from "../_components/toolbar/ToolbarButton";
-import ToggleHighlightFacesButton from "./toolbar/ToggleHighlightFacesButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
@@ -20,7 +19,6 @@ import DownloadPhotoLowResButton from "./toolbar/DownloadPhotoLowResButton";
 import DownloadPhotoHighResButton from "./toolbar/DownloadPhotoHighResButton";
 import ShareButton from "./toolbar/ShareButton";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
-import ToggleShowBadgesButton from "./toolbar/ToggleShowBadgesButton";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -33,7 +31,6 @@ interface Props {
     movePrevious: () => void;
     toggleSlideshow: () => void;
     requestMore: () => void;
-    setShowFavoritesBadge: () => void;
     /*
        Whether this listing is a category. The download hands back a whole
        category as a zip, which only answers a question somebody browsing one is
@@ -51,19 +48,10 @@ interface Props {
 }
 
 const DetailToolbar: Component<Props> = props => {
-    const [settings, { setShowMediaList, setThumbnailSize, setDimThumbnails, setHighlightFaces }] =
-        useMediaDetailViewSettingsContext();
+    const [settings, { setShowMediaList }] = useMediaDetailViewSettingsContext();
 
     const onTogglePhotoList = () => {
         setShowMediaList(!settings.showMediaList);
-    };
-
-    const onToggleThumbnailSize = () => {
-        setThumbnailSize(getNextThumbnailSize(settings.thumbnailSize).id);
-    };
-
-    const onToggleDimThumbnails = () => {
-        setDimThumbnails(!settings.dimThumbnails);
     };
 
     /*
@@ -121,11 +109,6 @@ const DetailToolbar: Component<Props> = props => {
                 <ToolbarDivider />
             </Show>
 
-            <ToggleHighlightFacesButton
-                isActive={settings.highlightFaces}
-                setHighlightFaces={() => setHighlightFaces(!settings.highlightFaces)}
-            />
-
             <ToolbarButton
                 icon="icon-[ic--round-remove-red-eye]"
                 name="Media List"
@@ -134,26 +117,7 @@ const DetailToolbar: Component<Props> = props => {
                 clickHandler={onTogglePhotoList}
                 active={settings.showMediaList}
             />
-            <ToolbarButton
-                icon="icon-[ic--round-density-medium]"
-                name="Density"
-                tooltip="Cycle Density"
-                shortcutKeys={["s"]}
-                clickHandler={onToggleThumbnailSize}
-            />
-            <ToolbarButton
-                icon="icon-[ic--round-tonality]"
-                name="Dim Thumbnails"
-                tooltip="Toggle Thumbnail Dimming"
-                shortcutKeys={["b"]}
-                clickHandler={onToggleDimThumbnails}
-                active={!settings.dimThumbnails}
-            />
-
-            <ToggleShowBadgesButton
-                isActive={settings.showFavoritesBadge}
-                setShowBadges={props.setShowFavoritesBadge}
-            />
+            <ListingToolbar density dim badges faces />
         </>
     );
 };

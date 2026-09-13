@@ -33,7 +33,6 @@ interface Props {
     // see the note on the same prop in ToolbarDetail
     enableCategoryDownload: boolean;
     showFavoritesBadge: boolean;
-    setShowFavoritesBadge: () => void;
 }
 
 const ViewDetail: Component<Props> = props => {
@@ -95,7 +94,6 @@ const ViewDetail: Component<Props> = props => {
                             movePrevious={() => props.mediaService.movePrevious()}
                             toggleSlideshow={() => props.slideshowService.toggle()}
                             requestMore={() => props.mediaService.requestMore()}
-                            setShowFavoritesBadge={() => props.setShowFavoritesBadge()}
                         />
                     </Toolbar>
                 }
