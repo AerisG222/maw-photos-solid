@@ -993,6 +993,33 @@ parse errors. `git checkout` on the affected files and a surgical pass got it ba
 from the earlier `git checkout` mishap in reverse: a regex that deletes _lines_ containing a name will happily
 cut a `case` from its `return`. Deleting a _construct_ needs a pattern that matches the whole construct.
 
+### Step 9b silently removed downloads and sharing (2026-09-13)
+
+Deleting the detail view took `ToolbarDetail` with it, and that toolbar was the only thing that rendered the
+low-res download, the high-res download, the category zip and the share button. Four working components were
+left in the tree - importable, compiling, reachable from nowhere. **The application lost the ability to
+download a photograph**, and typecheck, lint, 150 tests and a production build all passed.
+
+Step 10 was the step that gives them a home, so they were only missing for one commit. That is luck rather than
+design: nothing in the repository could have told me.
+
+**So the repository can tell me now.** `src/orphans.test.ts` walks every module and fails if one is reachable
+from nowhere. It found the four immediately, and two more that predate this work entirely - `UtilityTypes.ts`,
+unused since July, and `ChartUtils.ts`, a chart colour palette unused since August 2025. Both deleted; git
+keeps them.
+
+**Where the actions went.** A `⋮` menu rather than four more toolbar buttons: they are used rarely and read as
+a list - "high resolution", "low resolution", "the whole category" - where four more icons would be four more
+things to decode on a toolbar that has enough. Kobalte's `DropdownMenu` gives it the focus trap, typeahead,
+arrow keys, escape and click-outside that §11 said nobody should hand-roll.
+
+It is mounted in `_media/Toolbar.tsx`, the one place that already knows both the photograph and its category,
+so all four views get it without threading a prop through three toolbars.
+
+**One deliberate widening.** The category zip used to be offered only while browsing that category; it is now
+offered wherever the photograph is. A photograph belongs to a category whether you reached it from that
+category, from a person or from a place, which is the same principle the inspector follows.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1104,7 +1131,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files              | medium |
 | **9**   | **MOSTLY DONE 2026-09-12 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. The _Adjust_ card (rotate/flip) and the bulk-edit fold-in are not done. 8 new tests.                                                                                                                                                                         | 12 files              | high   |
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files              | done   |
-| **10**  | **`ItemActions`.** `⋮` on the tile and in the toolbar; move downloads + share off Detail.                                                                                                                                                                                                                                                                                                                                                                                                                                                   | 5 files               | medium |
+| **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files              | medium |
 | **11**  | **`MediaToolbar`.** Collapse the five media toolbars into one capability-driven component; extend `IMediaService` with `capabilities()`.                                                                                                                                                                                                                                                                                                                                                                                                    | `_media/Toolbar*.tsx` | medium |
 | **12**  | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`.                                                                                                                                                                                                                                                                                                                                                                 | ~10 files             | medium |
 | **12b** | **View Transitions.** Morph the thumbnail into the photo on grid → active item and grid → fullscreen, behind a `prefers-reduced-motion` guard. No dependency (§11).                                                                                                                                                                                                                                                                                                                                                                         | 3–4 files             | low    |

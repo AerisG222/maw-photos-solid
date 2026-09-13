@@ -14,6 +14,7 @@ import {
     MediaViewMap
 } from "../_models/MediaView";
 
+import ItemActions from "../_components/listing/ItemActions";
 import NavGroup, { NavEntry } from "../_components/toolbar/NavGroup";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
@@ -83,6 +84,21 @@ const Toolbar: ParentComponent<Props> = props => {
             </Show>
 
             <NavGroup entries={entries()} digitOffset={props.leadingNavCount ?? 0} />
+
+            {/*
+                Here rather than in each view's own toolbar: this is the one
+                place that already knows both the photograph and the category it
+                belongs to, so every view gets these without threading a prop
+                through three toolbars to reach them.
+            */}
+            <Show when={props.activeMedia}>
+                <ToolbarDivider />
+
+                <ItemActions
+                    activeMedia={props.activeMedia}
+                    activeCategory={props.activeCategory}
+                />
+            </Show>
 
             <Show when={!!c()}>
                 <ToolbarDivider />

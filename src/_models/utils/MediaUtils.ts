@@ -21,3 +21,28 @@ export const getMediaShareUrl = (_media: Media) => "TODO";
    repeating and skipping rows.
 */
 export const newMediaSeed = () => Math.floor(Math.random() * 2 ** 31);
+
+/*
+   A download needs a name. The url's last segment is the file's own, with a
+   suffix so the two resolutions of one photograph do not overwrite each other
+   in a downloads folder.
+*/
+export const getFilenameFromUrl = (url: string, suffix?: string) => {
+    try {
+        const urlObj = new URL(url);
+        const path = urlObj.pathname;
+        const filename = path.substring(path.lastIndexOf("/") + 1) || "download";
+
+        return getFilenameWithSuffix(filename, suffix);
+    } catch {
+        return suffix ? `download-${suffix}` : "download";
+    }
+};
+
+const getFilenameWithSuffix = (filename: string, suffix?: string) => {
+    const extIndex = filename.lastIndexOf(".");
+
+    return extIndex === -1
+        ? filename
+        : `${filename.substring(0, extIndex)}-${suffix}${filename.substring(extIndex)}`;
+};
