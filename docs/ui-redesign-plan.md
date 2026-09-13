@@ -947,6 +947,18 @@ That guard _reports_ rather than throws, which §7 had asked for. A key genuinel
 about, but a route change can briefly have the outgoing screen's controls mounted alongside the incoming one's,
 and taking the application down over a transient overlap would be worse than the fault it is reporting.
 
+**And a fault only mounting it elsewhere could reveal.** Every card reaches into the photograph without
+checking - `props.activeMedia!.id` - and none of them ever had to, because the detail view is itself gated on
+having one open. A grid or a map can be looked at with nothing selected at all, so the comments card asked the
+API for the comments of `undefined` and the page fell over on arrival.
+
+The rule lives in `applicableCards` now: nothing applies without an item to apply it to. One place rather than
+eight cards, the rail goes empty instead of offering cards that cannot render, and it is unit-testable. The
+panel answers the state instead - "nothing selected" is a perfectly ordinary thing for a grid to be.
+
+Same family as the eager-`children()` crash: something built before the thing it describes exists. Worth
+watching for through the rest of this work.
+
 **Not done, deliberately.** The _Adjust_ card - moving rotate and flip out of three toolbars - is a change in
 where a tool lives, and those four buttons currently carry keyboard shortcuts that work whenever a photograph
 is on screen. Putting them in a card would silently make the keys conditional on the card being open unless
