@@ -1436,6 +1436,28 @@ to do nothing. It now skips anything that cannot take focus.
 link that already prints the category's name, a thumbnail beside its own checkbox, an avatar next to the name
 it belongs to. Announcing those twice is worse than not announcing them.
 
+### Arrowing into the `⋮` was a dead end (2026-09-14)
+
+The roving cursor put on the toolbar an hour earlier had a trap in it: arrowing along the bar reached the
+actions menu and opened it, instead of moving past it, and there was no way to arrow back out.
+
+`ItemActions` is a Kobalte `DropdownMenu`, and a menu button opens on ArrowDown by convention. The cursor's
+listener was on the container in the bubble phase, so the trigger - which binds its own handler to its own
+element - saw the key first. Claiming it on the way down instead means it never reaches the trigger. That is
+the toolbar pattern rather than a workaround: inside a toolbar the arrows belong to the toolbar, and Enter or
+Space still opens the menu.
+
+**The first test I wrote for it passed against the bug**, which is worth recording because it nearly shipped.
+It used a JSX `onKeyDown` on the child to stand in for the trigger - and Solid _delegates_ `keydown` to the
+document, so a JSX handler runs after any real listener on the container whichever phase that one uses. The
+stand-in has to bind its own listener to its own element, as a library does, and then `capture: false` fails
+it. Checking that a new test fails against the old code has caught something real for the third time in this
+rework.
+
+Two tests guard the edges of the fix, because capturing claims keys before anything below sees them: Enter
+still reaches the trigger, and a text field keeps its own arrows - the filter boxes live in these toolbars and
+an arrow there moves the caret, which `isEditableTarget` already answers for.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

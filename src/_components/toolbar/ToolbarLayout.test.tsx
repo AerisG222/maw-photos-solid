@@ -144,4 +144,98 @@ describe("the toolbar at each width", () => {
 
         expect(screen.getByRole("toolbar").getAttribute("aria-orientation")).toBe("horizontal");
     });
+
+    /*
+       The `⋮` menu is a Kobalte trigger, and a menu button opens on ArrowDown
+       by convention. Listening on the bubble meant the trigger saw the key
+       first: arrowing along the toolbar reached the ellipsis and opened its
+       menu instead of moving past it, which is a dead end you cannot arrow out
+       of.
+
+       Stood in for by a button carrying a listener of its own, attached to the
+       element rather than through JSX. That distinction is the whole test:
+       Solid *delegates* `onKeyDown` to the document, so a JSX handler on the
+       child would run after this container's listener whichever phase it used,
+       and the test would pass against the bug. A library that binds its own
+       handler to its own element - which is what the trigger does - is only
+       beaten by capturing.
+    */
+    test("a control with its own idea about the arrows never sees them", () => {
+        atWidth(1280);
+
+        const opened: string[] = [];
+
+        render(() => (
+            <AppSettingsProvider>
+                <MediaBreakpointProvider>
+                    <ToolbarLayout nav={<button>Grid</button>}>
+                        <button ref={el => el.addEventListener("keydown", e => opened.push(e.key))}>
+                            Actions
+                        </button>
+                    </ToolbarLayout>
+                </MediaBreakpointProvider>
+            </AppSettingsProvider>
+        ));
+
+        const trigger = screen.getByText("Actions");
+
+        trigger.focus();
+        fireEvent.keyDown(trigger, { key: "ArrowDown" });
+
+        expect(opened).toEqual([]);
+    });
+
+    // the toolbar claims the arrows; activating is still Enter or Space
+    test("but it still receives the keys that activate it", () => {
+        atWidth(1280);
+
+        const seen: string[] = [];
+
+        render(() => (
+            <AppSettingsProvider>
+                <MediaBreakpointProvider>
+                    <ToolbarLayout nav={<button>Grid</button>}>
+                        <button ref={el => el.addEventListener("keydown", e => seen.push(e.key))}>
+                            Actions
+                        </button>
+                    </ToolbarLayout>
+                </MediaBreakpointProvider>
+            </AppSettingsProvider>
+        ));
+
+        const trigger = screen.getByText("Actions");
+
+        trigger.focus();
+        fireEvent.keyDown(trigger, { key: "Enter" });
+
+        expect(seen).toEqual(["Enter"]);
+    });
+
+    /*
+       Capturing claims the key before anything below sees it, which is the
+       right answer for a menu trigger and the wrong one for a text field - the
+       filter boxes live in these toolbars, and an arrow there moves the caret.
+    */
+    test("but a text field keeps its own arrows", () => {
+        atWidth(1280);
+
+        const seen: string[] = [];
+
+        render(() => (
+            <AppSettingsProvider>
+                <MediaBreakpointProvider>
+                    <ToolbarLayout nav={<button>Grid</button>}>
+                        <input ref={el => el.addEventListener("keydown", e => seen.push(e.key))} />
+                    </ToolbarLayout>
+                </MediaBreakpointProvider>
+            </AppSettingsProvider>
+        ));
+
+        const field = screen.getByRole("textbox");
+
+        field.focus();
+        fireEvent.keyDown(field, { key: "ArrowLeft" });
+
+        expect(seen).toEqual(["ArrowLeft"]);
+    });
 });

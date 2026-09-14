@@ -43,10 +43,19 @@ const ToolbarLayout: ParentComponent<Props> = props => {
        Tab past all of them. The arrows move along it now, which is what the
        toolbar role promises and is the same treatment the listings got.
     */
-    const { onKeyDown, onFocusIn } = createRovingFocus(() => bar, {
+    createRovingFocus(() => bar, {
         enabled: () => true,
         // a rail down the side from `md` up, a bar across the bottom below it
-        axis: () => (gteMd() ? "vertical" : "horizontal")
+        axis: () => (gteMd() ? "vertical" : "horizontal"),
+        /*
+           The `⋮` menu is a Kobalte trigger, and a menu button opens on
+           ArrowDown by convention. On the bubble the trigger saw the key first,
+           so arrowing along the toolbar reached the ellipsis and opened its
+           menu instead of moving past it - a dead end you could not arrow out
+           of. Claimed on the way down, it never reaches the trigger, and Enter
+           or Space still opens the menu.
+        */
+        capture: true
     });
 
     const c = children(() => props.children);
@@ -57,8 +66,6 @@ const ToolbarLayout: ParentComponent<Props> = props => {
         <>
             <div
                 ref={bar}
-                onKeyDown={onKeyDown}
-                onFocusIn={onFocusIn}
                 role="toolbar"
                 aria-label="View controls"
                 aria-orientation={gteMd() ? "vertical" : "horizontal"}

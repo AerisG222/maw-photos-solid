@@ -33,7 +33,7 @@ interface Props {
 const ListingSurface: ParentComponent<Props> = props => {
     let container!: HTMLDivElement;
 
-    const { onKeyDown, onFocusIn } = createRovingFocus(() => container, {
+    createRovingFocus(() => container, {
         enabled: () => !!props.keyboardCursor,
         // the tiles wrap, so up and down cross a row rather than stepping one
         axis: () => "grid"
@@ -42,8 +42,6 @@ const ListingSurface: ParentComponent<Props> = props => {
     return (
         <div
             ref={container}
-            onKeyDown={onKeyDown}
-            onFocusIn={onFocusIn}
             class={`flex gap-2 flex-wrap place-content-center ${props.class ?? ""}`}
             classList={{ "rise-in": !!props.animate }}
         >

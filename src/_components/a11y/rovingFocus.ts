@@ -17,6 +17,17 @@ interface Options {
     // photographs and two things answering one key is a fault, not a feature
     enabled: () => boolean;
     axis: () => RovingAxis;
+    /*
+       Claim the key on the way down rather than on the way back up.
+
+       For a group holding a control with its own idea about the arrows - a menu
+       button opens on ArrowDown by convention - listening on the bubble means
+       that control sees the key first, so arrowing onto it triggers it instead
+       of moving past it. Capturing stops the key ever reaching it, which is the
+       right reading of the toolbar pattern: inside a toolbar the arrows belong
+       to the toolbar, and Enter or Space still activates.
+    */
+    capture?: boolean;
 }
 
 /*
@@ -75,33 +86,6 @@ export const createRovingFocus = (container: () => HTMLElement, options: Options
                 el.tabIndex = index === Math.min(cursor(), all.length - 1) ? 0 : -1;
             }
         });
-    };
-
-    onMount(() => {
-        applyTabStops();
-
-        /*
-           The items arrive after the group does - a query resolves, a filter
-           narrows it, paging appends more - so the tab stops have to be
-           reapplied as the children change rather than once on mount.
-        */
-        const observer = new MutationObserver(applyTabStops);
-
-        observer.observe(container(), { childList: true });
-        onCleanup(() => observer.disconnect());
-    });
-
-    createEffect(applyTabStops);
-
-    /*
-       How many fit across, measured rather than assumed: the items wrap, their
-       size follows the density, and a listing can be any width. Items sharing a
-       top edge are on the same row.
-    */
-    const perRow = (all: HTMLElement[]) => {
-        const top = all[0]?.offsetTop;
-
-        return Math.max(1, all.filter(el => el.offsetTop === top).length);
     };
 
     const onFocusIn = (evt: FocusEvent) => {
@@ -167,5 +151,44 @@ export const createRovingFocus = (container: () => HTMLElement, options: Options
         }
     };
 
-    return { onKeyDown, onFocusIn };
+    onMount(() => {
+        applyTabStops();
+
+        /*
+           Attached here rather than bound in JSX, because the capture phase is
+           not something Solid's `on*` props can ask for.
+        */
+        const el = container();
+
+        el.addEventListener("keydown", onKeyDown, { capture: !!options.capture });
+        el.addEventListener("focusin", onFocusIn);
+
+        onCleanup(() => {
+            el.removeEventListener("keydown", onKeyDown, { capture: !!options.capture });
+            el.removeEventListener("focusin", onFocusIn);
+        });
+
+        /*
+           The items arrive after the group does - a query resolves, a filter
+           narrows it, paging appends more - so the tab stops have to be
+           reapplied as the children change rather than once on mount.
+        */
+        const observer = new MutationObserver(applyTabStops);
+
+        observer.observe(container(), { childList: true });
+        onCleanup(() => observer.disconnect());
+    });
+
+    createEffect(applyTabStops);
+
+    /*
+       How many fit across, measured rather than assumed: the items wrap, their
+       size follows the density, and a listing can be any width. Items sharing a
+       top edge are on the same row.
+    */
+    const perRow = (all: HTMLElement[]) => {
+        const top = all[0]?.offsetTop;
+
+        return Math.max(1, all.filter(el => el.offsetTop === top).length);
+    };
 };
