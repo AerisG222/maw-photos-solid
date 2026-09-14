@@ -10,8 +10,6 @@ interface Props {
     sort?: boolean;
     // the text under an item - a title, a year, a name, a count
     labels?: boolean;
-    density?: boolean;
-    dim?: boolean;
     // the favourite heart and the media-type icons on a tile
     badges?: boolean;
     // media listings only
@@ -38,17 +36,8 @@ interface Props {
    listing.
 */
 const ListingToolbar: Component<Props> = props => {
-    const [
-        settings,
-        {
-            cycleDensity,
-            setShowLabels,
-            setDimThumbnails,
-            setShowBadges,
-            setHighlightFaces,
-            setPeopleSort
-        }
-    ] = useListingSettingsContext();
+    const [settings, { setShowLabels, setShowBadges, setHighlightFaces, setPeopleSort }] =
+        useListingSettingsContext();
 
     return (
         <>
@@ -74,28 +63,6 @@ const ListingToolbar: Component<Props> = props => {
                     shortcutKeys={["t"]}
                     clickHandler={() => setShowLabels(!settings.showLabels)}
                     active={settings.showLabels}
-                />
-            </Show>
-
-            <Show when={props.density}>
-                <ToolbarButton
-                    icon="icon-[ic--round-density-medium]"
-                    name="Density"
-                    tooltip="Cycle Density"
-                    shortcutKeys={["s"]}
-                    clickHandler={cycleDensity}
-                />
-            </Show>
-
-            <Show when={props.dim}>
-                <ToolbarButton
-                    icon="icon-[ic--round-tonality]"
-                    name="Dim Thumbnails"
-                    tooltip="Toggle Thumbnail Dimming"
-                    shortcutKeys={["b"]}
-                    clickHandler={() => setDimThumbnails(!settings.dimThumbnails)}
-                    // lit when dimming is off, which is the state worth noticing
-                    active={!settings.dimThumbnails}
                 />
             </Show>
 

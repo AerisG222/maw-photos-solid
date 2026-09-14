@@ -287,12 +287,18 @@ html {
        How wide the content runs, which is what the density's "margin" step
        actually meant.
 
-       It was four `mx-[N%]` classes, symmetric padding taken off both edges.
-       That reads fine on a monitor and is indefensible on a phone: the
-       comfortable step gave away 16% of a 390px screen to whitespace, on the
-       device least able to spare it. Expressed as a width rather than a margin,
-       the same number can be capped - and below `md` it is simply ignored.
+       It was four `mx-[N%]` classes, symmetric padding taken off both edges,
+       chosen by a density setting. That reads fine on a monitor and is
+       indefensible on a phone: the comfortable step gave away 16% of a 390px
+       screen to whitespace, on the device least able to spare it.
+
+       Expressed as a width rather than a margin the same number can be capped,
+       and below `md` it is ignored entirely. It is one number now rather than a
+       preference - the density that chose between them was two older controls
+       welded together and never designed, and three named steps of whitespace
+       is not a choice worth carrying a toolbar button for.
     */
+
     /*
        Secondary text: a caption, an ancestry line, a media count.
 
@@ -307,17 +313,11 @@ html {
     }
 
     .stage {
-        width: min(100%, var(--stage-width, 100%));
-        margin-inline: auto;
-    }
-
-    /* the two the density actually produces, as the width the old mx-[N%] left */
-    .stage-dense {
-        --stage-width: 100%;
-    }
-
-    .stage-compact {
+        /* what the old `mx-[8%]` left behind, which was its default step */
         --stage-width: 84%;
+
+        width: min(100%, var(--stage-width));
+        margin-inline: auto;
     }
 
     /* a phone has no width to give away */

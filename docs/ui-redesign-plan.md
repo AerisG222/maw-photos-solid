@@ -1602,6 +1602,40 @@ membership of `MediaViewAll`, and the migration's `migrateView` does the same. T
 the old behaviour and were rewritten - and `ShortcutReference.test.ts` caught `f` being bound before it was
 documented, which is exactly the drift it was written for.
 
+### Three settings that were never designed (2026-09-14)
+
+Asked what else I had noticed while working through this. Three of the answers were worth acting on, and the
+first of them was mine to have caught earlier.
+
+**A view switcher with one entry.** Removing fullscreen left Random and every feed offering the grid and
+nothing else, so `NavGroup` drew a switch between a single option - a link to the page you are already on,
+taking a slot in the bar and a digit with it. A group of fewer than two now draws nothing, and the media
+toolbar's divider is conditional on there being view links to divide from.
+
+**Density is gone.** It was never designed: the old application had a four-step thumbnail size _and_ a
+four-step page margin, sixteen combinations of one idea, and three named steps was the compromise that
+collapsed them in step 3. It cost a toolbar button, a shortcut, a settings row, a stored key and reactive
+plumbing through `Tile`, `SkeletonGrid`, `CategoryListItem` and `Layout` - and only two of its three steps
+produced distinct stage widths, which is the tell that the axis was not carrying real information. One
+thumbnail size, one list size, one content width.
+
+**Thumbnail dimming is gone**, and it was the worse of the two. It desaturated every thumbnail until you
+hovered it and defaulted **on**, so a library of photographs showed them washed out until you pointed at one.
+The hover emphasis the user wanted to keep is the lift and the primary-tinted shadow in `.elev-hover`, which
+say the same thing without taking the colour away.
+
+**What fell out with them.** `_models/Density.ts` and `_models/Margin.ts` deleted outright; both list
+toolbars deleted, because density and dimming were the only controls a list view had; two migration helpers
+and two migration tests removed with the keys they carried; `s` and `b` returned to the pool. `.stage` is one
+number with a phone override rather than a class per step.
+
+**The pattern worth naming**, since it is what connects all three and probably is not finished: nearly every
+questionable control in this application is a _preference that exists because two older things were merged_,
+not because anyone wanted a choice. The rework has been good at collapsing duplication and less good at
+asking whether the survivor should exist at all. The test to apply is whether a setting earns its toolbar
+button, its shortcut letter, its settings row and its stored key - and by that test `showBadges` is the next
+one to look at, since the favourite heart it hides is the only way to favourite anything.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

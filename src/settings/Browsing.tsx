@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 
 import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
-import { allDensities } from "../_models/Density";
 import { allPersonSorts } from "../_models/PersonSort";
 
 import Panel from "./components/Panel";
@@ -15,34 +14,24 @@ import Layout from "../_components/layout/Layout";
    Everything about how a listing presents its items, in one place.
 
    These used to be repeated on the Categories, Media, People and Search pages -
-   the same four controls, four times over, each writing to a different store,
-   so setting them in one place did nothing for the others. They are one setting
+   the same controls, four times over, each writing to a different store, so
+   setting them in one place did nothing for the others. They are one setting
    each now, and this is where they live.
+
+   Two of them are not settings at all any more. A three-step density chose
+   between thumbnail sizes and page margins; it was salvaged from two older
+   controls rather than designed, and there is now one of each. And thumbnail
+   dimming desaturated every photograph until you pointed at it - on by
+   default, in an application whose subject is photographs.
 */
 const ViewBrowsing: Component = () => {
-    const [
-        settings,
-        {
-            setDensity,
-            setShowLabels,
-            setShowBadges,
-            setDimThumbnails,
-            setHighlightFaces,
-            setPeopleSort
-        }
-    ] = useListingSettingsContext();
+    const [settings, { setShowLabels, setShowBadges, setHighlightFaces, setPeopleSort }] =
+        useListingSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Browsing">
             <PanelContainer>
                 <Panel title="Every Listing">
-                    <RadioGroup
-                        title="Density"
-                        groupName="density"
-                        itemArray={allDensities}
-                        selectedValue={settings.density}
-                        onChange={setDensity}
-                    />
                     <Toggle
                         title="Show Labels"
                         name="showLabels"
@@ -54,12 +43,6 @@ const ViewBrowsing: Component = () => {
                         name="showBadges"
                         isSelected={settings.showBadges}
                         onChange={setShowBadges}
-                    />
-                    <Toggle
-                        title="Dim Thumbnails"
-                        name="dimThumbnails"
-                        isSelected={settings.dimThumbnails}
-                        onChange={setDimThumbnails}
                     />
                     <Toggle
                         title="Highlight Faces"

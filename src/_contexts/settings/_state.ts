@@ -1,4 +1,3 @@
-import { DensityIdType, defaultDensity } from "../../_models/Density";
 import { CategoryViewModeIdType, defaultCategoryViewMode } from "../../_models/CategoryViewMode";
 import { InspectorCardIdType, defaultInspectorCards } from "../../_models/InspectorCard";
 import { MapTypeIdType, defaultMapType } from "../../_models/MapType";
@@ -31,19 +30,16 @@ export const defaultAppSettings: AppSettingsState = {
    follows you into the next.
 */
 export interface ListingSettingsState {
-    readonly density: DensityIdType;
     // titles, years, names and media counts - all of them answer "do I want
     // text under the picture", so there is one control rather than four
     readonly showLabels: boolean;
     // favourite hearts and media-type icons
     readonly showBadges: boolean;
-    readonly dimThumbnails: boolean;
     readonly highlightFaces: boolean;
     readonly peopleSort: PersonSortIdType;
 }
 
 export const defaultListingSettings: ListingSettingsState = {
-    density: defaultDensity,
     showLabels: true,
     /*
        On, where every one of the six stores this replaces defaulted it off.
@@ -51,7 +47,6 @@ export const defaultListingSettings: ListingSettingsState = {
        invisible until you found a toolbar button to reveal it.
     */
     showBadges: true,
-    dimThumbnails: true,
     highlightFaces: false,
     peopleSort: defaultPersonSort
 };

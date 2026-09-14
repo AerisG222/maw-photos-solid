@@ -54,12 +54,13 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
     },
     {
         title: "How a listing looks",
-        detail: "One setting behind each, shared by every listing in the application.",
+        detail:
+            "One setting behind each, shared by every listing. Density and thumbnail " +
+            "dimming used to be here and are not settings any more - there is one " +
+            "size, and photographs show in full colour.",
         entries: [
-            { keys: ["s"], action: "Cycle density", scope: "Any listing" },
             { keys: ["t"], action: "Show / hide labels", scope: "Any listing" },
             { keys: ["h"], action: "Show / hide badges", scope: "Any listing" },
-            { keys: ["b"], action: "Dim thumbnails until hovered", scope: "Any listing" },
             { keys: ["o"], action: "Cycle the sort order", scope: "People" },
             { keys: ["r"], action: "Load more", scope: "Any paged listing" }
         ]

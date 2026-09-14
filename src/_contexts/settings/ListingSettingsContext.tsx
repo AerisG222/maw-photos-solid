@@ -1,7 +1,6 @@
 import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { DensityIdType, getNextDensity } from "../../_models/Density";
 import { PersonSortIdType } from "../../_models/PersonSort";
 import { ListingSettingsState, defaultListingSettings } from "./_state";
 import { loadMigrated } from "./_migrate";
@@ -13,13 +12,10 @@ export { defaultListingSettings } from "./_state";
 export type ListingSettingsContextValue = [
     state: ListingSettingsState,
     actions: {
-        setDensity: (density: DensityIdType) => void;
         setShowLabels: (showLabels: boolean) => void;
         setShowBadges: (showBadges: boolean) => void;
-        setDimThumbnails: (dimThumbnails: boolean) => void;
         setHighlightFaces: (highlightFaces: boolean) => void;
         setPeopleSort: (peopleSort: PersonSortIdType) => void;
-        cycleDensity: () => void;
     }
 ];
 
@@ -35,32 +31,23 @@ export const ListingSettingsProvider: ParentComponent = props => {
         saveJson(KEY_SETTINGS_V2_LISTING, state);
     };
 
-    const setDensity = (density: DensityIdType) => updateState({ density });
-
     const setShowLabels = (showLabels: boolean) => updateState({ showLabels });
 
     const setShowBadges = (showBadges: boolean) => updateState({ showBadges });
 
-    const setDimThumbnails = (dimThumbnails: boolean) => updateState({ dimThumbnails });
-
     const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
 
     const setPeopleSort = (peopleSort: PersonSortIdType) => updateState({ peopleSort });
-
-    const cycleDensity = () => updateState({ density: getNextDensity(state.density) });
 
     return (
         <ListingSettingsContext.Provider
             value={[
                 state,
                 {
-                    setDensity,
                     setShowLabels,
                     setShowBadges,
-                    setDimThumbnails,
                     setHighlightFaces,
-                    setPeopleSort,
-                    cycleDensity
+                    setPeopleSort
                 }
             ]}
         >

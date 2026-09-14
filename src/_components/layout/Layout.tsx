@@ -1,8 +1,6 @@
 import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
 
-import { getStageClass } from "../../_models/Margin";
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
-import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 interface Props {
     xPad?: boolean;
@@ -19,13 +17,13 @@ interface Props {
     */
     header?: JSXElement;
     /*
-       Indent the content, by however much the density asks for.
+       Cap how wide the content runs.
 
-       A flag rather than a value: seven listing screens were each reading a
-       margin from their own settings store and handing it down, and all seven
-       were deriving it from the same one number. What was never uniform is
-       *which* screens want it - a listing breathes, a settings form does not -
-       so that part stays a decision each screen makes.
+       A flag rather than a value. It was a value once - seven listing screens
+       each read a margin from their own settings store and handed it down, all
+       seven deriving it from the same density - and then a density step, and
+       now simply one width. What was never uniform is *which* screens want it:
+       a listing breathes, a settings form does not.
     */
     margin?: boolean;
     toolbar?: JSXElement;
@@ -34,8 +32,7 @@ interface Props {
 
 const Layout: ParentComponent<Props> = props => {
     const merged = mergeProps({ xPad: true }, props);
-    const [listing] = useListingSettingsContext();
-    const stage = () => (props.margin ? getStageClass(listing.density) : "");
+
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
@@ -86,7 +83,7 @@ const Layout: ParentComponent<Props> = props => {
                     "h-full min-h-0 overflow-hidden": !!merged.fill
                 }}
             >
-                <div class={stage()} classList={{ "h-full": !!merged.fill }}>
+                <div classList={{ stage: !!props.margin, "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
                     </Show>

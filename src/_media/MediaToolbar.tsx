@@ -138,11 +138,6 @@ const MediaToolbar: Component<Props> = props => {
 
                 <ListingToolbar badges faces />
             </Show>
-
-            {/* the grid's own geometry, which an opened photograph is not laid out by */}
-            <Show when={laysOutTiles() && !activeMedia()}>
-                <ListingToolbar density dim />
-            </Show>
         </>
     );
 };

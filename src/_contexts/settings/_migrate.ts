@@ -1,4 +1,3 @@
-import { DensityIdType, getDensityForThumbnailSize } from "../../_models/Density";
 import {
     InspectorCardComments,
     InspectorCardCategoryTeaser,
@@ -12,7 +11,6 @@ import {
 } from "../../_models/InspectorCard";
 import { MediaViewAll } from "../../_models/MediaView";
 import { ThemeDark, ThemeIdType, ThemeLight, ThemeSystem } from "../../_models/Theme";
-import { ThumbnailSizeIdType } from "../../_models/ThumbnailSize";
 import {
     AppSettingsState,
     AreaSettingsState,
@@ -28,7 +26,6 @@ import {
     KEY_SETTINGS_CATEGORY_FILTER,
     KEY_SETTINGS_CATEGORY_PAGE,
     KEY_SETTINGS_CATEGORY_VIEW_GRID,
-    KEY_SETTINGS_CATEGORY_VIEW_LIST,
     KEY_SETTINGS_FACE_FEED,
     KEY_SETTINGS_FEED_VIEW_CATEGORY,
     KEY_SETTINGS_MEDIA_INFO_PANEL,
@@ -40,7 +37,6 @@ import {
     KEY_SETTINGS_PEOPLE_VIEW_GRID,
     KEY_SETTINGS_SEARCH_PAGE,
     KEY_SETTINGS_SEARCH_VIEW_GRID,
-    KEY_SETTINGS_SEARCH_VIEW_LIST,
     KEY_SETTINGS_V2_APP,
     KEY_SETTINGS_V2_AREA,
     KEY_SETTINGS_V2_LISTING,
@@ -95,12 +91,6 @@ const migrateTheme = (stored: unknown): ThemeIdType => {
     return ThemeSystem;
 };
 
-const migrateDensity = (grid: unknown, categoryGrid: unknown): DensityIdType => {
-    const size = (str(grid) ?? str(categoryGrid)) as ThumbnailSizeIdType | undefined;
-
-    return size ? getDensityForThumbnailSize(size) : defaultListingSettings.density;
-};
-
 const migrateInspectorCards = (panel: LegacyRecord): InspectorCardIdType[] => {
     // declaration order in the old sidebar, so the rail keeps its arrangement
     const flags: [unknown, InspectorCardIdType][] = [
@@ -127,7 +117,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
     const categoryFilter = read(KEY_SETTINGS_CATEGORY_FILTER);
     const categoryPage = read(KEY_SETTINGS_CATEGORY_PAGE);
     const categoryGrid = read(KEY_SETTINGS_CATEGORY_VIEW_GRID);
-    const categoryList = read(KEY_SETTINGS_CATEGORY_VIEW_LIST);
     const faceFeed = read(KEY_SETTINGS_FACE_FEED);
     const feedCategory = read(KEY_SETTINGS_FEED_VIEW_CATEGORY);
     const infoPanel = read(KEY_SETTINGS_MEDIA_INFO_PANEL);
@@ -139,7 +128,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
     const peopleGrid = read(KEY_SETTINGS_PEOPLE_VIEW_GRID);
     const searchPage = read(KEY_SETTINGS_SEARCH_PAGE);
     const searchGrid = read(KEY_SETTINGS_SEARCH_VIEW_GRID);
-    const searchList = read(KEY_SETTINGS_SEARCH_VIEW_LIST);
 
     return {
         app: {
@@ -159,7 +147,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 defaultAppSettings.showToolbarLabels
         },
         listing: {
-            density: migrateDensity(mediaGrid.thumbnailSize, categoryGrid.thumbnailSize),
             showLabels: anyFalse([
                 bool(categoryGrid.showTitles),
                 bool(searchGrid.showTitles),
@@ -178,16 +165,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                button that revealed it.
             */
             showBadges: defaultListingSettings.showBadges,
-            dimThumbnails: anyFalse([
-                bool(mediaGrid.dimThumbnails),
-                bool(mediaDetail.dimThumbnails),
-                bool(categoryGrid.dimThumbnails),
-                bool(categoryList.dimThumbnails),
-                bool(searchGrid.dimThumbnails),
-                bool(searchList.dimThumbnails),
-                bool(feedCategory.dimThumbnails),
-                bool(peopleGrid.dimThumbnails)
-            ]),
             highlightFaces: anyTrue([
                 bool(mediaGrid.highlightFaces),
                 bool(mediaDetail.highlightFaces),

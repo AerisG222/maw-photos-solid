@@ -79,8 +79,14 @@ const Toolbar: ParentComponent<Props> = props => {
         <ToolbarLayout
             nav={
                 <>
-                    <Show when={leading()}>
-                        {leading()}
+                    {leading()}
+
+                    {/*
+                        Only between two things. A feed's view links collapse to
+                        nothing when the grid is all it offers, and a divider
+                        with one side is a line hanging off the end of the bar.
+                    */}
+                    <Show when={leading() && entries().length > 1}>
                         <ToolbarDivider />
                     </Show>
 

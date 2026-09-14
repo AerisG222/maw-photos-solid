@@ -1,4 +1,4 @@
-import { Component, Index, createMemo } from "solid-js";
+import { Component, Index, Show, createMemo } from "solid-js";
 
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 
@@ -38,31 +38,40 @@ interface Props {
    twenty-two letters, and a collision is impossible rather than merely fixed.
    The cost is that the key no longer hints at the destination, which is what the
    labels and the reference dialog are for.
+
+   **A group of one draws nothing.** A switch between a single option is not a
+   switch; it is a link to the page you are already on, taking a slot in the bar
+   and a digit with it. Two areas ended up here the moment fullscreen stopped
+   being a view of its own - Random and every feed offer only the grid now - and
+   the honest answer is that they have no view choice to offer rather than a
+   choice of one.
 */
 const NavGroup: Component<Props> = props => {
     return (
-        <Index each={props.entries}>
-            {(entry, idx) => {
-                /*
+        <Show when={props.entries.length > 1}>
+            <Index each={props.entries}>
+                {(entry, idx) => {
+                    /*
                    Built once for this position rather than on every read: the
                    array identity is what ShortcutWrapper keys its binding on, so
                    a fresh one each render would tear the binding down and rebuild
                    it continuously.
                 */
-                const shortcutKeys = [String((props.digitOffset ?? 0) + idx + 1)];
-                const route = createMemo(() => ({ ...entry().route, shortcutKeys }));
+                    const shortcutKeys = [String((props.digitOffset ?? 0) + idx + 1)];
+                    const route = createMemo(() => ({ ...entry().route, shortcutKeys }));
 
-                return (
-                    <ToolbarLink
-                        href={entry().href}
-                        route={route()}
-                        active={entry().active}
-                        disabled={entry().disabled}
-                        clickHandler={entry().clickHandler}
-                    />
-                );
-            }}
-        </Index>
+                    return (
+                        <ToolbarLink
+                            href={entry().href}
+                            route={route()}
+                            active={entry().active}
+                            disabled={entry().disabled}
+                            clickHandler={entry().clickHandler}
+                        />
+                    );
+                }}
+            </Index>
+        </Show>
     );
 };
 

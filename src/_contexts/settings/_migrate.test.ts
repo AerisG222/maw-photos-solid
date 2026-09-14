@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 
-import { DensityComfortable, DensityCompact, DensityDense } from "../../_models/Density";
 import {
     InspectorCardComments,
     InspectorCardExif,
@@ -22,7 +21,7 @@ import {
     KEY_SETTINGS_PEOPLE_VIEW_GRID,
     KEY_SETTINGS_SEARCH_VIEW_GRID
 } from "./_storage";
-import { defaultListingSettings, defaultMediaSettings } from "./_state";
+import { defaultMediaSettings } from "./_state";
 
 const reader =
     (store: Record<string, Record<string, unknown>>): LegacyReader =>
@@ -34,10 +33,8 @@ describe("migrating from the per-view settings", () => {
         const migrated = buildMigratedSettings(reader({}));
 
         expect(migrated.app.theme).toBe(ThemeSystem);
-        expect(migrated.listing.density).toBe(defaultListingSettings.density);
         expect(migrated.listing.showBadges).toBe(true);
         expect(migrated.listing.showLabels).toBe(true);
-        expect(migrated.listing.dimThumbnails).toBe(true);
         expect(migrated.media.inspectorCards).toEqual(defaultMediaSettings.inspectorCards);
     });
 
@@ -72,30 +69,9 @@ describe("migrating from the per-view settings", () => {
         ).toBe(false);
     });
 
-    test.each([
-        ["default", DensityComfortable],
-        ["small", DensityCompact],
-        ["verySmall", DensityDense],
-        ["tiny", DensityDense]
-    ])("a %s thumbnail becomes %s density", (size, density) => {
-        const migrated = buildMigratedSettings(
-            reader({ [KEY_SETTINGS_MEDIA_VIEW_GRID]: { thumbnailSize: size } })
-        );
-
-        expect(migrated.listing.density).toBe(density);
-    });
-
-    test("the category grid's size is used when the media grid has none", () => {
-        const migrated = buildMigratedSettings(
-            reader({ [KEY_SETTINGS_CATEGORY_VIEW_GRID]: { thumbnailSize: "small" } })
-        );
-
-        expect(migrated.listing.density).toBe(DensityCompact);
-    });
-
     /*
        The non-default choice wins. Badges shipped off, so switching them on
-       anywhere is the deliberate act; dimming shipped on, so switching it off is.
+       anywhere is the deliberate act.
     */
     test("badges end up on whatever was stored, because nobody turned them off", () => {
         // they shipped off, so the stored value can only ever have been "on"
@@ -117,14 +93,6 @@ describe("migrating from the per-view settings", () => {
         );
 
         expect(migrated.listing.showLabels).toBe(false);
-    });
-
-    test("dimming turned off anywhere turns off everywhere", () => {
-        const migrated = buildMigratedSettings(
-            reader({ [KEY_SETTINGS_PEOPLE_VIEW_GRID]: { dimThumbnails: false } })
-        );
-
-        expect(migrated.listing.dimThumbnails).toBe(false);
     });
 
     test("face highlighting is the same, across its three old homes", () => {
@@ -240,10 +208,8 @@ describe("migrating from the per-view settings", () => {
             navExpanded: false,
             showToolbarLabels: true
         });
-        expect(migrated.listing.density).toBe(DensityCompact);
         expect(migrated.listing.showLabels).toBe(true);
         expect(migrated.listing.showBadges).toBe(true);
-        expect(migrated.listing.dimThumbnails).toBe(false);
         expect(migrated.listing.peopleSort).toBe("mediaCount");
         expect(migrated.media.slideshowSeconds).toBe(5);
         expect(migrated.area.categoriesView).toBe("list");

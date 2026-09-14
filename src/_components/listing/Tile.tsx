@@ -1,9 +1,7 @@
 import { JSXElement, ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { getGridThumbnailSize } from "../../_models/Density";
-import { getThumbnailSize } from "../../_models/ThumbnailSize";
-import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
+import { ThumbnailSizeDefault, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { createImageReveal } from "../loading/_imageReveal";
 
 export interface TileBadges {
@@ -18,7 +16,7 @@ interface Props {
     // absent where there is nothing published yet - a person with no face crop
     src: string | undefined;
     alt?: string;
-    // a face is square; everything else takes the density's rectangle
+    // a face is square; everything else takes the thumbnail's rectangle
     square?: boolean;
     /*
        Card chrome - a surface, a border, a hover lift. Categories and people are
@@ -49,22 +47,27 @@ interface Props {
    and they had already drifted - different rounding, different transitions,
    different ways of spelling the same hover.
 
-   It sizes itself. Which is the point of it being here rather than in each
-   listing: the size comes from the density in the one settings store, so a tile
-   no longer has to be told how big it is by whichever screen happens to be
-   drawing it.
+   It sizes itself, which is the point of it being here rather than in each
+   listing - no screen has to be told how big a tile is, or tell one.
+
+   One size, and photographs at full colour at rest. Both used to be settings:
+   a three-step density, and a desaturation that lifted on hover. The density
+   was never designed, it was salvaged - the old app had a thumbnail size and a
+   page margin, sixteen combinations of one idea, and three named steps was the
+   compromise that collapsed them. The dimming was worse than merely unused: it
+   defaulted *on*, so a library of photographs showed them washed out until you
+   pointed at one. The hover emphasis is still here - it is the lift and the
+   shadow, which say the same thing without taking the colour away.
 
    Places are deliberately not here. A place card is a different thing - a fixed
    width, a four-by-three cover and a footer of text - and forcing it into this
    shape would mean a prop for every way it differs.
 */
 const Tile: ParentComponent<Props> = props => {
-    const [listing] = useListingSettingsContext();
-
-    const size = () => getThumbnailSize(getGridThumbnailSize(listing.density));
-    const width = () => size().width;
+    const size = getThumbnailSize(ThumbnailSizeDefault);
+    const width = () => size.width;
     // a face crop is square, so its height follows its width rather than the ratio
-    const height = () => (props.square ? size().width : size().height);
+    const height = () => (props.square ? size.width : size.height);
 
     const { loaded, reveal, ref: imgRef } = createImageReveal(() => props.src);
 
@@ -102,7 +105,6 @@ const Tile: ParentComponent<Props> = props => {
                             // interpolates the composited layer while the
                             // transform runs - it reads as a blur that sharpens
                             // once the transition settles
-                            "saturate-50 group-hover:saturate-100": listing.dimThumbnails,
                             "opacity-0": !loaded(),
                             "opacity-100": loaded()
                         }}

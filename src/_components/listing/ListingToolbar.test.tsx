@@ -28,19 +28,17 @@ const press = (name: string) =>
 
 describe("ListingToolbar", () => {
     test("offers only what the listing asked for", () => {
-        mount(() => <ListingToolbar density dim />);
+        mount(() => <ListingToolbar labels badges />);
 
-        expect(controls()).toEqual(["Cycle Density (S)", "Toggle Thumbnail Dimming (B)"]);
+        expect(controls()).toEqual(["Toggle Labels (T)", "Toggle Badges (H)"]);
     });
 
     test("always in the same order, whichever subset it is", () => {
-        mount(() => <ListingToolbar badges labels sort density dim faces />);
+        mount(() => <ListingToolbar badges labels sort faces />);
 
         expect(controls().map(t => t.split(" (")[0])).toEqual([
             "Sorted by Name",
             "Toggle Labels",
-            "Cycle Density",
-            "Toggle Thumbnail Dimming",
             "Toggle Badges",
             "Toggle Face Highlighting"
         ]);
@@ -48,7 +46,7 @@ describe("ListingToolbar", () => {
 
     // the row is the same everywhere, so the keys have to be too
     test("no two of its controls claim the same key", () => {
-        mount(() => <ListingToolbar sort labels density dim badges faces />);
+        mount(() => <ListingToolbar sort labels badges faces />);
 
         const keys = controls().map(title => /\(([^)]+)\)$/.exec(title)?.[1]);
 
@@ -91,16 +89,5 @@ describe("ListingToolbar", () => {
         expect(lit()).not.toEqual(before);
         // both moved, not just the one that was pressed
         expect(new Set(lit()).size).toBe(1);
-    });
-
-    test("density cycles rather than sticking at an end", () => {
-        mount(() => <ListingToolbar density />);
-
-        // three named steps: a fourth press is back where it started
-        expect(() => {
-            press("Cycle Density");
-            press("Cycle Density");
-            press("Cycle Density");
-        }).not.toThrow();
     });
 });

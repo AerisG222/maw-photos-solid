@@ -6,7 +6,6 @@ import { Category } from "../_models/Category";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
-import ListToolbar from "./components/ToolbarList";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import CategoryListItem from "../_components/categories/CategoryListItem";
@@ -39,9 +38,7 @@ const ViewList: Component = () => {
                 <Toolbar
                     canRequestMore={searchQuery.hasNextPage}
                     requestMore={() => void searchQuery.fetchNextPage()}
-                >
-                    <ListToolbar />
-                </Toolbar>
+                />
             }
         >
             <div class="mt-4">

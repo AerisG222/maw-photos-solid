@@ -1,9 +1,7 @@
 import { Component, Show, createSignal, onMount } from "solid-js";
 import { A } from "@solidjs/router";
 
-import { getThumbnailSize } from "../../_models/ThumbnailSize";
-import { getListThumbnailSize } from "../../_models/Density";
-import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
+import { defaultListThumbnailSize, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { MediaTypePhoto, MediaTypeVideo } from "../../_models/MediaType";
 import { getCategoryPath } from "../../categories/_routes";
@@ -23,9 +21,7 @@ interface Props {
 }
 
 const CategoryListItem: Component<Props> = props => {
-    const [listing] = useListingSettingsContext();
-
-    const size = () => getThumbnailSize(getListThumbnailSize(listing.density));
+    const size = getThumbnailSize(defaultListThumbnailSize);
     const teaserUrl = () => getMediaTeaserUrl(props.category.teaser);
 
     // a teaser already seen this session starts visible - see _imageReveal
@@ -62,12 +58,10 @@ const CategoryListItem: Component<Props> = props => {
                 src={teaserUrl()}
                 /* the row prints the name a few pixels to the right */
                 alt=""
-                width={size().width}
-                height={size().height}
+                width={size.width}
+                height={size.height}
                 classList={{
                     inline: true,
-                    "saturate-50": listing.dimThumbnails,
-                    "group-hover:saturate-100": listing.dimThumbnails,
                     "transition-[filter,opacity]": true,
                     "duration-[400ms]": true,
                     "ease-out": true,

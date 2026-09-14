@@ -5,7 +5,6 @@ import { Category } from "../_models/Category";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
-import ListToolbar from "./components/ToolbarList";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
@@ -28,14 +27,7 @@ const ListView: Component = () => {
     return (
         // Layout wraps every state so the backdrop and toolbar are constant -
         // see the note in Grid.tsx
-        <Layout
-            margin
-            toolbar={
-                <Toolbar>
-                    <ListToolbar />
-                </Toolbar>
-            }
-        >
+        <Layout margin toolbar={<Toolbar />}>
             {/*
                 error is checked first: a failed year query also leaves
                 categoriesToDisplay undefined, which would otherwise skeleton forever

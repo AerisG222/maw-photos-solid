@@ -64,7 +64,7 @@ const ToolbarCategories: Component<Props> = props => {
 
             <ToolbarDivider />
 
-            <ListingToolbar labels density dim badges />
+            <ListingToolbar labels badges />
         </ToolbarLayout>
     );
 };

@@ -17,7 +17,7 @@ import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
 /*
-   Looking at one photograph, rather than at a listing of them. Density, labels,
+   Looking at one photograph, rather than at a listing of them. Labels,
    badges and face highlighting are the same question everywhere and are answered
    once, under Browsing.
 

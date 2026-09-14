@@ -9,7 +9,7 @@ import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 */
 const Toolbar: Component = () => (
     <ToolbarLayout>
-        <ListingToolbar sort labels density dim />
+        <ListingToolbar sort labels />
     </ToolbarLayout>
 );
 

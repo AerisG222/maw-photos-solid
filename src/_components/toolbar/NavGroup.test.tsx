@@ -81,14 +81,36 @@ describe("NavGroup", () => {
 
     test("the route's own key is ignored in favour of its position", () => {
         // every view route used to carry a mnemonic: g, w, f, z, /
-        mount([entry("Grid", { route: { ...route("Grid"), shortcutKeys: ["g"] } })]);
+        mount([entry("Grid", { route: { ...route("Grid"), shortcutKeys: ["g"] } }), entry("Map")]);
 
-        expect(titles()).toEqual(["Grid (1)"]);
+        expect(titles()).toEqual(["Grid (1)", "Map (2)"]);
     });
 
     test("a tooltip is preferred over the name, as the label", () => {
-        mount([entry("Grid", { route: { ...route("Grid"), tooltip: "Browse The Grid" } })]);
+        mount([
+            entry("Grid", { route: { ...route("Grid"), tooltip: "Browse The Grid" } }),
+            entry("Map")
+        ]);
 
-        expect(titles()).toEqual(["Browse The Grid (1)"]);
+        expect(titles()).toEqual(["Browse The Grid (1)", "Map (2)"]);
+    });
+
+    /*
+       A switch between a single option is not a switch - it is a link to the
+       page you are already on, taking a slot in the bar and a digit with it.
+
+       Two areas arrived here the moment fullscreen stopped being a view of its
+       own: Random and every feed offer the grid and nothing else now.
+    */
+    test("a group of one draws nothing", () => {
+        mount([entry("Grid")]);
+
+        expect(titles()).toEqual([]);
+    });
+
+    test("and a group of none likewise", () => {
+        mount([]);
+
+        expect(titles()).toEqual([]);
     });
 });

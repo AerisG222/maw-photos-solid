@@ -37,7 +37,7 @@ const toolbar = (width: number) => {
         <AppSettingsProvider>
             <MediaBreakpointProvider>
                 <ToolbarLayout nav={<button>Grid</button>} actions={<button>Actions</button>}>
-                    <button>Density</button>
+                    <button>Labels</button>
                 </ToolbarLayout>
             </MediaBreakpointProvider>
         </AppSettingsProvider>
@@ -55,7 +55,7 @@ describe("the toolbar at each width", () => {
 
         expect(screen.getByText("Grid")).toBeTruthy();
         expect(screen.getByText("Actions")).toBeTruthy();
-        expect(screen.getByText("Density")).toBeTruthy();
+        expect(screen.getByText("Labels")).toBeTruthy();
         expect(screen.queryByLabelText("More controls")).toBeNull();
     });
 
@@ -74,7 +74,7 @@ describe("the toolbar at each width", () => {
     test("a phone folds the rest away behind one button", () => {
         toolbar(390);
 
-        expect(screen.queryByText("Density")).toBeNull();
+        expect(screen.queryByText("Labels")).toBeNull();
         expect(screen.getByLabelText("More controls")).toBeTruthy();
     });
 
@@ -83,7 +83,7 @@ describe("the toolbar at each width", () => {
 
         fireEvent.click(screen.getByLabelText("More controls"));
 
-        expect(screen.getByText("Density")).toBeTruthy();
+        expect(screen.getByText("Labels")).toBeTruthy();
         expect(screen.getByRole("dialog", { name: "More controls" })).toBeTruthy();
     });
 
@@ -93,7 +93,7 @@ describe("the toolbar at each width", () => {
         fireEvent.click(screen.getByLabelText("More controls"));
         fireEvent.click(screen.getByLabelText("Close"));
 
-        expect(screen.queryByText("Density")).toBeNull();
+        expect(screen.queryByText("Labels")).toBeNull();
     });
 
     // nothing to fold, so nothing to fold it behind
