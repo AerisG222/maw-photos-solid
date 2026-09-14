@@ -1,11 +1,9 @@
-import { Component, For, Show, createSignal } from "solid-js";
+import { Component, For } from "solid-js";
 
 import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
 import InfoCard from "../../_components/inspector/InspectorCard";
-import InspectorRail from "../../_components/inspector/InspectorRail";
-import InspectorRailButton from "../../_components/inspector/InspectorRailButton";
-import SidePanel, { usePanelShape } from "../../_components/overlay/SidePanel";
+import SidePanel from "../../_components/overlay/SidePanel";
 import BulkEditFilterCard from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
 
@@ -20,21 +18,17 @@ interface Props {
    Bulk edit's tools, in the same panel the Inspector uses.
 
    This was a second copy of what the Inspector had been before it learned to be
-   three shapes: a hard `w-[500px]` handed to the layout's sidebar slot. On a
-   phone that is a panel wider than the screen sitting *in flow*, so the layout's
-   bottom row stretched to the height of the cards and took the navigation with
-   it - which is exactly how it was reported.
+   three shapes: a hard `w-[500px]` handed to the layout's sidebar slot. In flow
+   on a 390px viewport that stretched the layout's bottom row to the height of
+   the cards and squeezed the chrome beside it to nothing.
 
-   Docked it is simply there, as it always was. Overlaid it needs a way in, so
-   the rail carries one button, matching the Inspector's.
+   It only ever renders docked now - the view itself is not offered anywhere the
+   panel would have to overlay, because reading a selection while typing
+   coordinates for it needs both on screen at once. So there is no open state
+   and no rail: `SidePanel` is here for the one shape, and for not being a
+   second implementation of it.
 */
 const BulkEditSidebar: Component<Props> = props => {
-    const { docked } = usePanelShape();
-    const [open, setOpen] = createSignal(false);
-
-    // beside the content there is nothing to open or close; over it there is
-    const isOpen = () => docked() || open();
-
     const cards = [
         {
             title: "Filter/Selection Tools",
@@ -56,7 +50,7 @@ const BulkEditSidebar: Component<Props> = props => {
 
     return (
         <div class="flex">
-            <SidePanel open={isOpen()} onClose={() => setOpen(false)} title="Bulk Edit Tools">
+            <SidePanel open onClose={() => undefined} title="Bulk Edit Tools">
                 <For each={cards}>
                     {card => (
                         <InfoCard title={card.title} icon={card.icon}>
@@ -65,28 +59,6 @@ const BulkEditSidebar: Component<Props> = props => {
                     )}
                 </For>
             </SidePanel>
-
-            {/*
-                Only where the panel is not simply there. Docked it cannot be
-                closed - which is how this screen has always behaved on a wide
-                display - so a button offering to close it would be a button
-                that does nothing.
-            */}
-            <Show when={!docked()}>
-                <InspectorRail>
-                    <InspectorRailButton
-                        name="Tools"
-                        tooltip="Show / Hide the Bulk Edit Tools"
-                        icon={
-                            open()
-                                ? "icon-[ic--round-chevron-right]"
-                                : "icon-[ic--round-chevron-left]"
-                        }
-                        shortcutKeys={["i"]}
-                        clickHandler={() => setOpen(!open())}
-                    />
-                </InspectorRail>
-            </Show>
         </div>
     );
 };

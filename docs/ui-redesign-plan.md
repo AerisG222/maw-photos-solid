@@ -1356,6 +1356,32 @@ of the component I was looking at and false of the screen being described. The r
 and I matched that to the Inspector's cards; bulk edit's panel is built from the same `InspectorCard`
 component, which is why it looks like one.
 
+### Bulk edit goes back behind a width gate, for a reason the old one did not have (2026-09-14)
+
+Step 12 removed `view === MediaViewGrid || gteMd()`, which hid fullscreen, the map _and_ bulk edit on a phone.
+Three of those four were hidden because there was nowhere to put the chrome, which is a reason to fix the
+chrome rather than remove the view. Bulk edit is the fourth, and it is genuinely different: the whole job is
+picking photographs from the grid and typing **one** set of coordinates for all of them, so the selection and
+the form have to be readable at the same time. Below `lg` the tools come over the grid, which means entering a
+location by covering the photographs it is for.
+
+So it is offered exactly where the panel docks - `usePanelShape().docked()`, the same line the panel itself
+uses, rather than a second opinion about width. The toolbar stops listing it, and `ViewBulkEdit` redirects the
+way its `AdminGuard` already does, which covers a bookmarked URL or a window dragged narrower while it is
+open.
+
+**`BulkEditSidebar` lost the machinery it had just been given.** An hour earlier it gained a rail, an open
+signal and a sheet shape; once the view is docked-only, all of that is unreachable. It is back to one shape -
+still through `SidePanel`, so there is still only one implementation of the panel, but with no state of its
+own.
+
+**A latent bug the guard would have exposed.** `MediaBreakpointProvider` seeded its store with `md: false,
+lg: false` and copied the real answer across in a `createEffect`, which does not run until after the first
+render. So for one render every screen looked like a phone - a flicker while the only consumers were picking
+a CSS class, and a bounce to the grid the moment something _navigated_ on the answer. The store is seeded from
+the queries now. Worth recording as the general shape: a default that is merely wrong-for-one-tick is free
+until someone acts on it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1469,7 +1495,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
 | **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files          | medium |
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
-| **12**  | **DONE 2026-09-13 — responsive.** The `gteMd` view gate is gone, so a phone is offered every view rather than the grid alone. The chrome moves to the bottom and folds everything past navigation into a sheet; the Inspector gains three shapes (docked / overlay / sheet) on a new `lg` breakpoint; `.stage` replaces the four `mx-[N%]` margins and is ignored below `md`; prev/next show at every width; fullscreen's chrome steps back when the reader goes still. 17 new tests.                                                       | 19 files          | medium |
+| **12**  | **DONE 2026-09-13 — responsive.** The `gteMd` view gate is gone, so a phone is offered every view but bulk edit, rather than the grid alone. The chrome moves to the bottom and folds everything past navigation into a sheet; the Inspector gains three shapes (docked / overlay / sheet) on a new `lg` breakpoint; `.stage` replaces the four `mx-[N%]` margins and is ignored below `md`; prev/next show at every width; fullscreen's chrome steps back when the reader goes still. 17 new tests.                                        | 19 files          | medium |
 | **12b** | **DONE 2026-09-13 — view transitions.** One `useBeforeLeave` hook wraps navigation in `startViewTransition`; the main photograph carries a `view-transition-name`, so it tweens between grid and fullscreen instead of being torn down and rebuilt. Guarded on support, on `prefers-reduced-motion`, and on a navigation somebody else has claimed. 4 tests.                                                                                                                                                                                | 5 files           | low    |
 | **13**  | **DONE 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. A Shortcuts page documents the scheme the `?` dialog cannot - and is checked against the source, which is what caught §7's letter map never having been implemented. 3 new tests.                                                                                                                                                                 | 8 files           | low    |
 | **14**  | **DONE 2026-09-13 — every adapter gone.** All fifteen are removed and their consumers read the four stores directly. `Layout`, `SkeletonGrid`, `CategoryListItem` and `Tile` now take the density and work out their own margin and pixels, which is what the last eight adapters existed to do for them. Nine dead model exports pruned with them.                                                                                                                                                                                         | 45 files          | medium |

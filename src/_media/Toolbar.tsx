@@ -14,6 +14,7 @@ import {
 } from "../_models/MediaView";
 
 import ItemActions from "../_components/listing/ItemActions";
+import { usePanelShape } from "../_components/overlay/SidePanel";
 import NavGroup, { NavEntry } from "../_components/toolbar/NavGroup";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../_components/toolbar/ToolbarLayout";
@@ -46,6 +47,7 @@ const viewOrder: MediaView[] = [
 
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaSettingsContext();
+    const { docked } = usePanelShape();
 
     const c = children(() => props.children);
     // resolved once - see the note in ToolbarGrid on reading a slot twice
@@ -55,15 +57,23 @@ const Toolbar: ParentComponent<Props> = props => {
        Only the views this feed actually offers, in one list, so the digits are
        positional over what is on screen.
 
-       Every view, at every width. A phone used to be offered the grid and
-       nothing else - no fullscreen, no map, no bulk edit - which is a strange
-       thing to do to the device most likely to be holding the photographs. The
-       views themselves were never the problem; the chrome around them was.
+       Nearly every view, at nearly every width. A phone used to be offered the
+       grid and nothing else - no fullscreen, no map, no bulk edit - which is a
+       strange thing to do to the device most likely to be holding the
+       photographs. For three of the four the chrome was the problem, not the
+       view, and the chrome is fixed.
+
+       Bulk edit is the real exception. Its whole job is to pick photographs
+       from the grid and type one set of coordinates for all of them, which
+       means reading the selection and the form at the same time. That only
+       works where the tools sit *beside* the photographs rather than over them
+       - which is exactly where the panel docks, so that is the test.
     */
     const entries = createMemo<NavEntry[]>(() => {
         const available = props.mediaService.getAvailableRoutes();
 
         return viewOrder
+            .filter(view => view !== MediaViewBulkEdit || docked())
             .map(view => ({ view, route: available.find(r => r.mediaView === view) }))
             .filter(
                 (candidate): candidate is { view: MediaView; route: MediaAppRouteDefinition } =>

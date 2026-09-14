@@ -1,4 +1,5 @@
 import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
@@ -14,6 +15,7 @@ import Layout from "../_components/layout/Layout";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import AdminGuard from "../_components/auth/AdminGuard";
+import { usePanelShape } from "../_components/overlay/SidePanel";
 
 interface SelectableMedia {
     id: Uuid;
@@ -27,6 +29,27 @@ interface Props {
 
 const ViewBulkEdit: Component<Props> = props => {
     const { bulkGpsOverrideMutation } = useMediaContext(); // todo: add to service
+    const { docked } = usePanelShape();
+    const navigate = useNavigate();
+
+    /*
+       The one view that is not offered on a narrow screen.
+
+       Everything here is "pick photographs, then type one set of coordinates
+       for all of them", which means having the selection and the form in view
+       at once. Where the panel cannot dock it comes over the grid instead, so
+       entering a location means covering the very thing you chose it for.
+
+       The toolbar stops offering it, and this catches the rest: a bookmarked
+       URL, a link from elsewhere, or a window dragged narrower while it is
+       open. Same shape as the AdminGuard above it - leave, rather than render
+       something that cannot do its job.
+    */
+    createEffect(() => {
+        if (!docked()) {
+            navigate(props.mediaService.getEntryPathByView(MediaViewGrid), { replace: true });
+        }
+    });
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
     const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
 
@@ -96,7 +119,7 @@ const ViewBulkEdit: Component<Props> = props => {
 
     return (
         <AdminGuard redirectRoute={props.mediaService.getEntryPathByView(MediaViewGrid)}>
-            <Show when={props.mediaService.isReady()}>
+            <Show when={props.mediaService.isReady() && docked()}>
                 <Layout
                     toolbar={
                         <Toolbar

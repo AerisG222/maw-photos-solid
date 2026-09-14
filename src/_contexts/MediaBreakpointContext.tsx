@@ -37,8 +37,6 @@ export type MediaBreakpointContextValue = [
 const MediaBreakpointContext = createContext<MediaBreakpointContextValue>();
 
 export const MediaBreakpointProvider: ParentComponent = props => {
-    const [state, setState] = createStore(defaultMediaBreakpointState);
-
     // https://tailwindcss.com/docs/screens
     const breakpoints = {
         md: "768px",
@@ -46,6 +44,22 @@ export const MediaBreakpointProvider: ParentComponent = props => {
     };
 
     const matches = createBreakpoints(breakpoints);
+
+    /*
+       Seeded from the queries rather than from the defaults.
+
+       It used to start at `false, false` and copy the real answer across in the
+       effect below, which does not run until after the first render - so for
+       one render every screen looked like a phone, on a desktop. That was a
+       flicker while the only consumers were choosing a CSS class. It stops
+       being a flicker the moment something *acts* on the answer: the bulk edit
+       guard navigates away when the panel cannot dock, and would have bounced
+       a desktop reader to the grid on load.
+    */
+    const [state, setState] = createStore<MediaBreakpointState>({
+        md: matches.md,
+        lg: matches.lg
+    });
 
     createEffect(() => {
         setState({
