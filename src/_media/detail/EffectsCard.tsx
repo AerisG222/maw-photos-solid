@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import { defaultVisualEffects } from "../contexts/VisualEffectsContext";
 import { useVisualEffectsContext } from "../contexts/VisualEffectsContext";
 
+import AdjustControls from "./AdjustControls";
 import EffectsResetButton from "./EffectsResetButton";
 
 const EffectsCard: Component = () => {
@@ -23,6 +24,8 @@ const EffectsCard: Component = () => {
 
     return (
         <>
+            <AdjustControls />
+
             <div class="flex gap-2">
                 <div class="w-full">
                     <div>

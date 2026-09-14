@@ -74,7 +74,7 @@ export const inspectorCards: InspectorCardDescriptor[] = [
     },
     {
         id: InspectorCardEffects,
-        title: "Effects",
+        title: "Adjust",
         icon: "icon-[ic--round-photo-filter]",
         appliesTo: always,
         component: lazy(() => import("../../_media/detail/EffectsCard"))

@@ -1234,6 +1234,30 @@ be reading it on is the one screen whose shortcuts you are not asking about. The
 is a rule rather than a list: the digits follow the toolbar's order, so there is one thing to learn instead
 of a letter per screen.
 
+### The Adjust card, and a reset that was already lying (2026-09-13)
+
+Rotate and flip were four toolbar buttons. The sliders they share a state object with were in an Inspector
+card - and `reset()` sets the whole of `defaultVisualEffects`, so pressing Reset in the Effects card
+_already_ straightened a photograph that had been rotated from the toolbar. It simply did not show that it
+was going to. One state, one reset, one card.
+
+So the card is now titled **Adjust**, with the four transforms above the filters. It is not a ninth card: a
+separate one would have put a reset button in one card that silently clears state shown in another, which is
+the fault this move set out to fix rather than a new home for it.
+
+**The keys had to survive the move.** A card is something you open, and a shortcut that only works while the
+panel holding its button happens to be open is not a shortcut. `ShortcutWrapper` with no children renders
+nothing and registers everything, so `AdjustShortcuts` keeps `a` and `d` bound from the toolbar - mounted for
+as long as a photograph is on screen. That is the whole of the trick, and there is a test asserting the
+component draws nothing while its keys are live.
+
+The flips never had keys at all, so nothing was lost there; they gained a visible pressed state instead,
+which four toolbar buttons had never shown.
+
+**The orphan check paid for itself again.** Deleting the four button call sites left four unreachable files,
+and `orphans.test.ts` failed the suite before the commit rather than after it - the same fault that shipped
+undetected in step 9b and prompted the check.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1343,7 +1367,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files          | low    |
 | **7**   | **DONE 2026-09-13 — one tile.** `createImageReveal` and `FavoriteBadge` came out byte-identically; `ListingSurface` replaced six hand-written containers and brought **arrow-key movement to listings that had none**; then `Tile` absorbed the category, person and media tiles. It **sizes itself from the density**, which is what unblocked step 14. `Row` was not needed: only one list item was left. 7 tests, snapshots read as a diff.                                                                                              | 24 files          | medium |
 | **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files          | medium |
-| **9**   | **MOSTLY DONE 2026-09-12 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. The _Adjust_ card (rotate/flip) and the bulk-edit fold-in are not done. 8 new tests.                                                                                                                                                                         | 12 files          | high   |
+| **9**   | **DONE 2026-09-13 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. Rotate and flip moved into the _Adjust_ card, beside the sliders they already shared a reset with, leaving their keys registered in the toolbar. The bulk-edit fold-in is not done. 10 new tests.                                                                   | 17 files          | high   |
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
 | **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files          | medium |
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |

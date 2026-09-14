@@ -7,12 +7,9 @@ import { SlideshowService } from "./services/SlideshowService";
 import ListingToolbar from "../_components/listing/ListingToolbar";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
-import FlipHorizontalButton from "./toolbar/FlipHorizontalButton";
-import FlipVerticalButton from "./toolbar/FlipVerticalButton";
+import AdjustShortcuts from "./toolbar/AdjustShortcuts";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
-import RotateClockwiseButton from "./toolbar/RotateClockwiseButton";
-import RotateCounterClockwiseButton from "./toolbar/RotateCounterClockwiseButton";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
 
 interface Props {
@@ -101,14 +98,15 @@ const MediaToolbar: Component<Props> = props => {
             <Show when={showsPhotograph()}>
                 <ToolbarDivider />
 
+                {/*
+                    No buttons: the four of them moved into the Inspector's
+                    Adjust card, next to the sliders they share a reset with.
+                    The keys stay here, because the toolbar is mounted for as
+                    long as a photograph is and a card is not.
+                */}
                 <Show when={activeMedia()}>
-                    <RotateCounterClockwiseButton />
-                    <RotateClockwiseButton />
-                    <FlipHorizontalButton />
-                    <FlipVerticalButton />
+                    <AdjustShortcuts />
                 </Show>
-
-                <ToolbarDivider />
 
                 <ListingToolbar badges faces />
             </Show>
