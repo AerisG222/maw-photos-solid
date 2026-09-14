@@ -138,7 +138,7 @@ describe("the inspector at each width", () => {
         inspector(390);
         open();
 
-        fireEvent.click(screen.getByLabelText("Close the Inspector"));
+        fireEvent.click(screen.getByLabelText("Close Inspector"));
 
         expect(screen.queryByRole("dialog")).toBeNull();
     });
@@ -148,7 +148,7 @@ describe("the inspector at each width", () => {
         inspector(1280);
         open();
 
-        expect(screen.queryByLabelText("Close the Inspector")).toBeNull();
+        expect(screen.queryByLabelText("Close Inspector")).toBeNull();
     });
 
     /*
@@ -161,7 +161,7 @@ describe("the inspector at each width", () => {
         open();
 
         const panel = screen.getByRole("dialog");
-        const header = screen.getByLabelText("Close the Inspector");
+        const header = screen.getByLabelText("Close Inspector");
         const scroller = panel.querySelector(".overflow-y-auto");
 
         expect(scroller, "the panel has a scrolling region").toBeTruthy();

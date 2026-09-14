@@ -1323,6 +1323,39 @@ Two of the three new tests fail against the previous component. The third - that
 scrolling region - is markup, which is the only part of this jsdom can honestly speak to; the geometry was
 checked in a real browser instead.
 
+### It was bulk edit, not the Inspector (2026-09-14)
+
+The screenshot settled an argument I had been having with the wrong component. The panel lifting the bottom
+row was **`BulkEditSidebar`** - a second copy of what the Inspector had been before step 12 taught it three
+shapes: a hard `w-[500px]` handed straight to the layout's sidebar slot, in flow, always open. Step 12 gave
+the Inspector a sheet and never looked at the other sidebar in the same slot.
+
+In flow at 390px it does exactly what was reported. Measured in a browser, old against new:
+
+|        | bottom nav row               | panel                | document width         |
+| ------ | ---------------------------- | -------------------- | ---------------------- |
+| before | `top=244` **`h=600`** `w=0`  | `static`, 500px wide | 500 - scrolls sideways |
+| after  | `top=804` **`h=40`** `w=362` | `fixed`, 390px       | 390                    |
+
+The row stretched to the height of the cards and squeezed the toolbar beside it to **zero width** - the narrow
+yellow strip in the report - while a 500px panel overflowed a 390px viewport.
+
+**The fix was to stop having two of these.** `overlay/SidePanel` now owns the three shapes, the backdrop, the
+Escape handling, the header with its close button and the pinned chooser slot; `Inspector` and
+`BulkEditSidebar` are both callers. `usePanelShape` is exported alongside it because a caller has to answer
+the same question about its own rail - in both overlaid shapes the panel covers the rail that opened it, so
+whatever the rail offers has to move into the panel there.
+
+Bulk edit keeps its old behaviour where it is docked: simply present, with no toggle, because a button
+offering to close something that cannot be closed is a button that does nothing.
+
+**What this says about the previous fix.** The Inspector work in the commit before was real and needed - no
+close button, a chooser that scrolled away, a chooser missing entirely between `md` and `lg`. But I had
+measured the Inspector, found its geometry correct, and reported that the row "is not lifted" - which was true
+of the component I was looking at and false of the screen being described. The report said _infocard popup_
+and I matched that to the Inspector's cards; bulk edit's panel is built from the same `InspectorCard`
+component, which is why it looks like one.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
