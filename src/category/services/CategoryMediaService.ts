@@ -4,15 +4,9 @@ import { UseQueryResult } from "@tanstack/solid-query";
 import { BaseMediaService } from "../../_media/services/BaseMediaService";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import {
-    MediaView,
-    MediaViewBulkEdit,
-    MediaViewFullscreen,
-    MediaViewGrid,
-    MediaViewMap
-} from "../../_models/MediaView";
+import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { bulkEditRoute, fullscreenRoute, gridRoute, mapRoute } from "../_routes";
+import { bulkEditRoute, gridRoute, mapRoute } from "../_routes";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 
 export class CategoryMediaService extends BaseMediaService implements IMediaService {
@@ -76,8 +70,6 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
 
     getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
         switch (view) {
-            case MediaViewFullscreen:
-                return fullscreenRoute;
             case MediaViewGrid:
                 return gridRoute;
             case MediaViewMap:
@@ -89,7 +81,7 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         }
     };
 
-    getAvailableRoutes = () => [gridRoute, fullscreenRoute, mapRoute, bulkEditRoute];
+    getAvailableRoutes = () => [gridRoute, mapRoute, bulkEditRoute];
 
     // this listing *is* a category
     canDownloadCategory = () => true;

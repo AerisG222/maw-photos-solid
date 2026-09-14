@@ -176,10 +176,10 @@ describe("migrating from the per-view settings", () => {
 
     test("a partial store keeps what it has and defaults the rest", () => {
         const migrated = buildMigratedSettings(
-            reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "fullscreen" } })
+            reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "map" } })
         );
 
-        expect(migrated.media.view).toBe("fullscreen");
+        expect(migrated.media.view).toBe("map");
         expect(migrated.media.slideshowSeconds).toBe(defaultMediaSettings.slideshowSeconds);
     });
 
@@ -259,10 +259,19 @@ describe("migrating from the per-view settings", () => {
                 .view
         ).toBe("grid");
 
-        // one that still exists is left alone
+        /*
+           And fullscreen, which went the same way for the same reason: what it
+           offered was the absence of the chrome, which is a state the grid can
+           be in rather than a place to go.
+        */
         expect(
             buildMigratedSettings(reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "fullscreen" } }))
                 .media.view
-        ).toBe("fullscreen");
+        ).toBe("grid");
+
+        // one that still exists is left alone
+        expect(
+            buildMigratedSettings(reader({ [KEY_SETTINGS_MEDIA_PAGE]: { view: "map" } })).media.view
+        ).toBe("map");
     });
 });

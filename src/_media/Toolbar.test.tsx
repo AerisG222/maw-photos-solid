@@ -6,7 +6,7 @@ import { AppSettingsProvider } from "../_contexts/settings/AppSettingsContext";
 import { MediaBreakpointProvider } from "../_contexts/MediaBreakpointContext";
 import { MediaSettingsProvider } from "../_contexts/settings/MediaSettingsContext";
 import { ShortcutProvider } from "../_contexts/ShortcutContext";
-import { gridRoute, bulkEditRoute, fullscreenRoute, mapRoute } from "../category/_routes";
+import { gridRoute, bulkEditRoute, mapRoute } from "../category/_routes";
 import { Category } from "../_models/Category";
 import { IMediaService } from "./services/IMediaService";
 import Toolbar from "./Toolbar";
@@ -48,7 +48,7 @@ const service = {
     getActiveMedia: () => undefined,
     navigateToMedia: () => undefined,
     navigateToFirstMediaIfNeeded: () => undefined,
-    getAvailableRoutes: () => [gridRoute, fullscreenRoute, mapRoute, bulkEditRoute],
+    getAvailableRoutes: () => [gridRoute, mapRoute, bulkEditRoute],
     getEntryPathByView: () => "/",
     getMediaPathByView: () => "/",
     canRequestMore: () => false,
@@ -123,7 +123,6 @@ describe("which views a feed offers", () => {
         const titles = offered().join(" ").toLowerCase();
 
         expect(titles).toContain("grid");
-        expect(titles).toContain("fullscreen");
         expect(titles).toContain("map");
     });
 });

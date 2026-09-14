@@ -6,7 +6,7 @@ import { IMediaService } from "../services/IMediaService";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
-import { MediaView, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
+import { MediaView, MediaViewGrid } from "../../_models/MediaView";
 import { SearchResults } from "../../_models/SearchResults";
 import { FeedRoutes, stripMediaParams } from "./_routes";
 
@@ -102,8 +102,6 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         const routes = this.routes();
 
         switch (view) {
-            case MediaViewFullscreen:
-                return routes.fullscreen;
             case MediaViewGrid:
                 return routes.grid;
             default:
@@ -114,14 +112,14 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
     getAvailableRoutes = () => {
         const routes = this.routes();
 
-        return [routes.grid, routes.fullscreen];
+        return [routes.grid];
     };
 
     /*
        Filtering can empty the feed outright - a person with no favorites is a
-       real answer, not a broken link. Detail and fullscreen render around an
-       active item and so have nowhere to say that, which leaves a blank screen;
-       the grid is the one view that can, so they hand back to it.
+       real answer, not a broken link. A view rendering around an active item
+       has nowhere to say that, which leaves a blank screen; the grid is the one
+       that can, so they hand back to it.
     */
     navigateToGridIfEmpty = () => {
         if (this.getMediaList().length > 0) {

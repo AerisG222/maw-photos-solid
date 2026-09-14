@@ -5,13 +5,7 @@ import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { IMediaService } from "./services/IMediaService";
-import {
-    MediaView,
-    MediaViewBulkEdit,
-    MediaViewFullscreen,
-    MediaViewGrid,
-    MediaViewMap
-} from "../_models/MediaView";
+import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
 
 import ItemActions from "../_components/listing/ItemActions";
 import { usePanelShape } from "../_components/overlay/SidePanel";
@@ -38,12 +32,7 @@ interface Props {
    The order the views are offered in. Grid first because it is where browsing
    starts, and because it is the one every feed has.
 */
-const viewOrder: MediaView[] = [
-    MediaViewGrid,
-    MediaViewFullscreen,
-    MediaViewMap,
-    MediaViewBulkEdit
-];
+const viewOrder: MediaView[] = [MediaViewGrid, MediaViewMap, MediaViewBulkEdit];
 
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaSettingsContext();

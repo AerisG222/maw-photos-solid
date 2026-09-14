@@ -4,7 +4,7 @@ import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
-import { MediaView, MediaViewFullscreen, MediaViewGrid } from "../../_models/MediaView";
+import { MediaView, MediaViewGrid } from "../../_models/MediaView";
 
 /*
    The routes behind a feed over a subject: the media one person appears in, the
@@ -25,7 +25,7 @@ const mediaParams = "/:categoryYear?/:categorySlug?/:mediaSlug?";
 const redirectComponent = lazy(() => import("./Redirect"));
 const gridComponent = lazy(() => import("./Grid"));
 const categoriesComponent = lazy(() => import("./Categories"));
-const fullscreenComponent = lazy(() => import("./Fullscreen"));
+const fullscreenRedirectComponent = lazy(() => import("../FullscreenRedirect"));
 const rootComponent = lazy(() => import("../MediaRoot"));
 const detailRedirectComponent = lazy(() => import("../DetailRedirect"));
 
@@ -65,7 +65,6 @@ export const stripMediaParams = (path: string) =>
 
 export interface FeedRoutes {
     grid: MediaAppRouteDefinition;
-    fullscreen: MediaAppRouteDefinition;
     // a listing of the categories the subject turns up in, rather than of their
     // media. its own route rather than a flag on the grid: it lists a different
     // thing, so it has a different toolbar and a different query, and neither
@@ -94,17 +93,6 @@ export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
         buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
             `${basePath}/grid${mediaSlugOrBlank(media)}${search}`
     },
-    fullscreen: {
-        icon: "icon-[ic--round-fullscreen]",
-        name: "Fullscreen",
-        tooltip: "Fullscreen View",
-        mediaView: MediaViewFullscreen,
-        path: `/fullscreen${mediaParams}`,
-        absolutePath: `${basePath}/fullscreen${mediaParams}`,
-        component: fullscreenComponent,
-        buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${basePath}/fullscreen${mediaSlugOrBlank(media)}${search}`
-    },
     categories: {
         icon: "icon-[ic--round-collections]",
         name: "Categories",
@@ -116,24 +104,28 @@ export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
 });
 
 /*
-   Which media view a feed can open on. Map and bulk edit belong to a single
-   category, so a saved preference for either falls back to the grid - the same
-   rule the feed's redirect applies.
+   Which media listing a feed can open on.
+
+   There is one. Map and bulk edit belong to a single category, and fullscreen
+   stopped being a view at all - it is a toggle on the grid now - so every saved
+   preference resolves here. Kept as a function because the caller asks a
+   question that may have more than one answer again.
 */
-export const feedMediaListing = (view: MediaView) => {
-    switch (view) {
-        case MediaViewFullscreen:
-            return "fullscreen";
-        default:
-            return "grid";
-    }
-};
+export const feedMediaListing = (_view: MediaView) => "grid";
 
 // a path to one of a feed's listings. only the favorites filter carries across:
 // a seeded shuffle has no meaning for a list of categories, and the API takes no
 // seed for them
 export const feedListingPath = (basePath: string, listing: string, favoritesOnly: boolean) =>
     `${basePath}/${listing}${favoritesOnly ? "?f=true" : ""}`;
+
+// kept only so old links resolve - see FullscreenRedirect
+const fullscreenRedirect = (basePath: string): AppRouteDefinition => ({
+    name: "Fullscreen",
+    path: "/fullscreen/:mediaSlug?",
+    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
+    component: fullscreenRedirectComponent
+});
 
 // the tree handed to the router, one per subject kind
 export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefinition => {
@@ -155,7 +147,7 @@ export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefi
             redirect,
             routes.grid,
             detailRedirect(basePath),
-            routes.fullscreen,
+            fullscreenRedirect(basePath),
             routes.categories
         ]
     };

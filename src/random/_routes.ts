@@ -1,7 +1,7 @@
 import { lazy } from "solid-js";
 
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { MediaViewFullscreen, MediaViewGrid } from "../_models/MediaView";
+import { MediaViewGrid } from "../_models/MediaView";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
@@ -35,18 +35,6 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
         `${basePath}/grid${mediaSlugOrBlank(category, media)}`
 });
 
-const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
-    icon: "icon-[ic--round-fullscreen]",
-    name: "Fullscreen",
-    tooltip: "Fullscreen View",
-    mediaView: MediaViewFullscreen,
-    path: "/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?",
-    absolutePath: `${basePath}/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?`,
-    component: lazy(() => import("./Fullscreen")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${basePath}/fullscreen${mediaSlugOrBlank(category, media)}`
-});
-
 const redirectRoute = buildRedirectRoute(basePath);
 export const gridRoute = buildGridRoute(basePath);
 // kept only so old links resolve - see DetailRedirect
@@ -56,7 +44,13 @@ export const detailRedirectRoute: AppRouteDefinition = {
     absolutePath: `${basePath}/detail/:categoryYear?/:categorySlug?/:mediaSlug?`,
     component: lazy(() => import("../_media/DetailRedirect"))
 };
-export const fullscreenRoute = buildFullscreenRoute(basePath);
+// kept only so old links resolve - see FullscreenRedirect
+export const fullscreenRedirectRoute: AppRouteDefinition = {
+    name: "Fullscreen",
+    path: "/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?",
+    absolutePath: `${basePath}/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?`,
+    component: lazy(() => import("../_media/FullscreenRedirect"))
+};
 
 export const randomMediaRoutes: AppRouteDefinition = {
     icon: "icon-[ic--round-shuffle]",
@@ -65,5 +59,5 @@ export const randomMediaRoutes: AppRouteDefinition = {
     path: basePath,
     absolutePath: basePath,
     component: lazy(() => import("../_media/MediaRoot")),
-    children: [redirectRoute, gridRoute, detailRedirectRoute, fullscreenRoute]
+    children: [redirectRoute, gridRoute, detailRedirectRoute, fullscreenRedirectRoute]
 };

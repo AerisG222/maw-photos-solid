@@ -1,11 +1,6 @@
 import { lazy } from "solid-js";
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import {
-    MediaViewBulkEdit,
-    MediaViewFullscreen,
-    MediaViewGrid,
-    MediaViewMap
-} from "../_models/MediaView";
+import { MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
@@ -32,18 +27,6 @@ const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
     component: lazy(() => import("./Grid")),
     buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
         `${getCategoryPath(category!.year, category!.slug)}/grid${slugOrBlank(media)}`
-});
-
-const buildFullscreenRoute = (basePath: string): MediaAppRouteDefinition => ({
-    icon: "icon-[ic--round-fullscreen]",
-    name: "Fullscreen",
-    tooltip: "Fullscreen View",
-    mediaView: MediaViewFullscreen,
-    path: "/fullscreen/:mediaSlug?",
-    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
-    component: lazy(() => import("./Fullscreen")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${getCategoryPath(category!.year, category!.slug)}/fullscreen${slugOrBlank(media)}`
 });
 
 const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
@@ -82,7 +65,16 @@ export const detailRedirectRoute: AppRouteDefinition = {
     absolutePath: `${basePath}/detail/:mediaSlug?`,
     component: lazy(() => import("../_media/DetailRedirect"))
 };
-export const fullscreenRoute = buildFullscreenRoute(basePath);
+/*
+   Kept only so old links resolve - see FullscreenRedirect. No `mediaView`, so
+   it never appears among the views a toolbar offers.
+*/
+export const fullscreenRedirectRoute: AppRouteDefinition = {
+    name: "Fullscreen",
+    path: "/fullscreen/:mediaSlug?",
+    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
+    component: lazy(() => import("../_media/FullscreenRedirect"))
+};
 export const mapRoute = buildMapRoute(basePath);
 export const bulkEditRoute = buildBulkEditRoute(basePath);
 
@@ -95,7 +87,7 @@ export const mediaRoutes: AppRouteDefinition = {
         redirectRoute,
         gridRoute,
         detailRedirectRoute,
-        fullscreenRoute,
+        fullscreenRedirectRoute,
         mapRoute,
         bulkEditRoute
     ]

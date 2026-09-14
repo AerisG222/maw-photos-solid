@@ -1,6 +1,7 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
 import { MediaView, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
+import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 
@@ -11,6 +12,7 @@ import AdjustShortcuts from "./toolbar/AdjustShortcuts";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
+import ToolbarButton from "../_components/toolbar/ToolbarButton";
 
 interface Props {
     view: MediaView;
@@ -41,6 +43,7 @@ interface Props {
    reason for it not to be.
 */
 const MediaToolbar: Component<Props> = props => {
+    const [fullscreen, { setFullscreen }] = useFullscreenContext();
     /*
        Resolved once. Reading a JSX prop twice - here and in the Show below -
        builds the component twice, and each copy registers its own keyboard
@@ -84,6 +87,31 @@ const MediaToolbar: Component<Props> = props => {
                 there, but only on the photograph itself - which left no visible
                 way to do it at all, and nothing to say the gesture existed.
             */}
+            {/*
+                Fullscreen, where fullscreen means something: a photograph open
+                on the grid. It was a view of its own until it became clear that
+                what it offered was the absence of this toolbar - which is a
+                state rather than a destination, and one the grid can hold.
+
+                `f` was free. It is the only letter in the map that names what
+                it does, which is an accident of the old keys not having claimed
+                it rather than a scheme.
+            */}
+            <Show when={laysOutTiles() && activeMedia()}>
+                <ToolbarButton
+                    icon={
+                        fullscreen.isFullscreen
+                            ? "icon-[ic--round-fullscreen-exit]"
+                            : "icon-[ic--round-fullscreen]"
+                    }
+                    name="Fullscreen"
+                    tooltip="Fill the screen with this photograph"
+                    shortcutKeys={["f"]}
+                    active={fullscreen.isFullscreen}
+                    clickHandler={() => setFullscreen(!fullscreen.isFullscreen)}
+                />
+            </Show>
+
             <Show when={activeMedia()}>
                 <MovePreviousButton
                     isFirst={props.mediaService.isActiveMediaFirst()}

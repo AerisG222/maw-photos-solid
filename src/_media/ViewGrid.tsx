@@ -1,4 +1,12 @@
-import { Component, createEffect, createSignal, JSXElement, onMount, Show } from "solid-js";
+import {
+    Component,
+    createEffect,
+    createSignal,
+    JSXElement,
+    onCleanup,
+    onMount,
+    Show
+} from "solid-js";
 import { A } from "@solidjs/router";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
@@ -7,6 +15,7 @@ import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
 import { useMediaContext } from "../_contexts/api/MediaContext";
+import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import MediaToolbar from "./MediaToolbar";
@@ -15,6 +24,7 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
+import Icon from "../_components/icon/Icon";
 import MainItem from "./MainItem";
 
 interface Props {
@@ -58,6 +68,44 @@ const ViewGrid: Component<Props> = props => {
         HTMLImageElement | HTMLVideoElement | undefined
     >();
     const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
+    const [fullscreen, { setFullscreen }] = useFullscreenContext();
+
+    const activeMedia = () => props.mediaService.getActiveMedia();
+
+    /*
+       Fullscreen is a state of this view, not a place of its own.
+
+       It was a route per area that rendered the same photograph through the
+       same `MainItem`, with a toolbar and a rail still around it. What it
+       actually offered was the absence of everything else - so it is a toggle
+       here, and `Layout` and `PrimaryNav` stand down while it is on.
+
+       Only ever on with a photograph open: stepping back to the tiles is
+       leaving the thing that was filling the screen, so it turns itself off
+       rather than leaving an empty black page with one button on it.
+    */
+    const isFullscreen = () => fullscreen.isFullscreen && !!activeMedia();
+
+    createEffect(() => {
+        if (fullscreen.isFullscreen && !activeMedia()) {
+            setFullscreen(false);
+        }
+    });
+
+    // the view is being left entirely - a different area, a different feed
+    onCleanup(() => setFullscreen(false));
+
+    onMount(() => {
+        const onKeyDown = (evt: KeyboardEvent) => {
+            if (evt.key === "Escape" && fullscreen.isFullscreen) {
+                evt.preventDefault();
+                setFullscreen(false);
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        onCleanup(() => window.removeEventListener("keydown", onKeyDown));
+    });
     const [sizeTarget, setSizeTarget] = createSignal<HTMLElement | undefined>(undefined);
     const elSize = createElementSize(sizeTarget);
     const windowSize = createWindowSize();
@@ -146,10 +194,15 @@ const ViewGrid: Component<Props> = props => {
                        that much below the bottom of the screen.
                     */}
                     <div
-                        class="absolute z-30 flex flex-col overflow-hidden bg-base-100/92"
-                        style={absoluteDivStyle()}
+                        class="flex flex-col overflow-hidden"
+                        classList={{
+                            "absolute z-30 bg-base-100/92": !isFullscreen(),
+                            // over everything, including the chrome's own stacking
+                            "fixed inset-0 z-50 bg-base-100": isFullscreen()
+                        }}
+                        style={isFullscreen() ? undefined : absoluteDivStyle()}
                     >
-                        <Show when={props.showBreadcrumbsOnMedia}>
+                        <Show when={props.showBreadcrumbsOnMedia && !isFullscreen()}>
                             <CategoryBreadcrumb
                                 showTitleAsLink={true}
                                 category={props.mediaService.getActiveCategory()}
@@ -169,6 +222,26 @@ const ViewGrid: Component<Props> = props => {
                                 setIsFavorite={setIsFavorite}
                             />
                         </A>
+
+                        {/*
+                            The one thing on screen that is not the photograph.
+
+                            Bottom left, small, and away from the swipe that
+                            moves between photographs. Escape does the same, but
+                            a key nobody can see is not a way out on a touch
+                            screen - and the toolbar that would otherwise offer
+                            one is exactly what fullscreen has taken away.
+                        */}
+                        <Show when={isFullscreen()}>
+                            <button
+                                class="fixed bottom-4 left-4 z-50 flex items-center gap-1 rounded-field bg-base-300/70 px-3 py-2 text-base-content opacity-60 transition-opacity duration-150 ease-out hover:opacity-100 focus-visible:opacity-100"
+                                onClick={() => setFullscreen(false)}
+                                aria-label="Leave fullscreen"
+                                title="Leave fullscreen (Esc)"
+                            >
+                                <Icon classes="icon-[ic--round-fullscreen-exit] text-lg" />
+                            </button>
+                        </Show>
                     </div>
                 </Show>
 

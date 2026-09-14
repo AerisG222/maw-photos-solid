@@ -44,6 +44,7 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
         title: "The photograph",
         detail: "Anywhere one is on screen, including the grid.",
         entries: [
+            { keys: ["f"], action: "Fill the screen with it", scope: "A photograph on the grid" },
             { keys: ["i"], action: "Open / close the Inspector", scope: "Any media view" },
             { keys: ["p"], action: "Start / stop the slideshow", scope: "Any media view" },
             { keys: ["a"], action: "Rotate counter-clockwise", scope: "Any media view" },

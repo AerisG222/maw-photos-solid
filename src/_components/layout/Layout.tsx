@@ -1,7 +1,7 @@
 import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
 
 import { getStageClass } from "../../_models/Margin";
-import { createIdleChrome } from "./_idleChrome";
+import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 interface Props {
@@ -30,13 +30,6 @@ interface Props {
     margin?: boolean;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
-    /*
-       Let the chrome step back while nothing is happening. Asked for by the
-       fullscreen view, whose whole point is the photograph, and by nothing
-       else: on a page you are reading rather than looking at, chrome that
-       disappears is chrome you have to go looking for.
-    */
-    autoHideChrome?: boolean;
 }
 
 const Layout: ParentComponent<Props> = props => {
@@ -47,7 +40,16 @@ const Layout: ParentComponent<Props> = props => {
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
     const header = children(() => props.header);
-    const chrome = createIdleChrome(() => !!props.autoHideChrome);
+    /*
+       Fullscreen takes the chrome away entirely rather than fading it.
+
+       This used to hide it on an idle timer, for a fullscreen *view* that still
+       drew a toolbar and a rail around the photograph. There is no such view
+       now - fullscreen is a state the grid enters, and in it the photograph is
+       the whole screen. Nothing to dim, nothing to keep up under a resting
+       pointer, and one button to leave by.
+    */
+    const [fullscreen] = useFullscreenContext();
 
     return (
         <div
@@ -70,20 +72,11 @@ const Layout: ParentComponent<Props> = props => {
             grid-rows-[minmax(0,1fr)_max-content] grid-cols-[minmax(0,1fr)_max-content]
             md:grid-rows-[100%] md:grid-cols-[max-content_minmax(0,1fr)_max-content]"
         >
-            <div
-                class="row-start-2 col-start-1 md:row-start-1 md:col-start-1 flex transition-[opacity,width] duration-300 ease-out"
-                classList={{
-                    // collapsed as well as faded, so the photograph takes the
-                    // room back rather than the strip sitting there empty
-                    "opacity-0 pointer-events-none md:w-0 md:overflow-hidden": chrome.hidden()
-                }}
-                onPointerEnter={chrome.hold}
-                onPointerLeave={chrome.release}
-                onFocusIn={chrome.hold}
-                onFocusOut={chrome.release}
-            >
-                {toolbar()}
-            </div>
+            <Show when={!fullscreen.isFullscreen}>
+                <div class="row-start-2 col-start-1 md:row-start-1 md:col-start-1 flex">
+                    {toolbar()}
+                </div>
+            </Show>
 
             <div
                 class="stage-backdrop row-start-1 col-span-2 md:row-start-1 md:col-start-2 md:col-span-1"
@@ -104,20 +97,11 @@ const Layout: ParentComponent<Props> = props => {
                 </div>
             </div>
 
-            <div
-                class="row-start-2 col-start-2 md:row-start-1 md:col-start-3 flex transition-[opacity,width] duration-300 ease-out"
-                classList={{
-                    // collapsed as well as faded, so the photograph takes the
-                    // room back rather than the strip sitting there empty
-                    "opacity-0 pointer-events-none md:w-0 md:overflow-hidden": chrome.hidden()
-                }}
-                onPointerEnter={chrome.hold}
-                onPointerLeave={chrome.release}
-                onFocusIn={chrome.hold}
-                onFocusOut={chrome.release}
-            >
-                {sidebar()}
-            </div>
+            <Show when={!fullscreen.isFullscreen}>
+                <div class="row-start-2 col-start-2 md:row-start-1 md:col-start-3 flex">
+                    {sidebar()}
+                </div>
+            </Show>
         </div>
     );
 };

@@ -7,12 +7,7 @@ import {
     InspectorCardMinimap,
     InspectorCardPlaceCovers
 } from "../../_models/InspectorCard";
-import {
-    MediaView,
-    MediaViewFullscreen,
-    MediaViewGrid,
-    MediaViewMap
-} from "../../_models/MediaView";
+import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../../_models/MediaView";
 import { InspectorContext, applicableCards, inspectorCards } from "./registry";
 
 const context = (over: Partial<InspectorContext> = {}): InspectorContext => ({
@@ -32,8 +27,12 @@ describe("which cards apply", () => {
        The point of the registry. Comments, EXIF and the effects used to exist on
        the detail view alone, so browsing a grid and wanting to know when
        something was taken meant leaving the grid.
+
+       Fullscreen used to be the second view in this list. It is a state of the
+       grid now rather than a view of its own, so the grid's answer is the one
+       it inherits.
     */
-    test.each<MediaView>([MediaViewGrid, MediaViewFullscreen])(
+    test.each<MediaView>([MediaViewGrid, MediaViewBulkEdit])(
         "the same cards are offered in %s",
         view => {
             expect(ids(context({ view }))).toEqual(ids(context({ view: MediaViewGrid })));

@@ -1570,6 +1570,38 @@ contract that makes the registry worth having. §4's "one place for everything a
 holds - it is just that bulk edit's focused thing is a selection, and that really is a different shape, which
 is what the step 9 note guessed when it deferred this in the first place.
 
+### Fullscreen stops being a place you go (2026-09-14)
+
+The same argument that deleted the detail view in step 9b, applied one view further along, and raised by the
+user rather than found in the code: _"there isn't much value in maintaining a separate route for fullscreen
+mode."_
+
+A fullscreen route per area rendered the same photograph through the same `MainItem` the grid already
+overlays it with, and then drew a toolbar and an inspector rail around it. So what fullscreen actually offered
+was the **absence of everything else** - and that is a state a view can be in, not a destination to navigate
+to. It is a toggle on the grid now, with one small button bottom-left to leave by.
+
+**What went.** `ViewFullscreen`, three per-area `Fullscreen` pages, four route definitions, `MediaViewFullscreen`
+from the model, and the fullscreen branch of three media services. `FullscreenRedirect` keeps the addresses
+alive on the same substitution the detail view got - `/fullscreen/a-photo` to `/grid/a-photo`.
+
+**And `_idleChrome` went with it**, which is the part worth noticing. That primitive existed to fade the
+chrome after 2.5s because the fullscreen _view_ still had chrome to fade. Once fullscreen means "there is no
+chrome", the whole idea - an idle timer, a hold while a pointer rests on it, a hold while focus is inside it -
+has nothing to do. Roughly 120 lines of behaviour deleted because the thing it was compensating for stopped
+existing.
+
+**Three ways out, deliberately.** The button, `Esc`, and stepping back to the tiles - fullscreen turns itself
+off when there is no active photograph, rather than leaving a black page with one control on it. The button is
+bottom-left, away from the swipe that moves between photographs, because the toolbar that would normally offer
+an exit is precisely what has been taken away. `f` toggles it and was the one free letter in the map; it is
+the only key that names what it does, which is an accident rather than a scheme.
+
+**A saved view of `fullscreen` falls back to the grid** with no new code: `sanitiseView` already tests
+membership of `MediaViewAll`, and the migration's `migrateView` does the same. Two migration tests asserted
+the old behaviour and were rewritten - and `ShortcutReference.test.ts` caught `f` being bound before it was
+documented, which is exactly the drift it was written for.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
