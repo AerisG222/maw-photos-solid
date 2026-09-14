@@ -127,4 +127,44 @@ describe("the inspector at each width", () => {
 
         expect(screen.getByText("Nothing selected")).toBeTruthy();
     });
+
+    /*
+       Overlaid, the panel sits on top of the rail that opened it - on a phone
+       that is the whole bottom bar. So the control you would reach for to close
+       it is underneath the thing you want to close. Tapping outside worked and
+       always did, but nothing said so.
+    */
+    test("overlaid, it offers a way out of itself", () => {
+        inspector(390);
+        open();
+
+        fireEvent.click(screen.getByLabelText("Close the Inspector"));
+
+        expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    // docked it covers nothing, so there is nothing to dismiss
+    test("docked, there is nothing to close", () => {
+        inspector(1280);
+        open();
+
+        expect(screen.queryByLabelText("Close the Inspector")).toBeNull();
+    });
+
+    /*
+       The header and the card chooser stay put while the cards scroll under
+       them. They were inside the scrolling area before, so opening a card
+       pushed the only way of closing it off the top.
+    */
+    test("the header is not inside the part that scrolls", () => {
+        inspector(390);
+        open();
+
+        const panel = screen.getByRole("dialog");
+        const header = screen.getByLabelText("Close the Inspector");
+        const scroller = panel.querySelector(".overflow-y-auto");
+
+        expect(scroller, "the panel has a scrolling region").toBeTruthy();
+        expect(scroller!.contains(header)).toBe(false);
+    });
 });

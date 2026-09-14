@@ -1297,6 +1297,32 @@ the breakpoint machinery, `Tile`'s extra DOM nodes) were each disproved by measu
 `motion.test.ts` guards the fill mode. It is a string check over `index.css` and a blunt one, but the cost is
 invisible at review time and severe at runtime, and nothing else in 190 tests could see it.
 
+### The Inspector sheet was a panel with no way out (2026-09-14)
+
+Reported against the phone sheet: no way to see how to toggle cards, and the bottom bar behaving oddly.
+Reproducing the real markup at 390px and reading the geometry back said the positioning was right - the panel
+is `fixed`, `top=253 h=591` for `70dvh`, and the bar stays where it is at `top=804`. It is not lifted. It is
+_covered_, which is what a bottom sheet does, and that was the whole problem:
+
+- **The rail it is opened from is underneath it.** On a phone the sheet spans the full width over the bottom
+  bar; on a tablet the right-hand overlay sits on the rail just the same. So the control you would reach for
+  to close it is beneath the thing you want to close. Tapping outside worked and always did, but nothing said
+  so, and the toolbar's own sheet had had a header and a Close button since the day it was written. The
+  Inspector's never got one. It has one now.
+- **The card chooser scrolled away with the cards.** The panel root was `overflow-y-auto` with the chooser as
+  its first child, so opening a card pushed the only means of closing it off the top. The panel is a flex
+  column now: header and chooser `shrink-0`, and a single `grow overflow-y-auto` region holding the cards.
+- **The chooser only existed on phones.** It was gated on `!gteMd()`, but the tablet overlay covers the rail
+  exactly as the phone sheet does - so between `md` and `lg` there was no way to toggle a card at all. Both
+  the chooser and the header are now gated on `!docked()`, which is the condition that actually describes
+  "this is covering the thing that controls it". The rail keeps its own copy only when docked.
+- **Eight unlabelled icons is not a menu.** `InspectorRailButton` takes `withLabel`, and the chooser row uses
+  it. The rail is a narrow strip and stays icon-only; there is width for the word inside the panel.
+
+Two of the three new tests fail against the previous component. The third - that the header is outside the
+scrolling region - is markup, which is the only part of this jsdom can honestly speak to; the geometry was
+checked in a real browser instead.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

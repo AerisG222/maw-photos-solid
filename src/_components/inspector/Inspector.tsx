@@ -11,6 +11,7 @@ import { MediaView } from "../../_models/MediaView";
 import { applicableCards } from "./registry";
 
 import EmptyState from "../state/EmptyState";
+import Icon from "../icon/Icon";
 import InspectorCard from "./InspectorCard";
 import InspectorRail from "./InspectorRail";
 import InspectorRailButton from "./InspectorRailButton";
@@ -92,10 +93,11 @@ const Inspector: Component<Props> = props => {
        panel and the chooser is focusable, so a card is two keystrokes rather
        than one and no letter has to mean two things.
     */
-    const cardButtons = () => (
+    const cardButtons = (withLabel = false) => (
         <For each={cards()}>
             {card => (
                 <InspectorRailButton
+                    withLabel={withLabel}
                     disabled={!settings.inspectorOpen}
                     name={card.title}
                     tooltip={card.title}
@@ -129,7 +131,7 @@ const Inspector: Component<Props> = props => {
                     role={docked() ? "complementary" : "dialog"}
                     aria-label="Inspector"
                     aria-modal={docked() ? undefined : "false"}
-                    class="bg-base-200 border-base-content/30 overflow-y-auto overflow-x-hidden"
+                    class="bg-base-200 border-base-content/30 flex flex-col min-h-0"
                     classList={{
                         "w-[500px] border-l-1": docked(),
                         // over the right-hand side on a tablet, up from the
@@ -141,52 +143,81 @@ const Inspector: Component<Props> = props => {
                     }}
                 >
                     {/*
-                        On a phone the chooser sits at the top of the sheet
-                        rather than in the strip behind it: eight buttons plus
-                        the toggle is more than a 390px edge holds, and the
-                        sheet is where you are already looking.
+                        A way out, wherever it is covering something.
+
+                        Overlaid, it sits on top of the rail that opened it - on
+                        a phone that is the whole bottom bar, on a tablet the
+                        right-hand strip - so the control you would reach for to
+                        close it is underneath the thing you want to close.
+                        Tapping outside works and always did, but nothing said
+                        so. Docked there is nothing covered and nothing to say.
                     */}
-                    <Show when={!gteMd()}>
-                        <div class="flex overflow-x-auto border-b-1 border-b-base-content/20">
-                            {cardButtons()}
+                    <Show when={!docked()}>
+                        <div class="flex shrink-0 items-center justify-between border-b-1 border-b-base-content/20 px-4 py-2">
+                            <span class="text-label">Inspector</span>
+
+                            <button
+                                class="cursor-pointer p-1 hover:text-primary"
+                                onClick={() => setInspectorOpen(false)}
+                                aria-label="Close the Inspector"
+                                title="Close the Inspector"
+                            >
+                                <Icon classes="icon-[ic--round-close] text-lg" />
+                            </button>
                         </div>
                     </Show>
 
                     {/*
+                        The card chooser, for every shape that covers the rail
+                        holding it - which is both of the overlaid ones, not
+                        just the phone. `shrink-0`, so it stays put while the
+                        cards scroll under it: it was inside the scrolling area
+                        before, which meant opening a card pushed the only way
+                        of closing it off the top.
+                    */}
+                    <Show when={!docked()}>
+                        <div class="flex shrink-0 overflow-x-auto border-b-1 border-b-base-content/20">
+                            {cardButtons(true)}
+                        </div>
+                    </Show>
+
+                    <div class="min-h-0 grow overflow-x-hidden overflow-y-auto">
+                        {/*
                         Every card is about one photograph, and reaches into it
                         without checking - the detail view could only ever render
                         them with one open, so none of them had to. A grid or a
                         map can be looked at with nothing selected at all, which
                         is a state the panel has to answer rather than crash on.
                     */}
-                    <Show
-                        when={props.activeMedia}
-                        fallback={
-                            <EmptyState
-                                icon="icon-[ic--round-photo-library]"
-                                title="Nothing selected"
-                                detail="Choose a photograph to see its details here."
-                            />
-                        }
-                    >
-                        <For each={cards()}>
-                            {card => (
-                                <Show when={isOpen(card.id)}>
-                                    <InspectorCard title={card.title} icon={card.icon}>
-                                        <Dynamic
-                                            component={card.component}
-                                            activeCategory={props.activeCategory}
-                                            activeMedia={props.activeMedia}
-                                            mediaElement={props.mediaElement}
-                                            requestMoveNext={
-                                                props.requestMoveNext ?? (() => undefined)
-                                            }
-                                        />
-                                    </InspectorCard>
-                                </Show>
-                            )}
-                        </For>
-                    </Show>
+                        <Show
+                            when={props.activeMedia}
+                            fallback={
+                                <EmptyState
+                                    icon="icon-[ic--round-photo-library]"
+                                    title="Nothing selected"
+                                    detail="Choose a photograph to see its details here."
+                                />
+                            }
+                        >
+                            <For each={cards()}>
+                                {card => (
+                                    <Show when={isOpen(card.id)}>
+                                        <InspectorCard title={card.title} icon={card.icon}>
+                                            <Dynamic
+                                                component={card.component}
+                                                activeCategory={props.activeCategory}
+                                                activeMedia={props.activeMedia}
+                                                mediaElement={props.mediaElement}
+                                                requestMoveNext={
+                                                    props.requestMoveNext ?? (() => undefined)
+                                                }
+                                            />
+                                        </InspectorCard>
+                                    </Show>
+                                )}
+                            </For>
+                        </Show>
+                    </div>
                 </div>
             </Show>
 
@@ -203,7 +234,12 @@ const Inspector: Component<Props> = props => {
                     clickHandler={() => setInspectorOpen(!settings.inspectorOpen)}
                 />
 
-                <Show when={gteMd()}>
+                {/*
+                    Only where the panel sits beside the rail rather than over
+                    it. Overlaid, these are behind the thing they control, so
+                    they live in the panel's own header instead.
+                */}
+                <Show when={docked()}>
                     <ToolbarDivider />
 
                     {cardButtons()}
