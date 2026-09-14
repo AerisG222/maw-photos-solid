@@ -27,13 +27,26 @@ const ToolbarCategories: Component<Props> = props => {
     // either back on restores it - the same rule the search results follow
 
     return (
-        <ToolbarLayout>
-            <ToolbarListing
-                basePath={props.basePath}
-                showingCategories={true}
-                favoritesOnly={props.favoritesOnly}
-            />
-
+        <ToolbarLayout
+            /*
+               In the slot, not the children - which is how the media views
+               already pass it, through the media toolbar's `leading`. As a
+               child it folded into the overflow sheet below `md`, so the same
+               switch sat in the bar while you were looking at media and behind
+               the ellipsis while you were looking at categories. It is how you
+               get between the two; it does not belong behind a tap.
+            */
+            nav={
+                <ToolbarListing
+                    basePath={props.basePath}
+                    showingCategories={true}
+                    favoritesOnly={props.favoritesOnly}
+                />
+            }
+        >
+            {/* separating the children from the nav slot, as every other
+                toolbar does - the divider that used to follow the listing
+                switch went into the slot with it */}
             <ToolbarDivider />
 
             <ToolbarButton

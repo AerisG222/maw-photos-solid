@@ -1382,6 +1382,28 @@ a CSS class, and a bounce to the grid the moment something _navigated_ on the an
 the queries now. Worth recording as the general shape: a default that is merely wrong-for-one-tick is free
 until someone acts on it.
 
+### One switch, two places, depending where you stood (2026-09-14)
+
+Reported on the places screen: the media/categories switch sits in the bottom bar while you are looking at
+media, and behind the overflow ellipsis while you are looking at categories.
+
+Both screens draw the same `ToolbarListing`, but reach `ToolbarLayout` by different routes. The media views
+hand it to the media toolbar's `leading` slot, which forwards it into `nav`. The categories view renders it as
+the first _child_ of `ToolbarLayout` - and children are exactly what folds into the overflow sheet below `md`.
+Step 12 converted five toolbars to the `nav` slot and missed this one, because it was the only one whose
+navigation arrives as a component rather than as a literal `<NavGroup>`.
+
+It is the same fault as the bulk edit sidebar two commits earlier: a pattern applied to the obvious cases and
+not to the one that looked slightly different. So the guard is on the _class_ rather than the case.
+`navigation.test.ts` reads every file that renders a `ToolbarLayout`, finds where the opening tag ends - by
+counting brace depth, since the slots hold JSX and the first `>` is nowhere near the end of it - and fails if
+any navigation component appears after that point. Reverting the fix fails it by name:
+`_media/feed/ToolbarCategories.tsx passes ToolbarListing as a child`.
+
+Worth stating the rule the test encodes, because it is the one the bar is built on: **the `nav` and `actions`
+slots stay on screen at every width; everything else may fold away.** That is the right trade for a density
+toggle and the wrong one for the links you move around with.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
