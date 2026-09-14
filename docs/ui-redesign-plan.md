@@ -1258,6 +1258,45 @@ which four toolbar buttons had never shown.
 and `orphans.test.ts` failed the suite before the commit rather than after it - the same fault that shipped
 undetected in step 9b and prompted the check.
 
+### The browser going slow in mobile view was one word of CSS (2026-09-14)
+
+Reported as: switch Chrome to device mode and _moving the mouse_ is slow, before touching anything. That
+"before touching anything" is what made it findable - it ruled out every piece of application logic and left
+hover.
+
+Driving real cursor movement over the built CSS through the DevTools protocol (synthetic `mousemove` will not
+do, it does not trigger `:hover`) put a number on it: **~87ms of main-thread work per mouse move** over a
+listing of 1500 tiles at 390px, with style and layout recalculation near zero. So: paint. And it scaled with
+the _total_ number of tiles rather than the visible ones, which meant hover was invalidating far more than the
+tile under the cursor.
+
+Bisecting the utilities found two that each independently removed the cost - `elev-hover` and `rise-in` -
+which is the shape of an interaction rather than a culprit:
+
+| variant                | per mouse move |
+| ---------------------- | -------------- |
+| everything on          | 87.3ms         |
+| without `elev-hover`   | 2.9ms          |
+| without `rise-in`      | 5.3ms          |
+| without `chrome-glass` | 89.3ms         |
+
+`.rise-in` was `animation: maw-rise-in ... both`. The `forwards` half of `both` keeps the animation filling
+after it ends, which pins `opacity` and `transform` as animated properties, which keeps the element on its own
+composited layer for the life of the page. That element is the _listing_ - at phone width, tens of thousands
+of pixels tall. Every hover shadow inside it re-rastered a slice of that layer, and the taller the page the
+worse it got, which is why a phone viewport was where it showed.
+
+`both` → `backwards`. **87.3ms → 5.6ms**, and the per-move cost is now flat across phone, tablet and desktop
+where it used to double at phone width. Nothing is lost visually: the `to` state is `opacity: 1; transform:
+none`, which is what the element computes to anyway, so only `backwards` was ever doing work.
+
+**`chrome-glass` was the obvious suspect and was entirely innocent** - 89.3ms without it. Worth recording,
+because backdrop-filter is where I would have put money, and three cheaper hypotheses (the grid restructure,
+the breakpoint machinery, `Tile`'s extra DOM nodes) were each disproved by measurement before this one.
+
+`motion.test.ts` guards the fill mode. It is a string check over `index.css` and a blunt one, but the cost is
+invisible at review time and severe at runtime, and nothing else in 190 tests could see it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

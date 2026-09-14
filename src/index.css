@@ -201,9 +201,23 @@ html {
        this file is the single place that can switch all of it off.
     */
 
-    /* thumbnails / cards easing into place as their group renders */
+    /*
+       Thumbnails / cards easing into place as their group renders.
+
+       `backwards`, not `both`. The `forwards` half of `both` keeps the
+       animation filling after it ends, which pins `opacity` and `transform` as
+       animated properties - so Chrome holds the element on its own composited
+       layer indefinitely. That element is the whole listing, which at phone
+       width is tens of thousands of pixels tall, and every hover shadow inside
+       it then re-rasters a slice of that layer. Measured at ~87ms of main
+       thread per mouse move over 1500 tiles; ~3ms without.
+
+       Nothing is lost: the `to` state is `opacity: 1; transform: none`, which
+       is exactly what the element computes to anyway. Only `backwards` was ever
+       doing any work here, holding the `from` state ahead of the start.
+    */
     .rise-in {
-        animation: maw-rise-in var(--motion-slow) var(--motion-ease) both;
+        animation: maw-rise-in var(--motion-slow) var(--motion-ease) backwards;
     }
 
     /* login brand mark: logo settles, wordmarks follow */
