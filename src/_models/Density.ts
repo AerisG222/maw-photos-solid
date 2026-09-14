@@ -1,5 +1,4 @@
 import { KeyValuePair } from "./KeyValuePair";
-import { MarginIdType } from "./Margin";
 import {
     ThumbnailSizeDefault,
     ThumbnailSizeIdType,
@@ -40,24 +39,25 @@ export const defaultDensity: DensityIdType = DensityComfortable;
 interface DensityGeometry {
     readonly grid: ThumbnailSizeIdType;
     readonly list: ThumbnailSizeIdType;
-    readonly margin: MarginIdType;
+    // the `.stage-*` class that caps how wide the content runs
+    readonly stage: string;
 }
 
 const geometry: Record<DensityIdType, DensityGeometry> = {
     [DensityComfortable]: {
         grid: ThumbnailSizeDefault,
         list: ThumbnailSizeVerySmall,
-        margin: "compact"
+        stage: "stage-compact"
     },
     [DensityCompact]: {
         grid: ThumbnailSizeSmall,
         list: ThumbnailSizeVerySmall,
-        margin: "dense"
+        stage: "stage-dense"
     },
     [DensityDense]: {
         grid: ThumbnailSizeVerySmall,
         list: ThumbnailSizeTiny,
-        margin: "dense"
+        stage: "stage-dense"
     }
 };
 
@@ -69,7 +69,7 @@ export const getGridThumbnailSize = (density: DensityIdType) => getDensity(densi
 
 export const getListThumbnailSize = (density: DensityIdType) => getDensity(density).list;
 
-export const getDensityMargin = (density: DensityIdType) => getDensity(density).margin;
+export const getDensityStage = (density: DensityIdType) => getDensity(density).stage;
 
 export const getNextDensity = (density: DensityIdType): DensityIdType => {
     const idx = densityOrder.indexOf(density);

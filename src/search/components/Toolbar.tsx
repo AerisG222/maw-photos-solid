@@ -16,14 +16,16 @@ const Toolbar: ParentComponent<Props> = props => {
     const c = children(() => props.children);
 
     return (
-        <ToolbarLayout>
-            <NavGroup
-                entries={[
-                    { route: searchGrid, href: searchGrid.absolutePath },
-                    { route: searchList, href: searchList.absolutePath }
-                ]}
-            />
-
+        <ToolbarLayout
+            nav={
+                <NavGroup
+                    entries={[
+                        { route: searchGrid, href: searchGrid.absolutePath },
+                        { route: searchList, href: searchList.absolutePath }
+                    ]}
+                />
+            }
+        >
             <ToolbarDivider />
 
             {/* the same control the media screens page with, rather than a

@@ -52,6 +52,7 @@ const ViewFullscreen: Component<Props> = props => {
         <Show when={props.mediaService.getActiveMedia()}>
             <Layout
                 xPad={false}
+                autoHideChrome
                 toolbar={
                     <Toolbar
                         mediaService={props.mediaService}

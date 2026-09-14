@@ -1,7 +1,7 @@
 import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
 
-import { getMarginClass } from "../../_models/Margin";
-import { getDensityMargin } from "../../_models/Density";
+import { getStageClass } from "../../_models/Margin";
+import { createIdleChrome } from "./_idleChrome";
 import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 interface Props {
@@ -30,36 +30,70 @@ interface Props {
     margin?: boolean;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
+    /*
+       Let the chrome step back while nothing is happening. Asked for by the
+       fullscreen view, whose whole point is the photograph, and by nothing
+       else: on a page you are reading rather than looking at, chrome that
+       disappears is chrome you have to go looking for.
+    */
+    autoHideChrome?: boolean;
 }
 
 const Layout: ParentComponent<Props> = props => {
     const merged = mergeProps({ xPad: true }, props);
     const [listing] = useListingSettingsContext();
-    const margin = () => (props.margin ? getDensityMargin(listing.density) : undefined);
+    const stage = () => (props.margin ? getStageClass(listing.density) : "");
     const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
     const header = children(() => props.header);
+    const chrome = createIdleChrome(() => !!props.autoHideChrome);
 
     return (
         <div
+            /*
+               Three slots: chrome, content, inspector rail.
+
+               From `md` up they are three columns - rail, page, rail. Below it
+               the content takes the whole upper area and the two strips share
+               one row along the bottom, which is where a thumb is. The chrome
+               used to sit along the top on a phone, and the Inspector's row was
+               a literal `0`: a blunt way of saying it does not exist there,
+               which it did not, because it was a fixed 500px column.
+
+               Each slot is placed explicitly rather than by source order,
+               because the two orders differ. The chrome comes first in the DOM
+               so the tab order and a screen reader reach the navigation before
+               the page, and last on screen on a phone.
+            */
             class="grid w-full h-full min-h-0
-            grid-rows-[max-content_minmax(0,1fr)_0] grid-cols-[100%]
+            grid-rows-[minmax(0,1fr)_max-content] grid-cols-[minmax(0,1fr)_max-content]
             md:grid-rows-[100%] md:grid-cols-[max-content_minmax(0,1fr)_max-content]"
         >
-            <Show when={toolbar()} fallback={<div />}>
+            <div
+                class="row-start-2 col-start-1 md:row-start-1 md:col-start-1 flex transition-[opacity,width] duration-300 ease-out"
+                classList={{
+                    // collapsed as well as faded, so the photograph takes the
+                    // room back rather than the strip sitting there empty
+                    "opacity-0 pointer-events-none md:w-0 md:overflow-hidden": chrome.hidden()
+                }}
+                onPointerEnter={chrome.hold}
+                onPointerLeave={chrome.release}
+                onFocusIn={chrome.hold}
+                onFocusOut={chrome.release}
+            >
                 {toolbar()}
-            </Show>
+            </div>
 
             <div
-                class="stage-backdrop"
+                class="stage-backdrop row-start-1 col-span-2 md:row-start-1 md:col-start-2 md:col-span-1"
                 classList={{
                     "px-2": merged.xPad,
                     "overflow-y-auto": !merged.fill,
                     "h-full min-h-0 overflow-hidden": !!merged.fill
                 }}
             >
-                <div classList={{ ...(getMarginClass(margin()) ?? {}), "h-full": !!merged.fill }}>
+                <div class={stage()} classList={{ "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
                         <h1 class="head1">{props.title}</h1>
                     </Show>
@@ -70,9 +104,20 @@ const Layout: ParentComponent<Props> = props => {
                 </div>
             </div>
 
-            <Show when={sidebar()} fallback={<div />}>
+            <div
+                class="row-start-2 col-start-2 md:row-start-1 md:col-start-3 flex transition-[opacity,width] duration-300 ease-out"
+                classList={{
+                    // collapsed as well as faded, so the photograph takes the
+                    // room back rather than the strip sitting there empty
+                    "opacity-0 pointer-events-none md:w-0 md:overflow-hidden": chrome.hidden()
+                }}
+                onPointerEnter={chrome.hold}
+                onPointerLeave={chrome.release}
+                onFocusIn={chrome.hold}
+                onFocusOut={chrome.release}
+            >
                 {sidebar()}
-            </Show>
+            </div>
         </div>
     );
 };

@@ -2,21 +2,27 @@ import { createContext, createEffect, ParentComponent, useContext } from "solid-
 import { createStore } from "solid-js/store";
 import { createBreakpoints } from "@solid-primitives/media";
 
-// we currently only alter display based on >= md, so only track that one for now
+/*
+   Two widths, because the layout makes two decisions.
+
+   `md` is where the chrome turns: a strip along the bottom of a phone becomes a
+   rail down the side. `lg` is where there is room to keep the Inspector open
+   *beside* the photograph rather than over it - between the two it overlays,
+   and below `md` it is a sheet.
+
+   The other Tailwind breakpoints are deliberately not tracked. Everything else
+   responsive in the application is a CSS media query, which needs no JavaScript
+   to know about it; these two are here because a component has to answer them
+   in markup rather than in classes.
+*/
 export interface MediaBreakpointState {
-    // readonly sm: boolean;
     readonly md: boolean;
-    // readonly lg: boolean;
-    // readonly xl: boolean;
-    // readonly xxl: boolean;
+    readonly lg: boolean;
 }
 
 export const defaultMediaBreakpointState: MediaBreakpointState = {
-    // sm: true,
-    md: false
-    // lg: false,
-    // xl: false,
-    // xxl: false
+    md: false,
+    lg: false
 };
 
 export type MediaBreakpointContextValue = [
@@ -24,6 +30,7 @@ export type MediaBreakpointContextValue = [
     actions: {
         gteMd: () => boolean;
         ltMd: () => boolean;
+        gteLg: () => boolean;
     }
 ];
 
@@ -34,30 +41,25 @@ export const MediaBreakpointProvider: ParentComponent = props => {
 
     // https://tailwindcss.com/docs/screens
     const breakpoints = {
-        // sm: "640px",
-        md: "768px"
-        // lg: "1024px",
-        // xl: "1280px",
-        // xxl: "1536px"
+        md: "768px",
+        lg: "1024px"
     };
 
     const matches = createBreakpoints(breakpoints);
 
     createEffect(() => {
         setState({
-            // sm: matches.sm,
-            md: matches.md
-            // lg: matches.lg,
-            // xl: matches.xl,
-            // xxl: matches.xxl
+            md: matches.md,
+            lg: matches.lg
         });
     });
 
     const gteMd = () => state.md;
     const ltMd = () => !state.md;
+    const gteLg = () => state.lg;
 
     return (
-        <MediaBreakpointContext.Provider value={[state, { gteMd, ltMd }]}>
+        <MediaBreakpointContext.Provider value={[state, { gteMd, ltMd, gteLg }]}>
             {props.children}
         </MediaBreakpointContext.Provider>
     );

@@ -1,6 +1,5 @@
 import { Component, JSXElement, Show, children } from "solid-js";
 
-import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { MediaView, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
 import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
@@ -45,8 +44,6 @@ interface Props {
    reason for it not to be.
 */
 const MediaToolbar: Component<Props> = props => {
-    const [, { ltMd }] = useMediaBreakpointContext();
-
     /*
        Resolved once. Reading a JSX prop twice - here and in the Show below -
        builds the component twice, and each copy registers its own keyboard
@@ -85,7 +82,12 @@ const MediaToolbar: Component<Props> = props => {
                 toggleSlideshow={() => props.slideshowService.toggle()}
             />
 
-            <Show when={activeMedia() && !ltMd()}>
+            {/*
+                On a phone as well. Swiping already moved between photographs
+                there, but only on the photograph itself - which left no visible
+                way to do it at all, and nothing to say the gesture existed.
+            */}
+            <Show when={activeMedia()}>
                 <MovePreviousButton
                     isFirst={props.mediaService.isActiveMediaFirst()}
                     movePrevious={() => props.mediaService.movePrevious()}

@@ -1176,6 +1176,40 @@ one implementation is worse than the implementation.
 - in the same way it broke the `switch` statements in step 9b. It is fine for removing a whole `prop={...}`
   line and wrong for anything inline, and I reached for it inline anyway.
 
+### Step 12, and what a phone was actually being offered (2026-09-13)
+
+The gate was one line - `view === MediaViewGrid || gteMd()` - and it meant a phone was offered the grid and
+nothing else. No fullscreen, no map, no bulk edit, on the device most likely to be holding the photographs.
+The views themselves were never the problem; there was nowhere to put the chrome, so the feature was removed
+instead of the layout being solved.
+
+**The chrome now has two shapes.** A rail down the side from `md` up, a bar along the bottom below it - which
+is where a thumb is, and the toolbar had been sitting along the top. `ToolbarLayout` gained a `nav` slot and
+an `actions` slot for the things that never fold (the view switcher, and the `⋮` menu - already one button
+hiding a menu, so putting it behind a second would be two taps to reach a download). Everything else goes
+into a sheet behind one button. The children are rendered _once_ either way and moved between the bar and the
+sheet, rather than being declared twice.
+
+**The Inspector has three.** It was `w-[500px]`, on a viewport that can be 390px wide - which is to say it
+was unusable on a phone, so it was simply never mounted there and its grid row was hard-coded to `0`. It
+docks at `lg`, overlays the right-hand side between `md` and `lg`, and rises from the bottom below that. The
+card chooser moves into the sheet on a phone: eight buttons plus the toggle is more than a 390px edge holds.
+
+**`.stage` is a width, not a margin.** The four `mx-[N%]` classes took symmetric padding off both edges,
+which reads fine on a monitor and is indefensible on a phone - the comfortable step gave away 16% of a 390px
+screen to whitespace. As `width: min(100%, var(--stage-width))` the same number caps the content instead, and
+below `md` it is ignored entirely. Only two of the four steps were reachable, so only two were kept.
+
+**Fullscreen's chrome steps back after 2.5s.** Held up by a pointer resting on it or by focus inside it -
+fading either out from under its reader would be worse than never hiding it. It collapses as well as fades,
+so the photograph takes the room back rather than the strip sitting there empty.
+
+**What jsdom can and cannot say.** The two new component suites check _markup_ - whether a control is in the
+document, what `role` the panel carries - and deliberately not appearance, because jsdom lays nothing out and
+parses almost none of the stylesheet. That distinction is the lesson from the invisible dialogs in step 5,
+and both suites were run against the pre-change code first: three of six toolbar tests and three of seven
+inspector tests fail there, which is what makes them worth keeping.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1289,7 +1323,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
 | **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files          | medium |
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
-| **12**  | **Responsive.** Bottom bar + overflow sheet; Inspector sheet/overlay/docked; remove the `gteMd` view gate; `.stage` replaces margins; add `lg` to `MediaBreakpointContext`.                                                                                                                                                                                                                                                                                                                                                                 | ~10 files         | medium |
+| **12**  | **DONE 2026-09-13 — responsive.** The `gteMd` view gate is gone, so a phone is offered every view rather than the grid alone. The chrome moves to the bottom and folds everything past navigation into a sheet; the Inspector gains three shapes (docked / overlay / sheet) on a new `lg` breakpoint; `.stage` replaces the four `mx-[N%]` margins and is ignored below `md`; prev/next show at every width; fullscreen's chrome steps back when the reader goes still. 17 new tests.                                                       | 19 files          | medium |
 | **12b** | **DONE 2026-09-13 — view transitions.** One `useBeforeLeave` hook wraps navigation in `startViewTransition`; the main photograph carries a `view-transition-name`, so it tweens between grid and fullscreen instead of being torn down and rebuilt. Guarded on support, on `prefers-reduced-motion`, and on a navigation somebody else has claimed. 4 tests.                                                                                                                                                                                | 5 files           | low    |
 | **13**  | **PARTIAL 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. Appearance and Browsing already exist (steps 3 and the theme fix). A Shortcuts page is still to come.                                                                                                                                                                                                                                          | 4 files           | low    |
 | **14**  | **DONE 2026-09-13 — every adapter gone.** All fifteen are removed and their consumers read the four stores directly. `Layout`, `SkeletonGrid`, `CategoryListItem` and `Tile` now take the density and work out their own margin and pixels, which is what the last eight adapters existed to do for them. Nine dead model exports pruned with them.                                                                                                                                                                                         | 45 files          | medium |

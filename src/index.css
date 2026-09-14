@@ -270,6 +270,37 @@ html {
     }
 
     /*
+       How wide the content runs, which is what the density's "margin" step
+       actually meant.
+
+       It was four `mx-[N%]` classes, symmetric padding taken off both edges.
+       That reads fine on a monitor and is indefensible on a phone: the
+       comfortable step gave away 16% of a 390px screen to whitespace, on the
+       device least able to spare it. Expressed as a width rather than a margin,
+       the same number can be capped - and below `md` it is simply ignored.
+    */
+    .stage {
+        width: min(100%, var(--stage-width, 100%));
+        margin-inline: auto;
+    }
+
+    /* the two the density actually produces, as the width the old mx-[N%] left */
+    .stage-dense {
+        --stage-width: 100%;
+    }
+
+    .stage-compact {
+        --stage-width: 84%;
+    }
+
+    /* a phone has no width to give away */
+    @media (width < 48rem) {
+        .stage {
+            --stage-width: 100%;
+        }
+    }
+
+    /*
        Translucent chrome for toolbars/sidebars that sit alongside photos.
        Falls back to the solid surface where backdrop-filter is unsupported.
     */

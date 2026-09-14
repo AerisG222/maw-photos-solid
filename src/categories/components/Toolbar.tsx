@@ -14,30 +14,32 @@ const Toolbar: ParentComponent = props => {
     const c = children(() => props.children);
 
     return (
-        <ToolbarLayout>
-            <NavGroup
-                entries={[
-                    {
-                        route: categoriesGrid,
-                        href: buildPath(
-                            categoriesGrid,
-                            undefined,
-                            buildSearch(area.categoryYearFilter)
-                        ),
-                        clickHandler: () => setCategoriesView("grid")
-                    },
-                    {
-                        route: categoriesList,
-                        href: buildPath(
-                            categoriesList,
-                            undefined,
-                            buildSearch(area.categoryYearFilter)
-                        ),
-                        clickHandler: () => setCategoriesView("list")
-                    }
-                ]}
-            />
-
+        <ToolbarLayout
+            nav={
+                <NavGroup
+                    entries={[
+                        {
+                            route: categoriesGrid,
+                            href: buildPath(
+                                categoriesGrid,
+                                undefined,
+                                buildSearch(area.categoryYearFilter)
+                            ),
+                            clickHandler: () => setCategoriesView("grid")
+                        },
+                        {
+                            route: categoriesList,
+                            href: buildPath(
+                                categoriesList,
+                                undefined,
+                                buildSearch(area.categoryYearFilter)
+                            ),
+                            clickHandler: () => setCategoriesView("list")
+                        }
+                    ]}
+                />
+            }
+        >
             <Show when={!!c()}>
                 <ToolbarDivider />
                 {c()}

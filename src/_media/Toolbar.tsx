@@ -1,7 +1,6 @@
 import { JSXElement, ParentComponent, Show, children, createMemo } from "solid-js";
 
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
-import { useMediaBreakpointContext } from "../_contexts/MediaBreakpointContext";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
@@ -47,7 +46,6 @@ const viewOrder: MediaView[] = [
 
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaSettingsContext();
-    const [, { gteMd }] = useMediaBreakpointContext();
 
     const c = children(() => props.children);
     // resolved once - see the note in ToolbarGrid on reading a slot twice
@@ -55,15 +53,17 @@ const Toolbar: ParentComponent<Props> = props => {
 
     /*
        Only the views this feed actually offers, in one list, so the digits are
-       positional over what is on screen. Below `md` that is the grid alone -
-       which keeps the grid on 1 either way, since everything hidden comes after
-       it.
+       positional over what is on screen.
+
+       Every view, at every width. A phone used to be offered the grid and
+       nothing else - no fullscreen, no map, no bulk edit - which is a strange
+       thing to do to the device most likely to be holding the photographs. The
+       views themselves were never the problem; the chrome around them was.
     */
     const entries = createMemo<NavEntry[]>(() => {
         const available = props.mediaService.getAvailableRoutes();
 
         return viewOrder
-            .filter(view => view === MediaViewGrid || gteMd())
             .map(view => ({ view, route: available.find(r => r.mediaView === view) }))
             .filter(
                 (candidate): candidate is { view: MediaView; route: MediaAppRouteDefinition } =>
@@ -77,35 +77,42 @@ const Toolbar: ParentComponent<Props> = props => {
     });
 
     return (
-        <ToolbarLayout>
-            <Show when={leading()}>
-                {leading()}
-                <ToolbarDivider />
-            </Show>
+        <ToolbarLayout
+            nav={
+                <>
+                    <Show when={leading()}>
+                        {leading()}
+                        <ToolbarDivider />
+                    </Show>
 
-            <NavGroup entries={entries()} digitOffset={props.leadingNavCount ?? 0} />
+                    <NavGroup entries={entries()} digitOffset={props.leadingNavCount ?? 0} />
+                </>
+            }
+            /*
+               In the bar at every width rather than folded into the sheet: it
+               is already one button hiding a menu, so putting it behind a
+               second one would be two taps to reach a download.
 
-            {/*
-                Here rather than in each view's own toolbar: this is the one
-                place that already knows both the photograph and the category it
-                belongs to, so every view gets these without threading a prop
-                through three toolbars to reach them.
-            */}
-            {/*
-                Shown when either scope has something to offer: a photograph is
-                selected, or a whole category is what is being browsed. A
-                category grid with nothing picked can still be downloaded.
-            */}
-            <Show when={!!props.activeMedia || props.mediaService.canDownloadCategory()}>
-                <ToolbarDivider />
+               Here rather than in each view's own toolbar: this is the one
+               place that knows both the photograph and the category it belongs
+               to, so every view gets these without threading a prop through
+               three toolbars to reach them. Shown when either scope has
+               something to offer - a photograph is selected, or a whole
+               category is what is being browsed, since a category grid with
+               nothing picked can still be downloaded.
+            */
+            actions={
+                <Show when={!!props.activeMedia || props.mediaService.canDownloadCategory()}>
+                    <ToolbarDivider />
 
-                <ItemActions
-                    activeMedia={props.activeMedia}
-                    activeCategory={props.activeCategory}
-                    canDownloadCategory={props.mediaService.canDownloadCategory()}
-                />
-            </Show>
-
+                    <ItemActions
+                        activeMedia={props.activeMedia}
+                        activeCategory={props.activeCategory}
+                        canDownloadCategory={props.mediaService.canDownloadCategory()}
+                    />
+                </Show>
+            }
+        >
             <Show when={!!c()}>
                 <ToolbarDivider />
                 {c()}

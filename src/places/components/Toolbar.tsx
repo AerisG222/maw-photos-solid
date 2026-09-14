@@ -75,24 +75,26 @@ const Toolbar: Component<Props> = props => {
     });
 
     return (
-        <ToolbarLayout>
-            <NavGroup
-                entries={[
-                    {
-                        route: mediaRoute(),
-                        href: mediaHref(),
-                        active: false,
-                        disabled: !props.placeId
-                    },
-                    {
-                        route: categoriesRoute(),
-                        href: categoriesHref(),
-                        active: false,
-                        disabled: !props.placeId
-                    }
-                ]}
-            />
-
+        <ToolbarLayout
+            nav={
+                <NavGroup
+                    entries={[
+                        {
+                            route: mediaRoute(),
+                            href: mediaHref(),
+                            active: false,
+                            disabled: !props.placeId
+                        },
+                        {
+                            route: categoriesRoute(),
+                            href: categoriesHref(),
+                            active: false,
+                            disabled: !props.placeId
+                        }
+                    ]}
+                />
+            }
+        >
             <Show when={props.canEdit}>
                 <ToolbarDivider />
 

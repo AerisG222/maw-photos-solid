@@ -14,18 +14,20 @@ import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 
 const Toolbar: ParentComponent = () => {
     return (
-        <ToolbarLayout>
-            <NavGroup
-                entries={[
-                    { route: settingsAppearance, href: settingsAppearance.absolutePath },
-                    { route: settingsBrowsing, href: settingsBrowsing.absolutePath },
-                    { route: settingsCategories, href: settingsCategories.absolutePath },
-                    { route: settingsMedia, href: settingsMedia.absolutePath },
-                    { route: settingsPeople, href: settingsPeople.absolutePath },
-                    { route: settingsSearch, href: settingsSearch.absolutePath }
-                ]}
-            />
-        </ToolbarLayout>
+        <ToolbarLayout
+            nav={
+                <NavGroup
+                    entries={[
+                        { route: settingsAppearance, href: settingsAppearance.absolutePath },
+                        { route: settingsBrowsing, href: settingsBrowsing.absolutePath },
+                        { route: settingsCategories, href: settingsCategories.absolutePath },
+                        { route: settingsMedia, href: settingsMedia.absolutePath },
+                        { route: settingsPeople, href: settingsPeople.absolutePath },
+                        { route: settingsSearch, href: settingsSearch.absolutePath }
+                    ]}
+                />
+            }
+        />
     );
 };
 
