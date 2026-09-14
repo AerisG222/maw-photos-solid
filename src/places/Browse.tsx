@@ -263,7 +263,7 @@ const Browse: Component = () => {
                     isEmpty={places.data?.length === 0}
                     empty={<EmptyState icon="icon-[ic--round-place]" title={emptyMessage()} />}
                 >
-                    <ListingSurface keyboardCursor animate class="mb-4">
+                    <ListingSurface animate class="mb-4">
                         <For each={places.data}>
                             {(item, idx) => (
                                 <PlaceCard

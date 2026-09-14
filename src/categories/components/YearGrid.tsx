@@ -27,7 +27,7 @@ const YearGrid: Component<Props> = props => {
                 container instance is keyed by year, so it survives the refetch
                 and animates only when the year first appears.
             */}
-            <ListingSurface keyboardCursor animate class="mb-4">
+            <ListingSurface animate class="mb-4">
                 <For each={props.categories}>
                     {(category, idx) => (
                         <CategoryCard

@@ -1514,6 +1514,36 @@ sizes text and fades it; the first run named three disabled controls, and `text-
 `text-base-content`. Fixing the test rather than the components was the right way round, and is worth
 recording as the failure mode of a heuristic guard.
 
+### The roving cursor is gone (2026-09-14)
+
+Built in step 7 for listings, extended to the toolbar with the accessibility work, and removed here at the
+user's call: _"it is not standard to swap between tab and arrows and i bet very few would find this
+behavior."_
+
+That is the right read, and the implementation history backs it up. In two days it produced three distinct
+faults, none of which any test or visual pass could see and all of which needed a keyboard to find:
+non-focusable children counted as steps, the bubble phase losing arrows to a menu trigger, and disabled
+controls silently swallowing focus. Each fix was correct and each revealed the next. A feature that costs that
+much scrutiny should be paying for itself in discoverability, and this one cannot: nothing on screen says the
+arrows have taken over, and Tab - the key a reader actually reaches for - starts behaving differently halfway
+down the page.
+
+`a11y/rovingFocus.ts` and the eleven listing keyboard tests are deleted, `keyboardCursor` is gone from five
+call sites, and eight toolbar tests went with it. **`role="toolbar"` went too**, which is the part worth
+saying out loud: that role _promises_ a single tab stop with arrow navigation, so keeping it after removing
+the behaviour would tell a screen reader to press keys that do nothing. A wrong landmark is worse than no
+landmark.
+
+Browser defaults now. If there is a real problem here it can be looked at from a clean slate.
+
+### The skeleton shimmer stops mid-sweep under reduced motion (2026-09-14)
+
+§8 item 7 said the blanket rule was "already correct". It is not quite. Capping every animation at one
+iteration of 0.01ms still _runs_ the shimmer, and with no fill mode it lands back at the element's own
+`background-position: 0% 0%` - which parks a bright diagonal band across every placeholder and leaves it
+there. A frozen highlight reads as a rendering fault rather than as something loading. Under reduced motion
+the gradient is now dropped entirely and the tile is the flat tint it was always meant to settle into.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1523,6 +1553,14 @@ hover utilities for the same reason — it is conditional on a prop that only th
 filmstrip is deleted in step 9b.
 
 ## 7. Unified shortcut map
+
+> **DECIDED 2026-09-14 — the letter reassignment below is not being carried out.** The tables are kept as a
+> record of what was proposed. §7's stated goal was "no letter has two meanings", and that goal was _met_ -
+> steps 8 and 9 reached it by consolidating the controls instead of renaming the keys, and the dev-mode
+> collision guard proves it on every startup. What is left of this section is mnemonic tidiness, and the cost
+> of it falls entirely on whoever has already learned `s` for density and `t` for labels. The map is now
+> written down on a Settings page and checked against the source by `ShortcutReference.test.ts`, so it is
+> documented rather than folklore. That is worth more than it being alphabetical.
 
 **The structural idea: digits navigate, letters act.** Digits are assigned by _position in the navigation row_, once, inside `NavGroup` — so they cannot collide by construction, and a user learns one rule instead of twenty-two letters.
 
@@ -1604,7 +1642,7 @@ No letter has two meanings. `c`, `g`, `j`, `k`, `m`, `v`, `w`, `z` are unassigne
 5. **The Inspector as a landmark.** `role="complementary"` when docked, `role="dialog" aria-modal="false"` when overlaid, focus trap only in the `<md` sheet, `Esc` closes it in overlay and sheet modes.
 6. **DONE 2026-09-14 — contrast.** Enforced by the theme test in §6. `PlaceCard`'s `text-xs opacity-70` ancestry line and `text-base-content/40` placeholders are the ones I expect to fail first.
 7. **Reduced motion.** Already correct — the global kill switch in `index.css` is a good pattern and stays. One addition: `.skeleton-tile`'s infinite shimmer should become a static tint under reduced motion rather than a 0.01ms infinite animation.
-8. **Keyboard reachability of listings.** `ListingSurface` gives every listing a roving-tabindex cursor with `←↑→↓`, `Home`/`End`, `Enter` to open, `h` to favourite, `i` to inspect. Categories, People and Places are not keyboard-navigable at all today.
+8. **REVERTED 2026-09-14 — keyboard reachability of listings.** `ListingSurface` was given a roving-tabindex cursor, and it has been taken back out; see the note below. Listings are ordinary tab stops again.
 
 ---
 
@@ -1667,7 +1705,15 @@ Steps 0–2 are safe to land in any order and are worth doing immediately regard
 
 14. **ANSWERED 2026-09-14 — yes, and it already does; effects must not reset when the photograph changes.** Nothing calls `reset` on item change, so a rotation persists across moves within a media root and clears on leaving it. No change needed. Is `VisualEffectsContext` expected to survive navigation within a media root? It is provided at `MediaRoot`, so a rotation applied to one photo persists across moves within a category but resets when you leave. Moving rotate/flip into the Inspector makes that lifetime more visible, and it may want an explicit "reset on item change" — `EffectsResetButton.tsx` exists but is only inside the Effects card.
 
-15. **Stats** is the one area with no listing, no items and no preferences — its toolbar is pure URL state. I'm leaving it structurally alone beyond `NavGroup`, `SegmentedControl` and `SkeletonChart`. If you want stats to feel part of the same system rather than merely consistent with it, that's a separate conversation about what a stat _is_ in this app.
+15. **The primary navigation has no keys at all.** Found while deciding the above: `PrimaryNavLink` registers
+    no shortcut, so Categories, People, Places, Search, Random, Stats, About and Settings are reachable only
+    by Tab or by pointer. The `1`-`9` digits are positional _within an area's toolbar_, not across areas, so
+    there is no keyboard route between areas. Deliberately left alone rather than patched with a single `,`
+    for Settings, which would beg the question of why Settings and not Search. If it is worth solving it wants
+    one scheme for all eight - a modifier and a digit, most likely - and that is a design decision rather than
+    a fix.
+
+16. **Stats** is the one area with no listing, no items and no preferences — its toolbar is pure URL state. I'm leaving it structurally alone beyond `NavGroup`, `SegmentedControl` and `SkeletonChart`. If you want stats to feel part of the same system rather than merely consistent with it, that's a separate conversation about what a stat _is_ in this app.
 
 ---
 

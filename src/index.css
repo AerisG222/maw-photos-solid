@@ -430,6 +430,24 @@ html {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+
+    /*
+       The blanket rule above is not enough for the skeletons.
+
+       Their shimmer is a moving `background-position` across a gradient that is
+       transparent at both ends. Capped at one iteration of 0.01ms it still
+       *runs*, and with no fill mode it lands back at the element's own
+       `0% 0%` - which parks a bright diagonal band across every placeholder and
+       leaves it there. A frozen highlight reads as a rendering fault rather than
+       as a thing loading.
+
+       So the gradient goes entirely and the tile becomes the flat tint it was
+       always meant to settle into.
+    */
+    .skeleton-tile {
+        background-image: none;
+        animation: none !important;
+    }
 }
 
 /*

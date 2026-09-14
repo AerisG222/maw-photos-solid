@@ -47,4 +47,22 @@ describe("entrance animations", () => {
     test("but it does hold its starting state", () => {
         expect(animationFor("rise-in")).toMatch(/\bbackwards\b/);
     });
+
+    /*
+       The blanket reduced-motion rule caps animations at one iteration of
+       0.01ms, which is not enough for the skeletons. Their shimmer moves a
+       `background-position` across a gradient that is transparent at both ends;
+       capped, it still runs, and with no fill mode it lands back at the
+       element's own `0% 0%` - parking a bright band across every placeholder
+       and leaving it there. A frozen highlight reads as a rendering fault
+       rather than as something loading.
+    */
+    test("the skeleton shimmer becomes a flat tint, not a frozen band", () => {
+        const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+        const rule = /\.skeleton-tile\s*\{([^}]*)\}/.exec(reduced);
+
+        expect(rule, "reduced motion does not neutralise .skeleton-tile").toBeTruthy();
+        expect(rule![1]).toMatch(/background-image:\s*none/);
+        expect(rule![1]).toMatch(/animation:\s*none/);
+    });
 });

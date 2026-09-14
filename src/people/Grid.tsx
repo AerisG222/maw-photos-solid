@@ -248,7 +248,7 @@ const GridView: Component = () => {
                 <PersonFilterBar filter={filter()} setFilter={setFilter} />
 
                 <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
-                    <ListingSurface keyboardCursor animate class="mb-4">
+                    <ListingSurface animate class="mb-4">
                         <For each={peopleToDisplay()}>
                             {(person, idx) => (
                                 <PersonCard

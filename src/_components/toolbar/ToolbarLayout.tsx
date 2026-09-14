@@ -1,7 +1,6 @@
 import { JSXElement, ParentComponent, Show, children, createSignal } from "solid-js";
 
 import { useMediaBreakpointContext } from "../../_contexts/MediaBreakpointContext";
-import { createRovingFocus } from "../a11y/rovingFocus";
 
 import Icon from "../icon/Icon";
 import ToolbarCollapseButton from "./ToolbarCollapseButton";
@@ -33,42 +32,20 @@ const ToolbarLayout: ParentComponent<Props> = props => {
     const [, { gteMd }] = useMediaBreakpointContext();
     const [sheetOpen, setSheetOpen] = createSignal(false);
 
-    let bar!: HTMLDivElement;
-
-    /*
-       One tab stop for the whole bar.
-
-       A media view's chrome is around fifteen controls, and every one of them
-       was its own stop - so reaching the page from the keyboard meant pressing
-       Tab past all of them. The arrows move along it now, which is what the
-       toolbar role promises and is the same treatment the listings got.
-    */
-    createRovingFocus(() => bar, {
-        enabled: () => true,
-        // a rail down the side from `md` up, a bar across the bottom below it
-        axis: () => (gteMd() ? "vertical" : "horizontal"),
-        /*
-           The `⋮` menu is a Kobalte trigger, and a menu button opens on
-           ArrowDown by convention. On the bubble the trigger saw the key first,
-           so arrowing along the toolbar reached the ellipsis and opened its
-           menu instead of moving past it - a dead end you could not arrow out
-           of. Claimed on the way down, it never reaches the trigger, and Enter
-           or Space still opens the menu.
-        */
-        capture: true
-    });
-
     const c = children(() => props.children);
     const nav = children(() => props.nav);
     const actions = children(() => props.actions);
 
     return (
         <>
+            {/*
+                Deliberately not `role="toolbar"`. That role promises a single
+                tab stop with the arrows moving between controls, and the roving
+                cursor that delivered it has been removed - so claiming it would
+                tell a screen reader to press keys that do nothing, which is
+                worse than claiming nothing at all.
+            */}
             <div
-                ref={bar}
-                role="toolbar"
-                aria-label="View controls"
-                aria-orientation={gteMd() ? "vertical" : "horizontal"}
                 class="flex chrome-glass z-20 border-t-1 border-t-base-content/20
                 md:flex-col md:border-t-0 md:border-t-transparent md:border-r-1 md:border-r-base-content/20"
             >

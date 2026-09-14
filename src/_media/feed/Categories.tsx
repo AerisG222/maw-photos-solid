@@ -87,7 +87,7 @@ const Categories: Component = () => {
                         />
                     }
                 >
-                    <ListingSurface keyboardCursor animate class="mb-4">
+                    <ListingSurface animate class="mb-4">
                         <For each={feed.categories()}>
                             {(category, idx) => (
                                 <CategoryCard

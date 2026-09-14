@@ -61,7 +61,7 @@ const ViewGrid: Component = () => {
                 when={!state.activeTerm || searchQuery.isSuccess}
                 skeleton={<SkeletonGrid />}
             >
-                <ListingSurface keyboardCursor class="my-4">
+                <ListingSurface class="my-4">
                     <For each={allSearchResults(searchQuery) ?? []}>
                         {(category, idx) => (
                             <CategoryCard
