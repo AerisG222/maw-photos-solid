@@ -47,6 +47,8 @@ const CoverCandidateGrid: Component<Props> = props => {
                     >
                         <img
                             src={getMediaTeaserUrl(item)}
+                            /* one of a grid of candidates; the control around it says so */
+                            alt=""
                             class="block w-full h-full object-cover"
                             loading="lazy"
                         />

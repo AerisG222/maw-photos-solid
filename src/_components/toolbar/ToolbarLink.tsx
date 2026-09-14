@@ -74,6 +74,7 @@ const ToolbarLink: Component<Props> = props => {
                 fallback={
                     <span
                         class="flex px-3 py-2 text-base-content opacity-40 cursor-not-allowed"
+                        aria-label={label()}
                         title={label()}
                         aria-disabled={true}
                     >
@@ -93,6 +94,16 @@ const ToolbarLink: Component<Props> = props => {
                             : { [ACTIVE_CLASS]: props.active, [INACTIVE_CLASS]: !props.active }
                     }
                     class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"
+                    /*
+                       The name span is hidden below `md`, so without this the
+                       link is an icon and a tooltip. `aria-current` is the
+                       navigation counterpart of the highlight beside it - where
+                       the caller forces `active` we state it, and where it is
+                       left to the router we cannot know here, so the class does
+                       the talking and `end={false}` keeps it lit.
+                    */
+                    aria-label={label()}
+                    aria-current={props.active ? "page" : undefined}
                     title={getNameWithShortcut(label(), props.route.shortcutKeys)}
                     ref={el}
                 >

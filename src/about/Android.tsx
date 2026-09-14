@@ -18,6 +18,7 @@ const ViewApplication: Component = () => {
                 >
                     <img
                         src="/icon.svg"
+                        alt="Download the Android app"
                         class="inline w-[72px] h-[72px] saturate-50 hover:saturate-100"
                     />
                 </a>

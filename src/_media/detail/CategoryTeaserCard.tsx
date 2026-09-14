@@ -35,6 +35,7 @@ const CategoryTeaserCard: Component<Props> = props => {
                     <img
                         class="mt-2 mx-auto center"
                         src={getMediaTeaserUrl(props.activeCategory!.teaser)}
+                        alt={props.activeCategory!.name}
                     />
 
                     <button class="btn btn-outline btn-primary btn-sm mt-2" onClick={onSetTeaser}>

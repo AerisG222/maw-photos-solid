@@ -88,6 +88,8 @@ const PlaceCoverCategories: Component<Props> = props => {
                                 >
                                     <img
                                         src={getMediaTeaserUrl(category.teaser)}
+                                        /* the name is printed under it */
+                                        alt=""
                                         class="block w-full object-cover"
                                         style={{ height: `${size().height}px` }}
                                         loading="lazy"

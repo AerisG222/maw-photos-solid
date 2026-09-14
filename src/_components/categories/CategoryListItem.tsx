@@ -60,6 +60,8 @@ const CategoryListItem: Component<Props> = props => {
             <img
                 ref={img}
                 src={teaserUrl()}
+                /* the row prints the name a few pixels to the right */
+                alt=""
                 width={size().width}
                 height={size().height}
                 classList={{
@@ -95,7 +97,11 @@ const CategoryListItem: Component<Props> = props => {
 
             <span class="grow" />
 
-            <IconButton onClick={onClickFavorite} buttonClasses="btn-lg mr-4">
+            <IconButton
+                label={props.category.isFavorite ? "Remove from favourites" : "Add to favourites"}
+                onClick={onClickFavorite}
+                buttonClasses="btn-lg mr-4"
+            >
                 <FavoriteIcon
                     isFavorite={props.category.isFavorite}
                     subjectId={props.category.id}

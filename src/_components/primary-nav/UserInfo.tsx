@@ -23,6 +23,8 @@ const UserInfo: Component<Props> = props => {
                     >
                         <img
                             src={authContext.user?.picture}
+                            /* the name is right beside it, so this would say it twice */
+                            alt=""
                             class="w-[29px] h-[29px] block rounded-full cursor-pointer"
                         />
                     </Show>

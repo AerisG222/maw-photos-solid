@@ -21,7 +21,13 @@ const PrimaryNav: Component = () => {
     const [state] = useAppSettingsContext();
 
     return (
-        <div
+        <nav
+            /*
+               A landmark, not a bare div. This is the one way around the
+               application, so it is the first thing a screen reader should be
+               able to jump to - and it was indistinguishable from any other box.
+            */
+            aria-label="Primary"
             class="flex md:flex-col border-b md:border-r border-base-content/30
                 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
         >
@@ -47,7 +53,7 @@ const PrimaryNav: Component = () => {
             <div class="divider my-0 h-auto" />
 
             <PrimaryNavCollapseButton />
-        </div>
+        </nav>
     );
 };
 

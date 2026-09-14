@@ -52,6 +52,7 @@ const SidebarButton: Component<Props> = props => {
                     "text-secondary-content": props.active,
                     "gap-2 whitespace-nowrap": props.withLabel
                 }}
+                aria-label={props.name}
                 title={getNameWithShortcut(props.tooltip ?? props.name, props.shortcutKeys)}
                 aria-pressed={props.active}
                 onClick={[handleClick, null]}

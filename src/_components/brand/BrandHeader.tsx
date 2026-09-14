@@ -9,6 +9,7 @@ const BrandHeader: Component<Props> = props => {
         <div class="font-brand text-6xl text-center mt-4 md:my-8">
             <img
                 src="/icon.svg"
+                alt=""
                 width="156"
                 height="156"
                 classList={{

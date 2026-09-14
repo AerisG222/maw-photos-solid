@@ -1404,6 +1404,38 @@ Worth stating the rule the test encodes, because it is the one the bar is built 
 slots stay on screen at every width; everything else may fold away.** That is the right trade for a density
 toggle and the wrong one for the links you move around with.
 
+### The accessibility list, items 2 to 4 (2026-09-14)
+
+§8 listed eight of these in the order I would fix them. One, five and eight were done along the way; six has
+the theme test behind it. Two, three and four were still open, and they are the ones a phone makes worst,
+because every one of these controls hides its text label below `md`.
+
+**Names.** `IconButton` is the real find: no `aria-label`, no `title`, no text - an icon and nothing else,
+drawing the favourite heart on every tile in the application, so a listing announced a row of bare "button"s.
+It now takes a **required** `label`, and the three callers say which way the toggle will go ("Add to
+favourites" / "Remove from favourites") rather than naming the control.
+
+Worth recording precisely, because I nearly wrote the opposite in a test: `title` **is** the last-resort
+fallback in the accessible-name algorithm, so `ToolbarButton` and `ToolbarLink` did have names. Their
+`aria-label` is a robustness fix - `title` support varies across assistive technology and it is invisible on
+touch - not a fix for having none. The test that asserts it passed before the change, and says so; only the
+`IconButton` and `aria-pressed` tests fail against the old code.
+
+**State and landmarks.** `aria-pressed` on every toolbar toggle, `aria-current="page"` on both link
+components, and `PrimaryNav` is a `<nav aria-label="Primary">` rather than a bare `<div>` - it is the one way
+around the application and it was indistinguishable from any other box.
+
+**One tab stop per toolbar.** A media view's chrome is around fifteen controls and each was its own stop, so
+reaching the page meant tabbing past all of them. The roving cursor written for `ListingSurface` in step 7 is
+now `a11y/rovingFocus`, shared by both, with an `axis` so a single-line toolbar leaves the cross-axis arrows
+for whatever else wants them. Extracting it turned up a real gap: it counted _every_ child as a step, and a
+toolbar has dividers and a spacer between its groups, so an arrow press could land on a separator and appear
+to do nothing. It now skips anything that cannot take focus.
+
+**Images.** All ten remaining `<img>` carry `alt`. Most are `alt=""` and deliberately so - a teaser inside a
+link that already prints the category's name, a thumbnail beside its own checkbox, an avatar next to the name
+it belongs to. Announcing those twice is worse than not announcing them.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1488,9 +1520,9 @@ No letter has two meanings. `c`, `g`, `j`, `k`, `m`, `v`, `w`, `z` are unassigne
 
 1. **Focus visibility.** There is currently none. Add once, in `@layer base`:
    `:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius-field); }` — and give `Tile` `.elev-hover` on `:focus-visible` so keyboard navigation of a grid is as legible as hovering it.
-2. **Accessible names on icon-only controls.** `ToolbarButton`, `ToolbarLink`, `SidebarButton`, `IconButton` and `ToolbarDownloadLink` all rely on `title`, which is invisible on touch and unreliable across AT. Make `label` a required prop rendering `aria-label`; keep `title` for the pointer tooltip. `IconButton` currently takes no label at all, and it is what renders the favourite heart on every tile.
-3. **Toggle and nav semantics.** `aria-pressed` on every toolbar toggle (there are ~30 with `active`), `aria-current="page"` on `PrimaryNavLink` and `NavGroup` links, `<nav aria-label="Primary">` around `PrimaryNav` (currently a bare `<div>`), `role="toolbar"` + arrow-key roving tabindex on `ToolbarLayout` so a toolbar is one tab stop rather than fifteen.
-4. **Images.** 15 of 22 `<img>` lack `alt`. Decorative thumbnails inside a labelled link get `alt=""`; the link carries the name. `ViewBulkEdit`'s tiles and `MediaLink`'s thumbnail are the main offenders.
+2. **DONE 2026-09-14 — accessible names on icon-only controls.** `ToolbarButton`, `ToolbarLink`, `SidebarButton`, `IconButton` and `ToolbarDownloadLink` all rely on `title`, which is invisible on touch and unreliable across AT. Make `label` a required prop rendering `aria-label`; keep `title` for the pointer tooltip. `IconButton` currently takes no label at all, and it is what renders the favourite heart on every tile.
+3. **DONE 2026-09-14 — toggle and nav semantics.** `aria-pressed` on every toolbar toggle (there are ~30 with `active`), `aria-current="page"` on `PrimaryNavLink` and `NavGroup` links, `<nav aria-label="Primary">` around `PrimaryNav` (currently a bare `<div>`), `role="toolbar"` + arrow-key roving tabindex on `ToolbarLayout` so a toolbar is one tab stop rather than fifteen.
+4. **DONE 2026-09-14 — images.** 15 of 22 `<img>` lack `alt`. Decorative thumbnails inside a labelled link get `alt=""`; the link carries the name. `ViewBulkEdit`'s tiles and `MediaLink`'s thumbnail are the main offenders.
 5. **The Inspector as a landmark.** `role="complementary"` when docked, `role="dialog" aria-modal="false"` when overlaid, focus trap only in the `<md` sheet, `Esc` closes it in overlay and sheet modes.
 6. **Contrast.** Enforced by the theme test in §6. `PlaceCard`'s `text-xs opacity-70` ancestry line and `text-base-content/40` placeholders are the ones I expect to fail first.
 7. **Reduced motion.** Already correct — the global kill switch in `index.css` is a good pattern and stays. One addition: `.skeleton-tile`'s infinite shimmer should become a static tint under reduced motion rather than a 0.01ms infinite animation.

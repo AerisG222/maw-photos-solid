@@ -154,6 +154,8 @@ const ViewBulkEdit: Component<Props> = props => {
                                     />
                                     <img
                                         src={m.imageUrl}
+                                        /* the checkbox beside it carries the meaning */
+                                        alt=""
                                         class="rounded-b-sm"
                                         width={getThumbnailSize(ThumbnailSizeDefault).width}
                                         height={getThumbnailSize(ThumbnailSizeDefault).height}

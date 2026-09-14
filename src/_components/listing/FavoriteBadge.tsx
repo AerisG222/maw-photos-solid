@@ -24,6 +24,7 @@ interface Props {
 const FavoriteBadge: Component<Props> = props => {
     return (
         <IconButton
+            label={props.isFavorite ? "Remove from favourites" : "Add to favourites"}
             buttonClasses={"btn-xs text-primary opacity-50 hover:opacity-100 m-[1px]"}
             onClick={props.onToggle}
         >

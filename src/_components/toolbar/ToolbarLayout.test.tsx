@@ -110,4 +110,38 @@ describe("the toolbar at each width", () => {
 
         expect(screen.queryByLabelText("More controls")).toBeNull();
     });
+
+    /*
+       A media view's chrome is around fifteen controls, and every one of them
+       used to be its own tab stop - so reaching the page from the keyboard
+       meant pressing Tab past all of them.
+    */
+    test("the whole bar is one tab stop", () => {
+        toolbar(1280);
+
+        const stops = [...screen.getByRole("toolbar").querySelectorAll("button, a[href]")].map(
+            el => (el as HTMLElement).tabIndex
+        );
+
+        expect(stops.filter(t => t === 0)).toHaveLength(1);
+        expect(stops.length).toBeGreaterThan(1);
+    });
+
+    test("and the arrows move along it", () => {
+        toolbar(1280);
+
+        const items = [...screen.getByRole("toolbar").querySelectorAll("button, a[href]")];
+
+        (items[0] as HTMLElement).focus();
+        fireEvent.keyDown(items[0], { key: "ArrowDown" });
+
+        expect(document.activeElement).toBe(items[1]);
+    });
+
+    // a rail down the side from md up, a bar across the bottom below it
+    test("it says which way it runs", () => {
+        toolbar(390);
+
+        expect(screen.getByRole("toolbar").getAttribute("aria-orientation")).toBe("horizontal");
+    });
 });

@@ -68,6 +68,17 @@ const ToolbarButton: Component<Props> = props => {
                     "bg-secondary": props.active,
                     "text-secondary-content": props.active
                 }}
+                /*
+                   Named and stated, not just tooltipped. The span below is
+                   `hidden` until `md` *and* until labels are turned on, so for
+                   most readers this is an icon and a `title` - which is
+                   invisible on touch and unevenly announced.
+
+                   `active` on a toolbar button always means "this is switched
+                   on", so it is a pressed state rather than a selected one.
+                */
+                aria-label={props.name}
+                aria-pressed={props.active}
                 title={getNameWithShortcut(props.tooltip ?? props.name, props.shortcutKeys)}
                 onClick={[handleClick, null]}
             >
