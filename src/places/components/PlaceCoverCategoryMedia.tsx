@@ -67,7 +67,7 @@ const PlaceCoverCategoryMedia: Component<Props> = props => {
                             />
                         }
                     >
-                        <p class="text-xs opacity-70 mb-2">
+                        <p class="text-xs text-muted mb-2">
                             A category can span several places. Anything here that was taken
                             somewhere else cannot be this place's cover, and choosing it says so.
                         </p>

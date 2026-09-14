@@ -104,7 +104,7 @@ const ClanSection: Component<Props> = props => {
 };
 
 const EmptyClans: Component = () => (
-    <p class="text-center text-sm opacity-70">
+    <p class="text-center text-sm text-muted">
         Group the people you look for together - say "the kids" - and they are one click away.
     </p>
 );

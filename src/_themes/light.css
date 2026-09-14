@@ -13,6 +13,19 @@
     --color-base-200: oklch(97.31% 0.004 262);
     --color-base-300: oklch(93.4% 0.007 262);
     --color-base-content: oklch(32.11% 0.008 262);
+
+    /*
+       Secondary text - an ancestry line, a media count, a caption.
+
+       A real token rather than `opacity-70` over the foreground. Fading text by
+       opacity composites it toward the surface behind it, and at 70% on this
+       theme that lands at 2.81:1, well under the 4.5:1 body text owes. It
+       looked like a subtlety and was a failure.
+
+       Chosen as the lightest value that still clears 4.5:1 on base-100, 200 and
+       300, so it is safe on any surface a caption appears on.
+    */
+    --color-base-content-muted: oklch(52.15% 0.008 262);
     --color-primary: oklch(24.3% 0.1146 262.26);
     --color-primary-content: oklch(98.5% 0.004 262);
     --color-secondary: oklch(44.95% 0.1474 255.27);

@@ -25,7 +25,7 @@ const ViewShortcuts: Component = () => {
                     {group => (
                         <Panel title={group.title}>
                             <Show when={group.detail}>
-                                <p class="text-meta opacity-70 mb-3">{group.detail}</p>
+                                <p class="text-meta text-muted mb-3">{group.detail}</p>
                             </Show>
 
                             <dl class="grid grid-cols-[max-content_1fr] gap-x-3 gap-y-2 items-baseline">
@@ -40,7 +40,7 @@ const ViewShortcuts: Component = () => {
 
                                             <dd class="min-w-0">
                                                 <div>{entry.action}</div>
-                                                <div class="text-meta opacity-60">
+                                                <div class="text-meta text-muted">
                                                     {entry.scope}
                                                 </div>
                                             </dd>

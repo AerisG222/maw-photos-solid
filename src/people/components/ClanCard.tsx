@@ -63,7 +63,7 @@ const ClanCard: Component<Props> = props => {
             >
                 <div class="flex items-baseline gap-2">
                     <span class="font-bold truncate">{props.clan.name}</span>
-                    <span class="text-sm opacity-70">{memberSummary()}</span>
+                    <span class="text-sm text-muted">{memberSummary()}</span>
                 </div>
 
                 <Show
@@ -75,7 +75,7 @@ const ClanCard: Component<Props> = props => {
                            two apart without leaking who it dropped, so neither
                            can this
                         */
-                        <p class="text-sm opacity-70">No people in this clan yet.</p>
+                        <p class="text-sm text-muted">No people in this clan yet.</p>
                     }
                 >
                     {/* -space-x pulls the faces into an overlapping row */}

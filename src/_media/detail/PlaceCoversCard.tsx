@@ -104,7 +104,7 @@ const PlaceCoversCard: Component<Props> = props => {
 
                                     <div class="min-w-0 grow">
                                         <div class="truncate text-sm font-bold">{place.name}</div>
-                                        <div class="truncate text-xs opacity-70">
+                                        <div class="truncate text-xs text-muted">
                                             {getPlaceKindName(place.kind)}
                                         </div>
 

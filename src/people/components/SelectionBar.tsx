@@ -30,7 +30,7 @@ const SelectionBar: Component<Props> = props => {
             <div class="flex flex-row flex-wrap items-center justify-center gap-3">
                 <span class="font-bold">{props.title}</span>
 
-                <span class="text-sm opacity-70">
+                <span class="text-sm text-muted">
                     {props.selectedCount === 1 ? "1 selected" : `${props.selectedCount} selected`}
                 </span>
 

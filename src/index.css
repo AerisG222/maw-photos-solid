@@ -293,6 +293,19 @@ html {
        device least able to spare it. Expressed as a width rather than a margin,
        the same number can be capped - and below `md` it is simply ignored.
     */
+    /*
+       Secondary text: a caption, an ancestry line, a media count.
+
+       A colour rather than `opacity-70` over the body colour, which is what
+       this replaced in a dozen places. Opacity composites text toward whatever
+       is behind it, so "slightly quieter" turned out to mean 2.81:1 in the light
+       theme against the 4.5:1 body text owes. The token is picked per theme to
+       clear that on every surface - see the note in light.css.
+    */
+    .text-muted {
+        color: var(--color-base-content-muted);
+    }
+
     .stage {
         width: min(100%, var(--stage-width, 100%));
         margin-inline: auto;

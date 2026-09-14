@@ -250,7 +250,7 @@ const Browse: Component = () => {
                 </Show>
 
                 <Show when={search()}>
-                    <p class="text-sm opacity-70 mb-2">
+                    <p class="text-sm text-muted mb-2">
                         Searching every level of the tree, not just this one.
                     </p>
                 </Show>

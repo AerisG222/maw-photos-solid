@@ -13,6 +13,7 @@ export const requiredColorTokens = [
     "--color-base-200",
     "--color-base-300",
     "--color-base-content",
+    "--color-base-content-muted",
     "--color-primary",
     "--color-primary-content",
     "--color-secondary",
@@ -60,6 +61,24 @@ export const contrastPairs: ContrastPair[] = [
         background: "--color-base-300",
         min: 4.5,
         where: "text on info cards and dropdowns"
+    },
+    {
+        foreground: "--color-base-content-muted",
+        background: "--color-base-100",
+        min: 4.5,
+        where: "a caption or ancestry line on the page"
+    },
+    {
+        foreground: "--color-base-content-muted",
+        background: "--color-base-200",
+        min: 4.5,
+        where: "a caption on a card or toolbar"
+    },
+    {
+        foreground: "--color-base-content-muted",
+        background: "--color-base-300",
+        min: 4.5,
+        where: "a caption on an info card or dropdown"
     },
     {
         foreground: "--color-primary",

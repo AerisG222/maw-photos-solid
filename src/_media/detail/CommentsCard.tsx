@@ -53,7 +53,7 @@ const CommentsCard: Component<Props> = props => {
                                     <span class="grow" />
 
                                     <time
-                                        class="text-xs opacity-50"
+                                        class="text-xs text-muted"
                                         datetime={comment.created.toISOString()}
                                     >
                                         {comment.created.toDateString()}

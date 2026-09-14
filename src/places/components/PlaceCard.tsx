@@ -99,7 +99,7 @@ const PlaceCard: Component<Props> = props => {
                     <div class="truncate">{props.place.name}</div>
 
                     <Show when={props.showAncestry && props.place.ancestorNames.length > 0}>
-                        <div class="truncate text-xs opacity-70">
+                        <div class="truncate text-xs text-muted">
                             {describePlaceAncestry(props.place)}
                         </div>
                     </Show>

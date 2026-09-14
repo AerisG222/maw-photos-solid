@@ -1481,6 +1481,39 @@ This is the third distinct fault in one small primitive: non-focusable children 
 extracting it), the bubble phase losing the key to a menu trigger, and now disabled controls. All three were
 invisible until somebody drove it with a keyboard, which is the argument for the eight tests now on it.
 
+### Faded text was a contrast failure wearing a subtlety (2026-09-14)
+
+§8 item 6 guessed `PlaceCard`'s ancestry line and the `text-base-content/40` placeholders would fail first. It
+was worse than that, and in a way the theme test was built not to see: that test compares one _token_ against
+another, and `opacity-70` is neither - it is an alpha composite of a token over whatever happens to be behind
+it.
+
+Computing what those composites actually render as:
+
+|                   | `@0.7`     | `@0.4` |
+| ----------------- | ---------- | ------ |
+| light on base-100 | **2.81:1** | 1.58:1 |
+| dark on base-100  | 4.56:1     | 3.03:1 |
+| dark on base-200  | 4.09:1     | 2.76:1 |
+
+Body text owes 4.5:1. **The light theme failed at every level**, across a dozen captions, ancestry lines and
+scope notes. It reads as "slightly quieter" in a class list and is a straightforward accessibility defect.
+
+So `--color-base-content-muted`, stated by both themes and held to 4.5:1 against base-100, 200 _and_ 300 by
+three new contract pairs. In light it is a genuine mute - 32% to 52% lightness. **In dark it is barely below
+the foreground, and that is the honest answer rather than a fudge**: base-300 is light enough that anything
+meaningfully dimmer fails against it, so muted text in the dark theme differs by size and weight rather than
+by tone. The token exists in both because the contract requires the two themes to agree about what exists.
+
+Badges keep their opacity. Fading one takes its own fill with it, so the contrast between its text and its
+background is unchanged - and so do disabled controls, which WCAG exempts from the minimum and which dim
+precisely to say they are unavailable.
+
+**Both exemptions were found by the guard failing on honest code.** `mutedText.test.ts` flags any class that
+sizes text and fades it; the first run named three disabled controls, and `text-base` was matching inside
+`text-base-content`. Fixing the test rather than the components was the right way round, and is worth
+recording as the failure mode of a heuristic guard.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1569,7 +1602,7 @@ No letter has two meanings. `c`, `g`, `j`, `k`, `m`, `v`, `w`, `z` are unassigne
 3. **DONE 2026-09-14 — toggle and nav semantics.** `aria-pressed` on every toolbar toggle (there are ~30 with `active`), `aria-current="page"` on `PrimaryNavLink` and `NavGroup` links, `<nav aria-label="Primary">` around `PrimaryNav` (currently a bare `<div>`), `role="toolbar"` + arrow-key roving tabindex on `ToolbarLayout` so a toolbar is one tab stop rather than fifteen.
 4. **DONE 2026-09-14 — images.** 15 of 22 `<img>` lack `alt`. Decorative thumbnails inside a labelled link get `alt=""`; the link carries the name. `ViewBulkEdit`'s tiles and `MediaLink`'s thumbnail are the main offenders.
 5. **The Inspector as a landmark.** `role="complementary"` when docked, `role="dialog" aria-modal="false"` when overlaid, focus trap only in the `<md` sheet, `Esc` closes it in overlay and sheet modes.
-6. **Contrast.** Enforced by the theme test in §6. `PlaceCard`'s `text-xs opacity-70` ancestry line and `text-base-content/40` placeholders are the ones I expect to fail first.
+6. **DONE 2026-09-14 — contrast.** Enforced by the theme test in §6. `PlaceCard`'s `text-xs opacity-70` ancestry line and `text-base-content/40` placeholders are the ones I expect to fail first.
 7. **Reduced motion.** Already correct — the global kill switch in `index.css` is a good pattern and stays. One addition: `.skeleton-tile`'s infinite shimmer should become a static tint under reduced motion rather than a 0.01ms infinite animation.
 8. **Keyboard reachability of listings.** `ListingSurface` gives every listing a roving-tabindex cursor with `←↑→↓`, `Home`/`End`, `Enter` to open, `h` to favourite, `i` to inspect. Categories, People and Places are not keyboard-navigable at all today.
 
@@ -1628,11 +1661,11 @@ Steps 0–2 are safe to land in any order and are worth doing immediately regard
 
 **Genuine unknowns I could not resolve from the code:**
 
-12. **Does anyone use `ic--android` / the About → Android page?** It's a nav row entry costing a digit. Not proposing removal, just asking.
+12. **ANSWERED 2026-09-14 — keep it.** Does anyone use `ic--android` / the About → Android page? It's a nav row entry costing a digit. Not proposing removal, just asking.
 
-13. **Should `theme: "system"` be the new default for fresh users?** The pre-mount script in `index.html` pins `data-theme`, so adding `system` means that script needs to read `prefers-color-scheme` too. Small change, but it touches the no-flash path.
+13. **ANSWERED 2026-09-14 — yes, and it already is.** `defaultTheme` became `ThemeSystem` with the theme-toggle fix in step 3, and the pre-mount script resolves anything that is not an explicit `light`/`dark` against `prefers-color-scheme`. No change needed. Should `theme: "system"` be the new default for fresh users? The pre-mount script in `index.html` pins `data-theme`, so adding `system` means that script needs to read `prefers-color-scheme` too. Small change, but it touches the no-flash path.
 
-14. **Is `VisualEffectsContext` expected to survive navigation within a media root?** It is provided at `MediaRoot`, so a rotation applied to one photo persists across moves within a category but resets when you leave. Moving rotate/flip into the Inspector makes that lifetime more visible, and it may want an explicit "reset on item change" — `EffectsResetButton.tsx` exists but is only inside the Effects card.
+14. **ANSWERED 2026-09-14 — yes, and it already does; effects must not reset when the photograph changes.** Nothing calls `reset` on item change, so a rotation persists across moves within a media root and clears on leaving it. No change needed. Is `VisualEffectsContext` expected to survive navigation within a media root? It is provided at `MediaRoot`, so a rotation applied to one photo persists across moves within a category but resets when you leave. Moving rotate/flip into the Inspector makes that lifetime more visible, and it may want an explicit "reset on item change" — `EffectsResetButton.tsx` exists but is only inside the Effects card.
 
 15. **Stats** is the one area with no listing, no items and no preferences — its toolbar is pure URL state. I'm leaving it structurally alone beyond `NavGroup`, `SegmentedControl` and `SkeletonChart`. If you want stats to feel part of the same system rather than merely consistent with it, that's a separate conversation about what a stat _is_ in this app.
 

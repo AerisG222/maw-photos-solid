@@ -107,7 +107,7 @@ const PlacePicker: Component<Props> = props => {
                                             <span class="block truncate">{place.name}</span>
 
                                             <Show when={place.ancestorNames.length > 0}>
-                                                <span class="block truncate text-xs opacity-70">
+                                                <span class="block truncate text-xs text-muted">
                                                     {describePlaceAncestry(place)}
                                                 </span>
                                             </Show>

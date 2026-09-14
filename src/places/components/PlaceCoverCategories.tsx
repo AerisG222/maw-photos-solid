@@ -98,7 +98,7 @@ const PlaceCoverCategories: Component<Props> = props => {
                                     <span class="w-full truncate px-1 text-xs">
                                         {category.name}
                                     </span>
-                                    <span class="w-full truncate px-1 text-xs opacity-70">
+                                    <span class="w-full truncate px-1 text-xs text-muted">
                                         {category.year}
                                     </span>
                                 </button>

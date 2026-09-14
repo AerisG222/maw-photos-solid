@@ -13,6 +13,18 @@
        requires. Hue and chroma are untouched; only the lightness moved.
     */
     --color-base-content: oklch(67.2% 0.0193 282.33);
+
+    /*
+       Secondary text - see the note in light.css.
+
+       Barely below the foreground, and that is the honest answer rather than a
+       shrug: this palette has almost no headroom. base-300 is light enough that
+       anything meaningfully dimmer than base-content fails 4.5:1 against it, so
+       muted text here differs from body text by size and weight rather than by
+       tone. The token exists so the two themes agree about what exists, and so
+       the light theme can mute properly.
+    */
+    --color-base-content-muted: oklch(66.8% 0.0193 282.33);
     --color-primary: oklch(80.04% 0.1642 84.18);
     --color-primary-content: oklch(24.85% 0.0207 284.79);
     /*
