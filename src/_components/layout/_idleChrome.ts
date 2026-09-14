@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 
 const IDLE_MS = 2500;
 
@@ -14,24 +14,36 @@ const IDLE_MS = 2500;
    chrome means it is being read, and something focused inside it means it is
    being used from the keyboard - fading either out from under its reader would
    be worse than never hiding it.
+
+   Nothing is listened for unless a view has actually asked for this. The first
+   version attached five window listeners from `onMount` and churned a timer on
+   every `wheel` and `pointermove`, on all twenty screens, for a feature exactly
+   one of them uses - which is a cost with no reader to show for it.
 */
 export const createIdleChrome = (enabled: () => boolean) => {
     const [idle, setIdle] = createSignal(false);
     const [held, setHeld] = createSignal(false);
 
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    createEffect(() => {
+        if (!enabled()) {
+            // whatever it was when the view stopped asking, it is not hiding now
+            setIdle(false);
 
-    const wake = () => {
-        setIdle(false);
-
-        if (timer) {
-            clearTimeout(timer);
+            return;
         }
 
-        timer = setTimeout(() => setIdle(true), IDLE_MS);
-    };
+        let timer: ReturnType<typeof setTimeout> | undefined;
 
-    onMount(() => {
+        const wake = () => {
+            setIdle(false);
+
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            timer = setTimeout(() => setIdle(true), IDLE_MS);
+        };
+
         const events = ["pointermove", "pointerdown", "keydown", "wheel", "touchstart"];
 
         events.forEach(name => window.addEventListener(name, wake, { passive: true }));

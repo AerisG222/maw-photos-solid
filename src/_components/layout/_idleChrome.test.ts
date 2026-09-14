@@ -73,4 +73,38 @@ describe("chrome that steps back", () => {
         expect(api.hidden()).toBe(false);
         dispose();
     });
+
+    /*
+       The regression this had shipped with: it attached five window listeners
+       from `onMount` regardless, so all twenty screens paid for a feature one
+       of them uses - a timer cleared and reset on every wheel tick and every
+       mouse move, app-wide, to drive chrome that was never going to hide.
+    */
+    test("listens for nothing where it was not asked for", () => {
+        const added: string[] = [];
+        const spy = vi
+            .spyOn(window, "addEventListener")
+            .mockImplementation((type: string) => void added.push(type));
+
+        const { dispose } = build(false);
+
+        expect(added).toEqual([]);
+
+        spy.mockRestore();
+        dispose();
+    });
+
+    test("and does listen where it was", () => {
+        const added: string[] = [];
+        const spy = vi
+            .spyOn(window, "addEventListener")
+            .mockImplementation((type: string) => void added.push(type));
+
+        const { dispose } = build(true);
+
+        expect(added).toContain("pointermove");
+
+        spy.mockRestore();
+        dispose();
+    });
 });
