@@ -1210,6 +1210,30 @@ parses almost none of the stylesheet. That distinction is the lesson from the in
 and both suites were run against the pre-change code first: three of six toolbar tests and three of seven
 inspector tests fail there, which is what makes them worth keeping.
 
+### §7's letter map was never implemented (2026-09-13)
+
+Writing the Shortcuts page meant writing down what the keys do, and the obvious source was §7 above. That
+would have shipped a reference to an application that does not exist. §7 proposes `d` for density, `l` for
+labels, `b` for badges, `[` and `]` for rotation, `f` for favourites-only, `x` for shuffle, plus `t`, `n`,
+`u` and `,` as new global keys. What is actually bound is the pre-rework set: `s` density, `t` labels, `h`
+badges, `a`/`d` rotation, `u` favourites-only, `j` shuffle, and no global keys at all.
+
+Steps 8 and 9 removed the _collisions_ - no letter carries two meanings now, which was the real complaint -
+but they did not carry out the reassignment. That is a separate, user-visible change: it invalidates whatever
+muscle memory a reader has, for the benefit of a tidier map, and it is not something to slip in under "add a
+settings page". **It is left as a decision to make rather than a step to finish.**
+
+The reference is therefore written from the bindings, and `ShortcutReference.test.ts` reads the source to keep
+it that way: every letter a component registers must be documented, and every letter documented must be one a
+component registers. Flipping one entry from `s` to `l` fails both halves, which is precisely the reference-
+written-from-the-plan mistake it exists to prevent.
+
+**Why a page at all, when `?` exists.** The dialog lists what is registered on the current screen, which is
+the right answer to "what can I press here" and the wrong one to "how does this work" - the screen you would
+be reading it on is the one screen whose shortcuts you are not asking about. The page carries the part that
+is a rule rather than a list: the digits follow the toolbar's order, so there is one thing to learn instead
+of a letter per screen.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1325,7 +1349,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
 | **12**  | **DONE 2026-09-13 — responsive.** The `gteMd` view gate is gone, so a phone is offered every view rather than the grid alone. The chrome moves to the bottom and folds everything past navigation into a sheet; the Inspector gains three shapes (docked / overlay / sheet) on a new `lg` breakpoint; `.stage` replaces the four `mx-[N%]` margins and is ignored below `md`; prev/next show at every width; fullscreen's chrome steps back when the reader goes still. 17 new tests.                                                       | 19 files          | medium |
 | **12b** | **DONE 2026-09-13 — view transitions.** One `useBeforeLeave` hook wraps navigation in `startViewTransition`; the main photograph carries a `view-transition-name`, so it tweens between grid and fullscreen instead of being torn down and rebuilt. Guarded on support, on `prefers-reduced-motion`, and on a navigation somebody else has claimed. 4 tests.                                                                                                                                                                                | 5 files           | low    |
-| **13**  | **PARTIAL 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. Appearance and Browsing already exist (steps 3 and the theme fix). A Shortcuts page is still to come.                                                                                                                                                                                                                                          | 4 files           | low    |
+| **13**  | **DONE 2026-09-13 — settings on the stores.** The four pages read the real stores, and the Media page's eight inspector checkboxes come from the registry rather than being listed again. A Shortcuts page documents the scheme the `?` dialog cannot - and is checked against the source, which is what caught §7's letter map never having been implemented. 3 new tests.                                                                                                                                                                 | 8 files           | low    |
 | **14**  | **DONE 2026-09-13 — every adapter gone.** All fifteen are removed and their consumers read the four stores directly. `Layout`, `SkeletonGrid`, `CategoryListItem` and `Tile` now take the density and work out their own margin and pixels, which is what the last eight adapters existed to do for them. Nine dead model exports pruned with them.                                                                                                                                                                                         | 45 files          | medium |
 
 Steps 0–2 are safe to land in any order and are worth doing immediately regardless of whether the rest proceeds. Step 3 is the keystone: everything from 7 onward is deletion enabled by it.

@@ -6,7 +6,8 @@ import {
     settingsCategories,
     settingsMedia,
     settingsPeople,
-    settingsSearch
+    settingsSearch,
+    settingsShortcuts
 } from "../_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
@@ -23,7 +24,8 @@ const Toolbar: ParentComponent = () => {
                         { route: settingsCategories, href: settingsCategories.absolutePath },
                         { route: settingsMedia, href: settingsMedia.absolutePath },
                         { route: settingsPeople, href: settingsPeople.absolutePath },
-                        { route: settingsSearch, href: settingsSearch.absolutePath }
+                        { route: settingsSearch, href: settingsSearch.absolutePath },
+                        { route: settingsShortcuts, href: settingsShortcuts.absolutePath }
                     ]}
                 />
             }

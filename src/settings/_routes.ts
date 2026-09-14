@@ -64,6 +64,15 @@ export const settingsSearch: AppRouteDefinition = {
     component: lazy(() => import("./Search"))
 };
 
+export const settingsShortcuts: AppRouteDefinition = {
+    icon: "icon-[ic--round-keyboard]",
+    name: "Shortcuts",
+    tooltip: "Keyboard Shortcuts",
+    path: "/shortcuts",
+    absolutePath: `${basePath}/shortcuts`,
+    component: lazy(() => import("./Shortcuts"))
+};
+
 export const settings: AppRouteDefinition = {
     icon: "icon-[ic--round-settings]",
     name: "Settings",
@@ -79,6 +88,7 @@ export const settings: AppRouteDefinition = {
         settingsCategories,
         settingsMedia,
         settingsPeople,
-        settingsSearch
+        settingsSearch,
+        settingsShortcuts
     ]
 };
