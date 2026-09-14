@@ -1458,6 +1458,29 @@ Two tests guard the edges of the fix, because capturing claims keys before anyth
 still reaches the trigger, and a text field keeps its own arrows - the filter boxes live in these toolbars and
 an arrow there moves the caret, which `isEditableTarget` already answers for.
 
+### The cursor was focusing things that cannot be focused (2026-09-14)
+
+The capture fix stopped the menu opening, and the cursor still would not move past it. Different cause, same
+symptom, and the second one was the older bug: **a disabled button still matches `button`**, so the roving
+cursor counted it as a step and called `focus()` on it - which a disabled element silently ignores, while the
+keystroke had already been consumed. Arrowing into a run of unavailable controls stopped dead with nothing on
+screen to explain why.
+
+Not a contrived state. A media toolbar disables three of its buttons in ordinary use - Request More with
+nothing left to fetch, previous and next at the ends of a category - so on a category's media page the stretch
+either side of the actions menu is routinely dead. It was reported against the `⋮` because that is where you
+happen to arrive.
+
+`FOCUSABLE` is now `a[href], button:not([disabled])`, which fixes the step _and_ the tab stop: `items()` is
+built from the same predicate, so an unusable control is no longer a candidate for either. The disabled
+element's own `tabIndex` is deliberately left alone - a disabled element is skipped by the browser whatever it
+says, so setting it would be tidying something nobody can observe, and a test asserting otherwise was wrong
+and got rewritten rather than made to pass.
+
+This is the third distinct fault in one small primitive: non-focusable children counted as steps (found while
+extracting it), the bubble phase losing the key to a menu trigger, and now disabled controls. All three were
+invisible until somebody drove it with a keyboard, which is the argument for the eight tests now on it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

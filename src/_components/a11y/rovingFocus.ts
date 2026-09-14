@@ -42,13 +42,26 @@ interface Options {
    This was written for `ListingSurface`, where the fortieth tile was forty
    presses away. A toolbar has the same shape and the same problem.
 */
+/*
+   What the cursor can actually land on.
+
+   `:not([disabled])` is the whole of the bug it fixes. A disabled button still
+   matches `button`, so the cursor counted it as a step and called `focus()` on
+   it - which a disabled element silently ignores. The keystroke was consumed
+   either way, so arrowing into a stretch of unavailable controls stopped dead,
+   with nothing on screen to explain why. A media toolbar disables three of its
+   buttons in ordinary use: Request More with nothing left to fetch, and
+   previous/next at the ends of a category.
+*/
+const FOCUSABLE = "a[href], button:not([disabled])";
+
+const focusable = (item: HTMLElement) =>
+    item.matches(FOCUSABLE) ? item : item.querySelector<HTMLElement>(FOCUSABLE);
+
 export const createRovingFocus = (container: () => HTMLElement, options: Options) => {
     // which item Tab will land on. Arrow keys move it; focusing one directly -
     // by clicking, or by shift-tabbing in from below - adopts it
     const [cursor, setCursor] = createSignal(0);
-
-    const focusable = (item: HTMLElement) =>
-        item.matches("a[href], button") ? item : item.querySelector<HTMLElement>("a[href], button");
 
     /*
        The items themselves, rather than every focusable thing inside them: a

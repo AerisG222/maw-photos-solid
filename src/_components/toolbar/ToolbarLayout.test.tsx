@@ -238,4 +238,59 @@ describe("the toolbar at each width", () => {
 
         expect(seen).toEqual(["ArrowLeft"]);
     });
+
+    /*
+       A disabled button still matches `button`, so the cursor counted it as a
+       step and called `focus()` on it - which a disabled element silently
+       ignores, while the keystroke was consumed all the same. Arrowing into a
+       run of unavailable controls stopped dead with nothing to explain it.
+
+       Not a contrived state: a media toolbar disables Request More with nothing
+       left to fetch, and previous/next at the ends of a category, so the
+       stretch either side of the actions menu is routinely dead.
+    */
+    test("arrows step over controls that cannot be used", () => {
+        atWidth(1280);
+
+        render(() => (
+            <AppSettingsProvider>
+                <MediaBreakpointProvider>
+                    <ToolbarLayout nav={<button>Grid</button>}>
+                        <button disabled>Request More</button>
+                        <button disabled>Previous</button>
+                        <button>Actions</button>
+                    </ToolbarLayout>
+                </MediaBreakpointProvider>
+            </AppSettingsProvider>
+        ));
+
+        const first = screen.getByText("Grid");
+
+        first.focus();
+        fireEvent.keyDown(first, { key: "ArrowDown" });
+
+        expect(document.activeElement).toBe(screen.getByText("Actions"));
+    });
+
+    /*
+       The tab stop has to land on something that can take it. The disabled
+       control's own `tabIndex` is left alone deliberately - a disabled element
+       is skipped by the browser whatever it says, so setting it would be
+       tidying something nobody can observe.
+    */
+    test("and the tab stop lands on one that can be used", () => {
+        atWidth(1280);
+
+        render(() => (
+            <AppSettingsProvider>
+                <MediaBreakpointProvider>
+                    <ToolbarLayout nav={<button disabled>Grid</button>}>
+                        <button>Actions</button>
+                    </ToolbarLayout>
+                </MediaBreakpointProvider>
+            </AppSettingsProvider>
+        ));
+
+        expect(screen.getByText("Actions").tabIndex).toBe(0);
+    });
 });
