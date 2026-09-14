@@ -1544,6 +1544,32 @@ iteration of 0.01ms still _runs_ the shimmer, and with no fill mode it lands bac
 there. A frozen highlight reads as a rendering fault rather than as something loading. Under reduced motion
 the gradient is now dropped entirely and the tile is the flat tint it was always meant to settle into.
 
+### The bulk-edit fold-in is dropped, not pending (2026-09-14)
+
+Step 9 left one item open: §4 had the Inspector holding the two bulk cards, shown in place of the per-item
+ones when Bulk Edit is the surface. Revisited, and the answer is that it should not be built.
+
+**What it was for has already been delivered by other means.** The motivation was one panel instead of two -
+`BulkEditSidebar` was a second copy of the Inspector's chrome, right down to a hard-coded `w-[500px]`. The
+`SidePanel` extraction took care of that: both now render the same shell, and `BulkEditSidebar` is 66 lines
+that name two cards.
+
+**What is left would mean bending the registry around one screen.** Three concrete mismatches:
+
+- `applicableCards` returns `[]` when there is no `context.media`. Bulk edit has no active media at all - it
+  acts on a _selection_ - so the registry's own gate excludes it by construction.
+- `InspectorCardProps` carries `{ activeCategory, activeMedia, mediaElement, requestMoveNext }`. The bulk
+  cards need four callbacks into the view (`onSave`, `onSelectAll`, `onDeselectAll`, `onHideMediaWithGps`),
+  which would either widen that contract for a single caller or need a context invented to smuggle them.
+- The Inspector's value is _choosing_ which cards to show and carrying that choice between views. Bulk edit
+  has exactly two cards and you want both, always. The rail toggle would be a control with one sensible
+  position.
+
+So the fold-in buys a shared registry for a screen whose model does not fit it, at the cost of loosening the
+contract that makes the registry worth having. §4's "one place for everything about the focused item" still
+holds - it is just that bulk edit's focused thing is a selection, and that really is a different shape, which
+is what the step 9 note guessed when it deferred this in the first place.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1661,7 +1687,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 | **6**   | **DONE 2026-09-12 — NavGroup and the digits.** Seven hand-rolled nav rows become one component; navigation is keyed `1`-`9` by position and the twelve mnemonic `shortcutKeys` in the route definitions are deleted. `ToolbarLink` is now reachable only through `NavGroup`, so every nav link is numbered by construction. 5 new tests.                                                                                                                                                                                                    | 17 files          | low    |
 | **7**   | **DONE 2026-09-13 — one tile.** `createImageReveal` and `FavoriteBadge` came out byte-identically; `ListingSurface` replaced six hand-written containers and brought **arrow-key movement to listings that had none**; then `Tile` absorbed the category, person and media tiles. It **sizes itself from the density**, which is what unblocked step 14. `Row` was not needed: only one list item was left. 7 tests, snapshots read as a diff.                                                                                              | 24 files          | medium |
 | **8**   | **DONE 2026-09-12 — `ListingToolbar`.** Nine toolbars' worth of density/label/badge/dim/faces/sort controls become one component reading the one store; three one-off button files deleted, and the dead badge-setter threading unwound through the views and screens. −451 lines. 5 new tests.                                                                                                                                                                                                                                             | 24 files          | medium |
-| **9**   | **DONE 2026-09-13 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. Rotate and flip moved into the _Adjust_ card, beside the sliders they already shared a reset with, leaving their keys registered in the toolbar. The bulk-edit fold-in is not done. 10 new tests.                                                                   | 17 files          | high   |
+| **9**   | **DONE 2026-09-13 — the Inspector.** `Sidebar` becomes `Inspector` + a registry with `appliesTo()`, mounted in **grid, detail, fullscreen and map**. Card letters removed, `i` opens it, and the dev-mode collision guard is in - **zero keys now carry two meanings**. Rotate and flip moved into the _Adjust_ card, beside the sliders they already shared a reset with, leaving their keys registered in the toolbar. The bulk-edit fold-in is **dropped** rather than pending — see below. 10 new tests.                                | 17 files          | high   |
 | **9b**  | **DONE 2026-09-13 — the Detail view is gone.** 7 files deleted, `/detail/*` redirects to `/grid/*` in all three areas, the saved view is mapped on both the migration and the load path, and the filmstrip goes with it. −613 lines.                                                                                                                                                                                                                                                                                                        | 23 files          | done   |
 | **10**  | **DONE 2026-09-13 — `ItemActions`.** Downloads and share, which step 9b had orphaned, return as a `⋮` menu on Kobalte's `DropdownMenu`, in the shared media toolbar so every view has them. 6 files deleted. An orphan check now fails the suite on unreachable modules.                                                                                                                                                                                                                                                                    | 10 files          | medium |
 | **11**  | **DONE 2026-09-13 — `MediaToolbar`.** Three view toolbars become one that derives everything from the service and the view; ~10 props per call site become 4. The map gains a slideshow. −200 lines.                                                                                                                                                                                                                                                                                                                                        | 11 files          | medium |
