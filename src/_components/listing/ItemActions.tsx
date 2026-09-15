@@ -52,10 +52,31 @@ const ItemActions: Component<Props> = props => {
         }
     };
 
+    const shareData = () =>
+        props.activeMedia ? { url: getMediaShareUrl(props.activeMedia) } : undefined;
+
+    /*
+       Asked about the data that is actually going to be shared.
+
+       `canShare()` with no argument is `canShare({})`, and the specification
+       says an empty payload is not shareable - so the bare call answered "no"
+       on every platform, including the ones that support this perfectly well.
+       It read as a support check and behaved as an off switch.
+    */
+    const canShare = () => {
+        const data = shareData();
+
+        return !!data && !!navigator.canShare?.(data);
+    };
+
     const share = () => {
-        navigator.share({ url: getMediaShareUrl(props.activeMedia!) }).catch(() => {
-            // a share the reader dismissed is not an error worth reporting
-        });
+        const data = shareData();
+
+        if (data) {
+            navigator.share(data).catch(() => {
+                // a share the reader dismissed is not an error worth reporting
+            });
+        }
     };
 
     const itemClass =
@@ -117,7 +138,7 @@ const ItemActions: Component<Props> = props => {
                         </DropdownMenu.Item>
                     </Show>
 
-                    <Show when={navigator.canShare?.() && props.activeMedia}>
+                    <Show when={canShare()}>
                         <DropdownMenu.Separator class="my-1 border-t border-base-content/20" />
 
                         <DropdownMenu.Item class={itemClass} onSelect={share}>

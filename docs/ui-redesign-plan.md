@@ -1776,6 +1776,35 @@ now reaches for `getClanPath` as a sibling rather than across the top level.
 feed against the listing of subjects. That distinction survives as two exports in one file, which is where it
 reads better than as two directories one letter apart.
 
+### Share had never worked, twice over (2026-09-15)
+
+Asked whether share still worked after the `⋮` menu absorbed it in step 10. It was still in the menu, and it
+had two independent faults, neither introduced by this rework and neither visible without a platform that
+supports Web Share.
+
+**The URL was the string `"TODO"`.** `getMediaShareUrl` had returned it since long before any of this work.
+The reason it was parked, per the user, was that a link to an asset is meaningless to whoever receives it -
+every file is served behind a bearer token the service worker attaches. That is a real obstacle to sharing a
+_file_, and no obstacle at all to sharing a _page_: the application's own address for the photograph works,
+because the recipient signs in and the app fetches the file as them. It now shares the category grid path,
+which is the canonical home - the same photograph reached through a person's or a place's feed sits at a path
+that describes how you got there rather than where it is.
+
+**And the item never rendered anyway.** It was gated on `navigator.canShare?.()` with **no argument**, and
+`canShare(data)` with no data is `canShare({})`, which the specification defines as unshareable. The bare call
+asks "can I share nothing", is told no, and hides the item on every platform including the ones that support
+it perfectly. It reads as a support check and behaves as an off switch. Now gated on the payload that is
+actually going to be sent.
+
+Neither could be confirmed locally - desktop Linux Chrome does not expose Web Share at all, so the gate hid
+the item here for the right reason and no experiment could tell the two cases apart. The first was certain
+from reading the source; the second from the specification, and is now pinned by a test that stubs a platform
+where `canShare` answers honestly.
+
+**`ItemActions` had no test at all**, which is why a menu entry that could not appear, leading to a URL that
+was a placeholder, survived a step that was specifically about rescuing it from being orphaned. It has three
+now, and each fails against one of the two faults.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
