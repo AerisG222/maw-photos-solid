@@ -1698,6 +1698,28 @@ longer exists.
 element "where it belongs", and that silently restores the tail. `motion.test.ts` fails if the base rule
 declares anything but `transition-property: none`.
 
+### Adjustments stop outliving their subject (2026-09-15)
+
+A reversal of §10's answer from the day before, and worth recording as one rather than quietly changed. Asked
+then whether visual effects should survive moving between photographs, the answer was yes, and the code
+already did it. Raised again while weighing whether to cut the filter sliders, the answer went the other way.
+
+**The sliders stay.** They were on my list as a toy - sepia and hue-rotate on somebody else's photographs -
+and that was the wrong read of who this is for. Grayscale and sepia answer "would this look better as one",
+and hue-rotate turns out to pull edge detail out of awkward scenes. A tool used rarely by one person is still
+a tool.
+
+**What was actually wrong was the persistence.** A rotation is the clearest case: you turn a sideways
+photograph the right way up, step to the next one, and that one is lying on its side for no reason visible on
+screen. The filters are the same fault more quietly - a sepia left on recolours everything you look at
+afterwards, and the control that undoes it is inside a card you may not have open. The effect outlives the
+thing it was applied to, and nothing says so.
+
+`useResetEffectsOnMediaChange` is `createEffect(on(subject, reset, { defer: true }))` - deferred, so arriving
+at the first photograph is not treated as a change. `MainItem` owns the call, being the thing that is
+adjusted. `reset` stays: this is about adjustments not outliving their subject, not about removing the way to
+clear them deliberately.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
@@ -1857,7 +1879,7 @@ Steps 0–2 are safe to land in any order and are worth doing immediately regard
 
 13. **ANSWERED 2026-09-14 — yes, and it already is.** `defaultTheme` became `ThemeSystem` with the theme-toggle fix in step 3, and the pre-mount script resolves anything that is not an explicit `light`/`dark` against `prefers-color-scheme`. No change needed. Should `theme: "system"` be the new default for fresh users? The pre-mount script in `index.html` pins `data-theme`, so adding `system` means that script needs to read `prefers-color-scheme` too. Small change, but it touches the no-flash path.
 
-14. **ANSWERED 2026-09-14 — yes, and it already does; effects must not reset when the photograph changes.** Nothing calls `reset` on item change, so a rotation persists across moves within a media root and clears on leaving it. No change needed. Is `VisualEffectsContext` expected to survive navigation within a media root? It is provided at `MediaRoot`, so a rotation applied to one photo persists across moves within a category but resets when you leave. Moving rotate/flip into the Inspector makes that lifetime more visible, and it may want an explicit "reset on item change" — `EffectsResetButton.tsx` exists but is only inside the Effects card.
+14. **ANSWERED 2026-09-14, REVERSED 2026-09-15 — they now reset when the photograph changes; see the note below.** The original answer was that effects must _not_ reset. Nothing calls `reset` on item change, so a rotation persists across moves within a media root and clears on leaving it. No change needed. Is `VisualEffectsContext` expected to survive navigation within a media root? It is provided at `MediaRoot`, so a rotation applied to one photo persists across moves within a category but resets when you leave. Moving rotate/flip into the Inspector makes that lifetime more visible, and it may want an explicit "reset on item change" — `EffectsResetButton.tsx` exists but is only inside the Effects card.
 
 15. **The primary navigation has no keys at all.** Found while deciding the above: `PrimaryNavLink` registers
     no shortcut, so Categories, People, Places, Search, Random, Stats, About and Settings are reachable only

@@ -2,7 +2,10 @@ import { Component, createSignal, Match, Show, Switch } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
-import { useVisualEffectsContext } from "./contexts/VisualEffectsContext";
+import {
+    useResetEffectsOnMediaChange,
+    useVisualEffectsContext
+} from "./contexts/VisualEffectsContext";
 import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
@@ -30,6 +33,10 @@ interface Props {
 const MainItem: Component<Props> = props => {
     const [listing] = useListingSettingsContext();
     const [, { getFilterStyles, getTransformStyles }] = useVisualEffectsContext();
+
+    // a rotation or a sepia belongs to the photograph it was applied to, and
+    // should not follow you to the next one - see the note in the context
+    useResetEffectsOnMediaChange(() => props.media.id);
     const { getScalesForMain } = useConfigContext();
 
     // the element itself, which is the only thing that knows the source

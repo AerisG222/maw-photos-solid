@@ -1,4 +1,4 @@
-import { createContext, JSX, ParentComponent, useContext } from "solid-js";
+import { createContext, createEffect, JSX, on, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
 export interface VisualEffectsState {
@@ -179,4 +179,25 @@ export const useVisualEffectsContext = () => {
     }
 
     throw new Error("VisualEffects context not provided by ancestor component!");
+};
+
+/*
+   Clear the adjustments when the photograph changes.
+
+   They used to persist for as long as you stayed within a media root, which
+   sounds like a convenience and is mostly a trap. A rotation is the clearest
+   case: you turn a sideways photograph the right way up, step to the next one,
+   and now *that* one is lying on its side for no reason you can see. The
+   filters are the same fault at lower volume - a sepia left on quietly recolours
+   everything you look at afterwards, and the control that would undo it is
+   inside a card you may not have open.
+
+   Deferred, so arriving at the first photograph is not treated as a change.
+   `reset` stays where it is: this is about the adjustments not outliving their
+   subject, not about removing the way to clear them deliberately.
+*/
+export const useResetEffectsOnMediaChange = (subject: () => unknown) => {
+    const [, { reset }] = useVisualEffectsContext();
+
+    createEffect(on(subject, () => reset(), { defer: true }));
 };
