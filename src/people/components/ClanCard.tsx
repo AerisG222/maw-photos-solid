@@ -3,7 +3,7 @@ import { A } from "@solidjs/router";
 
 import { Clan } from "../../_models/Clan";
 import { Person } from "../../_models/Person";
-import { getClanPath } from "../../clan/_routes";
+import { getClanPath } from "../_routes";
 
 import Icon from "../../_components/icon/Icon";
 

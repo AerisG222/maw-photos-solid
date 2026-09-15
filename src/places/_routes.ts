@@ -2,6 +2,7 @@ import { lazy } from "solid-js";
 
 import { AppRouteDefinition } from "../_models/AppRouteDefinition";
 import { Uuid } from "../_models/Uuid";
+import { buildFeedRouteTree, placeFeedBasePath } from "../_media/feed/_routes";
 
 /*
    One screen for the place tree, whoever is looking at it.
@@ -55,3 +56,14 @@ export const getPlacePath = (id?: Uuid, editing = false) => {
 
     return editing ? `${path}?${PLACE_EDIT_PARAM}=1` : path;
 };
+
+/*
+   The media taken at one place.
+
+   It sits below the place rather than at it: `/places/{id}` is the drill-down
+   into the states or cities inside, and `/places/{id}/media` is the photographs
+   from the whole of it. The feed is shared with people and clans - see
+   `_media/feed/_routes` - so all this decides is where it hangs and what it is
+   called.
+*/
+export const placeMediaRoutes = buildFeedRouteTree(placeFeedBasePath(":placeId"), "Place");

@@ -1,11 +1,8 @@
 import { login } from "./auth/_routes";
 import { categories } from "./categories/_routes";
 import { about } from "./about/_routes";
-import { people } from "./people/_routes";
-import { places } from "./places/_routes";
-import { personMediaRoutes } from "./person/_routes";
-import { placeMediaRoutes } from "./place/_routes";
-import { clanMediaRoutes } from "./clan/_routes";
+import { clanMediaRoutes, people, personMediaRoutes } from "./people/_routes";
+import { placeMediaRoutes, places } from "./places/_routes";
 import { search } from "./search/_routes";
 import { stats } from "./stats/_routes";
 import { settings } from "./settings/_routes";

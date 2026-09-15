@@ -1746,6 +1746,36 @@ With these settled, every item from the simplification review is closed and noth
 implementation side. What is left in §10 are two genuine design questions: a keyboard scheme for the primary
 navigation, and what a "stat" is in this application.
 
+### Three directories holding one line each (2026-09-15)
+
+Raised by the user about `person/` and `place/`; there were three, because `clan/` is the same shape.
+
+Each was a top-level directory containing a single `_routes.ts` whose only real content was one call to
+`buildFeedRouteTree`. And every one of their base paths already lived _inside_ an area that has its own
+directory:
+
+```
+personFeedBasePath → /people/{id}
+clanFeedBasePath   → /people/clans/{id}
+placeFeedBasePath  → /places/{id}/media
+```
+
+**The concern was already split.** `people/_routes.ts` exported `getPersonPath` → `/people/{id}`, the exact
+path `person/_routes.ts` built a route tree for. Same on the other side: `getPlacePath` in `places/`,
+`placeMediaRoutes` in `place/`. So "what is a person's URL" and "what hangs off it" lived in two directories
+whose names differ by one letter - which is a thing you stop and parse every time you read the tree.
+
+**The one thing that could have justified it was a cycle**, and there is none: `_media/feed/_routes.ts`
+imports only `solid-js` and `_models`. Files like `feed/Redirect.tsx` do import `people/_routes`, but they are
+reached through `lazy()`, so there is no static back-edge.
+
+`src/` goes from twenty entries to seventeen and stops reading as areas-plus-fragments-of-areas. `ClanCard`
+now reaches for `getClanPath` as a sibling rather than across the top level.
+
+**What is lost, and why it is worth losing.** Singular versus plural did encode something real - one subject's
+feed against the listing of subjects. That distinction survives as two exports in one file, which is where it
+reads better than as two directories one letter apart.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
