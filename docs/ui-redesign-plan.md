@@ -1720,6 +1720,32 @@ at the first photograph is not treated as a change. `MainItem` owns the call, be
 adjusted. `reset` stays: this is about adjustments not outliving their subject, not about removing the way to
 clear them deliberately.
 
+### Histogram and MiniMap stay, and my case against MiniMap was wrong (2026-09-15)
+
+The last two candidates from the simplification review, both kept.
+
+**Histogram** earns its place when reviewing photographs, which is a use I had discounted on the grounds that
+most viewers will not read one. Most viewers is not the measure for this application.
+
+**MiniMap** I argued against on the grounds that it shows a single marker for a photograph you can already see
+on the Map view. That was wrong twice over. It misses the point of the card - the Map view shows a
+_thumbnail_ on a map by design, while the Inspector shows where you are standing beside the **full-size**
+image, which is a different question being answered. And the duplication I was worried about cannot happen:
+`registry.ts` has carried `appliesTo: context => context.view !== MediaViewMap` since step 9, with a test
+named "the minimap stands aside on the map, where it would say the same thing twice". I had read that code,
+written about it, and still raised the objection it exists to answer.
+
+Worth recording as the shape of the error rather than the instance: **an argument from "who would use this"
+is weak in an application with one user who can simply tell you.** Three of the five candidates in that review
+were right to cut - density, dimming, badges - and every one of those was justified by something structural
+(a setting salvaged from two older controls, a default that was the only sensible value, a preference that
+could hide the sole route to a feature). The two I got wrong were both justified by my guess at what somebody
+would want.
+
+With these settled, every item from the simplification review is closed and nothing remains on the
+implementation side. What is left in §10 are two genuine design questions: a keyboard scheme for the primary
+navigation, and what a "stat" is in this application.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
