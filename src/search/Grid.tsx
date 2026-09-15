@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useSearchContext } from "./contexts/SearchContext";
@@ -61,16 +61,14 @@ const ViewGrid: Component = () => {
                 when={!state.activeTerm || searchQuery.isSuccess}
                 skeleton={<SkeletonGrid />}
             >
-                <ListingSurface class="my-4">
-                    <For each={allSearchResults(searchQuery) ?? []}>
-                        {(category, idx) => (
-                            <CategoryCard
-                                category={category}
-                                eager={idx() <= EAGER_THRESHOLD}
-                                setIsFavorite={setIsFavorite}
-                            />
-                        )}
-                    </For>
+                <ListingSurface class="my-4" items={allSearchResults(searchQuery) ?? []}>
+                    {(category, index) => (
+                        <CategoryCard
+                            category={category}
+                            eager={index <= EAGER_THRESHOLD}
+                            setIsFavorite={setIsFavorite}
+                        />
+                    )}
                 </ListingSurface>
             </AsyncBoundary>
         </Layout>

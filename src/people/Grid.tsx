@@ -1,4 +1,4 @@
-import { Component, createMemo, createSignal, For, Show } from "solid-js";
+import { Component, createMemo, createSignal, Show } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useClansContext } from "../_contexts/api/ClansContext";
@@ -247,19 +247,17 @@ const GridView: Component = () => {
                 <PersonFilterBar filter={filter()} setFilter={setFilter} />
 
                 <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
-                    <ListingSurface animate class="mb-4">
-                        <For each={peopleToDisplay()}>
-                            {(person, idx) => (
-                                <PersonCard
-                                    person={person}
-                                    eager={idx() <= EAGER_THRESHOLD}
-                                    selectable={isPicking()}
-                                    selected={selected().has(person.id)}
-                                    setIsFavorite={setIsFavorite}
-                                    toggleSelected={toggleSelected}
-                                />
-                            )}
-                        </For>
+                    <ListingSurface animate class="mb-4" items={peopleToDisplay()}>
+                        {(person, index) => (
+                            <PersonCard
+                                person={person}
+                                eager={index <= EAGER_THRESHOLD}
+                                selectable={isPicking()}
+                                selected={selected().has(person.id)}
+                                setIsFavorite={setIsFavorite}
+                                toggleSelected={toggleSelected}
+                            />
+                        )}
                     </ListingSurface>
                 </Show>
             </AsyncBoundary>

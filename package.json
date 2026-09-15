@@ -49,6 +49,7 @@
         "@solid-primitives/resize-observer": "^2.2.0",
         "@solidjs/router": "^1.0.0",
         "@tanstack/solid-query": "^5.102.8",
+        "@tanstack/solid-virtual": "^3.13.40",
         "date-fns": "^4.4.0",
         "highcharts": "^13.0.2",
         "numbro": "^2.5.0",

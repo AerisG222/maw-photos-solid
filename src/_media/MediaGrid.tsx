@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
@@ -15,17 +15,15 @@ interface Props {
 const MediaGrid: Component<Props> = props => {
     // entrance on the group, not each tile - see the note in YearGrid
     return (
-        <ListingSurface animate class="mb-4">
-            <For each={props.items}>
-                {(media, idx) => (
-                    <MediaLink
-                        href={props.mediaLinkBuilder(media)}
-                        media={media}
-                        eager={idx() <= EAGER_THRESHOLD}
-                        setIsFavorite={props.setIsFavorite}
-                    />
-                )}
-            </For>
+        <ListingSurface animate class="mb-4" items={props.items}>
+            {(media, index) => (
+                <MediaLink
+                    href={props.mediaLinkBuilder(media)}
+                    media={media}
+                    eager={index <= EAGER_THRESHOLD}
+                    setIsFavorite={props.setIsFavorite}
+                />
+            )}
         </ListingSurface>
     );
 };

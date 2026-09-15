@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { Category } from "../../_models/Category";
@@ -27,16 +27,14 @@ const YearGrid: Component<Props> = props => {
                 container instance is keyed by year, so it survives the refetch
                 and animates only when the year first appears.
             */}
-            <ListingSurface animate class="mb-4">
-                <For each={props.categories}>
-                    {(category, idx) => (
-                        <CategoryCard
-                            category={category}
-                            eager={props.enableEagerLoading && idx() <= EAGER_THRESHOLD}
-                            setIsFavorite={props.setIsFavorite}
-                        />
-                    )}
-                </For>
+            <ListingSurface animate class="mb-4" items={props.categories}>
+                {(category, index) => (
+                    <CategoryCard
+                        category={category}
+                        eager={props.enableEagerLoading && index <= EAGER_THRESHOLD}
+                        setIsFavorite={props.setIsFavorite}
+                    />
+                )}
             </ListingSurface>
         </>
     );

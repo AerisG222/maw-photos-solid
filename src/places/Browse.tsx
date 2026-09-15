@@ -1,4 +1,4 @@
-import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import { Component, Show, createEffect, createSignal } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 
@@ -263,21 +263,20 @@ const Browse: Component = () => {
                     isEmpty={places.data?.length === 0}
                     empty={<EmptyState icon="icon-[ic--round-place]" title={emptyMessage()} />}
                 >
-                    <ListingSurface animate class="mb-4">
-                        <For each={places.data}>
-                            {(item, idx) => (
-                                <PlaceCard
-                                    place={item}
-                                    href={tileHref(item)}
-                                    leadsToMedia={!editing() && isLeafPlace(item)}
-                                    showAncestry={!!search()}
-                                    eager={idx() <= EAGER_THRESHOLD}
-                                    onChooseCover={
-                                        editing() ? chosen => setCoverForId(chosen.id) : undefined
-                                    }
-                                />
-                            )}
-                        </For>
+                    {/* a place card is wider than a tile - see ListingSurface */}
+                    <ListingSurface animate class="mb-4" itemWidth={240} items={places.data ?? []}>
+                        {(item, index) => (
+                            <PlaceCard
+                                place={item}
+                                href={tileHref(item)}
+                                leadsToMedia={!editing() && isLeafPlace(item)}
+                                showAncestry={!!search()}
+                                eager={index <= EAGER_THRESHOLD}
+                                onChooseCover={
+                                    editing() ? chosen => setCoverForId(chosen.id) : undefined
+                                }
+                            />
+                        )}
                     </ListingSurface>
                 </AsyncBoundary>
             </Show>

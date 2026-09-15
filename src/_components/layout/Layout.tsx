@@ -1,6 +1,7 @@
-import { JSXElement, ParentComponent, Show, children, mergeProps } from "solid-js";
+import { JSXElement, ParentComponent, Show, children, createSignal, mergeProps } from "solid-js";
 
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
+import { ScrollContainerProvider } from "./ScrollContainerContext";
 
 interface Props {
     xPad?: boolean;
@@ -48,6 +49,9 @@ const Layout: ParentComponent<Props> = props => {
     */
     const [fullscreen] = useFullscreenContext();
 
+    // handed to the listings inside, which need to know what is on screen
+    const [scroller, setScroller] = createSignal<HTMLElement>();
+
     return (
         <div
             /*
@@ -76,6 +80,7 @@ const Layout: ParentComponent<Props> = props => {
             </Show>
 
             <div
+                ref={setScroller}
                 class="stage-backdrop row-start-1 col-span-2 md:row-start-1 md:col-start-2 md:col-span-1"
                 classList={{
                     "px-2": merged.xPad,
@@ -90,7 +95,9 @@ const Layout: ParentComponent<Props> = props => {
 
                     {header()}
 
-                    {content()}
+                    <ScrollContainerProvider element={scroller}>
+                        {content()}
+                    </ScrollContainerProvider>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, Show } from "solid-js";
 import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
@@ -87,16 +87,14 @@ const Categories: Component = () => {
                         />
                     }
                 >
-                    <ListingSurface animate class="mb-4">
-                        <For each={feed.categories()}>
-                            {(category, idx) => (
-                                <CategoryCard
-                                    category={category}
-                                    eager={idx() <= EAGER_THRESHOLD}
-                                    setIsFavorite={setIsFavorite}
-                                />
-                            )}
-                        </For>
+                    <ListingSurface animate class="mb-4" items={feed.categories()}>
+                        {(category, index) => (
+                            <CategoryCard
+                                category={category}
+                                eager={index <= EAGER_THRESHOLD}
+                                setIsFavorite={setIsFavorite}
+                            />
+                        )}
                     </ListingSurface>
                 </AsyncBoundary>
             </Show>
