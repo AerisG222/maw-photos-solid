@@ -65,8 +65,17 @@ const SidePanel: ParentComponent<Props> = props => {
             }
         };
 
-        window.addEventListener("keydown", onKeyDown);
-        onCleanup(() => window.removeEventListener("keydown", onKeyDown));
+        /*
+           Captured, so that this is unambiguously the first claim on Escape.
+
+           Three things answer that key on a media view - this panel, leaving
+           fullscreen, and closing the photograph - and they are a stack: the
+           topmost thing dismisses first. Ordering by registration would make
+           that depend on which component happened to mount first. Capturing
+           here and checking `defaultPrevented` there makes the stack explicit.
+        */
+        window.addEventListener("keydown", onKeyDown, true);
+        onCleanup(() => window.removeEventListener("keydown", onKeyDown, true));
     });
 
     return (

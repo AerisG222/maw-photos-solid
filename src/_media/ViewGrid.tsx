@@ -7,7 +7,7 @@ import {
     onMount,
     Show
 } from "solid-js";
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
 import { SlideshowService } from "./services/SlideshowService";
@@ -16,6 +16,8 @@ import { MediaViewGrid } from "../_models/MediaView";
 import { Media } from "../_models/Media";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
+import { isEditableTarget } from "../_components/shortcuts/_util";
+import { escapeAction } from "./_escape";
 import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import MediaToolbar from "./MediaToolbar";
@@ -69,6 +71,7 @@ const ViewGrid: Component<Props> = props => {
     >();
     const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
+    const navigate = useNavigate();
 
     const activeMedia = () => props.mediaService.getActiveMedia();
 
@@ -95,11 +98,36 @@ const ViewGrid: Component<Props> = props => {
     // the view is being left entirely - a different area, a different feed
     onCleanup(() => setFullscreen(false));
 
+    // Escape backs out one layer at a time - the order lives in `_escape`
+
+    const closeActiveMedia = () => {
+        props.slideshowService.stop();
+        navigate(props.mediaService.getEntryPathByView(MediaViewGrid));
+    };
+
     onMount(() => {
         const onKeyDown = (evt: KeyboardEvent) => {
-            if (evt.key === "Escape" && fullscreen.isFullscreen) {
-                evt.preventDefault();
+            if (evt.key !== "Escape") {
+                return;
+            }
+
+            const action = escapeAction({
+                handled: evt.defaultPrevented,
+                typing: isEditableTarget(evt.target),
+                isFullscreen: fullscreen.isFullscreen,
+                hasActiveMedia: !!activeMedia()
+            });
+
+            if (action === "none") {
+                return;
+            }
+
+            evt.preventDefault();
+
+            if (action === "exitFullscreen") {
                 setFullscreen(false);
+            } else {
+                closeActiveMedia();
             }
         };
 

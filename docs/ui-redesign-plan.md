@@ -1859,6 +1859,33 @@ the roving cursor that would once have supplied a "focused tile" was removed, so
 on something the reader cannot see chosen. The `disabled` gate is load-bearing and has a test that fails
 without it.
 
+### Escape backs out one layer at a time (2026-09-15)
+
+Asked for Escape to close the open photograph. It already meant two things - dismiss the Inspector when it is
+overlaid, leave fullscreen - so this is a third claim on one key, and the interesting part is not the handler
+but the **order**.
+
+A media view can have all three states at once. The stack is _Inspector, then fullscreen, then the
+photograph_, and exactly one layer goes per press. Taking two would be faster and worse: leaving fullscreen is
+the thing most likely to be wanted, and overshooting it means finding the photograph again on a grid of
+several hundred.
+
+**The ordering is a function, not a chain of `if`s inside a view.** `_escape.ts` takes what is on screen and
+names what should happen. The order is the part that will be got wrong when a fourth thing wants this key, and
+an order buried in a two-hundred-line component is an order nobody can see.
+
+**Two listeners, made deterministic.** The panel and the view both listen on `window`, and listeners on one
+target fire in registration order - which would have made the behaviour depend on which component happened to
+mount first. The panel captures instead, so it unambiguously answers first, and the view checks
+`defaultPrevented`, so it stands down. Both halves have a test that fails without them.
+
+**And a test that proved nothing, twice.** The first version read `defaultPrevented` after the dispatch - but
+the event is one object and `preventDefault` mutates it, so reading the flag afterwards says only that
+somebody called it, never who went first. It passed with the capture removed. The flag has to be sampled
+_inside_ the listener beneath, and that listener registered before the panel exists, or the test cannot lose
+the race it exists to detect. That is the third time in this rework that checking a new test against the old
+code found the test at fault rather than the code.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
