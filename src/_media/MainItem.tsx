@@ -6,6 +6,7 @@ import {
     useResetEffectsOnMediaChange,
     useVisualEffectsContext
 } from "./contexts/VisualEffectsContext";
+import { createPanZoom } from "./_panZoom";
 import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
@@ -53,7 +54,26 @@ const MainItem: Component<Props> = props => {
 
     let mediaHolderDiv!: HTMLDivElement;
 
+    const [zoomTarget, setZoomTarget] = createSignal<HTMLDivElement>();
+
+    /*
+       Pinch and wheel on the photograph, on an element of its own above the one
+       carrying rotation - two transforms cannot share a style property. Panning
+       turns on only once zoomed, so a drag at the resting size is still the
+       swipe to the next photograph.
+    */
+    const { isZoomed } = createPanZoom(zoomTarget, () => props.media.id);
+
     const handleSwipe = (direction: SWIPE_DIRECTION) => {
+        /*
+           A drag while zoomed in is panning, not paging. Panzoom disables its
+           own panning at the resting size for the mirror-image reason, so the
+           two gestures never both answer.
+        */
+        if (isZoomed()) {
+            return;
+        }
+
         if (direction === SWIPE_LEFT) {
             props.movePrevious();
         } else if (direction === SWIPE_RIGHT) {
@@ -96,50 +116,60 @@ const MainItem: Component<Props> = props => {
 
     return (
         <Show when={props.media}>
-            <div class="relative h-full w-full self-center">
-                <div
-                    ref={mediaHolderDiv}
-                    use:swipe={
-                        /* a directive is handed the handler itself; solid wraps it in the
+            <div class="relative h-full w-full self-center overflow-hidden">
+                {/* the zoom's own element - see createPanZoom */}
+                <div ref={setZoomTarget} class="h-full w-full">
+                    <div
+                        ref={mediaHolderDiv}
+                        use:swipe={
+                            /* a directive is handed the handler itself; solid wraps it in the
                            accessor swipe reads */
-                        // eslint-disable-next-line solid/reactivity
-                        handleSwipe
-                    }
-                    use:tap={handleTap}
-                    // relative so the face boxes measure against the photo's own
-                    // box - a transform would establish that too, but only while
-                    // one is actually applied
-                    class="relative h-full w-full max-h-dvh max-w-full object-contain"
-                    // an object rather than a string: solid then diffs the two
-                    // properties individually instead of rewriting cssText on
-                    // every effect change.
-                    //
-                    // `view-transition-name` is what lets the browser recognise
-                    // the photograph in the grid and the photograph in fullscreen
-                    // as one thing and tween between them. Only ever one of these
-                    // is on screen at a time, which the name requires.
-                    style={{
-                        ...getTransformStyles(),
-                        ...getFilterStyles(),
-                        "view-transition-name": "active-media"
-                    }}
-                >
-                    <Switch>
-                        <Match when={props.media.type === "photo"}>
-                            <MainPhoto url={getMediaUrl()} setActiveMediaElement={captureElement} />
-                        </Match>
-                        <Match when={props.media.type === "video"}>
-                            <MainVideo url={getMediaUrl()} setActiveMediaElement={captureElement} />
-                        </Match>
-                    </Switch>
+                            // eslint-disable-next-line solid/reactivity
+                            handleSwipe
+                        }
+                        use:tap={handleTap}
+                        // relative so the face boxes measure against the photo's own
+                        // box - a transform would establish that too, but only while
+                        // one is actually applied
+                        class="relative h-full w-full max-h-dvh max-w-full object-contain"
+                        // an object rather than a string: solid then diffs the two
+                        // properties individually instead of rewriting cssText on
+                        // every effect change.
+                        //
+                        // `view-transition-name` is what lets the browser recognise
+                        // the photograph in the grid and the photograph in fullscreen
+                        // as one thing and tween between them. Only ever one of these
+                        // is on screen at a time, which the name requires.
+                        style={{
+                            ...getTransformStyles(),
+                            ...getFilterStyles(),
+                            "view-transition-name": "active-media"
+                        }}
+                    >
+                        <Switch>
+                            <Match when={props.media.type === "photo"}>
+                                <MainPhoto
+                                    url={getMediaUrl()}
+                                    setActiveMediaElement={captureElement}
+                                />
+                            </Match>
+                            <Match when={props.media.type === "video"}>
+                                <MainVideo
+                                    url={getMediaUrl()}
+                                    setActiveMediaElement={captureElement}
+                                />
+                            </Match>
+                        </Switch>
 
-                    {/* inside the transform, so the boxes turn with the photo */}
-                    <Show when={highlight.isEnabled()}>
-                        <FaceBoxes highlight={highlight} />
-                    </Show>
+                        {/* inside the transform, so the boxes turn with the photo */}
+                        <Show when={highlight.isEnabled()}>
+                            <FaceBoxes highlight={highlight} />
+                        </Show>
+                    </div>
                 </div>
 
-                {/* outside it, so the controls stay upright */}
+                {/* outside the zoom as well as the rotation, so the controls
+                    stay upright and stay put */}
                 <Show when={highlight.isEnabled()}>
                     <FacePeopleStrip highlight={highlight} />
                 </Show>
