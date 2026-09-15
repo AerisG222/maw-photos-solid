@@ -25,7 +25,7 @@ import Layout from "../_components/layout/Layout";
    default, in an application whose subject is photographs.
 */
 const ViewBrowsing: Component = () => {
-    const [settings, { setShowLabels, setShowBadges, setHighlightFaces, setPeopleSort }] =
+    const [settings, { setShowLabels, setHighlightFaces, setPeopleSort }] =
         useListingSettingsContext();
 
     return (
@@ -37,12 +37,6 @@ const ViewBrowsing: Component = () => {
                         name="showLabels"
                         isSelected={settings.showLabels}
                         onChange={setShowLabels}
-                    />
-                    <Toggle
-                        title="Show Badges"
-                        name="showBadges"
-                        isSelected={settings.showBadges}
-                        onChange={setShowBadges}
                     />
                     <Toggle
                         title="Highlight Faces"

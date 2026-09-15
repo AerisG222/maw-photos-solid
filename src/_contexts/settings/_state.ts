@@ -33,20 +33,12 @@ export interface ListingSettingsState {
     // titles, years, names and media counts - all of them answer "do I want
     // text under the picture", so there is one control rather than four
     readonly showLabels: boolean;
-    // favourite hearts and media-type icons
-    readonly showBadges: boolean;
     readonly highlightFaces: boolean;
     readonly peopleSort: PersonSortIdType;
 }
 
 export const defaultListingSettings: ListingSettingsState = {
     showLabels: true,
-    /*
-       On, where every one of the six stores this replaces defaulted it off.
-       The favourite heart is the only way to favourite anything, and it was
-       invisible until you found a toolbar button to reveal it.
-    */
-    showBadges: true,
     highlightFaces: false,
     peopleSort: defaultPersonSort
 };

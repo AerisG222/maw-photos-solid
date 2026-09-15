@@ -10,8 +10,6 @@ interface Props {
     sort?: boolean;
     // the text under an item - a title, a year, a name, a count
     labels?: boolean;
-    // the favourite heart and the media-type icons on a tile
-    badges?: boolean;
     // media listings only
     faces?: boolean;
 }
@@ -36,7 +34,7 @@ interface Props {
    listing.
 */
 const ListingToolbar: Component<Props> = props => {
-    const [settings, { setShowLabels, setShowBadges, setHighlightFaces, setPeopleSort }] =
+    const [settings, { setShowLabels, setHighlightFaces, setPeopleSort }] =
         useListingSettingsContext();
 
     return (
@@ -63,17 +61,6 @@ const ListingToolbar: Component<Props> = props => {
                     shortcutKeys={["t"]}
                     clickHandler={() => setShowLabels(!settings.showLabels)}
                     active={settings.showLabels}
-                />
-            </Show>
-
-            <Show when={props.badges}>
-                <ToolbarButton
-                    icon="icon-[ic--round-label]"
-                    name="Badges"
-                    tooltip="Toggle Badges"
-                    shortcutKeys={["h"]}
-                    clickHandler={() => setShowBadges(!settings.showBadges)}
-                    active={settings.showBadges}
                 />
             </Show>
 

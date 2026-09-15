@@ -18,8 +18,7 @@ import {
     KEY_SETTINGS_MEDIA_VIEW_DETAIL,
     KEY_SETTINGS_MEDIA_VIEW_GRID,
     KEY_SETTINGS_MEDIA_VIEW_MAP,
-    KEY_SETTINGS_PEOPLE_VIEW_GRID,
-    KEY_SETTINGS_SEARCH_VIEW_GRID
+    KEY_SETTINGS_PEOPLE_VIEW_GRID
 } from "./_storage";
 import { defaultMediaSettings } from "./_state";
 
@@ -33,7 +32,6 @@ describe("migrating from the per-view settings", () => {
         const migrated = buildMigratedSettings(reader({}));
 
         expect(migrated.app.theme).toBe(ThemeSystem);
-        expect(migrated.listing.showBadges).toBe(true);
         expect(migrated.listing.showLabels).toBe(true);
         expect(migrated.media.inspectorCards).toEqual(defaultMediaSettings.inspectorCards);
     });
@@ -67,24 +65,6 @@ describe("migrating from the per-view settings", () => {
             buildMigratedSettings(reader({ [KEY_SETTINGS_APP]: { isPrimaryNavCollapsed: true } }))
                 .app.navExpanded
         ).toBe(false);
-    });
-
-    /*
-       The non-default choice wins. Badges shipped off, so switching them on
-       anywhere is the deliberate act.
-    */
-    test("badges end up on whatever was stored, because nobody turned them off", () => {
-        // they shipped off, so the stored value can only ever have been "on"
-        expect(
-            buildMigratedSettings(
-                reader({ [KEY_SETTINGS_SEARCH_VIEW_GRID]: { showFavoritesBadge: true } })
-            ).listing.showBadges
-        ).toBe(true);
-        expect(
-            buildMigratedSettings(
-                reader({ [KEY_SETTINGS_SEARCH_VIEW_GRID]: { showFavoritesBadge: false } })
-            ).listing.showBadges
-        ).toBe(true);
     });
 
     test("labels turned off anywhere turn off everywhere", () => {
@@ -209,7 +189,6 @@ describe("migrating from the per-view settings", () => {
             showToolbarLabels: true
         });
         expect(migrated.listing.showLabels).toBe(true);
-        expect(migrated.listing.showBadges).toBe(true);
         expect(migrated.listing.peopleSort).toBe("mediaCount");
         expect(migrated.media.slideshowSeconds).toBe(5);
         expect(migrated.area.categoriesView).toBe("list");

@@ -1636,6 +1636,31 @@ asking whether the survivor should exist at all. The test to apply is whether a 
 button, its shortcut letter, its settings row and its stored key - and by that test `showBadges` is the next
 one to look at, since the favourite heart it hides is the only way to favourite anything.
 
+### The badge toggle goes, on its own argument (2026-09-15)
+
+Flagged at the end of the density work as the next setting failing the "does it earn its keep" test, and
+removed here. The argument was already written down inside `PersonCard`, which had been carrying an exception
+since step 7: _the favourite heart is always offered there, because it is the only way to mark a person, so
+hiding it behind a preference would hide the feature itself._
+
+That reasoning does not stop at people. The heart is the only way to favourite **anything** - a category, a
+photograph - so `showBadges` was a setting whose "off" position removed the sole route to a feature. It
+already defaulted **on** for exactly that reason, which meant the preference existed to let somebody break
+their own application and nothing else.
+
+Gone: the state field, the context action, the toolbar button, the settings row, the migration note that
+explained why it was not carried across, and the `<Show>` around every badge in `Tile`'s three callers and in
+`MainItem`. `h` is free.
+
+**The snapshot did not move**, which is the tell that this was dead weight rather than behaviour: badges
+defaulted on, `<Show>` with a truthy condition renders no wrapper, so the markup is character-for-character
+what it was.
+
+That is three settings deleted in two days - density, thumbnail dimming, badges - and all three were the same
+shape: **a preference nobody asked for, created by merging two older controls, whose default was the only
+sensible value.** What is left in `ListingSettings` is `showLabels`, `highlightFaces` and `peopleSort`, and
+those three are genuine choices with two defensible answers each.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

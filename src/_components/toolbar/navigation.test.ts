@@ -7,7 +7,7 @@ import { describe, expect, test } from "vitest";
 
    `ToolbarLayout` puts its children behind a single overflow button below `md`
    and keeps only the `nav` and `actions` slots on screen. That is the right
-   trade for a badge toggle and the wrong one for the links you move around
+   trade for a label toggle and the wrong one for the links you move around
    with - so where a toolbar's navigation is passed decides whether you can
    still get anywhere on a phone.
 

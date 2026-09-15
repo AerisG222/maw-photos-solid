@@ -13,7 +13,6 @@ export type ListingSettingsContextValue = [
     state: ListingSettingsState,
     actions: {
         setShowLabels: (showLabels: boolean) => void;
-        setShowBadges: (showBadges: boolean) => void;
         setHighlightFaces: (highlightFaces: boolean) => void;
         setPeopleSort: (peopleSort: PersonSortIdType) => void;
     }
@@ -33,8 +32,6 @@ export const ListingSettingsProvider: ParentComponent = props => {
 
     const setShowLabels = (showLabels: boolean) => updateState({ showLabels });
 
-    const setShowBadges = (showBadges: boolean) => updateState({ showBadges });
-
     const setHighlightFaces = (highlightFaces: boolean) => updateState({ highlightFaces });
 
     const setPeopleSort = (peopleSort: PersonSortIdType) => updateState({ peopleSort });
@@ -45,7 +42,6 @@ export const ListingSettingsProvider: ParentComponent = props => {
                 state,
                 {
                     setShowLabels,
-                    setShowBadges,
                     setHighlightFaces,
                     setPeopleSort
                 }

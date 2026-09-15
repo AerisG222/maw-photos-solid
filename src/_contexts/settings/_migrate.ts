@@ -156,15 +156,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 bool(peopleGrid.showNames),
                 bool(peopleGrid.showMediaCounts)
             ]),
-            /*
-               Not carried across, deliberately. Both badge flags shipped off,
-               so the only thing anyone could have expressed was turning them
-               on - there is no "off" preference to preserve. They are on for
-               everyone now: the favourite heart is the only way to favourite a
-               photograph, and it was invisible until you found the toolbar
-               button that revealed it.
-            */
-            showBadges: defaultListingSettings.showBadges,
             highlightFaces: anyTrue([
                 bool(mediaGrid.highlightFaces),
                 bool(mediaDetail.highlightFaces),

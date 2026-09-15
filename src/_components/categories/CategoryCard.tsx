@@ -41,27 +41,23 @@ const CategoryCard: Component<Props> = props => {
             label={<Show when={listing.showLabels}>{props.category.name}</Show>}
             badges={{
                 topLeft: (
-                    <Show when={listing.showBadges}>
-                        <div class="badge m-[1px] gap-0.5 px-0.5 opacity-50">
-                            <For each={props.category.mediaTypes}>
-                                {typ => (
-                                    <MediaTypeIcon
-                                        extraClasses={"text-sm text-primary"}
-                                        mediaType={typ}
-                                    />
-                                )}
-                            </For>
-                        </div>
-                    </Show>
+                    <div class="badge m-[1px] gap-0.5 px-0.5 opacity-50">
+                        <For each={props.category.mediaTypes}>
+                            {typ => (
+                                <MediaTypeIcon
+                                    extraClasses={"text-sm text-primary"}
+                                    mediaType={typ}
+                                />
+                            )}
+                        </For>
+                    </div>
                 ),
                 topRight: (
-                    <Show when={listing.showBadges}>
-                        <FavoriteBadge
-                            isFavorite={props.category.isFavorite}
-                            subjectId={props.category.id}
-                            onToggle={onClickFavorite}
-                        />
-                    </Show>
+                    <FavoriteBadge
+                        isFavorite={props.category.isFavorite}
+                        subjectId={props.category.id}
+                        onToggle={onClickFavorite}
+                    />
                 )
             }}
         />

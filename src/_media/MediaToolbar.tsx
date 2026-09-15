@@ -136,7 +136,7 @@ const MediaToolbar: Component<Props> = props => {
                     <AdjustShortcuts />
                 </Show>
 
-                <ListingToolbar badges faces />
+                <ListingToolbar faces />
             </Show>
         </>
     );

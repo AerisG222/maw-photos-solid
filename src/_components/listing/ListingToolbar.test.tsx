@@ -28,25 +28,24 @@ const press = (name: string) =>
 
 describe("ListingToolbar", () => {
     test("offers only what the listing asked for", () => {
-        mount(() => <ListingToolbar labels badges />);
+        mount(() => <ListingToolbar labels faces />);
 
-        expect(controls()).toEqual(["Toggle Labels (T)", "Toggle Badges (H)"]);
+        expect(controls()).toEqual(["Toggle Labels (T)", "Toggle Face Highlighting (Q)"]);
     });
 
     test("always in the same order, whichever subset it is", () => {
-        mount(() => <ListingToolbar badges labels sort faces />);
+        mount(() => <ListingToolbar labels sort faces />);
 
         expect(controls().map(t => t.split(" (")[0])).toEqual([
             "Sorted by Name",
             "Toggle Labels",
-            "Toggle Badges",
             "Toggle Face Highlighting"
         ]);
     });
 
     // the row is the same everywhere, so the keys have to be too
     test("no two of its controls claim the same key", () => {
-        mount(() => <ListingToolbar sort labels badges faces />);
+        mount(() => <ListingToolbar sort labels faces />);
 
         const keys = controls().map(title => /\(([^)]+)\)$/.exec(title)?.[1]);
 

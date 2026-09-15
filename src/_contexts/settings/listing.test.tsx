@@ -46,18 +46,7 @@ describe("the listing settings", () => {
         actions.setShowLabels(false);
         expect(settings.showLabels).toBe(false);
 
-        actions.setShowBadges(false);
-        expect(settings.showBadges).toBe(false);
-    });
-
-    /*
-       On, where every one of the six stores this replaces defaulted it off:
-       the favourite heart is the only way to favourite anything, and it was
-       invisible until you found a toolbar button to reveal it.
-    */
-    test("badges start visible", () => {
-        const [settings] = mount(useListingSettingsContext);
-
-        expect(settings.showBadges).toBe(true);
+        actions.setHighlightFaces(true);
+        expect(settings.highlightFaces).toBe(true);
     });
 });

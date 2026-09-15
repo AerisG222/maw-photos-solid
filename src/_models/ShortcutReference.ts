@@ -60,7 +60,6 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
             "size, and photographs show in full colour.",
         entries: [
             { keys: ["t"], action: "Show / hide labels", scope: "Any listing" },
-            { keys: ["h"], action: "Show / hide badges", scope: "Any listing" },
             { keys: ["o"], action: "Cycle the sort order", scope: "People" },
             { keys: ["r"], action: "Load more", scope: "Any paged listing" }
         ]

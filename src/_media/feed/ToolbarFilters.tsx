@@ -11,10 +11,11 @@ interface Props {
 
 /*
    The controls that shape the media listing of a face feed. Both write to the
-   query string, so they survive a move into detail or fullscreen and a reload.
+   query string, so they survive a reload and a move between views.
 
-   Their keys avoid f, h and e, which the view links and the badge toggles
-   already own on these screens.
+   Their keys avoid the ones the other controls on these screens already own -
+   which is now checked rather than remembered, by the collision guard in
+   `ShortcutContext` and by `ShortcutReference.test.ts`.
 */
 const ToolbarFilters: Component<Props> = props => {
     return (

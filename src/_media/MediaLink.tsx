@@ -1,8 +1,7 @@
-import { Component, Show } from "solid-js";
+import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
-import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 
 import FavoriteBadge from "../_components/listing/FavoriteBadge";
 import MediaTypeIcon from "../_components/icon/MediaTypeIcon";
@@ -21,8 +20,6 @@ interface Props {
    corners.
 */
 const MediaLink: Component<Props> = props => {
-    const [listing] = useListingSettingsContext();
-
     const onClickFavorite = () => props.setIsFavorite?.(props.media, !props.media.isFavorite);
 
     return (
@@ -32,23 +29,19 @@ const MediaLink: Component<Props> = props => {
             eager={props.eager}
             badges={{
                 topLeft: (
-                    <Show when={listing.showBadges}>
-                        <div class="badge m-[1px] gap-0.5 px-0.5 opacity-50">
-                            <MediaTypeIcon
-                                extraClasses={"text-sm text-primary"}
-                                mediaType={props.media.type}
-                            />
-                        </div>
-                    </Show>
+                    <div class="badge m-[1px] gap-0.5 px-0.5 opacity-50">
+                        <MediaTypeIcon
+                            extraClasses={"text-sm text-primary"}
+                            mediaType={props.media.type}
+                        />
+                    </div>
                 ),
                 topRight: (
-                    <Show when={listing.showBadges}>
-                        <FavoriteBadge
-                            isFavorite={props.media.isFavorite}
-                            subjectId={props.media.id}
-                            onToggle={onClickFavorite}
-                        />
-                    </Show>
+                    <FavoriteBadge
+                        isFavorite={props.media.isFavorite}
+                        subjectId={props.media.id}
+                        onToggle={onClickFavorite}
+                    />
                 )
             }}
         />

@@ -72,9 +72,10 @@ const PersonCard: Component<Props> = props => {
                     </Show>
                 ),
                 /*
-                   Always offered, unlike the badges elsewhere: this is the only
-                   way to mark a person, so hiding it behind a preference would
-                   hide the feature itself.
+                   The only way to mark a person, which is the argument that
+                   eventually took the preference away from every badge: a
+                   setting that can hide the sole route to a feature is not
+                   offering a choice, it is offering a trap.
                 */
                 topRight: (
                     <FavoriteBadge

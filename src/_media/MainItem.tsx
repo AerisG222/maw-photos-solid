@@ -137,24 +137,20 @@ const MainItem: Component<Props> = props => {
                     <FacePeopleStrip highlight={highlight} />
                 </Show>
 
-                <Show when={listing.showBadges}>
-                    <div class="absolute top-0 left-0 m-2">
-                        <IconButton
-                            label={
-                                props.media.isFavorite
-                                    ? "Remove from favourites"
-                                    : "Add to favourites"
-                            }
-                            buttonClasses="hover:text-primary"
-                            onClick={onClickFavorite}
-                        >
-                            <FavoriteIcon
-                                isFavorite={props.media.isFavorite}
-                                subjectId={props.media.id}
-                            />
-                        </IconButton>
-                    </div>
-                </Show>
+                <div class="absolute top-0 left-0 m-2">
+                    <IconButton
+                        label={
+                            props.media.isFavorite ? "Remove from favourites" : "Add to favourites"
+                        }
+                        buttonClasses="hover:text-primary"
+                        onClick={onClickFavorite}
+                    >
+                        <FavoriteIcon
+                            isFavorite={props.media.isFavorite}
+                            subjectId={props.media.id}
+                        />
+                    </IconButton>
+                </div>
             </div>
         </Show>
     );
