@@ -2,13 +2,26 @@ import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { Media } from "../../_models/Media";
+import { MediaFileType } from "../../_models/MediaFileType";
 import { MediaTypePhoto } from "../../_models/MediaType";
 import { Uuid } from "../../_models/Uuid";
 import ItemActions from "./ItemActions";
 
-// the menu reaches for it to download; nothing here exercises that path
+const fetched: string[] = [];
+
+/*
+   `fetchFile` is the authorised fetch - every asset is behind a bearer token,
+   which is why a share cannot simply hand over a link to one.
+*/
 vi.mock("../../_contexts/api/CategoriesContext", () => ({
-    useCategoriesContext: () => ({ downloadFile: () => Promise.resolve() })
+    useCategoriesContext: () => ({
+        downloadFile: () => Promise.resolve(),
+        fetchFile: (url: string) => {
+            fetched.push(url);
+
+            return Promise.resolve(new Blob(["bytes"], { type: "image/jpeg" }));
+        }
+    })
 }));
 
 /*
@@ -32,18 +45,31 @@ const media: Media = {
     categorySlug: "a-category",
     type: MediaTypePhoto,
     isFavorite: false,
-    files: []
+    files: [
+        {
+            id: id("file-1"),
+            scale: "full-hd",
+            type: "photo" as MediaFileType,
+            path: "https://assets.example.com/a-photo.jpg"
+        }
+    ]
 };
 
-const withShare = (supported: boolean) => {
-    const shared: unknown[] = [];
+/*
+   `"files"` stands for a phone, `"url"` for a desktop that takes a link and
+   nothing else, `"none"` for a platform without Web Share at all.
+*/
+const withShare = (takes: "files" | "url" | "none") => {
+    const shared: { url?: string; files?: File[] }[] = [];
 
     vi.stubGlobal("navigator", {
         ...navigator,
-        canShare: supported
-            ? (data: unknown) => !!data && !!(data as { url?: string }).url
-            : undefined,
-        share: (data: unknown) => {
+        canShare:
+            takes === "none"
+                ? undefined
+                : (data: { url?: string; files?: File[] }) =>
+                      takes === "files" ? !!data.files : !!data.url,
+        share: (data: { url?: string; files?: File[] }) => {
             shared.push(data);
 
             return Promise.resolve();
@@ -62,6 +88,13 @@ const open = () => {
     fireEvent.click(trigger);
 };
 
+// as with the trigger, a menu item selects on pointer events
+const select = (item: HTMLElement) => {
+    fireEvent.pointerDown(item, { pointerType: "mouse", button: 0 });
+    fireEvent.pointerUp(item, { pointerType: "mouse", button: 0 });
+    fireEvent.click(item);
+};
+
 afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
@@ -69,7 +102,7 @@ afterEach(() => {
 
 describe("sharing a photograph", () => {
     test("is offered where the platform supports it", async () => {
-        withShare(true);
+        withShare("url");
 
         render(() => (
             <ItemActions
@@ -85,7 +118,7 @@ describe("sharing a photograph", () => {
 
     // the bare `canShare()` asked whether nothing was shareable, and was told no
     test("and not where it does not", async () => {
-        withShare(false);
+        withShare("none");
 
         render(() => (
             <ItemActions
@@ -107,7 +140,7 @@ describe("sharing a photograph", () => {
        sign in and it fetches the file as them.
     */
     test("shares the app's address for the photograph, not the file's", async () => {
-        const shared = withShare(true);
+        const shared = withShare("url");
 
         render(() => (
             <ItemActions
@@ -118,16 +151,57 @@ describe("sharing a photograph", () => {
         ));
         open();
 
-        const item = await screen.findByText("Share");
-
-        // as with the trigger, a menu item selects on pointer events
-        fireEvent.pointerDown(item, { pointerType: "mouse", button: 0 });
-        fireEvent.pointerUp(item, { pointerType: "mouse", button: 0 });
-        fireEvent.click(item);
+        select(await screen.findByText("Share"));
 
         expect(shared).toHaveLength(1);
         expect((shared[0] as { url: string }).url).toBe(
             `${window.location.origin}/categories/2019/a-category/grid/a-photo`
         );
+    });
+
+    /*
+       The point of sharing a photograph is the photograph.
+
+       A link into this application is only useful to somebody who has an
+       account here, which is nobody a photo is usually sent to. Where the
+       platform takes files - which is to say, a phone - the bytes go instead,
+       fetched through the same authorised request a download uses.
+    */
+    test("a phone is given the photograph itself, not a link", async () => {
+        const shared = withShare("files");
+
+        render(() => (
+            <ItemActions
+                activeMedia={media}
+                activeCategory={undefined}
+                canDownloadCategory={false}
+            />
+        ));
+        open();
+        select(await screen.findByText("Share"));
+
+        await vi.waitFor(() => expect(shared).toHaveLength(1));
+
+        expect(shared[0].url).toBeUndefined();
+        expect(shared[0].files?.[0]).toBeInstanceOf(File);
+        expect(shared[0].files?.[0].type).toBe("image/jpeg");
+    });
+
+    // through the authorised fetch, because the asset is behind a bearer token
+    test("and the bytes come from the protected asset", async () => {
+        withShare("files");
+        fetched.length = 0;
+
+        render(() => (
+            <ItemActions
+                activeMedia={media}
+                activeCategory={undefined}
+                canDownloadCategory={false}
+            />
+        ));
+        open();
+        select(await screen.findByText("Share"));
+
+        await vi.waitFor(() => expect(fetched).toEqual(["https://assets.example.com/a-photo.jpg"]));
     });
 });

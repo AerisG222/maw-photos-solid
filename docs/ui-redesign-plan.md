@@ -1805,6 +1805,41 @@ where `canShare` answers honestly.
 was a placeholder, survived a step that was specifically about rescuing it from being orphaned. It has three
 now, and each fails against one of the two faults.
 
+### Share sends the photograph, not a link to it (2026-09-15)
+
+Follow-up to the fix above, and a better answer than the one I gave. Having established that a link to an
+_asset_ is useless because of the bearer token, I reached for a link into the _application_ - which works, and
+is still only useful to somebody who has an account here. That is nobody a photograph is usually being sent
+to.
+
+The app can fetch the bytes itself. It already does: `downloadFile` performs an authorised fetch and hands the
+blob to an anchor. Split that into `fetchFile`, and a share hands the same blob to the operating system
+instead - `navigator.share({ files: [file] })`. The recipient gets a photograph in their messages rather than
+a sign-in page.
+
+**Three details worth recording.**
+
+_Asking whether files can be shared needs a file._ There is no way to probe support without one in hand, and
+fetching a photograph to be told no would waste a request every time the menu opened. An empty `File` of the
+right type answers the only question being asked.
+
+_The link stays, as the fallback._ Desktop platforms that support Web Share often take a URL and not files, so
+the item is offered when either will work and the file path is preferred.
+
+_One sheet, whatever happens._ A reader who dismissed the share did not ask to be offered a second one, so an
+`AbortError` ends it rather than falling through to the link. A genuine failure gets a line in the console for
+the same reason.
+
+**`full-hd` rather than the original**, which is a judgement to revisit if it is wrong: a share sheet is on
+its way to a message, and the original can be tens of megabytes. The high-resolution download is still there
+for when the original is what is wanted.
+
+The remaining unknown is the user-activation rule. `navigator.share` requires transient activation, and the
+fetch happens between the tap and the call. Chrome on Android is relaxed about this; Safari is stricter, and a
+slow fetch could plausibly exhaust the activation. It cannot be tested from here - desktop Linux Chrome has no
+Web Share at all - so it needs a phone, and if it fails there the answer is to pre-fetch when the menu opens
+rather than when the item is chosen.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

@@ -35,7 +35,7 @@ interface Props {
    nothing selected at all, which is how most of a visit to a category is spent.
 */
 const ItemActions: Component<Props> = props => {
-    const { downloadFile } = useCategoriesContext();
+    const { downloadFile, fetchFile } = useCategoriesContext();
 
     const fileUrl = (scale: string) =>
         props.activeMedia?.files.find(f => f.scale === scale && f.type !== "video-poster")?.path ??
@@ -52,28 +52,69 @@ const ItemActions: Component<Props> = props => {
         }
     };
 
-    const shareData = () =>
-        props.activeMedia ? { url: getMediaShareUrl(props.activeMedia) } : undefined;
+    /*
+       What a share should carry.
+
+       The photograph itself, where the platform will take one. A link into the
+       application is only useful to somebody who has an account here - which is
+       nobody a photograph is usually being sent to - so a file is the thing
+       worth sharing and the link is the fallback for platforms that will only
+       take one.
+
+       `full-hd` rather than the original: a share sheet is on its way to a
+       message or a chat, and the original can be tens of megabytes. The
+       high-resolution download above is still there for when the original is
+       what you want.
+    */
+    const shareFileUrl = createMemo(() => fileUrl("full-hd") || fileUrl("full"));
+
+    const shareUrl = () => (props.activeMedia ? getMediaShareUrl(props.activeMedia) : undefined);
 
     /*
-       Asked about the data that is actually going to be shared.
+       Whether files can be shared at all, asked with an empty one.
 
-       `canShare()` with no argument is `canShare({})`, and the specification
-       says an empty payload is not shareable - so the bare call answered "no"
-       on every platform, including the ones that support this perfectly well.
-       It read as a support check and behaved as an off switch.
+       There is no way to ask without a `File` in hand, and fetching a
+       photograph to find out the answer is no would be a waste every time the
+       menu opened. An empty file of the right type answers the only question
+       being asked, which is whether the platform takes files.
     */
-    const canShare = () => {
-        const data = shareData();
+    const canShareFiles = () =>
+        !!navigator.canShare?.({ files: [new File([], "photo.jpg", { type: "image/jpeg" })] });
 
-        return !!data && !!navigator.canShare?.(data);
+    const canShareLink = () => {
+        const url = shareUrl();
+
+        return !!url && !!navigator.canShare?.({ url });
+    };
+
+    const shareFile = async (url: string) => {
+        const blob = await fetchFile(url);
+        const file = new File([blob], getFilenameFromUrl(url, "share"), { type: blob.type });
+
+        await navigator.share({ files: [file] });
     };
 
     const share = () => {
-        const data = shareData();
+        const url = shareUrl();
 
-        if (data) {
-            navigator.share(data).catch(() => {
+        if (canShareFiles() && shareFileUrl()) {
+            /*
+               Only one sheet, whatever happens. A reader who dismissed the
+               share did not ask to be offered a second one, and the fetch
+               failing is worth a line in the console rather than a silent
+               downgrade to a link they cannot use.
+            */
+            shareFile(shareFileUrl()).catch((error: unknown) => {
+                if ((error as Error | undefined)?.name !== "AbortError") {
+                    console.error("Share failed:", error);
+                }
+            });
+
+            return;
+        }
+
+        if (url) {
+            navigator.share({ url }).catch(() => {
                 // a share the reader dismissed is not an error worth reporting
             });
         }
@@ -138,7 +179,7 @@ const ItemActions: Component<Props> = props => {
                         </DropdownMenu.Item>
                     </Show>
 
-                    <Show when={canShare()}>
+                    <Show when={props.activeMedia && (canShareFiles() || canShareLink())}>
                         <DropdownMenu.Separator class="my-1 border-t border-base-content/20" />
 
                         <DropdownMenu.Item class={itemClass} onSelect={share}>

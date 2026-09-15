@@ -48,6 +48,8 @@ export interface CategoriesService {
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
     downloadFile: (url: string, fileName: string) => Promise<void>;
+    // the same authorised fetch, for a caller that wants the bytes themselves
+    fetchFile: (url: string) => Promise<Blob>;
 }
 
 const CategoriesContext = createContext<CategoriesService>();
@@ -340,7 +342,16 @@ export const CategoriesProvider: ParentComponent = props => {
         }
     }));
 
-    const downloadFile = async (url: string, fileName: string) =>
+    /*
+       The bytes of one protected asset.
+
+       Split out of `downloadFile` because sharing wants the same thing and does
+       something else with it: a download hands the blob to an anchor, a share
+       hands it to the operating system. The authorisation is the part worth
+       having in one place - every file is behind a bearer token, which is why
+       neither can be done with a plain link.
+    */
+    const fetchFile = async (url: string) =>
         runWithAccessToken(getToken, async accessToken => {
             const response = await fetch(url, {
                 method: "GET",
@@ -353,10 +364,14 @@ export const CategoriesProvider: ParentComponent = props => {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to download file: HTTP ${response.status}`);
+                throw new Error(`Failed to fetch file: HTTP ${response.status}`);
             }
 
-            const blob = await response.blob();
+            return response.blob();
+        });
+
+    const downloadFile = async (url: string, fileName: string) =>
+        fetchFile(url).then(blob => {
             const objectUrl = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = objectUrl;
@@ -381,7 +396,8 @@ export const CategoriesProvider: ParentComponent = props => {
                 categorySearchQuery,
                 setIsFavoriteMutation,
                 setCategoryTeaserMutation,
-                downloadFile
+                downloadFile,
+                fetchFile
             }}
         >
             {props.children}
