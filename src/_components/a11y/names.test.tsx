@@ -107,4 +107,33 @@ describe("icon-only controls", () => {
 
         expect(screen.getByRole("button", { name: "Add to favourites" })).toBeTruthy();
     });
+
+    /*
+       The key is in the tooltip and not in the accessible name.
+
+       A screen reader announces the action and reads the binding from its own
+       list; repeating it in the name makes every heart announce as "add to
+       favourites h". A pointer user has no other way to find out there is a
+       key at all.
+    */
+    test("an icon button names its key to the pointer, not to the reader", () => {
+        frame(() => (
+            <IconButton label="Add to favourites" shortcutKeys={["h"]} onClick={() => undefined} />
+        ));
+
+        const button = screen.getByRole("button", { name: "Add to favourites" });
+
+        expect(button.getAttribute("title")).toBe("Add to favourites (H)");
+    });
+
+    /*
+       And says nothing where nothing is bound. `h` acts on the photograph that
+       is open; the hearts on a listing's tiles have no key behind them, so a
+       tooltip claiming one would be a lie.
+    */
+    test("and claims no key where none is bound", () => {
+        frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
+
+        expect(screen.getByRole("button").getAttribute("title")).toBe("Add to favourites");
+    });
 });

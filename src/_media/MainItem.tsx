@@ -149,6 +149,7 @@ const MainItem: Component<Props> = props => {
                         label={
                             props.media.isFavorite ? "Remove from favourites" : "Add to favourites"
                         }
+                        shortcutKeys={["h"]}
                         buttonClasses="hover:text-primary"
                         onClick={onClickFavorite}
                     >
