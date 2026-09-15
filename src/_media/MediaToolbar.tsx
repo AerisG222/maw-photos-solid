@@ -9,6 +9,7 @@ import ListingToolbar from "../_components/listing/ListingToolbar";
 import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import AdjustShortcuts from "./toolbar/AdjustShortcuts";
+import FavoriteShortcut from "./toolbar/FavoriteShortcut";
 import MoveNextButton from "./toolbar/MoveNextButton";
 import MovePreviousButton from "./toolbar/MovePreviousButton";
 import ToggleSlideshowButton from "./toolbar/ToggleSlideshowButton";
@@ -135,6 +136,14 @@ const MediaToolbar: Component<Props> = props => {
                 <Show when={activeMedia()}>
                     <AdjustShortcuts />
                 </Show>
+
+                {/*
+                    Likewise keyless until now: the heart on a tile is the only
+                    way to favourite anything, and it had no shortcut at all.
+                    Only with a photograph open - on a listing nothing is
+                    selected for it to act on.
+                */}
+                <FavoriteShortcut activeMedia={activeMedia()} />
 
                 <ListingToolbar faces />
             </Show>

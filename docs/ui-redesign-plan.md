@@ -1840,6 +1840,25 @@ slow fetch could plausibly exhaust the activation. It cannot be tested from here
 Web Share at all - so it needs a phone, and if it fails there the answer is to pre-fetch when the menu opens
 rather than when the item is chosen.
 
+### Favouriting finally gets a key (2026-09-15)
+
+Asked whether a photograph could be favourited from the keyboard. It could not - not on any screen, by any
+key. `u` is _favourites only_, a filter, and nothing anywhere bound a key to marking something.
+
+A strange gap, because favouriting is the one action with **no other home**: the heart on a tile is the only
+way to do it, and that is the exact argument that deleted the badge toggle two days earlier - a setting able
+to hide the sole route to a feature is a trap rather than a choice. Deleting it freed `h`, which is the key
+§7 had wanted for this and could not have. The other half of that argument went unnoticed at the time: the
+capability it was defending still had no keyboard route.
+
+`FavoriteShortcut` is `AdjustShortcuts` again - a `ShortcutWrapper` with no children, registered in
+`MediaToolbar`, which stays mounted for as long as a photograph is on screen.
+
+**Only with a photograph open**, agreed with the user rather than assumed. On a listing nothing is selected:
+the roving cursor that would once have supplied a "focused tile" was removed, so a key acting there would act
+on something the reader cannot see chosen. The `disabled` gate is load-bearing and has a test that fails
+without it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
