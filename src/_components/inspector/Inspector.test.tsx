@@ -96,8 +96,8 @@ describe("the inspector at each width", () => {
         inspector(1280);
         open();
 
-        expect(screen.getByRole("complementary", { name: "Inspector" })).toBeTruthy();
-        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(screen.getByRole("complementary", { name: "Inspector" })).toBeInTheDocument();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
     test.each([
@@ -107,8 +107,8 @@ describe("the inspector at each width", () => {
         inspector(width);
         open();
 
-        expect(screen.getByRole("dialog", { name: "Inspector" })).toBeTruthy();
-        expect(screen.queryByRole("complementary")).toBeNull();
+        expect(screen.getByRole("dialog", { name: "Inspector" })).toBeInTheDocument();
+        expect(screen.queryByRole("complementary")).not.toBeInTheDocument();
     });
 
     /*
@@ -119,7 +119,7 @@ describe("the inspector at each width", () => {
         inspector(390);
         open();
 
-        expect(screen.getByRole("dialog").getAttribute("aria-modal")).toBe("false");
+        expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "false");
     });
 
     test("escape closes it where it is covering something", () => {
@@ -128,7 +128,7 @@ describe("the inspector at each width", () => {
 
         fireEvent.keyDown(window, { key: "Escape" });
 
-        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
     // docked it is part of the page, and Escape belongs to whatever else wants it
@@ -138,7 +138,7 @@ describe("the inspector at each width", () => {
 
         fireEvent.keyDown(window, { key: "Escape" });
 
-        expect(screen.getByRole("complementary")).toBeTruthy();
+        expect(screen.getByRole("complementary")).toBeInTheDocument();
     });
 
     /*
@@ -150,7 +150,7 @@ describe("the inspector at each width", () => {
         inspector(1280);
         open();
 
-        expect(screen.getByText("Nothing selected")).toBeTruthy();
+        expect(screen.getByText("Nothing selected")).toBeInTheDocument();
     });
 
     /*
@@ -165,7 +165,7 @@ describe("the inspector at each width", () => {
 
         fireEvent.click(screen.getByLabelText("Close Inspector"));
 
-        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
     // docked it covers nothing, so there is nothing to dismiss
@@ -173,7 +173,7 @@ describe("the inspector at each width", () => {
         inspector(1280);
         open();
 
-        expect(screen.queryByLabelText("Close Inspector")).toBeNull();
+        expect(screen.queryByLabelText("Close Inspector")).not.toBeInTheDocument();
     });
 
     /*

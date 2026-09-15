@@ -131,7 +131,7 @@ describe("sharing a photograph", () => {
 
         await screen.findByText("High Resolution");
 
-        expect(screen.queryByText("Share")).toBeNull();
+        expect(screen.queryByText("Share")).not.toBeInTheDocument();
     });
 
     /*

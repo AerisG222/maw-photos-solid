@@ -18,8 +18,19 @@ import { expect, test } from "vitest";
 */
 const SRC = join(__dirname);
 
-// entry points and things the bundler or the framework reaches without an import
-const ENTRY_POINTS = new Set(["index.tsx", "App.tsx", "routes.ts", "env.d.ts", "vite-env.d.ts"]);
+/*
+   Entry points, and things the bundler or the test runner reaches without an
+   import. `setup.ts` is named in `vite.config.ts`, which lives outside `src` and
+   so outside the corpus this scans - reached, but not from anywhere it can see.
+*/
+const ENTRY_POINTS = new Set([
+    "index.tsx",
+    "App.tsx",
+    "routes.ts",
+    "env.d.ts",
+    "vite-env.d.ts",
+    "setup.ts"
+]);
 
 const walk = (dir: string): string[] =>
     readdirSync(dir).flatMap(entry => {

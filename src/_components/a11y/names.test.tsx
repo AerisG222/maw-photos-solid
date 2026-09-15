@@ -70,7 +70,7 @@ describe("icon-only controls", () => {
             />
         ));
 
-        expect(screen.getByRole("button", { name: "Favorites" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Favorites" })).toBeInTheDocument();
     });
 
     // `active` on a toolbar button always means "switched on", never "selected"
@@ -95,7 +95,7 @@ describe("icon-only controls", () => {
 
         const link = screen.getByRole("link", { name: "Show the Grid" });
 
-        expect(link.getAttribute("aria-current")).toBe("page");
+        expect(link).toHaveAttribute("aria-current", "page");
     });
 
     /*
@@ -105,7 +105,7 @@ describe("icon-only controls", () => {
     test("an icon button is named, and says which way it will go", () => {
         frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
 
-        expect(screen.getByRole("button", { name: "Add to favourites" })).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Add to favourites" })).toBeInTheDocument();
     });
 
     /*
@@ -123,7 +123,7 @@ describe("icon-only controls", () => {
 
         const button = screen.getByRole("button", { name: "Add to favourites" });
 
-        expect(button.getAttribute("title")).toBe("Add to favourites (H)");
+        expect(button).toHaveAttribute("title", "Add to favourites (H)");
     });
 
     /*
@@ -134,6 +134,6 @@ describe("icon-only controls", () => {
     test("and claims no key where none is bound", () => {
         frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
 
-        expect(screen.getByRole("button").getAttribute("title")).toBe("Add to favourites");
+        expect(screen.getByRole("button")).toHaveAttribute("title", "Add to favourites");
     });
 });

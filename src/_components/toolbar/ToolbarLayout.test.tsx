@@ -53,10 +53,10 @@ describe("the toolbar at each width", () => {
     test("a wide screen shows every control at once", () => {
         toolbar(1280);
 
-        expect(screen.getByText("Grid")).toBeTruthy();
-        expect(screen.getByText("Actions")).toBeTruthy();
-        expect(screen.getByText("Labels")).toBeTruthy();
-        expect(screen.queryByLabelText("More controls")).toBeNull();
+        expect(screen.getByText("Grid")).toBeInTheDocument();
+        expect(screen.getByText("Actions")).toBeInTheDocument();
+        expect(screen.getByText("Labels")).toBeInTheDocument();
+        expect(screen.queryByLabelText("More controls")).not.toBeInTheDocument();
     });
 
     /*
@@ -67,15 +67,15 @@ describe("the toolbar at each width", () => {
     test("a phone keeps navigation and actions in the bar", () => {
         toolbar(390);
 
-        expect(screen.getByText("Grid")).toBeTruthy();
-        expect(screen.getByText("Actions")).toBeTruthy();
+        expect(screen.getByText("Grid")).toBeInTheDocument();
+        expect(screen.getByText("Actions")).toBeInTheDocument();
     });
 
     test("a phone folds the rest away behind one button", () => {
         toolbar(390);
 
-        expect(screen.queryByText("Labels")).toBeNull();
-        expect(screen.getByLabelText("More controls")).toBeTruthy();
+        expect(screen.queryByText("Labels")).not.toBeInTheDocument();
+        expect(screen.getByLabelText("More controls")).toBeInTheDocument();
     });
 
     test("and the button is how they come back", () => {
@@ -83,8 +83,8 @@ describe("the toolbar at each width", () => {
 
         fireEvent.click(screen.getByLabelText("More controls"));
 
-        expect(screen.getByText("Labels")).toBeTruthy();
-        expect(screen.getByRole("dialog", { name: "More controls" })).toBeTruthy();
+        expect(screen.getByText("Labels")).toBeInTheDocument();
+        expect(screen.getByRole("dialog", { name: "More controls" })).toBeInTheDocument();
     });
 
     test("the sheet closes again", () => {
@@ -93,7 +93,7 @@ describe("the toolbar at each width", () => {
         fireEvent.click(screen.getByLabelText("More controls"));
         fireEvent.click(screen.getByLabelText("Close"));
 
-        expect(screen.queryByText("Labels")).toBeNull();
+        expect(screen.queryByText("Labels")).not.toBeInTheDocument();
     });
 
     // nothing to fold, so nothing to fold it behind
@@ -108,6 +108,6 @@ describe("the toolbar at each width", () => {
             </AppSettingsProvider>
         ));
 
-        expect(screen.queryByLabelText("More controls")).toBeNull();
+        expect(screen.queryByLabelText("More controls")).not.toBeInTheDocument();
     });
 });

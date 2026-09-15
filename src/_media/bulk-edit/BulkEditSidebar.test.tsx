@@ -57,21 +57,21 @@ describe("the bulk edit tools", () => {
     test("sit alongside, as part of the page", () => {
         sidebar();
 
-        expect(screen.getByRole("complementary", { name: "Bulk Edit Tools" })).toBeTruthy();
-        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(screen.getByRole("complementary", { name: "Bulk Edit Tools" })).toBeInTheDocument();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
     // nothing is covered, so there is nothing to dismiss
     test("offer no way to dismiss them", () => {
         sidebar();
 
-        expect(screen.queryByLabelText("Close Bulk Edit Tools")).toBeNull();
+        expect(screen.queryByLabelText("Close Bulk Edit Tools")).not.toBeInTheDocument();
     });
 
     test("and still carry the tools", () => {
         sidebar();
 
-        expect(screen.getByText("Select All")).toBeTruthy();
-        expect(screen.getByText("GPS")).toBeTruthy();
+        expect(screen.getByText("Select All")).toBeInTheDocument();
+        expect(screen.getByText("GPS")).toBeInTheDocument();
     });
 });
