@@ -1661,6 +1661,43 @@ shape: **a preference nobody asked for, created by merging two older controls, w
 sensible value.** What is left in `ListingSettings` is `showLabels`, `highlightFaces` and `peopleSort`, and
 those three are genuine choices with two defensible answers each.
 
+### The hover highlight was leaving a comet-tail (2026-09-15)
+
+Reported as the card highlight not being "very snappy" when moving quickly across many categories. Three
+candidate causes, and measurement killed the first two.
+
+**Not main-thread cost.** Driving a real cursor across 400 tiles through the DevTools protocol: 1.3ms of main
+thread per move as shipped, 0.6ms with the shadow transition dropped. Real, halvable, and nowhere near enough
+to be felt.
+
+**Not hover flicker.** `transform: translateY(-2px)` moves the card, and transformed elements are hit-tested
+where they are drawn - so a pointer in the bottom 2px could plausibly lift the card out from under itself and
+oscillate. Parked the cursor 1px inside the bottom edge and sampled the hovered-card count fourteen times: a
+flat `1` throughout. Disproved.
+
+**It was the trail.** Counting how many cards carry a shadow _during_ a sweep gives the answer directly:
+
+|                    | cards lit at once |
+| ------------------ | ----------------- |
+| as shipped         | **5**             |
+| any variant tested | 1                 |
+
+Five cards mid-fade behind the pointer does not read as five highlights. It reads as one highlight failing to
+keep up, which is exactly the words used to report it.
+
+**The fix is asymmetry, not speed.** A transition is governed by the state being moved _to_, so declaring it
+on `:hover` rather than on the element gives arrival an animation and departure none. Verified by sampling
+the computed transform: `none` at rest, mid-interpolation 20ms after entering, the full `-2px` once settled,
+and `none` again the instant the pointer leaves. The considered fade when you rest on a card is kept; the tail
+is gone.
+
+`filter` came out of the transition list while in there - it was for the thumbnail desaturation, which no
+longer exists.
+
+**Guarded, because the fix looks like a mistake.** The obvious tidy-up is to hoist the transition onto the
+element "where it belongs", and that silently restores the tail. `motion.test.ts` fails if the base rule
+declares anything but `transition-property: none`.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

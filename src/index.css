@@ -175,10 +175,24 @@ html {
        card. Applying it on :focus-visible as well is the reason a keyboard user
        can now see where they are in a grid.
     */
+    /*
+       Eased on the way in, instant on the way out.
+
+       Declaring the transition on the hovered state rather than on the element
+       is what makes that work: a transition is governed by the state being
+       moved *to*, so arriving animates and leaving has nothing to animate with.
+
+       The asymmetry is the whole point. At 200ms in both directions, sweeping
+       across a grid left a comet-tail of cards still fading behind the pointer
+       - **five lit at once**, measured - which does not read as five
+       highlights, it reads as one highlight failing to keep up. Snapping the
+       exit puts it back to one: the card under the pointer, and nothing else.
+
+       `filter` is no longer in the list. It was there for the thumbnail
+       desaturation that lifted on hover, and that setting is gone.
+    */
     .elev-hover {
-        transition-property: background-color, border-color, color, box-shadow, transform, filter;
-        transition-duration: var(--motion-base);
-        transition-timing-function: var(--motion-ease);
+        transition-property: none;
 
         &:hover,
         &:focus-visible {
@@ -186,6 +200,9 @@ html {
             box-shadow:
                 0 10px 15px -3px color-mix(in oklab, var(--color-primary) 20%, transparent),
                 0 4px 6px -4px color-mix(in oklab, var(--color-primary) 20%, transparent);
+            transition-property: background-color, border-color, color, box-shadow, transform;
+            transition-duration: var(--motion-base);
+            transition-timing-function: var(--motion-ease);
         }
     }
 

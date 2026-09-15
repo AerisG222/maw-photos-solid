@@ -65,4 +65,29 @@ describe("entrance animations", () => {
         expect(rule![1]).toMatch(/background-image:\s*none/);
         expect(rule![1]).toMatch(/animation:\s*none/);
     });
+
+    /*
+       Hover eases in and snaps out.
+
+       A transition is governed by the state being moved *to*, so declaring it
+       on `:hover` rather than on the element gives arrival an animation and
+       departure none. That asymmetry is not a flourish: at 200ms in both
+       directions, sweeping a pointer across a grid left five cards lit at once,
+       measured - a comet-tail that reads as one highlight failing to keep up
+       rather than as five highlights. Snapping the exit puts it back to one.
+
+       Guarded because it looks like a mistake. The obvious tidy-up is to hoist
+       the transition onto the element "where it belongs", and that would
+       silently bring the tail back.
+    */
+    test("the hover lift declares its transition on the hovered state, not the element", () => {
+        const block = /\.elev-hover\s*\{([\s\S]*?)\n {4}\}/.exec(css);
+
+        expect(block, "no .elev-hover rule found").toBeTruthy();
+
+        const [base, hovered] = block![1].split("&:hover");
+
+        expect(base).toMatch(/transition-property:\s*none/);
+        expect(hovered).toMatch(/transition-duration/);
+    });
 });
