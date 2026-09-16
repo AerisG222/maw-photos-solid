@@ -21,7 +21,11 @@ import Panzoom, { PanzoomObject } from "@panzoom/panzoom";
    whole turned thing is scaled.
 */
 const MAX_SCALE = 6;
-const RESTING_SCALE = 1;
+export const RESTING_SCALE = 1;
+
+// far enough that a steady hand clicking is never mistaken for a drag, close
+// enough that a deliberate drag always is
+const DRAG_THRESHOLD_PX = 6;
 
 export const createPanZoom = (element: () => HTMLElement | undefined, subject: () => unknown) => {
     const [scale, setScale] = createSignal(RESTING_SCALE);
@@ -64,37 +68,52 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
         const onWheel = (event: WheelEvent) => panzoom.zoomWithWheel(event);
 
         /*
-           A gesture is not a click on the thing underneath.
+           A drag is not a click on the thing underneath.
 
            The photograph is wrapped in a link back to the grid, so without this
-           a drag to pan ends by closing the photograph you were panning - and a
-           ctrl-click lands on that link and opens it in a tab. Captured, so it
-           never reaches the anchor.
-        */
-        let gestured = false;
+           a drag to pan ends by closing the photograph being panned.
 
-        const onGesture = () => (gestured = true);
+           Measured by how far the pointer travelled, rather than by asking
+           Panzoom whether it did anything. Its `panzoomzoom` fires on `reset`
+           too - which happens on every change of photograph - so a flag set
+           from its events was already true before the reader touched anything,
+           and ate the first click on every photograph. Distance is what
+           actually distinguishes the two gestures, and it answers the same way
+           whatever the library does internally.
+        */
+        let origin: { x: number; y: number } | undefined;
+
+        const onPointerDown = (event: PointerEvent) => {
+            origin = { x: event.clientX, y: event.clientY };
+        };
 
         const onClick = (event: MouseEvent) => {
-            if (gestured || scale() > RESTING_SCALE) {
+            const start = origin;
+
+            origin = undefined;
+
+            if (!start) {
+                return;
+            }
+
+            const travelled = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+
+            // a tap still closes the photograph, zoomed in or not
+            if (travelled > DRAG_THRESHOLD_PX) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-
-            gestured = false;
         };
 
         target.addEventListener("panzoomzoom", onZoom);
-        target.addEventListener("panzoompan", onGesture);
-        target.addEventListener("panzoomzoom", onGesture);
         target.addEventListener("wheel", onWheel, { passive: false });
+        target.addEventListener("pointerdown", onPointerDown, true);
         target.addEventListener("click", onClick, true);
 
         onCleanup(() => {
             target.removeEventListener("panzoomzoom", onZoom);
-            target.removeEventListener("panzoompan", onGesture);
-            target.removeEventListener("panzoomzoom", onGesture);
             target.removeEventListener("wheel", onWheel);
+            target.removeEventListener("pointerdown", onPointerDown, true);
             target.removeEventListener("click", onClick, true);
             panzoom.destroy();
             instance = undefined;

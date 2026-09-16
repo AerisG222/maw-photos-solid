@@ -1,7 +1,7 @@
 import { createRoot, createSignal } from "solid-js";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import { createPanZoom } from "./_panZoom";
+import { RESTING_SCALE, createPanZoom } from "./_panZoom";
 
 /*
    A gesture on the photograph is not a click on what is underneath it.
@@ -64,46 +64,90 @@ const build = (subject: () => unknown = () => "photo-1") => {
 
 afterEach(() => listeners.clear());
 
-describe("a pan or zoom gesture", () => {
-    test("does not also click the link the photograph sits in", () => {
+const press = (x: number, y: number) => fire("pointerdown", { clientX: x, clientY: y });
+
+const release = (x: number, y: number) => {
+    const click = clickEvent();
+
+    fire("click", { ...click, clientX: x, clientY: y });
+
+    return click;
+};
+
+describe("a click on the photograph", () => {
+    /*
+       The photograph is wrapped in the link that closes it, so a drag to pan
+       would otherwise end by closing the photograph being panned.
+    */
+    test("is swallowed when the pointer travelled - that was a drag", () => {
         const { dispose } = build();
 
-        fire("panzoompan");
+        press(100, 100);
 
-        const click = clickEvent();
-
-        fire("click", click);
+        const click = release(160, 130);
 
         expect(click.preventDefault).toHaveBeenCalled();
         expect(click.stopPropagation).toHaveBeenCalled();
         dispose();
     });
 
-    // a plain click on an unzoomed photograph still closes it, as it always did
-    test("but a plain click still reaches it", () => {
+    test("and reaches the link when it did not - that was a click", () => {
         const { dispose } = build();
 
-        const click = clickEvent();
+        press(100, 100);
 
-        fire("click", click);
+        const click = release(101, 102);
 
         expect(click.preventDefault).not.toHaveBeenCalled();
         dispose();
     });
 
     /*
-       Wheel zoom takes no modifier. Requiring ctrl is what produced the blocked
-       popup: the reader holds it to zoom, and the next click is a ctrl-click on
-       the link that closes the photograph.
+       The bug this replaced. A flag set from Panzoom's own events was true
+       before the reader touched anything, because `reset` fires `panzoomzoom`
+       and reset runs on every change of photograph - so the first click on
+       every photograph was eaten. Distance does not care what the library does
+       internally.
     */
-    test("wheel zoom is wired without a modifier", () => {
+    test("still reaches it after the zoom has been reset", () => {
+        const { dispose } = build();
+
+        fire("panzoomzoom", { detail: { scale: RESTING_SCALE } });
+        press(100, 100);
+
+        const click = release(100, 100);
+
+        expect(click.preventDefault).not.toHaveBeenCalled();
+        dispose();
+    });
+
+    // a tap still closes it, zoomed in or not - only travel means panning
+    test("and reaches it while zoomed, if it was a tap", () => {
+        const { dispose } = build();
+
+        fire("panzoomzoom", { detail: { scale: 3 } });
+        press(100, 100);
+
+        const click = release(100, 100);
+
+        expect(click.preventDefault).not.toHaveBeenCalled();
+        dispose();
+    });
+});
+
+describe("the zoom", () => {
+    /*
+       Wheel zoom takes no modifier. Requiring ctrl put a ctrl-click on the link
+       the photograph sits in, which opens a tab - reported as a blocked popup.
+    */
+    test("is wired to the wheel without a modifier", () => {
         const { dispose } = build();
 
         expect(listeners.has("wheel")).toBe(true);
         dispose();
     });
 
-    test("and a zoom does not outlive the photograph it was applied to", () => {
+    test("does not outlive the photograph it was applied to", () => {
         const [subject, setSubject] = createSignal("photo-1");
         // eslint-disable-next-line solid/reactivity -- the accessor is what it wants
         const { api, dispose } = build(subject);
