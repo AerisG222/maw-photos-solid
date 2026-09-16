@@ -44,7 +44,26 @@ const AppContext: ParentComponent = props => {
                    and keep retrying only the transient cases.
                 */
                 retry: (failureCount, error) =>
-                    error instanceof ApiError && error.isClientError ? false : failureCount < 2
+                    error instanceof ApiError && error.isClientError ? false : failureCount < 2,
+
+                /*
+                   The default is zero, which means every query refetches the
+                   moment a component mounts - so stepping from a grid to the
+                   map and back fetched the whole category twice more, for data
+                   that had not moved.
+
+                   Safe because nothing here relies on that refetch to stay
+                   correct: every mutation invalidates or writes through on
+                   success, so a favourite, a rename or a new cover updates the
+                   cache directly. This only decides how long an untouched
+                   answer is trusted between visits.
+
+                   A minute is conservative. The listings behind it change when
+                   somebody uploads, which is out of band and rare; the figure
+                   could be raised a long way before anybody noticed, and the
+                   queries that want something different already say so.
+                */
+                staleTime: 60 * 1000
             },
             // a write should never be replayed automatically
             mutations: { retry: false }

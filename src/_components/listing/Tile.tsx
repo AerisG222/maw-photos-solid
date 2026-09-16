@@ -63,11 +63,13 @@ interface Props {
    width, a four-by-three cover and a footer of text - and forcing it into this
    shape would mean a prop for every way it differs.
 */
+// one size for every tile, so it is worked out once rather than per tile
+const SIZE = getThumbnailSize(ThumbnailSizeDefault);
+
 const Tile: ParentComponent<Props> = props => {
-    const size = getThumbnailSize(ThumbnailSizeDefault);
-    const width = () => size.width;
+    const width = () => SIZE.width;
     // a face crop is square, so its height follows its width rather than the ratio
-    const height = () => (props.square ? size.width : size.height);
+    const height = () => (props.square ? SIZE.width : SIZE.height);
 
     const { loaded, reveal, ref: imgRef } = createImageReveal(() => props.src);
 
