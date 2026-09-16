@@ -1981,6 +1981,30 @@ so both looked like obvious culprits for a broken swipe - and a test showed the 
 normally in every configuration. The desktop path was the broken one, and no amount of reading the library's
 source would have said so.
 
+### Dependency update, and why TypeScript stays on 6 (2026-09-16)
+
+The in-range updates were uneventful: auth0-spa-js, the three TanStack query packages,
+`@types/google.maps`, `@types/node` and prettier. Two packages report a `latest` _older_ than what is
+installed - `@types/node` and `jsdom` both tag earlier release lines - so there is nothing to do for either,
+and `npm outdated` listing them is not a signal.
+
+Three were majors in effect. Two were taken:
+
+- **eslint-plugin-solid 0.18** keeps the same config names and lints clean. Checked that its rules still
+  _fire_ rather than trusting the quiet run - a deliberately destructured `props` is still flagged. A lint
+  that passes because it stopped looking is the failure mode worth ruling out on any plugin upgrade.
+- **Vitest 5** wants vite `^6.4 || ^7 || ^8` and we are on 8.3. It also suggested `fsModuleCache`, which keeps
+  transforms between runs: transform falls from 30% of a run to 8%, and a rerun from 3.8s to 2.9s.
+
+**TypeScript 7 is held back, and the reason is concrete rather than caution.**
+`@typescript-eslint/typescript-estree` declares `typescript: ">=4.8.4 <6.1.0"`. Version 7 is outside that
+range, and typescript-eslint is what the whole lint configuration is built on - `recommendedTypeChecked` and
+`stylisticTypeChecked` both need it to parse with type information. Upgrading the compiler would take the
+type-aware linting with it, which is a poor trade for a version number.
+
+The check to repeat before trying again is that one line: if `typescript-estree`'s peer range has moved past
+7, the upgrade is worth attempting; until then it is not.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
