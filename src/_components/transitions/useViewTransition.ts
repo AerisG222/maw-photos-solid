@@ -32,6 +32,34 @@ const wantsMotion = () =>
 export const shouldAnimate = (event: Pick<BeforeLeaveEventArgs, "defaultPrevented">) =>
     !event.defaultPrevented && supported() && wantsMotion();
 
+/*
+   A transition that was superseded is not a failure.
+
+   `startViewTransition` hands back promises, and `ready` rejects with an
+   `AbortError` the moment a second transition starts before the first has
+   finished - which is what navigating twice in quick succession *is*. Nothing
+   was attached to them, so the browser reported every one as an unhandled
+   rejection: `AbortError: Transition was skipped. New ViewTransition started`.
+
+   Swallowing only the supersession, and only by name. Anything else going wrong
+   here means the navigation itself failed, which is worth seeing rather than
+   hiding - the whole point of attaching a handler is to be specific about which
+   rejection is expected.
+*/
+const SUPERSEDED = "AbortError";
+
+export const settleTransition = (transition: ViewTransition) => {
+    const report = (error: unknown) => {
+        if ((error as Error | undefined)?.name !== SUPERSEDED) {
+            console.error("View transition failed:", error);
+        }
+    };
+
+    void transition.ready.catch(report);
+    void transition.updateCallbackDone.catch(report);
+    void transition.finished.catch(report);
+};
+
 export const useViewTransition = () => {
     useBeforeLeave(event => {
         if (!shouldAnimate(event)) {
@@ -40,8 +68,10 @@ export const useViewTransition = () => {
 
         event.preventDefault();
 
-        document.startViewTransition(() => {
-            event.retry(true);
-        });
+        settleTransition(
+            document.startViewTransition(() => {
+                event.retry(true);
+            })
+        );
     });
 };

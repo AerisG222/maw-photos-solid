@@ -2005,6 +2005,27 @@ type-aware linting with it, which is a poor trade for a version number.
 The check to repeat before trying again is that one line: if `typescript-estree`'s peer range has moved past
 7, the upgrade is worth attempting; until then it is not.
 
+### A superseded view transition is not a failure (2026-09-16)
+
+Reported from the console: `AbortError: Transition was skipped. New ViewTransition started`, unhandled.
+
+`startViewTransition` hands back three promises - `ready`, `updateCallbackDone`, `finished` - and `ready`
+rejects the moment a second transition starts before the first has finished. Which is what navigating twice
+in quick succession _is_, so the rejection is expected behaviour rather than a fault. Step 12b attached
+nothing to any of them, so the browser reported every one.
+
+Swallowing **only the supersession, and only by name**. Anything else rejecting here means the navigation
+itself failed, which is worth seeing rather than hiding - the point of attaching a handler is to be specific
+about which rejection is expected, not to silence the promise.
+
+**The test needed two goes to be worth anything, again.** The first listened for `unhandledrejection` on
+`window` - but vitest runs jsdom inside node, so an unattached rejection surfaces on the _process_ and the DOM
+event never fires. It passed with the handlers removed. `process.on("unhandledRejection")` detects it, and
+then removing the handlers fails it.
+
+That is now the fourth test this session that proved nothing until it was checked against the broken code.
+The habit is worth more than any of the individual fixes it has caught.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
