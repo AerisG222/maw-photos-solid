@@ -54,19 +54,48 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
             panzoom.setOptions({ disablePan: next <= RESTING_SCALE });
         };
 
-        const onWheel = (event: WheelEvent) => {
-            // plain scrolling still scrolls; zoom is the deliberate gesture
-            if (event.ctrlKey || event.metaKey) {
-                panzoom.zoomWithWheel(event);
+        /*
+           No modifier. Requiring one was a mistake: the photograph sits inside
+           the link that closes it, so a reader holding ctrl to zoom is one
+           stray click away from ctrl-clicking that link - which opens a tab,
+           and which the browser reports as a blocked popup. Wheel-to-zoom is
+           what every other photograph viewer does anyway.
+        */
+        const onWheel = (event: WheelEvent) => panzoom.zoomWithWheel(event);
+
+        /*
+           A gesture is not a click on the thing underneath.
+
+           The photograph is wrapped in a link back to the grid, so without this
+           a drag to pan ends by closing the photograph you were panning - and a
+           ctrl-click lands on that link and opens it in a tab. Captured, so it
+           never reaches the anchor.
+        */
+        let gestured = false;
+
+        const onGesture = () => (gestured = true);
+
+        const onClick = (event: MouseEvent) => {
+            if (gestured || scale() > RESTING_SCALE) {
+                event.preventDefault();
+                event.stopPropagation();
             }
+
+            gestured = false;
         };
 
         target.addEventListener("panzoomzoom", onZoom);
+        target.addEventListener("panzoompan", onGesture);
+        target.addEventListener("panzoomzoom", onGesture);
         target.addEventListener("wheel", onWheel, { passive: false });
+        target.addEventListener("click", onClick, true);
 
         onCleanup(() => {
             target.removeEventListener("panzoomzoom", onZoom);
+            target.removeEventListener("panzoompan", onGesture);
+            target.removeEventListener("panzoomzoom", onGesture);
             target.removeEventListener("wheel", onWheel);
+            target.removeEventListener("click", onClick, true);
             panzoom.destroy();
             instance = undefined;
         });

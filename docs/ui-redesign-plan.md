@@ -1924,6 +1924,30 @@ plugin and keep all 127 lines. And a gesture library for `Swipe.ts`/`Tap.ts`: 15
 Solid-native primitive does swipe recognition. Highcharts stays too - the largest asset by far at 328K, but
 correctly code-split behind the Stats route, and charts are where a mature library earns its size.
 
+### The blocked popup was the smaller half of the bug (2026-09-16)
+
+Reported as a "popup blocked" message while trying the new pan and zoom. Nothing in this application opens a
+popup - no `window.open` anywhere, and Auth0 is configured for redirect - so the question was what the browser
+thought it was blocking.
+
+**The photograph sits inside the link that closes it.** `ViewGrid` wraps `MainItem` in an `<A>` back to the
+grid, and the zoom target is inside that anchor. I had gated wheel-zoom behind ctrl or meta, reasoning that
+plain scrolling should still scroll. So a reader holding ctrl to zoom is one stray click away from
+**ctrl-clicking a link**, which opens a tab, which the browser reports as a blocked popup.
+
+**And the same wrapping hid a worse fault the report happened to surface.** A drag to pan ends in a click on
+that anchor - so panning a zoomed photograph closed it. Nobody had reported that yet; it was found looking for
+the popup.
+
+Both are the same mistake, and both are fixed by the same two changes. Wheel zoom takes no modifier now, which
+is what every other photograph viewer does and removes the ctrl-click hazard at the root. And a click that
+follows a pan or a zoom is swallowed on the capture phase, so it never reaches the anchor - while a plain
+click on an unzoomed photograph still closes it, as it always did.
+
+**A note on the test.** Solid runs effects _after_ the `createRoot` callback returns, so the first version
+asserted against a component that had not wired anything up and saw no listeners at all. Building inside the
+root and asserting outside it is the pattern `_idleChrome.test.ts` already used, and is the one to copy.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
