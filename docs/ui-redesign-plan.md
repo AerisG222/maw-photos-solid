@@ -1886,6 +1886,44 @@ _inside_ the listener beneath, and that listener registered before the panel exi
 the race it exists to detect. That is the third time in this rework that checking a new test against the old
 code found the test at fault rather than the code.
 
+### Four libraries, three added and one removed (2026-09-16)
+
+Asked what could be added to improve the experience or reduce custom code. Four were worth doing; two obvious
+candidates were worth arguing against and are recorded below so they are not suggested again.
+
+**`@testing-library/jest-dom`.** 33 assertions converted where the old form read worst - attribute checks and
+element presence. `expect(el.getAttribute("title")).toBe(...)` fails with two strings and no indication of
+which element disappointed it. The rest were left alone: a matcher swap that does not improve the failure
+message is churn.
+
+**`@tanstack/solid-virtual`.** Nothing here was windowed - a people listing built every person, a category
+built every photograph, and a phone-width grid of a few hundred ran to tens of thousands of pixels of real
+DOM. `ListingSurface` owns its items now and draws rows as they come into view. Two things made it possible:
+the fixed tile size left by deleting density, and `Layout` publishing its scroll container through a context
+rather than listings sniffing the DOM for `overflow-y`.
+
+The arithmetic lives in `_rows.ts` and is tested there, because **jsdom lays nothing out** - a virtualiser
+has nothing to measure and would report whatever a stub told it. My first attempt tested it through the
+component and was asserting the stubs. `YearGrid` is deliberately left unwindowed: a group of twenty
+categories is not worth it, and its surfaces share one scroller.
+
+**`@panzoom/panzoom`.** There was no zoom at all, which became a real gap the moment fullscreen turned into a
+state of the grid. Two conflicts, both settled by one condition: the zoom lives on its own element above the
+one carrying rotation, because two transforms cannot share a style property; and panning is disabled until
+there is something to pan, so a drag at the resting size is still the swipe to the next photograph.
+
+**`numbro`, removed.** A hundred kilobytes of locale rules for a thousands separator, a clock and a byte
+unit. The replacement was checked sample-by-sample against the library and is identical on all twenty-two
+values tried. Worth recording that **my bundle estimate was wrong**: the stats chunk fell 364K to 328K, not
+the ~100K I predicted, because numbro tree-shakes better than its install size implies. One fewer dependency
+for fifteen lines is the real argument; the bundle was a bonus.
+
+**Argued against, with reasons.** `vite-plugin-pwa`/Workbox would not replace the service worker - its job is
+injecting an `Authorization` header, which is the bespoke part Workbox does not do, so you would add a build
+plugin and keep all 127 lines. And a gesture library for `Swipe.ts`/`Tap.ts`: 151 lines, working, and no
+Solid-native primitive does swipe recognition. Highcharts stays too - the largest asset by far at 328K, but
+correctly code-split behind the Stats route, and charts are where a mature library earns its size.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
