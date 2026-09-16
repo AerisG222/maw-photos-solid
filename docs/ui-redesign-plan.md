@@ -1959,6 +1959,28 @@ Asking the library whether a gesture happened was the wrong question. **How far 
 answers the same way whatever the library does internally. A tap now closes the photograph whether it is
 zoomed or not; only travel means panning. Three of the six tests fail without the threshold.
 
+**And then it broke paging between photographs**, which took a browser to find rather than an argument.
+Panzoom's default `handleStartEvent` cancels the start event, and cancelling a `pointerdown` stops the browser
+ever beginning a native drag - so the swipe directive, which pages on `dragstart`/`dragend`, never heard
+another thing. Driving a real drag through the DevTools protocol against three configurations said it
+plainly:
+
+|                                 | the element beneath saw |
+| ------------------------------- | ----------------------- |
+| no Panzoom                      | `dragstart,dragend`     |
+| Panzoom, default handler        | **nothing**             |
+| Panzoom, handler passed through | `dragstart,dragend`     |
+
+The user's suggestion - only swipe when not zoomed - is the right rule stated from the other side: **Panzoom
+should claim the gesture only once there is something to pan.** At the resting size the photograph already
+fits, so a drag means "next photograph"; zoomed in it means "show me the other corner". One condition decides
+both, and neither gesture can fire while the other is enabled.
+
+Worth noting what the two touch-related guesses cost. Panzoom sets `touch-action: none` and cancels events,
+so both looked like obvious culprits for a broken swipe - and a test showed the touch listeners firing
+normally in every configuration. The desktop path was the broken one, and no amount of reading the library's
+source would have said so.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

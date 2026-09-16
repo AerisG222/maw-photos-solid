@@ -46,7 +46,28 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
             disablePan: true,
             // the photograph is the whole point; let it reach the edges
             contain: "outside",
-            cursor: "default"
+            cursor: "default",
+
+            /*
+               Claim the gesture only once there is something to pan.
+
+               Panzoom's default start handler cancels the event, and cancelling
+               a pointerdown stops the browser ever beginning a native drag - so
+               the swipe directive, which pages between photographs on
+               `dragstart`/`dragend`, never heard another thing. Measured: with
+               the default handler the element beneath saw nothing at all; with
+               this one it sees the drag again.
+
+               At the resting size the photograph already fits, so a drag means
+               "next photograph" and belongs to the swipe. Zoomed in it means
+               "show me the other corner" and belongs here.
+            */
+            handleStartEvent: (event: Event) => {
+                if (scale() > RESTING_SCALE) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            }
         });
 
         instance = panzoom;

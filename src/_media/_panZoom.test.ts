@@ -18,13 +18,19 @@ import { RESTING_SCALE, createPanZoom } from "./_panZoom";
 */
 const listeners = new Map<string, EventListener[]>();
 
+let options: { handleStartEvent?: (event: Event) => void } = {};
+
 vi.mock("@panzoom/panzoom", () => ({
-    default: () => ({
-        setOptions: () => undefined,
-        reset: () => undefined,
-        zoomWithWheel: () => undefined,
-        destroy: () => undefined
-    })
+    default: (_element: HTMLElement, given: { handleStartEvent?: (event: Event) => void }) => {
+        options = given;
+
+        return {
+            setOptions: () => undefined,
+            reset: () => undefined,
+            zoomWithWheel: () => undefined,
+            destroy: () => undefined
+        };
+    }
 }));
 
 const element = () => {
@@ -158,6 +164,39 @@ describe("the zoom", () => {
         setSubject("photo-2");
 
         expect(api.isZoomed()).toBe(false);
+        dispose();
+    });
+
+    /*
+       The fault that broke paging between photographs.
+
+       Panzoom's default start handler cancels the event, and cancelling a
+       pointerdown stops the browser ever beginning a native drag - so the swipe
+       directive, which pages on `dragstart`/`dragend`, never heard another
+       thing. Measured in a browser: with the default handler the element
+       beneath saw nothing at all, with this one it sees the drag again.
+    */
+    test("leaves the start of a gesture alone at the resting size", () => {
+        const { dispose } = build();
+        const event = { preventDefault: vi.fn(), stopPropagation: vi.fn() };
+
+        options.handleStartEvent?.(event as unknown as Event);
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        dispose();
+    });
+
+    // zoomed in, a drag means "show me the other corner" and belongs to the pan
+    test("and claims it once there is something to pan", () => {
+        const { dispose } = build();
+
+        fire("panzoomzoom", { detail: { scale: 3 } });
+
+        const event = { preventDefault: vi.fn(), stopPropagation: vi.fn() };
+
+        options.handleStartEvent?.(event as unknown as Event);
+
+        expect(event.preventDefault).toHaveBeenCalled();
         dispose();
     });
 });
