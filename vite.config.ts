@@ -42,6 +42,9 @@ export default defineConfig({
         environment: "jsdom",
         globals: true,
         isolate: false,
-        setupFiles: ["src/_testing/setup.ts"]
+        setupFiles: ["src/_testing/setup.ts"],
+        // transforming the tree is the largest share of a run, and it is the
+        // same work every time - vitest 5 will keep it between runs if asked
+        fsModuleCache: true
     }
 });
