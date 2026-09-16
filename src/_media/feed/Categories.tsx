@@ -2,8 +2,6 @@ import { Component, Show } from "solid-js";
 import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
-import { Category } from "../../_models/Category";
-import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 import { getPlacePath } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
@@ -17,6 +15,7 @@ import Layout from "../../_components/layout/Layout";
 import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarCategories from "./ToolbarCategories";
+import { favoriteSetter } from "../../_models/utils/FavoriteUtils";
 
 /*
    The categories a person or clan turns up in, or the ones holding media taken at
@@ -30,14 +29,7 @@ const Categories: Component = () => {
     const { setIsFavoriteMutation } = useCategoriesContext();
     const chain = usePlaceChain(feed.placeId);
 
-    const setIsFavorite = (category: Category, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Category> = {
-            item: category,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
         <Layout

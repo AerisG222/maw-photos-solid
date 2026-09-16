@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext";
 import ToolbarLayout from "./ToolbarLayout";
+import { atWidth } from "../../_testing/breakpoints";
 
 /*
    Two shapes, and which controls survive each.
@@ -15,20 +16,6 @@ import ToolbarLayout from "./ToolbarLayout";
    bar folds its children into a sheet below `md`, and folding away the wrong
    ones is a silent regression.
 */
-const atWidth = (px: number) => {
-    vi.stubGlobal("matchMedia", (query: string) => {
-        const min = /min-width:\s*(\d+)px/.exec(query);
-
-        return {
-            matches: !!min && px >= Number(min[1]),
-            media: query,
-            addEventListener: () => undefined,
-            removeEventListener: () => undefined,
-            addListener: () => undefined,
-            removeListener: () => undefined
-        };
-    });
-};
 
 const toolbar = (width: number) => {
     atWidth(width);

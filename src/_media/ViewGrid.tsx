@@ -13,12 +13,12 @@ import { createElementSize, createWindowSize } from "@solid-primitives/resize-ob
 import { SlideshowService } from "./services/SlideshowService";
 import { IMediaService } from "./services/IMediaService";
 import { MediaViewGrid } from "../_models/MediaView";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 import { Media } from "../_models/Media";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { useFullscreenContext } from "../_contexts/FullscreenContext";
 import { isEditableTarget } from "../_components/shortcuts/_util";
 import { escapeAction } from "./_escape";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import MediaToolbar from "./MediaToolbar";
 import Toolbar from "./Toolbar";
@@ -139,14 +139,7 @@ const ViewGrid: Component<Props> = props => {
     const windowSize = createWindowSize();
     let sizeDiv!: HTMLDivElement;
 
-    const setIsFavorite = (media: Media, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Media> = {
-            item: media,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     /*
        Measured from where the stage actually is, rather than assumed to be flush

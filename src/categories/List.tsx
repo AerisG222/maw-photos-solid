@@ -1,8 +1,6 @@
 import { Component, For } from "solid-js";
 
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
-import { Category } from "../_models/Category";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
 import CategoryFilterBar from "./components/CategoryFilterBar";
@@ -10,19 +8,13 @@ import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
 import SkeletonList from "../_components/loading/SkeletonList";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const ListView: Component = () => {
     const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
-    const setIsFavorite = (category: Category, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Category> = {
-            item: category,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
         // Layout wraps every state so the backdrop and toolbar are constant -

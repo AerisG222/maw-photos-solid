@@ -10,6 +10,7 @@ import { gridRoute, bulkEditRoute, mapRoute } from "../category/_routes";
 import { Category } from "../_models/Category";
 import { IMediaService } from "./services/IMediaService";
 import Toolbar from "./Toolbar";
+import { atWidth } from "../_testing/breakpoints";
 
 /*
    Which views a feed offers, and at which widths.
@@ -24,20 +25,6 @@ import Toolbar from "./Toolbar";
    the selection and the form in view at the same time, so it is offered only
    where the tools dock beside the grid rather than covering it.
 */
-const atWidth = (px: number) => {
-    vi.stubGlobal("matchMedia", (query: string) => {
-        const min = /min-width:\s*(\d+)px/.exec(query);
-
-        return {
-            matches: !!min && px >= Number(min[1]),
-            media: query,
-            addEventListener: () => undefined,
-            removeEventListener: () => undefined,
-            addListener: () => undefined,
-            removeListener: () => undefined
-        };
-    });
-};
 
 // the route builders ask a category for its year and slug
 const category = { year: 2019, slug: "a-category" } as unknown as Category;

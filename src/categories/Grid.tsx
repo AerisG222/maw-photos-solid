@@ -1,8 +1,6 @@
 import { Component, For } from "solid-js";
 
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
-import { Category } from "../_models/Category";
 
 import Toolbar from "./components/Toolbar";
 import GridToolbar from "./components/ToolbarGrid";
@@ -11,19 +9,13 @@ import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const GridView: Component = () => {
     const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
-    const setIsFavorite = (category: Category, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Category> = {
-            item: category,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
         /*

@@ -3,8 +3,6 @@ import ListingSurface from "../_components/listing/ListingSurface";
 
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
-import { Category } from "../_models/Category";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
 import GridToolbar from "./components/ToolbarGrid";
@@ -13,6 +11,7 @@ import SearchBar from "./components/SearchBar";
 import CategoryCard from "../_components/categories/CategoryCard";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const ViewGrid: Component = () => {
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
@@ -24,14 +23,7 @@ const ViewGrid: Component = () => {
     */
     const searchQuery = categorySearchQuery(() => state.activeTerm);
 
-    const setIsFavorite = (category: Category, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Category> = {
-            item: category,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
         <Layout

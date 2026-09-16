@@ -5,7 +5,6 @@ import { useClansContext } from "../_contexts/api/ClansContext";
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
 import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { Clan } from "../_models/Clan";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 import { Person } from "../_models/Person";
 import { PersonSortName } from "../_models/PersonSort";
 import { Uuid } from "../_models/Uuid";
@@ -22,6 +21,7 @@ import SelectionBar from "./components/SelectionBar";
 import EmptyState from "../_components/state/EmptyState";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 /*
    What the face grid is currently being used for. Picking people is a mode
@@ -70,14 +70,7 @@ const GridView: Component = () => {
     const byMediaCount = (a: Person, b: Person) =>
         byFavoriteFirst(a, b) || b.mediaCount - a.mediaCount || a.name.localeCompare(b.name);
 
-    const setIsFavorite = (person: Person, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Person> = {
-            item: person,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     const peopleToDisplay = createMemo(() => {
         const term = filter().trim().toLocaleLowerCase();

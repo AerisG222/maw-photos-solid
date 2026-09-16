@@ -6,6 +6,7 @@ import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { MediaSettingsProvider } from "../../_contexts/settings/MediaSettingsContext";
 import { MediaViewGrid } from "../../_models/MediaView";
 import Inspector from "./Inspector";
+import { atWidth } from "../../_testing/breakpoints";
 
 /*
    The real provider hangs its children off an async Auth0 client, so under test
@@ -24,20 +25,6 @@ vi.mock("../../_contexts/AuthContext", () => ({
    dragging eight lazy card components and their queries into the test. It also
    pins the state that used to crash - see the "Nothing selected" fallback.
 */
-const atWidth = (px: number) => {
-    vi.stubGlobal("matchMedia", (query: string) => {
-        const min = /min-width:\s*(\d+)px/.exec(query);
-
-        return {
-            matches: !!min && px >= Number(min[1]),
-            media: query,
-            addEventListener: () => undefined,
-            removeEventListener: () => undefined,
-            addListener: () => undefined,
-            removeListener: () => undefined
-        };
-    });
-};
 
 const inspector = (width: number) => {
     atWidth(width);

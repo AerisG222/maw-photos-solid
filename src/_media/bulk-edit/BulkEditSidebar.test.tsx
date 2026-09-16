@@ -3,6 +3,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
 import BulkEditSidebar from "./BulkEditSidebar";
+import { atWidth } from "../../_testing/breakpoints";
 
 /*
    Bulk edit's tools were a second copy of what the Inspector had been before it
@@ -17,20 +18,6 @@ import BulkEditSidebar from "./BulkEditSidebar";
    once, so the view is simply not offered where the panel cannot dock. That
    leaves this with one shape, which is what is pinned here.
 */
-const atWidth = (px: number) => {
-    vi.stubGlobal("matchMedia", (query: string) => {
-        const min = /min-width:\s*(\d+)px/.exec(query);
-
-        return {
-            matches: !!min && px >= Number(min[1]),
-            media: query,
-            addEventListener: () => undefined,
-            removeEventListener: () => undefined,
-            addListener: () => undefined,
-            removeListener: () => undefined
-        };
-    });
-};
 
 const sidebar = () => {
     atWidth(1280);

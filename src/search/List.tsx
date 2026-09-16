@@ -2,8 +2,6 @@ import { Component, For } from "solid-js";
 
 import { useSearchContext } from "./contexts/SearchContext";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
-import { Category } from "../_models/Category";
-import { IsFavoriteRequest } from "../_models/IsFavoriteRequest";
 
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
@@ -11,6 +9,7 @@ import SearchBar from "./components/SearchBar";
 import CategoryListItem from "../_components/categories/CategoryListItem";
 import SkeletonList from "../_components/loading/SkeletonList";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const ViewList: Component = () => {
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
@@ -22,14 +21,7 @@ const ViewList: Component = () => {
     */
     const searchQuery = categorySearchQuery(() => state.activeTerm);
 
-    const setIsFavorite = (category: Category, isFavorite: boolean) => {
-        const req: IsFavoriteRequest<Category> = {
-            item: category,
-            isFavorite
-        };
-
-        setIsFavoriteMutation.mutate(req);
-    };
+    const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
         <Layout
