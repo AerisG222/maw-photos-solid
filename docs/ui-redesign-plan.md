@@ -1948,6 +1948,17 @@ click on an unzoomed photograph still closes it, as it always did.
 asserted against a component that had not wired anything up and saw no listeners at all. Building inside the
 root and asserting outside it is the pattern `_idleChrome.test.ts` already used, and is the one to copy.
 
+**The first fix then broke clicking the photograph to close it**, which is worth recording because the cause
+is the kind of thing a library's documentation does not mention. The suppression was driven by a flag set from
+Panzoom's own `panzoompan` and `panzoomzoom` events - and `panzoomzoom` fires on `reset`, which runs on every
+change of photograph. So the flag was true before the reader touched anything, and ate the first click on
+every photograph.
+
+Asking the library whether a gesture happened was the wrong question. **How far the pointer travelled between
+`pointerdown` and `click`** is what actually distinguishes a drag from a click, it is six lines, and it
+answers the same way whatever the library does internally. A tap now closes the photograph whether it is
+zoomed or not; only travel means panning. Three of the six tests fail without the threshold.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`
