@@ -329,6 +329,23 @@ html {
         color: var(--color-base-content-muted);
     }
 
+    /*
+       How a listing flows: centred, wrapping, evenly spaced.
+
+       Seven places state this - `ListingSurface` and six that are deliberately
+       not it. Two are skeletons, which are aria-hidden placeholders and want no
+       windowing; two are pickers inside dialogs, which have no scroll container
+       to window against. They are the same *flow*, not the same component, and
+       a class is what expresses that without dragging a virtualiser into a
+       dialog.
+    */
+    .listing-flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: calc(var(--spacing) * 2);
+        place-content: center;
+    }
+
     .stage {
         /* what the old `mx-[8%]` left behind, which was its default step */
         --stage-width: 84%;

@@ -49,7 +49,16 @@ export default defineConfig(
             // rule flags them on every well-formed query. Disabled; keeping the varying values in
             // each queryKey (e.g. the media id / year) is enforced by convention and code review.
             "@tanstack/query/exhaustive-deps": "off",
-            ...solidPlugin.configs.recommended.rules,
+            /*
+               The typescript config rather than the plain recommended one. It
+               differs in two rules, and both matter here: `jsx-no-undef` is
+               told that TypeScript is resolving the names, so it stops
+               second-guessing imports it cannot see; and `no-unknown-namespaces`
+               is switched off, because the `use:` directives this codebase
+               declares through `declare module "solid-js"` are exactly what it
+               would flag.
+            */
+            ...solidPlugin.configs.typescript.rules,
 
             // Solid compiles `ref={el}` into an assignment to `el`, but that rewrite happens in
             // the JSX transform, so eslint's static analysis only ever sees the bare declaration.

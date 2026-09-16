@@ -30,10 +30,11 @@ interface Props<T> {
 /*
    The box a listing's items sit in, and only the part of it you can see.
 
-   Twelve places wrote out `flex gap-2 flex-wrap place-content-center` for
-   themselves, which is the sort of duplication that is harmless right up until
-   somebody wants to change how a listing behaves - and then has to find all
-   twelve. This is that box.
+   Twelve places wrote out the same centred, wrapping flex row for themselves,
+   which is the sort of duplication that is harmless right up until somebody
+   wants to change how a listing behaves - and then has to find all twelve. This
+   is that box; the flow itself is `.listing-flow`, shared with the handful of
+   places that want the arrangement without the windowing.
 
    It is also where the items stopped all being in the document at once. Nothing
    here was virtualised: a people listing built every person, a category built
@@ -100,7 +101,7 @@ const ListingSurface = <T,>(props: Props<T>) => {
             <Show
                 when={isVirtual()}
                 fallback={
-                    <div class="flex gap-2 flex-wrap place-content-center">
+                    <div class="listing-flow">
                         {/* eslint-disable-next-line solid/reactivity -- the index is a number by design, see Props */}
                         <For each={props.items}>{(item, i) => props.children(item, i())}</For>
                     </div>
@@ -120,7 +121,7 @@ const ListingSurface = <T,>(props: Props<T>) => {
                                     queueMicrotask(() => virtualizer.measureElement(element))
                                 }
                                 data-index={virtualRow.index}
-                                class="absolute top-0 left-0 flex w-full gap-2 flex-wrap place-content-center"
+                                class="listing-flow absolute top-0 left-0 w-full"
                                 style={{ transform: `translateY(${virtualRow.start}px)` }}
                             >
                                 <For each={rows()[virtualRow.index]}>

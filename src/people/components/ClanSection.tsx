@@ -80,7 +80,7 @@ const ClanSection: Component<Props> = props => {
                     </Match>
 
                     <Match when={(props.clans.data?.length ?? 0) > 0}>
-                        <div class="flex gap-2 flex-wrap place-content-center">
+                        <div class="listing-flow">
                             <For each={props.clans.data}>
                                 {clan => (
                                     <ClanCard

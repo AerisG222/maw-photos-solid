@@ -27,7 +27,7 @@ const CoverCandidateGrid: Component<Props> = props => {
     const size = () => getThumbnailSize(ThumbnailSizeSmall);
 
     return (
-        <div class="flex gap-2 flex-wrap place-content-center">
+        <div class="listing-flow">
             <For each={props.items}>
                 {item => (
                     <button

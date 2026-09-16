@@ -76,7 +76,7 @@ const PlaceCoverCategories: Component<Props> = props => {
                         />
                     }
                 >
-                    <div class="flex gap-2 flex-wrap place-content-center">
+                    <div class="listing-flow">
                         <For each={items()}>
                             {category => (
                                 <button

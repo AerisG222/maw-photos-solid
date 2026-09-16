@@ -139,7 +139,7 @@ const ViewBulkEdit: Component<Props> = props => {
                 >
                     <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
 
-                    <div class="flex gap-2 flex-wrap place-content-center mb-4">
+                    <div class="listing-flow mb-4">
                         <For each={mediaToShow()}>
                             {m => (
                                 <div

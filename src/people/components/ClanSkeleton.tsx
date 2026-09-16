@@ -16,7 +16,7 @@ const ClanSkeleton: Component<Props> = props => {
     const faces = [0, 1, 2];
 
     return (
-        <div class="flex gap-2 flex-wrap place-content-center" aria-hidden="true">
+        <div class="listing-flow" aria-hidden="true">
             <For each={cards()}>
                 {card => (
                     <div class="flex flex-col gap-2 border-1 rounded-sm bg-base-200 border-secondary/20 p-3 min-w-[220px]">

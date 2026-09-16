@@ -22,7 +22,7 @@ const SkeletonGrid: Component<Props> = props => {
         <div class="mb-4" aria-hidden="true">
             <div class="skeleton-tile h-3 w-16 rounded-sm mt-3 mb-3" />
 
-            <div class="flex gap-2 flex-wrap place-content-center">
+            <div class="listing-flow">
                 <For each={tiles()}>
                     {idx => (
                         <div

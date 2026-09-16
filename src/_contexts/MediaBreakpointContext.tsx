@@ -1,5 +1,4 @@
-import { createContext, createEffect, ParentComponent, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createContext, ParentComponent, useContext } from "solid-js";
 import { createBreakpoints } from "@solid-primitives/media";
 
 /*
@@ -20,11 +19,6 @@ export interface MediaBreakpointState {
     readonly lg: boolean;
 }
 
-export const defaultMediaBreakpointState: MediaBreakpointState = {
-    md: false,
-    lg: false
-};
-
 export type MediaBreakpointContextValue = [
     state: MediaBreakpointState,
     actions: {
@@ -43,37 +37,27 @@ export const MediaBreakpointProvider: ParentComponent = props => {
         lg: "1024px"
     };
 
+    /*
+       Handed on as it comes, rather than copied into a store of our own.
+
+       `createBreakpoints` already returns a reactive store, and mirroring it
+       through an effect bought nothing and cost a render: an effect does not run
+       until after the first one, so the copy began life at `false, false` and
+       every screen looked like a phone until it caught up. That was invisible
+       while the only consumers picked a CSS class, and stopped being invisible
+       as soon as something *acted* on the answer - the bulk edit guard
+       navigates, and bounced a desktop reader to the grid on load.
+
+       Seeding the copy fixed the symptom. Not copying removes the question.
+    */
     const matches = createBreakpoints(breakpoints);
 
-    /*
-       Seeded from the queries rather than from the defaults.
-
-       It used to start at `false, false` and copy the real answer across in the
-       effect below, which does not run until after the first render - so for
-       one render every screen looked like a phone, on a desktop. That was a
-       flicker while the only consumers were choosing a CSS class. It stops
-       being a flicker the moment something *acts* on the answer: the bulk edit
-       guard navigates away when the panel cannot dock, and would have bounced
-       a desktop reader to the grid on load.
-    */
-    const [state, setState] = createStore<MediaBreakpointState>({
-        md: matches.md,
-        lg: matches.lg
-    });
-
-    createEffect(() => {
-        setState({
-            md: matches.md,
-            lg: matches.lg
-        });
-    });
-
-    const gteMd = () => state.md;
-    const ltMd = () => !state.md;
-    const gteLg = () => state.lg;
+    const gteMd = () => matches.md;
+    const ltMd = () => !matches.md;
+    const gteLg = () => matches.lg;
 
     return (
-        <MediaBreakpointContext.Provider value={[state, { gteMd, ltMd, gteLg }]}>
+        <MediaBreakpointContext.Provider value={[matches, { gteMd, ltMd, gteLg }]}>
             {props.children}
         </MediaBreakpointContext.Provider>
     );
