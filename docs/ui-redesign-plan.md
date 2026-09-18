@@ -2026,6 +2026,39 @@ then removing the handlers fails it.
 That is now the fourth test this session that proved nothing until it was checked against the broken code.
 The habit is worth more than any of the individual fixes it has caught.
 
+### Who and Where: two cards for data that was already paid for (2026-09-18)
+
+Asked what else the Inspector could offer. The two worth building were the two whose data the application
+was _already fetching_ for every photograph and not showing to anybody.
+
+**Where.** `media/{id}/places` returns the rungs of the place tree a photograph was geocoded into. Exactly one
+thing read it: Place Covers, an admin-only card framed around choosing covers. So for everyone else, the
+answer to "where was this taken?" was an unlabelled pin on the MiniMap. The card names each rung, broadest
+first, and each links to everything else taken there. It complements the MiniMap rather than repeating it -
+one says where on earth, the other says what that place is called - and the MiniMap already stands aside on
+the map view, so the two never say the same thing twice.
+
+**Who.** `media/{id}/faces` returns every face found, with the person each belongs to. The only way to see
+them was the face overlay, which draws boxes and a strip _over the photograph_, and only while highlighting
+is switched on - so finding out who was in a picture meant covering it. Photographs only: faces are detected
+on stills, and a video would only ever offer an empty card. Faces nobody has named are counted rather than
+hidden, because leaving them out would make the list look complete when it is not.
+
+**Shared rather than re-derived.** The overlay already turned faces into people, and the card answers the same
+question, so the resolution moved into `_peopleInFaces.ts` and both call it - two implementations would have
+been two chances to disagree about who counts.
+
+**A mutation test found dead code rather than a hollow test.** Removing the `!seen.has(...)` check did not fail
+the deduplication test, which looked like the fifth hollow test of the session. It was not: `seen` is a
+`Map`, and setting a key it already holds keeps the original position, so the map had been doing the
+deduplication all along and the check was redundant. It is gone, and a mutation that _genuinely_ removes
+deduplication - collecting into a list - fails the test as it should. The lesson is the converse of the usual
+one: a test that survives a mutation is suspect, but so is the mutation.
+
+**Two anchored edits failed silently while building this**, both adding a helper after a line that did not
+exist. `tsc` passing proved nothing about whether the code landed, since nothing called it yet. The edits
+assert on their anchor now.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

@@ -11,7 +11,9 @@ import {
     InspectorCardIdType,
     InspectorCardMetadata,
     InspectorCardMinimap,
-    InspectorCardPlaceCovers
+    InspectorCardPlaceCovers,
+    InspectorCardWhere,
+    InspectorCardWho
 } from "../../_models/InspectorCard";
 import { MediaView, MediaViewMap } from "../../_models/MediaView";
 
@@ -71,6 +73,28 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         icon: "icon-[ic--round-tune]",
         appliesTo: always,
         component: lazy(() => import("../../_media/detail/ExifCard"))
+    },
+    {
+        /*
+           Who is in it. Photographs only - faces are detected on stills, and a
+           video would only ever offer an empty card.
+        */
+        id: InspectorCardWho,
+        title: "Who",
+        icon: "icon-[ic--round-people]",
+        appliesTo: context => context.media?.type === "photo",
+        component: lazy(() => import("../../_media/detail/WhoCard"))
+    },
+    {
+        /*
+           Where it was taken, by name. Everyone, unlike Place Covers below, which
+           reads the same data for an admin's purposes - see WhereCard.
+        */
+        id: InspectorCardWhere,
+        title: "Where",
+        icon: "icon-[ic--round-place]",
+        appliesTo: always,
+        component: lazy(() => import("../../_media/detail/WhereCard"))
     },
     {
         id: InspectorCardEffects,

@@ -1,10 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
 
 import {
+    broadestFirst,
     describePlaceAncestry,
     getParentPlaceKinds,
     isLeafPlace,
     Place,
+    PlaceKind,
     PlaceKindCity,
     PlaceKindCountry,
     PlaceKindState
@@ -78,5 +80,32 @@ describe("isLeafPlace", () => {
     */
     it("is not a leaf when the caller can see something inside it", () => {
         expect(isLeafPlace(build([], 2))).toBe(false);
+    });
+});
+
+describe("reading a place aloud", () => {
+    /*
+       A list of the rungs a geocode resolved says nothing about its order, and
+       a breadcrumb reading city, country, state would be worse than none.
+    */
+    test("puts the country first and the city last, whatever order they arrived in", () => {
+        const at = (kind: PlaceKind, name: string) => ({ kind, name }) as unknown as Place;
+
+        const ordered = broadestFirst([
+            at(PlaceKindCity, "Portland"),
+            at(PlaceKindCountry, "United States"),
+            at(PlaceKindState, "Oregon")
+        ]);
+
+        expect(ordered.map(place => place.name)).toEqual(["United States", "Oregon", "Portland"]);
+    });
+
+    // Macao and Hong Kong have no state level
+    test("and copes with a rung that is not there", () => {
+        const at = (kind: PlaceKind, name: string) => ({ kind, name }) as unknown as Place;
+
+        const ordered = broadestFirst([at(PlaceKindCity, "Macao"), at(PlaceKindCountry, "China")]);
+
+        expect(ordered.map(place => place.name)).toEqual(["China", "Macao"]);
     });
 });

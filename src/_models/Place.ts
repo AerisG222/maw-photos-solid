@@ -69,6 +69,17 @@ export const getParentPlaceKinds = (kind: PlaceKind): PlaceKind[] =>
     allPlaceKinds.map(k => k.id).filter(k => placeKindLevels[k] < placeKindLevels[kind]);
 
 /*
+   Country first, city last - the order a place is read aloud in.
+
+   Sorted by kind rather than trusted from the caller, because a list of the
+   rungs a geocode resolved says nothing about its order, and a breadcrumb that
+   ran city, country, state would be worse than none. Not every rung is present:
+   Macao and Hong Kong have no state level, so a photograph there has two.
+*/
+export const broadestFirst = (places: readonly Place[]) =>
+    [...places].sort((a, b) => placeKindLevels[a.kind] - placeKindLevels[b.kind]);
+
+/*
    A browsable location: a country, a state or a city.
 
    Deliberately flat, mirroring the API - the hierarchy is expressed by

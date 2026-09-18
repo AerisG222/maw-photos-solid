@@ -5,14 +5,18 @@ import {
     InspectorCardHistogram,
     InspectorCardMetadata,
     InspectorCardMinimap,
-    InspectorCardPlaceCovers
+    InspectorCardPlaceCovers,
+    InspectorCardWhere,
+    InspectorCardWho
 } from "../../_models/InspectorCard";
 import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../../_models/MediaView";
+import { MediaTypePhoto, MediaTypeVideo } from "../../_models/MediaType";
 import { InspectorContext, applicableCards, inspectorCards } from "./registry";
 
 const context = (over: Partial<InspectorContext> = {}): InspectorContext => ({
     view: MediaViewGrid,
-    media: { id: "media-1" } as unknown as InspectorContext["media"],
+    // a photograph, so the photos-only cards have their gate open too
+    media: { id: "media-1", type: MediaTypePhoto } as unknown as InspectorContext["media"],
     category: undefined,
     isAdmin: false,
     enableCategoryTeaser: false,
@@ -93,5 +97,27 @@ describe("which cards apply", () => {
         expect(
             ids(context({ media: undefined, isAdmin: true, enableCategoryTeaser: true }))
         ).toEqual([]);
+    });
+
+    // faces are detected on stills, so a video would only ever offer an empty card
+    test("who is in it is asked of photographs, not videos", () => {
+        const video = {
+            id: "media-1",
+            type: MediaTypeVideo
+        } as unknown as InspectorContext["media"];
+
+        expect(ids(context())).toContain(InspectorCardWho);
+        expect(ids(context({ media: video }))).not.toContain(InspectorCardWho);
+    });
+
+    /*
+       Where it was taken is for everyone. The same data sits behind Place
+       Covers, but that card is an admin's tool for choosing covers - and it was
+       the only thing reading it, so nobody else could find out where a
+       photograph was taken except as an unlabelled pin on the MiniMap.
+    */
+    test("where it was taken is offered to everyone, not only admins", () => {
+        expect(ids(context({ isAdmin: false }))).toContain(InspectorCardWhere);
+        expect(ids(context({ isAdmin: false }))).not.toContain(InspectorCardPlaceCovers);
     });
 });

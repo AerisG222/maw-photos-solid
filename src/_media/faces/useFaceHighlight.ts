@@ -1,5 +1,6 @@
 import { Accessor, createEffect, createMemo, createSignal, on, onCleanup } from "solid-js";
 
+import { peopleInFaces } from "./_peopleInFaces";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { DetectedFace } from "../../_models/DetectedFace";
@@ -66,19 +67,12 @@ export const useFaceHighlight = (
 
     /*
        One entry per person, in the order their first face appears, so the strip
-       does not repeat somebody photographed twice in the same frame.
+       does not repeat somebody photographed twice in the same frame. Shared with
+       the Who card - see _peopleInFaces.
     */
-    const peopleInMedia = createMemo(() => {
-        const seen = new Map<Uuid, Person>();
-
-        for (const entry of highlighted()) {
-            if (entry.person && !seen.has(entry.person.id)) {
-                seen.set(entry.person.id, entry.person);
-            }
-        }
-
-        return [...seen.values()];
-    });
+    const peopleInMedia = createMemo(
+        () => peopleInFaces(faces.data ?? [], people.data ?? []).people
+    );
 
     /*
        The source dimensions, which the normalised boxes are relative to. Read

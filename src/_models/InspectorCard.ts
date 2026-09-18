@@ -12,6 +12,8 @@ export const InspectorCardMinimap = "minimap";
 export const InspectorCardMetadata = "metadata";
 export const InspectorCardCategoryTeaser = "categoryTeaser";
 export const InspectorCardPlaceCovers = "placeCovers";
+export const InspectorCardWhere = "where";
+export const InspectorCardWho = "who";
 
 export type InspectorCardIdType =
     | typeof InspectorCardComments
@@ -21,7 +23,9 @@ export type InspectorCardIdType =
     | typeof InspectorCardMinimap
     | typeof InspectorCardMetadata
     | typeof InspectorCardCategoryTeaser
-    | typeof InspectorCardPlaceCovers;
+    | typeof InspectorCardPlaceCovers
+    | typeof InspectorCardWhere
+    | typeof InspectorCardWho;
 
 // the order the sidebar declares them in today, which the migration preserves
 export const allInspectorCards: InspectorCardIdType[] = [
@@ -32,7 +36,9 @@ export const allInspectorCards: InspectorCardIdType[] = [
     InspectorCardMinimap,
     InspectorCardMetadata,
     InspectorCardCategoryTeaser,
-    InspectorCardPlaceCovers
+    InspectorCardPlaceCovers,
+    InspectorCardWhere,
+    InspectorCardWho
 ];
 
 export const defaultInspectorCards: InspectorCardIdType[] = [InspectorCardComments];
