@@ -43,6 +43,12 @@ export const KEY_SETTINGS_FEED_VIEW_CATEGORY = `${PREFIX}|feedcategoryview`;
 */
 export const KEY_UI_CLAN_COUNT = `${PREFIX}|clancount`;
 
+/*
+   Not a setting either - the terms searched for most recently, newest first.
+   Kept on this device only, the way the Android app keeps its own.
+*/
+export const KEY_UI_RECENT_SEARCHES = `${PREFIX}|recentsearches`;
+
 export const KEY_SETTINGS_SEARCH_PAGE = `${PREFIX}|searchpage`;
 export const KEY_SETTINGS_SEARCH_VIEW_GRID = `${PREFIX}|searchgridview`;
 export const KEY_SETTINGS_SEARCH_VIEW_LIST = `${PREFIX}|searchlistview`;

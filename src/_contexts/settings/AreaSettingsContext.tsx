@@ -19,6 +19,7 @@ export type AreaSettingsContextValue = [
         setCategoryMissingGpsFilter: (categoryMissingGpsFilter: boolean) => void;
         setFeedFavoritesOnly: (feedFavoritesOnly: boolean) => void;
         setFeedShuffle: (feedShuffle: boolean) => void;
+        setSearchHistoryCount: (searchHistoryCount: number) => void;
     }
 ];
 
@@ -49,6 +50,9 @@ export const AreaSettingsProvider: ParentComponent = props => {
 
     const setFeedShuffle = (feedShuffle: boolean) => updateState({ feedShuffle });
 
+    const setSearchHistoryCount = (searchHistoryCount: number) =>
+        updateState({ searchHistoryCount });
+
     return (
         <AreaSettingsContext.Provider
             value={[
@@ -60,7 +64,8 @@ export const AreaSettingsProvider: ParentComponent = props => {
                     setCategoryYearFilter,
                     setCategoryMissingGpsFilter,
                     setFeedFavoritesOnly,
-                    setFeedShuffle
+                    setFeedShuffle,
+                    setSearchHistoryCount
                 }
             ]}
         >

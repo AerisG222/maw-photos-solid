@@ -5,6 +5,7 @@ import { MapZoomLevelIdType, defaultMapZoomLevel } from "../../_models/MapZoomLe
 import { MediaView, defaultMediaView } from "../../_models/MediaView";
 import { PersonSortIdType, defaultPersonSort } from "../../_models/PersonSort";
 import { ThemeIdType, defaultTheme } from "../../_models/Theme";
+import { defaultSearchHistoryCount } from "../../_models/SearchHistoryCount";
 
 /*
    The four shapes the application keeps, declared here rather than beside their
@@ -73,6 +74,8 @@ export interface AreaSettingsState {
     readonly categoryMissingGpsFilter: boolean;
     readonly feedFavoritesOnly: boolean;
     readonly feedShuffle: boolean;
+    // how many recent search terms to keep
+    readonly searchHistoryCount: number;
 }
 
 export const defaultAreaSettings: AreaSettingsState = {
@@ -82,5 +85,6 @@ export const defaultAreaSettings: AreaSettingsState = {
     categoryYearFilter: "all",
     categoryMissingGpsFilter: false,
     feedFavoritesOnly: false,
-    feedShuffle: false
+    feedShuffle: false,
+    searchHistoryCount: defaultSearchHistoryCount
 };

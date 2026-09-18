@@ -10,6 +10,7 @@ import { createEffect, createSignal } from "solid-js";
 import { Uuid } from "../../_models/Uuid";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { MEDIA_PAGE_SIZE } from "../../_models/utils/Constants";
+import { needsTopUp } from "../_slideshowTopUp";
 
 export const useRandomServices = (view: MediaView) => {
     const navigate = useNavigate();
@@ -40,7 +41,24 @@ export const useRandomServices = (view: MediaView) => {
         }
     });
 
-    mediaService.startPeriodicFetching();
+    /*
+       More only when asked for - the toolbar's request more - or when a playing
+       slideshow is about to run out. It used to append a page every twenty
+       seconds regardless, so the grid grew under whoever was looking at it,
+       and the Android app never did that.
+    */
+    createEffect(() => {
+        if (!slideshowService.isPlaying() || mq.isFetchingNextPage) {
+            return;
+        }
+
+        const active = mediaService.getActiveMedia();
+        const list = mediaService.getMediaList();
+
+        if (active && needsTopUp(mediaService.getCurrIndex(list, active.id), list.length)) {
+            void mq.fetchNextPage();
+        }
+    });
 
     // the category lookup follows the active media, so only the media feed
     // failing should block the screen - a missing category is not fatal here
@@ -48,10 +66,10 @@ export const useRandomServices = (view: MediaView) => {
     const retryLoad = () => refetchQueries([mq, cq]);
 
     /*
-       True only while the first page is still in flight. The periodic prefetch
-       keeps requesting further pages for as long as the screen is open, so a
-       plain `isFetching` would leave the indicator blinking on forever - this
-       has to mean "there is nothing to show yet", not "a request is running".
+       True only while the first page is still in flight. Later pages arrive
+       while there is already a grid to look at, so a plain `isFetching` would
+       skeleton over it - this has to mean "there is nothing to show yet", not
+       "a request is running".
     */
     const isLoading = () => mq.isLoading;
 

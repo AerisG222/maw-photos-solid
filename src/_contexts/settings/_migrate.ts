@@ -191,7 +191,9 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 defaultAreaSettings.categoryMissingGpsFilter,
             feedFavoritesOnly:
                 bool(faceFeed.favoritesOnly) ?? defaultAreaSettings.feedFavoritesOnly,
-            feedShuffle: bool(faceFeed.shuffle) ?? defaultAreaSettings.feedShuffle
+            feedShuffle: bool(faceFeed.shuffle) ?? defaultAreaSettings.feedShuffle,
+            // new since the legacy keys, so there is nothing to carry over
+            searchHistoryCount: defaultAreaSettings.searchHistoryCount
         }
     };
 };

@@ -2059,6 +2059,29 @@ one: a test that survives a mutation is suspect, but so is the mutation.
 exist. `tsc` passing proved nothing about whether the code landed, since nothing called it yet. The edits
 assert on their anchor now.
 
+### Recent searches, and Random stops growing on its own (2026-09-18)
+
+Both from comparing this application with the Android app, which had one thing this did not and did one
+thing differently.
+
+**Recent searches.** Android remembers the last few queries and offers them in its menu. Here, the terms
+are offered under the search bar before a search, not over its results, since at that point the results
+are the answer. Picking one runs it again. They are kept on this device only, in localStorage, the same way
+Android keeps its own. Syncing them through the server was considered and turned down: every other
+preference in both apps is per device, and a searches log is a new kind of personal data to hold on the
+server for a small convenience. A repeat moves to the front rather than appearing twice, case is ignored
+because the search ignores it, and "Recent Searches to Remember" in Settings → Search offers Android's
+choices (5, 10, 20, 30, 50; default 10).
+
+**Random.** It used to append a page every twenty seconds for as long as the screen was open, so the grid
+grew under whoever was looking at it. Android only loads when asked. Now this app does too, with one
+exception: a playing slideshow stops at the end of the list, and Random's list has no natural end, so while
+a slideshow plays the next page is requested once the open photograph is within five of the end.
+
+**Found on the way:** `SearchProvider` builds its store on the shared `defaultSearchState` object, so the
+search term outlives the provider. That is probably what returns a reader to their results after opening
+one, so it stays, but it also carried one test's search into the next until the test reset it.
+
 ### Deliberately deferred from step 1
 
 `.stage` and `.tile` were listed in step 1 but have no consumer until the density work (step 8) and `Tile`

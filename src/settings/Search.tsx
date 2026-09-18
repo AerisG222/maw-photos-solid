@@ -2,6 +2,7 @@ import { Component } from "solid-js";
 
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
+import { allSearchHistoryCounts } from "../_models/SearchHistoryCount";
 
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
@@ -11,7 +12,7 @@ import Layout from "../_components/layout/Layout";
 
 // see the note in Categories - search results are categories
 const ViewSearch: Component = () => {
-    const [area, { setSearchView }] = useAreaSettingsContext();
+    const [area, { setSearchView, setSearchHistoryCount }] = useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Search">
@@ -23,6 +24,14 @@ const ViewSearch: Component = () => {
                         groupName="pageView"
                         selectedValue={area.searchView}
                         onChange={setSearchView}
+                    />
+
+                    <RadioGroup
+                        title="Recent Searches to Remember"
+                        itemArray={allSearchHistoryCounts}
+                        groupName="searchHistoryCount"
+                        selectedValue={area.searchHistoryCount}
+                        onChange={setSearchHistoryCount}
                     />
                 </Panel>
             </PanelContainer>

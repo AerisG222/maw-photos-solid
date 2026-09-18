@@ -17,7 +17,6 @@ const Grid: Component = () => {
 
     onCleanup(() => {
         slideshowService.stop();
-        mediaService.stopPeriodicFetching();
     });
 
     return (
