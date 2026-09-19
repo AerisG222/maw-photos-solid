@@ -56,7 +56,7 @@ const offenders = () =>
     });
 
 describe("secondary text", () => {
-    test("is a colour, not a faded copy of the foreground", () => {
+    test("is a color, not a faded copy of the foreground", () => {
         expect(offenders()).toEqual([]);
     });
 });

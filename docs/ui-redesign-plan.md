@@ -36,11 +36,11 @@ The eight open questions in §10 were walked through with the owner. These answe
 
 | #   | Question                 | Decision                                                                                                                                                                              |
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Dim thumbnails           | **Keep the toggle.** Consolidated to one flag in `ListingSettings` and one button in `ListingToolbar`, but it stays user-controllable — it is not fixed tile behaviour.               |
+| 1   | Dim thumbnails           | **Keep the toggle.** Consolidated to one flag in `ListingSettings` and one button in `ListingToolbar`, but it stays user-controllable — it is not fixed tile behavior.               |
 | 2   | Margins + thumbnail size | **Merge into one Density control, three steps** (Comfortable / Compact / Dense). 16 combinations become 3; big-tiles-in-a-narrow-column is deliberately given up.                     |
 | 3   | Breadcrumb toggles       | **Remove all three.** Always visible in grid, never in fullscreen.                                                                                                                    |
 | 4   | Filmstrip                | **Delete the Detail view outright** — see below. The filmstrip goes with it.                                                                                                          |
-| 5   | Badges                   | **One toggle, default ON.** Favourite hearts and media-type icons appear together and are visible out of the box. A visible change for every existing user.                           |
+| 5   | Badges                   | **One toggle, default ON.** Favorite hearts and media-type icons appear together and are visible out of the box. A visible change for every existing user.                           |
 | 6   | Inspector card letters   | **Remove.** `i` opens the Inspector; arrow keys move between cards once the rail has focus. Eight letters returned.                                                                   |
 | 7   | Category year filter     | **Keep persisting it** — §5's "belongs in the link" rule does _not_ apply here. Precedence rule below.                                                                                |
 | 8   | Detail view              | **Delete**, with `/detail/*` redirecting to grid with the item active.                                                                                                                |
@@ -50,7 +50,7 @@ The eight open questions in §10 were walked through with the owner. These answe
 
 ### Deleting the Detail view
 
-The evidence for this is stronger than §2 realised: **grid already renders the detail experience.** When an item is active, `ViewGrid.tsx:118-150` mounts the same `MainItem` component Detail uses, inside an overlay over the dimmed grid, with the same `CategoryBreadcrumb` above it. Detail adds exactly two things on top of that — the filmstrip (`MediaList.tsx`, whose only consumer is `ViewDetail`) and the Inspector, which §3 promotes into grid anyway.
+The evidence for this is stronger than §2 realized: **grid already renders the detail experience.** When an item is active, `ViewGrid.tsx:118-150` mounts the same `MainItem` component Detail uses, inside an overlay over the dimmed grid, with the same `CategoryBreadcrumb` above it. Detail adds exactly two things on top of that — the filmstrip (`MediaList.tsx`, whose only consumer is `ViewDetail`) and the Inspector, which §3 promotes into grid anyway.
 
 Scope — deleted:
 
@@ -202,7 +202,7 @@ Surfaces (columns) — file that renders each:
 | **Thumbnail size** (8 contexts)                                                                                                                                  | **Merge into Density**                                              | 4 sizes × 4 margins = 16 ways to express one idea. Three named steps (Comfortable / Compact / Dense).                                                                                                                                   |
 | **Show titles / years / names / counts** (4 controls, 4 contexts)                                                                                                | **Merge into "Labels"**                                             | All four answer "do I want text under the picture". One toggle, one key.                                                                                                                                                                |
 | **Title↔thumbnail-size coupling** (`ToolbarGrid.tsx:26-34`, `search/ToolbarGrid.tsx:36-50`, `feed/ToolbarCategories.tsx:41-62`, `settings/Categories.tsx:43-60`) | **Remove**                                                          | Four copies of "turning titles on forces the largest thumbnail, and the size button goes disabled". It exists because the tile doesn't reserve label space. Fix the tile; delete the rule.                                              |
-| **Favorites badge / media-type badge** toggles                                                                                                                   | **Merge into "Badges", default ON**                                 | Both default `false` today, which means the heart — the only way to favourite media — is invisible until you discover a toolbar button. That is a bug wearing a preference's clothes.                                                   |
+| **Favorites badge / media-type badge** toggles                                                                                                                   | **Merge into "Badges", default ON**                                 | Both default `false` today, which means the heart — the only way to favorite media — is invisible until you discover a toolbar button. That is a bug wearing a preference's clothes.                                                   |
 | **Breadcrumb toggles** (3 of them, all `t`)                                                                                                                      | **Remove**                                                          | ~24px of text that answers "where am I". Always on in grid/detail, never in fullscreen. Deletes `showBreadcrumbs`, `showMainBreadcrumbs`, and four props threaded through `ViewGrid`.                                                   |
 | **Filmstrip toggle** `l`                                                                                                                                         | ~~Remove the toggle~~ → **filmstrip deleted entirely** (decision 4) | `MediaList.tsx` has one consumer, `ViewDetail`, which is itself being deleted. The grid is the navigator.                                                                                                                               |
 | **Toolbar collapse button** (every toolbar)                                                                                                                      | **Demote to Settings → Appearance**                                 | A chrome preference, not a tool; it occupies a permanent slot in fifteen toolbars. Fix the inverted flag name while moving it.                                                                                                          |
@@ -261,11 +261,11 @@ Slideshow duration (already there), map type + zoom, toolbar labels, theme (and 
 | **Item overflow `⋮`**                             | Verbs acting on exactly one item, used rarely: download low/high, share, copy deep link, set as category teaser, set as place cover. On the tile (hover/focus) and mirrored in the toolbar when an item is focused.      | 6   |
 | **Settings**                                      | Defaults and set-once preferences: theme, toolbar labels, slideshow duration, map type/zoom, default inspector cards, default density.                                                                                   | —   |
 
-**Focused item.** Every listing surface exposes `focusedItem()`. In a grid it is the item under the keyboard cursor, or the last clicked, and it is already modelled — `IMediaService.getActiveMedia()`. In Detail/Fullscreen it is the item on screen. In Map it is the selected marker. In Bulk Edit it is the _selection_, and the Inspector shows the two bulk cards instead of the per-item ones. Listings that don't track focus (Categories, People, Places) get it for free from the same `ListingSurface` keyboard cursor — which is also how those surfaces become keyboard-navigable for the first time.
+**Focused item.** Every listing surface exposes `focusedItem()`. In a grid it is the item under the keyboard cursor, or the last clicked, and it is already modeled — `IMediaService.getActiveMedia()`. In Detail/Fullscreen it is the item on screen. In Map it is the selected marker. In Bulk Edit it is the _selection_, and the Inspector shows the two bulk cards instead of the per-item ones. Listings that don't track focus (Categories, People, Places) get it for free from the same `ListingSurface` keyboard cursor — which is also how those surfaces become keyboard-navigable for the first time.
 
 **The Inspector across space.** One component, three presentations, chosen by breakpoint and view — not by area:
 
-- **Docked** (`≥lg`): a right-hand column, `w-[420px] xl:w-[500px]`. Content reflows. This is today's Detail behaviour, generalised.
+- **Docked** (`≥lg`): a right-hand column, `w-[420px] xl:w-[500px]`. Content reflows. This is today's Detail behavior, generalised.
 - **Overlay** (`md`–`lg`, and always in **Fullscreen**): floats over the right edge with a left-side scrim gradient, so the photograph keeps the full stage. In Fullscreen, the toolbar and Inspector rail auto-hide after 2.5s idle and return on pointer or key movement — which also fixes the fact that Fullscreen currently has permanent chrome.
 - **Sheet** (`<md`): a bottom sheet at `70dvh` with a grab handle, one card at a time, swipe to dismiss. `w-[500px]` on a 390px phone is the reason the Inspector could never be promoted before.
 
@@ -363,7 +363,7 @@ interface ListingSettings {
     // applies to every listing, everywhere
     density: "comfortable" | "compact" | "dense";
     showLabels: boolean; // titles / years / names / counts
-    showBadges: boolean; // favourites + media type
+    showBadges: boolean; // favorites + media type
     highlightFaces: boolean;
     peopleSort: PersonSortIdType; // the one genuinely per-entity ordering
 }
@@ -386,7 +386,7 @@ interface AreaSettings {
 }
 ```
 
-Everything else moves to the URL, where it already half-lives: category year filter and missing-GPS filter (`?year`, `?gps`), feed favourites-only and shuffle seed (already URL), place search / kind / edit mode (already URL), stats type and mode (already URL). **A preference that changes what a link shows belongs in the link.**
+Everything else moves to the URL, where it already half-lives: category year filter and missing-GPS filter (`?year`, `?gps`), feed favorites-only and shuffle seed (already URL), place search / kind / edit mode (already URL), stats type and mode (already URL). **A preference that changes what a link shows belongs in the link.**
 
 Contexts deleted: `MediaGridViewSettings`, `MediaDetailViewSettings`, `MediaFullscreenViewSettings`, `MediaMapViewSettings`, `MediaInfoPanelSettings`, `CategoryGridViewSettings`, `CategoryListViewSettings`, `CategoryPageSettings`, `CategoryFilterSettings`, `SearchGridViewSettings`, `SearchListViewSettings`, `SearchPageSettings`, `PeopleGridViewSettings`, `FeedCategoryViewSettings`, `FaceFeedSettings` — fifteen files, plus `AllSettingsProvider`'s eighteen-deep nesting becomes four.
 
@@ -445,7 +445,7 @@ Places, Stats and Random need no page because their state is now entirely in the
 | `categoriesView`, `searchView` | `\|categorypage.viewMode`, `\|searchpage.viewMode`                                                                                                                                 |
 | `feedListing`                  | `\|facefeed.showCategories ? "categories" : "media"`                                                                                                                               |
 
-Two migration decisions worth naming: **`showBadges` migrates as an OR, not an AND** — anyone who had _any_ badge on anywhere keeps badges; anyone who had none gets the new default, which is on. And `dimThumbnails` is simply dropped; a user who had it off will see slightly less saturated idle thumbnails and identical hover behaviour.
+Two migration decisions worth naming: **`showBadges` migrates as an OR, not an AND** — anyone who had _any_ badge on anywhere keeps badges; anyone who had none gets the new default, which is on. And `dimThumbnails` is simply dropped; a user who had it off will see slightly less saturated idle thumbnails and identical hover behavior.
 
 Migration gets a `_migrate.test.ts` with fixtures for: empty storage, a full v1 storage, a partial v1 storage, the legacy `theme: "dusk"` case that `AppSettingsContext.loadState()` already handles, and corrupt JSON (which `loadJson` already swallows).
 
@@ -491,7 +491,7 @@ The stage replaces margins:
 
 ### Radius and elevation
 
-Radius: `--radius-field` (0.25rem) for controls, `--radius-box` (0.5rem) for tiles, cards, dialogs and the Inspector. `--radius-selector: 1rem` is unused in both themes — delete it. Today `MediaLink` uses `rounded-md`, `CategoryCard`/`PersonCard`/`PlaceCard` use `rounded-sm`, `Tile` normalises all of them to `rounded-box`.
+Radius: `--radius-field` (0.25rem) for controls, `--radius-box` (0.5rem) for tiles, cards, dialogs and the Inspector. `--radius-selector: 1rem` is unused in both themes — delete it. Today `MediaLink` uses `rounded-md`, `CategoryCard`/`PersonCard`/`PlaceCard` use `rounded-sm`, `Tile` normalizes all of them to `rounded-box`.
 
 Elevation: exactly three.
 
@@ -522,11 +522,11 @@ Keep the four keyframes and the `prefers-reduced-motion` kill switch — they ar
 }
 ```
 
-Colour/opacity transitions use `--motion-fast`, transforms `--motion-base`, image reveals `--motion-slow`.
+Color/opacity transitions use `--motion-fast`, transforms `--motion-base`, image reveals `--motion-slow`.
 
 ### Keeping the two themes honest
 
-Light currently declares 8 colour tokens; dark declares 9 (it adds `--color-primary-content`). Everything else is commented out in both, so daisyUI derives it — which is fine, but means neither theme is deliberate about the derived pairs, and light's `--color-primary` is `oklch(24.3% …)` while dark's is `oklch(80% …)`, so the derived content colours differ in kind.
+Light currently declares 8 color tokens; dark declares 9 (it adds `--color-primary-content`). Everything else is commented out in both, so daisyUI derives it — which is fine, but means neither theme is deliberate about the derived pairs, and light's `--color-primary` is `oklch(24.3% …)` while dark's is `oklch(80% …)`, so the derived content colors differ in kind.
 
 Two mechanisms:
 
@@ -646,7 +646,7 @@ workarounds are gone. This is §7's change, arriving here because converting the
 instance of it.
 
 **What Kobalte actually bought.** The five dialogs already got a focus trap and Escape from the native
-`<dialog>` element. What they did _not_ have was consistent labelling for a screen reader, and each needed an
+`<dialog>` element. What they did _not_ have was consistent labeling for a screen reader, and each needed an
 effect calling `showModal()`/`close()` to chase a prop - `PlaceCoverDialog` had a fifteen-line comment
 explaining why its version of that effect had to be guarded on the element's current state to avoid yanking
 focus mid-choice. `open` is declarative now and that whole class of problem is gone, along with the comment.
@@ -663,14 +663,14 @@ instance, verified in the library source - but any future portal test needs the 
 The Kobalte wrappers borrowed daisyUI's `.modal-box` for the dialog surface. That class sets **`opacity: 0`
 on itself** and is only revealed by rules requiring an open `.modal` ancestor - `.modal[open] > .modal-box`
 and friends. Outside a native `<dialog>` there is no such ancestor, so **all six dialogs rendered fully
-transparent**: correct markup, correct roles, correct focus behaviour, completely invisible. It was reported
+transparent**: correct markup, correct roles, correct focus behavior, completely invisible. It was reported
 as "I am not seeing a dialog when I type ?", which was the cheapest of the six to notice.
 
 Fixed by styling the surface from the app's own tokens - `bg-base-100 rounded-box p-6 elev-overlay` - rather
 than borrowing a component class whose visibility depends on where it sits. `.modal-action` went the same way,
 for coherence rather than necessity.
 
-**The lesson is about the tests, not the CSS.** Twelve assertions covered these dialogs - roles, labelling,
+**The lesson is about the tests, not the CSS.** Twelve assertions covered these dialogs - roles, labeling,
 error announcement, confirm-versus-cancel - and every one passed, because jsdom applies no stylesheet. An
 attempt to close that gap by injecting the built CSS and asserting `getComputedStyle(...).opacity !== "0"`
 looked promising (jsdom does resolve simple class-based declarations) but was then verified against the broken
@@ -679,7 +679,7 @@ several thousand, never seeing `.modal-box` at all. That test was deleted rather
 that cannot fail on the bug it names is worse than no guard.
 
 So: **anything whose correctness is "can you see it" needs a browser.** The unit tests in this repo can say a
-dialog exists, is labelled and responds; they cannot say it is visible. Steps that change rendered appearance
+dialog exists, is labeled and responds; they cannot say it is visible. Steps that change rendered appearance
 should be looked at in the running app before being called done - which is how this one was found.
 
 ### Step 6 notes (2026-09-12)
@@ -799,7 +799,7 @@ different files from each other and the duplication is only visible once you kno
 
 They are one **Badges** control now, on `h`, and `ToggleShowTypesButton` is deleted - a file whose component
 was also, incidentally, _declared_ as `ToggleShowFavoritesBadgeButton`, having been copy-pasted from its
-neighbour and never renamed. `e` is freed as a listing key; what remains on it is the Effects card and the
+neighbor and never renamed. `e` is freed as a listing key; what remains on it is the Effects card and the
 Places edit mode, which decision 6 separates in step 9.
 
 **The general shape of it:** every setting that step 3 collapsed is a candidate for this. Two controls that
@@ -817,7 +817,7 @@ became three named steps behind one store:
 - `ensureLargeThumbnails()` called `setThumbnailSize(...)`, which the adapter maps to `cycleDensity()`. So
   **pressing the titles button changed the density.**
 - The guard `disabled={settings.showTitles}` read a flag that now defaults to _true_, so **the density button
-  was greyed out by default** in the categories grid, and dead behind an `if` in Search and the feed.
+  was grayed out by default** in the categories grid, and dead behind an `if` in Search and the feed.
 
 The coupling is gone rather than repaired: it existed because the tile reserved no room for a label, and it
 has nothing to say about a three-step density.
@@ -858,11 +858,11 @@ during the loading or error states - and was checked against the eager version f
 §11's mapping table was written before anything was built, and two of its rows do not survive contact.
 
 **Kobalte has no `Toolbar` primitive.** The table named one for the roving-tabindex work in step 8. It is not
-in the package. That behaviour - one tab stop per toolbar, arrow keys between the controls - has to be
+in the package. That behavior - one tab stop per toolbar, arrow keys between the controls - has to be
 hand-rolled, which is perhaps thirty lines of keydown handling, and is still worth doing.
 
 **`Select` and `RadioGroup` should stay native.** Both are real `<select>` and `<input type="radio">` elements
-today, which already carry keyboard behaviour, grouping and labelling from the browser - and a native
+today, which already carry keyboard behavior, grouping and labeling from the browser - and a native
 `<select>` opens the operating system's own picker on a phone. Kobalte's versions are custom listboxes: better
 to style, worse on touch, more code. Replacing a working native control to gain styling nobody asked for is not
 a trade this rework should make. Struck.
@@ -1005,7 +1005,7 @@ design: nothing in the repository could have told me.
 
 **So the repository can tell me now.** `src/orphans.test.ts` walks every module and fails if one is reachable
 from nowhere. It found the four immediately, and two more that predate this work entirely - `UtilityTypes.ts`,
-unused since July, and `ChartUtils.ts`, a chart colour palette unused since August 2025. Both deleted; git
+unused since July, and `ChartUtils.ts`, a chart color palette unused since August 2025. Both deleted; git
 keeps them.
 
 **Where the actions went.** A `⋮` menu rather than four more toolbar buttons: they are used rarely and read as
@@ -1147,7 +1147,7 @@ The step-7 note below says `Tile` was deferred because it changes markup and the
 it. That was right, and the snapshots are what made finishing it reviewable: three of the four tiles were
 rewritten onto `Tile`, the diffs were read line by line, and the two that were wrong showed up immediately.
 
-**The favourite heart got wrapped twice.** `FavoriteBadge` had been extracted in the first half of step 7
+**The favorite heart got wrapped twice.** `FavoriteBadge` had been extracted in the first half of step 7
 carrying its own `col-start-2 row-start-1` pinning, because it was byte-identical in three tiles _including_
 the pinning. Correct then; wrong the moment `Tile` owned the corners, since passing it as `badges.topRight`
 put a positioned box inside a positioned box. The snapshot showed the doubled `<div>` and nothing else would
@@ -1214,9 +1214,9 @@ inspector tests fail there, which is what makes them worth keeping.
 
 Writing the Shortcuts page meant writing down what the keys do, and the obvious source was §7 above. That
 would have shipped a reference to an application that does not exist. §7 proposes `d` for density, `l` for
-labels, `b` for badges, `[` and `]` for rotation, `f` for favourites-only, `x` for shuffle, plus `t`, `n`,
+labels, `b` for badges, `[` and `]` for rotation, `f` for favorites-only, `x` for shuffle, plus `t`, `n`,
 `u` and `,` as new global keys. What is actually bound is the pre-rework set: `s` density, `t` labels, `h`
-badges, `a`/`d` rotation, `u` favourites-only, `j` shuffle, and no global keys at all.
+badges, `a`/`d` rotation, `u` favorites-only, `j` shuffle, and no global keys at all.
 
 Steps 8 and 9 removed the _collisions_ - no letter carries two meanings now, which was the real complaint -
 but they did not carry out the reassignment. That is a separate, user-visible change: it invalidates whatever
@@ -1316,7 +1316,7 @@ _covered_, which is what a bottom sheet does, and that was the whole problem:
   exactly as the phone sheet does - so between `md` and `lg` there was no way to toggle a card at all. Both
   the chooser and the header are now gated on `!docked()`, which is the condition that actually describes
   "this is covering the thing that controls it". The rail keeps its own copy only when docked.
-- **Eight unlabelled icons is not a menu.** `InspectorRailButton` takes `withLabel`, and the chooser row uses
+- **Eight unlabeled icons is not a menu.** `InspectorRailButton` takes `withLabel`, and the chooser row uses
   it. The rail is a narrow strip and stays icon-only; there is width for the word inside the panel.
 
 Two of the three new tests fail against the previous component. The third - that the header is outside the
@@ -1346,7 +1346,7 @@ Escape handling, the header with its close button and the pinned chooser slot; `
 the same question about its own rail - in both overlaid shapes the panel covers the rail that opened it, so
 whatever the rail offers has to move into the panel there.
 
-Bulk edit keeps its old behaviour where it is docked: simply present, with no toggle, because a button
+Bulk edit keeps its old behavior where it is docked: simply present, with no toggle, because a button
 offering to close something that cannot be closed is a button that does nothing.
 
 **What this says about the previous fix.** The Inspector work in the commit before was real and needed - no
@@ -1411,9 +1411,9 @@ the theme test behind it. Two, three and four were still open, and they are the 
 because every one of these controls hides its text label below `md`.
 
 **Names.** `IconButton` is the real find: no `aria-label`, no `title`, no text - an icon and nothing else,
-drawing the favourite heart on every tile in the application, so a listing announced a row of bare "button"s.
+drawing the favorite heart on every tile in the application, so a listing announced a row of bare "button"s.
 It now takes a **required** `label`, and the three callers say which way the toggle will go ("Add to
-favourites" / "Remove from favourites") rather than naming the control.
+favorites" / "Remove from favorites") rather than naming the control.
 
 Worth recording precisely, because I nearly wrote the opposite in a test: `title` **is** the last-resort
 fallback in the accessible-name algorithm, so `ToolbarButton` and `ToolbarLink` did have names. Their
@@ -1531,7 +1531,7 @@ down the page.
 `a11y/rovingFocus.ts` and the eleven listing keyboard tests are deleted, `keyboardCursor` is gone from five
 call sites, and eight toolbar tests went with it. **`role="toolbar"` went too**, which is the part worth
 saying out loud: that role _promises_ a single tab stop with arrow navigation, so keeping it after removing
-the behaviour would tell a screen reader to press keys that do nothing. A wrong landmark is worse than no
+the behavior would tell a screen reader to press keys that do nothing. A wrong landmark is worse than no
 landmark.
 
 Browser defaults now. If there is a real problem here it can be looked at from a clean slate.
@@ -1588,7 +1588,7 @@ alive on the same substitution the detail view got - `/fullscreen/a-photo` to `/
 **And `_idleChrome` went with it**, which is the part worth noticing. That primitive existed to fade the
 chrome after 2.5s because the fullscreen _view_ still had chrome to fade. Once fullscreen means "there is no
 chrome", the whole idea - an idle timer, a hold while a pointer rests on it, a hold while focus is inside it -
-has nothing to do. Roughly 120 lines of behaviour deleted because the thing it was compensating for stopped
+has nothing to do. Roughly 120 lines of behavior deleted because the thing it was compensating for stopped
 existing.
 
 **Three ways out, deliberately.** The button, `Esc`, and stepping back to the tiles - fullscreen turns itself
@@ -1597,9 +1597,9 @@ bottom-left, away from the swipe that moves between photographs, because the too
 an exit is precisely what has been taken away. `f` toggles it and was the one free letter in the map; it is
 the only key that names what it does, which is an accident rather than a scheme.
 
-**A saved view of `fullscreen` falls back to the grid** with no new code: `sanitiseView` already tests
+**A saved view of `fullscreen` falls back to the grid** with no new code: `sanitizeView` already tests
 membership of `MediaViewAll`, and the migration's `migrateView` does the same. Two migration tests asserted
-the old behaviour and were rewritten - and `ShortcutReference.test.ts` caught `f` being bound before it was
+the old behavior and were rewritten - and `ShortcutReference.test.ts` caught `f` being bound before it was
 documented, which is exactly the drift it was written for.
 
 ### Three settings that were never designed (2026-09-14)
@@ -1622,7 +1622,7 @@ thumbnail size, one list size, one content width.
 **Thumbnail dimming is gone**, and it was the worse of the two. It desaturated every thumbnail until you
 hovered it and defaulted **on**, so a library of photographs showed them washed out until you pointed at one.
 The hover emphasis the user wanted to keep is the lift and the primary-tinted shadow in `.elev-hover`, which
-say the same thing without taking the colour away.
+say the same thing without taking the color away.
 
 **What fell out with them.** `_models/Density.ts` and `_models/Margin.ts` deleted outright; both list
 toolbars deleted, because density and dimming were the only controls a list view had; two migration helpers
@@ -1634,16 +1634,16 @@ questionable control in this application is a _preference that exists because tw
 not because anyone wanted a choice. The rework has been good at collapsing duplication and less good at
 asking whether the survivor should exist at all. The test to apply is whether a setting earns its toolbar
 button, its shortcut letter, its settings row and its stored key - and by that test `showBadges` is the next
-one to look at, since the favourite heart it hides is the only way to favourite anything.
+one to look at, since the favorite heart it hides is the only way to favorite anything.
 
 ### The badge toggle goes, on its own argument (2026-09-15)
 
 Flagged at the end of the density work as the next setting failing the "does it earn its keep" test, and
 removed here. The argument was already written down inside `PersonCard`, which had been carrying an exception
-since step 7: _the favourite heart is always offered there, because it is the only way to mark a person, so
+since step 7: _the favorite heart is always offered there, because it is the only way to mark a person, so
 hiding it behind a preference would hide the feature itself._
 
-That reasoning does not stop at people. The heart is the only way to favourite **anything** - a category, a
+That reasoning does not stop at people. The heart is the only way to favorite **anything** - a category, a
 photograph - so `showBadges` was a setting whose "off" position removed the sole route to a feature. It
 already defaulted **on** for exactly that reason, which meant the preference existed to let somebody break
 their own application and nothing else.
@@ -1652,7 +1652,7 @@ Gone: the state field, the context action, the toolbar button, the settings row,
 explained why it was not carried across, and the `<Show>` around every badge in `Tile`'s three callers and in
 `MainItem`. `h` is free.
 
-**The snapshot did not move**, which is the tell that this was dead weight rather than behaviour: badges
+**The snapshot did not move**, which is the tell that this was dead weight rather than behavior: badges
 defaulted on, `<Show>` with a truthy condition renders no wrapper, so the markup is character-for-character
 what it was.
 
@@ -1711,7 +1711,7 @@ a tool.
 
 **What was actually wrong was the persistence.** A rotation is the clearest case: you turn a sideways
 photograph the right way up, step to the next one, and that one is lying on its side for no reason visible on
-screen. The filters are the same fault more quietly - a sepia left on recolours everything you look at
+screen. The filters are the same fault more quietly - a sepia left on recolors everything you look at
 afterwards, and the control that undoes it is inside a card you may not have open. The effect outlives the
 thing it was applied to, and nothing says so.
 
@@ -1812,7 +1812,7 @@ _asset_ is useless because of the bearer token, I reached for a link into the _a
 is still only useful to somebody who has an account here. That is nobody a photograph is usually being sent
 to.
 
-The app can fetch the bytes itself. It already does: `downloadFile` performs an authorised fetch and hands the
+The app can fetch the bytes itself. It already does: `downloadFile` performs an authorized fetch and hands the
 blob to an anchor. Split that into `fetchFile`, and a share hands the same blob to the operating system
 instead - `navigator.share({ files: [file] })`. The recipient gets a photograph in their messages rather than
 a sign-in page.
@@ -1830,7 +1830,7 @@ _One sheet, whatever happens._ A reader who dismissed the share did not ask to b
 `AbortError` ends it rather than falling through to the link. A genuine failure gets a line in the console for
 the same reason.
 
-**`full-hd` rather than the original**, which is a judgement to revisit if it is wrong: a share sheet is on
+**`full-hd` rather than the original**, which is a judgment to revisit if it is wrong: a share sheet is on
 its way to a message, and the original can be tens of megabytes. The high-resolution download is still there
 for when the original is what is wanted.
 
@@ -1840,12 +1840,12 @@ slow fetch could plausibly exhaust the activation. It cannot be tested from here
 Web Share at all - so it needs a phone, and if it fails there the answer is to pre-fetch when the menu opens
 rather than when the item is chosen.
 
-### Favouriting finally gets a key (2026-09-15)
+### Favoriting finally gets a key (2026-09-15)
 
-Asked whether a photograph could be favourited from the keyboard. It could not - not on any screen, by any
+Asked whether a photograph could be favorited from the keyboard. It could not - not on any screen, by any
 key. `u` is _favourites only_, a filter, and nothing anywhere bound a key to marking something.
 
-A strange gap, because favouriting is the one action with **no other home**: the heart on a tile is the only
+A strange gap, because favoriting is the one action with **no other home**: the heart on a tile is the only
 way to do it, and that is the exact argument that deleted the badge toggle two days earlier - a setting able
 to hide the sole route to a feature is a trap rather than a choice. Deleting it freed `h`, which is the key
 §7 had wanted for this and could not have. The other half of that argument went unnoticed at the time: the
@@ -1875,7 +1875,7 @@ names what should happen. The order is the part that will be got wrong when a fo
 an order buried in a two-hundred-line component is an order nobody can see.
 
 **Two listeners, made deterministic.** The panel and the view both listen on `window`, and listeners on one
-target fire in registration order - which would have made the behaviour depend on which component happened to
+target fire in registration order - which would have made the behavior depend on which component happened to
 mount first. The panel captures instead, so it unambiguously answers first, and the view checks
 `defaultPrevented`, so it stands down. Both halves have a test that fails without them.
 
@@ -1954,13 +1954,13 @@ Panzoom's own `panzoompan` and `panzoomzoom` events - and `panzoomzoom` fires on
 change of photograph. So the flag was true before the reader touched anything, and ate the first click on
 every photograph.
 
-Asking the library whether a gesture happened was the wrong question. **How far the pointer travelled between
+Asking the library whether a gesture happened was the wrong question. **How far the pointer traveled between
 `pointerdown` and `click`** is what actually distinguishes a drag from a click, it is six lines, and it
 answers the same way whatever the library does internally. A tap now closes the photograph whether it is
 zoomed or not; only travel means panning. Three of the six tests fail without the threshold.
 
 **And then it broke paging between photographs**, which took a browser to find rather than an argument.
-Panzoom's default `handleStartEvent` cancels the start event, and cancelling a `pointerdown` stops the browser
+Panzoom's default `handleStartEvent` cancels the start event, and canceling a `pointerdown` stops the browser
 ever beginning a native drag - so the swipe directive, which pages on `dragstart`/`dragend`, never heard
 another thing. Driving a real drag through the DevTools protocol against three configurations said it
 plainly:
@@ -2011,7 +2011,7 @@ Reported from the console: `AbortError: Transition was skipped. New ViewTransiti
 
 `startViewTransition` hands back three promises - `ready`, `updateCallbackDone`, `finished` - and `ready`
 rejects the moment a second transition starts before the first has finished. Which is what navigating twice
-in quick succession _is_, so the rejection is expected behaviour rather than a fault. Step 12b attached
+in quick succession _is_, so the rejection is expected behavior rather than a fault. Step 12b attached
 nothing to any of them, so the browser reported every one.
 
 Swallowing **only the supersession, and only by name**. Anything else rejecting here means the navigation
@@ -2033,7 +2033,7 @@ was _already fetching_ for every photograph and not showing to anybody.
 
 **Where.** `media/{id}/places` returns the rungs of the place tree a photograph was geocoded into. Exactly one
 thing read it: Place Covers, an admin-only card framed around choosing covers. So for everyone else, the
-answer to "where was this taken?" was an unlabelled pin on the MiniMap. The card names each rung, broadest
+answer to "where was this taken?" was an unlabeled pin on the MiniMap. The card names each rung, broadest
 first, and each links to everything else taken there. It complements the MiniMap rather than repeating it -
 one says where on earth, the other says what that place is called - and the MiniMap already stands aside on
 the map view, so the two never say the same thing twice.
@@ -2123,18 +2123,18 @@ Replaces today's `g`, `w`, `f`, `z`, `/`, `k`, `p`(places media), `l`(categories
 | ------- | ------------------------------------ | ----------------------------------------------------------- |
 | `←` `→` | Previous / next item                 | any surface with a focused item                             |
 | `p`     | Play / pause slideshow               | Grid, Detail, Fullscreen, **Map** (new)                     |
-| `h`     | Favourite the focused item           | everywhere _(was: toggle the badge)_                        |
+| `h`     | Favorite the focused item           | everywhere _(was: toggle the badge)_                        |
 | `i`     | Open / close the Inspector           | everywhere                                                  |
 | `[` `]` | Rotate counter-clockwise / clockwise | any media surface _(was `a` / `d`)_                         |
 | `\`     | Flip horizontal (`Shift+\` vertical) | any media surface                                           |
 | `d`     | Cycle density                        | any listing _(was `s` size + `m` margins)_                  |
 | `l`     | Toggle labels                        | any listing _(was `t` titles / `y` years / names / counts)_ |
-| `b`     | Toggle badges                        | any listing _(was `h` favourites + `e` types)_              |
+| `b`     | Toggle badges                        | any listing _(was `h` favorites + `e` types)_              |
 | `q`     | Toggle face highlighting             | any media listing (unchanged)                               |
 | `o`     | Cycle order / sort                   | People (unchanged)                                          |
 | `r`     | Request more                         | any paged listing (unchanged)                               |
 | `s`     | Focus the search / filter box        | Search, People, Places                                      |
-| `f`     | Favourites-only filter               | feeds _(was `u`)_                                           |
+| `f`     | Favorites-only filter               | feeds _(was `u`)_                                           |
 | `x`     | Shuffle                              | media feeds _(was `j`)_                                     |
 | `y`     | Year filter                          | Categories                                                  |
 | `e`     | Edit mode                            | Places (admin) — now its **only** meaning                   |
@@ -2174,9 +2174,9 @@ No letter has two meanings. `c`, `g`, `j`, `k`, `m`, `v`, `w`, `z` are unassigne
 
 1. **Focus visibility.** There is currently none. Add once, in `@layer base`:
    `:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius-field); }` — and give `Tile` `.elev-hover` on `:focus-visible` so keyboard navigation of a grid is as legible as hovering it.
-2. **DONE 2026-09-14 — accessible names on icon-only controls.** `ToolbarButton`, `ToolbarLink`, `SidebarButton`, `IconButton` and `ToolbarDownloadLink` all rely on `title`, which is invisible on touch and unreliable across AT. Make `label` a required prop rendering `aria-label`; keep `title` for the pointer tooltip. `IconButton` currently takes no label at all, and it is what renders the favourite heart on every tile.
+2. **DONE 2026-09-14 — accessible names on icon-only controls.** `ToolbarButton`, `ToolbarLink`, `SidebarButton`, `IconButton` and `ToolbarDownloadLink` all rely on `title`, which is invisible on touch and unreliable across AT. Make `label` a required prop rendering `aria-label`; keep `title` for the pointer tooltip. `IconButton` currently takes no label at all, and it is what renders the favorite heart on every tile.
 3. **DONE 2026-09-14 — toggle and nav semantics.** `aria-pressed` on every toolbar toggle (there are ~30 with `active`), `aria-current="page"` on `PrimaryNavLink` and `NavGroup` links, `<nav aria-label="Primary">` around `PrimaryNav` (currently a bare `<div>`), `role="toolbar"` + arrow-key roving tabindex on `ToolbarLayout` so a toolbar is one tab stop rather than fifteen.
-4. **DONE 2026-09-14 — images.** 15 of 22 `<img>` lack `alt`. Decorative thumbnails inside a labelled link get `alt=""`; the link carries the name. `ViewBulkEdit`'s tiles and `MediaLink`'s thumbnail are the main offenders.
+4. **DONE 2026-09-14 — images.** 15 of 22 `<img>` lack `alt`. Decorative thumbnails inside a labeled link get `alt=""`; the link carries the name. `ViewBulkEdit`'s tiles and `MediaLink`'s thumbnail are the main offenders.
 5. **The Inspector as a landmark.** `role="complementary"` when docked, `role="dialog" aria-modal="false"` when overlaid, focus trap only in the `<md` sheet, `Esc` closes it in overlay and sheet modes.
 6. **DONE 2026-09-14 — contrast.** Enforced by the theme test in §6. `PlaceCard`'s `text-xs opacity-70` ancestry line and `text-base-content/40` placeholders are the ones I expect to fail first.
 7. **Reduced motion.** Already correct — the global kill switch in `index.css` is a good pattern and stays. One addition: `.skeleton-tile`'s infinite shimmer should become a static tint under reduced motion rather than a 0.01ms infinite animation.
@@ -2190,7 +2190,7 @@ Fourteen steps. Each is independently shippable, leaves the app working, and pas
 
 | #       | Step                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Scope             | Risk   |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------ |
-| **0**   | **DONE 2026-09-11 — hygiene, no behaviour change.** Dropped the 5 dead `.scrollable` uses; fixed `mr[-1px]`, `border-l-base-content:30%`, `flex-items-center`; replaced 9 `text-6` with `text-2xl` (the tenth was a real `text-6xl`); renamed the two components misnamed `Select` to `Toggle` / `Checkbox`; removed the dead `horizontal` prop chain and the hardcoded `name="theme"`; renamed `isToolbarCollapsed` → `showToolbarLabels` with a legacy read; added the missing loading states to `search/Grid.tsx` and `search/List.tsx`. | 27 files          | none   |
+| **0**   | **DONE 2026-09-11 — hygiene, no behavior change.** Dropped the 5 dead `.scrollable` uses; fixed `mr[-1px]`, `border-l-base-content:30%`, `flex-items-center`; replaced 9 `text-6` with `text-2xl` (the tenth was a real `text-6xl`); renamed the two components misnamed `Select` to `Toggle` / `Checkbox`; removed the dead `horizontal` prop chain and the hardcoded `name="theme"`; renamed `isToolbarCollapsed` → `showToolbarLabels` with a legacy read; added the missing loading states to `search/Grid.tsx` and `search/List.tsx`. | 27 files          | none   |
 | **1**   | **DONE 2026-09-12 — visual system.** Type scale (`--text-display/title/label/body/meta`) and motion tokens in `@theme`; `head1/2/3` rebuilt on the scale; `.icon-sm`/`.icon-md` replacing the step-0 `text-2xl` stopgap; `.elev-hover`/`.elev-overlay` with the hover treatment now applying on `:focus-visible`; the app's first focus ring; body set to the body step; fonts self-hosted via `@fontsource` and the Google Fonts `<link>` + preconnects removed; `_contract.ts` + `theme.test.ts` (49 assertions).                         | 20 files, +2 deps | low    |
 | **2**   | **DONE 2026-09-12 — icon consolidation.** 52 references rewritten across 34 files; the app now draws from `ic--round-*` only, down from six vocabularies. `@iconify-json/mdi` removed. An eslint `no-restricted-syntax` rule (covering both string literals and template elements, so `.ts` route definitions are caught too) rejects a seventh. All 82 unique icons verified present in the production CSS.                                                                                                                                | 34 files, −1 dep  | low    |
 | **3**   | **DONE 2026-09-12 — the four stores.** 16 settings keys become 4; 15 of the old contexts are now adapters that own nothing, so no screen had to change. `_migrate.ts` carries the legacy keys across without deleting them. `AllSettingsProvider` goes from 18 providers to 4. Theme gains `system` (decision 13), including the pre-mount script. 41 tests: migration fixtures plus a runtime pass over the adapters.                                                                                                                      | 40 files          | done   |
@@ -2223,7 +2223,7 @@ Steps 0–2 are safe to land in any order and are worth doing immediately regard
 3. **Thumbnail size's four steps → three density steps.** `tiny` (40×30) disappears. Was it ever used?
 4. **Breadcrumb toggles, all three.** Always visible in grid and detail, never in fullscreen.
 5. **The filmstrip toggle** (`l` in Detail). Filmstrip stays, toggle goes, auto-hidden below `md`.
-6. **Badges default to ON.** The favourite heart currently defaults to invisible — I read that as an accident, but it is a visible default change for every existing user.
+6. **Badges default to ON.** The favorite heart currently defaults to invisible — I read that as an accident, but it is a visible default change for every existing user.
 7. **The eight sidebar-card letters** (`c,x,e,o,v,n,k,y`). See §2 for the trade-off and the `Shift+` fallback.
 8. **Persisting the category year filter.** URL only.
 
@@ -2271,7 +2271,7 @@ Asked directly: should the app move to a different styling framework to look bea
 
 ### Keep Tailwind 4 + daisyUI
 
-Measured, counting only class tokens inside string literals: ~300 daisyUI class occurrences across ~40 files, dominated by `btn` (150 occurrences, 30 files), then `input` (28), `range` (24), `modal` (18), `badge` (16), `radio` (12). The deeper dependency is not those classes though — it is the **token layer**. Both `src/_themes/light.css` and `dark.css` are written in daisyUI's semantic tokens, and essentially every colour in the application resolves through `base-100/200/300`, `base-content`, `primary` and `primary-content`. Replacing daisyUI means re-authoring both themes and every colour reference in the app.
+Measured, counting only class tokens inside string literals: ~300 daisyUI class occurrences across ~40 files, dominated by `btn` (150 occurrences, 30 files), then `input` (28), `range` (24), `modal` (18), `badge` (16), `radio` (12). The deeper dependency is not those classes though — it is the **token layer**. Both `src/_themes/light.css` and `dark.css` are written in daisyUI's semantic tokens, and essentially every color in the application resolves through `base-100/200/300`, `base-content`, `primary` and `primary-content`. Replacing daisyUI means re-authoring both themes and every color reference in the app.
 
 More to the point, the framework is not the cause. §0 and §6 already located the reasons this app does not feel designed: ~83 ad-hoc `text-*` utilities applied at call sites instead of a type scale, six icon vocabularies, five class names that emit no CSS at all, zero focus styling anywhere, and two themes that declare 8–9 tokens and let the rest be derived. Panda, vanilla-extract, UnoCSS or CSS modules would fix none of those. A framework migration here is the kind of change that looks like progress, costs a rewrite of every component, collides with a roadmap already deleting ~35 files, and produces nothing a user can see.
 
@@ -2279,7 +2279,7 @@ More to the point, the framework is not the cause. §0 and §6 already located t
 
 Version 0.13.14, published 2026-09-07, peer `solid-js ^1.9.8` against this project's `^1.9.15`. Unstyled Solid-native primitives — the Radix equivalent — so it composes with Tailwind and daisyUI instead of displacing them.
 
-The case is that §4's hand-rolled list is Kobalte's catalogue:
+The case is that §4's hand-rolled list is Kobalte's catalog:
 
 | §4 component                                | Kobalte primitive                              | Lands in step |
 | ------------------------------------------- | ---------------------------------------------- | ------------- |

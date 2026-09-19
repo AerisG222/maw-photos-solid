@@ -71,7 +71,7 @@ const ShortcutWrapper: ParentComponent<Props> = props => {
                        so declining to act was not enough: a letter bound to a
                        toolbar button was swallowed by every text field in the
                        application, which is a shortcut eating the thing it was
-                       supposed to stay out of the way of. Cancelling it here
+                       supposed to stay out of the way of. Canceling it here
                        means only a press that actually does something does so.
                     */
                     createShortcut(

@@ -36,7 +36,7 @@ interface Props {
 
    At the root they are dead rather than absent: there is no one place to list,
    and a toolbar that changed width as you drilled would be worse than one with a
-   pair of grey entries in it.
+   pair of gray entries in it.
 
    The corrections appear only while editing, next to the toggle that revealed
    them. They act on the place the chain says you are on, so at the root - where

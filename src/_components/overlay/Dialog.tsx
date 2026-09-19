@@ -29,7 +29,7 @@ interface Props {
    `.modal-box`, which carries `opacity: 0` and is only revealed by a rule
    requiring an open `.modal` ancestor - so borrowing it outside a native
    `<dialog>` renders a perfectly laid-out, completely invisible dialog. What they did not do consistently was the part that is
-   hard - the focus trap, returning focus to whatever opened them, labelling
+   hard - the focus trap, returning focus to whatever opened them, labeling
    themselves for a screen reader, and locking the page behind them. Kobalte
    does all of that; the markup below is only the dressing.
 */

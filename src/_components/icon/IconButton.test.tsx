@@ -7,7 +7,7 @@ afterEach(cleanup);
 
 /*
    The heart on an open photograph sits inside the link that closes it. A click
-   on the heart has to favourite and stop there - reaching the link would shut
+   on the heart has to favorite and stop there - reaching the link would shut
    the photograph the reader just liked. Both ways of drawing the button, since
    the styled tooltip puts Kobalte's handlers between the click and this one.
 */
@@ -15,25 +15,25 @@ describe.each([
     ["with the browser's title", false],
     ["with the styled tooltip", true]
 ])("a click on the heart %s", (_, styledTooltip) => {
-    test("favourites, and goes no further", () => {
-        const favourited = vi.fn();
+    test("favorites, and goes no further", () => {
+        const favorited = vi.fn();
         const closed = vi.fn();
 
         render(() => (
             <a href="/grid" onClick={closed}>
                 <IconButton
-                    label="Add to favourites"
+                    label="Add to favorites"
                     styledTooltip={styledTooltip}
-                    onClick={favourited}
+                    onClick={favorited}
                 />
             </a>
         ));
 
         const click = new MouseEvent("click", { bubbles: true, cancelable: true });
 
-        fireEvent(screen.getByRole("button", { name: "Add to favourites" }), click);
+        fireEvent(screen.getByRole("button", { name: "Add to favorites" }), click);
 
-        expect(favourited).toHaveBeenCalledOnce();
+        expect(favorited).toHaveBeenCalledOnce();
         expect(closed).not.toHaveBeenCalled();
         expect(click.defaultPrevented).toBe(true);
     });

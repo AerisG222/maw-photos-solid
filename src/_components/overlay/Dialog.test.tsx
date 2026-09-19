@@ -51,7 +51,7 @@ describe("Dialog", () => {
        version: the dialog names itself to a screen reader, from its own title,
        without every caller having to remember to wire that up.
     */
-    test("is announced as a modal labelled by its title", () => {
+    test("is announced as a modal labeled by its title", () => {
         const { baseElement } = render(() => (
             <Dialog open={true} title="Name Your Clan" onClose={() => undefined}>
                 <p>body</p>

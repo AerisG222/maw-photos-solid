@@ -12,7 +12,7 @@ interface Props {
     /*
        Show the name beside the icon. The rail is a narrow strip and has room
        for neither, but where these are offered as a row inside the panel there
-       is width for the word - and eight unlabelled icons is not a menu anybody
+       is width for the word - and eight unlabeled icons is not a menu anybody
        can read.
     */
     withLabel?: boolean;

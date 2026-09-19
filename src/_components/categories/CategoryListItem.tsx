@@ -92,7 +92,7 @@ const CategoryListItem: Component<Props> = props => {
             <span class="grow" />
 
             <IconButton
-                label={props.category.isFavorite ? "Remove from favourites" : "Add to favourites"}
+                label={props.category.isFavorite ? "Remove from favorites" : "Add to favorites"}
                 onClick={onClickFavorite}
                 buttonClasses="btn-lg mr-4"
             >

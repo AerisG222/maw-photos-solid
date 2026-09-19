@@ -23,7 +23,7 @@ const FacePeopleStrip: Component<Props> = props => {
     return (
         <Show when={props.highlight.peopleInMedia().length > 0}>
             {/*
-                Centred by a full width flex row rather than by left-1/2 and a
+                Centered by a full width flex row rather than by left-1/2 and a
                 transform. The transform moves the strip visually but leaves its
                 layout box running from the middle of the photo to beyond the
                 right edge, and the stage sets overflow-y, which makes the

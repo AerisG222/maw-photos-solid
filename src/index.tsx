@@ -16,7 +16,7 @@ import App from "./App";
 render(
     () => (
         // outermost net: the page-level boundary lives inside the provider tree,
-        // so it cannot catch a provider itself failing to initialise
+        // so it cannot catch a provider itself failing to initialize
         <AppErrorBoundary title="MaW Photos could not start">
             <Router
                 root={props => (

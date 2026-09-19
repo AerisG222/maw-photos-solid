@@ -5,7 +5,7 @@ interface Props {
     open: boolean;
     title: string;
     confirmLabel: string;
-    // a deletion, rather than a save - colours the confirming button
+    // a deletion, rather than a save - colors the confirming button
     destructive?: boolean;
     pending?: boolean;
     error?: string;
@@ -17,7 +17,7 @@ interface Props {
    Asking before doing something that cannot be taken back.
 
    An alert dialog rather than a plain one, which is not only a different
-   colour of button: it takes focus to itself on open and will not be dismissed
+   color of button: it takes focus to itself on open and will not be dismissed
    by a click outside, because an accidental dismissal of "are you sure" should
    not be indistinguishable from answering it.
 */

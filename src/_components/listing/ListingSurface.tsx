@@ -30,7 +30,7 @@ interface Props<T> {
 /*
    The box a listing's items sit in, and only the part of it you can see.
 
-   Twelve places wrote out the same centred, wrapping flex row for themselves,
+   Twelve places wrote out the same centered, wrapping flex row for themselves,
    which is the sort of duplication that is harmless right up until somebody
    wants to change how a listing behaves - and then has to find all twelve. This
    is that box; the flow itself is `.listing-flow`, shared with the handful of

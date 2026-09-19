@@ -54,7 +54,7 @@ const AppContext: ParentComponent = props => {
 
                    Safe because nothing here relies on that refetch to stay
                    correct: every mutation invalidates or writes through on
-                   success, so a favourite, a rename or a new cover updates the
+                   success, so a favorite, a rename or a new cover updates the
                    cache directly. This only decides how long an untouched
                    answer is trusted between visits.
 

@@ -40,7 +40,7 @@ export const getPlaceKindIcon = (kind: PlaceKind) => {
     }
 };
 
-// singular, for labelling one place rather than a listing of them
+// singular, for labeling one place rather than a listing of them
 export const getPlaceKindName = (kind: PlaceKind) => {
     switch (kind) {
         case PlaceKindCountry:

@@ -9,7 +9,7 @@ const ATTRIBUTE = "data-tooltip-placement";
 
    Every bar in the application turns at the same breakpoint - a column from
    `md` up, a row below it - and a tooltip belongs beside a column but past a
-   row: opened along the bar it lands on the neighbouring control. The bar
+   row: opened along the bar it lands on the neighboring control. The bar
    knows which edge it is on, so it says so once:
 
        <div {...barTooltips("right", "top")}>

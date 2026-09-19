@@ -114,7 +114,7 @@ describe("which cards apply", () => {
        Where it was taken is for everyone. The same data sits behind Place
        Covers, but that card is an admin's tool for choosing covers - and it was
        the only thing reading it, so nobody else could find out where a
-       photograph was taken except as an unlabelled pin on the MiniMap.
+       photograph was taken except as an unlabeled pin on the MiniMap.
     */
     test("where it was taken is offered to everyone, not only admins", () => {
         expect(ids(context({ isAdmin: false }))).toContain(InspectorCardWhere);

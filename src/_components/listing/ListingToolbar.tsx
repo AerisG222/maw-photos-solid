@@ -24,7 +24,7 @@ interface Props {
    existed in one listing and not the next.
 
    Which controls a listing offers is still its own decision, because not every
-   listing has labels worth showing or items that can be favourited. What is
+   listing has labels worth showing or items that can be favorited. What is
    *not* its decision any more is what they look like, what they are called,
    which key presses them, or what order they sit in - so moving between two
    listings no longer means re-learning the same row.

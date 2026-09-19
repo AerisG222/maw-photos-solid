@@ -85,7 +85,7 @@ describe("a click on the photograph", () => {
        The photograph is wrapped in the link that closes it, so a drag to pan
        would otherwise end by closing the photograph being panned.
     */
-    test("is swallowed when the pointer travelled - that was a drag", () => {
+    test("is swallowed when the pointer traveled - that was a drag", () => {
         const { dispose } = build();
 
         press(100, 100);
@@ -170,7 +170,7 @@ describe("the zoom", () => {
     /*
        The fault that broke paging between photographs.
 
-       Panzoom's default start handler cancels the event, and cancelling a
+       Panzoom's default start handler cancels the event, and canceling a
        pointerdown stops the browser ever beginning a native drag - so the swipe
        directive, which pages on `dragstart`/`dragend`, never heard another
        thing. Measured in a browser: with the default handler the element

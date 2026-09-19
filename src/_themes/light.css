@@ -7,7 +7,7 @@
     /*
        Surfaces carry a trace of the primary's hue (262) rather than sitting at
        chroma 0. It is well below the threshold where anyone would call it blue,
-       but it stops the greys reading as unstyled browser default.
+       but it stops the grays reading as unstyled browser default.
     */
     --color-base-100: oklch(99.4% 0.002 262);
     --color-base-200: oklch(97.31% 0.004 262);

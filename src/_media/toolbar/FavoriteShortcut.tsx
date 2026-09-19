@@ -14,7 +14,7 @@ interface Props {
 /*
    The key for marking a photograph, with no button attached.
 
-   Favouriting is the one thing in this application with no keyboard route at
+   Favoriting is the one thing in this application with no keyboard route at
    all, which is a strange gap for the one action that has no other home - the
    heart on a tile is the only way to do it. §7 asked for `h` and could not have
    it, because `h` was "show / hide badges"; that toggle was deleted on the

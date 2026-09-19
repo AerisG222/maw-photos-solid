@@ -51,7 +51,7 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
             /*
                Claim the gesture only once there is something to pan.
 
-               Panzoom's default start handler cancels the event, and cancelling
+               Panzoom's default start handler cancels the event, and canceling
                a pointerdown stops the browser ever beginning a native drag - so
                the swipe directive, which pages between photographs on
                `dragstart`/`dragend`, never heard another thing. Measured: with
@@ -94,7 +94,7 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
            The photograph is wrapped in a link back to the grid, so without this
            a drag to pan ends by closing the photograph being panned.
 
-           Measured by how far the pointer travelled, rather than by asking
+           Measured by how far the pointer traveled, rather than by asking
            Panzoom whether it did anything. Its `panzoomzoom` fires on `reset`
            too - which happens on every change of photograph - so a flag set
            from its events was already true before the reader touched anything,
@@ -117,10 +117,10 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
                 return;
             }
 
-            const travelled = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+            const traveled = Math.hypot(event.clientX - start.x, event.clientY - start.y);
 
             // a tap still closes the photograph, zoomed in or not
-            if (travelled > DRAG_THRESHOLD_PX) {
+            if (traveled > DRAG_THRESHOLD_PX) {
                 event.preventDefault();
                 event.stopPropagation();
             }

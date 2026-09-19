@@ -10,7 +10,7 @@ interface Props {
 /*
    Placeholder tiles laid out on the same geometry as the real grid, so the
    content lands in place instead of shoving the page around when it arrives.
-   Staggering the shimmer phase per tile avoids a single synchronised pulse.
+   Staggering the shimmer phase per tile avoids a single synchronized pulse.
 */
 const SkeletonGrid: Component<Props> = props => {
     // the size the real tiles are, so the placeholders are the size of what

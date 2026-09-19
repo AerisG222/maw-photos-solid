@@ -28,7 +28,7 @@ const FaceBoxes: Component<Props> = props => {
 
     /*
        Where the photo actually is inside its box. `object-contain` letterboxes
-       the image, so the normalised coordinates are relative to the painted area
+       the image, so the normalized coordinates are relative to the painted area
        rather than to the element - which are the same thing only when the two
        aspect ratios happen to match.
     */

@@ -139,7 +139,7 @@ const MediaToolbar: Component<Props> = props => {
 
                 {/*
                     Likewise keyless until now: the heart on a tile is the only
-                    way to favourite anything, and it had no shortcut at all.
+                    way to favorite anything, and it had no shortcut at all.
                     Only with a photograph open - on a listing nothing is
                     selected for it to act on.
                 */}

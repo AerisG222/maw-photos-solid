@@ -21,7 +21,7 @@ interface Props {
    and each name leads to everything else taken there. The data was being
    fetched for every photograph already - but only the admin-only Place Covers
    card read it, and framed it around choosing covers, so for everybody else the
-   answer to "where was this?" was an unlabelled pin.
+   answer to "where was this?" was an unlabeled pin.
 
    One row per rung the geocode actually resolved, broadest first. Not every rung
    exists everywhere: Macao and Hong Kong have no state level.
@@ -50,7 +50,7 @@ const WhereCard: Component<Props> = props => {
                     when={ordered().length > 0}
                     fallback={
                         <p class="text-sm text-muted">
-                            Nowhere the geocoder recognised - this photograph has no location, or
+                            Nowhere the geocoder recognized - this photograph has no location, or
                             one too remote to name.
                         </p>
                     }

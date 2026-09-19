@@ -75,7 +75,7 @@ export const useFaceHighlight = (
     );
 
     /*
-       The source dimensions, which the normalised boxes are relative to. Read
+       The source dimensions, which the normalized boxes are relative to. Read
        from the element rather than the API: it is the only thing that knows what
        actually loaded, and a scaled file keeps the aspect of its source.
     */

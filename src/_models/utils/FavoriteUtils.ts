@@ -3,7 +3,7 @@ import { UseMutationResult } from "@tanstack/solid-query";
 import { IsFavoriteRequest } from "../IsFavoriteRequest";
 
 /*
-   Turning a favourite mutation into the handler every tile expects.
+   Turning a favorite mutation into the handler every tile expects.
 
    Eight screens each wrote the same six lines: build an `IsFavoriteRequest`
    around an item and a flag, hand it to the mutation. Identical in all of them

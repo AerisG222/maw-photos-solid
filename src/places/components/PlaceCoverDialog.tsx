@@ -41,7 +41,7 @@ type Browsing = "media" | "categories";
    accept - the place's own media, or a category holding some of it - so there is
    no eligibility rule here to keep in step with the server's.
 
-   Choosing does not close the dialog. Publishing a cover is a judgement call
+   Choosing does not close the dialog. Publishing a cover is a judgment call
    made by looking at the result, and the header shows the published copy as soon
    as it exists, so a second try is one click rather than a re-open.
 */

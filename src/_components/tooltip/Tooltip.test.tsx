@@ -7,17 +7,17 @@ afterEach(cleanup);
 
 test("keyboard focus shows the name and the key to press", async () => {
     render(() => (
-        <Tooltip as="button" aria-label="Favourite" content="Favourite" shortcutKeys={["h"]}>
+        <Tooltip as="button" aria-label="Favorite" content="Favorite" shortcutKeys={["h"]}>
             ♥
         </Tooltip>
     ));
 
     // a keyboard focus, which is the case `title` never covered
-    fireEvent.focus(screen.getByRole("button", { name: "Favourite" }));
+    fireEvent.focus(screen.getByRole("button", { name: "Favorite" }));
 
     const tooltip = await screen.findByRole("tooltip");
 
-    expect(tooltip).toHaveTextContent("Favourite");
+    expect(tooltip).toHaveTextContent("Favorite");
     expect(tooltip.querySelector("kbd")).toHaveTextContent("H");
 });
 

@@ -14,7 +14,7 @@ import { describe, expect, test } from "vitest";
    Measured, with a listing of 1500 tiles at 390px: ~87ms of main-thread work
    per mouse move with `both`, ~6ms with `backwards`. It reads as the browser
    itself going slow, which is how it was reported, and nothing else in the
-   suite could see it - it is a fill mode, not markup and not behaviour.
+   suite could see it - it is a fill mode, not markup and not behavior.
 
    A string check, and honestly a blunt one. It is here because the cost is
    invisible at review time and severe at runtime.

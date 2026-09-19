@@ -27,7 +27,7 @@ import ToolbarLink from "../toolbar/ToolbarLink";
 
    The two that were genuinely broken are the ones that fail without the
    change: `IconButton` had no name of any kind - no title, no text, an icon
-   and nothing else, drawing the favourite heart on every tile - and no toolbar
+   and nothing else, drawing the favorite heart on every tile - and no toolbar
    toggle said whether it was switched on.
 */
 const frame = (body: () => unknown) =>
@@ -99,13 +99,13 @@ describe("icon-only controls", () => {
     });
 
     /*
-       The one that had no name at all. It draws the favourite heart on every
+       The one that had no name at all. It draws the favorite heart on every
        tile in the application, so a listing announced a row of bare "button"s.
     */
     test("an icon button is named, and says which way it will go", () => {
-        frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
+        frame(() => <IconButton label="Add to favorites" onClick={() => undefined} />);
 
-        expect(screen.getByRole("button", { name: "Add to favourites" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Add to favorites" })).toBeInTheDocument();
     });
 
     /*
@@ -113,17 +113,17 @@ describe("icon-only controls", () => {
 
        A screen reader announces the action and reads the binding from its own
        list; repeating it in the name makes every heart announce as "add to
-       favourites h". A pointer user has no other way to find out there is a
+       favorites h". A pointer user has no other way to find out there is a
        key at all.
     */
     test("an icon button names its key to the pointer, not to the reader", () => {
         frame(() => (
-            <IconButton label="Add to favourites" shortcutKeys={["h"]} onClick={() => undefined} />
+            <IconButton label="Add to favorites" shortcutKeys={["h"]} onClick={() => undefined} />
         ));
 
-        const button = screen.getByRole("button", { name: "Add to favourites" });
+        const button = screen.getByRole("button", { name: "Add to favorites" });
 
-        expect(button).toHaveAttribute("title", "Add to favourites (H)");
+        expect(button).toHaveAttribute("title", "Add to favorites (H)");
     });
 
     /*
@@ -139,14 +139,14 @@ describe("icon-only controls", () => {
     test("with the styled tooltip, the key is stated beside the name, not in it", async () => {
         frame(() => (
             <IconButton
-                label="Add to favourites"
+                label="Add to favorites"
                 shortcutKeys={["h"]}
                 styledTooltip
                 onClick={() => undefined}
             />
         ));
 
-        const button = screen.getByRole("button", { name: "Add to favourites" });
+        const button = screen.getByRole("button", { name: "Add to favorites" });
 
         expect(button).toHaveAttribute("aria-keyshortcuts", "h");
         expect(button).not.toHaveAttribute("title");
@@ -155,13 +155,13 @@ describe("icon-only controls", () => {
 
         const tooltip = await screen.findByRole("tooltip");
 
-        expect(tooltip).toHaveTextContent("Add to favourites");
+        expect(tooltip).toHaveTextContent("Add to favorites");
         expect(tooltip.querySelector("kbd")).toHaveTextContent("H");
     });
 
     test("and claims no key where none is bound", () => {
-        frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
+        frame(() => <IconButton label="Add to favorites" onClick={() => undefined} />);
 
-        expect(screen.getByRole("button")).toHaveAttribute("title", "Add to favourites");
+        expect(screen.getByRole("button")).toHaveAttribute("title", "Add to favorites");
     });
 });

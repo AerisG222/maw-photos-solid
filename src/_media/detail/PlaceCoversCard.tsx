@@ -20,7 +20,7 @@ interface Props {
    The category teaser treatment, applied to places: the decision "this one
    represents here" is made while looking at the photograph, not while paging a
    picker, so the sidebar is where it belongs. The admin screen at /admin/places
-   is still the place to hunt for a cover; this is the place to recognise one.
+   is still the place to hunt for a cover; this is the place to recognize one.
 
    One row per rung the geocode actually resolved, rather than three by
    assumption - Macao and Hong Kong have no state level, so a photograph there
@@ -78,7 +78,7 @@ const PlaceCoversCard: Component<Props> = props => {
                     when={places.data!.length > 0}
                     fallback={
                         <p class="text-sm">
-                            This media has no location the geocoder recognised, so there is nowhere
+                            This media has no location the geocoder recognized, so there is nowhere
                             to publish it as a cover.
                         </p>
                     }

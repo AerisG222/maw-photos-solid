@@ -22,7 +22,7 @@ export const requiredColorTokens = [
     "--color-neutral"
 ] as const;
 
-// non-colour tokens the components depend on
+// non-color tokens the components depend on
 export const requiredScalarTokens = [
     "--radius-field",
     "--radius-box",

@@ -96,7 +96,7 @@ const Tooltip = <T extends ValidComponent = "button">(props: TooltipProps<T>): J
             <KobalteTooltip.Portal>
                 {/*
                     the dropdowns' surface, not `neutral`: the light theme's
-                    neutral pair is pale on grey, where this one is held to
+                    neutral pair is pale on gray, where this one is held to
                     4.5:1 by the theme contract in both themes
                 */}
                 <KobalteTooltip.Content

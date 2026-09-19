@@ -292,7 +292,7 @@ const EmptyLibrary: Component = () => (
     <EmptyState
         icon="icon-[ic--round-people]"
         title="Nobody has been identified yet"
-        detail="Once faces have been recognised in the photos and videos you can see, everyone found will show up here."
+        detail="Once faces have been recognized in the photos and videos you can see, everyone found will show up here."
     />
 );
 

@@ -14,7 +14,7 @@ import {
    They used to persist for as long as you stayed within a media root. A
    rotation is the clearest case against it: you turn a sideways photograph the
    right way up, step to the next one, and that one is now lying on its side for
-   no reason you can see. A sepia is the same fault more quietly - it recolours
+   no reason you can see. A sepia is the same fault more quietly - it recolors
    everything you look at afterwards, and the control that undoes it is inside a
    card you may not have open.
 */

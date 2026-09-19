@@ -47,7 +47,7 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
             { keys: ["f"], action: "Fill the screen with it", scope: "A photograph on the grid" },
             {
                 keys: ["h"],
-                action: "Favourite it",
+                action: "Favorite it",
                 scope: "A photograph that is open"
             },
             { keys: ["i"], action: "Open / close the Inspector", scope: "Any media view" },
@@ -62,7 +62,7 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
         detail:
             "One setting behind each, shared by every listing. Density and thumbnail " +
             "dimming used to be here and are not settings any more - there is one " +
-            "size, and photographs show in full colour.",
+            "size, and photographs show in full color.",
         entries: [
             { keys: ["t"], action: "Show / hide labels", scope: "Any listing" },
             { keys: ["o"], action: "Cycle the sort order", scope: "People" },
@@ -73,7 +73,7 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
         title: "Narrowing things down",
         detail: "",
         entries: [
-            { keys: ["u"], action: "Favourites only", scope: "Feeds" },
+            { keys: ["u"], action: "Favorites only", scope: "Feeds" },
             { keys: ["j"], action: "Shuffle", scope: "Media feeds" }
         ]
     },

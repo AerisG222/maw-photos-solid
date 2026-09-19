@@ -31,7 +31,7 @@ const ShortcutContext = createContext<ShortcutContextValue>();
 export const ShortcutProvider: ParentComponent = props => {
     const [state, setState] = createStore(defaultShortcutState);
 
-    const normalise = (shortcut: string[]) => shortcut.join("+").toUpperCase();
+    const normalize = (shortcut: string[]) => shortcut.join("+").toUpperCase();
 
     /*
        Two different things must not answer one key.
@@ -52,10 +52,10 @@ export const ShortcutProvider: ParentComponent = props => {
             return;
         }
 
-        const key = normalise(shortcutInfo.shortcut);
+        const key = normalize(shortcutInfo.shortcut);
         const held = state.shortcuts.find(
             existing =>
-                normalise(existing.shortcut) === key &&
+                normalize(existing.shortcut) === key &&
                 existing.description !== shortcutInfo.description
         );
 

@@ -41,7 +41,7 @@ describe("ConfirmDialog", () => {
         expect(baseElement.textContent).toContain("Delete the Morano clan?");
     });
 
-    test("confirming and cancelling are told apart", () => {
+    test("confirming and canceling are told apart", () => {
         const onConfirm = vi.fn();
         const onCancel = vi.fn();
         render(() => (

@@ -50,14 +50,14 @@ interface Props {
    It sizes itself, which is the point of it being here rather than in each
    listing - no screen has to be told how big a tile is, or tell one.
 
-   One size, and photographs at full colour at rest. Both used to be settings:
+   One size, and photographs at full color at rest. Both used to be settings:
    a three-step density, and a desaturation that lifted on hover. The density
    was never designed, it was salvaged - the old app had a thumbnail size and a
    page margin, sixteen combinations of one idea, and three named steps was the
    compromise that collapsed them. The dimming was worse than merely unused: it
    defaulted *on*, so a library of photographs showed them washed out until you
    pointed at one. The hover emphasis is still here - it is the lift and the
-   shadow, which say the same thing without taking the colour away.
+   shadow, which say the same thing without taking the color away.
 
    Places are deliberately not here. A place card is a different thing - a fixed
    width, a four-by-three cover and a footer of text - and forcing it into this

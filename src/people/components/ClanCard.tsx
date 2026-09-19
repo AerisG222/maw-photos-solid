@@ -7,7 +7,7 @@ import { getClanPath } from "../_routes";
 
 import Icon from "../../_components/icon/Icon";
 
-// enough faces to recognise the clan at a glance; the rest are counted
+// enough faces to recognize the clan at a glance; the rest are counted
 const FACES_SHOWN = 5;
 
 interface Props {

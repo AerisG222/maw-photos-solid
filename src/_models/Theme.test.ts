@@ -12,7 +12,7 @@ import {
 const allChoices: ThemeIdType[] = [ThemeLight, ThemeDark, ThemeSystem];
 
 describe("resolving a theme", () => {
-    test("an explicit choice is honoured whatever the system says", () => {
+    test("an explicit choice is honored whatever the system says", () => {
         expect(resolveTheme(ThemeLight, true)).toBe(ThemeLight);
         expect(resolveTheme(ThemeDark, false)).toBe(ThemeDark);
     });

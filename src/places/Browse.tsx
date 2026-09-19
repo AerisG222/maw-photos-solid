@@ -192,7 +192,7 @@ const Browse: Component = () => {
             return `There are no ${kindPhrase} at this level. The kind filter narrows the level you are on - search to look across the whole tree.`;
         }
 
-        return "None of the media you can see has a location we recognised yet.";
+        return "None of the media you can see has a location we recognized yet.";
     };
 
     return (

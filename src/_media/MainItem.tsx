@@ -136,7 +136,7 @@ const MainItem: Component<Props> = props => {
                         // properties individually instead of rewriting cssText on
                         // every effect change.
                         //
-                        // `view-transition-name` is what lets the browser recognise
+                        // `view-transition-name` is what lets the browser recognize
                         // the photograph in the grid and the photograph in fullscreen
                         // as one thing and tween between them. Only ever one of these
                         // is on screen at a time, which the name requires.
@@ -177,7 +177,7 @@ const MainItem: Component<Props> = props => {
                 <div class="absolute top-0 left-0 m-2">
                     <IconButton
                         label={
-                            props.media.isFavorite ? "Remove from favourites" : "Add to favourites"
+                            props.media.isFavorite ? "Remove from favorites" : "Add to favorites"
                         }
                         shortcutKeys={["h"]}
                         styledTooltip

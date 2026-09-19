@@ -14,7 +14,7 @@ import { JSX } from "solid-js";
 const fetched: string[] = [];
 
 /*
-   `fetchFile` is the authorised fetch - every asset is behind a bearer token,
+   `fetchFile` is the authorized fetch - every asset is behind a bearer token,
    which is why a share cannot simply hand over a link to one.
 */
 vi.mock("../../_contexts/api/CategoriesContext", () => ({
@@ -173,7 +173,7 @@ describe("sharing a photograph", () => {
        A link into this application is only useful to somebody who has an
        account here, which is nobody a photo is usually sent to. Where the
        platform takes files - which is to say, a phone - the bytes go instead,
-       fetched through the same authorised request a download uses.
+       fetched through the same authorized request a download uses.
     */
     test("a phone is given the photograph itself, not a link", async () => {
         const shared = withShare("files");
@@ -195,7 +195,7 @@ describe("sharing a photograph", () => {
         expect(shared[0].files?.[0].type).toBe("image/jpeg");
     });
 
-    // through the authorised fetch, because the asset is behind a bearer token
+    // through the authorized fetch, because the asset is behind a bearer token
     test("and the bytes come from the protected asset", async () => {
         withShare("files");
         fetched.length = 0;

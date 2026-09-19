@@ -18,7 +18,7 @@ vi.mock("../../_contexts/api/MediaContext", () => ({
 }));
 
 /*
-   Favouriting was the one action with no keyboard route at all - which is a
+   Favoriting was the one action with no keyboard route at all - which is a
    strange gap for the one action with no other home, since the heart on a tile
    is the only way to do it. §7 asked for `h` and could not have it; deleting the
    badge toggle freed it, which was the unnoticed other half of that argument.
@@ -63,7 +63,7 @@ afterEach(() => {
     mutated.length = 0;
 });
 
-describe("the favourite key", () => {
+describe("the favorite key", () => {
     test("is registered while a photograph is open", () => {
         const keys = mount(media(false));
 

@@ -35,12 +35,12 @@ const MediaSettingsContext = createContext<MediaSettingsContextValue>();
    Checked on load rather than in the migration alone, because the migration runs
    once and somebody may already have carried "detail" into the new store.
 */
-const sanitiseView = (settings: MediaSettingsState): MediaSettingsState =>
+const sanitizeView = (settings: MediaSettingsState): MediaSettingsState =>
     MediaViewAll.includes(settings.view) ? settings : { ...settings, view: defaultMediaView };
 
 export const MediaSettingsProvider: ParentComponent = props => {
     const [state, setState] = createStore(
-        sanitiseView(loadMigrated(KEY_SETTINGS_V2_MEDIA, defaultMediaSettings))
+        sanitizeView(loadMigrated(KEY_SETTINGS_V2_MEDIA, defaultMediaSettings))
     );
 
     const updateState = (update: Partial<MediaSettingsState>) => {

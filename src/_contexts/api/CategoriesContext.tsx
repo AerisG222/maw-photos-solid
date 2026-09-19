@@ -48,7 +48,7 @@ export interface CategoriesService {
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
     downloadFile: (url: string, fileName: string) => Promise<void>;
-    // the same authorised fetch, for a caller that wants the bytes themselves
+    // the same authorized fetch, for a caller that wants the bytes themselves
     fetchFile: (url: string) => Promise<Blob>;
 }
 
@@ -347,7 +347,7 @@ export const CategoriesProvider: ParentComponent = props => {
 
        Split out of `downloadFile` because sharing wants the same thing and does
        something else with it: a download hands the blob to an anchor, a share
-       hands it to the operating system. The authorisation is the part worth
+       hands it to the operating system. The authorization is the part worth
        having in one place - every file is behind a bearer token, which is why
        neither can be done with a plain link.
     */

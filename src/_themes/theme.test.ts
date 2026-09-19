@@ -53,7 +53,7 @@ const parseOklch = (value: string): Oklch => {
 /*
    oklch -> linear sRGB. Out-of-gamut channels are clamped, which is what a
    browser renders anyway, so the ratio below reflects what someone actually
-   sees rather than the theoretical colour.
+   sees rather than the theoretical color.
 */
 const toLinearRgb = ({ l, c, h }: Oklch) => {
     const a = c * Math.cos((h * Math.PI) / 180);

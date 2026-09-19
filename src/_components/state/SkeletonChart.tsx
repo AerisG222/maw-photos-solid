@@ -8,7 +8,7 @@ interface Props {
 
 /*
    The chart-shaped counterpart to SkeletonGrid - see the note there. Stats was
-   the one area that showed a centred spinner while it waited, which says
+   the one area that showed a centered spinner while it waited, which says
    "something is happening" where the others say "a chart is coming, and it will
    be about this big".
 */

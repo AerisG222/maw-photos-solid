@@ -38,7 +38,7 @@
     --text-meta--line-height: 1.35;
 
     /*
-       Motion. Colour and opacity move at `fast`, transforms at `base`, image
+       Motion. Color and opacity move at `fast`, transforms at `base`, image
        reveals at `slow`. The two bespoke animations below (the brand entrance
        and the heart overshoot) keep their own timings deliberately - they are
        one-off gestures, not part of the system.
@@ -52,7 +52,7 @@
 /*
    The pre-mount script in index.html pins `data-theme` on <html>, so the
    document background resolves straight from the theme tokens - no duplicated
-   colour literals, and no flash of white before Solid mounts.
+   color literals, and no flash of white before Solid mounts.
 */
 html {
     background-color: var(--color-base-100);
@@ -270,13 +270,13 @@ html {
        Applied once in Layout, so categories, search, settings, stats and the
        media views all share it.
 
-       The edges stay at the app's own base colour so the content area blends
+       The edges stay at the app's own base color so the content area blends
        into the surrounding chrome instead of reading as a lighter panel dropped
-       on top of it. Only the centre is lifted, by a few percent toward white,
+       on top of it. Only the center is lifted, by a few percent toward white,
        which gives the page a sense of being lit without changing the overall
        darkness of the view.
 
-       `--stage-lift` is how far the centre is raised.
+       `--stage-lift` is how far the center is raised.
     */
     .stage-backdrop {
         --stage-lift: 8%;
@@ -292,7 +292,7 @@ html {
     /*
        Light theme sits at ~99% lightness already, so there is no headroom to
        lift toward white - zero the knob and let the stage render flat. Shading
-       the edges down instead would light the centre by comparison, but it would
+       the edges down instead would light the center by comparison, but it would
        also stop the stage matching the base-100 content area around it, which
        is the seam this rework set out to remove.
     */
@@ -319,7 +319,7 @@ html {
     /*
        Secondary text: a caption, an ancestry line, a media count.
 
-       A colour rather than `opacity-70` over the body colour, which is what
+       A color rather than `opacity-70` over the body color, which is what
        this replaced in a dozen places. Opacity composites text toward whatever
        is behind it, so "slightly quieter" turned out to mean 2.81:1 in the light
        theme against the 4.5:1 body text owes. The token is picked per theme to
@@ -330,7 +330,7 @@ html {
     }
 
     /*
-       How a listing flows: centred, wrapping, evenly spaced.
+       How a listing flows: centered, wrapping, evenly spaced.
 
        Seven places state this - `ListingSurface` and six that are deliberately
        not it. Two are skeletons, which are aria-hidden placeholders and want no
@@ -504,7 +504,7 @@ html {
    `background-color`, which Google does not set inline — so the icon is
    shaped but has no fill and is invisible. Give it a fill (and ensure the
    mask is sized/positioned). Google's InfoWindow chrome stays light
-   regardless of the app theme, so a fixed neutral grey keeps good contrast
+   regardless of the app theme, so a fixed neutral gray keeps good contrast
    and matches the native close-button look.
 */
 .gm-ui-hover-effect > span {
