@@ -180,6 +180,9 @@ const MainItem: Component<Props> = props => {
                             props.media.isFavorite ? "Remove from favourites" : "Add to favourites"
                         }
                         shortcutKeys={["h"]}
+                        styledTooltip
+                        // out of its corner along the top edge of the photograph
+                        tooltipPlacement="right"
                         buttonClasses="hover:text-primary"
                         onClick={onClickFavorite}
                     >

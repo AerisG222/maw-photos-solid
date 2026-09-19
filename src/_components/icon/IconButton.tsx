@@ -1,6 +1,9 @@
-import { children, ParentComponent } from "solid-js";
+import { children, ParentComponent, Show } from "solid-js";
 
 import { getNameWithShortcut } from "../shortcuts/_util";
+
+import Tooltip from "../tooltip/Tooltip";
+import { Placement } from "../tooltip/TooltipPlacement";
 
 interface Props {
     /*
@@ -21,6 +24,15 @@ interface Props {
        politely.
     */
     shortcutKeys?: string[];
+    /*
+       The styled tooltip, which shows on keyboard focus and draws the key as a
+       key, in place of the browser's `title`. Opt-in, because this is also the
+       heart on every tile of a listing - thousands of them, where the native
+       tooltip costs nothing - while one on the open photograph is worth it.
+    */
+    styledTooltip?: boolean;
+    // which side the styled tooltip opens on; below, unless said otherwise
+    tooltipPlacement?: Placement;
     buttonClasses?: string;
     onClick: () => void;
 }
@@ -38,14 +50,31 @@ const IconButton: ParentComponent<Props> = props => {
     };
 
     return (
-        <button
-            class={`btn btn-circle ${props.buttonClasses}`}
-            aria-label={props.label}
-            title={getNameWithShortcut(props.label, props.shortcutKeys)}
-            onClick={evt => handleClick(evt)}
+        <Show
+            when={props.styledTooltip}
+            fallback={
+                <button
+                    class={`btn btn-circle ${props.buttonClasses}`}
+                    aria-label={props.label}
+                    title={getNameWithShortcut(props.label, props.shortcutKeys)}
+                    onClick={evt => handleClick(evt)}
+                >
+                    {c()}
+                </button>
+            }
         >
-            {c()}
-        </button>
+            <Tooltip
+                as="button"
+                content={props.label}
+                shortcutKeys={props.shortcutKeys}
+                placement={props.tooltipPlacement}
+                class={`btn btn-circle ${props.buttonClasses}`}
+                aria-label={props.label}
+                onClick={(evt: MouseEvent) => handleClick(evt)}
+            >
+                {c()}
+            </Tooltip>
+        </Show>
     );
 };
 

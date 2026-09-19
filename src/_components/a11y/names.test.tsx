@@ -1,5 +1,5 @@
 import { Router } from "@solidjs/router";
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test } from "vitest";
 
 import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext";
@@ -131,6 +131,34 @@ describe("icon-only controls", () => {
        is open; the hearts on a listing's tiles have no key behind them, so a
        tooltip claiming one would be a lie.
     */
+    /*
+       The open photograph's heart takes the styled tooltip, which states the
+       key to assistive technology as `aria-keyshortcuts` - still not in the
+       name - and shows it on keyboard focus, which `title` never did.
+    */
+    test("with the styled tooltip, the key is stated beside the name, not in it", async () => {
+        frame(() => (
+            <IconButton
+                label="Add to favourites"
+                shortcutKeys={["h"]}
+                styledTooltip
+                onClick={() => undefined}
+            />
+        ));
+
+        const button = screen.getByRole("button", { name: "Add to favourites" });
+
+        expect(button).toHaveAttribute("aria-keyshortcuts", "h");
+        expect(button).not.toHaveAttribute("title");
+
+        fireEvent.focus(button);
+
+        const tooltip = await screen.findByRole("tooltip");
+
+        expect(tooltip).toHaveTextContent("Add to favourites");
+        expect(tooltip.querySelector("kbd")).toHaveTextContent("H");
+    });
+
     test("and claims no key where none is bound", () => {
         frame(() => <IconButton label="Add to favourites" onClick={() => undefined} />);
 
