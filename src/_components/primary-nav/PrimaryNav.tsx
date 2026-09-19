@@ -20,6 +20,13 @@ import { useBarTooltips } from "../tooltip/TooltipPlacement";
 const PrimaryNav: Component = () => {
     const [authContext] = useAuthContext();
     const [state] = useAppSettingsContext();
+    /*
+       `z-45`, above the page and everything it floats: an open photograph is
+       `z-30` and the overlaid side panels `z-40`, and at the old `z-30` the
+       photograph tied with the nav and won by coming later - so the account
+       menu, which opens out over the page, opened underneath it. Dialogs
+       (`z-50`) still cover it, as they should, and fullscreen hides it.
+    */
     // down the left edge from `md` up, so tooltips open to the right; across
     // the top below it, so downwards
     const tooltips = useBarTooltips("right", "bottom");
@@ -33,7 +40,7 @@ const PrimaryNav: Component = () => {
                able to jump to - and it was indistinguishable from any other box.
             */
             aria-label="Primary"
-            class="flex md:flex-col border-b md:border-r border-base-content/30 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
+            class="flex md:flex-col border-b md:border-r border-base-content/30 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-45"
         >
             <PrimaryNavLink showTitle={state.navExpanded} route={categories} />
             <PrimaryNavLink showTitle={state.navExpanded} route={people} />
