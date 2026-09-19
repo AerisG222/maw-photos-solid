@@ -32,6 +32,8 @@ const CategoryCard: Component<Props> = props => {
             href={getCategoryPath(props.category.year, props.category.slug)}
             src={getMediaTeaserUrl(props.category.teaser)}
             surface
+            // the whole name wherever the label cannot show it - hidden, or cut short
+            title={props.category.name}
             eager={props.eager}
             header={
                 <Show when={listing.showLabels}>
