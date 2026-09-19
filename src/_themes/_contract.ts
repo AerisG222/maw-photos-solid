@@ -60,7 +60,7 @@ export const contrastPairs: ContrastPair[] = [
         foreground: "--color-base-content",
         background: "--color-base-300",
         min: 4.5,
-        where: "text on info cards and dropdowns"
+        where: "text on info cards, dropdowns and tooltips"
     },
     {
         foreground: "--color-base-content-muted",

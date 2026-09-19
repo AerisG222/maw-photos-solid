@@ -6,6 +6,10 @@ import { MediaFileType } from "../../_models/MediaFileType";
 import { MediaTypePhoto } from "../../_models/MediaType";
 import { Uuid } from "../../_models/Uuid";
 import ItemActions from "./ItemActions";
+import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
+import { defaultAppSettings } from "../../_contexts/settings/_state";
+import { KEY_SETTINGS_V2_APP, KEY_SETTINGS_V2_MIGRATED } from "../../_contexts/settings/_storage";
+import { JSX } from "solid-js";
 
 const fetched: string[] = [];
 
@@ -79,6 +83,10 @@ const withShare = (takes: "files" | "url" | "none") => {
     return shared;
 };
 
+// the trigger reads whether toolbar labels are on
+const renderActions = (ui: () => JSX.Element) =>
+    render(() => <AllSettingsProvider>{ui()}</AllSettingsProvider>);
+
 // Kobalte's trigger opens on pointerdown rather than click
 const open = () => {
     const trigger = screen.getByLabelText("More actions for this item");
@@ -104,7 +112,7 @@ describe("sharing a photograph", () => {
     test("is offered where the platform supports it", async () => {
         withShare("url");
 
-        render(() => (
+        renderActions(() => (
             <ItemActions
                 activeMedia={media}
                 activeCategory={undefined}
@@ -120,7 +128,7 @@ describe("sharing a photograph", () => {
     test("and not where it does not", async () => {
         withShare("none");
 
-        render(() => (
+        renderActions(() => (
             <ItemActions
                 activeMedia={media}
                 activeCategory={undefined}
@@ -142,7 +150,7 @@ describe("sharing a photograph", () => {
     test("shares the app's address for the photograph, not the file's", async () => {
         const shared = withShare("url");
 
-        render(() => (
+        renderActions(() => (
             <ItemActions
                 activeMedia={media}
                 activeCategory={undefined}
@@ -170,7 +178,7 @@ describe("sharing a photograph", () => {
     test("a phone is given the photograph itself, not a link", async () => {
         const shared = withShare("files");
 
-        render(() => (
+        renderActions(() => (
             <ItemActions
                 activeMedia={media}
                 activeCategory={undefined}
@@ -192,7 +200,7 @@ describe("sharing a photograph", () => {
         withShare("files");
         fetched.length = 0;
 
-        render(() => (
+        renderActions(() => (
             <ItemActions
                 activeMedia={media}
                 activeCategory={undefined}
@@ -203,5 +211,48 @@ describe("sharing a photograph", () => {
         select(await screen.findByText("Share"));
 
         await vi.waitFor(() => expect(fetched).toEqual(["https://assets.example.com/a-photo.jpg"]));
+    });
+});
+
+describe("the trigger", () => {
+    afterEach(() => localStorage.clear());
+
+    const renderWithLabels = (showToolbarLabels: boolean) => {
+        localStorage.setItem(
+            KEY_SETTINGS_V2_APP,
+            JSON.stringify({ ...defaultAppSettings, showToolbarLabels })
+        );
+        localStorage.setItem(KEY_SETTINGS_V2_MIGRATED, "true");
+
+        renderActions(() => (
+            <ItemActions
+                activeMedia={media}
+                activeCategory={undefined}
+                canDownloadCategory={false}
+            />
+        ));
+    };
+
+    const label = () => screen.getByText("Actions");
+
+    // like every other toolbar control, the name shows once labels are turned on
+    test("is named alongside the rest when labels are on", () => {
+        renderWithLabels(true);
+
+        expect(label()).toHaveClass("md:inline");
+    });
+
+    test("and is an icon alone when they are off", () => {
+        renderWithLabels(false);
+
+        expect(label()).not.toHaveClass("md:inline");
+    });
+
+    test("keyboard focus shows what it is", async () => {
+        renderWithLabels(false);
+
+        fireEvent.focus(screen.getByLabelText("More actions for this item"));
+
+        expect(await screen.findByRole("tooltip")).toHaveTextContent("More actions");
     });
 });

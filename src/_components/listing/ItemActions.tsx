@@ -6,8 +6,10 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { getFilenameFromUrl, getMediaShareUrl } from "../../_models/utils/MediaUtils";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
+import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 interface Props {
     activeMedia: Media | undefined;
@@ -36,6 +38,7 @@ interface Props {
 */
 const ItemActions: Component<Props> = props => {
     const { downloadFile, fetchFile } = useCategoriesContext();
+    const [appSettings] = useAppSettingsContext();
 
     const fileUrl = (scale: string) =>
         props.activeMedia?.files.find(f => f.scale === scale && f.type !== "video-poster")?.path ??
@@ -126,13 +129,25 @@ const ItemActions: Component<Props> = props => {
 
     return (
         <DropdownMenu>
-            <DropdownMenu.Trigger
+            {/*
+                The menu's trigger, wearing the tooltip - one element doing
+                both jobs, so each composes its handlers with the other's.
+            */}
+            <Tooltip
+                as={DropdownMenu.Trigger}
+                content="More actions"
                 class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer transition-colors duration-150 ease-out"
-                title="More Actions"
                 aria-label="More actions for this item"
             >
                 <Icon classes="icon-[ic--round-more-vert]" />
-            </DropdownMenu.Trigger>
+                {/* named like every other toolbar control once labels are on */}
+                <span
+                    class="ml-2 hidden text-sm font-bold align-middle"
+                    classList={{ "md:inline": appSettings.showToolbarLabels }}
+                >
+                    Actions
+                </span>
+            </Tooltip>
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content class="z-50 min-w-56 bg-base-100 rounded-box p-1 elev-overlay">

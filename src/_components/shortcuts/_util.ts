@@ -1,15 +1,13 @@
+// the keys as a reader would press them - `H`, `→`
+export const formatShortcut = (shortcutKeys: string[]) =>
+    shortcutKeys.join("-").toUpperCase().replace("ARROWRIGHT", "→").replace("ARROWLEFT", "←");
+
 export const getNameWithShortcut = (name: string, shortcutKeys?: string[]) => {
     if (!shortcutKeys || shortcutKeys.length === 0) {
         return name;
     }
 
-    const shortcut = shortcutKeys
-        .join("-")
-        .toUpperCase()
-        .replace("ARROWRIGHT", "→")
-        .replace("ARROWLEFT", "←");
-
-    return `${name} (${shortcut})`;
+    return `${name} (${formatShortcut(shortcutKeys)})`;
 };
 
 /*

@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 const ToolbarCollapseButton: Component = () => {
     const [settingsState, { toggleToolbarLabels }] = useAppSettingsContext();
@@ -25,13 +26,14 @@ const ToolbarCollapseButton: Component = () => {
     };
 
     return (
-        <button
+        <Tooltip
+            as="button"
+            content="Expand/Collapse Toolbar"
             class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer transition-colors duration-150 ease-out"
             onClick={toggleToolbarLabels}
-            title="Expand/Collapse Toolbar"
         >
             <Icon classes={collapseIconClasses()} />
-        </button>
+        </Tooltip>
     );
 };
 

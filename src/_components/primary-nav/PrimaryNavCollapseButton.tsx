@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 const PrimaryNavCollapseButton: Component = () => {
@@ -24,13 +25,14 @@ const PrimaryNavCollapseButton: Component = () => {
     };
 
     return (
-        <button
+        <Tooltip
+            as="button"
+            content="Expand/Collapse Nav"
             class="hidden md:block py-1 text-secondary hover:text-secondary-content hover:bg-secondary cursor-pointer transition-colors duration-150 ease-out"
             onClick={toggleNavExpanded}
-            title="Expand/Collapse Nav"
         >
             <Icon classes={collapseIconClass()} />
-        </button>
+        </Tooltip>
     );
 };
 

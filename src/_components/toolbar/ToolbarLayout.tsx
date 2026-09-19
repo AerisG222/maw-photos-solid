@@ -3,7 +3,9 @@ import { JSXElement, ParentComponent, Show, children, createSignal } from "solid
 import { useMediaBreakpointContext } from "../../_contexts/MediaBreakpointContext";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 import ToolbarCollapseButton from "./ToolbarCollapseButton";
+import { useBarTooltips } from "../tooltip/TooltipPlacement";
 
 interface Props {
     /*
@@ -31,6 +33,9 @@ interface Props {
 const ToolbarLayout: ParentComponent<Props> = props => {
     const [, { gteMd }] = useMediaBreakpointContext();
     const [sheetOpen, setSheetOpen] = createSignal(false);
+    // a column beside the page from `md` up, so tooltips open to the right; a
+    // row along the bottom below it, so they open upwards, the only way with room
+    const tooltips = useBarTooltips("right", "top");
 
     const c = children(() => props.children);
     const nav = children(() => props.nav);
@@ -46,8 +51,8 @@ const ToolbarLayout: ParentComponent<Props> = props => {
                 worse than claiming nothing at all.
             */}
             <div
-                class="flex chrome-glass z-20 border-t-1 border-t-base-content/20
-                md:flex-col md:border-t-0 md:border-t-transparent md:border-r-1 md:border-r-base-content/20"
+                class="flex chrome-glass z-20 border-t-1 border-t-base-content/20 md:flex-col md:border-t-0 md:border-t-transparent md:border-r-1 md:border-r-base-content/20"
+                {...tooltips()}
             >
                 <Show when={nav()}>{nav()}</Show>
 
@@ -62,15 +67,16 @@ const ToolbarLayout: ParentComponent<Props> = props => {
                     <Show
                         when={gteMd()}
                         fallback={
-                            <button
+                            <Tooltip
+                                as="button"
+                                content="More controls"
                                 class="flex items-center gap-1 px-3 py-2 cursor-pointer text-secondary hover:text-secondary-content hover:bg-secondary transition-colors duration-150 ease-out"
                                 onClick={() => setSheetOpen(true)}
                                 aria-label="More controls"
                                 aria-expanded={sheetOpen()}
-                                title="More controls"
                             >
                                 <Icon classes="icon-[ic--round-more-horiz] text-lg" />
-                            </button>
+                            </Tooltip>
                         }
                     >
                         {c()}

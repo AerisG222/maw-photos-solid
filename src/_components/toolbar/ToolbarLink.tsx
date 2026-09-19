@@ -2,11 +2,11 @@ import { Component, Show } from "solid-js";
 import { A } from "@solidjs/router";
 
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
-import { getNameWithShortcut } from "../shortcuts/_util";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 // one definition, so the forced and the routed highlight cannot drift apart
 const ACTIVE_CLASS = "text-primary-content bg-primary mr-[-1px]";
@@ -72,17 +72,21 @@ const ToolbarLink: Component<Props> = props => {
             <Show
                 when={!props.disabled}
                 fallback={
-                    <span
+                    <Tooltip
+                        as="span"
+                        content={label()}
                         class="flex px-3 py-2 text-base-content opacity-40 cursor-not-allowed"
                         aria-label={label()}
-                        title={label()}
                         aria-disabled={true}
                     >
                         {body()}
-                    </span>
+                    </Tooltip>
                 }
             >
-                <A
+                <Tooltip
+                    as={A}
+                    content={label()}
+                    shortcutKeys={props.route.shortcutKeys}
                     href={props.href}
                     onClick={() => handleClick()}
                     end={false}
@@ -104,11 +108,10 @@ const ToolbarLink: Component<Props> = props => {
                     */
                     aria-label={label()}
                     aria-current={props.active ? "page" : undefined}
-                    title={getNameWithShortcut(label(), props.route.shortcutKeys)}
                     ref={el}
                 >
                     {body()}
-                </A>
+                </Tooltip>
             </Show>
         </ShortcutWrapper>
     );

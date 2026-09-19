@@ -7,6 +7,7 @@ import { MediaSettingsProvider } from "../../_contexts/settings/MediaSettingsCon
 import { MediaViewGrid } from "../../_models/MediaView";
 import Inspector from "./Inspector";
 import { atWidth } from "../../_testing/breakpoints";
+import { tooltipOf } from "../../_testing/tooltip";
 
 /*
    The real provider hangs its children off an async Auth0 client, so under test
@@ -44,7 +45,10 @@ const inspector = (width: number) => {
     ));
 };
 
-const open = () => fireEvent.click(screen.getByTitle(/Show . Hide the Inspector/));
+const open = () =>
+    fireEvent.click(
+        screen.getAllByRole("button").find(el => /Show . Hide the Inspector/.test(tooltipOf(el)))!
+    );
 
 /*
    Was Escape already marked by the time a listener beneath the panel ran?

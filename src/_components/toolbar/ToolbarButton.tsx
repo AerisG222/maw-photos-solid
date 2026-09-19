@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 
-import { getNameWithShortcut } from "../shortcuts/_util";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 interface Props {
     icon: string;
@@ -32,7 +32,7 @@ const ToolbarButton: Component<Props> = props => {
         }
     };
 
-    const handleClick = (data: null, evt: Event) => {
+    const handleClick = (evt: MouseEvent) => {
         evt.preventDefault();
 
         activate();
@@ -61,7 +61,10 @@ const ToolbarButton: Component<Props> = props => {
 
     return (
         <ShortcutWrapper {...props} clickHandler={activate}>
-            <button
+            <Tooltip
+                as="button"
+                content={props.tooltip ?? props.name}
+                shortcutKeys={props.shortcutKeys}
                 disabled={props.disabled}
                 class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:opacity-40 disabled:hover:cursor-not-allowed transition-colors duration-150 ease-out"
                 classList={{
@@ -71,20 +74,19 @@ const ToolbarButton: Component<Props> = props => {
                 /*
                    Named and stated, not just tooltipped. The span below is
                    `hidden` until `md` *and* until labels are turned on, so for
-                   most readers this is an icon and a `title` - which is
-                   invisible on touch and unevenly announced.
+                   most readers this is an icon and a tooltip - which is
+                   invisible on touch and not the accessible name.
 
                    `active` on a toolbar button always means "this is switched
                    on", so it is a pressed state rather than a selected one.
                 */
                 aria-label={props.name}
                 aria-pressed={props.active}
-                title={getNameWithShortcut(props.tooltip ?? props.name, props.shortcutKeys)}
-                onClick={[handleClick, null]}
+                onClick={handleClick}
             >
                 <Icon classes={iconClasses()} />
                 <span classList={nameClass()}>{props.name}</span>
-            </button>
+            </Tooltip>
         </ShortcutWrapper>
     );
 };

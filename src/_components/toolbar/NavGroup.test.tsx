@@ -7,6 +7,7 @@ import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 
 import NavGroup, { NavEntry } from "./NavGroup";
+import { tooltipOf } from "../../_testing/tooltip";
 
 afterEach(() => {
     cleanup();
@@ -44,11 +45,8 @@ const mount = (entries: NavEntry[], digitOffset?: number) =>
         </Router>
     ));
 
-// the digit is shown in the title, which is how a reader discovers it
-const titles = () =>
-    [...document.querySelectorAll("a, span[aria-disabled]")]
-        .map(el => el.getAttribute("title"))
-        .filter(Boolean);
+// the digit is shown in the tooltip, which is how a reader discovers it
+const titles = () => [...document.querySelectorAll("a, span[aria-disabled]")].map(tooltipOf);
 
 describe("NavGroup", () => {
     test("numbers its entries by position", () => {

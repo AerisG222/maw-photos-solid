@@ -1,8 +1,7 @@
 import { Component, Show } from "solid-js";
 
-import { getNameWithShortcut } from "../shortcuts/_util";
-
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
 
 interface Props {
@@ -24,7 +23,7 @@ interface Props {
 }
 
 const SidebarButton: Component<Props> = props => {
-    const handleClick = (data: null, evt: Event) => {
+    const handleClick = (evt: MouseEvent) => {
         evt.preventDefault();
 
         props.clickHandler();
@@ -44,7 +43,10 @@ const SidebarButton: Component<Props> = props => {
 
     return (
         <ShortcutWrapper {...props}>
-            <button
+            <Tooltip
+                as="button"
+                content={props.tooltip ?? props.name}
+                shortcutKeys={props.shortcutKeys}
                 disabled={props.disabled}
                 class="flex px-3 py-2 hover:bg-secondary hover:text-secondary-content hover:cursor-pointer disabled:bg-transparent! disabled:text-base-content disabled:opacity-40 disabled:hover:cursor-not-allowed transition-colors duration-150 ease-out"
                 classList={{
@@ -53,16 +55,15 @@ const SidebarButton: Component<Props> = props => {
                     "gap-2 whitespace-nowrap": props.withLabel
                 }}
                 aria-label={props.name}
-                title={getNameWithShortcut(props.tooltip ?? props.name, props.shortcutKeys)}
                 aria-pressed={props.active}
-                onClick={[handleClick, null]}
+                onClick={handleClick}
             >
                 <Icon classes={iconClasses()} />
 
                 <Show when={props.withLabel}>
                     <span class="text-label">{props.name}</span>
                 </Show>
-            </button>
+            </Tooltip>
         </ShortcutWrapper>
     );
 };

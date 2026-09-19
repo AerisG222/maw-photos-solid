@@ -15,21 +15,25 @@ import PrimaryNavLink from "./PrimaryNavLink";
 import ThemeSelector from "./ThemeSelector";
 import PrimaryNavCollapseButton from "./PrimaryNavCollapseButton";
 import UserInfo from "./UserInfo";
+import { useBarTooltips } from "../tooltip/TooltipPlacement";
 
 const PrimaryNav: Component = () => {
     const [authContext] = useAuthContext();
     const [state] = useAppSettingsContext();
+    // down the left edge from `md` up, so tooltips open to the right; across
+    // the top below it, so downwards
+    const tooltips = useBarTooltips("right", "bottom");
 
     return (
         <nav
+            {...tooltips()}
             /*
                A landmark, not a bare div. This is the one way around the
                application, so it is the first thing a screen reader should be
                able to jump to - and it was indistinguishable from any other box.
             */
             aria-label="Primary"
-            class="flex md:flex-col border-b md:border-r border-base-content/30
-                bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
+            class="flex md:flex-col border-b md:border-r border-base-content/30 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-30"
         >
             <PrimaryNavLink showTitle={state.navExpanded} route={categories} />
             <PrimaryNavLink showTitle={state.navExpanded} route={people} />

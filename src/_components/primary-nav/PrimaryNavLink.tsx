@@ -3,6 +3,7 @@ import { A, useLocation } from "@solidjs/router";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 interface Props {
     route: AppRouteDefinition;
@@ -28,17 +29,18 @@ const PrimaryNavLink: Component<Props> = props => {
     const isCurrent = () => location.pathname.startsWith(props.route.path!);
 
     return (
-        <A
+        <Tooltip
+            as={A}
+            content={props.route.tooltip ?? props.route.name}
             href={props.route.path!}
             activeClass="text-primary-content bg-primary"
             class="flex primary-nav-link"
             aria-label={props.route.tooltip ?? props.route.name}
             aria-current={isCurrent() ? "page" : undefined}
-            title={props.route.tooltip ?? props.route.name}
         >
             <Icon classes={props.route.icon!} />
             <span classList={nameClass()}>{props.route.name}</span>
-        </A>
+        </Tooltip>
     );
 };
 

@@ -5,6 +5,7 @@ import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvide
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 
 import ListingToolbar from "./ListingToolbar";
+import { tooltipOf } from "../../_testing/tooltip";
 
 afterEach(() => {
     cleanup();
@@ -18,12 +19,13 @@ const mount = (ui: () => unknown) =>
         </AllSettingsProvider>
     ));
 
-const controls = () =>
-    [...document.querySelectorAll("button[title]")].map(el => el.getAttribute("title")!);
+const buttons = () => [...document.querySelectorAll("button[aria-label]")];
+
+const controls = () => buttons().map(tooltipOf);
 
 const press = (name: string) =>
-    [...document.querySelectorAll("button[title]")]
-        .find(el => el.getAttribute("title")!.startsWith(name))!
+    buttons()
+        .find(el => tooltipOf(el).startsWith(name))!
         .dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
 describe("ListingToolbar", () => {
@@ -49,6 +51,8 @@ describe("ListingToolbar", () => {
 
         const keys = controls().map(title => /\(([^)]+)\)$/.exec(title)?.[1]);
 
+        // three controls, so three keys - an empty list would pass the rest
+        expect(keys).toHaveLength(3);
         expect(keys).toEqual([...new Set(keys)]);
         expect(keys.every(Boolean)).toBe(true);
     });
@@ -77,9 +81,9 @@ describe("ListingToolbar", () => {
            button whatever its state.
         */
         const lit = () =>
-            [...document.querySelectorAll("button[title^='Toggle Labels']")].map(el =>
-                el.className.split(/\s+/).includes("bg-secondary")
-            );
+            buttons()
+                .filter(el => tooltipOf(el).startsWith("Toggle Labels"))
+                .map(el => el.className.split(/\s+/).includes("bg-secondary"));
 
         const before = lit();
 

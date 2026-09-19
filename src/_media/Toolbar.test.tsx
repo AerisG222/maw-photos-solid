@@ -11,6 +11,7 @@ import { Category } from "../_models/Category";
 import { IMediaService } from "./services/IMediaService";
 import Toolbar from "./Toolbar";
 import { atWidth } from "../_testing/breakpoints";
+import { tooltipOf } from "../_testing/tooltip";
 
 /*
    Which views a feed offers, and at which widths.
@@ -71,7 +72,7 @@ const toolbar = (width: number) => {
     ));
 };
 
-const offered = () => screen.queryAllByRole("link").map(el => el.getAttribute("title") ?? "");
+const offered = () => screen.queryAllByRole("link").map(tooltipOf);
 
 afterEach(() => {
     cleanup();

@@ -4,6 +4,7 @@ import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsConte
 import { ThemeDark } from "../../_models/Theme";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 interface Props {
     showTitle: boolean;
@@ -26,10 +27,21 @@ const ThemeSelector: Component<Props> = props => {
     });
 
     return (
-        <button onClick={toggleTheme} class="flex primary-nav-link cursor-pointer" title={label()}>
+        /*
+            Named here as well as tooltipped. The "Theme" span is hidden while
+            the navigation is collapsed, and the `title` this used to carry was
+            all that named the button then.
+        */
+        <Tooltip
+            as="button"
+            content={label()}
+            aria-label={label()}
+            onClick={toggleTheme}
+            class="flex primary-nav-link cursor-pointer"
+        >
             <Icon classes="block icon-[ic--round-brightness-6]" />
             <span classList={nameClass()}>Theme</span>
-        </button>
+        </Tooltip>
     );
 };
 
