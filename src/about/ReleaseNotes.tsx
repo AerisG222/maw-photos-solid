@@ -6,6 +6,49 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.0.0</span> : <span class="date">2026-09-19</span>
+            </h3>
+            <p>Major redesign of the application:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>A refreshed look, with one consistent style across every listing</li>
+                <li>
+                    Open photos right on the grid - the separate detail and fullscreen views are
+                    gone, press f to fill the screen, and older links still work
+                </li>
+                <li>
+                    A new Inspector panel brings comments, EXIF, the histogram, the map, and
+                    adjustments to wherever a photo is open
+                </li>
+                <li>
+                    New Who and Where cards show the people in a photo and the places it was taken,
+                    each linking to more media
+                </li>
+                <li>Zoom and pan photos with a pinch, the scroll wheel, or by dragging</li>
+                <li>Smooth transitions between the grid and an open photo</li>
+                <li>
+                    New keys: Esc closes the open photo and h favorites it - press ? to see every
+                    shortcut
+                </li>
+                <li>Tooltips now show each control's shortcut key, including on keyboard focus</li>
+                <li>Every view is now available on phones</li>
+                <li>Recent searches are remembered on each device</li>
+                <li>
+                    Random photos now load more only when asked, or as a slideshow nears the end
+                </li>
+                <li>
+                    Share sends the photo itself on devices that support it, and downloads and
+                    sharing live together in the ⋮ menu
+                </li>
+                <li>Large listings are faster, drawing only what is on screen</li>
+                <li>
+                    Simpler settings: thumbnails always show in full color, and the density and
+                    badge options have been removed
+                </li>
+                <li>Accessibility improvements throughout</li>
+                <li>Numerous fixes and dependency updates</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v4.5.0</span> : <span class="date">2026-09-05</span>
             </h3>
             <p>Add new section to browse media by places</p>
