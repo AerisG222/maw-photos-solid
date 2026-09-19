@@ -173,6 +173,7 @@ const ViewMap: Component<Props> = props => {
                         view={MediaViewMap}
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
+                        enableCategoryTeaser={props.mediaService.canChooseCategoryTeaser()}
                         requestMoveNext={() => props.mediaService.moveNext()}
                     />
                 }

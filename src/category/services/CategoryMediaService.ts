@@ -85,4 +85,5 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
 
     // this listing *is* a category
     canDownloadCategory = () => true;
+    canChooseCategoryTeaser = () => true;
 }

@@ -20,6 +20,7 @@ export abstract class BaseMediaService {
     canRequestMore = () => false;
     // only a category listing can answer for a whole category - see IMediaService
     canDownloadCategory = () => false;
+    canChooseCategoryTeaser = () => false;
     requestMore = () => {
         /* empty */
     };

@@ -202,6 +202,7 @@ const ViewGrid: Component<Props> = props => {
                         activeCategory={props.mediaService.getActiveCategory()}
                         activeMedia={props.mediaService.getActiveMedia()}
                         mediaElement={mediaElement()}
+                        enableCategoryTeaser={props.mediaService.canChooseCategoryTeaser()}
                         requestMoveNext={() => props.mediaService.moveNext()}
                     />
                 }
