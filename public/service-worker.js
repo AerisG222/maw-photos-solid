@@ -50,13 +50,16 @@ self.addEventListener("fetch", function (event) {
             } catch (error) {
                 // Couldn't obtain a token (no client / timeout / auth failure). Fall back to the
                 // original request rather than hanging or sending "Bearer undefined".
-                console.error("sw: Error obtaining token:", error);
+                console.error("sw: Error obtaining token for", event.request.url, error);
             }
 
             try {
                 return await fetch(request);
             } catch (error) {
-                console.error("sw: Error fetching resource:", error);
+                // the url, because "failed to fetch" alone says nothing about which of a
+                // grid's worth of requests it was - and a response the server sent without
+                // its cors headers fails here exactly like a network error does
+                console.error("sw: Error fetching", event.request.url, error);
                 return new Response("Error fetching resource", { status: 500 });
             }
         })()
