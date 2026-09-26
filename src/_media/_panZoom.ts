@@ -46,7 +46,10 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
             disablePan: true,
             // the photograph is the whole point; let it reach the edges
             contain: "outside",
-            cursor: "default",
+            // Panzoom writes this inline, so it wins over the link the
+            // photograph sits in - and a click on it does close the photograph,
+            // zoomed in or not (see onClick below)
+            cursor: "pointer",
 
             /*
                Claim the gesture only once there is something to pan.
