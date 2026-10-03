@@ -86,6 +86,16 @@ const ViewBulkEdit: Component<Props> = props => {
         );
     };
 
+    // only what is on screen - with the gps filter on, the hidden photos already
+    // have a location, and selecting them would overwrite it on the next save
+    const selectAllShown = () => {
+        const shown = new Set(mediaToShow().map(m => m.id));
+
+        setMedia(media =>
+            media.map(m => (shown.has(m.id) && !m.isSelected ? { ...m, isSelected: true } : m))
+        );
+    };
+
     const onHideMediaWithGps = (hide: boolean) => {
         setAll(false);
         setHideMediaWithGps(hide);
@@ -131,7 +141,7 @@ const ViewBulkEdit: Component<Props> = props => {
                     sidebar={
                         <BulkEditSidebar
                             onSave={onSave}
-                            onSelectAll={() => setAll(true)}
+                            onSelectAll={selectAllShown}
                             onDeselectAll={() => setAll(false)}
                             onHideMediaWithGps={onHideMediaWithGps}
                         />
