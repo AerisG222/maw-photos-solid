@@ -6,6 +6,15 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.0.1</span> : <span class="date">2026-10-03</span>
+            </h3>
+            <p>Minor tweaks:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Correct bulk edit to only update media that are shown</li>
+                <li>Bump dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.0.0</span> : <span class="date">2026-09-19</span>
             </h3>
             <p>Major redesign of the application:</p>
