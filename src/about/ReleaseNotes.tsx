@@ -6,6 +6,14 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.0.2</span> : <span class="date">2026-10-04</span>
+            </h3>
+            <p>Minor tweaks:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Allow an admin to clear GPS overrides for media and in bulk</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.0.1</span> : <span class="date">2026-10-03</span>
             </h3>
             <p>Minor tweaks:</p>
