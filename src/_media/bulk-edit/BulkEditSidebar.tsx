@@ -4,12 +4,15 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
 import InfoCard from "../../_components/inspector/InspectorCard";
 import SidePanel from "../../_components/overlay/SidePanel";
-import BulkEditFilterCard from "./BulkEditFilterCard";
+import BulkEditFilterCard, { BulkEditGpsFilter } from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
 
 interface Props {
     onSave: (gps: GpsCoordinate) => void;
-    onHideMediaWithGps: (hide: boolean) => void;
+    onClearOverride: () => void;
+    selectedCount: number;
+    gpsFilter: BulkEditGpsFilter;
+    onGpsFilterChange: (filter: BulkEditGpsFilter) => void;
     onSelectAll: () => void;
     onDeselectAll: () => void;
 }
@@ -37,14 +40,21 @@ const BulkEditSidebar: Component<Props> = props => {
                 <BulkEditFilterCard
                     onSelectAll={props.onSelectAll}
                     onDeselectAll={props.onDeselectAll}
-                    onHideMediaWithGps={props.onHideMediaWithGps}
+                    gpsFilter={props.gpsFilter}
+                    onGpsFilterChange={props.onGpsFilterChange}
                 />
             )
         },
         {
             title: "GPS",
             icon: "icon-[ic--round-place]",
-            component: <BulkEditGpsCard onSave={props.onSave} />
+            component: (
+                <BulkEditGpsCard
+                    onSave={props.onSave}
+                    onClearOverride={props.onClearOverride}
+                    selectedCount={props.selectedCount}
+                />
+            )
         }
     ];
 

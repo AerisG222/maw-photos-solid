@@ -5,6 +5,9 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
 interface Props {
     onSave: (gps: GpsCoordinate) => void;
+    onClearOverride: () => void;
+    // how many photos the clear would touch - nothing selected, nothing to clear
+    selectedCount: number;
 }
 
 const BulkEditGpsCard: Component<Props> = props => {
@@ -61,6 +64,12 @@ const BulkEditGpsCard: Component<Props> = props => {
         });
     };
 
+    const clearOverride = (evt: Event) => {
+        evt.preventDefault();
+
+        props.onClearOverride();
+    };
+
     return (
         <div class="mx-4">
             <div>
@@ -102,6 +111,17 @@ const BulkEditGpsCard: Component<Props> = props => {
                 </button>
                 <button class="btn btn-sm btn-error btn-outline" onClick={cancel}>
                     Cancel
+                </button>
+            </div>
+
+            <div class="mt-4">
+                <button
+                    class="btn btn-sm btn-error btn-outline"
+                    classList={{ "btn-disabled": props.selectedCount === 0 }}
+                    disabled={props.selectedCount === 0}
+                    onClick={clearOverride}
+                >
+                    Clear Override
                 </button>
             </div>
         </div>

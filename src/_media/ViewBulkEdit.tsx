@@ -14,6 +14,8 @@ import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
+import { BulkEditGpsFilter } from "./bulk-edit/BulkEditFilterCard";
+import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import AdminGuard from "../_components/auth/AdminGuard";
 import { usePanelShape } from "../_components/overlay/SidePanel";
 
@@ -28,7 +30,7 @@ interface Props {
 }
 
 const ViewBulkEdit: Component<Props> = props => {
-    const { bulkGpsOverrideMutation } = useMediaContext(); // todo: add to service
+    const { bulkGpsOverrideMutation, bulkClearGpsOverrideMutation } = useMediaContext(); // todo: add to service
     const { docked } = usePanelShape();
     const navigate = useNavigate();
 
@@ -51,7 +53,8 @@ const ViewBulkEdit: Component<Props> = props => {
         }
     });
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
-    const [hideMediaWithGps, setHideMediaWithGps] = createSignal(false);
+    const [gpsFilter, setGpsFilter] = createSignal<BulkEditGpsFilter>("all");
+    const [isConfirmingClear, setIsConfirmingClear] = createSignal(false);
 
     const buildSelectableMedia = (media: Media) => ({
         id: media.id,
@@ -72,6 +75,21 @@ const ViewBulkEdit: Component<Props> = props => {
             mediaIds: mediaToUpdate,
             gpsCoordinate: gps
         });
+    };
+
+    const selectedIds = () =>
+        media()
+            .filter(m => m.isSelected)
+            .map(m => m.id);
+
+    const onConfirmClearOverride = async () => {
+        const mediaToClear = selectedIds();
+
+        // as with a save: the cleared photos may leave the "with an override" view
+        setAll(false);
+        setIsConfirmingClear(false);
+
+        await bulkClearGpsOverrideMutation.mutateAsync({ mediaIds: mediaToClear });
     };
 
     const setAll = (doSelect: boolean) => {
@@ -96,9 +114,9 @@ const ViewBulkEdit: Component<Props> = props => {
         );
     };
 
-    const onHideMediaWithGps = (hide: boolean) => {
+    const onGpsFilterChange = (filter: BulkEditGpsFilter) => {
         setAll(false);
-        setHideMediaWithGps(hide);
+        setGpsFilter(filter);
     };
 
     const toggle = (media: SelectableMedia) => {
@@ -118,13 +136,23 @@ const ViewBulkEdit: Component<Props> = props => {
     });
 
     const mediaToShow = () => {
-        if (!hideMediaWithGps()) {
-            return media();
-        } else {
-            const mediaWithGps = new Set(props.mediaService.mediaWithGps().map(x => x.media.id));
+        const filter = gpsFilter();
 
-            return media().filter(m => !mediaWithGps.has(m.id));
+        if (filter === "all") {
+            return media();
         }
+
+        const withGps = props.mediaService.mediaWithGps();
+
+        if (filter === "withoutGps") {
+            const ids = new Set(withGps.map(x => x.media.id));
+
+            return media().filter(m => !ids.has(m.id));
+        }
+
+        const ids = new Set(withGps.filter(x => x.gps.override).map(x => x.media.id));
+
+        return media().filter(m => ids.has(m.id));
     };
 
     return (
@@ -143,7 +171,10 @@ const ViewBulkEdit: Component<Props> = props => {
                             onSave={onSave}
                             onSelectAll={selectAllShown}
                             onDeselectAll={() => setAll(false)}
-                            onHideMediaWithGps={onHideMediaWithGps}
+                            onClearOverride={() => setIsConfirmingClear(true)}
+                            selectedCount={selectedIds().length}
+                            gpsFilter={gpsFilter()}
+                            onGpsFilterChange={onGpsFilterChange}
                         />
                     }
                 >
@@ -174,6 +205,19 @@ const ViewBulkEdit: Component<Props> = props => {
                             )}
                         </For>
                     </div>
+
+                    <ConfirmDialog
+                        open={isConfirmingClear()}
+                        title="Clear GPS Override"
+                        confirmLabel="Clear"
+                        destructive
+                        onConfirm={() => void onConfirmClearOverride()}
+                        onCancel={() => setIsConfirmingClear(false)}
+                    >
+                        Remove the GPS override from {selectedIds().length} selected{" "}
+                        {selectedIds().length === 1 ? "photo" : "photos"}? Each will go back to the
+                        location its file recorded, if it has one.
+                    </ConfirmDialog>
                 </Layout>
             </Show>
         </AdminGuard>

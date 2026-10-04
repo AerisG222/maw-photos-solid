@@ -19,14 +19,17 @@ import { atWidth } from "../../_testing/breakpoints";
    leaves this with one shape, which is what is pinned here.
 */
 
-const sidebar = () => {
+const sidebar = (selectedCount = 0, onClearOverride = () => undefined) => {
     atWidth(1280);
 
     return render(() => (
         <MediaBreakpointProvider>
             <BulkEditSidebar
                 onSave={() => undefined}
-                onHideMediaWithGps={() => undefined}
+                onClearOverride={onClearOverride}
+                selectedCount={selectedCount}
+                gpsFilter="all"
+                onGpsFilterChange={() => undefined}
                 onSelectAll={() => undefined}
                 onDeselectAll={() => undefined}
             />
@@ -60,5 +63,29 @@ describe("the bulk edit tools", () => {
 
         expect(screen.getByText("Select All")).toBeInTheDocument();
         expect(screen.getByText("GPS")).toBeInTheDocument();
+    });
+
+    test("offer every gps filter as one choice", () => {
+        sidebar();
+
+        expect(screen.getByLabelText("All Photos")).toBeChecked();
+        expect(screen.getByLabelText("Photos without GPS Data")).not.toBeChecked();
+        expect(screen.getByLabelText("Photos with a GPS Override")).not.toBeChecked();
+    });
+
+    // nothing selected, nothing to clear
+    test("hold back clearing overrides until something is selected", () => {
+        sidebar();
+
+        expect(screen.getByRole("button", { name: "Clear Override" })).toBeDisabled();
+    });
+
+    test("ask to clear the overrides of what is selected", () => {
+        const onClearOverride = vi.fn();
+
+        sidebar(2, onClearOverride);
+        screen.getByRole("button", { name: "Clear Override" }).click();
+
+        expect(onClearOverride).toHaveBeenCalledOnce();
     });
 });

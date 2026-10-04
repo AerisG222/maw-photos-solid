@@ -12,7 +12,7 @@ interface Props {
 }
 
 const MetadataEditorCard: Component<Props> = props => {
-    const { gpsQuery, setGpsOverrideMutation } = useMediaContext(); // todo: add to service
+    const { gpsQuery, setGpsOverrideMutation, clearGpsOverrideMutation } = useMediaContext(); // todo: add to service
     const [override, setOverride] = createSignal<GpsOverride>({ lat: undefined, lng: undefined });
 
     // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
@@ -65,6 +65,19 @@ const MetadataEditorCard: Component<Props> = props => {
         }
     };
 
+    // back to the coordinate the file recorded, which is what is then shown
+    const clearOverride = async (evt: Event) => {
+        evt.preventDefault();
+
+        if (props.activeMedia) {
+            await clearGpsOverrideMutation.mutateAsync(props.activeMedia.id);
+
+            setOverride({ lat: undefined, lng: undefined });
+        }
+    };
+
+    const hasOverride = () => !!gps.data?.override;
+
     createEffect(() => {
         // update inputs when navigating between media
         if (props.activeMedia!.id) {
@@ -99,7 +112,7 @@ const MetadataEditorCard: Component<Props> = props => {
     return (
         <Show when={gps.isSuccess}>
             <form>
-                <div class="grid grid-cols-3 grid-rows-3 gap-2">
+                <div class="grid grid-cols-3 grid-rows-4 gap-2">
                     <div>
                         <label class="label">Latitude</label>
                     </div>
@@ -181,6 +194,18 @@ const MetadataEditorCard: Component<Props> = props => {
                             classList={getButtonClass()}
                         >
                             Save Move Next
+                        </button>
+                    </div>
+
+                    {/* under the override column, as the thing it removes */}
+                    <div class="col-start-3">
+                        <button
+                            class="btn btn-sm btn-outline btn-error w-full"
+                            onClick={clearOverride}
+                            disabled={!hasOverride() || clearGpsOverrideMutation.isPending}
+                            classList={{ "btn-disabled": !hasOverride() }}
+                        >
+                            Clear Override
                         </button>
                     </div>
                 </div>

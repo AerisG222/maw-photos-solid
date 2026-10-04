@@ -13,7 +13,7 @@ import {
 import { Comment, CommentDto, mapComment } from "../../_models/Comment";
 import { DetectedFace } from "../../_models/DetectedFace";
 import { useAuthContext } from "../AuthContext";
-import { postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
+import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { GpsDetail } from "../../_models/GpsDetail";
@@ -23,6 +23,7 @@ import { Uuid } from "../../_models/Uuid";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
+import { BulkClearGpsOverrideRequest } from "../../_models/BulkClearGpsOverrideRequest";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
@@ -40,6 +41,13 @@ export interface MediaService {
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Media>, unknown>;
     setGpsOverrideMutation: UseMutationResult<Response, Error, GpsOverrideRequest, unknown>;
     bulkGpsOverrideMutation: UseMutationResult<Response, Error, BulkGpsOverrideRequest, unknown>;
+    clearGpsOverrideMutation: UseMutationResult<Response, Error, Uuid, unknown>;
+    bulkClearGpsOverrideMutation: UseMutationResult<
+        Response,
+        Error,
+        BulkClearGpsOverrideRequest,
+        unknown
+    >;
 }
 
 const MediaContext = createContext<MediaService>();
@@ -120,6 +128,17 @@ export const MediaProvider: ParentComponent = props => {
             postApi(accessToken, `media/bulk-gps-override`, {
                 mediaIds: req.mediaIds,
                 gpsCoordinate: req.gpsCoordinate
+            })
+        );
+
+    const deleteGpsOverride = async (mediaId: Uuid) =>
+        runWithAccessToken(getToken, accessToken => deleteApi(accessToken, `media/${mediaId}/gps`));
+
+    // a POST rather than a DELETE with a body - see the route in maw-media
+    const postBulkClearGpsOverride = async (req: BulkClearGpsOverrideRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/bulk-gps-override/clear`, {
+                mediaIds: req.mediaIds
             })
         );
 
@@ -348,6 +367,38 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
+    // invalidates what setting one does - a cleared media moves back to the
+    // place its recorded coordinate is in, so the category views move with it
+    const clearGpsOverrideMutation = useMutation(() => ({
+        mutationFn: (mediaId: Uuid) => deleteGpsOverride(mediaId),
+        onSettled: (data, errs, mediaId) => {
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.media.gps(mediaId),
+                refetchType: "all"
+            });
+
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.all(),
+                refetchType: "all"
+            });
+        }
+    }));
+
+    const bulkClearGpsOverrideMutation = useMutation(() => ({
+        mutationFn: (req: BulkClearGpsOverrideRequest) => postBulkClearGpsOverride(req),
+        onSettled: () => {
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.media.all(),
+                refetchType: "all"
+            });
+
+            void queryClient.invalidateQueries({
+                queryKey: queryKeys.categories.all(),
+                refetchType: "all"
+            });
+        }
+    }));
+
     return (
         <MediaContext.Provider
             value={{
@@ -360,7 +411,9 @@ export const MediaProvider: ParentComponent = props => {
                 addCommentMutation,
                 setIsFavoriteMutation,
                 setGpsOverrideMutation,
-                bulkGpsOverrideMutation
+                bulkGpsOverrideMutation,
+                clearGpsOverrideMutation,
+                bulkClearGpsOverrideMutation
             }}
         >
             {props.children}
