@@ -17,6 +17,7 @@ export type AreaSettingsContextValue = [
         setFeedListing: (feedListing: "media" | "categories") => void;
         setCategoryYearFilter: (categoryYearFilter: number | "all") => void;
         setCategoryMissingGpsFilter: (categoryMissingGpsFilter: boolean) => void;
+        setCategoryRestrictedFilter: (categoryRestrictedFilter: boolean) => void;
         setFeedFavoritesOnly: (feedFavoritesOnly: boolean) => void;
         setFeedShuffle: (feedShuffle: boolean) => void;
         setSearchHistoryCount: (searchHistoryCount: number) => void;
@@ -46,6 +47,9 @@ export const AreaSettingsProvider: ParentComponent = props => {
     const setCategoryMissingGpsFilter = (categoryMissingGpsFilter: boolean) =>
         updateState({ categoryMissingGpsFilter });
 
+    const setCategoryRestrictedFilter = (categoryRestrictedFilter: boolean) =>
+        updateState({ categoryRestrictedFilter });
+
     const setFeedFavoritesOnly = (feedFavoritesOnly: boolean) => updateState({ feedFavoritesOnly });
 
     const setFeedShuffle = (feedShuffle: boolean) => updateState({ feedShuffle });
@@ -63,6 +67,7 @@ export const AreaSettingsProvider: ParentComponent = props => {
                     setFeedListing,
                     setCategoryYearFilter,
                     setCategoryMissingGpsFilter,
+                    setCategoryRestrictedFilter,
                     setFeedFavoritesOnly,
                     setFeedShuffle,
                     setSearchHistoryCount

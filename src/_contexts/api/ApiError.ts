@@ -10,7 +10,10 @@ export class ApiError extends Error {
     constructor(
         readonly status: number,
         readonly statusText: string,
-        readonly url: string
+        readonly url: string,
+        // what the server said, parsed when it was json. Most failures say
+        // nothing useful, but some 400s carry the reasons a request was refused
+        readonly body?: unknown
     ) {
         super(`API request failed: ${status} ${statusText || "(no status text)"} - ${url}`);
 
@@ -57,3 +60,13 @@ export const describeError = (error: unknown): string => {
 
     return "Something went wrong.";
 };
+
+/*
+   The sentence a 400 was refused with, when the server wrote one for a person
+   to read - maw-media answers some refusals, like a restricted photo offered as
+   a teaser, with a plain string. Anything else is not trusted as user facing.
+*/
+export const getRefusalMessage = (error: unknown): string | undefined =>
+    error instanceof ApiError && error.status === 400 && typeof error.body === "string"
+        ? error.body
+        : undefined;

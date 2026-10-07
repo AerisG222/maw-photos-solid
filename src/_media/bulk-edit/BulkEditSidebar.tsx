@@ -4,17 +4,24 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
 import InfoCard from "../../_components/inspector/InspectorCard";
 import SidePanel from "../../_components/overlay/SidePanel";
-import BulkEditFilterCard, { BulkEditGpsFilter } from "./BulkEditFilterCard";
+import BulkEditFilterCard, { BulkEditFilter } from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
+import BulkEditAccessCard from "./BulkEditAccessCard";
 
 interface Props {
     onSave: (gps: GpsCoordinate) => void;
     onClearOverride: () => void;
     selectedCount: number;
-    gpsFilter: BulkEditGpsFilter;
-    onGpsFilterChange: (filter: BulkEditGpsFilter) => void;
+    filter: BulkEditFilter;
+    onFilterChange: (filter: BulkEditFilter) => void;
+    hiddenCount: number;
     onSelectAll: () => void;
     onDeselectAll: () => void;
+    roles: string[] | undefined;
+    onRestrict: (roles: string[]) => void;
+    onClearRestriction: () => void;
+    isRestrictionPending: boolean;
+    restrictionMessages: string[];
 }
 
 /*
@@ -40,8 +47,9 @@ const BulkEditSidebar: Component<Props> = props => {
                 <BulkEditFilterCard
                     onSelectAll={props.onSelectAll}
                     onDeselectAll={props.onDeselectAll}
-                    gpsFilter={props.gpsFilter}
-                    onGpsFilterChange={props.onGpsFilterChange}
+                    filter={props.filter}
+                    onFilterChange={props.onFilterChange}
+                    hiddenCount={props.hiddenCount}
                 />
             )
         },
@@ -53,6 +61,20 @@ const BulkEditSidebar: Component<Props> = props => {
                     onSave={props.onSave}
                     onClearOverride={props.onClearOverride}
                     selectedCount={props.selectedCount}
+                />
+            )
+        },
+        {
+            title: "Access",
+            icon: "icon-[ic--round-lock]",
+            component: (
+                <BulkEditAccessCard
+                    roles={props.roles}
+                    onRestrict={props.onRestrict}
+                    onClearRestriction={props.onClearRestriction}
+                    selectedCount={props.selectedCount}
+                    isPending={props.isRestrictionPending}
+                    messages={props.restrictionMessages}
                 />
             )
         }

@@ -12,6 +12,7 @@ export const InspectorCardMinimap = "minimap";
 export const InspectorCardMetadata = "metadata";
 export const InspectorCardCategoryTeaser = "categoryTeaser";
 export const InspectorCardPlaceCovers = "placeCovers";
+export const InspectorCardAccess = "access";
 export const InspectorCardWhere = "where";
 export const InspectorCardWho = "who";
 
@@ -24,6 +25,7 @@ export type InspectorCardIdType =
     | typeof InspectorCardMetadata
     | typeof InspectorCardCategoryTeaser
     | typeof InspectorCardPlaceCovers
+    | typeof InspectorCardAccess
     | typeof InspectorCardWhere
     | typeof InspectorCardWho;
 
@@ -38,7 +40,8 @@ export const allInspectorCards: InspectorCardIdType[] = [
     InspectorCardCategoryTeaser,
     InspectorCardPlaceCovers,
     InspectorCardWhere,
-    InspectorCardWho
+    InspectorCardWho,
+    InspectorCardAccess
 ];
 
 export const defaultInspectorCards: InspectorCardIdType[] = [InspectorCardComments];

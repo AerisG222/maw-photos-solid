@@ -24,6 +24,10 @@ import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { GpsOverrideRequest } from "../../_models/GpsOverrideRequest";
 import { BulkGpsOverrideRequest } from "../../_models/BulkGpsOverrideRequest";
 import { BulkClearGpsOverrideRequest } from "../../_models/BulkClearGpsOverrideRequest";
+import { MediaRolesRequest } from "../../_models/MediaRolesRequest";
+import { BulkMediaRolesRequest } from "../../_models/BulkMediaRolesRequest";
+import { BulkClearMediaRolesRequest } from "../../_models/BulkClearMediaRolesRequest";
+import { RestrictedMedia } from "../../_models/RestrictedMedia";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
@@ -34,6 +38,12 @@ export interface MediaService {
     commentsQuery: (id: Accessor<Uuid>) => UseQueryResult<Comment[], Error>;
     gpsQuery: (id: Accessor<Uuid>) => UseQueryResult<GpsDetail, Error>;
     facesQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<DetectedFace[], Error>;
+    rolesQuery: () => UseQueryResult<string[], Error>;
+    mediaRolesQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<string[], Error>;
+    restrictedMediaQuery: (enabled: Accessor<boolean>) => UseQueryResult<RestrictedMedia[], Error>;
+    categoryRestrictionsQuery: (
+        categoryId: Accessor<Uuid | undefined>
+    ) => UseQueryResult<RestrictedMedia[], Error>;
     randomMediaQuery: (
         count: number
     ) => UseInfiniteQueryResult<InfiniteData<Media[] | undefined>, Error>;
@@ -46,6 +56,15 @@ export interface MediaService {
         Response,
         Error,
         BulkClearGpsOverrideRequest,
+        unknown
+    >;
+    setMediaRolesMutation: UseMutationResult<string[], Error, MediaRolesRequest, unknown>;
+    clearMediaRolesMutation: UseMutationResult<Response, Error, Uuid, unknown>;
+    bulkSetMediaRolesMutation: UseMutationResult<Response, Error, BulkMediaRolesRequest, unknown>;
+    bulkClearMediaRolesMutation: UseMutationResult<
+        Response,
+        Error,
+        BulkClearMediaRolesRequest,
         unknown
     >;
 }
@@ -142,6 +161,55 @@ export const MediaProvider: ParentComponent = props => {
             })
         );
 
+    const fetchRoles = async () =>
+        runWithAccessToken(getToken, accessToken => queryApi<string[]>(accessToken, `roles`));
+
+    const fetchMediaRoles = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<string[]>(accessToken, `media/${id}/roles`)
+        );
+
+    const fetchRestrictedMedia = async () =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<RestrictedMedia[]>(accessToken, `media/restricted`)
+        );
+
+    const fetchCategoryRestrictions = async (categoryId: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<RestrictedMedia[]>(accessToken, `categories/${categoryId}/restrictions`)
+        );
+
+    // answers with the restriction as stored, which is what the screen then shows
+    const putMediaRoles = async (req: MediaRolesRequest) =>
+        runWithAccessToken(getToken, async accessToken => {
+            const response = await putApi(accessToken, `media/${req.mediaId}/roles`, {
+                roles: req.roles
+            });
+
+            return (await response.json()) as string[];
+        });
+
+    const deleteMediaRoles = async (mediaId: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            deleteApi(accessToken, `media/${mediaId}/roles`)
+        );
+
+    const postBulkMediaRoles = async (req: BulkMediaRolesRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/bulk-roles`, {
+                mediaIds: req.mediaIds,
+                roles: req.roles
+            })
+        );
+
+    // a POST rather than a DELETE with a body, as with the bulk gps clear
+    const postBulkClearMediaRoles = async (req: BulkClearMediaRolesRequest) =>
+        runWithAccessToken(getToken, accessToken =>
+            postApi(accessToken, `media/bulk-roles/clear`, {
+                mediaIds: req.mediaIds
+            })
+        );
+
     const randomMediaQuery = (count: number) =>
         useInfiniteQuery(() => ({
             queryKey: queryKeys.media.random(),
@@ -196,6 +264,49 @@ export const MediaProvider: ParentComponent = props => {
             queryFn: () => fetchFaces(id()!),
             enabled: !!id() && authContext.isLoggedIn,
             staleTime: 30 * 60 * 1000
+        }));
+
+    /*
+       Admin only, and the server answers 403 to anyone else - so these are
+       only ever asked from screens already behind an admin check. The role list
+       changes about as often as the people using the site do.
+    */
+    const rolesQuery = () =>
+        useQuery(() => ({
+            queryKey: queryKeys.roles.all(),
+            queryFn: fetchRoles,
+            enabled: authContext.isLoggedIn,
+            staleTime: 60 * 60 * 1000
+        }));
+
+    const mediaRolesQuery = (id: Accessor<Uuid | undefined>) =>
+        useQuery(() => ({
+            queryKey: queryKeys.media.roles(id()),
+            queryFn: () => fetchMediaRoles(id()!),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 15 * 60 * 1000
+        }));
+
+    /*
+       Every restricted media in the library - small, since restrictions are
+       rare. Switched by the caller rather than on whenever an admin is signed
+       in, so the categories page only asks while its filter wants it.
+    */
+    const restrictedMediaQuery = (enabled: Accessor<boolean>) =>
+        useQuery(() => ({
+            queryKey: queryKeys.restrictions.library(),
+            queryFn: fetchRestrictedMedia,
+            enabled: enabled() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
+        }));
+
+    // the restricted media in one category, beside its media and gps
+    const categoryRestrictionsQuery = (categoryId: Accessor<Uuid | undefined>) =>
+        useQuery(() => ({
+            queryKey: queryKeys.restrictions.category(categoryId()),
+            queryFn: () => fetchCategoryRestrictions(categoryId()!),
+            enabled: !!categoryId() && authContext.isLoggedIn,
+            staleTime: 5 * 60 * 1000
         }));
 
     const addCommentMutation = useMutation(() => ({
@@ -399,6 +510,64 @@ export const MediaProvider: ParentComponent = props => {
         }
     }));
 
+    /*
+       What a restriction moves: the restriction itself, the listings of which
+       media are restricted, and - because one can hide a photo from the admin
+       setting it, or bring one back - the category media this admin can see.
+       The media lists are refetched rather than patched: a photo coming back
+       into view is not one the cache ever held.
+
+       A single save writes the stored list straight in, since it answers with
+       it. The bulk forms do not, so they drop every held restriction instead;
+       those are few - only what an admin opened.
+    */
+    const invalidateRestrictionListings = () => {
+        void queryClient.invalidateQueries({
+            queryKey: queryKeys.restrictions.all(),
+            refetchType: "all"
+        });
+
+        void queryClient.invalidateQueries({
+            predicate: query => queryKeyMatches.categoryMedia(query.queryKey),
+            refetchType: "all"
+        });
+    };
+
+    const setMediaRolesMutation = useMutation(() => ({
+        mutationFn: (req: MediaRolesRequest) => putMediaRoles(req),
+        onSuccess: (roles, req) => {
+            queryClient.setQueryData(queryKeys.media.roles(req.mediaId), roles);
+            invalidateRestrictionListings();
+        }
+    }));
+
+    const clearMediaRolesMutation = useMutation(() => ({
+        mutationFn: (mediaId: Uuid) => deleteMediaRoles(mediaId),
+        onSuccess: (data, mediaId) => {
+            queryClient.setQueryData<string[]>(queryKeys.media.roles(mediaId), []);
+            invalidateRestrictionListings();
+        }
+    }));
+
+    const invalidateAllRestrictions = () => {
+        void queryClient.invalidateQueries({
+            predicate: query => queryKeyMatches.mediaRoles(query.queryKey),
+            refetchType: "all"
+        });
+
+        invalidateRestrictionListings();
+    };
+
+    const bulkSetMediaRolesMutation = useMutation(() => ({
+        mutationFn: (req: BulkMediaRolesRequest) => postBulkMediaRoles(req),
+        onSuccess: invalidateAllRestrictions
+    }));
+
+    const bulkClearMediaRolesMutation = useMutation(() => ({
+        mutationFn: (req: BulkClearMediaRolesRequest) => postBulkClearMediaRoles(req),
+        onSuccess: invalidateAllRestrictions
+    }));
+
     return (
         <MediaContext.Provider
             value={{
@@ -407,13 +576,21 @@ export const MediaProvider: ParentComponent = props => {
                 commentsQuery,
                 gpsQuery,
                 facesQuery,
+                rolesQuery,
+                mediaRolesQuery,
+                restrictedMediaQuery,
+                categoryRestrictionsQuery,
                 randomMediaQuery,
                 addCommentMutation,
                 setIsFavoriteMutation,
                 setGpsOverrideMutation,
                 bulkGpsOverrideMutation,
                 clearGpsOverrideMutation,
-                bulkClearGpsOverrideMutation
+                bulkClearGpsOverrideMutation,
+                setMediaRolesMutation,
+                clearMediaRolesMutation,
+                bulkSetMediaRolesMutation,
+                bulkClearMediaRolesMutation
             }}
         >
             {props.children}

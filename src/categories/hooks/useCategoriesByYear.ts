@@ -7,6 +7,7 @@ import { UseQueryResult } from "@tanstack/solid-query";
 import { CategoryIdsForYearResult } from "../../_contexts/api/models/CategoryIdsForYearResult";
 import { Uuid } from "../../_models/Uuid";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
+import { useMediaContext } from "../../_contexts/api/MediaContext";
 
 export const useCategoriesByYear = () => {
     const [area] = useAreaSettingsContext();
@@ -16,6 +17,7 @@ export const useCategoriesByYear = () => {
         categoriesWithoutGpsForAllYearsQuery,
         setIsFavoriteMutation
     } = useCategoriesContext();
+    const { restrictedMediaQuery } = useMediaContext();
 
     const years = yearsQuery();
 
@@ -45,46 +47,65 @@ export const useCategoriesByYear = () => {
     const allCategories = categoriesForAllYearsQuery(yearsToLoad);
     const categoryIdsWithoutGps = categoriesWithoutGpsForAllYearsQuery(gpsYearsToLoad);
 
+    /*
+       One library-wide call rather than one per year: restrictions are rare,
+       so the whole list is small. Only asked while the admin-only filter is on.
+    */
+    const restricted = restrictedMediaQuery(() => area.categoryRestrictedFilter);
+
     const allCategoriesReady = () =>
         allCategories.length > 0 && !allCategories.some(result => result.isPending);
 
     const categoryIdsWithoutGpsReady = () =>
         categoryIdsWithoutGps.length > 0 && !categoryIdsWithoutGps.some(result => result.isPending);
 
-    const filterCategoriesWithoutGps = (
-        categoriesForYear: Category[],
-        categoryIdsWithoutGps: Uuid[] | undefined
-    ) => categoriesForYear.filter(cat => !!categoryIdsWithoutGps?.find(id => cat.id === id));
-
     const getCategoryIdsWithoutGpsForYear = (
         year: number,
         categoryIdsWithoutGpsResult: UseQueryResult<CategoryIdsForYearResult, Error>[]
     ) => categoryIdsWithoutGpsResult.find(x => x.data?.year === year)?.data?.categoryIds;
 
+    /*
+       Each filter narrows what the one before it left, so both together mean
+       "missing gps and restricted" - and each holds the screen back until its
+       own data is in, rather than showing every category and then shrinking.
+    */
     const categoriesToDisplay = createMemo(() => {
-        if (!area.categoryMissingGpsFilter) {
-            if (allCategoriesReady()) {
-                return allCategories.reduce<Record<number, Category[]>>((acc, result) => {
-                    if (result.data) {
-                        acc[result.data.year] = result.data.categories;
-                    }
-                    return acc;
-                }, {});
-            }
-        } else {
-            if (allCategoriesReady() && categoryIdsWithoutGpsReady()) {
-                return allCategories.reduce<Record<number, Category[]>>((acc, result) => {
-                    if (result.data) {
-                        acc[result.data.year] = filterCategoriesWithoutGps(
-                            result.data.categories,
-                            getCategoryIdsWithoutGpsForYear(result.data.year, categoryIdsWithoutGps)
-                        );
-                    }
-                    return acc;
-                }, {});
-            }
+        if (!allCategoriesReady()) {
+            return undefined;
         }
-        return undefined;
+
+        if (area.categoryMissingGpsFilter && !categoryIdsWithoutGpsReady()) {
+            return undefined;
+        }
+
+        if (area.categoryRestrictedFilter && !restricted.isSuccess) {
+            return undefined;
+        }
+
+        const restrictedCategoryIds = new Set<Uuid>((restricted.data ?? []).map(r => r.categoryId));
+
+        return allCategories.reduce<Record<number, Category[]>>((acc, result) => {
+            if (result.data) {
+                let categories = result.data.categories;
+
+                if (area.categoryMissingGpsFilter) {
+                    const ids = getCategoryIdsWithoutGpsForYear(
+                        result.data.year,
+                        categoryIdsWithoutGps
+                    );
+
+                    categories = categories.filter(cat => !!ids?.includes(cat.id));
+                }
+
+                if (area.categoryRestrictedFilter) {
+                    categories = categories.filter(cat => restrictedCategoryIds.has(cat.id));
+                }
+
+                acc[result.data.year] = categories;
+            }
+
+            return acc;
+        }, {});
     });
 
     /*
@@ -97,10 +118,18 @@ export const useCategoriesByYear = () => {
             years,
             ...allCategories,
             // only consulted while the missing-gps filter is on
-            ...(area.categoryMissingGpsFilter ? categoryIdsWithoutGps : [])
+            ...(area.categoryMissingGpsFilter ? categoryIdsWithoutGps : []),
+            // and this while the restricted filter is
+            ...(area.categoryRestrictedFilter ? [restricted] : [])
         ]);
 
-    const retryLoad = () => refetchQueries([years, ...allCategories, ...categoryIdsWithoutGps]);
+    const retryLoad = () =>
+        refetchQueries([
+            years,
+            ...allCategories,
+            ...categoryIdsWithoutGps,
+            ...(area.categoryRestrictedFilter ? [restricted] : [])
+        ]);
 
     return { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation };
 };

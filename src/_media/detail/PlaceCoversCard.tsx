@@ -1,6 +1,6 @@
 import { Component, For, Match, Show, Switch } from "solid-js";
 
-import { ApiError, describeError } from "../../_contexts/api/ApiError";
+import { ApiError, describeError, getRefusalMessage } from "../../_contexts/api/ApiError";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { getPlaceKindName, Place } from "../../_models/Place";
 import { Media } from "../../_models/Media";
@@ -53,11 +53,18 @@ const PlaceCoversCard: Component<Props> = props => {
             return undefined;
         }
 
-        // the api layer carries the status but not the body, and a 400 here is
-        // always the rendition rule - the place came from this media's own chain,
-        // so "not at this place" cannot arise
+        /*
+           A 400 says why in words: the rendition rule, or a restricted photo,
+           which may not be a cover everyone sees. The place came from this
+           media's own chain, so "not at this place" cannot arise. The fallback
+           is for an api that predates restrictions, where a 400 was always the
+           rendition rule.
+        */
         if (error instanceof ApiError && error.status === 400) {
-            return "This media has no rendition that may be published. Originals never are.";
+            return (
+                getRefusalMessage(error) ??
+                "This media has no rendition that may be published. Originals never are."
+            );
         }
 
         return describeError(error);

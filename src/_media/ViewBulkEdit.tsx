@@ -9,20 +9,37 @@ import { Uuid } from "../_models/Uuid";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
+import { describeError } from "../_contexts/api/ApiError";
+import {
+    MediaRestrictionProblem,
+    describeRestrictionProblem,
+    getRestrictionProblems
+} from "../_models/MediaRestrictionProblem";
+import { RestrictedMedia } from "../_models/RestrictedMedia";
+import { AdminRole, excludesAdmin } from "./access/_restriction";
 
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
-import { BulkEditGpsFilter } from "./bulk-edit/BulkEditFilterCard";
+import { BulkEditFilter } from "./bulk-edit/BulkEditFilterCard";
 import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import AdminGuard from "../_components/auth/AdminGuard";
+import Icon from "../_components/icon/Icon";
 import { usePanelShape } from "../_components/overlay/SidePanel";
 
+/*
+   A photo on offer for selection. Most come from the category's media; a photo
+   restricted to roles this admin does not hold is not among those - it is
+   hidden from them like anyone else - so it comes from the restrictions list
+   instead, with no image to show, since /assets would refuse it.
+*/
 interface SelectableMedia {
     id: Uuid;
     isSelected: boolean;
-    imageUrl: string;
+    imageUrl: string | undefined;
+    slug: string;
+    isHiddenFromYou: boolean;
 }
 
 interface Props {
@@ -30,7 +47,18 @@ interface Props {
 }
 
 const ViewBulkEdit: Component<Props> = props => {
-    const { bulkGpsOverrideMutation, bulkClearGpsOverrideMutation } = useMediaContext(); // todo: add to service
+    const {
+        bulkGpsOverrideMutation,
+        bulkClearGpsOverrideMutation,
+        rolesQuery,
+        categoryRestrictionsQuery,
+        bulkSetMediaRolesMutation,
+        bulkClearMediaRolesMutation
+    } = useMediaContext(); // todo: add to service
+    const roles = rolesQuery();
+    const activeCategoryId = () => props.mediaService.getActiveCategory()?.id;
+    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
+    const restrictions = categoryRestrictionsQuery(activeCategoryId);
     const { docked } = usePanelShape();
     const navigate = useNavigate();
 
@@ -53,15 +81,36 @@ const ViewBulkEdit: Component<Props> = props => {
         }
     });
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);
-    const [gpsFilter, setGpsFilter] = createSignal<BulkEditGpsFilter>("all");
+    const [filter, setFilter] = createSignal<BulkEditFilter>("all");
     const [isConfirmingClear, setIsConfirmingClear] = createSignal(false);
+    // the roles waiting on an answer to "hide these from admins?"
+    const [pendingLockoutRoles, setPendingLockoutRoles] = createSignal<string[]>();
+    const [isConfirmingUnrestrict, setIsConfirmingUnrestrict] = createSignal(false);
 
-    const buildSelectableMedia = (media: Media) => ({
+    const buildSelectableMedia = (media: Media, isSelected: boolean): SelectableMedia => ({
         id: media.id,
         imageUrl: getMediaTeaserUrl(media)!,
-        isSelected: false
+        slug: media.slug,
+        isHiddenFromYou: false,
+        isSelected
     });
 
+    const buildHiddenMedia = (
+        restricted: RestrictedMedia,
+        isSelected: boolean
+    ): SelectableMedia => ({
+        id: restricted.mediaId,
+        imageUrl: undefined,
+        slug: restricted.mediaSlug,
+        isHiddenFromYou: true,
+        isSelected
+    });
+
+    // the restriction on each restricted photo here, for the badges and the filter
+    const restrictionById = () =>
+        new Map((restrictions.data ?? []).map(r => [r.mediaId, r] as const));
+
+    const hiddenCount = () => (restrictions.data ?? []).filter(r => !r.isVisibleToYou).length;
     const onSave = async (gps: GpsCoordinate) => {
         const mediaToUpdate = media()
             .filter(p => p.isSelected)
@@ -92,6 +141,84 @@ const ViewBulkEdit: Component<Props> = props => {
         await bulkClearGpsOverrideMutation.mutateAsync({ mediaIds: mediaToClear });
     };
 
+    /*
+       Unlike a gps save, the selection is kept until the server agrees: a
+       restriction is all or nothing, and a refused one comes back naming each
+       photo that stopped it. Those are marked in the grid, so the admin can
+       deselect them - or go change the teaser - and try again with the rest
+       still chosen.
+    */
+    const restrict = (roles: string[]) => {
+        setPendingLockoutRoles(undefined);
+        bulkClearMediaRolesMutation.reset();
+
+        bulkSetMediaRolesMutation.mutate(
+            { mediaIds: selectedIds(), roles },
+            { onSuccess: () => setAll(false) }
+        );
+    };
+
+    const onRestrict = (roles: string[]) => {
+        if (excludesAdmin(roles)) {
+            setPendingLockoutRoles(roles);
+        } else {
+            restrict(roles);
+        }
+    };
+
+    const onConfirmUnrestrict = () => {
+        setIsConfirmingUnrestrict(false);
+        bulkSetMediaRolesMutation.reset();
+
+        bulkClearMediaRolesMutation.mutate(
+            { mediaIds: selectedIds() },
+            { onSuccess: () => setAll(false) }
+        );
+    };
+
+    const restrictionProblems = () => getRestrictionProblems(bulkSetMediaRolesMutation.error);
+
+    // the problems that belong to one photo, for marking it in the grid
+    const problemsByMedia = () => {
+        const byMedia = new Map<Uuid, MediaRestrictionProblem[]>();
+
+        for (const problem of restrictionProblems()) {
+            if (problem.mediaId) {
+                byMedia.set(problem.mediaId, [...(byMedia.get(problem.mediaId) ?? []), problem]);
+            }
+        }
+
+        return byMedia;
+    };
+
+    const restrictionMessages = () => {
+        const error = bulkSetMediaRolesMutation.error ?? bulkClearMediaRolesMutation.error;
+
+        if (!error) {
+            return [];
+        }
+
+        const problems = restrictionProblems();
+
+        if (problems.length === 0) {
+            return [describeError(error)];
+        }
+
+        // problems with the request itself are said here; the rest are on their photos
+        const general = problems.filter(p => !p.mediaId).map(describeRestrictionProblem);
+        const photoCount = problemsByMedia().size;
+
+        return photoCount === 0
+            ? general
+            : [
+                  ...general,
+                  `Nothing was changed. ${photoCount} ${photoCount === 1 ? "photo" : "photos"} could not be restricted - ${photoCount === 1 ? "it is" : "they are"} outlined in red, and pointing at one says why.`
+              ];
+    };
+
+    const describeProblems = (id: Uuid) =>
+        problemsByMedia().get(id)?.map(describeRestrictionProblem).join(" ");
+
     const setAll = (doSelect: boolean) => {
         setMedia(media =>
             media.map(m => {
@@ -114,9 +241,9 @@ const ViewBulkEdit: Component<Props> = props => {
         );
     };
 
-    const onGpsFilterChange = (filter: BulkEditGpsFilter) => {
+    const onFilterChange = (next: BulkEditFilter) => {
         setAll(false);
-        setGpsFilter(filter);
+        setFilter(next);
     };
 
     const toggle = (media: SelectableMedia) => {
@@ -131,28 +258,68 @@ const ViewBulkEdit: Component<Props> = props => {
         );
     };
 
+    /*
+       Rebuilt as the media or the restrictions arrive, keeping whatever was
+       selected that is still here - the two land separately, and the second
+       should not throw away a selection made after the first.
+    */
     createEffect(() => {
-        setMedia(props.mediaService.getMediaList().map(buildSelectableMedia));
+        const hidden = (restrictions.data ?? []).filter(r => !r.isVisibleToYou);
+        const list = props.mediaService.getMediaList();
+
+        setMedia(prev => {
+            const selected = new Set(prev.filter(m => m.isSelected).map(m => m.id));
+
+            return [
+                ...list.map(m => buildSelectableMedia(m, selected.has(m.id))),
+                ...hidden.map(r => buildHiddenMedia(r, selected.has(r.mediaId)))
+            ];
+        });
     });
 
+    /*
+       A photo hidden from you only appears under the restricted filter. It is
+       there to have its restriction changed; the gps filters know nothing of
+       it, and a select-all for a gps edit should not reach it.
+    */
     const mediaToShow = () => {
-        const filter = gpsFilter();
+        const current = filter();
 
-        if (filter === "all") {
-            return media();
+        if (current === "restricted") {
+            const restricted = restrictionById();
+
+            return media().filter(m => restricted.has(m.id));
+        }
+
+        const visible = media().filter(m => !m.isHiddenFromYou);
+
+        if (current === "all") {
+            return visible;
         }
 
         const withGps = props.mediaService.mediaWithGps();
 
-        if (filter === "withoutGps") {
+        if (current === "withoutGps") {
             const ids = new Set(withGps.map(x => x.media.id));
 
-            return media().filter(m => !ids.has(m.id));
+            return visible.filter(m => !ids.has(m.id));
         }
 
         const ids = new Set(withGps.filter(x => x.gps.override).map(x => x.media.id));
 
-        return media().filter(m => ids.has(m.id));
+        return visible.filter(m => ids.has(m.id));
+    };
+
+    const describeRestriction = (id: Uuid) => {
+        const restriction = restrictionById().get(id);
+
+        if (!restriction) {
+            return undefined;
+        }
+
+        return restriction.isVisibleToYou
+            ? `Restricted to ${restriction.roles.join(", ")}`
+            : `Restricted to ${restriction.roles.join(", ")} - hidden from you`;
     };
 
     return (
@@ -173,8 +340,24 @@ const ViewBulkEdit: Component<Props> = props => {
                             onDeselectAll={() => setAll(false)}
                             onClearOverride={() => setIsConfirmingClear(true)}
                             selectedCount={selectedIds().length}
-                            gpsFilter={gpsFilter()}
-                            onGpsFilterChange={onGpsFilterChange}
+                            filter={filter()}
+                            onFilterChange={onFilterChange}
+                            hiddenCount={hiddenCount()}
+                            roles={roles.data}
+                            onRestrict={onRestrict}
+                            onClearRestriction={() => setIsConfirmingUnrestrict(true)}
+                            isRestrictionPending={
+                                bulkSetMediaRolesMutation.isPending ||
+                                bulkClearMediaRolesMutation.isPending
+                            }
+                            restrictionMessages={[
+                                ...(restrictions.isError
+                                    ? [
+                                          `Could not tell which photos are restricted. ${describeError(restrictions.error)}`
+                                      ]
+                                    : []),
+                                ...restrictionMessages()
+                            ]}
                         />
                     }
                 >
@@ -184,23 +367,59 @@ const ViewBulkEdit: Component<Props> = props => {
                         <For each={mediaToShow()}>
                             {m => (
                                 <div
-                                    class="border-1 border-primary/40 hover:border-primary cursor-pointer text-center rounded-sm"
+                                    class="border-1 cursor-pointer text-center rounded-sm"
+                                    classList={{
+                                        "border-primary/40 hover:border-primary":
+                                            !problemsByMedia().has(m.id),
+                                        "border-error outline-2 outline-error":
+                                            problemsByMedia().has(m.id)
+                                    }}
+                                    title={describeProblems(m.id) ?? describeRestriction(m.id)}
                                     onClick={() => toggle(m)}
                                 >
-                                    <input
-                                        type="checkbox"
-                                        class="checkbox checkbox-sm my-1"
-                                        checked={m.isSelected}
-                                        onInput={evt => (m.isSelected = evt.currentTarget.checked)}
-                                    />
-                                    <img
-                                        src={m.imageUrl}
-                                        /* the checkbox beside it carries the meaning */
-                                        alt=""
-                                        class="rounded-b-sm"
-                                        width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                        height={getThumbnailSize(ThumbnailSizeDefault).height}
-                                    />
+                                    <div class="flex items-center justify-center gap-1">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm my-1"
+                                            checked={m.isSelected}
+                                            onInput={evt =>
+                                                (m.isSelected = evt.currentTarget.checked)
+                                            }
+                                        />
+                                        <Show when={describeRestriction(m.id)}>
+                                            {description => (
+                                                <>
+                                                    <Icon classes="icon-[ic--round-lock] text-warning" />
+                                                    <span class="sr-only">{description()}</span>
+                                                </>
+                                            )}
+                                        </Show>
+                                    </div>
+                                    <Show
+                                        when={m.imageUrl}
+                                        fallback={
+                                            <div
+                                                class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
+                                                style={{
+                                                    width: `${getThumbnailSize(ThumbnailSizeDefault).width}px`,
+                                                    height: `${getThumbnailSize(ThumbnailSizeDefault).height}px`
+                                                }}
+                                            >
+                                                <Icon classes="icon-[ic--round-visibility-off] text-2xl" />
+                                                <span class="truncate max-w-full">{m.slug}</span>
+                                                <span>Hidden from you</span>
+                                            </div>
+                                        }
+                                    >
+                                        <img
+                                            src={m.imageUrl}
+                                            /* the checkbox beside it carries the meaning */
+                                            alt=""
+                                            class="rounded-b-sm"
+                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                        />
+                                    </Show>
                                 </div>
                             )}
                         </For>
@@ -217,6 +436,33 @@ const ViewBulkEdit: Component<Props> = props => {
                         Remove the GPS override from {selectedIds().length} selected{" "}
                         {selectedIds().length === 1 ? "photo" : "photos"}? Each will go back to the
                         location its file recorded, if it has one.
+                    </ConfirmDialog>
+
+                    <ConfirmDialog
+                        open={isConfirmingUnrestrict()}
+                        title="Unrestrict"
+                        confirmLabel="Unrestrict"
+                        destructive
+                        onConfirm={onConfirmUnrestrict}
+                        onCancel={() => setIsConfirmingUnrestrict(false)}
+                    >
+                        Remove the restriction from {selectedIds().length} selected{" "}
+                        {selectedIds().length === 1 ? "photo" : "photos"}? Each will be visible to
+                        everyone who can see its category.
+                    </ConfirmDialog>
+
+                    <ConfirmDialog
+                        open={!!pendingLockoutRoles()}
+                        title="Hide from Admins?"
+                        confirmLabel="Restrict"
+                        destructive
+                        onConfirm={() => restrict(pendingLockoutRoles()!)}
+                        onCancel={() => setPendingLockoutRoles(undefined)}
+                    >
+                        Without the {AdminRole} role, you will only see these photos if you hold one
+                        of the roles you chose. If you do not, they will drop out of this category
+                        for you too - though they stay listed here under Restricted Photos, where
+                        the restriction can be changed or removed.
                     </ConfirmDialog>
                 </Layout>
             </Show>

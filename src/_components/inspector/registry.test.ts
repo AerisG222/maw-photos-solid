@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+    InspectorCardAccess,
     InspectorCardCategoryTeaser,
     InspectorCardHistogram,
     InspectorCardMetadata,
@@ -58,8 +59,10 @@ describe("which cards apply", () => {
 
         expect(asReader).not.toContain(InspectorCardMetadata);
         expect(asReader).not.toContain(InspectorCardPlaceCovers);
+        expect(asReader).not.toContain(InspectorCardAccess);
 
         expect(ids(context({ isAdmin: true }))).toContain(InspectorCardMetadata);
+        expect(ids(context({ isAdmin: true }))).toContain(InspectorCardAccess);
     });
 
     /*

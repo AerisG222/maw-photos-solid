@@ -48,6 +48,27 @@ export const putApi = (accessToken: string, relativeUrl: string, content: unknow
 export const deleteApi = (accessToken: string, relativeUrl: string) =>
     callApi("DELETE", relativeUrl, undefined, accessToken);
 
+// best effort - an error body that cannot be read is no reason to lose the status
+const readErrorBody = async (response: Response): Promise<unknown> => {
+    let text: string;
+
+    try {
+        text = await response.text();
+    } catch {
+        return undefined;
+    }
+
+    if (!text) {
+        return undefined;
+    }
+
+    try {
+        return JSON.parse(text) as unknown;
+    } catch {
+        return text;
+    }
+};
+
 const callApi = async (
     method: string,
     relativeUrl: string,
@@ -67,7 +88,12 @@ const callApi = async (
     });
 
     if (!response.ok) {
-        throw new ApiError(response.status, response.statusText, relativeUrl);
+        throw new ApiError(
+            response.status,
+            response.statusText,
+            relativeUrl,
+            await readErrorBody(response)
+        );
     }
 
     return response;

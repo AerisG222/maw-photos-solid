@@ -3,6 +3,7 @@ import { Component, lazy } from "solid-js";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import {
+    InspectorCardAccess,
     InspectorCardCategoryTeaser,
     InspectorCardComments,
     InspectorCardEffects,
@@ -145,6 +146,14 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         icon: "icon-[ic--round-place]",
         appliesTo: context => context.isAdmin,
         component: lazy(() => import("../../_media/detail/PlaceCoversCard"))
+    },
+    {
+        // who may see it, when that is fewer than its category is shared with
+        id: InspectorCardAccess,
+        title: "Access",
+        icon: "icon-[ic--round-lock]",
+        appliesTo: context => context.isAdmin,
+        component: lazy(() => import("../../_media/detail/AccessCard"))
     }
 ];
 

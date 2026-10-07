@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { ApiError, describeError } from "./ApiError";
+import { ApiError, describeError, getRefusalMessage } from "./ApiError";
 
 describe("ApiError", () => {
     it("classifies 401 and 403 as auth errors", () => {
@@ -53,5 +53,22 @@ describe("describeError", () => {
     it("handles a non-error being thrown", () => {
         expect(describeError("boom")).toBe("Something went wrong.");
         expect(describeError(undefined)).toBe("Something went wrong.");
+    });
+});
+
+describe("getRefusalMessage", () => {
+    // maw-media writes some refusals for a person, like a restricted teaser
+    it("reads the sentence a 400 was refused with", () => {
+        expect(getRefusalMessage(new ApiError(400, "", "x", "That photo is restricted."))).toBe(
+            "That photo is restricted."
+        );
+    });
+
+    it("trusts nothing else as user facing", () => {
+        expect(getRefusalMessage(new ApiError(400, "", "x", [{ reason: "teaser" }]))).toBe(
+            undefined
+        );
+        expect(getRefusalMessage(new ApiError(500, "", "x", "stack trace"))).toBe(undefined);
+        expect(getRefusalMessage(new Error("x"))).toBe(undefined);
     });
 });

@@ -58,10 +58,27 @@ export const queryKeys = {
         comments: (id: Uuid | undefined) => ["media", id, "comments"] as const,
         gps: (id: Uuid | undefined) => ["media", id, "gps"] as const,
         faces: (id: Uuid | undefined) => ["media", id, "faces"] as const,
+        // the roles one media is restricted to - an admin's question only
+        roles: (id: Uuid | undefined) => ["media", id, "roles"] as const,
         // the chain of places one media was taken at. Keyed under the media
         // rather than under places because it is asked with a media id in hand -
         // it is the one read that runs the tree backwards
         places: (id: Uuid | undefined) => ["media", id, "places"] as const
+    },
+    // every role a media can be restricted to, for the picker
+    roles: {
+        all: () => ["roles"] as const
+    },
+    /*
+       Which media are restricted, across the library or within one category.
+       Their own root rather than under categories or media, so a change to any
+       restriction can drop every listing of them at once without also dropping
+       the media themselves.
+    */
+    restrictions: {
+        all: () => ["restrictions"] as const,
+        library: () => ["restrictions", "library"] as const,
+        category: (id: Uuid | undefined) => ["restrictions", "category", id] as const
     },
     people: {
         all: () => ["people"] as const,
@@ -120,5 +137,8 @@ export const queryKeyMatches = {
 
     // the place chains held against a media. They carry the same Place objects as
     // the listings above, so a cover published from anywhere has to reach both
-    mediaPlaces: (key: readonly unknown[]) => key[0] === "media" && key[2] === "places"
+    mediaPlaces: (key: readonly unknown[]) => key[0] === "media" && key[2] === "places",
+
+    // the restriction held against each media an admin has looked at
+    mediaRoles: (key: readonly unknown[]) => key[0] === "media" && key[2] === "roles"
 };
