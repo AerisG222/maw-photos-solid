@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { ApiError } from "../_contexts/api/ApiError";
-import { describeRestrictionProblem, getRestrictionProblems } from "./MediaRestrictionProblem";
+import {
+    describeCategoryRolesProblem,
+    describeRestrictionProblem,
+    getRestrictionProblems
+} from "./MediaRestrictionProblem";
 import { Uuid } from "./Uuid";
 
 const id = (value: string) => value as unknown as Uuid;
@@ -51,6 +55,34 @@ describe("describeRestrictionProblem", () => {
     it("falls back for a reason it does not know", () => {
         expect(
             describeRestrictionProblem({ mediaId: null, reason: "brand_new", detail: null })
+        ).toContain("brand_new");
+    });
+});
+
+describe("describeCategoryRolesProblem", () => {
+    it("names the role a restricted photo still depends on", () => {
+        expect(
+            describeCategoryRolesProblem({
+                mediaId: id("m"),
+                reason: "restriction_depends",
+                detail: "friend"
+            })
+        ).toContain("friend");
+    });
+
+    it("explains a change that would hide the category from you", () => {
+        expect(
+            describeCategoryRolesProblem({
+                mediaId: null,
+                reason: "would_hide_from_you",
+                detail: null
+            })
+        ).toMatch(/hidden from you/);
+    });
+
+    it("falls back for a reason it does not know", () => {
+        expect(
+            describeCategoryRolesProblem({ mediaId: null, reason: "brand_new", detail: null })
         ).toContain("brand_new");
     });
 });

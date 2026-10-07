@@ -47,6 +47,8 @@ export const queryKeys = {
         detail: (id: Uuid | undefined) => ["categories", id] as const,
         media: (id: Uuid | undefined) => ["categories", id, "media"] as const,
         gps: (id: Uuid | undefined) => ["categories", id, "gps"] as const,
+        // who the category is granted to - an admin's question only
+        roles: (id: Uuid | undefined) => ["categories", id, "roles"] as const,
         searchRoot: () => ["categories", "search"] as const,
         search: (term: string) => ["categories", "search", term] as const
     },

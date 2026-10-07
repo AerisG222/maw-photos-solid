@@ -20,6 +20,7 @@ import { Uuid } from "../../_models/Uuid";
 import { CategoriesForYearResult } from "./models/CategoriesForYearResult";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { CategoryTeaserRequest } from "../../_models/CategoryTeaserRequest";
+import { CategoryRolesRequest } from "../../_models/CategoryRolesRequest";
 import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
@@ -47,6 +48,8 @@ export interface CategoriesService {
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
+    categoryRolesQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<string[], Error>;
+    setCategoryRolesMutation: UseMutationResult<string[], Error, CategoryRolesRequest, unknown>;
     downloadFile: (url: string, fileName: string) => Promise<void>;
     // the same authorized fetch, for a caller that wants the bytes themselves
     fetchFile: (url: string) => Promise<Blob>;
@@ -127,6 +130,21 @@ export const CategoriesProvider: ParentComponent = props => {
                 isFavorite: req.isFavorite
             })
         );
+
+    const fetchCategoryRoles = async (id: Uuid) =>
+        runWithAccessToken(getToken, accessToken =>
+            queryApi<string[]>(accessToken, `categories/${id}/roles`)
+        );
+
+    // answers with the roles as stored, which is what the screen then shows
+    const putCategoryRoles = async (req: CategoryRolesRequest) =>
+        runWithAccessToken(getToken, async accessToken => {
+            const response = await putApi(accessToken, `categories/${req.categoryId}/roles`, {
+                roles: req.roles
+            });
+
+            return (await response.json()) as string[];
+        });
 
     const postCategoryTeaser = async (req: CategoryTeaserRequest) =>
         runWithAccessToken(getToken, accessToken =>
@@ -343,6 +361,30 @@ export const CategoriesProvider: ParentComponent = props => {
     }));
 
     /*
+       Admin only, and answered 403 to anyone else - asked only from a screen
+       already behind an admin check.
+    */
+    const categoryRolesQuery = (id: Accessor<Uuid | undefined>) =>
+        useQuery(() => ({
+            queryKey: queryKeys.categories.roles(id()),
+            queryFn: () => fetchCategoryRoles(id()!),
+            enabled: !!id() && authContext.isLoggedIn,
+            staleTime: 15 * 60 * 1000
+        }));
+
+    /*
+       Nothing else this admin has cached moves. The server refuses a change
+       that would hide the category from them, so their own listings are
+       unchanged; who else now sees it is not something this client holds.
+    */
+    const setCategoryRolesMutation = useMutation(() => ({
+        mutationFn: (req: CategoryRolesRequest) => putCategoryRoles(req),
+        onSuccess: (roles, req) => {
+            queryClient.setQueryData(queryKeys.categories.roles(req.categoryId), roles);
+        }
+    }));
+
+    /*
        The bytes of one protected asset.
 
        Split out of `downloadFile` because sharing wants the same thing and does
@@ -396,6 +438,8 @@ export const CategoriesProvider: ParentComponent = props => {
                 categorySearchQuery,
                 setIsFavoriteMutation,
                 setCategoryTeaserMutation,
+                categoryRolesQuery,
+                setCategoryRolesMutation,
                 downloadFile,
                 fetchFile
             }}

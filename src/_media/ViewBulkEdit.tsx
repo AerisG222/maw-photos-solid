@@ -9,9 +9,11 @@ import { Uuid } from "../_models/Uuid";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
+import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
 import { describeError } from "../_contexts/api/ApiError";
 import {
     MediaRestrictionProblem,
+    describeCategoryRolesProblem,
     describeRestrictionProblem,
     getRestrictionProblems
 } from "../_models/MediaRestrictionProblem";
@@ -59,10 +61,13 @@ const ViewBulkEdit: Component<Props> = props => {
         bulkSetMediaRolesMutation,
         bulkClearMediaRolesMutation
     } = useMediaContext(); // todo: add to service
+    const { categoryRolesQuery, setCategoryRolesMutation } = useCategoriesContext();
     const roles = rolesQuery();
     const activeCategoryId = () => props.mediaService.getActiveCategory()?.id;
     // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
     const restrictions = categoryRestrictionsQuery(activeCategoryId);
+    // eslint-disable-next-line solid/reactivity -- as above
+    const categoryRoles = categoryRolesQuery(activeCategoryId);
     const { docked } = usePanelShape();
     const navigate = useNavigate();
 
@@ -90,6 +95,8 @@ const ViewBulkEdit: Component<Props> = props => {
     // the roles waiting on an answer to "hide these from admins?"
     const [pendingLockoutRoles, setPendingLockoutRoles] = createSignal<string[]>();
     const [isConfirmingUnrestrict, setIsConfirmingUnrestrict] = createSignal(false);
+    // the category roles waiting on an answer to "take this category from them?"
+    const [pendingCategoryRoles, setPendingCategoryRoles] = createSignal<string[]>();
     // the photo open in the preview, by id so a refetch beneath it does not move it
     const [previewId, setPreviewId] = createSignal<Uuid>();
 
@@ -159,6 +166,7 @@ const ViewBulkEdit: Component<Props> = props => {
     const restrict = (roles: string[]) => {
         setPendingLockoutRoles(undefined);
         bulkClearMediaRolesMutation.reset();
+        setCategoryRolesMutation.reset();
 
         bulkSetMediaRolesMutation.mutate(
             { mediaIds: selectedIds(), roles },
@@ -177,6 +185,7 @@ const ViewBulkEdit: Component<Props> = props => {
     const onConfirmUnrestrict = () => {
         setIsConfirmingUnrestrict(false);
         bulkSetMediaRolesMutation.reset();
+        setCategoryRolesMutation.reset();
 
         bulkClearMediaRolesMutation.mutate(
             { mediaIds: selectedIds() },
@@ -185,47 +194,115 @@ const ViewBulkEdit: Component<Props> = props => {
     };
 
     const restrictionProblems = () => getRestrictionProblems(bulkSetMediaRolesMutation.error);
+    const categoryRolesProblems = () => getRestrictionProblems(setCategoryRolesMutation.error);
 
-    // the problems that belong to one photo, for marking it in the grid
-    const problemsByMedia = () => {
-        const byMedia = new Map<Uuid, MediaRestrictionProblem[]>();
+    /*
+       What to say on each photo that stopped the last change, for marking it in
+       the grid. Both kinds of refusal can name photos: a selection that could
+       not be restricted, and restricted photos that depend on a role being taken
+       away from the category. Only the latest attempt's are ever present - each
+       card clears the other's refusal when it acts.
+    */
+    const messagesByMedia = () => {
+        const byMedia = new Map<Uuid, string[]>();
 
-        for (const problem of restrictionProblems()) {
-            if (problem.mediaId) {
-                byMedia.set(problem.mediaId, [...(byMedia.get(problem.mediaId) ?? []), problem]);
+        const add = (
+            problems: MediaRestrictionProblem[],
+            describe: typeof describeRestrictionProblem
+        ) => {
+            for (const problem of problems) {
+                if (problem.mediaId) {
+                    byMedia.set(problem.mediaId, [
+                        ...(byMedia.get(problem.mediaId) ?? []),
+                        describe(problem)
+                    ]);
+                }
             }
-        }
+        };
+
+        add(restrictionProblems(), describeRestrictionProblem);
+        add(categoryRolesProblems(), describeCategoryRolesProblem);
 
         return byMedia;
     };
 
-    const restrictionMessages = () => {
-        const error = bulkSetMediaRolesMutation.error ?? bulkClearMediaRolesMutation.error;
+    const countPhotos = (problems: MediaRestrictionProblem[]) =>
+        new Set(problems.filter(p => p.mediaId).map(p => p.mediaId)).size;
 
+    /*
+       A refusal in words: problems with the request itself said outright, and
+       those that belong to a photo summarized here and spelled out on the photo.
+    */
+    const describeRefusal = (
+        error: Error | null,
+        problems: MediaRestrictionProblem[],
+        describe: typeof describeRestrictionProblem,
+        photoSummary: (count: number) => string
+    ) => {
         if (!error) {
             return [];
         }
-
-        const problems = restrictionProblems();
 
         if (problems.length === 0) {
             return [describeError(error)];
         }
 
-        // problems with the request itself are said here; the rest are on their photos
-        const general = problems.filter(p => !p.mediaId).map(describeRestrictionProblem);
-        const photoCount = problemsByMedia().size;
+        const general = problems.filter(p => !p.mediaId).map(describe);
+        const photoCount = countPhotos(problems);
 
-        return photoCount === 0
-            ? general
-            : [
-                  ...general,
-                  `Nothing was changed. ${photoCount} ${photoCount === 1 ? "photo" : "photos"} could not be restricted - ${photoCount === 1 ? "it is" : "they are"} outlined in red, and pointing at one says why.`
-              ];
+        return photoCount === 0 ? general : [...general, photoSummary(photoCount)];
     };
 
-    const describeProblems = (id: Uuid) =>
-        problemsByMedia().get(id)?.map(describeRestrictionProblem).join(" ");
+    const photos = (count: number) => `${count} ${count === 1 ? "photo" : "photos"}`;
+    const outlined = (count: number) =>
+        `${count === 1 ? "it is" : "they are"} outlined in red, and pointing at one says why.`;
+
+    const restrictionMessages = () =>
+        describeRefusal(
+            bulkSetMediaRolesMutation.error ?? bulkClearMediaRolesMutation.error,
+            restrictionProblems(),
+            describeRestrictionProblem,
+            count =>
+                `Nothing was changed. ${photos(count)} could not be restricted - ${outlined(count)}`
+        );
+
+    const categoryRolesMessages = () =>
+        describeRefusal(
+            setCategoryRolesMutation.error,
+            categoryRolesProblems(),
+            describeCategoryRolesProblem,
+            count =>
+                `Nothing was changed. ${photos(count)} restricted to a role you removed - ${outlined(count)} Change ${count === 1 ? "its" : "their"} restriction first.`
+        );
+
+    const describeProblems = (id: Uuid) => messagesByMedia().get(id)?.join(" ");
+
+    const saveCategoryRoles = (roles: string[]) => {
+        const categoryId = activeCategoryId();
+
+        setPendingCategoryRoles(undefined);
+        bulkSetMediaRolesMutation.reset();
+        bulkClearMediaRolesMutation.reset();
+
+        if (categoryId) {
+            setCategoryRolesMutation.mutate({ categoryId, roles });
+        }
+    };
+
+    /*
+       Taking a role away takes the whole category from everyone who saw it
+       through that role, so that is asked about. Granting one is not.
+    */
+    const removedRoles = (roles: string[]) =>
+        (categoryRoles.data ?? []).filter(role => !roles.includes(role));
+
+    const onSaveCategoryRoles = (roles: string[]) => {
+        if (removedRoles(roles).length > 0) {
+            setPendingCategoryRoles(roles);
+        } else {
+            saveCategoryRoles(roles);
+        }
+    };
 
     const setAll = (doSelect: boolean) => {
         setMedia(media =>
@@ -383,6 +460,17 @@ const ViewBulkEdit: Component<Props> = props => {
                                     : []),
                                 ...restrictionMessages()
                             ]}
+                            categoryRoles={categoryRoles.data}
+                            onSaveCategoryRoles={onSaveCategoryRoles}
+                            isCategoryRolesPending={setCategoryRolesMutation.isPending}
+                            categoryRolesMessages={[
+                                ...(categoryRoles.isError
+                                    ? [
+                                          `Could not load who this category is shared with. ${describeError(categoryRoles.error)}`
+                                      ]
+                                    : []),
+                                ...categoryRolesMessages()
+                            ]}
                         />
                     }
                 >
@@ -395,9 +483,9 @@ const ViewBulkEdit: Component<Props> = props => {
                                     class="border-1 cursor-pointer text-center rounded-sm"
                                     classList={{
                                         "border-primary/40 hover:border-primary":
-                                            !problemsByMedia().has(m.id),
+                                            !messagesByMedia().has(m.id),
                                         "border-error outline-2 outline-error":
-                                            problemsByMedia().has(m.id)
+                                            messagesByMedia().has(m.id)
                                     }}
                                     title={describeProblems(m.id) ?? describeRestriction(m.id)}
                                     onClick={() => toggle(m.id)}
@@ -482,6 +570,21 @@ const ViewBulkEdit: Component<Props> = props => {
                         Remove the GPS override from {selectedIds().length} selected{" "}
                         {selectedIds().length === 1 ? "photo" : "photos"}? Each will go back to the
                         location its file recorded, if it has one.
+                    </ConfirmDialog>
+
+                    <ConfirmDialog
+                        open={!!pendingCategoryRoles()}
+                        title="Stop Sharing Category"
+                        confirmLabel="Save"
+                        destructive
+                        onConfirm={() => saveCategoryRoles(pendingCategoryRoles()!)}
+                        onCancel={() => setPendingCategoryRoles(undefined)}
+                    >
+                        Anyone who sees this category only as{" "}
+                        {removedRoles(pendingCategoryRoles() ?? []).join(" or ")} will lose it,
+                        along with every photo in it. Their browser may keep photos they already
+                        viewed for up to a week, and an app that already synced the category may
+                        keep listing it until it syncs from scratch.
                     </ConfirmDialog>
 
                     <ConfirmDialog

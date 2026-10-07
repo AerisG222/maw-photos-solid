@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { cleanup, render, screen, within } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
@@ -28,6 +28,9 @@ interface SidebarOptions {
     restrictionMessages?: string[];
     hiddenCount?: number;
     filter?: BulkEditFilter;
+    categoryRoles?: string[];
+    onSaveCategoryRoles?: (roles: string[]) => void;
+    categoryRolesMessages?: string[];
 }
 
 const sidebar = ({
@@ -37,7 +40,10 @@ const sidebar = ({
     onClearRestriction = () => undefined,
     restrictionMessages = [],
     hiddenCount = 0,
-    filter = "all"
+    filter = "all",
+    categoryRoles = ["admin", "friend"],
+    onSaveCategoryRoles = () => undefined,
+    categoryRolesMessages = []
 }: SidebarOptions = {}) => {
     atWidth(1280);
 
@@ -57,6 +63,10 @@ const sidebar = ({
                 onClearRestriction={onClearRestriction}
                 isRestrictionPending={false}
                 restrictionMessages={restrictionMessages}
+                categoryRoles={categoryRoles}
+                onSaveCategoryRoles={onSaveCategoryRoles}
+                isCategoryRolesPending={false}
+                categoryRolesMessages={categoryRolesMessages}
             />
         </MediaBreakpointProvider>
     ));
@@ -66,6 +76,24 @@ afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
 });
+
+/*
+   One card's controls. The two access cards offer the same role checkboxes,
+   and the gps card has a Save of its own, so a control is only unambiguous
+   within its card.
+*/
+const card = (title: string) => {
+    const element = screen.getByText(title).closest<HTMLElement>(".bg-base-300");
+
+    if (!element) {
+        throw new Error(`No card titled ${title}`);
+    }
+
+    return within(element);
+};
+
+const photoAccess = () => card("Photo Access");
+const categoryAccess = () => card("Category Access");
 
 describe("the bulk edit tools", () => {
     // beside the photographs, part of the page - never over them
@@ -150,10 +178,10 @@ describe("the bulk edit tools", () => {
 
         sidebar({ selectedCount: 2, onRestrict });
 
-        expect(screen.getByLabelText("admin")).toBeChecked();
-        expect(screen.getByLabelText("friend")).not.toBeChecked();
+        expect(photoAccess().getByLabelText("admin")).toBeChecked();
+        expect(photoAccess().getByLabelText("friend")).not.toBeChecked();
 
-        screen.getByLabelText("friend").click();
+        photoAccess().getByLabelText("friend").click();
         screen.getByRole("button", { name: "Restrict" }).click();
 
         expect(onRestrict).toHaveBeenCalledWith(["admin", "friend"]);
@@ -162,7 +190,7 @@ describe("the bulk edit tools", () => {
     test("cannot restrict to no roles at all", () => {
         sidebar({ selectedCount: 2 });
 
-        screen.getByLabelText("admin").click();
+        photoAccess().getByLabelText("admin").click();
 
         expect(screen.getByRole("button", { name: "Restrict" })).toBeDisabled();
     });
@@ -180,5 +208,55 @@ describe("the bulk edit tools", () => {
         sidebar({ restrictionMessages: ["There is no role named nope."] });
 
         expect(screen.getByText("There is no role named nope.")).toBeInTheDocument();
+    });
+});
+
+describe("the category access card", () => {
+    test("says who the category is shared with, and ticks them", () => {
+        sidebar({ categoryRoles: ["admin", "friend"] });
+
+        expect(categoryAccess().getByText("admin, friend")).toBeInTheDocument();
+        expect(categoryAccess().getByLabelText("admin")).toBeChecked();
+        expect(categoryAccess().getByLabelText("friend")).toBeChecked();
+        expect(categoryAccess().getByLabelText("demo")).not.toBeChecked();
+    });
+
+    // it acts on the category, so nothing has to be selected first
+    test("saves the roles chosen, whatever is selected", () => {
+        const onSaveCategoryRoles = vi.fn();
+
+        sidebar({ selectedCount: 0, onSaveCategoryRoles });
+
+        expect(categoryAccess().getByRole("button", { name: "Save" })).toBeDisabled();
+
+        categoryAccess().getByLabelText("demo").click();
+        categoryAccess().getByRole("button", { name: "Save" }).click();
+
+        expect(onSaveCategoryRoles).toHaveBeenCalledWith(["admin", "demo", "friend"]);
+    });
+
+    test("puts the roles back on cancel", () => {
+        sidebar();
+
+        categoryAccess().getByLabelText("friend").click();
+        categoryAccess().getByRole("button", { name: "Cancel" }).click();
+
+        expect(categoryAccess().getByLabelText("friend")).toBeChecked();
+        expect(categoryAccess().getByRole("button", { name: "Save" })).toBeDisabled();
+    });
+
+    // a category granted to nobody would be hidden from everyone
+    test("cannot be shared with no one", () => {
+        sidebar({ categoryRoles: ["admin"] });
+
+        categoryAccess().getByLabelText("admin").click();
+
+        expect(categoryAccess().getByRole("button", { name: "Save" })).toBeDisabled();
+    });
+
+    test("say why a change was refused", () => {
+        sidebar({ categoryRolesMessages: ["There is no role named nope."] });
+
+        expect(categoryAccess().getByText("There is no role named nope.")).toBeInTheDocument();
     });
 });

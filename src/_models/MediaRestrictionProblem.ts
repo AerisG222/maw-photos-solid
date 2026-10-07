@@ -48,3 +48,26 @@ export const describeRestrictionProblem = (problem: MediaRestrictionProblem): st
             return `It could not be restricted (${problem.reason}).`;
     }
 };
+
+/*
+   Why a change to a category's roles was refused. The same shape as a photo's
+   refusal, and read the same way; only the reasons differ. `mediaId` is set for
+   restriction_depends alone - a restricted photo in the category whose list
+   names a role being taken away.
+*/
+export const describeCategoryRolesProblem = (problem: MediaRestrictionProblem): string => {
+    const detail = problem.detail ?? "";
+
+    switch (problem.reason) {
+        case "restriction_depends":
+            return `A restricted photo here is visible to ${detail}. Change its restriction before removing ${detail} from the category.`;
+        case "would_hide_from_you":
+            return "You hold none of those roles, so the category would be hidden from you. Keep one of yours.";
+        case "unknown_role":
+            return `There is no role named ${detail}.`;
+        case "no_roles":
+            return "Choose at least one role.";
+        default:
+            return `The roles could not be changed (${problem.reason}).`;
+    }
+};

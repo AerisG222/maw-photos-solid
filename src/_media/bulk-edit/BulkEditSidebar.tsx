@@ -7,6 +7,7 @@ import SidePanel from "../../_components/overlay/SidePanel";
 import BulkEditFilterCard, { BulkEditFilter } from "./BulkEditFilterCard";
 import BulkEditGpsCard from "./BulkEditGpsCard";
 import BulkEditAccessCard from "./BulkEditAccessCard";
+import BulkEditCategoryAccessCard from "./BulkEditCategoryAccessCard";
 
 interface Props {
     onSave: (gps: GpsCoordinate) => void;
@@ -22,6 +23,10 @@ interface Props {
     onClearRestriction: () => void;
     isRestrictionPending: boolean;
     restrictionMessages: string[];
+    categoryRoles: string[] | undefined;
+    onSaveCategoryRoles: (roles: string[]) => void;
+    isCategoryRolesPending: boolean;
+    categoryRolesMessages: string[];
 }
 
 /*
@@ -65,7 +70,8 @@ const BulkEditSidebar: Component<Props> = props => {
             )
         },
         {
-            title: "Access",
+            // who may see the selected photos, within the category
+            title: "Photo Access",
             icon: "icon-[ic--round-lock]",
             component: (
                 <BulkEditAccessCard
@@ -75,6 +81,19 @@ const BulkEditSidebar: Component<Props> = props => {
                     selectedCount={props.selectedCount}
                     isPending={props.isRestrictionPending}
                     messages={props.restrictionMessages}
+                />
+            )
+        },
+        {
+            title: "Category Access",
+            icon: "icon-[ic--round-folder-shared]",
+            component: (
+                <BulkEditCategoryAccessCard
+                    roles={props.roles}
+                    categoryRoles={props.categoryRoles}
+                    onSave={props.onSaveCategoryRoles}
+                    isPending={props.isCategoryRolesPending}
+                    messages={props.categoryRolesMessages}
                 />
             )
         }
