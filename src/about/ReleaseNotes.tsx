@@ -6,6 +6,15 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.0.3</span> : <span class="date">2026-10-07</span>
+            </h3>
+            <p>Minor tweaks:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Do not show the bulk edit toolbar button for non-admins as they can't visit that screen</li>
+                <li>Expose some additional capabilities for administrators</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.0.2</span> : <span class="date">2026-10-04</span>
             </h3>
             <p>Minor tweaks:</p>
