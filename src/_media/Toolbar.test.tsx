@@ -27,6 +27,18 @@ import { tooltipOf } from "../_testing/tooltip";
    where the tools dock beside the grid rather than covering it.
 */
 
+/*
+   The real provider hangs its children off an async Auth0 client, so under test
+   it renders nothing at all. All the bar wants from it is whether the reader is
+   an administrator - bulk edit is theirs alone - so that is what is supplied,
+   switchable per test.
+*/
+const auth = vi.hoisted(() => ({ isAdmin: true }));
+
+vi.mock("../_contexts/AuthContext", () => ({
+    useAuthContext: () => [{ accountStatus: { isAdmin: auth.isAdmin } }]
+}));
+
 // the route builders ask a category for its year and slug
 const category = { year: 2019, slug: "a-category" } as unknown as Category;
 
@@ -78,6 +90,7 @@ afterEach(() => {
     cleanup();
     localStorage.clear();
     vi.unstubAllGlobals();
+    auth.isAdmin = true;
 });
 
 describe("which views a feed offers", () => {
@@ -102,6 +115,18 @@ describe("which views a feed offers", () => {
         toolbar(820);
 
         expect(offered().some(t => /bulk/i.test(t))).toBe(false);
+    });
+
+    // every edit it makes would be refused, and the view sends them back to the grid
+    test("nor is a reader who is not an admin, at any width", () => {
+        auth.isAdmin = false;
+        toolbar(1280);
+
+        const titles = offered().join(" ").toLowerCase();
+
+        expect(titles).not.toMatch(/bulk/);
+        expect(titles).toContain("grid");
+        expect(titles).toContain("map");
     });
 
     // the three that were only ever hidden for want of somewhere to put the chrome

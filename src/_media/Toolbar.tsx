@@ -1,6 +1,7 @@
 import { JSXElement, ParentComponent, Show, children, createMemo } from "solid-js";
 
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
+import { useAuthContext } from "../_contexts/AuthContext";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
 import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
@@ -37,6 +38,7 @@ const viewOrder: MediaView[] = [MediaViewGrid, MediaViewMap, MediaViewBulkEdit];
 const Toolbar: ParentComponent<Props> = props => {
     const [, { setView: setViewMode }] = useMediaSettingsContext();
     const { docked } = usePanelShape();
+    const [authState] = useAuthContext();
 
     const c = children(() => props.children);
     // resolved once - see the note in ToolbarGrid on reading a slot twice
@@ -57,12 +59,18 @@ const Toolbar: ParentComponent<Props> = props => {
        means reading the selection and the form at the same time. That only
        works where the tools sit *beside* the photographs rather than over them
        - which is exactly where the panel docks, so that is the test.
+
+       It is also an admin's tool. Every edit it makes is refused to anyone else,
+       and the view itself sends a non-admin back to the grid, so offering it
+       would only be a button that bounces.
     */
+    const canBulkEdit = () => docked() && !!authState.accountStatus?.isAdmin;
+
     const entries = createMemo<NavEntry[]>(() => {
         const available = props.mediaService.getAvailableRoutes();
 
         return viewOrder
-            .filter(view => view !== MediaViewBulkEdit || docked())
+            .filter(view => view !== MediaViewBulkEdit || canBulkEdit())
             .map(view => ({ view, route: available.find(r => r.mediaView === view) }))
             .filter(
                 (candidate): candidate is { view: MediaView; route: MediaAppRouteDefinition } =>
