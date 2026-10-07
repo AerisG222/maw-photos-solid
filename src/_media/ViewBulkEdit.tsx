@@ -26,6 +26,8 @@ import { BulkEditFilter } from "./bulk-edit/BulkEditFilterCard";
 import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import AdminGuard from "../_components/auth/AdminGuard";
 import Icon from "../_components/icon/Icon";
+import IconButton from "../_components/icon/IconButton";
+import BulkEditPreview from "./bulk-edit/BulkEditPreview";
 import { usePanelShape } from "../_components/overlay/SidePanel";
 
 /*
@@ -40,6 +42,8 @@ interface SelectableMedia {
     imageUrl: string | undefined;
     slug: string;
     isHiddenFromYou: boolean;
+    // what the preview opens - absent for a photo hidden from you
+    media: Media | undefined;
 }
 
 interface Props {
@@ -86,12 +90,15 @@ const ViewBulkEdit: Component<Props> = props => {
     // the roles waiting on an answer to "hide these from admins?"
     const [pendingLockoutRoles, setPendingLockoutRoles] = createSignal<string[]>();
     const [isConfirmingUnrestrict, setIsConfirmingUnrestrict] = createSignal(false);
+    // the photo open in the preview, by id so a refetch beneath it does not move it
+    const [previewId, setPreviewId] = createSignal<Uuid>();
 
     const buildSelectableMedia = (media: Media, isSelected: boolean): SelectableMedia => ({
         id: media.id,
         imageUrl: getMediaTeaserUrl(media)!,
         slug: media.slug,
         isHiddenFromYou: false,
+        media,
         isSelected
     });
 
@@ -103,6 +110,7 @@ const ViewBulkEdit: Component<Props> = props => {
         imageUrl: undefined,
         slug: restricted.mediaSlug,
         isHiddenFromYou: true,
+        media: undefined,
         isSelected
     });
 
@@ -246,10 +254,10 @@ const ViewBulkEdit: Component<Props> = props => {
         setFilter(next);
     };
 
-    const toggle = (media: SelectableMedia) => {
+    const toggle = (id: Uuid) => {
         setMedia(prev =>
             prev.map(m => {
-                if (m.id === media.id) {
+                if (m.id === id) {
                     return { ...m, isSelected: !m.isSelected };
                 }
 
@@ -308,6 +316,23 @@ const ViewBulkEdit: Component<Props> = props => {
         const ids = new Set(withGps.filter(x => x.gps.override).map(x => x.media.id));
 
         return visible.filter(m => ids.has(m.id));
+    };
+
+    /*
+       What the preview steps through: the photos on screen, in their order,
+       less any hidden from you - there is no image of those to show.
+    */
+    const previewItems = () =>
+        mediaToShow()
+            .filter(m => !!m.media)
+            .map(m => ({ media: m.media!, isSelected: m.isSelected }));
+
+    // closes itself if the photo leaves the grid - a filter change, or a refetch
+    const previewIndex = () => {
+        const id = previewId();
+        const index = id ? previewItems().findIndex(item => item.media.id === id) : -1;
+
+        return index === -1 ? undefined : index;
     };
 
     const describeRestriction = (id: Uuid) => {
@@ -375,7 +400,7 @@ const ViewBulkEdit: Component<Props> = props => {
                                             problemsByMedia().has(m.id)
                                     }}
                                     title={describeProblems(m.id) ?? describeRestriction(m.id)}
-                                    onClick={() => toggle(m)}
+                                    onClick={() => toggle(m.id)}
                                 >
                                     <div class="flex items-center justify-center gap-1">
                                         <input
@@ -396,7 +421,7 @@ const ViewBulkEdit: Component<Props> = props => {
                                         </Show>
                                     </div>
                                     <Show
-                                        when={m.imageUrl}
+                                        when={m.imageUrl && m.media}
                                         fallback={
                                             <div
                                                 class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
@@ -411,19 +436,40 @@ const ViewBulkEdit: Component<Props> = props => {
                                             </div>
                                         }
                                     >
-                                        <img
-                                            src={m.imageUrl}
-                                            /* the checkbox beside it carries the meaning */
-                                            alt=""
-                                            class="rounded-b-sm"
-                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
-                                        />
+                                        {/* the button shows on hover, or when tabbed to */}
+                                        <div class="relative group">
+                                            <img
+                                                src={m.imageUrl}
+                                                /* the checkbox beside it carries the meaning */
+                                                alt=""
+                                                class="rounded-b-sm"
+                                                width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                                height={
+                                                    getThumbnailSize(ThumbnailSizeDefault).height
+                                                }
+                                            />
+                                            <IconButton
+                                                label="Preview"
+                                                buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                                                onClick={() => setPreviewId(m.id)}
+                                            >
+                                                <Icon classes="icon-[ic--round-zoom-in] text-lg" />
+                                            </IconButton>
+                                        </div>
                                     </Show>
                                 </div>
                             )}
                         </For>
                     </div>
+
+                    <BulkEditPreview
+                        items={previewItems()}
+                        index={previewIndex()}
+                        onIndexChange={index => setPreviewId(previewItems()[index]?.media.id)}
+                        onToggle={media => toggle(media.id)}
+                        onClose={() => setPreviewId(undefined)}
+                        describeRestriction={media => describeRestriction(media.id)}
+                    />
 
                     <ConfirmDialog
                         open={isConfirmingClear()}

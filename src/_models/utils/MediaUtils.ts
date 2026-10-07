@@ -1,4 +1,5 @@
 import { Media } from "../Media";
+import { Scale } from "../Scale";
 import { getCategoryPath } from "../../categories/_routes";
 
 // one scale, so no size to choose between - see the note below
@@ -9,6 +10,24 @@ export const getMediaTeaserUrl = (media: Media) => {
     } else {
         return media.files.find(f => f.scale === "qqvg-fill" && f.type === "video-poster")?.path;
     }
+};
+
+/*
+   The file to show when a media fills the screen: the first of the scales the
+   config chose for this window that the media has, falling back to full hd. A
+   video's poster shares its scale codes, so it is skipped - this wants the
+   video itself.
+*/
+export const getMainMediaUrl = (media: Media, scales: Scale[]) => {
+    for (const scale of scales) {
+        const file = media.files.find(f => f.scale === scale.code && f.type !== "video-poster");
+
+        if (file) {
+            return file.path;
+        }
+    }
+
+    return media.files.find(f => f.scale === "full-hd")?.path ?? "";
 };
 
 /*

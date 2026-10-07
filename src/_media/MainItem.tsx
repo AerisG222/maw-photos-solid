@@ -10,6 +10,7 @@ import { createPanZoom } from "./_panZoom";
 import { SWIPE_DIRECTION, SWIPE_LEFT, SWIPE_RIGHT, swipe } from "../_directives/Swipe";
 import { tap } from "../_directives/Tap";
 import { useConfigContext } from "../_contexts/api/ConfigContext";
+import { getMainMediaUrl } from "../_models/utils/MediaUtils";
 
 // Reference the directives so the bundler keeps them for `use:swipe` / `use:tap`.
 void swipe;
@@ -87,21 +88,7 @@ const MainItem: Component<Props> = props => {
         mediaHolderDiv.click();
     };
 
-    const getMediaUrl = () => {
-        const scales = getScalesForMain();
-
-        for (const scale of scales) {
-            const file = props.media.files.find(
-                f => f.scale === scale.code && f.type !== "video-poster"
-            );
-
-            if (file) {
-                return file.path;
-            }
-        }
-
-        return props.media.files.find(f => f.scale === "full-hd")?.path ?? "";
-    };
+    const getMediaUrl = () => getMainMediaUrl(props.media, getScalesForMain());
 
     const captureElement = (el: HTMLImageElement | HTMLVideoElement) => {
         setMediaElement(el);
