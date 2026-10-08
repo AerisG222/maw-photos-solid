@@ -328,7 +328,41 @@ const ViewBulkEdit: Component<Props> = props => {
 
     const onFilterChange = (next: BulkEditFilter) => {
         setAll(false);
+        setRangeAnchorId(undefined);
         setFilter(next);
+    };
+
+    /*
+       Where a shift-click range starts: the photo last clicked without shift.
+       Everything on screen between it and the shift-clicked photo takes on the
+       anchor's state, so a range can be selected or deselected. Without an
+       anchor still on screen, a shift-click is a plain toggle.
+    */
+    const [rangeAnchorId, setRangeAnchorId] = createSignal<Uuid>();
+
+    const onItemClick = (id: Uuid, evt: MouseEvent) => {
+        const shown = mediaToShow();
+        const anchorIndex = shown.findIndex(m => m.id === rangeAnchorId());
+        const index = shown.findIndex(m => m.id === id);
+
+        if (!evt.shiftKey || anchorIndex === -1 || index === -1) {
+            setRangeAnchorId(id);
+            toggle(id);
+            return;
+        }
+
+        const doSelect = shown[anchorIndex].isSelected;
+        const range = new Set(
+            shown
+                .slice(Math.min(anchorIndex, index), Math.max(anchorIndex, index) + 1)
+                .map(m => m.id)
+        );
+
+        setMedia(media =>
+            media.map(m =>
+                range.has(m.id) && m.isSelected !== doSelect ? { ...m, isSelected: doSelect } : m
+            )
+        );
     };
 
     const toggle = (id: Uuid) => {
@@ -488,16 +522,18 @@ const ViewBulkEdit: Component<Props> = props => {
                                             messagesByMedia().has(m.id)
                                     }}
                                     title={describeProblems(m.id) ?? describeRestriction(m.id)}
-                                    onClick={() => toggle(m.id)}
+                                    // keep a shift-click from also selecting text across the grid
+                                    onMouseDown={evt => evt.shiftKey && evt.preventDefault()}
+                                    onClick={evt => onItemClick(m.id, evt)}
                                 >
                                     <div class="flex items-center justify-center gap-1">
                                         <input
                                             type="checkbox"
                                             class="checkbox checkbox-sm my-1"
                                             checked={m.isSelected}
-                                            onInput={evt =>
-                                                (m.isSelected = evt.currentTarget.checked)
-                                            }
+                                            // the click on the photo around it decides the state - left to
+                                            // itself the box would flip even when a shift-click range does not
+                                            onClick={evt => evt.preventDefault()}
                                         />
                                         <Show when={describeRestriction(m.id)}>
                                             {description => (
