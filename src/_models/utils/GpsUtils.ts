@@ -34,3 +34,6 @@ export const parseGps = (val: string): GpsCoordinate | undefined => {
         longitude: lng
     };
 };
+
+// the "latitude,longitude" form parseGps reads back, for pasting as an override elsewhere
+export const formatGps = (gps: GpsCoordinate) => `${gps.latitude},${gps.longitude}`;

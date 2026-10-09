@@ -1,6 +1,7 @@
-import { Component, createEffect, createSignal, Show } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup, Show } from "solid-js";
 
-import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
+import { GpsOverride, formatGps, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
+import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
@@ -78,6 +79,48 @@ const MetadataEditorCard: Component<Props> = props => {
 
     const hasOverride = () => !!gps.data?.override;
 
+    // what is in the override boxes, saved or not, so a pasted location can be passed along too
+    const overrideToCopy = (): GpsCoordinate | undefined =>
+        isOverrideValid()
+            ? { latitude: parseFloat(override().lat!), longitude: parseFloat(override().lng!) }
+            : undefined;
+
+    // which copy button last answered, and how - shown on it for a moment
+    const [copyResult, setCopyResult] = createSignal<{
+        which: "recorded" | "override";
+        copied: boolean;
+    }>();
+    let copyResultTimer: ReturnType<typeof setTimeout> | undefined;
+
+    onCleanup(() => clearTimeout(copyResultTimer));
+
+    const copy = async (evt: Event, which: "recorded" | "override", gps: GpsCoordinate) => {
+        evt.preventDefault();
+
+        let copied = true;
+
+        try {
+            await navigator.clipboard.writeText(formatGps(gps));
+        } catch {
+            // no clipboard outside a secure context, or permission refused
+            copied = false;
+        }
+
+        setCopyResult({ which, copied });
+        clearTimeout(copyResultTimer);
+        copyResultTimer = setTimeout(() => setCopyResult(undefined), 1500);
+    };
+
+    const copyLabel = (which: "recorded" | "override") => {
+        const result = copyResult();
+
+        if (result?.which !== which) {
+            return "Copy";
+        }
+
+        return result.copied ? "Copied" : "Copy Failed";
+    };
+
     createEffect(() => {
         // update inputs when navigating between media
         if (props.activeMedia!.id) {
@@ -112,7 +155,7 @@ const MetadataEditorCard: Component<Props> = props => {
     return (
         <Show when={gps.isSuccess}>
             <form>
-                <div class="grid grid-cols-3 grid-rows-4 gap-2">
+                <div class="grid grid-cols-3 grid-rows-5 gap-2">
                     <div>
                         <label class="label">Latitude</label>
                     </div>
@@ -169,6 +212,42 @@ const MetadataEditorCard: Component<Props> = props => {
                                 }))
                             }
                         />
+                    </div>
+
+                    {/* each under the column it copies, as latitude,longitude */}
+                    <div class="col-start-2">
+                        <button
+                            class="btn btn-sm btn-outline w-full"
+                            title="Copy the recorded location as latitude,longitude"
+                            onClick={evt => {
+                                const recorded = gps.data?.recorded;
+
+                                if (recorded) {
+                                    void copy(evt, "recorded", recorded);
+                                }
+                            }}
+                            disabled={!gps.data?.recorded}
+                            classList={{ "btn-disabled": !gps.data?.recorded }}
+                        >
+                            {copyLabel("recorded")}
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            class="btn btn-sm btn-outline w-full"
+                            title="Copy the override as latitude,longitude"
+                            onClick={evt => {
+                                const ov = overrideToCopy();
+
+                                if (ov) {
+                                    void copy(evt, "override", ov);
+                                }
+                            }}
+                            disabled={!overrideToCopy()}
+                            classList={{ "btn-disabled": !overrideToCopy() }}
+                        >
+                            {copyLabel("override")}
+                        </button>
                     </div>
 
                     <div>
