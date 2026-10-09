@@ -434,7 +434,15 @@ const ViewMap: Component<Props> = props => {
         pathParts?.lines.forEach(line => line.setMap(isShown ? map : null));
         pathParts?.ends.forEach(end => (end.map = isShown ? map : null));
 
-        pathControl?.setAttribute("aria-pressed", String(isShown));
+        /*
+           Named for what a press would do, so the state reads without the
+           color. Not also aria-pressed: with the name already changing, a
+           screen reader would announce "hide trip path, pressed".
+        */
+        const label = isShown ? "Hide trip path" : "Show trip path";
+
+        pathControl?.setAttribute("title", label);
+        pathControl?.setAttribute("aria-label", label);
         // on, in the blue the map's own controls use for a choice that is made
         pathControl?.classList.toggle("text-blue-500!", isShown);
     };
