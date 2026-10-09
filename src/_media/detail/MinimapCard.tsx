@@ -4,12 +4,16 @@ import {
     createMemo,
     createResource,
     createSignal,
-    onMount
+    onMount,
+    Show
 } from "solid-js";
 import { Category } from "../../_models/Category";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
+import { getGoogleMapsUrl } from "../../_models/utils/GpsUtils";
+
+import Icon from "../../_components/icon/Icon";
 
 interface Props {
     activeCategory: Category | undefined;
@@ -104,7 +108,26 @@ const MinimapCard: Component<Props> = props => {
         setIsMounted(true);
     });
 
-    return <div class="h-[320px] w-full" ref={el} />;
+    return (
+        <>
+            <div class="h-[320px] w-full" ref={el} />
+
+            {/* google maps itself, for street view, directions and the rest */}
+            <Show when={effectiveGps()}>
+                {gps => (
+                    <a
+                        href={getGoogleMapsUrl(gps())}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="link link-primary mt-2 inline-flex items-center gap-1 text-sm"
+                    >
+                        Open in Google Maps
+                        <Icon classes="icon-[ic--round-open-in-new]" />
+                    </a>
+                )}
+            </Show>
+        </>
+    );
 };
 
 export default MinimapCard;

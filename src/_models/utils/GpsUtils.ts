@@ -48,3 +48,7 @@ export const copyGps = async (gps: GpsCoordinate) => {
         return false;
     }
 };
+
+// google maps itself at this spot - street view, directions and all - with no api or key involved
+export const getGoogleMapsUrl = (gps: GpsCoordinate) =>
+    `https://www.google.com/maps/search/?api=1&query=${formatGps(gps)}`;
