@@ -9,7 +9,6 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { MediaWithGps } from "../../_media/models/MediaWithGps";
 import { MediaView } from "../../_models/MediaView";
 import { IMapsMediaService } from "../../_media/services/IMapsMediaService";
-import { Uuid } from "../../_models/Uuid";
 
 export class CategoryMapsMediaService extends CategoryMediaService implements IMapsMediaService {
     constructor(
@@ -35,88 +34,53 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         }
     };
 
-    getCurrIndexWithGps = (list: MediaWithGps[], currId: Uuid) =>
-        list?.findIndex(x => x.media.id === currId);
+    /*
+       The photos with a location either side of the active one, in the
+       category's order - which are the only ones the map can move to.
 
-    getNextIndexWithGps = (list: MediaWithGps[], currId: Uuid) => {
-        const nextIndex = this.getCurrIndexWithGps(list, currId) + 1;
+       Found by where each sits in the whole category, so they are found from a
+       photo without a location too: the map can be opened on one, from the grid
+       or a link, and looking it up among the located photos found nothing, so
+       next, previous and the slideshow all quietly did nothing. With no photo
+       active, both lead to the first.
+    */
+    private locatedNeighbors = () => {
+        const located = this.mediaWithGps();
+        const order = new Map(this.getMediaList().map((media, i) => [media.id, i]));
+        const active = this.getActiveMedia();
+        const activeIndex = active ? order.get(active.id) : undefined;
 
-        return nextIndex < list.length ? nextIndex : undefined;
-    };
+        if (activeIndex === undefined) {
+            return { previous: located[0]?.media, next: located[0]?.media };
+        }
 
-    getPreviousIndexWithGps = (list: MediaWithGps[], currId: Uuid) => {
-        const prevIndex = this.getCurrIndexWithGps(list, currId) - 1;
+        const indexOf = (item: MediaWithGps) => order.get(item.media.id) ?? -1;
 
-        return prevIndex >= 0 ? prevIndex : undefined;
-    };
-
-    getNextMediaWithGps = (list: MediaWithGps[], currId: Uuid) => {
-        const nextIndex = this.getNextIndexWithGps(list, currId);
-
-        return nextIndex ? list[nextIndex].media : undefined;
-    };
-
-    getPreviousMediaWithGps = (list: MediaWithGps[], currId: Uuid) => {
-        const prevIndex = this.getPreviousIndexWithGps(list, currId);
-
-        return prevIndex ? list[prevIndex].media : undefined;
+        return {
+            previous: located.findLast(item => indexOf(item) < activeIndex)?.media,
+            next: located.find(item => indexOf(item) > activeIndex)?.media
+        };
     };
 
     override moveNext = () => {
-        const list = this.mediaWithGps();
-        const currMedia = this.findMediaWithGpsBySlug(
-            list,
-            this.params.categoryYear,
-            this.params.categorySlug,
-            this.params.mediaSlug
-        );
+        const next = this.locatedNeighbors().next;
 
-        if (currMedia) {
-            const nextMedia = this.getNextMediaWithGps(list, currMedia.media.id);
-
-            if (nextMedia) {
-                this.navigateToMedia(this.view, nextMedia);
-            }
+        if (next) {
+            this.navigateToMedia(this.view, next);
         }
     };
 
     override movePrevious = () => {
-        const list = this.mediaWithGps();
-        const currMedia = this.findMediaWithGpsBySlug(
-            list,
-            this.params.categoryYear,
-            this.params.categorySlug,
-            this.params.mediaSlug
-        );
+        const previous = this.locatedNeighbors().previous;
 
-        if (currMedia) {
-            const prevMedia = this.getPreviousMediaWithGps(list, currMedia.media.id);
-
-            if (prevMedia) {
-                this.navigateToMedia(this.view, prevMedia);
-            }
+        if (previous) {
+            this.navigateToMedia(this.view, previous);
         }
     };
 
-    override isActiveMediaFirst = () => {
-        const list = this.mediaWithGps();
+    override isActiveMediaFirst = () => !this.locatedNeighbors().previous;
 
-        if (!list || list.length === 0) {
-            return true;
-        }
-
-        return list[0].media.id === this.getActiveMedia()?.id;
-    };
-
-    override isActiveMediaLast = () => {
-        const list = this.mediaWithGps();
-
-        if (!list || list.length === 0) {
-            return true;
-        }
-
-        return list[list.length - 1].media.id === this.getActiveMedia()?.id;
-    };
+    override isActiveMediaLast = () => !this.locatedNeighbors().next;
 
     isReady = () =>
         this.gpsListQuery().isSuccess &&
@@ -160,19 +124,4 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         this.preferredGpsLocation(
             this.mediaWithGps().find(m => m.media.id === this.getActiveMedia()?.id)
         );
-
-    findMediaWithGpsBySlug = (
-        list?: MediaWithGps[],
-        categoryYearAsString?: string,
-        categorySlug?: string,
-        mediaSlug?: string
-    ) =>
-        list && categoryYearAsString && categorySlug && mediaSlug
-            ? list?.find(
-                  m =>
-                      m.media.categoryYear === parseInt(categoryYearAsString, 10) &&
-                      m.media.categorySlug === categorySlug &&
-                      m.media.slug === mediaSlug
-              )
-            : undefined;
 }

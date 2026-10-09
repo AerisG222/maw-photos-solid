@@ -19,6 +19,7 @@ export type MediaSettingsContextValue = [
         setSlideshowSeconds: (slideshowSeconds: number) => void;
         setMapType: (mapType: MapTypeIdType) => void;
         setMapZoom: (mapZoom: MapZoomLevelIdType) => void;
+        setMapShowPath: (mapShowPath: boolean) => void;
         setInspectorOpen: (inspectorOpen: boolean) => void;
         setInspectorCards: (inspectorCards: InspectorCardIdType[]) => void;
         toggleInspectorCard: (card: InspectorCardIdType) => void;
@@ -56,6 +57,8 @@ export const MediaSettingsProvider: ParentComponent = props => {
 
     const setMapZoom = (mapZoom: MapZoomLevelIdType) => updateState({ mapZoom });
 
+    const setMapShowPath = (mapShowPath: boolean) => updateState({ mapShowPath });
+
     const setInspectorOpen = (inspectorOpen: boolean) => updateState({ inspectorOpen });
 
     const setInspectorCards = (inspectorCards: InspectorCardIdType[]) =>
@@ -81,6 +84,7 @@ export const MediaSettingsProvider: ParentComponent = props => {
                     setSlideshowSeconds,
                     setMapType,
                     setMapZoom,
+                    setMapShowPath,
                     setInspectorOpen,
                     setInspectorCards,
                     toggleInspectorCard

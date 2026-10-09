@@ -1,5 +1,6 @@
-import { Component, createEffect } from "solid-js";
+import { Component, Show, createEffect } from "solid-js";
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
+import { useAppSettingsContext } from "../_contexts/settings/AppSettingsContext";
 
 import { MediaViewMap } from "../_models/MediaView";
 import { useCategoryMapServices } from "./hooks/useCategoryMapServices";
@@ -9,7 +10,8 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Loading from "../_components/loading/Loading";
 
 const Map: Component = () => {
-    const [media, { setMapType, setMapZoom }] = useMediaSettingsContext();
+    const [media, { setMapType, setMapZoom, setMapShowPath }] = useMediaSettingsContext();
+    const [, { resolvedTheme }] = useAppSettingsContext();
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
         useCategoryMapServices(MediaViewMap);
 
@@ -23,13 +25,20 @@ const Map: Component = () => {
             when={!isLoading()}
             skeleton={<Loading />}
         >
-            <ViewMap
-                mediaService={mediaService}
-                slideshowService={slideshowService}
-                mapState={media}
-                setMapType={setMapType}
-                setZoom={setMapZoom}
-            />
+            {/* a map takes its color scheme only when made, so a new theme means a new map */}
+            <Show when={resolvedTheme()} keyed>
+                {theme => (
+                    <ViewMap
+                        mediaService={mediaService}
+                        slideshowService={slideshowService}
+                        mapState={media}
+                        theme={theme}
+                        setMapType={setMapType}
+                        setZoom={setMapZoom}
+                        setShowPath={setMapShowPath}
+                    />
+                )}
+            </Show>
         </AsyncBoundary>
     );
 };

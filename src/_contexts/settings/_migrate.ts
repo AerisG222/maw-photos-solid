@@ -174,6 +174,7 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
             // the info panel kept a second copy of both; the map view's wins
             mapType: str(mediaMap.mapType) ?? defaultMediaSettings.mapType,
             mapZoom: num(mediaMap.zoom) ?? defaultMediaSettings.mapZoom,
+            mapShowPath: defaultMediaSettings.mapShowPath,
             inspectorOpen: bool(infoPanel.expandInfoPanel) ?? defaultMediaSettings.inspectorOpen,
             inspectorCards: migrateInspectorCards(infoPanel)
         },

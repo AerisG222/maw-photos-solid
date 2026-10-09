@@ -10,10 +10,12 @@ import {
 import { Cluster, MarkerClusterer, SuperClusterAlgorithm } from "@googlemaps/markerclusterer";
 import { MapTypeIdType } from "../_models/MapType";
 import { MapZoomLevelIdType } from "../_models/MapZoomLevel";
+import { ResolvedThemeIdType, ThemeDark } from "../_models/Theme";
 
 import { Media } from "../_models/Media";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
 import { getGoogleMapsUrl } from "../_models/utils/GpsUtils";
+import { pathEndColor, pathSegmentColors, pathStartColor } from "./_pathGradient";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
@@ -38,9 +40,12 @@ interface Pin {
 interface Props {
     mediaService: IMapsMediaService;
     slideshowService: SlideshowService;
-    mapState: { mapType: MapTypeIdType; mapZoom: MapZoomLevelIdType };
+    mapState: { mapType: MapTypeIdType; mapZoom: MapZoomLevelIdType; mapShowPath: boolean };
+    // fixed for the life of the map, which only takes a color scheme when made
+    theme: ResolvedThemeIdType;
     setMapType: (mapType: string) => void;
     setZoom: (zoom: number) => void;
+    setShowPath: (showPath: boolean) => void;
 }
 
 const ViewMap: Component<Props> = props => {
@@ -203,7 +208,10 @@ const ViewMap: Component<Props> = props => {
         mapTypeControl: true,
         mapId: "af11584565f27198",
         mapTypeId: props.mapState.mapType,
-        zoom: center ? props.mapState.mapZoom : 2
+        zoom: center ? props.mapState.mapZoom : 2,
+        // read once: a new theme makes a new map
+        colorScheme:
+            props.theme === ThemeDark ? google.maps.ColorScheme.DARK : google.maps.ColorScheme.LIGHT
     });
 
     async function initMap(initialLocation: GpsCoordinate | undefined): Promise<void> {
@@ -229,6 +237,9 @@ const ViewMap: Component<Props> = props => {
                     props.setMapType(mapType);
                 }
             });
+            pathControl = buildControl("icon-[ic--round-route]", "Show trip path", () =>
+                props.setShowPath(!props.mapState.mapShowPath)
+            );
             /* eslint-enable solid/reactivity */
             infoWindow = new InfoWindow({ content: "" });
             // closed with its button or by the map - nothing is being shown, so nothing is marked
@@ -236,7 +247,10 @@ const ViewMap: Component<Props> = props => {
                 reopenWhenClustered = undefined;
                 highlight([]);
             });
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(buildFitAllControl());
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+                buildControl("icon-[ic--round-zoom-out-map]", "Show all photos", fitAll)
+            );
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(pathControl);
 
             google.maps.event.addListenerOnce(map, "idle", async () => {
                 await addMarkers();
@@ -250,11 +264,7 @@ const ViewMap: Component<Props> = props => {
        only centers on it rather than zooming as far in as it can.
     */
     const fitAll = () => {
-        const positions = props.mediaService
-            .mediaWithGps()
-            .map(item => props.mediaService.preferredGpsLocation(item))
-            .filter(gps => !!gps)
-            .map(gps => ({ lat: gps.latitude, lng: gps.longitude }));
+        const positions = photoPositions();
 
         if (positions.length === 1) {
             map.panTo(positions[0]);
@@ -266,22 +276,171 @@ const ViewMap: Component<Props> = props => {
         }
     };
 
-    // in the look of the map's own controls, which stay light whatever the app's theme
-    const buildFitAllControl = () => {
+    // where each photo was taken, in the category's order
+    const photoPositions = () =>
+        props.mediaService
+            .mediaWithGps()
+            .map(item => props.mediaService.preferredGpsLocation(item))
+            .filter(gps => !!gps)
+            .map(gps => ({ lat: gps.latitude, lng: gps.longitude }));
+
+    // in the look of the map's own controls, which are light or dark with the map
+    const buildControl = (iconClass: string, label: string, onClick: () => void) => {
         const button = document.createElement("button");
         const icon = document.createElement("span");
 
-        icon.className = "icon-[ic--round-zoom-out-map] align-middle text-lg";
+        icon.className = `${iconClass} align-middle text-lg`;
         button.type = "button";
-        button.title = "Show all photos";
-        button.setAttribute("aria-label", "Show all photos");
+        button.title = label;
+        button.setAttribute("aria-label", label);
         button.className =
-            "m-2.5 flex size-6 cursor-pointer items-center justify-center rounded-xs bg-white text-neutral-600 shadow-md hover:text-neutral-900";
-        button.addEventListener("click", fitAll);
+            props.theme === ThemeDark
+                ? "m-2.5 -mb-1 flex size-6 cursor-pointer items-center justify-center rounded-xs bg-neutral-800 text-neutral-300 shadow-md hover:text-white"
+                : "m-2.5 -mb-1 flex size-6 cursor-pointer items-center justify-center rounded-xs bg-white text-neutral-600 shadow-md hover:text-neutral-900";
+        button.addEventListener("click", onClick);
         button.append(icon);
 
         return button;
     };
+
+    /*
+       The photos joined in order, with arrows for which way they went - for a
+       trip, the route taken. The category's order is the order the photos
+       were added to it, which is usually the order they were taken in. A
+       photo taken where the last one was adds nothing, so is skipped.
+
+       Each hop is drawn in its own color, stepping from the start of the
+       gradient to its end, over one dark line beneath them all so it reads on
+       pale roads and busy imagery alike. The arrows ride a line of their own
+       on top - on a hop shorter than the spacing between them, they would not
+       be drawn at all. Geodesic, so a long flight bends the way the route did.
+    */
+    let pathParts:
+        | {
+              lines: google.maps.Polyline[];
+              ends: google.maps.marker.AdvancedMarkerElement[];
+          }
+        | undefined;
+
+    const buildPath = () => {
+        const path = photoPositions().filter(
+            (position, i, all) =>
+                i === 0 || position.lat !== all[i - 1].lat || position.lng !== all[i - 1].lng
+        );
+
+        if (path.length < 2) {
+            return { lines: [], ends: [] };
+        }
+
+        const arrow = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            scale: 2.5,
+            fillColor: "#ffffff",
+            fillOpacity: 1,
+            strokeColor: "#000000",
+            strokeOpacity: 0.8,
+            strokeWeight: 1
+        };
+
+        const edge = new google.maps.Polyline({
+            path,
+            geodesic: true,
+            strokeColor: "#000000",
+            strokeOpacity: 0.6,
+            strokeWeight: 6,
+            zIndex: 1
+        });
+
+        const hops = pathSegmentColors(path.length - 1).map(
+            (color, i) =>
+                new google.maps.Polyline({
+                    path: [path[i], path[i + 1]],
+                    geodesic: true,
+                    strokeColor: color,
+                    strokeOpacity: 1,
+                    strokeWeight: 3.5,
+                    zIndex: 2
+                })
+        );
+
+        const arrows = new google.maps.Polyline({
+            path,
+            geodesic: true,
+            strokeOpacity: 0,
+            icons: [{ icon: arrow, offset: "60px", repeat: "120px" }],
+            zIndex: 3
+        });
+
+        return {
+            lines: [edge, ...hops, arrows],
+            ends: [
+                buildPathEnd(
+                    path[0],
+                    pathStartColor,
+                    "icon-[ic--round-play-arrow]",
+                    "Start",
+                    false
+                ),
+                buildPathEnd(
+                    path[path.length - 1],
+                    pathEndColor,
+                    "icon-[ic--round-flag]",
+                    "End",
+                    true
+                )
+            ]
+        };
+    };
+
+    /*
+       A dot in the gradient's own color where the path begins or ends - in a
+       small category, or one with most photos in one place, the colors alone
+       are too subtle to tell which end is which. Centered on the spot, beneath
+       the photo pins there.
+    */
+    const buildPathEnd = (
+        position: google.maps.LatLngLiteral,
+        color: string,
+        iconClass: string,
+        title: string,
+        isLight: boolean
+    ) => {
+        const dot = document.createElement("div");
+        const icon = document.createElement("span");
+
+        dot.className =
+            "flex size-6 items-center justify-center rounded-full border-2 border-white shadow-md shadow-black/60";
+        dot.style.backgroundColor = color;
+        // dark on the bright yellow, white on the blue
+        icon.className = `${iconClass} text-base ${isLight ? "text-neutral-900" : "text-white"}`;
+        dot.append(icon);
+
+        return new google.maps.marker.AdvancedMarkerElement({
+            position,
+            content: dot,
+            title,
+            anchorLeft: "-50%",
+            anchorTop: "-50%",
+            zIndex: -1
+        });
+    };
+
+    // built the first time it is wanted, then only shown and hidden
+    const showPath = (isShown: boolean) => {
+        if (isShown) {
+            pathParts ??= buildPath();
+        }
+
+        pathParts?.lines.forEach(line => line.setMap(isShown ? map : null));
+        pathParts?.ends.forEach(end => (end.map = isShown ? map : null));
+
+        pathControl?.setAttribute("aria-pressed", String(isShown));
+        // on, in the blue the map's own controls use for a choice that is made
+        pathControl?.classList.toggle("text-blue-500!", isShown);
+    };
+
+    // the toggle for the path, made with the map
+    let pathControl: HTMLButtonElement | undefined;
 
     // a link out to google maps at this spot, for street view and the rest
     const buildGoogleMapsLink = (gps: GpsCoordinate) => {
@@ -514,6 +673,12 @@ const ViewMap: Component<Props> = props => {
     createEffect(() => {
         if (markersAdded()) {
             updateMap();
+        }
+    });
+
+    createEffect(() => {
+        if (markersAdded()) {
+            showPath(props.mapState.mapShowPath);
         }
     });
 

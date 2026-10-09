@@ -51,6 +51,8 @@ export interface MediaSettingsState {
     // one map preference, read by the map view and the inspector's minimap card
     readonly mapType: MapTypeIdType;
     readonly mapZoom: MapZoomLevelIdType;
+    // a line through the photos in order - for a trip, the route taken
+    readonly mapShowPath: boolean;
     readonly inspectorOpen: boolean;
     readonly inspectorCards: InspectorCardIdType[];
 }
@@ -60,6 +62,8 @@ export const defaultMediaSettings: MediaSettingsState = {
     slideshowSeconds: 2,
     mapType: defaultMapType,
     mapZoom: defaultMapZoomLevel,
+    // off: most categories are not a journey, and their path would only scribble
+    mapShowPath: false,
     inspectorOpen: false,
     inspectorCards: defaultInspectorCards
 };

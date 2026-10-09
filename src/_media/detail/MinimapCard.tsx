@@ -9,6 +9,8 @@ import {
 } from "solid-js";
 import { Category } from "../../_models/Category";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
+import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
+import { ResolvedThemeIdType, ThemeDark } from "../../_models/Theme";
 import { Media } from "../../_models/Media";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { getGoogleMapsUrl } from "../../_models/utils/GpsUtils";
@@ -20,7 +22,24 @@ interface Props {
     activeMedia: Media | undefined;
 }
 
+// a map takes its color scheme only when made, so a new theme means a new map
 const MinimapCard: Component<Props> = props => {
+    const [, { resolvedTheme }] = useAppSettingsContext();
+
+    return (
+        <Show when={resolvedTheme()} keyed>
+            {theme => (
+                <Minimap
+                    activeCategory={props.activeCategory}
+                    activeMedia={props.activeMedia}
+                    theme={theme}
+                />
+            )}
+        </Show>
+    );
+};
+
+const Minimap: Component<Props & { theme: ResolvedThemeIdType }> = props => {
     const [isMounted, setIsMounted] = createSignal(false);
     const { gpsQuery } = useMediaContext();
     const [media, { setMapType, setMapZoom }] = useMediaSettingsContext();
@@ -29,15 +48,19 @@ const MinimapCard: Component<Props> = props => {
     const gps = gpsQuery(() => props.activeMedia!.id);
     const effectiveGps = createMemo(() => gps.data?.override ?? gps.data?.recorded);
 
-    const defaultMapOptions = {
+    // made once the maps api has loaded, as the color scheme is one of its values
+    const defaultMapOptions = () => ({
         controlSize: 24,
         center: { lat: 0, lng: 0 },
         fullscreenControl: false,
         mapTypeControl: true,
         mapId: "dd8322a8b42d6496",
         mapTypeId: media.mapType,
-        zoom: media.mapZoom
-    };
+        zoom: media.mapZoom,
+        // read once: a new theme makes a new map
+        colorScheme:
+            props.theme === ThemeDark ? google.maps.ColorScheme.DARK : google.maps.ColorScheme.LIGHT
+    });
 
     const [initialized, setInitialized] = createSignal(false);
     let el: HTMLDivElement | undefined;
@@ -49,7 +72,9 @@ const MinimapCard: Component<Props> = props => {
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
         if (el) {
-            map = new Map(el, defaultMapOptions);
+            const options = defaultMapOptions();
+
+            map = new Map(el, options);
             map.addListener("zoom_changed", () => {
                 const zoom = map.getZoom();
 
@@ -65,7 +90,7 @@ const MinimapCard: Component<Props> = props => {
                 }
             });
 
-            marker = new AdvancedMarkerElement({ map, position: defaultMapOptions.center });
+            marker = new AdvancedMarkerElement({ map, position: options.center });
 
             setInitialized(true);
         }
