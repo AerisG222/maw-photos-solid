@@ -6,6 +6,29 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.1.0</span> : <span class="date">2026-10-09</span>
+            </h3>
+            <p>Improved map view:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Show each photo on the map as a small thumbnail rather than a pin</li>
+                <li>Group nearby photos into a single marker showing how many it holds</li>
+                <li>Click a group to see all of its photos and choose one</li>
+                <li>Preview a larger version of the selected photo or video right on the map</li>
+                <li>Highlight the photo or group being shown in the popup</li>
+                <li>Add a button to fit every photo in view</li>
+                <li>
+                    Optionally show the trip path, joining the photos in order with a color that
+                    runs from start to end
+                </li>
+                <li>Follow the light or dark theme on the map and minimap</li>
+                <li>Open a photo's location in Google Maps from the map popup or the minimap</li>
+                <li>
+                    Fix next, previous, and the slideshow on the map when the current media has no
+                    GPS data
+                </li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.0.4</span> : <span class="date">2026-10-09</span>
             </h3>
             <p>Minor admin enhancements:</p>
