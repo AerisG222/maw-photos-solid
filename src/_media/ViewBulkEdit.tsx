@@ -1,4 +1,4 @@
-import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import { Component, For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 
 import { Media } from "../_models/Media";
@@ -7,6 +7,7 @@ import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize
 import { MediaViewGrid } from "../_models/MediaView";
 import { Uuid } from "../_models/Uuid";
 import { getMediaTeaserUrl } from "../_models/utils/MediaUtils";
+import { copyGps } from "../_models/utils/GpsUtils";
 import { IMapsMediaService } from "./services/IMapsMediaService";
 import { useMediaContext } from "../_contexts/api/MediaContext";
 import { useCategoriesContext } from "../_contexts/api/CategoriesContext";
@@ -446,6 +447,50 @@ const ViewBulkEdit: Component<Props> = props => {
         return index === -1 ? undefined : index;
     };
 
+    // each photo's location to copy - the override where there is one, else what the file recorded
+    const gpsById = createMemo(
+        () =>
+            new Map(
+                props.mediaService
+                    .mediaWithGps()
+                    .map(x => [x.media.id, props.mediaService.preferredGpsLocation(x)] as const)
+            )
+    );
+
+    // the photo whose location was last copied, and whether it took - shown on its button for a moment
+    const [copyResult, setCopyResult] = createSignal<{ id: Uuid; copied: boolean }>();
+    let copyResultTimer: ReturnType<typeof setTimeout> | undefined;
+
+    onCleanup(() => clearTimeout(copyResultTimer));
+
+    const copyLocation = async (id: Uuid, gps: GpsCoordinate) => {
+        const copied = await copyGps(gps);
+
+        setCopyResult({ id, copied });
+        clearTimeout(copyResultTimer);
+        copyResultTimer = setTimeout(() => setCopyResult(undefined), 1500);
+    };
+
+    const copyLabel = (id: Uuid) => {
+        const result = copyResult();
+
+        if (result?.id !== id) {
+            return "Copy Location";
+        }
+
+        return result.copied ? "Copied" : "Copy Failed";
+    };
+
+    const copyIcon = (id: Uuid) => {
+        const result = copyResult();
+
+        if (result?.id !== id) {
+            return "icon-[ic--round-content-copy]";
+        }
+
+        return result.copied ? "icon-[ic--round-check]" : "icon-[ic--round-error-outline]";
+    };
+
     const describeRestriction = (id: Uuid) => {
         const restriction = restrictionById().get(id);
 
@@ -560,7 +605,7 @@ const ViewBulkEdit: Component<Props> = props => {
                                             </div>
                                         }
                                     >
-                                        {/* the button shows on hover, or when tabbed to */}
+                                        {/* preview shows on hover, or when tabbed to; copy always shows, marking a photo with a location */}
                                         <div class="relative group">
                                             <img
                                                 src={m.imageUrl}
@@ -572,6 +617,21 @@ const ViewBulkEdit: Component<Props> = props => {
                                                     getThumbnailSize(ThumbnailSizeDefault).height
                                                 }
                                             />
+                                            <Show when={gpsById().get(m.id)}>
+                                                {gps => (
+                                                    <IconButton
+                                                        label={copyLabel(m.id)}
+                                                        buttonClasses="btn-sm absolute bottom-1 left-1 bg-base-100/80"
+                                                        onClick={() =>
+                                                            void copyLocation(m.id, gps())
+                                                        }
+                                                    >
+                                                        <Icon
+                                                            classes={`${copyIcon(m.id)} text-base`}
+                                                        />
+                                                    </IconButton>
+                                                )}
+                                            </Show>
                                             <IconButton
                                                 label="Preview"
                                                 buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"

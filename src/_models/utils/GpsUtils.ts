@@ -37,3 +37,14 @@ export const parseGps = (val: string): GpsCoordinate | undefined => {
 
 // the "latitude,longitude" form parseGps reads back, for pasting as an override elsewhere
 export const formatGps = (gps: GpsCoordinate) => `${gps.latitude},${gps.longitude}`;
+
+// false when there is no clipboard to write to - outside a secure context, or permission refused
+export const copyGps = async (gps: GpsCoordinate) => {
+    try {
+        await navigator.clipboard.writeText(formatGps(gps));
+
+        return true;
+    } catch {
+        return false;
+    }
+};

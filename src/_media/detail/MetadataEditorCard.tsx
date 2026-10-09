@@ -1,6 +1,6 @@
 import { Component, createEffect, createSignal, onCleanup, Show } from "solid-js";
 
-import { GpsOverride, formatGps, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
+import { GpsOverride, copyGps, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { Category } from "../../_models/Category";
@@ -97,14 +97,7 @@ const MetadataEditorCard: Component<Props> = props => {
     const copy = async (evt: Event, which: "recorded" | "override", gps: GpsCoordinate) => {
         evt.preventDefault();
 
-        let copied = true;
-
-        try {
-            await navigator.clipboard.writeText(formatGps(gps));
-        } catch {
-            // no clipboard outside a secure context, or permission refused
-            copied = false;
-        }
+        const copied = await copyGps(gps);
 
         setCopyResult({ which, copied });
         clearTimeout(copyResultTimer);
