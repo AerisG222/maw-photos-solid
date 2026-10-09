@@ -6,6 +6,15 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.0.4</span> : <span class="date">2026-10-09</span>
+            </h3>
+            <p>Minor admin enhancements:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Allow shift-click within bulk edit to select continguous range of media</li>
+                <li>Provide way to copy GPS from other media in the metadata editor or bulk edit screens</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.0.3</span> : <span class="date">2026-10-07</span>
             </h3>
             <p>Minor tweaks:</p>
