@@ -15,6 +15,7 @@ import StatLayout from "./components/StatLayout";
 import Header from "./components/Header";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonChart from "../_components/state/SkeletonChart";
+import { statsYearRoute } from "./_routeTree";
 
 const ViewYear: Component = () => {
     const { statsForYearQuery } = useStatsContext();
@@ -28,7 +29,7 @@ const ViewYear: Component = () => {
 
     const changeSearch = (change: Partial<StatsSearch>) =>
         void navigate({
-            to: "/stats/summary/$year",
+            to: statsYearRoute.to,
             params: params(),
             search: { ...search(), ...change }
         });

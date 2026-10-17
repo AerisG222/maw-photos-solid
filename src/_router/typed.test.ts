@@ -1,5 +1,12 @@
-import { getRouteApi, linkOptions } from "@tanstack/solid-router";
+import { createRouter, getRouteApi, linkOptions } from "@tanstack/solid-router";
+import { QueryClient } from "@tanstack/solid-query";
 import { expect, test } from "vitest";
+
+import { routeTree } from "./routeTree";
+import { statsSummaryRoute } from "../stats/_routeTree";
+import { categoryGridRoute } from "../category/_routeTree";
+import { placesRoute } from "../places/_routeTree";
+import { personFeedGridRoute } from "../_media/feed/_routeTree";
 
 /*
    The router's types, checked by the compiler rather than at runtime.
@@ -39,4 +46,29 @@ const readMode = (): "category-count" | "count" | "size" | "duration" =>
 test("the route types are checked when the application is compiled", () => {
     // the assertions are the lines above, enforced by `tsc`; this only keeps them in a test file
     expect(typeof readMode).toBe("function");
+});
+
+/*
+   The other half: a route's `.to` is what links are built from, and it is only
+   filled in once a router is built over the tree. The types claim the path
+   either way, so this checks the value - built from the same tree the
+   application uses, it should be exactly the path the types say.
+*/
+test("a route's path is the one its type claims, once there is a router", () => {
+    createRouter({
+        routeTree,
+        context: {
+            queryClient: new QueryClient(),
+            getToken: () => Promise.resolve(undefined),
+            isLoggedIn: () => false,
+            login: () => Promise.resolve()
+        }
+    });
+
+    expect(statsSummaryRoute.to).toBe("/stats/summary");
+    expect(categoryGridRoute.to).toBe("/categories/$categoryYear/$categorySlug/grid/{-$mediaSlug}");
+    expect(placesRoute.to).toBe("/places/{-$placeId}");
+    expect(personFeedGridRoute.to).toBe(
+        "/people/$personId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}"
+    );
 });

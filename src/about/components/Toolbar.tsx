@@ -5,6 +5,7 @@ import { aboutAndroid, aboutHelp, aboutReleaseNotes } from "../_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import { aboutAndroidRoute, aboutHelpRoute, aboutReleaseNotesRoute } from "../_routeTree";
 
 const Toolbar: Component = () => {
     return (
@@ -12,12 +13,12 @@ const Toolbar: Component = () => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: aboutHelp, link: linkOptions({ to: "/about/help" }) },
+                        { route: aboutHelp, link: linkOptions({ to: aboutHelpRoute.to }) },
                         {
                             route: aboutReleaseNotes,
-                            link: linkOptions({ to: "/about/release-notes" })
+                            link: linkOptions({ to: aboutReleaseNotesRoute.to })
                         },
-                        { route: aboutAndroid, link: linkOptions({ to: "/about/android" }) }
+                        { route: aboutAndroid, link: linkOptions({ to: aboutAndroidRoute.to }) }
                     ]}
                 />
             }

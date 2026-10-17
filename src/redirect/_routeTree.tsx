@@ -1,6 +1,8 @@
 import { createRoute, redirect } from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
+import { categoriesRoute } from "../categories/_routeTree";
+import { loginRoute } from "../auth/_routeTree";
 
 /*
    Any address the application does not know: the categories for somebody
@@ -15,7 +17,7 @@ export const catchAllRoute = createRoute({
     path: "$",
     beforeLoad: ({ context }) => {
         throw context.isLoggedIn()
-            ? redirect({ to: "/categories", replace: true })
-            : redirect({ to: "/auth/login", replace: true });
+            ? redirect({ to: categoriesRoute.to, replace: true })
+            : redirect({ to: loginRoute.to, replace: true });
     }
 });

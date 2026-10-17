@@ -1,40 +1,27 @@
-import { createRouter } from "@tanstack/solid-router";
+import { createRouter, Outlet } from "@tanstack/solid-router";
 
-import { categoryRouteTree } from "../category/_routeTree";
-import { authRouteTree } from "../auth/_routeTree";
-import { aboutRouteTree } from "../about/_routeTree";
-import { settingsRouteTree } from "../settings/_routeTree";
-import { searchRouteTree } from "../search/_routeTree";
-import { statsRouteTree } from "../stats/_routeTree";
-import { categoriesRouteTree } from "../categories/_routeTree";
-import { randomRouteTree } from "../random/_routeTree";
-import { peopleRouteTree } from "../people/_routeTree";
-import { placesRoute } from "../places/_routeTree";
-import { feedRouteTrees } from "../_media/feed/_routeTree";
-import { catchAllRoute } from "../redirect/_routeTree";
 import { startRouteTransition } from "../_components/transitions/viewTransition";
 import { RouterContext, rootRoute } from "./rootRoute";
+import { routeTree } from "./routeTree";
 import { parseSearch, stringifySearch } from "./search";
 
+import AppContext from "../_components/app-context/AppContext";
+import App from "../App";
+
 /*
-   Every area, each declared in its own _routeTree.tsx. Order does not decide
-   which route an address reaches - TanStack ranks them by how specific their
-   paths are - except that the catch-all goes last, for whoever reads it.
+   The application shell, as the root route's component - attached here rather
+   than declared with the root route, which every other route imports. See
+   rootRoute.tsx.
 */
-const routeTree = rootRoute.addChildren([
-    authRouteTree,
-    aboutRouteTree,
-    settingsRouteTree,
-    searchRouteTree,
-    statsRouteTree,
-    categoriesRouteTree,
-    randomRouteTree,
-    peopleRouteTree,
-    placesRoute,
-    ...feedRouteTrees,
-    categoryRouteTree,
-    catchAllRoute
-]);
+rootRoute.update({
+    component: () => (
+        <AppContext>
+            <App>
+                <Outlet />
+            </App>
+        </AppContext>
+    )
+});
 
 export const createAppRouter = (context: RouterContext) => {
     const router = createRouter({

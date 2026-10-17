@@ -4,6 +4,7 @@ import { Media } from "../_models/Media";
 import { MediaViewGrid } from "../_models/MediaView";
 import { MediaViewRoute } from "../_models/MediaViewRoute";
 import { RouteDisplay } from "../_models/RouteDisplay";
+import { randomGridRoute } from "./_routeTree";
 
 // how the random stack shows up in navigation - the routes are in _routeTree.tsx
 
@@ -26,7 +27,7 @@ export const gridView: MediaViewRoute = {
 */
 export const randomGridLink = (media?: Media) =>
     linkOptions({
-        to: "/random/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+        to: randomGridRoute.to,
         params: media
             ? {
                   categoryYear: String(media.categoryYear),

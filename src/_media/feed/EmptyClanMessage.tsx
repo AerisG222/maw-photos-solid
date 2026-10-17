@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import { linkOptions } from "@tanstack/solid-router";
 
 import EmptyState from "../../_components/state/EmptyState";
+import { peopleRoute } from "../../people/_routeTree";
 
 /*
    A clan with nobody in it is a real state, not a failure - the API answers its
@@ -16,7 +17,7 @@ const EmptyClanMessage: Component<{ name: string | undefined }> = props => {
             title={`${props.name ?? "This clan"} has nobody in it yet`}
             detail="Add people to it and their photos and videos will show up here."
             actionLabel="Back to People"
-            actionLink={linkOptions({ to: "/people" })}
+            actionLink={linkOptions({ to: peopleRoute.to })}
         />
     );
 };

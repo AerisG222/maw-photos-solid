@@ -2,6 +2,8 @@ import { Component, Show } from "solid-js";
 import { Link } from "@tanstack/solid-router";
 
 import { Category } from "../../_models/Category";
+import { categoriesRoute } from "../../categories/_routeTree";
+import { categoryRoute } from "../../category/_routeTree";
 
 interface Props {
     showTitleAsLink?: boolean;
@@ -14,7 +16,7 @@ const CategoryBreadcrumb: Component<Props> = props => {
             <div class="text-center">
                 <Link
                     class="text-primary hover:underline"
-                    to="/categories"
+                    to={categoriesRoute.to}
                     search={{ year: props.category!.effectiveDate.getFullYear() }}
                 >
                     {props.category!.effectiveDate.getFullYear()}
@@ -25,7 +27,7 @@ const CategoryBreadcrumb: Component<Props> = props => {
                 <Show when={props.showTitleAsLink}>
                     <Link
                         class="text-primary hover:underline"
-                        to="/categories/$categoryYear/$categorySlug"
+                        to={categoryRoute.to}
                         params={{
                             categoryYear: String(props.category!.year),
                             categorySlug: props.category!.slug

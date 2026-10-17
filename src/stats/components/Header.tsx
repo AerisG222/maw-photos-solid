@@ -4,6 +4,7 @@ import { Link } from "@tanstack/solid-router";
 import { StatsSearch } from "../_search";
 
 import Icon from "../../_components/icon/Icon";
+import { statsSummaryRoute } from "../_routeTree";
 
 interface Props {
     year: string | undefined;
@@ -16,7 +17,11 @@ const Header: Component<Props> = props => {
         <>
             <div class="flex text-secondary font-bold">
                 <Show when={props.year} fallback={<h3>Stats</h3>}>
-                    <Link class="text-primary" to="/stats/summary" search={props.search ?? {}}>
+                    <Link
+                        class="text-primary"
+                        to={statsSummaryRoute.to}
+                        search={props.search ?? {}}
+                    >
                         Stats
                     </Link>
                     <Icon classes="text-lg icon-[ic--round-keyboard-arrow-right]" />

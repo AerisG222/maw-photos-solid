@@ -1,8 +1,9 @@
 import { Component, For } from "solid-js";
 
-import { areas } from "../areas";
+import { getAreas } from "../areas";
 
 const ViewReleaseNotes: Component = () => {
+    const areas = getAreas();
     return (
         <>
             <h1 class="head1">Help</h1>

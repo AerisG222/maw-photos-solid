@@ -4,6 +4,7 @@ import { Link } from "@tanstack/solid-router";
 import { useAuthContext } from "../_contexts/AuthContext";
 
 import BrandHeader from "../_components/brand/BrandHeader";
+import { loginRoute } from "./_routeTree";
 
 const Logout: Component = () => {
     const [authContext, { logout }] = useAuthContext();
@@ -23,7 +24,7 @@ const Logout: Component = () => {
 
                 <p>
                     If you would like to return photos.mikeandwan.us, please{" "}
-                    <Link to="/auth/login" class="link text-secondary">
+                    <Link to={loginRoute.to} class="link text-secondary">
                         login
                     </Link>
                     .

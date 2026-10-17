@@ -13,6 +13,15 @@ import {
 
 import NavGroup from "../../_components/toolbar/NavGroup";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import {
+    settingsAppearanceRoute,
+    settingsBrowsingRoute,
+    settingsCategoriesRoute,
+    settingsMediaRoute,
+    settingsPeopleRoute,
+    settingsSearchRoute,
+    settingsShortcutsRoute
+} from "../_routeTree";
 
 const Toolbar: ParentComponent = () => {
     return (
@@ -22,22 +31,28 @@ const Toolbar: ParentComponent = () => {
                     entries={[
                         {
                             route: settingsAppearance,
-                            link: linkOptions({ to: "/settings/appearance" })
+                            link: linkOptions({ to: settingsAppearanceRoute.to })
                         },
                         {
                             route: settingsBrowsing,
-                            link: linkOptions({ to: "/settings/browsing" })
+                            link: linkOptions({ to: settingsBrowsingRoute.to })
                         },
                         {
                             route: settingsCategories,
-                            link: linkOptions({ to: "/settings/categories" })
+                            link: linkOptions({ to: settingsCategoriesRoute.to })
                         },
-                        { route: settingsMedia, link: linkOptions({ to: "/settings/media" }) },
-                        { route: settingsPeople, link: linkOptions({ to: "/settings/people" }) },
-                        { route: settingsSearch, link: linkOptions({ to: "/settings/search" }) },
+                        { route: settingsMedia, link: linkOptions({ to: settingsMediaRoute.to }) },
+                        {
+                            route: settingsPeople,
+                            link: linkOptions({ to: settingsPeopleRoute.to })
+                        },
+                        {
+                            route: settingsSearch,
+                            link: linkOptions({ to: settingsSearchRoute.to })
+                        },
                         {
                             route: settingsShortcuts,
-                            link: linkOptions({ to: "/settings/shortcuts" })
+                            link: linkOptions({ to: settingsShortcutsRoute.to })
                         }
                     ]}
                 />

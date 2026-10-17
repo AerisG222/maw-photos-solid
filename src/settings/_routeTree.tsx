@@ -13,47 +13,47 @@ const settingsIndexRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "/",
     beforeLoad: () => {
-        throw redirect({ to: "/settings/categories", replace: true });
+        throw redirect({ to: settingsCategoriesRoute.to, replace: true });
     }
 });
 
-const settingsAppearanceRoute = createRoute({
+export const settingsAppearanceRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "appearance",
     component: lazyRouteComponent(() => import("./Appearance"))
 });
 
-const settingsBrowsingRoute = createRoute({
+export const settingsBrowsingRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "browsing",
     component: lazyRouteComponent(() => import("./Browsing"))
 });
 
-const settingsCategoriesRoute = createRoute({
+export const settingsCategoriesRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "categories",
     component: lazyRouteComponent(() => import("./Categories"))
 });
 
-const settingsMediaRoute = createRoute({
+export const settingsMediaRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "media",
     component: lazyRouteComponent(() => import("./Media"))
 });
 
-const settingsPeopleRoute = createRoute({
+export const settingsPeopleRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "people",
     component: lazyRouteComponent(() => import("./People"))
 });
 
-const settingsSearchRoute = createRoute({
+export const settingsSearchRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "search",
     component: lazyRouteComponent(() => import("./Search"))
 });
 
-const settingsShortcutsRoute = createRoute({
+export const settingsShortcutsRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "shortcuts",
     component: lazyRouteComponent(() => import("./Shortcuts"))

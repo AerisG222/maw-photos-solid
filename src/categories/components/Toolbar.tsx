@@ -7,6 +7,7 @@ import { categoriesGrid, categoriesList } from "../_routes";
 import NavGroup from "../../_components/toolbar/NavGroup";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import { categoriesGridRoute, categoriesListRoute } from "../_routeTree";
 
 const Toolbar: ParentComponent = props => {
     const [area, { setCategoriesView }] = useAreaSettingsContext();
@@ -21,7 +22,7 @@ const Toolbar: ParentComponent = props => {
                         {
                             route: categoriesGrid,
                             link: linkOptions({
-                                to: "/categories/grid",
+                                to: categoriesGridRoute.to,
                                 search: { year: area.categoryYearFilter }
                             }),
                             clickHandler: () => setCategoriesView("grid")
@@ -29,7 +30,7 @@ const Toolbar: ParentComponent = props => {
                         {
                             route: categoriesList,
                             link: linkOptions({
-                                to: "/categories/list",
+                                to: categoriesListRoute.to,
                                 search: { year: area.categoryYearFilter }
                             }),
                             clickHandler: () => setCategoriesView("list")

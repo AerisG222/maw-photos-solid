@@ -11,6 +11,7 @@ import { hasRevealed, markRevealed } from "../loading/_imageReveal";
 import FavoriteIcon from "../icon/FavoriteIcon";
 import IconButton from "../icon/IconButton";
 import MediaTypeIcon from "../icon/MediaTypeIcon";
+import { categoryRoute } from "../../category/_routeTree";
 
 interface Props {
     category: Category;
@@ -47,7 +48,7 @@ const CategoryListItem: Component<Props> = props => {
 
     return (
         <Link
-            to="/categories/$categoryYear/$categorySlug"
+            to={categoryRoute.to}
             params={{
                 categoryYear: String(props.category.year),
                 categorySlug: props.category.slug

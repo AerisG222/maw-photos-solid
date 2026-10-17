@@ -7,6 +7,7 @@ import NavGroup from "../../_components/toolbar/NavGroup";
 import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
+import { searchGridRoute, searchListRoute } from "../_routeTree";
 
 interface Props {
     canRequestMore: boolean;
@@ -21,8 +22,8 @@ const Toolbar: ParentComponent<Props> = props => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: searchGrid, link: linkOptions({ to: "/search/grid" }) },
-                        { route: searchList, link: linkOptions({ to: "/search/list" }) }
+                        { route: searchGrid, link: linkOptions({ to: searchGridRoute.to }) },
+                        { route: searchList, link: linkOptions({ to: searchListRoute.to }) }
                     ]}
                 />
             }

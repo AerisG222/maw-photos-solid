@@ -15,18 +15,18 @@ const statsIndexRoute = createRoute({
     getParentRoute: () => statsRoute,
     path: "/",
     beforeLoad: () => {
-        throw redirect({ to: "/stats/summary", replace: true });
+        throw redirect({ to: statsSummaryRoute.to, replace: true });
     }
 });
 
-const statsSummaryRoute = createRoute({
+export const statsSummaryRoute = createRoute({
     getParentRoute: () => statsRoute,
     path: "summary",
     validateSearch: validateStatsSearch("category-count"),
     component: lazyRouteComponent(() => import("./Summary"))
 });
 
-const statsYearRoute = createRoute({
+export const statsYearRoute = createRoute({
     getParentRoute: () => statsRoute,
     path: "summary/$year",
     validateSearch: validateStatsSearch("count"),

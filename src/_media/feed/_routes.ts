@@ -1,10 +1,24 @@
-import { linkOptions, SearchSchemaInput } from "@tanstack/solid-router";
+import { linkOptions } from "@tanstack/solid-router";
 
 import { Media } from "../../_models/Media";
 import { MediaView, MediaViewGrid } from "../../_models/MediaView";
 import { MediaViewRoute } from "../../_models/MediaViewRoute";
 import { RouteDisplay } from "../../_models/RouteDisplay";
 import { Uuid } from "../../_models/Uuid";
+import { FeedSearch } from "./_search";
+import {
+    clanFeedCategoriesRoute,
+    clanFeedGridRoute,
+    clanFeedRoute,
+    personFeedCategoriesRoute,
+    personFeedGridRoute,
+    personFeedRoute,
+    placeFeedCategoriesRoute,
+    placeFeedGridRoute,
+    placeFeedRoute
+} from "./_routeTree";
+
+export type { FeedSearch } from "./_search";
 
 /*
    A feed over a subject: the media one person appears in, the media anyone in a
@@ -17,37 +31,6 @@ import { Uuid } from "../../_models/Uuid";
 */
 export type FeedSubject =
     { kind: "person"; id: Uuid } | { kind: "clan"; id: Uuid } | { kind: "place"; id: Uuid };
-
-export interface FeedSearch {
-    // favorites only
-    f?: boolean;
-    // a shuffled order, reproducible from the seed
-    seed?: number;
-}
-
-/*
-   What a feed's address may say. In the address rather than a store: it has to
-   survive moving between a feed's listings, which are separate routes, and a
-   reload or a shared link should reproduce the same feed. Anything that is not
-   a favorites flag or a whole number of a seed is dropped.
-*/
-export const validateFeedSearch = (search: FeedSearch & SearchSchemaInput): FeedSearch => {
-    // typed as what a link may pass; the address bar can hold anything
-    const raw = search as unknown as Record<string, unknown>;
-    const result: FeedSearch = {};
-
-    if (raw.f === true || raw.f === "true") {
-        result.f = true;
-    }
-
-    const seed = typeof raw.seed === "number" ? raw.seed : Number(raw.seed);
-
-    if (raw.seed !== undefined && Number.isSafeInteger(seed)) {
-        result.seed = seed;
-    }
-
-    return result;
-};
 
 export const gridView: MediaViewRoute = {
     icon: "icon-[ic--round-apps]",
@@ -104,19 +87,19 @@ export const feedGridLink = (subject: FeedSubject, media?: Media, search: FeedSe
     switch (subject.kind) {
         case "clan":
             return linkOptions({
-                to: "/people/clans/$clanId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                to: clanFeedGridRoute.to,
                 params: { clanId: subject.id, ...mediaParams(media) },
                 search
             });
         case "place":
             return linkOptions({
-                to: "/places/$placeId/media/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                to: placeFeedGridRoute.to,
                 params: { placeId: subject.id, ...mediaParams(media) },
                 search
             });
         default:
             return linkOptions({
-                to: "/people/$personId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                to: personFeedGridRoute.to,
                 params: { personId: subject.id, ...mediaParams(media) },
                 search
             });
@@ -134,19 +117,19 @@ export const feedCategoriesLink = (subject: FeedSubject, favoritesOnly: boolean)
     switch (subject.kind) {
         case "clan":
             return linkOptions({
-                to: "/people/clans/$clanId/categories",
+                to: clanFeedCategoriesRoute.to,
                 params: { clanId: subject.id },
                 search
             });
         case "place":
             return linkOptions({
-                to: "/places/$placeId/media/categories",
+                to: placeFeedCategoriesRoute.to,
                 params: { placeId: subject.id },
                 search
             });
         default:
             return linkOptions({
-                to: "/people/$personId/categories",
+                to: personFeedCategoriesRoute.to,
                 params: { personId: subject.id },
                 search
             });
@@ -157,10 +140,10 @@ export const feedCategoriesLink = (subject: FeedSubject, favoritesOnly: boolean)
 export const feedLink = (subject: FeedSubject) => {
     switch (subject.kind) {
         case "clan":
-            return linkOptions({ to: "/people/clans/$clanId", params: { clanId: subject.id } });
+            return linkOptions({ to: clanFeedRoute.to, params: { clanId: subject.id } });
         case "place":
-            return linkOptions({ to: "/places/$placeId/media", params: { placeId: subject.id } });
+            return linkOptions({ to: placeFeedRoute.to, params: { placeId: subject.id } });
         default:
-            return linkOptions({ to: "/people/$personId", params: { personId: subject.id } });
+            return linkOptions({ to: personFeedRoute.to, params: { personId: subject.id } });
     }
 };

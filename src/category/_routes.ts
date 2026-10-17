@@ -2,6 +2,7 @@ import { linkOptions } from "@tanstack/solid-router";
 
 import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
 import { MediaViewRoute } from "../_models/MediaViewRoute";
+import { categoryBulkEditRoute, categoryGridRoute, categoryMapRoute } from "./_routeTree";
 
 // the views of one category, as a toolbar offers them - the routes are in _routeTree.tsx
 
@@ -42,17 +43,17 @@ export const categoryViewLink = (
     switch (view) {
         case MediaViewMap:
             return linkOptions({
-                to: "/categories/$categoryYear/$categorySlug/map/{-$mediaSlug}",
+                to: categoryMapRoute.to,
                 params
             });
         case MediaViewBulkEdit:
             return linkOptions({
-                to: "/categories/$categoryYear/$categorySlug/bulk-edit",
+                to: categoryBulkEditRoute.to,
                 params: { categoryYear, categorySlug }
             });
         default:
             return linkOptions({
-                to: "/categories/$categoryYear/$categorySlug/grid/{-$mediaSlug}",
+                to: categoryGridRoute.to,
                 params
             });
     }

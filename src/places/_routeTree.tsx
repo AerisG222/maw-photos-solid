@@ -2,7 +2,7 @@ import { createRoute, lazyRouteComponent } from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
-import { validatePlacesSearch } from "./_routes";
+import { validatePlacesSearch } from "./_search";
 
 /*
    The place tree, a level at a time. The place being looked at lives in the path

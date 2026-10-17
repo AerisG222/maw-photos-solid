@@ -1,6 +1,6 @@
 import { Component, Show } from "solid-js";
 
-import { areas } from "../../areas";
+import { getAreas } from "../../areas";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
@@ -11,6 +11,7 @@ import UserInfo from "./UserInfo";
 import { useBarTooltips } from "../tooltip/TooltipPlacement";
 
 const PrimaryNav: Component = () => {
+    const areas = getAreas();
     const [authContext] = useAuthContext();
     const [state] = useAppSettingsContext();
     /*

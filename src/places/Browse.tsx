@@ -2,7 +2,8 @@ import { Component, Show, createEffect, createSignal } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
 import { getRouteApi } from "@tanstack/solid-router";
 
-import { PlacesSearch, placeLink } from "./_routes";
+import { placeLink } from "./_routes";
+import { PlacesSearch } from "./_search";
 import { feedLink } from "../_media/feed/_routes";
 import { useGoTo } from "../_media/services/_navigation";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
@@ -24,6 +25,7 @@ import PlaceSearchBar from "./components/PlaceSearchBar";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
 import { usePlaceChain } from "./usePlaceChain";
+import { placesRoute } from "./_routeTree";
 
 /*
    Browsing by where a photograph was taken, and - for an administrator with edit
@@ -66,7 +68,7 @@ const Browse: Component = () => {
     // the query string, changed in place - the level of the tree stays where it is
     const changeSearch = (change: Partial<PlacesSearch>) =>
         void navigate({
-            to: "/places/{-$placeId}",
+            to: placesRoute.to,
             params: params(),
             search: { ...searchParams(), ...change }
         });

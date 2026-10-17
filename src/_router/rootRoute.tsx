@@ -1,10 +1,7 @@
 import { QueryClient } from "@tanstack/solid-query";
-import { createRootRouteWithContext, Outlet, redirect } from "@tanstack/solid-router";
+import { createRootRouteWithContext, redirect } from "@tanstack/solid-router";
 
 import { GetToken, accountStatusQueryOptions } from "../_contexts/api/_routeQueries";
-
-import AppContext from "../_components/app-context/AppContext";
-import App from "../App";
 
 /*
    What a route's loader and guards are handed. Both live above the router -
@@ -22,6 +19,16 @@ export interface RouterContext {
 
 const INACTIVE_PATH = "/auth/inactive";
 
+/*
+   The root of every route, and deliberately nothing else - in particular, not
+   the application shell it renders. That is attached in router.tsx.
+
+   Every area's routes hang from this, and components link to those routes by
+   their own `.to`; if this imported the shell, a component importing a route
+   would import the shell that imports the component. Kept free of the
+   application, every route module is a leaf: guards, search validation and
+   lazily loaded pages, nothing that can lead back.
+*/
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
     /*
        An account that exists but has been given nothing yet sees only the page
@@ -44,12 +51,5 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
         if (status?.status === "inactive") {
             throw redirect({ to: INACTIVE_PATH });
         }
-    },
-    component: () => (
-        <AppContext>
-            <App>
-                <Outlet />
-            </App>
-        </AppContext>
-    )
+    }
 });

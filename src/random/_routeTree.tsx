@@ -16,14 +16,14 @@ const randomIndexRoute = createRoute({
     path: "/",
     beforeLoad: () => {
         throw redirect({
-            to: "/random/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+            to: randomGridRoute.to,
             params: {},
             replace: true
         });
     }
 });
 
-const randomGridRoute = createRoute({
+export const randomGridRoute = createRoute({
     getParentRoute: () => randomRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
     component: lazyRouteComponent(() => import("./Grid"))

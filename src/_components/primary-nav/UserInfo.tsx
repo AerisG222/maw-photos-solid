@@ -4,6 +4,7 @@ import { Link } from "@tanstack/solid-router";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
 import Icon from "../icon/Icon";
+import { logoutRoute } from "../../auth/_routeTree";
 
 interface Props {
     showTitle: boolean;
@@ -45,7 +46,7 @@ const UserInfo: Component<Props> = props => {
                     <li>
                         <Link
                             class="cursor-pointer hover:bg-primary hover:text-primary-content"
-                            to="/auth/logout"
+                            to={logoutRoute.to}
                         >
                             <Icon classes="icon-[ic--round-logout]" />
                             <span>Logout</span>

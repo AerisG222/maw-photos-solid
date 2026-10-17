@@ -23,13 +23,13 @@ const categoriesIndexRoute = createRoute({
     component: lazyRouteComponent(() => import("./Redirect"))
 });
 
-const categoriesGridRoute = createRoute({
+export const categoriesGridRoute = createRoute({
     getParentRoute: () => categoriesRoute,
     path: "grid",
     component: lazyRouteComponent(() => import("./Grid"))
 });
 
-const categoriesListRoute = createRoute({
+export const categoriesListRoute = createRoute({
     getParentRoute: () => categoriesRoute,
     path: "list",
     component: lazyRouteComponent(() => import("./List"))

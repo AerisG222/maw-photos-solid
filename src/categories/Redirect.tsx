@@ -3,6 +3,7 @@ import { getRouteApi, Navigate } from "@tanstack/solid-router";
 
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { equalsIgnoreCase } from "../_models/utils/StringUtils";
+import { categoriesGridRoute, categoriesListRoute } from "./_routeTree";
 
 const route = getRouteApi("/categories");
 
@@ -19,8 +20,8 @@ const CategoriesRedirect: Component = () => {
         <Navigate
             to={
                 equalsIgnoreCase("list", area.categoriesView)
-                    ? "/categories/list"
-                    : "/categories/grid"
+                    ? categoriesListRoute.to
+                    : categoriesGridRoute.to
             }
             search={{ year: search().year ?? area.categoryYearFilter }}
             replace

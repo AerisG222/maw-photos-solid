@@ -8,6 +8,7 @@ import { useListingSettingsContext } from "../../_contexts/settings/ListingSetti
 import FavoriteBadge from "../listing/FavoriteBadge";
 import MediaTypeIcon from "../icon/MediaTypeIcon";
 import Tile from "../listing/Tile";
+import { categoryRoute } from "../../category/_routeTree";
 
 interface Props {
     category: Category;
@@ -30,7 +31,7 @@ const CategoryCard: Component<Props> = props => {
     return (
         <Tile
             link={linkOptions({
-                to: "/categories/$categoryYear/$categorySlug",
+                to: categoryRoute.to,
                 params: {
                     categoryYear: String(props.category.year),
                     categorySlug: props.category.slug

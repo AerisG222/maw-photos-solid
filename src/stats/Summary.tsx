@@ -15,6 +15,7 @@ import Treemap from "./components/Treemap";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonChart from "../_components/state/SkeletonChart";
 import Header from "./components/Header";
+import { statsSummaryRoute, statsYearRoute } from "./_routeTree";
 
 const ViewCombined: Component = () => {
     const route = getRouteApi("/stats/summary");
@@ -26,7 +27,7 @@ const ViewCombined: Component = () => {
     const searchMode = () => search().mode;
 
     const changeSearch = (change: Partial<StatsSearch>) =>
-        void navigate({ to: "/stats/summary", search: { ...search(), ...change } });
+        void navigate({ to: statsSummaryRoute.to, search: { ...search(), ...change } });
 
     const stats = statsByYearQuery();
 
@@ -125,7 +126,7 @@ const ViewCombined: Component = () => {
     // into the year the way it is being looked at - a year has no categories to count across
     function goToYear(year: string) {
         void navigate({
-            to: "/stats/summary/$year",
+            to: statsYearRoute.to,
             params: { year },
             search: {
                 type: searchType(),

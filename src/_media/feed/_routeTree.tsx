@@ -4,7 +4,9 @@ import { rootRoute } from "../../_router/rootRoute";
 import { requireLogin } from "../../_router/guards";
 import { isUuid } from "../../_models/Uuid";
 import { redirectToGrid } from "../_legacyViews";
-import { validateFeedSearch } from "./_routes";
+import { validateFeedSearch } from "./_search";
+import { peopleRoute } from "../../people/_routeTree";
+import { placesRoute } from "../../places/_routeTree";
 
 /*
    The feeds, one tree per subject - a person, a clan, a place. Declared out in
@@ -40,11 +42,11 @@ const FeedCategories = lazyRouteComponent(() => import("./Categories"));
    is still checked, where each is written.
 */
 const backToPeople = (): never => {
-    throw redirect({ to: "/people", replace: true });
+    throw redirect({ to: peopleRoute.to, replace: true });
 };
 
 const backToPlaces = (): never => {
-    throw redirect({ to: "/places/{-$placeId}", params: {}, replace: true });
+    throw redirect({ to: placesRoute.to, params: {}, replace: true });
 };
 
 // ---- a person -------------------------------------------------------------
@@ -69,7 +71,7 @@ const personFeedIndexRoute = createRoute({
     component: FeedRedirect
 });
 
-const personFeedGridRoute = createRoute({
+export const personFeedGridRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
     component: FeedGrid
@@ -87,7 +89,7 @@ const personFeedFullscreenRoute = createRoute({
     beforeLoad: redirectToGrid
 });
 
-const personFeedCategoriesRoute = createRoute({
+export const personFeedCategoriesRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "categories",
     component: FeedCategories
@@ -123,7 +125,7 @@ const clanFeedIndexRoute = createRoute({
     component: FeedRedirect
 });
 
-const clanFeedGridRoute = createRoute({
+export const clanFeedGridRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
     component: FeedGrid
@@ -141,7 +143,7 @@ const clanFeedFullscreenRoute = createRoute({
     beforeLoad: redirectToGrid
 });
 
-const clanFeedCategoriesRoute = createRoute({
+export const clanFeedCategoriesRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "categories",
     component: FeedCategories
@@ -177,7 +179,7 @@ const placeFeedIndexRoute = createRoute({
     component: FeedRedirect
 });
 
-const placeFeedGridRoute = createRoute({
+export const placeFeedGridRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
     component: FeedGrid
@@ -195,7 +197,7 @@ const placeFeedFullscreenRoute = createRoute({
     beforeLoad: redirectToGrid
 });
 
-const placeFeedCategoriesRoute = createRoute({
+export const placeFeedCategoriesRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "categories",
     component: FeedCategories

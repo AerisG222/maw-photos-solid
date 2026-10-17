@@ -121,7 +121,7 @@ export const categoryBulkEditRoute = createRoute({
         if (!status?.isAdmin) {
             // checked when compiled: a wrong path, or a missing param, is a type error
             throw redirect({
-                to: "/categories/$categoryYear/$categorySlug/grid/{-$mediaSlug}",
+                to: categoryGridRoute.to,
                 params: {
                     categoryYear: params.categoryYear,
                     categorySlug: params.categorySlug

@@ -17,13 +17,13 @@ const searchIndexRoute = createRoute({
     component: lazyRouteComponent(() => import("./Redirect"))
 });
 
-const searchGridRoute = createRoute({
+export const searchGridRoute = createRoute({
     getParentRoute: () => searchRoute,
     path: "grid",
     component: lazyRouteComponent(() => import("./Grid"))
 });
 
-const searchListRoute = createRoute({
+export const searchListRoute = createRoute({
     getParentRoute: () => searchRoute,
     path: "list",
     component: lazyRouteComponent(() => import("./List"))
