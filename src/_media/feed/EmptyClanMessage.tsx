@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { people } from "../../people/_routes";
+import { linkOptions } from "@tanstack/solid-router";
 
 import EmptyState from "../../_components/state/EmptyState";
 
@@ -16,7 +16,7 @@ const EmptyClanMessage: Component<{ name: string | undefined }> = props => {
             title={`${props.name ?? "This clan"} has nobody in it yet`}
             detail="Add people to it and their photos and videos will show up here."
             actionLabel="Back to People"
-            actionHref={people.absolutePath}
+            actionLink={linkOptions({ to: "/people" })}
         />
     );
 };

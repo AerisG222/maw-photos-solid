@@ -1,11 +1,11 @@
 import { Component, createMemo } from "solid-js";
-import { useNavigate, useSearchParams } from "../_router/compat";
+import { getRouteApi } from "@tanstack/solid-router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
 import { YearStat } from "../_models/YearStat";
 import { MediaTypeStat } from "../_models/MediaTypeStat";
-import { formatForMode, StatMode, statbarMediaCountTitle } from "./_funcs";
-import { statsYear } from "./_routes";
+import { formatForMode, statbarMediaCountTitle } from "./_funcs";
+import { StatsSearch } from "./_search";
 
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
@@ -17,12 +17,16 @@ import SkeletonChart from "../_components/state/SkeletonChart";
 import Header from "./components/Header";
 
 const ViewCombined: Component = () => {
-    const [search] = useSearchParams();
-    const navigate = useNavigate();
+    const route = getRouteApi("/stats/summary");
+    const search = route.useSearch();
+    const navigate = route.useNavigate();
     const { statsByYearQuery } = useStatsContext();
 
-    const searchType = () => (search.type as string | undefined) ?? "all";
-    const searchMode = () => ((search.mode as string | undefined) ?? "category-count") as StatMode;
+    const searchType = () => search().type;
+    const searchMode = () => search().mode;
+
+    const changeSearch = (change: Partial<StatsSearch>) =>
+        void navigate({ to: "/stats/summary", search: { ...search(), ...change } });
 
     const stats = statsByYearQuery();
 
@@ -100,7 +104,7 @@ const ViewCombined: Component = () => {
                 categoryCount += stat.categoryCount;
 
                 for (const mediaTypeStat of stat.mediaTypeStats) {
-                    if (search?.type === mediaTypeStat.mediaType || search?.type === "all") {
+                    if (searchType() === mediaTypeStat.mediaType || searchType() === "all") {
                         mediaCount += mediaTypeStat.mediaCount;
                         mediaSize += mediaTypeStat.fileSize;
                         duration += mediaTypeStat.duration;
@@ -118,20 +122,24 @@ const ViewCombined: Component = () => {
         };
     });
 
+    // into the year the way it is being looked at - a year has no categories to count across
     function goToYear(year: string) {
-        const path = statsYear.absolutePath.replace(":year", year);
-        const type = `type=${String(search.type)}`;
-        const mode =
-            search.mode === "category-count" ? "mode=count" : `mode=${String(search.mode)}`;
-
-        navigate(`${path}?${mode}&${type}`);
+        void navigate({
+            to: "/stats/summary/$year",
+            params: { year },
+            search: {
+                type: searchType(),
+                mode: searchMode() === "category-count" ? "count" : searchMode()
+            }
+        });
     }
 
     return (
         <Layout
             toolbar={
                 <Toolbar
-                    initialParams={{ type: "all", mode: "category-count" }}
+                    search={search()}
+                    onChange={changeSearch}
                     showSummarizeByCategoryCount={true}
                 />
             }
@@ -144,7 +152,7 @@ const ViewCombined: Component = () => {
             >
                 <StatLayout>
                     <div class="my-2">
-                        <Header year={search.year as string} />
+                        <Header year={undefined} />
                     </div>
                     <div class="my-2">
                         <StatBar

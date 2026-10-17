@@ -1,14 +1,14 @@
-import { ParentComponent } from "solid-js";
+import { Component } from "solid-js";
+import { Outlet } from "@tanstack/solid-router";
 
 import { VisualEffectsProvider } from "./contexts/VisualEffectsContext";
 
-import AuthGuard from "../_components/auth/AuthGuard";
-
-const MediaRoot: ParentComponent = props => {
+// the frame every media area shares; signing in is checked on each area's route
+const MediaRoot: Component = () => {
     return (
-        <AuthGuard>
-            <VisualEffectsProvider>{props.children}</VisualEffectsProvider>
-        </AuthGuard>
+        <VisualEffectsProvider>
+            <Outlet />
+        </VisualEffectsProvider>
     );
 };
 

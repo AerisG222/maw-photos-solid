@@ -1,6 +1,8 @@
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
+import { LinkOptions } from "@tanstack/solid-router";
+
+import { MediaViewRoute } from "../../_models/MediaViewRoute";
 import { MediaView } from "../../_models/MediaView";
 import { INavigable } from "./INavigable";
 
@@ -10,9 +12,10 @@ export interface IMediaService extends INavigable {
     getActiveMedia(): Media | undefined;
     navigateToMedia(view: MediaView, media: Media): void;
     navigateToFirstMediaIfNeeded(): void;
-    getAvailableRoutes(): MediaAppRouteDefinition[];
-    getEntryPathByView(view: MediaView): string;
-    getMediaPathByView(view: MediaView, media: Media | undefined): string;
+    // the views a toolbar can offer here, and the typed link into each
+    getAvailableViews(): MediaViewRoute[];
+    getEntryLinkByView(view: MediaView): LinkOptions;
+    getMediaLinkByView(view: MediaView, media: Media | undefined): LinkOptions;
     canRequestMore(): boolean;
     requestMore(): void;
     /*

@@ -1,11 +1,10 @@
-import { useParams, useSearchParams } from "../../_router/compat";
+import { useParams, useSearch } from "@tanstack/solid-router";
 
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Uuid } from "../../_models/Uuid";
-import { firstParam } from "../../_models/utils/RouteUtils";
-import { clanFeedBasePath, personFeedBasePath, placeFeedBasePath } from "./_routes";
+import { FeedSubject } from "./_routes";
 
 /*
    What a feed is about, and the one filter both of its listings share.
@@ -20,24 +19,26 @@ import { clanFeedBasePath, personFeedBasePath, placeFeedBasePath } from "./_rout
    three trees.
 */
 export const useFeedSubject = () => {
-    const params = useParams();
-    const [searchParams] = useSearchParams();
+    // every feed's params and search, typed - which of the three this is, the params say
+    const params = useParams({ strict: false });
+    const search = useSearch({ strict: false });
     const { peopleQuery } = usePeopleContext();
     const { clansQuery } = useClansContext();
     const { placeQuery } = usePlacesContext();
 
-    const personId = () => params.personId as Uuid | undefined;
-    const clanId = () => params.clanId as Uuid | undefined;
-    const placeId = () => params.placeId as Uuid | undefined;
+    const personId = () => params().personId as Uuid | undefined;
+    const clanId = () => params().clanId as Uuid | undefined;
+    const placeId = () => params().placeId as Uuid | undefined;
     const isClan = () => !!clanId();
     const isPlace = () => !!placeId();
 
-    const basePath = () => {
+    // the route guarantees an id - see _routeTree.tsx
+    const subject = (): FeedSubject => {
         if (isClan()) {
-            return clanFeedBasePath(clanId()!);
+            return { kind: "clan", id: clanId()! };
         }
 
-        return isPlace() ? placeFeedBasePath(placeId()!) : personFeedBasePath(personId()!);
+        return isPlace() ? { kind: "place", id: placeId()! } : { kind: "person", id: personId()! };
     };
 
     // what to call the thing in a sentence about a failure - "media for this
@@ -55,7 +56,7 @@ export const useFeedSubject = () => {
        listings, which are separate routes, and putting it in the address makes a
        reload or a shared link reproduce the same feed.
     */
-    const favoritesOnly = () => firstParam(searchParams.f) === "true";
+    const favoritesOnly = () => search().f === true;
 
     // the people and clan lists are already cached for the picker, so naming
     // either subject on its own page costs nothing beyond a lookup. a place is
@@ -120,7 +121,7 @@ export const useFeedSubject = () => {
         isClan,
         isPlace,
         subjectKindName,
-        basePath,
+        subject,
         favoritesOnly,
         subjectName,
         mediaScope,

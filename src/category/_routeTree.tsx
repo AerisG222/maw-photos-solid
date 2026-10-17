@@ -1,5 +1,4 @@
-import { Dynamic } from "solid-js/web";
-import { createRoute, Outlet, redirect } from "@tanstack/solid-router";
+import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-router";
 
 import {
     accountStatusQueryOptions,
@@ -9,22 +8,15 @@ import {
     categoryQueryOptions
 } from "../_contexts/api/_routeQueries";
 import { RouterContext, rootRoute } from "../_router/rootRoute";
-import {
-    bulkEditRoute,
-    detailRedirectRoute,
-    fullscreenRedirectRoute,
-    gridRoute,
-    mapRoute,
-    mediaRoutes,
-    redirectRoute
-} from "./_routes";
+import { requireLogin } from "../_router/guards";
+import { redirectToGrid } from "../_media/_legacyViews";
 
 /*
    The category area, on TanStack Router's own typed routes rather than through
    the compatibility layer the rest of the application still uses.
 
-   The names, icons and tooltips the toolbars show still come from _routes.ts;
-   what is here is what only a router can do. Because these are typed, a link or
+   The names, icons and tooltips the toolbars show come from _routes.ts; what
+   is here is what only a router can do. Because these are typed, a link or
    redirect to one of them is checked against its path and params when the
    application is compiled, rather than discovered broken when somebody clicks it.
 */
@@ -71,43 +63,40 @@ const prefetchCategory = (context: RouterContext, categoryYear: string, category
 export const categoryRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "categories/$categoryYear/$categorySlug",
+    beforeLoad: requireLogin,
     loader: ({ context, params }) =>
         prefetchCategory(context, params.categoryYear, params.categorySlug),
-    component: () => (
-        <Dynamic component={mediaRoutes.component}>
-            <Outlet />
-        </Dynamic>
-    )
+    component: lazyRouteComponent(() => import("../_media/MediaRoot"))
 });
 
 const categoryIndexRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "/",
-    component: redirectRoute.component
+    component: lazyRouteComponent(() => import("./Redirect"))
 });
 
 export const categoryGridRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "grid/{-$mediaSlug}",
-    component: gridRoute.component
+    component: lazyRouteComponent(() => import("./Grid"))
 });
 
 const categoryDetailRedirectRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "detail/{-$mediaSlug}",
-    component: detailRedirectRoute.component
+    beforeLoad: redirectToGrid
 });
 
 const categoryFullscreenRedirectRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "fullscreen/{-$mediaSlug}",
-    component: fullscreenRedirectRoute.component
+    beforeLoad: redirectToGrid
 });
 
 export const categoryMapRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "map/{-$mediaSlug}",
-    component: mapRoute.component
+    component: lazyRouteComponent(() => import("./Map"))
 });
 
 /*
@@ -131,7 +120,6 @@ export const categoryBulkEditRoute = createRoute({
 
         if (!status?.isAdmin) {
             // checked when compiled: a wrong path, or a missing param, is a type error
-            // eslint-disable-next-line @typescript-eslint/only-throw-error -- how TanStack Router redirects
             throw redirect({
                 to: "/categories/$categoryYear/$categorySlug/grid/{-$mediaSlug}",
                 params: {
@@ -142,7 +130,7 @@ export const categoryBulkEditRoute = createRoute({
             });
         }
     },
-    component: bulkEditRoute.component
+    component: lazyRouteComponent(() => import("./BulkEdit"))
 });
 
 export const categoryRouteTree = categoryRoute.addChildren([

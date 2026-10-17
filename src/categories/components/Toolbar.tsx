@@ -1,8 +1,8 @@
 import { ParentComponent, Show, children } from "solid-js";
+import { linkOptions } from "@tanstack/solid-router";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
-import { buildSearch, categoriesGrid, categoriesList } from "../_routes";
-import { buildPath } from "../../_models/utils/RouteUtils";
+import { categoriesGrid, categoriesList } from "../_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
@@ -20,20 +20,18 @@ const Toolbar: ParentComponent = props => {
                     entries={[
                         {
                             route: categoriesGrid,
-                            href: buildPath(
-                                categoriesGrid,
-                                undefined,
-                                buildSearch(area.categoryYearFilter)
-                            ),
+                            link: linkOptions({
+                                to: "/categories/grid",
+                                search: { year: area.categoryYearFilter }
+                            }),
                             clickHandler: () => setCategoriesView("grid")
                         },
                         {
                             route: categoriesList,
-                            href: buildPath(
-                                categoriesList,
-                                undefined,
-                                buildSearch(area.categoryYearFilter)
-                            ),
+                            link: linkOptions({
+                                to: "/categories/list",
+                                search: { year: area.categoryYearFilter }
+                            }),
                             clickHandler: () => setCategoriesView("list")
                         }
                     ]}

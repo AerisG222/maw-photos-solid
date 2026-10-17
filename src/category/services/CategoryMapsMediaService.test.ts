@@ -35,14 +35,17 @@ const build = (mediaSlug?: string) => {
     const navigate = vi.fn();
     const service = new CategoryMapsMediaService(
         navigate,
-        { categoryYear: "2007", categorySlug: "hong-kong", mediaSlug },
+        () => ({ categoryYear: "2007", categorySlug: "hong-kong", mediaSlug }),
         MediaViewMap,
         succeeded<Category | undefined>(category),
         succeeded(["a", "b", "c", "d", "e"].map(media)),
         succeeded(["a", "c", "e"].map(located))
     );
 
-    const movedTo = () => (navigate.mock.calls[0]?.[0] as string | undefined)?.split("/").pop();
+    // the photo the typed link it navigated by is open on
+    const movedTo = () =>
+        (navigate.mock.calls[0]?.[0] as { params?: { mediaSlug?: string } } | undefined)?.params
+            ?.mediaSlug;
 
     return { service, navigate, movedTo };
 };

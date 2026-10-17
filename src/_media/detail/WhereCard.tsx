@@ -1,10 +1,10 @@
 import { Component, For, Match, Show, Switch, createMemo } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Media } from "../../_models/Media";
 import { broadestFirst, getPlaceKindName } from "../../_models/Place";
-import { placeFeedBasePath } from "../feed/_routes";
+import { feedLink } from "../feed/_routes";
 
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Icon from "../../_components/icon/Icon";
@@ -59,8 +59,8 @@ const WhereCard: Component<Props> = props => {
                         <For each={ordered()}>
                             {place => (
                                 <li>
-                                    <A
-                                        href={placeFeedBasePath(place.id)}
+                                    <Link
+                                        {...feedLink({ kind: "place", id: place.id })}
                                         class="flex items-center gap-2 rounded-field px-2 py-1 hover:bg-base-300 hover:text-primary"
                                     >
                                         <Icon classes="icon-[ic--round-place] shrink-0" />
@@ -75,7 +75,7 @@ const WhereCard: Component<Props> = props => {
                                         {/* how much more there is to see there, which is
                                             what makes following the link worth it */}
                                         <span class="badge badge-sm">{place.mediaCount}</span>
-                                    </A>
+                                    </Link>
                                 </li>
                             )}
                         </For>

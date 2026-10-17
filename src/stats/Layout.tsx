@@ -1,14 +1,14 @@
-import { ParentComponent } from "solid-js";
+import { Component } from "solid-js";
+import { Outlet } from "@tanstack/solid-router";
 
 import { StatsProvider } from "../_contexts/api/StatsContext";
 
-import AuthGuard from "../_components/auth/AuthGuard";
-
-const Stats: ParentComponent = props => {
+// signing in is checked on the route itself - see _routeTree.tsx
+const Stats: Component = () => {
     return (
-        <AuthGuard>
-            <StatsProvider>{props.children}</StatsProvider>
-        </AuthGuard>
+        <StatsProvider>
+            <Outlet />
+        </StatsProvider>
     );
 };
 

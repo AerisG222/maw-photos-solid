@@ -7,7 +7,7 @@ import { afterEach, describe, expect, test } from "vitest";
 import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { MediaBreakpointProvider } from "../../_contexts/MediaBreakpointContext";
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { RouteDisplay } from "../../_models/RouteDisplay";
 
 import IconButton from "../icon/IconButton";
 import ToolbarButton from "../toolbar/ToolbarButton";
@@ -43,12 +43,10 @@ const frame = (body: () => unknown) =>
         </WithRouter>
     ));
 
-const route: AppRouteDefinition = {
+const route: RouteDisplay = {
     icon: "icon-[ic--round-image]",
     name: "Grid",
-    tooltip: "Show the Grid",
-    path: "/",
-    absolutePath: "/"
+    tooltip: "Show the Grid"
 };
 
 afterEach(() => {
@@ -89,7 +87,7 @@ describe("icon-only controls", () => {
     });
 
     test("a toolbar link is named, and says when it is the current page", () => {
-        frame(() => <ToolbarLink href="/" route={route} active={true} />);
+        frame(() => <ToolbarLink link={{ href: "/" }} route={route} active={true} />);
 
         const link = screen.getByRole("link", { name: "Show the Grid" });
 

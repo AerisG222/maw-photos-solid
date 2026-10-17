@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onMount } from "solid-js";
+import { useSearch } from "@tanstack/solid-router";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
-import { useLocation, useNavigate, useParams, useSearchParams } from "../../_router/compat";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
@@ -11,17 +11,15 @@ import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsC
 import { MediaView } from "../../_models/MediaView";
 import { Uuid } from "../../_models/Uuid";
 import { SlideshowService } from "../services/SlideshowService";
-import { buildFeedRoutes } from "./_routes";
+import { feedGridLink, FeedSearch } from "./_routes";
 import { newMediaSeed } from "../../_models/utils/MediaUtils";
-import { firstParam } from "../../_models/utils/RouteUtils";
+import { useGoTo, useMediaParams } from "../services/_navigation";
 import { useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
 
 export const useFeedServices = (view: MediaView) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const params = useParams();
-    const [searchParams] = useSearchParams();
+    const goTo = useGoTo();
+    const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
     const [area, { setFeedFavoritesOnly: rememberFavoritesOnly, setFeedShuffle: rememberShuffle }] =
         useAreaSettingsContext();
@@ -31,36 +29,21 @@ export const useFeedServices = (view: MediaView) => {
     const { placeMediaQuery } = usePlacesContext();
 
     const subject = useFeedSubject();
-    const { personId, clanId, placeId, isClan, isPlace, basePath, favoritesOnly } = subject;
+    const { personId, clanId, placeId, isClan, isPlace, favoritesOnly } = subject;
+    const search = useSearch({ strict: false });
 
-    const seed = () => {
-        const raw = firstParam(searchParams.seed);
-        const parsed = raw === undefined ? Number.NaN : Number.parseInt(raw, 10);
-
-        return Number.isSafeInteger(parsed) ? parsed : undefined;
-    };
+    // already a whole number or absent - the route validated it, see _routes.ts
+    const seed = () => search().seed;
 
     const isShuffled = () => seed() !== undefined;
 
     const filter = () => ({ favoritesOnly: favoritesOnly(), seed: seed() });
 
-    const buildSearch = (favorites: boolean, currentSeed: number | undefined) => {
-        const parts: string[] = [];
-
-        if (favorites) {
-            parts.push("f=true");
-        }
-
-        if (currentSeed !== undefined) {
-            parts.push(`seed=${currentSeed}`);
-        }
-
-        return parts.length > 0 ? `?${parts.join("&")}` : "";
-    };
-
-    const search = () => buildSearch(favoritesOnly(), seed());
-
-    const routes = () => buildFeedRoutes(basePath(), search());
+    // the filter as the address says it, carried by every link the feed hands out
+    const feedSearch = (favorites: boolean, currentSeed: number | undefined): FeedSearch => ({
+        ...(favorites ? { f: true } : {}),
+        ...(currentSeed !== undefined ? { seed: currentSeed } : {})
+    });
 
     /*
        All three queries are created, and the two this feed is not about are
@@ -89,11 +72,11 @@ export const useFeedServices = (view: MediaView) => {
     const categoryResult = categoryQuery(catId);
 
     const mediaService = new FeedMediaService(
-        navigate,
+        goTo,
         params,
         view,
-        routes,
-        search,
+        subject.subject,
+        () => feedSearch(favoritesOnly(), seed()),
         () => categoryResult,
         mq
     );
@@ -109,9 +92,7 @@ export const useFeedServices = (view: MediaView) => {
        than a photo that no longer belongs there.
     */
     const applyFilter = (favorites: boolean, nextSeed: number | undefined) => {
-        navigate(
-            `${mediaService.getEntryPathWithoutFilter(view)}${buildSearch(favorites, nextSeed)}`
-        );
+        goTo(feedGridLink(subject.subject(), undefined, feedSearch(favorites, nextSeed)));
     };
 
     /*
@@ -140,10 +121,7 @@ export const useFeedServices = (view: MediaView) => {
        not somewhere the back button should have to walk through.
     */
     onMount(() => {
-        if (
-            firstParam(searchParams.f) !== undefined ||
-            firstParam(searchParams.seed) !== undefined
-        ) {
+        if (search().f !== undefined || search().seed !== undefined) {
             return;
         }
 
@@ -151,11 +129,14 @@ export const useFeedServices = (view: MediaView) => {
             return;
         }
 
-        navigate(
-            `${location.pathname}${buildSearch(
-                area.feedFavoritesOnly,
-                area.feedShuffle ? newMediaSeed() : undefined
-            )}`,
+        goTo(
+            {
+                to: ".",
+                search: feedSearch(
+                    area.feedFavoritesOnly,
+                    area.feedShuffle ? newMediaSeed() : undefined
+                )
+            },
             { replace: true }
         );
     });

@@ -1,8 +1,16 @@
-import { lazy } from "solid-js";
+import { linkOptions, SearchSchemaInput } from "@tanstack/solid-router";
 
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { RouteDisplay } from "../_models/RouteDisplay";
+import { allPlaceKinds, PlaceKind } from "../_models/Place";
 import { Uuid } from "../_models/Uuid";
-import { buildFeedRouteTree, placeFeedBasePath } from "../_media/feed/_routes";
+
+// how the places area shows up in navigation - the routes are in _routeTree.tsx
+
+export const places: RouteDisplay = {
+    icon: "icon-[ic--round-place]",
+    name: "Places",
+    helpText: "Browse photos and videos by where in the world they were taken."
+};
 
 /*
    One screen for the place tree, whoever is looking at it.
@@ -16,54 +24,51 @@ import { buildFeedRouteTree, placeFeedBasePath } from "../_media/feed/_routes";
    So the actions live here instead, behind an edit mode an admin turns on. The
    mode is in the query string rather than in a signal for the same reason the
    level is in the path: it survives a reload, it can be handed to another tab,
-   and drilling deeper keeps it.
+   and drilling deeper keeps it. Non-admins can type it, and it does nothing for
+   them - every write behind it is refused by the API and by the database
+   regardless.
 */
-const basePath = "/places";
+export interface PlacesSearch {
+    // a search across the whole tree
+    q?: string;
+    // only countries, states or cities
+    kind?: PlaceKind;
+    edit?: boolean;
+}
 
-// non-admins can type it, and it does nothing for them - every write behind it
-// is refused by the API and by the database regardless
-export const PLACE_EDIT_PARAM = "edit";
+// `edit=1` is what the address said before it was typed, so old links still work
+export const validatePlacesSearch = (search: PlacesSearch & SearchSchemaInput): PlacesSearch => {
+    // typed as what a link may pass; the address bar can hold anything
+    const raw = search as unknown as Record<string, unknown>;
+    const result: PlacesSearch = {};
+    const q = typeof raw.q === "string" ? raw.q.trim() : "";
+    const kind = allPlaceKinds.find(k => k.id === raw.kind)?.id;
 
-export const placeBrowse: AppRouteDefinition = {
-    name: "Places",
-    // the place being looked at lives in the path rather than in a signal, so a
-    // link to one level of the tree can be shared and reloaded. Optional: with
-    // nothing there the page lists the countries, which is the root of the tree
-    path: "/:placeId?",
-    absolutePath: basePath,
-    component: lazy(() => import("./Browse"))
-};
+    if (q) {
+        result.q = q;
+    }
 
-export const places: AppRouteDefinition = {
-    icon: "icon-[ic--round-place]",
-    name: "Places",
-    helpText: "Browse photos and videos by where in the world they were taken.",
-    path: basePath,
-    absolutePath: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [placeBrowse]
-};
+    if (kind) {
+        result.kind = kind;
+    }
 
-/*
-   Where a place lives, carrying the edit mode when it is on.
+    if (raw.edit === true || raw.edit === "true" || raw.edit === "1" || raw.edit === 1) {
+        result.edit = true;
+    }
 
-   Everything that moves around the tree builds its links through here - the
-   tiles, the breadcrumb, the toolbar - so an admin who turned editing on stays in
-   it while drilling, and a plain browse never accidentally offers it.
-*/
-export const getPlacePath = (id?: Uuid, editing = false) => {
-    const path = id ? `${basePath}/${id}` : basePath;
-
-    return editing ? `${path}?${PLACE_EDIT_PARAM}=1` : path;
+    return result;
 };
 
 /*
-   The media taken at one place.
-
-   It sits below the place rather than at it: `/places/{id}` is the drill-down
-   into the states or cities inside, and `/places/{id}/media` is the photographs
-   from the whole of it. The feed is shared with people and clans - see
-   `_media/feed/_routes` - so all this decides is where it hangs and what it is
-   called.
+   A level of the tree - or its root, with no id - carrying the edit mode when
+   it is on. Everything that moves around the tree builds its links through
+   here - the tiles, the breadcrumb, the toolbar - so an admin who turned
+   editing on stays in it while drilling, and a plain browse never accidentally
+   offers it.
 */
-export const placeMediaRoutes = buildFeedRouteTree(placeFeedBasePath(":placeId"), "Place");
+export const placeLink = (id?: Uuid, editing = false) =>
+    linkOptions({
+        to: "/places/{-$placeId}",
+        params: { placeId: id },
+        search: editing ? { edit: true } : {}
+    });

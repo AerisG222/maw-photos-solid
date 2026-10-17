@@ -1,5 +1,5 @@
 import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link, LinkOptions } from "@tanstack/solid-router";
 
 import { describePlaceAncestry, getPlaceKindName, Place } from "../../_models/Place";
 import { createImageReveal } from "../../_components/loading/_imageReveal";
@@ -10,7 +10,8 @@ interface Props {
     place: Place;
     // where the tile leads. The browse drills into the places inside this one;
     // the admin screen drills to the panel where this one is changed
-    href: string;
+    // where the card leads - built with `linkOptions`, so it is checked
+    link: LinkOptions;
     // where the place sits in the tree, shown while searching - results come from
     // anywhere in it, and two cities can share a name and even a parent
     showAncestry: boolean;
@@ -41,8 +42,8 @@ const PlaceCard: Component<Props> = props => {
     };
 
     return (
-        <A
-            href={props.href}
+        <Link
+            {...props.link}
             class="group flex flex-col w-60 border border-secondary/20 rounded-sm bg-base-200
                 hover:bg-base-300 hover:border-primary hover:text-primary elev-hover"
             title={`${props.place.name} (${props.place.mediaCount})`}
@@ -115,7 +116,7 @@ const PlaceCard: Component<Props> = props => {
                     </button>
                 </Show>
             </div>
-        </A>
+        </Link>
     );
 };
 

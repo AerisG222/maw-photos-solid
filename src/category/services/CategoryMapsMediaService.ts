@@ -1,4 +1,4 @@
-import { Navigator, Params } from "../../_router/compat";
+import { Accessor } from "solid-js";
 import { UseQueryResult } from "@tanstack/solid-query";
 
 import { Category } from "../../_models/Category";
@@ -9,17 +9,18 @@ import { GpsCoordinate } from "../../_models/GpsCoordinate";
 import { MediaWithGps } from "../../_media/models/MediaWithGps";
 import { MediaView } from "../../_models/MediaView";
 import { IMapsMediaService } from "../../_media/services/IMapsMediaService";
+import { GoTo, MediaParams } from "../../_media/services/_navigation";
 
 export class CategoryMapsMediaService extends CategoryMediaService implements IMapsMediaService {
     constructor(
-        navigate: Navigator,
-        params: Params,
+        goTo: GoTo,
+        params: Accessor<MediaParams>,
         view: MediaView,
         categoryQuery: () => UseQueryResult<Category | undefined, Error>,
         mediaListQuery: () => UseQueryResult<Media[], Error>,
         protected gpsListQuery: () => UseQueryResult<GpsDetail[], Error>
     ) {
-        super(navigate, params, view, categoryQuery, mediaListQuery);
+        super(goTo, params, view, categoryQuery, mediaListQuery);
     }
 
     override navigateToFirstMediaIfNeeded = () => {
@@ -86,7 +87,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         this.gpsListQuery().isSuccess &&
         this.mediaListQuery().isSuccess &&
         this.categoryQuery().isSuccess &&
-        (!this.params.mediaSlug || !!this.getActiveMedia());
+        (!this.params().mediaSlug || !!this.getActiveMedia());
 
     // read once, so `isSuccess` narrows the data on the same value
     getGpsList = () => {

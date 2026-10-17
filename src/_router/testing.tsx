@@ -1,5 +1,6 @@
 import { ParentComponent } from "solid-js";
 import {
+    AnyRoute,
     createMemoryHistory,
     createRootRoute,
     createRouter,
@@ -7,7 +8,6 @@ import {
     RouterProvider
 } from "@tanstack/solid-router";
 
-import { RouteNode, toRoutes } from "./routeTree";
 import { parseSearch, stringifySearch } from "./search";
 
 /*
@@ -31,15 +31,15 @@ export const WithRouter: ParentComponent<{ path?: string }> = props => {
 };
 
 /*
-   Real routes, in the application's own route syntax, on the real address bar -
-   for a test about where something leads. They resolve asynchronously, so look
-   for the result with `findBy`.
+   Real routes on the real address bar, for a test about where something leads -
+   handed the root to hang them from. They resolve asynchronously, so look for
+   the result with `findBy`.
 */
-export const TestRouter = (props: { routes: RouteNode[] }) => {
+export const TestRouter = (props: { routes: (root: AnyRoute) => AnyRoute[] }) => {
     const rootRoute = createRootRoute();
     const router = createRouter({
         // eslint-disable-next-line solid/reactivity -- the routes under test; read once
-        routeTree: rootRoute.addChildren(toRoutes(rootRoute, props.routes)),
+        routeTree: rootRoute.addChildren(props.routes(rootRoute)),
         parseSearch,
         stringifySearch
     });

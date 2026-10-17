@@ -1,63 +1,37 @@
-import { lazy } from "solid-js";
+import { linkOptions } from "@tanstack/solid-router";
 
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { MediaViewGrid } from "../_models/MediaView";
-import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
 import { Media } from "../_models/Media";
-import { Category } from "../_models/Category";
+import { MediaViewGrid } from "../_models/MediaView";
+import { MediaViewRoute } from "../_models/MediaViewRoute";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-const basePath = "/random";
+// how the random stack shows up in navigation - the routes are in _routeTree.tsx
 
-const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-});
-
-const mediaSlugOrBlank = (category: Category | undefined, media: Media | undefined) => {
-    if (!media) {
-        return "";
-    }
-
-    return `/${media.categoryYear}/${media.categorySlug}/${media.slug}`;
+export const random: RouteDisplay = {
+    icon: "icon-[ic--round-shuffle]",
+    name: "Random",
+    helpText: "Play though an unending list of random photos."
 };
 
-const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
+export const gridView: MediaViewRoute = {
     icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
-    mediaView: MediaViewGrid,
-    path: "/grid/:categoryYear?/:categorySlug?/:mediaSlug?",
-    absolutePath: `${basePath}/grid/:categoryYear?/:categorySlug?/:mediaSlug?`,
-    component: lazy(() => import("./Grid")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${basePath}/grid${mediaSlugOrBlank(category, media)}`
-});
-
-const redirectRoute = buildRedirectRoute(basePath);
-export const gridRoute = buildGridRoute(basePath);
-// kept only so old links resolve - see DetailRedirect
-export const detailRedirectRoute: AppRouteDefinition = {
-    name: "Detail",
-    path: "/detail/:categoryYear?/:categorySlug?/:mediaSlug?",
-    absolutePath: `${basePath}/detail/:categoryYear?/:categorySlug?/:mediaSlug?`,
-    component: lazy(() => import("../_media/DetailRedirect"))
-};
-// kept only so old links resolve - see FullscreenRedirect
-export const fullscreenRedirectRoute: AppRouteDefinition = {
-    name: "Fullscreen",
-    path: "/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?",
-    absolutePath: `${basePath}/fullscreen/:categoryYear?/:categorySlug?/:mediaSlug?`,
-    component: lazy(() => import("../_media/FullscreenRedirect"))
+    mediaView: MediaViewGrid
 };
 
-export const randomMediaRoutes: AppRouteDefinition = {
-    icon: "icon-[ic--round-shuffle]",
-    name: "Random",
-    helpText: "Play though an unending list of random photos.",
-    path: basePath,
-    absolutePath: basePath,
-    component: lazy(() => import("../_media/MediaRoot")),
-    children: [redirectRoute, gridRoute, detailRedirectRoute, fullscreenRedirectRoute]
-};
+/*
+   The stack, optionally open on one photo. Random media spans every category,
+   so a photo is addressed by its category's year and slug as well as its own.
+*/
+export const randomGridLink = (media?: Media) =>
+    linkOptions({
+        to: "/random/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+        params: media
+            ? {
+                  categoryYear: String(media.categoryYear),
+                  categorySlug: media.categorySlug,
+                  mediaSlug: media.slug
+              }
+            : {}
+    });

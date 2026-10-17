@@ -22,11 +22,12 @@ const queryClient = createAppQueryClient();
    and guards can ask for a token from the very first navigation.
 */
 const AppRouter = () => {
-    const [auth, { getToken }] = useAuthContext();
+    const [auth, { getToken, login }] = useAuthContext();
     const router = createAppRouter({
         queryClient,
         getToken,
-        isLoggedIn: () => auth.isLoggedIn
+        isLoggedIn: () => auth.isLoggedIn,
+        login
     });
 
     return <RouterProvider router={router} />;

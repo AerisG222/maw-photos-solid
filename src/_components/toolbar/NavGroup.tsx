@@ -1,12 +1,15 @@
 import { Component, Index, Show, createMemo } from "solid-js";
 
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { LinkOptions } from "@tanstack/solid-router";
+
+import { RouteDisplay } from "../../_models/RouteDisplay";
 
 import ToolbarLink from "./ToolbarLink";
 
 export interface NavEntry {
-    route: AppRouteDefinition;
-    href: string;
+    route: RouteDisplay;
+    // built with `linkOptions`, so where it goes is checked
+    link: LinkOptions;
     // overrides the router's own match - see the note on ToolbarLink
     active?: boolean;
     // shown but dead, so a toolbar keeps its shape as its subject comes and goes
@@ -62,7 +65,7 @@ const NavGroup: Component<Props> = props => {
 
                     return (
                         <ToolbarLink
-                            href={entry().href}
+                            link={entry().link}
                             route={route()}
                             active={entry().active}
                             disabled={entry().disabled}

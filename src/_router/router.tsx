@@ -1,29 +1,40 @@
 import { createRouter } from "@tanstack/solid-router";
 
-import { appRoutes } from "../routes";
-import { mediaRoutes } from "../category/_routes";
 import { categoryRouteTree } from "../category/_routeTree";
+import { authRouteTree } from "../auth/_routeTree";
+import { aboutRouteTree } from "../about/_routeTree";
+import { settingsRouteTree } from "../settings/_routeTree";
+import { searchRouteTree } from "../search/_routeTree";
+import { statsRouteTree } from "../stats/_routeTree";
+import { categoriesRouteTree } from "../categories/_routeTree";
+import { randomRouteTree } from "../random/_routeTree";
+import { peopleRouteTree } from "../people/_routeTree";
+import { placesRoute } from "../places/_routeTree";
+import { feedRouteTrees } from "../_media/feed/_routeTree";
+import { catchAllRoute } from "../redirect/_routeTree";
 import { startRouteTransition } from "../_components/transitions/viewTransition";
 import { RouterContext, rootRoute } from "./rootRoute";
-import { toRoutes } from "./routeTree";
 import { parseSearch, stringifySearch } from "./search";
 
 /*
-   The areas not yet on typed routes, converted from their _routes.ts.
-
-   In the tree, but kept out of its type. Their paths are strings decided at
-   runtime, typed as "any route" - and one of those in the tree widens every
-   path the router knows to plain `string`, which quietly switches off checking
-   for the typed areas too. Nothing needs them typed: they are reached by path
-   strings through the compatibility layer, exactly as before.
+   Every area, each declared in its own _routeTree.tsx. Order does not decide
+   which route an address reaches - TanStack ranks them by how specific their
+   paths are - except that the catch-all goes last, for whoever reads it.
 */
-const untypedRoutes = toRoutes(
-    rootRoute,
-    appRoutes.filter(route => route !== mediaRoutes)
-) as unknown as [];
-
-// every area on typed routes is left out of the conversion above and added as its own subtree
-const routeTree = rootRoute.addChildren([categoryRouteTree, ...untypedRoutes]);
+const routeTree = rootRoute.addChildren([
+    authRouteTree,
+    aboutRouteTree,
+    settingsRouteTree,
+    searchRouteTree,
+    statsRouteTree,
+    categoriesRouteTree,
+    randomRouteTree,
+    peopleRouteTree,
+    placesRoute,
+    ...feedRouteTrees,
+    categoryRouteTree,
+    catchAllRoute
+]);
 
 export const createAppRouter = (context: RouterContext) => {
     const router = createRouter({

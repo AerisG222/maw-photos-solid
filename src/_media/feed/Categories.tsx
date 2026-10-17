@@ -3,7 +3,7 @@ import ListingSurface from "../../_components/listing/ListingSurface";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
-import { getPlacePath } from "../../places/_routes";
+import { placeLink } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedCategories } from "./useFeedCategories";
 
@@ -38,12 +38,12 @@ const Categories: Component = () => {
             title={feed.isPlace() ? undefined : feed.subjectName()}
             header={
                 <Show when={feed.isPlace()}>
-                    <PlaceChain links={chain()} buildPath={getPlacePath} />
+                    <PlaceChain links={chain()} link={id => placeLink(id)} />
                 </Show>
             }
             toolbar={
                 <ToolbarCategories
-                    basePath={feed.basePath()}
+                    subject={feed.subject()}
                     favoritesOnly={feed.favoritesOnly()}
                     canRequestMore={feed.query().hasNextPage}
                     setFavoritesOnly={feed.setFavoritesOnly}

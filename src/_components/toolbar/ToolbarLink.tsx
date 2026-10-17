@@ -1,7 +1,7 @@
-import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Component, mergeProps, Show, splitProps } from "solid-js";
+import { LinkOptions, useLinkProps } from "@tanstack/solid-router";
 
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { RouteDisplay } from "../../_models/RouteDisplay";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 
 import ShortcutWrapper from "../shortcuts/ShortcutWrapper";
@@ -13,8 +13,9 @@ const ACTIVE_CLASS = "text-primary-content bg-primary mr-[-1px]";
 const INACTIVE_CLASS = "text-primary";
 
 interface Props {
-    href: string;
-    route: AppRouteDefinition;
+    // where it goes - built with `linkOptions`, so the destination is checked
+    link: LinkOptions;
+    route: RouteDisplay;
     /*
        Overrides the router's own match. For a link whose href is a *destination*
        rather than the path you are on: the media listing points at whichever view
@@ -55,6 +56,37 @@ const ToolbarLink: Component<Props> = props => {
 
     const label = () => props.route.tooltip ?? props.route.name;
 
+    /*
+       The router's own link behaviour on the anchor the tooltip renders: the
+       href, routing a plain click, preloading on hover, and its idea of which
+       link is active. Lit by path alone, and for everything beneath it too - a
+       view link stays lit while a photo below it is open - unless the caller
+       forces `active`, which is then the only answer.
+    */
+    const linkProps = useLinkProps(
+        mergeProps(() => props.link, {
+            class: "flex px-3 py-2 hover:text-primary-content hover:bg-primary/80",
+            activeOptions: { includeSearch: false },
+            get activeProps() {
+                return { class: props.active === undefined ? ACTIVE_CLASS : "" };
+            },
+            get inactiveProps() {
+                return { class: props.active === undefined ? INACTIVE_CLASS : "" };
+            }
+        })
+    );
+
+    // an anchor's `type` is a hint nobody sets here, and the tooltip types it as a button's
+    const [, anchorProps] = splitProps(linkProps, ["type"]);
+
+    const followLink = (evt: MouseEvent) => {
+        const onClick = linkProps.onClick;
+
+        if (typeof onClick === "function") {
+            onClick(evt as MouseEvent & { currentTarget: HTMLAnchorElement; target: Element });
+        }
+    };
+
     const body = () => (
         <>
             <Icon classes={props.route.icon!} />
@@ -83,31 +115,35 @@ const ToolbarLink: Component<Props> = props => {
                     </Tooltip>
                 }
             >
-                <Tooltip
-                    as={A}
+                <Tooltip<"a">
+                    as="a"
+                    {...anchorProps}
                     content={label()}
                     shortcutKeys={props.route.shortcutKeys}
-                    href={props.href}
-                    onClick={() => handleClick()}
-                    end={false}
-                    activeClass={props.active === undefined ? ACTIVE_CLASS : ""}
-                    inactiveClass={props.active === undefined ? INACTIVE_CLASS : ""}
+                    onClick={(evt: MouseEvent) => {
+                        handleClick();
+                        followLink(evt);
+                    }}
                     classList={
                         props.active === undefined
                             ? {}
                             : { [ACTIVE_CLASS]: props.active, [INACTIVE_CLASS]: !props.active }
                     }
-                    class="flex px-3 py-2 hover:text-primary-content hover:bg-primary/80"
                     /*
                        The name span is hidden below `md`, so without this the
                        link is an icon and a tooltip. `aria-current` is the
-                       navigation counterpart of the highlight beside it - where
-                       the caller forces `active` we state it, and where it is
-                       left to the router we cannot know here, so the class does
-                       the talking and `end={false}` keeps it lit.
+                       navigation counterpart of the highlight beside it: the
+                       router states it for a link it finds active, and where the
+                       caller forces `active` that answer wins.
                     */
                     aria-label={label()}
-                    aria-current={props.active ? "page" : undefined}
+                    aria-current={
+                        props.active === undefined
+                            ? linkProps["aria-current"]
+                            : props.active
+                              ? "page"
+                              : undefined
+                    }
                     ref={el}
                 >
                     {body()}

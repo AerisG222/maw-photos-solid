@@ -4,7 +4,7 @@ import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsCont
 import { useAuthContext } from "../_contexts/AuthContext";
 import { Media } from "../_models/Media";
 import { Category } from "../_models/Category";
-import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
+import { MediaViewRoute } from "../_models/MediaViewRoute";
 import { IMediaService } from "./services/IMediaService";
 import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
 
@@ -67,18 +67,18 @@ const Toolbar: ParentComponent<Props> = props => {
     const canBulkEdit = () => docked() && !!authState.accountStatus?.isAdmin;
 
     const entries = createMemo<NavEntry[]>(() => {
-        const available = props.mediaService.getAvailableRoutes();
+        const available = props.mediaService.getAvailableViews();
 
         return viewOrder
             .filter(view => view !== MediaViewBulkEdit || canBulkEdit())
             .map(view => ({ view, route: available.find(r => r.mediaView === view) }))
             .filter(
-                (candidate): candidate is { view: MediaView; route: MediaAppRouteDefinition } =>
+                (candidate): candidate is { view: MediaView; route: MediaViewRoute } =>
                     !!candidate.route
             )
             .map(({ view, route }) => ({
                 route,
-                href: route.buildPathForMedia(props.activeCategory, props.activeMedia),
+                link: props.mediaService.getMediaLinkByView(view, props.activeMedia),
                 clickHandler: () => setViewMode(view)
             }));
     });

@@ -10,7 +10,7 @@ import {
 import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 
-import { loginPage, logout as logoutPage } from "../auth/_routes";
+import { LOGIN_PATH, LOGOUT_PATH } from "../auth/_routeTree";
 import { AccountStatus } from "../_models/AccountStatus";
 
 export interface AuthState {
@@ -89,7 +89,7 @@ export const AuthProvider: ParentComponent = props => {
             window.history.replaceState(
                 undefined,
                 "",
-                returnTo && returnTo !== loginPage.absolutePath ? returnTo : "/"
+                returnTo && returnTo !== LOGIN_PATH ? returnTo : "/"
             );
         }
 
@@ -113,7 +113,7 @@ export const AuthProvider: ParentComponent = props => {
     };
 
     const logout = async (returnUrl?: string) => {
-        const destAfterLogout = returnUrl ?? `${window.location.origin}${logoutPage.absolutePath}`;
+        const destAfterLogout = returnUrl ?? `${window.location.origin}${LOGOUT_PATH}`;
 
         await auth0Client()?.logout({
             clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,

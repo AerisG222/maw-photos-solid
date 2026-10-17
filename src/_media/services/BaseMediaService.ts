@@ -1,4 +1,7 @@
-import { Navigator, Params } from "../../_router/compat";
+import { Accessor } from "solid-js";
+import { LinkOptions } from "@tanstack/solid-router";
+
+import { GoTo, MediaParams } from "./_navigation";
 
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
@@ -7,15 +10,15 @@ import { Uuid } from "../../_models/Uuid";
 
 export abstract class BaseMediaService {
     constructor(
-        protected navigate: Navigator,
-        protected params: Params,
+        protected goTo: GoTo,
+        protected params: Accessor<MediaParams>,
         protected view: MediaView
     ) {}
 
     abstract getMediaList(): Media[];
     abstract getActiveCategory(): Category | undefined;
-    abstract getEntryPathByView(view: MediaView): string;
-    abstract getMediaPathByView(view: MediaView, media: Media | undefined): string;
+    abstract getEntryLinkByView(view: MediaView): LinkOptions;
+    abstract getMediaLinkByView(view: MediaView, media: Media | undefined): LinkOptions;
 
     canRequestMore = () => false;
     // only a category listing can answer for a whole category - see IMediaService
@@ -26,7 +29,11 @@ export abstract class BaseMediaService {
     };
 
     getActiveMedia = () => {
-        if (!this.params.categoryYear && !this.params.categorySlug && !this.params.mediaSlug) {
+        if (
+            !this.params().categoryYear &&
+            !this.params().categorySlug &&
+            !this.params().mediaSlug
+        ) {
             return undefined;
         }
 
@@ -34,14 +41,14 @@ export abstract class BaseMediaService {
 
         return this.findMediaBySlug(
             list,
-            this.params.categoryYear,
-            this.params.categorySlug,
-            this.params.mediaSlug
+            this.params().categoryYear,
+            this.params().categorySlug,
+            this.params().mediaSlug
         );
     };
 
     navigateToMedia = (view: MediaView, media: Media) => {
-        this.navigate(this.getMediaPathByView(view, media));
+        this.goTo(this.getMediaLinkByView(view, media));
     };
 
     getCurrIndex = (list: Media[], currId: Uuid) => list?.findIndex(x => x.id === currId);
@@ -74,9 +81,9 @@ export abstract class BaseMediaService {
         const list = this.getMediaList();
         const currMedia = this.findMediaBySlug(
             list,
-            this.params.categoryYear,
-            this.params.categorySlug,
-            this.params.mediaSlug
+            this.params().categoryYear,
+            this.params().categorySlug,
+            this.params().mediaSlug
         );
 
         if (!currMedia) {
@@ -94,9 +101,9 @@ export abstract class BaseMediaService {
         const list = this.getMediaList();
         const currMedia = this.findMediaBySlug(
             list,
-            this.params.categoryYear,
-            this.params.categorySlug,
-            this.params.mediaSlug
+            this.params().categoryYear,
+            this.params().categorySlug,
+            this.params().mediaSlug
         );
 
         if (!currMedia) {

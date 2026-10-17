@@ -1,15 +1,18 @@
-import { ParentComponent } from "solid-js";
+import { Component } from "solid-js";
+import { Outlet } from "@tanstack/solid-router";
 
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 import BrandHeader from "../_components/brand/BrandHeader";
 
-const AboutLayout: ParentComponent = props => {
+const AboutLayout: Component = () => {
     return (
         <Layout toolbar={<Toolbar />}>
             <BrandHeader showVersion />
 
-            <div class="mx-4 md:mx-10%">{props.children}</div>
+            <div class="mx-4 md:mx-10%">
+                <Outlet />
+            </div>
         </Layout>
     );
 };

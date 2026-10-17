@@ -1,5 +1,5 @@
 import { Component, For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
-import { useNavigate } from "../_router/compat";
+import { useGoTo } from "./services/_navigation";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
@@ -69,7 +69,7 @@ const ViewBulkEdit: Component<Props> = props => {
     // eslint-disable-next-line solid/reactivity -- as above
     const categoryRoles = categoryRolesQuery(activeCategoryId);
     const { docked } = usePanelShape();
-    const navigate = useNavigate();
+    const goTo = useGoTo();
 
     /*
        The one view that is not offered on a narrow screen.
@@ -87,7 +87,7 @@ const ViewBulkEdit: Component<Props> = props => {
     */
     createEffect(() => {
         if (!docked()) {
-            navigate(props.mediaService.getEntryPathByView(MediaViewGrid), { replace: true });
+            goTo(props.mediaService.getEntryLinkByView(MediaViewGrid), { replace: true });
         }
     });
     const [media, setMedia] = createSignal<SelectableMedia[]>([]);

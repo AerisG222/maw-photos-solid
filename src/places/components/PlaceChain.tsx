@@ -1,5 +1,5 @@
 import { Component, For, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link, LinkOptions } from "@tanstack/solid-router";
 
 import { getPlaceKindIcon, PlaceKind } from "../../_models/Place";
 import { Uuid } from "../../_models/Uuid";
@@ -25,7 +25,8 @@ export interface PlaceChainLink {
 
 interface Props {
     links: PlaceChainLink[];
-    buildPath: (id?: Uuid) => string;
+    // where a rung leads - the tree at that place, or its root with no id
+    link: (id?: Uuid) => LinkOptions;
 }
 
 /*
@@ -47,14 +48,14 @@ const PlaceChain: Component<Props> = props => {
 
     return (
         <div class="flex flex-wrap items-center gap-1 my-3">
-            <A
+            <Link
+                {...props.link()}
                 class="flex items-center gap-1 px-2 py-1 rounded-sm border border-secondary/20
                     hover:border-primary hover:text-primary transition-colors duration-150 ease-out"
-                href={props.buildPath()}
             >
                 <Icon classes="icon-[ic--round-travel-explore] text-lg" />
                 <span class="text-sm">All Places</span>
-            </A>
+            </Link>
 
             <For each={props.links}>
                 {(link, idx) => (
@@ -66,15 +67,14 @@ const PlaceChain: Component<Props> = props => {
                             or a move that reshaped the chain gets read again, and
                             it costs nothing to leave working.
                         */}
-                        <A
-                            class="flex items-center gap-2 pr-2 rounded-sm border
-                                transition-colors duration-150 ease-out"
-                            classList={{
-                                "border-secondary/20 hover:border-primary hover:text-primary":
-                                    !isCurrent(idx()),
-                                "border-primary bg-primary/10 font-bold": isCurrent(idx())
-                            }}
-                            href={props.buildPath(link.id)}
+                        <Link
+                            {...props.link(link.id)}
+                            // one class string: TanStack's Link passes `class` through, but not `classList`
+                            class={`flex items-center gap-2 pr-2 rounded-sm border transition-colors duration-150 ease-out ${
+                                isCurrent(idx())
+                                    ? "border-primary bg-primary/10 font-bold"
+                                    : "border-secondary/20 hover:border-primary hover:text-primary"
+                            }`}
                             title={link.name}
                         >
                             <Show
@@ -100,7 +100,7 @@ const PlaceChain: Component<Props> = props => {
                             <Show when={isCurrent(idx()) && link.mediaCount !== undefined}>
                                 <span class="badge badge-sm opacity-70">{link.mediaCount}</span>
                             </Show>
-                        </A>
+                        </Link>
                     </>
                 )}
             </For>

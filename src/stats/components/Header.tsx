@@ -1,14 +1,14 @@
 import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
-import { statsSummary } from "../_routes";
+import { StatsSearch } from "../_search";
 
 import Icon from "../../_components/icon/Icon";
 
 interface Props {
     year: string | undefined;
-    type?: string | undefined;
-    mode?: string | undefined;
+    // carried back to the summary, so it opens the way the year was being looked at
+    search?: StatsSearch;
 }
 
 const Header: Component<Props> = props => {
@@ -16,12 +16,9 @@ const Header: Component<Props> = props => {
         <>
             <div class="flex text-secondary font-bold">
                 <Show when={props.year} fallback={<h3>Stats</h3>}>
-                    <A
-                        class="text-primary"
-                        href={`${statsSummary.absolutePath}?type=${props.type}&mode=${props.mode}`}
-                    >
+                    <Link class="text-primary" to="/stats/summary" search={props.search ?? {}}>
                         Stats
-                    </A>
+                    </Link>
                     <Icon classes="text-lg icon-[ic--round-keyboard-arrow-right]" />
                     <h3>{props.year}</h3>
                 </Show>

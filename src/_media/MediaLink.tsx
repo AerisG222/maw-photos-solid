@@ -1,3 +1,4 @@
+import { LinkOptions } from "@tanstack/solid-router";
 import { Component } from "solid-js";
 
 import { Media } from "../_models/Media";
@@ -8,7 +9,8 @@ import MediaTypeIcon from "../_components/icon/MediaTypeIcon";
 import Tile from "../_components/listing/Tile";
 
 interface Props {
-    href: string;
+    // where the tile leads - built with `linkOptions`, so it is checked
+    link: LinkOptions;
     media: Media;
     eager: boolean;
     setIsFavorite?: (media: Media, isFavorite: boolean) => void;
@@ -24,7 +26,7 @@ const MediaLink: Component<Props> = props => {
 
     return (
         <Tile
-            href={props.href}
+            link={props.link}
             src={getMediaTeaserUrl(props.media)}
             eager={props.eager}
             badges={{

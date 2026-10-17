@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js";
 
 import { Person } from "../../_models/Person";
-import { getPersonPath } from "../_routes";
+import { feedLink } from "../../_media/feed/_routes";
 import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 import FavoriteBadge from "../../_components/listing/FavoriteBadge";
@@ -39,7 +39,7 @@ const PersonCard: Component<Props> = props => {
 
     return (
         <Tile
-            href={getPersonPath(props.person.id)}
+            link={feedLink({ kind: "person", id: props.person.id })}
             src={faceUrl()}
             square
             surface

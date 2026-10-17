@@ -1,4 +1,5 @@
 import { ParentComponent, Show, children } from "solid-js";
+import { linkOptions } from "@tanstack/solid-router";
 
 import { searchGrid, searchList } from "../_routes";
 
@@ -20,8 +21,8 @@ const Toolbar: ParentComponent<Props> = props => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: searchGrid, href: searchGrid.absolutePath },
-                        { route: searchList, href: searchList.absolutePath }
+                        { route: searchGrid, link: linkOptions({ to: "/search/grid" }) },
+                        { route: searchList, link: linkOptions({ to: "/search/list" }) }
                     ]}
                 />
             }

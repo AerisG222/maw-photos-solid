@@ -1,47 +1,26 @@
-import { lazy } from "solid-js";
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-const basePath = "/about";
+// how the about area and its pages show up in navigation - the routes are in _routeTree.tsx
 
-export const aboutRedirect: AppRouteDefinition = {
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-};
-
-export const aboutHelp: AppRouteDefinition = {
+export const aboutHelp: RouteDisplay = {
     icon: "icon-[ic--round-help]",
-    name: "Help",
-    path: "/help",
-    absolutePath: `${basePath}/help`,
-    component: lazy(() => import("./Help"))
+    name: "Help"
 };
 
-export const aboutReleaseNotes: AppRouteDefinition = {
+export const aboutReleaseNotes: RouteDisplay = {
     icon: "icon-[ic--round-info]",
     name: "Releases",
-    tooltip: "Release Notes",
-    path: "/release-notes",
-    absolutePath: `${basePath}/release-notes`,
-    component: lazy(() => import("./ReleaseNotes"))
+    tooltip: "Release Notes"
 };
 
-export const aboutAndroid: AppRouteDefinition = {
+export const aboutAndroid: RouteDisplay = {
     icon: "icon-[ic--round-android]",
     name: "Android",
-    tooltip: "Android Application",
-    path: "/android",
-    absolutePath: `${basePath}/android`,
-    component: lazy(() => import("./Android"))
+    tooltip: "Android Application"
 };
 
-export const about: AppRouteDefinition = {
+export const about: RouteDisplay = {
     icon: "icon-[ic--round-help-outline]",
     name: "About",
-    helpText: "View help and release notes for this application.",
-    path: basePath,
-    absolutePath: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [aboutRedirect, aboutHelp, aboutReleaseNotes, aboutAndroid]
+    helpText: "View help and release notes for this application."
 };

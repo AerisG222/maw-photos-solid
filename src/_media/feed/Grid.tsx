@@ -1,7 +1,7 @@
 import { Component, createEffect, onCleanup, Show } from "solid-js";
 
 import { MediaViewGrid } from "../../_models/MediaView";
-import { getPlacePath } from "../../places/_routes";
+import { placeLink } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedServices } from "./useFeedServices";
 
@@ -18,7 +18,7 @@ const Grid: Component = () => {
     const {
         mediaService,
         slideshowService,
-        basePath,
+        subject,
         subjectName,
         mediaScope,
         subjectIsEmpty,
@@ -70,13 +70,13 @@ const Grid: Component = () => {
                     title={isPlace() ? undefined : subjectName()}
                     header={
                         <Show when={isPlace()}>
-                            <PlaceChain links={chain()} buildPath={getPlacePath} />
+                            <PlaceChain links={chain()} link={id => placeLink(id)} />
                         </Show>
                     }
                     toolbarLeadingNavCount={LISTING_NAV_COUNT}
                     toolbarLeading={
                         <ToolbarListing
-                            basePath={basePath()}
+                            subject={subject()}
                             showingCategories={false}
                             favoritesOnly={favoritesOnly()}
                         />

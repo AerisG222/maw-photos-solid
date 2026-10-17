@@ -1,8 +1,7 @@
 import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { useAuthContext } from "../../_contexts/AuthContext";
-import { logout } from "../../auth/_routes";
 
 import Icon from "../icon/Icon";
 
@@ -44,13 +43,13 @@ const UserInfo: Component<Props> = props => {
 
                 <ul class="menu dropdown-content bg-base-300 rounded z-1 w-52 p-2 shadow">
                     <li>
-                        <A
+                        <Link
                             class="cursor-pointer hover:bg-primary hover:text-primary-content"
-                            href={logout.absolutePath}
+                            to="/auth/logout"
                         >
                             <Icon classes="icon-[ic--round-logout]" />
                             <span>Logout</span>
-                        </A>
+                        </Link>
                     </li>
                 </ul>
             </div>

@@ -1,4 +1,5 @@
 import { ParentComponent } from "solid-js";
+import { linkOptions } from "@tanstack/solid-router";
 
 import {
     settingsAppearance,
@@ -19,13 +20,25 @@ const Toolbar: ParentComponent = () => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: settingsAppearance, href: settingsAppearance.absolutePath },
-                        { route: settingsBrowsing, href: settingsBrowsing.absolutePath },
-                        { route: settingsCategories, href: settingsCategories.absolutePath },
-                        { route: settingsMedia, href: settingsMedia.absolutePath },
-                        { route: settingsPeople, href: settingsPeople.absolutePath },
-                        { route: settingsSearch, href: settingsSearch.absolutePath },
-                        { route: settingsShortcuts, href: settingsShortcuts.absolutePath }
+                        {
+                            route: settingsAppearance,
+                            link: linkOptions({ to: "/settings/appearance" })
+                        },
+                        {
+                            route: settingsBrowsing,
+                            link: linkOptions({ to: "/settings/browsing" })
+                        },
+                        {
+                            route: settingsCategories,
+                            link: linkOptions({ to: "/settings/categories" })
+                        },
+                        { route: settingsMedia, link: linkOptions({ to: "/settings/media" }) },
+                        { route: settingsPeople, link: linkOptions({ to: "/settings/people" }) },
+                        { route: settingsSearch, link: linkOptions({ to: "/settings/search" }) },
+                        {
+                            route: settingsShortcuts,
+                            link: linkOptions({ to: "/settings/shortcuts" })
+                        }
                     ]}
                 />
             }

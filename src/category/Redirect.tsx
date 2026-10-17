@@ -1,19 +1,22 @@
-import { Component, createEffect } from "solid-js";
+import { Component } from "solid-js";
+import { getRouteApi, Navigate } from "@tanstack/solid-router";
 
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
-import { useCategoryServices } from "./hooks/useCategoryServices";
+import { categoryViewLink } from "./_routes";
 
+const route = getRouteApi("/categories/$categoryYear/$categorySlug");
+
+// a category opens in whichever view was used last - a setting, which only a component can read
 const Redirect: Component = () => {
     const [settings] = useMediaSettingsContext();
-    const { mediaService } = useCategoryServices(settings.view);
+    const params = route.useParams();
 
-    createEffect(() => {
-        if (mediaService.getActiveCategory()) {
-            mediaService.navigateToView(settings.view);
-        }
-    });
-
-    return <></>;
+    return (
+        <Navigate
+            {...categoryViewLink(settings.view, params().categoryYear, params().categorySlug)}
+            replace
+        />
+    );
 };
 
 export default Redirect;

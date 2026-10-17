@@ -1,35 +1,8 @@
-import { lazy } from "solid-js";
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-const basePath = "/stats";
-
-export const statsRedirect: AppRouteDefinition = {
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-};
-
-export const statsSummary: AppRouteDefinition = {
-    name: "Stats Summary",
-    path: "/summary",
-    absolutePath: `${basePath}/summary`,
-    component: lazy(() => import("./Summary"))
-};
-
-export const statsYear: AppRouteDefinition = {
-    name: "Stats Year",
-    path: "/summary/:year",
-    absolutePath: `${basePath}/summary/:year`,
-    component: lazy(() => import("./Year"))
-};
-
-export const stats: AppRouteDefinition = {
+// how the stats area shows up in navigation - the routes are in _routeTree.tsx
+export const stats: RouteDisplay = {
     icon: "icon-[ic--round-bar-chart]",
     name: "Statistics",
-    helpText: "View statistics for all photos and videos.",
-    absolutePath: basePath,
-    path: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [statsRedirect, statsSummary, statsYear]
+    helpText: "View statistics for all photos and videos."
 };

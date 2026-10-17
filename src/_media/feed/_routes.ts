@@ -1,154 +1,166 @@
-import { lazy } from "solid-js";
+import { linkOptions, SearchSchemaInput } from "@tanstack/solid-router";
 
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
-import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 import { MediaView, MediaViewGrid } from "../../_models/MediaView";
+import { MediaViewRoute } from "../../_models/MediaViewRoute";
+import { RouteDisplay } from "../../_models/RouteDisplay";
+import { Uuid } from "../../_models/Uuid";
 
 /*
-   The routes behind a feed over a subject: the media one person appears in, the
-   media anyone in a clan appears in, or the media taken at a place.
+   A feed over a subject: the media one person appears in, the media anyone in a
+   clan appears in, or the media taken at a place.
 
-   They differ only in the path they hang from and the query they read, so they
-   share one set of pages rather than one set each. Everything else - the
-   favorites filter, the seeded shuffle, paging, the slideshow - is identical by
-   construction instead of by maintenance.
+   They differ only in where they hang and which query they read, so they share
+   one set of pages rather than one set each. Everything else - the favorites
+   filter, the seeded shuffle, paging, the slideshow - is identical by
+   construction instead of by maintenance. The routes are in _routeTree.tsx.
 */
+export type FeedSubject =
+    { kind: "person"; id: Uuid } | { kind: "clan"; id: Uuid } | { kind: "place"; id: Uuid };
 
-// media in these feeds spans categories, so an item is addressed the way the
-// random feed addresses one rather than by slug alone
-const mediaParams = "/:categoryYear?/:categorySlug?/:mediaSlug?";
-
-// module level, so rebuilding the definitions for another subject does not
-// create a second lazy wrapper around the same chunk
-const redirectComponent = lazy(() => import("./Redirect"));
-const gridComponent = lazy(() => import("./Grid"));
-const categoriesComponent = lazy(() => import("./Categories"));
-const fullscreenRedirectComponent = lazy(() => import("../FullscreenRedirect"));
-const rootComponent = lazy(() => import("../MediaRoot"));
-const detailRedirectComponent = lazy(() => import("../DetailRedirect"));
-
-// kept only so old links resolve - see DetailRedirect
-const detailRedirect = (basePath: string): AppRouteDefinition => ({
-    name: "Detail",
-    path: `/detail${mediaParams}`,
-    absolutePath: `${basePath}/detail${mediaParams}`,
-    component: detailRedirectComponent
-});
-
-/*
-   One source of truth for where each feed lives. The route definitions register
-   these with the parameter name in place; the running feed builds the same paths
-   with a real id, and nothing else needs to know the shape.
-
-   Clans sit under /people rather than at the root so the People nav entry stays
-   lit while browsing one - a clan is a way into the same library, not a separate
-   place.
-*/
-export const personFeedBasePath = (personId: string) => `/people/${personId}`;
-export const clanFeedBasePath = (clanId: string) => `/people/clans/${clanId}`;
-
-/*
-   A place's feed hangs below the place itself rather than replacing it, because
-   /places/{id} is already the drill-down - the states inside a country, the
-   cities inside a state. The static segment is what separates the two, the same
-   job `clans` does for the path above.
-*/
-export const placeFeedBasePath = (placeId: string) => `/places/${placeId}/media`;
-
-const mediaSlugOrBlank = (media: Media | undefined) =>
-    media ? `/${media.categoryYear}/${media.categorySlug}/${media.slug}` : "";
-
-export const stripMediaParams = (path: string) =>
-    path.replace("/:categoryYear?", "").replace("/:categorySlug?", "").replace("/:mediaSlug?", "");
-
-export interface FeedRoutes {
-    grid: MediaAppRouteDefinition;
-    // a listing of the categories the subject turns up in, rather than of their
-    // media. its own route rather than a flag on the grid: it lists a different
-    // thing, so it has a different toolbar and a different query, and neither
-    // has to ask which mode it is in
-    categories: AppRouteDefinition;
+export interface FeedSearch {
+    // favorites only
+    f?: boolean;
+    // a shuffled order, reproducible from the seed
+    seed?: number;
 }
 
 /*
-   Built per subject rather than declared once. The shared toolbar navigates by
-   asking a route to build a path, and that path has to name the person or clan
-   on screen - which the router only knows as a parameter.
-
-   `search` is baked in for the same reason: the favorites filter and shuffle
-   seed live in the query string, and a view link built without them would
-   silently drop the filter the user is browsing under.
+   What a feed's address may say. In the address rather than a store: it has to
+   survive moving between a feed's listings, which are separate routes, and a
+   reload or a shared link should reproduce the same feed. Anything that is not
+   a favorites flag or a whole number of a seed is dropped.
 */
-export const buildFeedRoutes = (basePath: string, search = ""): FeedRoutes => ({
-    grid: {
-        icon: "icon-[ic--round-apps]",
-        name: "Grid",
-        tooltip: "Grid View",
-        mediaView: MediaViewGrid,
-        path: `/grid${mediaParams}`,
-        absolutePath: `${basePath}/grid${mediaParams}`,
-        component: gridComponent,
-        buildPathForMedia: (_category: Category | undefined, media: Media | undefined) =>
-            `${basePath}/grid${mediaSlugOrBlank(media)}${search}`
-    },
-    categories: {
-        icon: "icon-[ic--round-collections]",
-        name: "Categories",
-        tooltip: "Show Categories",
-        path: "/categories",
-        absolutePath: `${basePath}/categories`,
-        component: categoriesComponent
+export const validateFeedSearch = (search: FeedSearch & SearchSchemaInput): FeedSearch => {
+    // typed as what a link may pass; the address bar can hold anything
+    const raw = search as unknown as Record<string, unknown>;
+    const result: FeedSearch = {};
+
+    if (raw.f === true || raw.f === "true") {
+        result.f = true;
     }
-});
+
+    const seed = typeof raw.seed === "number" ? raw.seed : Number(raw.seed);
+
+    if (raw.seed !== undefined && Number.isSafeInteger(seed)) {
+        result.seed = seed;
+    }
+
+    return result;
+};
+
+export const gridView: MediaViewRoute = {
+    icon: "icon-[ic--round-apps]",
+    name: "Grid",
+    tooltip: "Grid View",
+    mediaView: MediaViewGrid
+};
+
+export const feedMediaDisplay: RouteDisplay = {
+    icon: "icon-[ic--round-image]",
+    name: "Media",
+    tooltip: "Show Media"
+};
 
 /*
-   Which media listing a feed can open on.
-
-   There is one. Map and bulk edit belong to a single category, and fullscreen
-   stopped being a view at all - it is a toggle on the grid now - so every saved
-   preference resolves here. Kept as a function because the caller asks a
-   question that may have more than one answer again.
+   A listing of the categories the subject turns up in, rather than of their
+   media. Its own route rather than a flag on the grid: it lists a different
+   thing, so it has a different toolbar and a different query, and neither has
+   to ask which mode it is in.
 */
-export const feedMediaListing = (_view: MediaView) => "grid";
+export const feedCategoriesDisplay: RouteDisplay = {
+    icon: "icon-[ic--round-collections]",
+    name: "Categories",
+    tooltip: "Show Categories"
+};
 
-// a path to one of a feed's listings. only the favorites filter carries across:
-// a seeded shuffle has no meaning for a list of categories, and the API takes no
-// seed for them
-export const feedListingPath = (basePath: string, listing: string, favoritesOnly: boolean) =>
-    `${basePath}/${listing}${favoritesOnly ? "?f=true" : ""}`;
+/*
+   Which media listing a feed can open on. There is one: map and bulk edit
+   belong to a single category, and fullscreen stopped being a view at all - it
+   is a toggle on the grid now - so every saved preference resolves here. Kept
+   as a function because the caller asks a question that may have more than one
+   answer again.
+*/
+export const feedMediaListing = (_view: MediaView) => MediaViewGrid;
 
-// kept only so old links resolve - see FullscreenRedirect
-const fullscreenRedirect = (basePath: string): AppRouteDefinition => ({
-    name: "Fullscreen",
-    path: "/fullscreen/:mediaSlug?",
-    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
-    component: fullscreenRedirectComponent
-});
+// media in a feed spans categories, so a photo is addressed by its category as well as its slug
+// left out entirely, rather than present and undefined, when there is no photo
+const mediaParams = (media: Media | undefined): Record<string, string> =>
+    media
+        ? {
+              categoryYear: String(media.categoryYear),
+              categorySlug: media.categorySlug,
+              mediaSlug: media.slug
+          }
+        : {};
 
-// the tree handed to the router, one per subject kind
-export const buildFeedRouteTree = (basePath: string, name: string): AppRouteDefinition => {
-    const routes = buildFeedRoutes(basePath);
+/*
+   A feed's grid, optionally open on one photo, under the filter it is being
+   browsed with - typed per subject, so a person's feed cannot be handed a
+   clan's address. The filter rides along because a link built without it would
+   silently drop what the reader is browsing under.
+*/
+export const feedGridLink = (subject: FeedSubject, media?: Media, search: FeedSearch = {}) => {
+    switch (subject.kind) {
+        case "clan":
+            return linkOptions({
+                to: "/people/clans/$clanId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                params: { clanId: subject.id, ...mediaParams(media) },
+                search
+            });
+        case "place":
+            return linkOptions({
+                to: "/places/$placeId/media/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                params: { placeId: subject.id, ...mediaParams(media) },
+                search
+            });
+        default:
+            return linkOptions({
+                to: "/people/$personId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+                params: { personId: subject.id, ...mediaParams(media) },
+                search
+            });
+    }
+};
 
-    const redirect: AppRouteDefinition = {
-        path: "/",
-        absolutePath: basePath,
-        name: "Redirect",
-        component: redirectComponent
-    };
+/*
+   A feed's categories. Only the favorites filter carries across: a seeded
+   shuffle has no meaning for a list of categories, and the API takes no seed
+   for them.
+*/
+export const feedCategoriesLink = (subject: FeedSubject, favoritesOnly: boolean) => {
+    const search = favoritesOnly ? { f: true } : {};
 
-    return {
-        path: basePath,
-        absolutePath: basePath,
-        name,
-        component: rootComponent,
-        children: [
-            redirect,
-            routes.grid,
-            detailRedirect(basePath),
-            fullscreenRedirect(basePath),
-            routes.categories
-        ]
-    };
+    switch (subject.kind) {
+        case "clan":
+            return linkOptions({
+                to: "/people/clans/$clanId/categories",
+                params: { clanId: subject.id },
+                search
+            });
+        case "place":
+            return linkOptions({
+                to: "/places/$placeId/media/categories",
+                params: { placeId: subject.id },
+                search
+            });
+        default:
+            return linkOptions({
+                to: "/people/$personId/categories",
+                params: { personId: subject.id },
+                search
+            });
+    }
+};
+
+// a feed itself, which opens on whichever listing was used last
+export const feedLink = (subject: FeedSubject) => {
+    switch (subject.kind) {
+        case "clan":
+            return linkOptions({ to: "/people/clans/$clanId", params: { clanId: subject.id } });
+        case "place":
+            return linkOptions({ to: "/places/$placeId/media", params: { placeId: subject.id } });
+        default:
+            return linkOptions({ to: "/people/$personId", params: { personId: subject.id } });
+    }
 };

@@ -1,14 +1,18 @@
 import { Component } from "solid-js";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
-import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
-import { feedListingPath, feedMediaListing } from "./_routes";
+import {
+    FeedSubject,
+    feedCategoriesDisplay,
+    feedCategoriesLink,
+    feedGridLink,
+    feedMediaDisplay
+} from "./_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
 
 interface Props {
-    basePath: string;
+    subject: FeedSubject;
     showingCategories: boolean;
     favoritesOnly: boolean;
 }
@@ -37,34 +41,16 @@ interface Props {
 // where to start numbering
 export const LISTING_NAV_COUNT = 2;
 const ToolbarListing: Component<Props> = props => {
-    const [mediaSettings] = useMediaSettingsContext();
     const [, { setFeedListing }] = useAreaSettingsContext();
 
     /*
-       Going back to the media returns to whichever view was last used, rather
-       than always the grid - the same preference the feed's redirect opens a
-       fresh subject on, so the two agree.
+       Going back to the media returns to the media listing a feed opens on -
+       the same answer its redirect gives a fresh subject, so the two agree.
     */
-    const mediaHref = () =>
-        feedListingPath(props.basePath, feedMediaListing(mediaSettings.view), props.favoritesOnly);
+    const mediaLink = () =>
+        feedGridLink(props.subject, undefined, props.favoritesOnly ? { f: true } : {});
 
-    const categoriesHref = () => feedListingPath(props.basePath, "categories", props.favoritesOnly);
-
-    const mediaRoute = (): AppRouteDefinition => ({
-        icon: "icon-[ic--round-image]",
-        name: "Media",
-        tooltip: "Show Media",
-        path: mediaHref(),
-        absolutePath: mediaHref()
-    });
-
-    const categoriesRoute = (): AppRouteDefinition => ({
-        icon: "icon-[ic--round-collections]",
-        name: "Categories",
-        tooltip: "Show Categories",
-        path: categoriesHref(),
-        absolutePath: categoriesHref()
-    });
+    const categoriesLink = () => feedCategoriesLink(props.subject, props.favoritesOnly);
 
     return (
         /*
@@ -79,14 +65,14 @@ const ToolbarListing: Component<Props> = props => {
         <NavGroup
             entries={[
                 {
-                    route: mediaRoute(),
-                    href: mediaHref(),
+                    route: feedMediaDisplay,
+                    link: mediaLink(),
                     active: !props.showingCategories,
                     clickHandler: () => setFeedListing("media")
                 },
                 {
-                    route: categoriesRoute(),
-                    href: categoriesHref(),
+                    route: feedCategoriesDisplay,
+                    link: categoriesLink(),
                     active: props.showingCategories,
                     clickHandler: () => setFeedListing("categories")
                 }

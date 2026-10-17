@@ -7,7 +7,8 @@ import {
     onMount,
     Show
 } from "solid-js";
-import { A, useNavigate } from "../_router/compat";
+import { Link } from "@tanstack/solid-router";
+import { useGoTo } from "./services/_navigation";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
 import { SlideshowService } from "./services/SlideshowService";
@@ -71,7 +72,7 @@ const ViewGrid: Component<Props> = props => {
     >();
     const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
-    const navigate = useNavigate();
+    const goTo = useGoTo();
 
     const activeMedia = () => props.mediaService.getActiveMedia();
 
@@ -102,7 +103,7 @@ const ViewGrid: Component<Props> = props => {
 
     const closeActiveMedia = () => {
         props.slideshowService.stop();
-        navigate(props.mediaService.getEntryPathByView(MediaViewGrid));
+        goTo(props.mediaService.getEntryLinkByView(MediaViewGrid));
     };
 
     onMount(() => {
@@ -231,9 +232,9 @@ const ViewGrid: Component<Props> = props => {
                             />
                         </Show>
 
-                        <A
+                        <Link
+                            {...props.mediaService.getEntryLinkByView(MediaViewGrid)}
                             class="flex flex-1 min-h-0"
-                            href={props.mediaService.getEntryPathByView(MediaViewGrid)}
                             onClick={() => props.slideshowService.stop()}
                         >
                             <MainItem
@@ -243,7 +244,7 @@ const ViewGrid: Component<Props> = props => {
                                 setActiveMediaElement={el => setMediaElement(el)}
                                 setIsFavorite={setIsFavorite}
                             />
-                        </A>
+                        </Link>
 
                         {/*
                             The one thing on screen that is not the photograph.
@@ -278,7 +279,7 @@ const ViewGrid: Component<Props> = props => {
                     >
                         <MediaGrid
                             mediaLinkBuilder={(media: Media) =>
-                                props.mediaService.getMediaPathByView(MediaViewGrid, media)
+                                props.mediaService.getMediaLinkByView(MediaViewGrid, media)
                             }
                             items={props.mediaService.getMediaList()}
                             setIsFavorite={setIsFavorite}

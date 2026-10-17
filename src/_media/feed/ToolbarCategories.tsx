@@ -6,9 +6,10 @@ import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import ToolbarListing from "./ToolbarListing";
+import { FeedSubject } from "./_routes";
 
 interface Props {
-    basePath: string;
+    subject: FeedSubject;
     favoritesOnly: boolean;
     canRequestMore: boolean;
     setFavoritesOnly: (favoritesOnly: boolean) => void;
@@ -38,7 +39,7 @@ const ToolbarCategories: Component<Props> = props => {
             */
             nav={
                 <ToolbarListing
-                    basePath={props.basePath}
+                    subject={props.subject}
                     showingCategories={true}
                     favoritesOnly={props.favoritesOnly}
                 />

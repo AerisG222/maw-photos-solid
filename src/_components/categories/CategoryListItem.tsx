@@ -1,10 +1,9 @@
 import { Component, Show, createSignal, onMount } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { defaultListThumbnailSize, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";
 import { MediaTypePhoto, MediaTypeVideo } from "../../_models/MediaType";
-import { getCategoryPath } from "../../categories/_routes";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 
 import { hasRevealed, markRevealed } from "../loading/_imageReveal";
@@ -47,8 +46,12 @@ const CategoryListItem: Component<Props> = props => {
     };
 
     return (
-        <A
-            href={getCategoryPath(props.category.year, props.category.slug)}
+        <Link
+            to="/categories/$categoryYear/$categorySlug"
+            params={{
+                categoryYear: String(props.category.year),
+                categorySlug: props.category.slug
+            }}
             class="group flex items-center cursor-pointer p-1 bg-base-200 border-b-1 border-b-secondary/10
                 hover:bg-base-300 hover:text-primary
                 transition-[background-color,color] duration-200 ease-out"
@@ -102,7 +105,7 @@ const CategoryListItem: Component<Props> = props => {
                     extraClasses="hover:text-primary"
                 />
             </IconButton>
-        </A>
+        </Link>
     );
 };
 

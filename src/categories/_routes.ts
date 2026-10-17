@@ -1,55 +1,28 @@
-import { lazy } from "solid-js";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { equalsIgnoreCase } from "../_models/utils/StringUtils";
+// how the categories area and its views show up in navigation - the routes are in _routeTree.tsx
 
-const basePath = "/categories";
-
-export const categoriesRedirect: AppRouteDefinition = {
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-};
-
-export const categoriesGrid: AppRouteDefinition = {
+export const categoriesGrid: RouteDisplay = {
     icon: "icon-[ic--round-apps]",
     name: "Grid",
-    tooltip: "Grid View",
-    path: "/grid",
-    absolutePath: `${basePath}/grid`,
-    component: lazy(() => import("./Grid"))
+    tooltip: "Grid View"
 };
 
-export const categoriesList: AppRouteDefinition = {
+export const categoriesList: RouteDisplay = {
     icon: "icon-[ic--round-format-list-bulleted]",
     name: "List",
-    tooltip: "List View",
-    path: "/list",
-    absolutePath: `${basePath}/list`,
-    component: lazy(() => import("./List"))
+    tooltip: "List View"
 };
 
-export const categories: AppRouteDefinition = {
+export const categories: RouteDisplay = {
     icon: "icon-[ic--round-home]",
     name: "Categories",
-    helpText: "Browse by year and category.",
-    path: basePath,
-    absolutePath: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [categoriesRedirect, categoriesGrid, categoriesList]
+    helpText: "Browse by year and category."
 };
 
-export const getRouteForViewMode = (mode: string) => {
-    if (equalsIgnoreCase("list", mode)) {
-        return categoriesList;
-    }
-
-    return categoriesGrid;
-};
-
-export const buildSearch = (year?: number | "all") => {
-    return { year: year };
-};
-
-export const getCategoryPath = (year: number, slug: string) => `${basePath}/${year}/${slug}`;
+/*
+   A category's address as plain text, for the one place a link is not followed
+   but handed to somebody else - sharing a photograph. Everything that navigates
+   builds a typed link to the route instead.
+*/
+export const getCategoryPath = (year: number, slug: string) => `/categories/${year}/${slug}`;

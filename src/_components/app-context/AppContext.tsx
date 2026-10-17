@@ -27,7 +27,6 @@ import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
-import AccountActivatedGuard from "../auth/AccountActivatedGuard";
 
 /*
    The providers beneath the router. Auth and the query client sit above it - see
@@ -43,21 +42,19 @@ const AppContext: ParentComponent = props => {
                         <AllSettingsProvider>
                             <ThemeWrapper>
                                 <ConfigProvider>
-                                    <AccountActivatedGuard>
-                                        <CategoriesProvider>
-                                            <MediaProvider>
-                                                <PeopleProvider>
-                                                    <ClansProvider>
-                                                        <PlacesProvider>
-                                                            <FullscreenProvider>
-                                                                {props.children}
-                                                            </FullscreenProvider>
-                                                        </PlacesProvider>
-                                                    </ClansProvider>
-                                                </PeopleProvider>
-                                            </MediaProvider>
-                                        </CategoriesProvider>
-                                    </AccountActivatedGuard>
+                                    <CategoriesProvider>
+                                        <MediaProvider>
+                                            <PeopleProvider>
+                                                <ClansProvider>
+                                                    <PlacesProvider>
+                                                        <FullscreenProvider>
+                                                            {props.children}
+                                                        </FullscreenProvider>
+                                                    </PlacesProvider>
+                                                </ClansProvider>
+                                            </PeopleProvider>
+                                        </MediaProvider>
+                                    </CategoriesProvider>
                                 </ConfigProvider>
                             </ThemeWrapper>
                         </AllSettingsProvider>

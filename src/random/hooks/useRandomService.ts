@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "../../_router/compat";
+import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
@@ -13,8 +13,8 @@ import { MEDIA_PAGE_SIZE } from "../../_models/utils/Constants";
 import { needsTopUp } from "../_slideshowTopUp";
 
 export const useRandomServices = (view: MediaView) => {
-    const navigate = useNavigate();
-    const params = useParams();
+    const goTo = useGoTo();
+    const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
     const { categoryQuery } = useCategoriesContext();
     const { randomMediaQuery } = useMediaContext();
@@ -25,7 +25,7 @@ export const useRandomServices = (view: MediaView) => {
     const cq = categoryQuery(catId);
     const mq = randomMediaQuery(MEDIA_PAGE_SIZE);
     const mediaService = new RandomMediaService(
-        navigate,
+        goTo,
         params,
         view,
         () => cq,

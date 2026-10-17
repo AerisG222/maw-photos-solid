@@ -1,5 +1,5 @@
 import { JSXElement, ParentComponent, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link, LinkOptions } from "@tanstack/solid-router";
 
 import { ThumbnailSizeDefault, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { createImageReveal } from "../loading/_imageReveal";
@@ -12,7 +12,8 @@ export interface TileBadges {
 }
 
 interface Props {
-    href: string;
+    // where the tile leads - built with `linkOptions`, so it is checked
+    link: LinkOptions;
     // absent where there is nothing published yet - a person with no face crop
     src: string | undefined;
     alt?: string;
@@ -63,6 +64,13 @@ interface Props {
    width, a four-by-three cover and a footer of text - and forcing it into this
    shape would mean a prop for every way it differs.
 */
+// the keys whose condition holds, as one class string
+const classes = (list: Record<string, boolean>) =>
+    Object.entries(list)
+        .filter(([, on]) => on)
+        .map(([name]) => name)
+        .join(" ");
+
 // one size for every tile, so it is worked out once rather than per tile
 const SIZE = getThumbnailSize(ThumbnailSizeDefault);
 
@@ -74,18 +82,19 @@ const Tile: ParentComponent<Props> = props => {
     const { loaded, reveal, ref: imgRef } = createImageReveal(() => props.src);
 
     return (
-        <A
-            href={props.href}
+        <Link
+            {...props.link}
             onClick={evt => props.onClick?.(evt)}
             title={props.title}
-            class="group grid shrink-0 cursor-pointer overflow-hidden rounded-sm elev-hover"
-            classList={{
+            // one class string: TanStack's Link passes `class` through, but not `classList`
+            class={classes({
+                "group grid shrink-0 cursor-pointer overflow-hidden rounded-sm elev-hover": true,
                 "border bg-base-200 hover:bg-base-300 hover:border-primary hover:text-primary":
                     !!props.surface,
                 "border-secondary/20": !!props.surface && !props.selected,
                 "border-primary bg-primary/10": !!props.selected,
                 "border border-transparent hover:border-primary": !props.surface
-            }}
+            })}
         >
             {props.header}
 
@@ -147,7 +156,7 @@ const Tile: ParentComponent<Props> = props => {
                     {props.label}
                 </div>
             </Show>
-        </A>
+        </Link>
     );
 };
 

@@ -1,40 +1,34 @@
-import { Navigator, Params } from "../../_router/compat";
+import { Accessor } from "solid-js";
 import { UseQueryResult } from "@tanstack/solid-query";
 
 import { BaseMediaService } from "../../_media/services/BaseMediaService";
+import { GoTo, MediaParams } from "../../_media/services/_navigation";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../../_models/MediaView";
+import { MediaView } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { bulkEditRoute, gridRoute, mapRoute } from "../_routes";
-import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
+import { bulkEditView, categoryViewLink, gridView, mapView } from "../_routes";
 
 export class CategoryMediaService extends BaseMediaService implements IMediaService {
     constructor(
-        navigate: Navigator,
-        params: Params,
+        goTo: GoTo,
+        params: Accessor<MediaParams>,
         view: MediaView,
         // accessors throughout - see the note in FeedMediaService
         protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
         protected mediaListQuery: () => UseQueryResult<Media[], Error>
     ) {
-        super(navigate, params, view);
+        super(goTo, params, view);
     }
 
     navigateToView = (view: MediaView) => {
-        this.navigate(
-            this.getEntryPathByView(view)
-                .replace(":categoryYear", this.params.categoryYear ?? "")
-                .replace(":categorySlug", this.params.categorySlug ?? "")
-                .replace("/:mediaSlug?", ""),
-            { replace: true }
-        );
+        this.goTo(this.getEntryLinkByView(view), { replace: true });
     };
 
     navigateToFirstMediaIfNeeded = () => {
         const list = this.getMediaList();
 
-        if (!this.params.mediaSlug && list && list.length > 0) {
+        if (!this.params().mediaSlug && list && list.length > 0) {
             this.navigateToMedia(this.view, list[0]);
         }
     };
@@ -54,34 +48,19 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         return query.isSuccess ? query.data : [];
     };
 
-    getEntryPathByView = (view: MediaView) =>
-        this.getActiveCategory()
-            ? this.getRouteForView(view)
-                  .absolutePath.replace(":categoryYear", this.getActiveCategory()!.year.toString())
-                  .replace(":categorySlug", this.getActiveCategory()!.slug)
-                  .replace("/:mediaSlug?", "")
-            : "";
+    // the category is the one the address names, which every category route has
+    getEntryLinkByView = (view: MediaView) =>
+        categoryViewLink(view, this.params().categoryYear!, this.params().categorySlug!);
 
-    getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media ? this.getMediaPath(this.getRouteForView(view), media) : "";
+    getMediaLinkByView = (view: MediaView, media: Media | undefined) =>
+        categoryViewLink(
+            view,
+            this.params().categoryYear!,
+            this.params().categorySlug!,
+            media?.slug
+        );
 
-    getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
-        route.buildPathForMedia(this.getActiveCategory(), media);
-
-    getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
-        switch (view) {
-            case MediaViewGrid:
-                return gridRoute;
-            case MediaViewMap:
-                return mapRoute;
-            case MediaViewBulkEdit:
-                return bulkEditRoute;
-            default:
-                return gridRoute;
-        }
-    };
-
-    getAvailableRoutes = () => [gridRoute, mapRoute, bulkEditRoute];
+    getAvailableViews = () => [gridView, mapView, bulkEditView];
 
     // this listing *is* a category
     canDownloadCategory = () => true;

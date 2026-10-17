@@ -1,10 +1,10 @@
 import { Component, For, Match, Show, Switch, createMemo } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { Media } from "../../_models/Media";
-import { getPersonPath } from "../../people/_routes";
+import { feedLink } from "../feed/_routes";
 import { peopleInFaces } from "../faces/_peopleInFaces";
 
 import ErrorMessage from "../../_components/error/ErrorMessage";
@@ -69,8 +69,8 @@ const WhoCard: Component<Props> = props => {
                         <For each={found().people}>
                             {person => (
                                 <li>
-                                    <A
-                                        href={getPersonPath(person.id)}
+                                    <Link
+                                        {...feedLink({ kind: "person", id: person.id })}
                                         class="flex items-center gap-2 rounded-field px-2 py-1 hover:bg-base-300 hover:text-primary"
                                     >
                                         <Show
@@ -90,7 +90,7 @@ const WhoCard: Component<Props> = props => {
                                         </Show>
 
                                         <span class="min-w-0 grow truncate">{person.name}</span>
-                                    </A>
+                                    </Link>
                                 </li>
                             )}
                         </For>

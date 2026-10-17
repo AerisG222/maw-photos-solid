@@ -1,14 +1,14 @@
-import { ParentComponent } from "solid-js";
+import { Component } from "solid-js";
+import { Outlet } from "@tanstack/solid-router";
 
 import { SearchProvider } from "./contexts/SearchContext";
 
-import AuthGuard from "../_components/auth/AuthGuard";
-
-const Search: ParentComponent = props => {
+// signing in is checked on the route itself - see _routeTree.tsx
+const Search: Component = () => {
     return (
-        <AuthGuard>
-            <SearchProvider>{props.children}</SearchProvider>
-        </AuthGuard>
+        <SearchProvider>
+            <Outlet />
+        </SearchProvider>
     );
 };
 

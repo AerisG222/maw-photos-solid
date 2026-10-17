@@ -1,94 +1,52 @@
-import { lazy } from "solid-js";
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-const basePath = "/settings";
+// how the settings area and its pages show up in navigation - the routes are in _routeTree.tsx
 
-export const settingsRedirect: AppRouteDefinition = {
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-};
-
-export const settingsAppearance: AppRouteDefinition = {
+export const settingsAppearance: RouteDisplay = {
     icon: "icon-[ic--round-brightness-6]",
     name: "Appearance",
-    tooltip: "Appearance Settings",
-    path: "/appearance",
-    absolutePath: `${basePath}/appearance`,
-    component: lazy(() => import("./Appearance"))
+    tooltip: "Appearance Settings"
 };
 
-export const settingsBrowsing: AppRouteDefinition = {
+export const settingsBrowsing: RouteDisplay = {
     icon: "icon-[ic--round-density-medium]",
     name: "Browsing",
-    tooltip: "Browsing Settings",
-    path: "/browsing",
-    absolutePath: `${basePath}/browsing`,
-    component: lazy(() => import("./Browsing"))
+    tooltip: "Browsing Settings"
 };
 
-export const settingsCategories: AppRouteDefinition = {
+export const settingsCategories: RouteDisplay = {
     icon: "icon-[ic--round-collections]",
     name: "Categories",
-    tooltip: "Category Settings",
-    path: "/categories",
-    absolutePath: `${basePath}/categories`,
-    component: lazy(() => import("./Categories"))
+    tooltip: "Category Settings"
 };
 
-export const settingsMedia: AppRouteDefinition = {
+export const settingsMedia: RouteDisplay = {
     icon: "icon-[ic--round-image]",
     name: "Media",
-    tooltip: "Media Settings",
-    path: "/media",
-    absolutePath: `${basePath}/media`,
-    component: lazy(() => import("./Media"))
+    tooltip: "Media Settings"
 };
 
-export const settingsPeople: AppRouteDefinition = {
+export const settingsPeople: RouteDisplay = {
     icon: "icon-[ic--round-people]",
     name: "People",
-    tooltip: "People Settings",
-    path: "/people",
-    absolutePath: `${basePath}/people`,
-    component: lazy(() => import("./People"))
+    tooltip: "People Settings"
 };
 
-export const settingsSearch: AppRouteDefinition = {
+export const settingsSearch: RouteDisplay = {
     icon: "icon-[ic--round-search]",
     name: "Search",
-    tooltip: "Search Settings",
-    path: "/search",
-    absolutePath: `${basePath}/search`,
-    component: lazy(() => import("./Search"))
+    tooltip: "Search Settings"
 };
 
-export const settingsShortcuts: AppRouteDefinition = {
+export const settingsShortcuts: RouteDisplay = {
     icon: "icon-[ic--round-keyboard]",
     name: "Shortcuts",
-    tooltip: "Keyboard Shortcuts",
-    path: "/shortcuts",
-    absolutePath: `${basePath}/shortcuts`,
-    component: lazy(() => import("./Shortcuts"))
+    tooltip: "Keyboard Shortcuts"
 };
 
-export const settings: AppRouteDefinition = {
+export const settings: RouteDisplay = {
     icon: "icon-[ic--round-settings]",
     name: "Settings",
     helpText:
-        "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control.",
-    absolutePath: basePath,
-    path: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [
-        settingsRedirect,
-        settingsAppearance,
-        settingsBrowsing,
-        settingsCategories,
-        settingsMedia,
-        settingsPeople,
-        settingsSearch,
-        settingsShortcuts
-    ]
+        "Adjust all settings from one screen to optimize your experience. Many of these settings are also available throughout the application, primarily in context sensitive toolbars, often with support for keyboard control."
 };

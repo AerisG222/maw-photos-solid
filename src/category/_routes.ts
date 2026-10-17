@@ -1,94 +1,59 @@
-import { lazy } from "solid-js";
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
-import { MediaAppRouteDefinition } from "../_models/MediaAppRouteDefinition";
-import { Media } from "../_models/Media";
-import { Category } from "../_models/Category";
-import { getCategoryPath } from "../categories/_routes";
+import { linkOptions } from "@tanstack/solid-router";
 
-const basePath = "/categories/:categoryYear/:categorySlug";
+import { MediaView, MediaViewBulkEdit, MediaViewGrid, MediaViewMap } from "../_models/MediaView";
+import { MediaViewRoute } from "../_models/MediaViewRoute";
 
-const buildRedirectRoute = (basePath: string): AppRouteDefinition => ({
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-});
+// the views of one category, as a toolbar offers them - the routes are in _routeTree.tsx
 
-const slugOrBlank = (media: Media | undefined) => (media ? `/${media.slug}` : "");
-
-const buildGridRoute = (basePath: string): MediaAppRouteDefinition => ({
+export const gridView: MediaViewRoute = {
     icon: "icon-[ic--round-apps]",
     name: "Grid",
     tooltip: "Grid View",
-    mediaView: MediaViewGrid,
-    path: "/grid/:mediaSlug?",
-    absolutePath: `${basePath}/grid/:mediaSlug?`,
-    component: lazy(() => import("./Grid")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${getCategoryPath(category!.year, category!.slug)}/grid${slugOrBlank(media)}`
-});
+    mediaView: MediaViewGrid
+};
 
-const buildMapRoute = (basePath: string): MediaAppRouteDefinition => ({
+export const mapView: MediaViewRoute = {
     icon: "icon-[ic--round-map]",
     name: "Map",
     tooltip: "Map View",
-    mediaView: MediaViewMap,
-    path: "/map/:mediaSlug?",
-    absolutePath: `${basePath}/map/:mediaSlug?`,
-    component: lazy(() => import("./Map")),
-    buildPathForMedia: (category: Category | undefined, media: Media | undefined) =>
-        `${getCategoryPath(category!.year, category!.slug)}/map${slugOrBlank(media)}`
-});
+    mediaView: MediaViewMap
+};
 
-const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
+export const bulkEditView: MediaViewRoute = {
     icon: "icon-[ic--round-collections]",
     name: "Bulk Edit",
     tooltip: "Bulk Edit View",
-    mediaView: MediaViewBulkEdit,
-    path: "/bulk-edit",
-    absolutePath: `${basePath}/bulk-edit`,
-    component: lazy(() => import("./BulkEdit")),
-    buildPathForMedia: (category: Category | undefined, _media: Media | undefined) =>
-        `${getCategoryPath(category!.year, category!.slug)}/bulk-edit`
-});
-
-export const redirectRoute = buildRedirectRoute(basePath);
-export const gridRoute = buildGridRoute(basePath);
-/*
-   Kept only so old links resolve - see DetailRedirect. No `mediaView`, so it
-   never appears among the views a toolbar offers.
-*/
-export const detailRedirectRoute: AppRouteDefinition = {
-    name: "Detail",
-    path: "/detail/:mediaSlug?",
-    absolutePath: `${basePath}/detail/:mediaSlug?`,
-    component: lazy(() => import("../_media/DetailRedirect"))
+    mediaView: MediaViewBulkEdit
 };
-/*
-   Kept only so old links resolve - see FullscreenRedirect. No `mediaView`, so
-   it never appears among the views a toolbar offers.
-*/
-export const fullscreenRedirectRoute: AppRouteDefinition = {
-    name: "Fullscreen",
-    path: "/fullscreen/:mediaSlug?",
-    absolutePath: `${basePath}/fullscreen/:mediaSlug?`,
-    component: lazy(() => import("../_media/FullscreenRedirect"))
-};
-export const mapRoute = buildMapRoute(basePath);
-export const bulkEditRoute = buildBulkEditRoute(basePath);
 
-export const mediaRoutes: AppRouteDefinition = {
-    path: basePath,
-    absolutePath: basePath,
-    name: "Category",
-    component: lazy(() => import("../_media/MediaRoot")),
-    children: [
-        redirectRoute,
-        gridRoute,
-        detailRedirectRoute,
-        fullscreenRedirectRoute,
-        mapRoute,
-        bulkEditRoute
-    ]
+/*
+   A view of a category, optionally open on one of its photos - typed, so a
+   view that does not exist, or a category address missing its year, fails to
+   compile. Bulk edit works on the whole category, so it takes no photo.
+*/
+export const categoryViewLink = (
+    view: MediaView,
+    categoryYear: string,
+    categorySlug: string,
+    mediaSlug?: string
+) => {
+    const params = { categoryYear, categorySlug, mediaSlug };
+
+    switch (view) {
+        case MediaViewMap:
+            return linkOptions({
+                to: "/categories/$categoryYear/$categorySlug/map/{-$mediaSlug}",
+                params
+            });
+        case MediaViewBulkEdit:
+            return linkOptions({
+                to: "/categories/$categoryYear/$categorySlug/bulk-edit",
+                params: { categoryYear, categorySlug }
+            });
+        default:
+            return linkOptions({
+                to: "/categories/$categoryYear/$categorySlug/grid/{-$mediaSlug}",
+                params
+            });
+    }
 };

@@ -113,12 +113,17 @@ const cards = () => (
         </div>
 
         <div data-card="PlaceCard">
-            <PlaceCard place={place} href="/places/place-1" showAncestry={true} eager={false} />
+            <PlaceCard
+                place={place}
+                link={{ href: "/places/place-1" }}
+                showAncestry={true}
+                eager={false}
+            />
         </div>
 
         <div data-card="MediaLink">
             <MediaLink
-                href="/media/1"
+                link={{ href: "/media/1" }}
                 media={media}
                 eager={false}
                 setIsFavorite={() => undefined}

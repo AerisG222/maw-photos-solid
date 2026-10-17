@@ -1,14 +1,26 @@
 import { Component, Show } from "solid-js";
 
-import { feedListingPath, feedMediaListing, placeFeedBasePath } from "../../_media/feed/_routes";
-import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { feedCategoriesLink, feedGridLink } from "../../_media/feed/_routes";
+import { RouteDisplay } from "../../_models/RouteDisplay";
 import { Uuid } from "../../_models/Uuid";
+import { placeLink } from "../_routes";
 
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import NavGroup from "../../_components/toolbar/NavGroup";
+
+const mediaDisplay: RouteDisplay = {
+    icon: "icon-[ic--round-image]",
+    name: "Media",
+    tooltip: "Media Taken Here"
+};
+
+const categoriesDisplay: RouteDisplay = {
+    icon: "icon-[ic--round-collections]",
+    name: "Categories",
+    tooltip: "Categories With Media Taken Here"
+};
 
 interface Props {
     // undefined at the root, where there is no one place to act on
@@ -44,35 +56,19 @@ interface Props {
    which keeps the toolbar from changing width as you drill.
 */
 const Toolbar: Component<Props> = props => {
-    const [mediaSettings] = useMediaSettingsContext();
+    /*
+       The media taken here, and the categories holding it - the same two
+       listings a place's feed switches between. At the root there is no one
+       place to list, so they are shown disabled; a disabled entry never
+       navigates, so it points at the tree itself.
+    */
+    const mediaLink = () =>
+        props.placeId ? feedGridLink({ kind: "place", id: props.placeId }) : placeLink();
 
-    const feedPath = () => placeFeedBasePath(props.placeId!);
-
-    // opens on whichever view was last used, exactly as the feed's own switch
-    // does - the two are the same journey started from different screens
-    const mediaHref = () =>
+    const categoriesLink = () =>
         props.placeId
-            ? feedListingPath(feedPath(), feedMediaListing(mediaSettings.view), false)
-            : "";
-
-    const categoriesHref = () =>
-        props.placeId ? feedListingPath(feedPath(), "categories", false) : "";
-
-    const mediaRoute = (): AppRouteDefinition => ({
-        icon: "icon-[ic--round-image]",
-        name: "Media",
-        tooltip: "Media Taken Here",
-        path: mediaHref(),
-        absolutePath: mediaHref()
-    });
-
-    const categoriesRoute = (): AppRouteDefinition => ({
-        icon: "icon-[ic--round-collections]",
-        name: "Categories",
-        tooltip: "Categories With Media Taken Here",
-        path: categoriesHref(),
-        absolutePath: categoriesHref()
-    });
+            ? feedCategoriesLink({ kind: "place", id: props.placeId }, false)
+            : placeLink();
 
     return (
         <ToolbarLayout
@@ -80,14 +76,14 @@ const Toolbar: Component<Props> = props => {
                 <NavGroup
                     entries={[
                         {
-                            route: mediaRoute(),
-                            href: mediaHref(),
+                            route: mediaDisplay,
+                            link: mediaLink(),
                             active: false,
                             disabled: !props.placeId
                         },
                         {
-                            route: categoriesRoute(),
-                            href: categoriesHref(),
+                            route: categoriesDisplay,
+                            link: categoriesLink(),
                             active: false,
                             disabled: !props.placeId
                         }

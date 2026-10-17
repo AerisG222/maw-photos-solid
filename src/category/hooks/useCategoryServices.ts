@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "../../_router/compat";
+import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
@@ -7,21 +7,22 @@ import { CategoryMediaService } from "../services/CategoryMediaService";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 
 export const useCategoryServices = (view: MediaView) => {
-    const navigate = useNavigate();
-    const params = useParams();
+    const goTo = useGoTo();
+    const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
     const { categoryQuery, categoryMediaQuery, categoriesForYearQuery } = useCategoriesContext();
 
-    const categoriesQuery = categoriesForYearQuery(() => parseInt(params.categoryYear ?? "", 10));
+    const categoriesQuery = categoriesForYearQuery(() => parseInt(params().categoryYear ?? "", 10));
     const categoryId = () =>
         categoriesQuery.data?.categories?.find(
             x =>
-                x.year === parseInt(params.categoryYear ?? "", 10) && x.slug === params.categorySlug
+                x.year === parseInt(params().categoryYear ?? "", 10) &&
+                x.slug === params().categorySlug
         )?.id;
     const cq = categoryQuery(categoryId);
     const mq = categoryMediaQuery(categoryId);
     const mediaService = new CategoryMediaService(
-        navigate,
+        goTo,
         params,
         view,
         () => cq,

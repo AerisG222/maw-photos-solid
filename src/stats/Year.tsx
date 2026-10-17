@@ -1,8 +1,9 @@
 import { Component, createMemo } from "solid-js";
-import { useParams, useSearchParams } from "../_router/compat";
+import { getRouteApi } from "@tanstack/solid-router";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
-import { formatForMode, StatMode, statbarMediaCountTitle } from "./_funcs";
+import { formatForMode, statbarMediaCountTitle } from "./_funcs";
+import { StatsSearch } from "./_search";
 import { CategoryStat } from "../_models/CategoryStat";
 import { MediaTypeStat } from "../_models/MediaTypeStat";
 
@@ -17,13 +18,22 @@ import SkeletonChart from "../_components/state/SkeletonChart";
 
 const ViewYear: Component = () => {
     const { statsForYearQuery } = useStatsContext();
-    const route = useParams();
-    const [search] = useSearchParams();
+    const route = getRouteApi("/stats/summary/$year");
+    const params = route.useParams();
+    const search = route.useSearch();
+    const navigate = route.useNavigate();
 
-    const searchType = () => (search.type as string | undefined) ?? "all";
-    const searchMode = () => ((search.mode as string | undefined) ?? "count") as StatMode;
+    const searchType = () => search().type;
+    const searchMode = () => search().mode;
 
-    const stats = statsForYearQuery(() => parseInt(route.year ?? "", 10));
+    const changeSearch = (change: Partial<StatsSearch>) =>
+        void navigate({
+            to: "/stats/summary/$year",
+            params: params(),
+            search: { ...search(), ...change }
+        });
+
+    const stats = statsForYearQuery(() => parseInt(params().year, 10));
 
     const statbarData = createMemo(() => {
         let mediaCount = 0;
@@ -33,7 +43,7 @@ const ViewYear: Component = () => {
         if (stats.isSuccess && stats.data) {
             for (const stat of stats.data) {
                 for (const mediaTypeStat of stat.mediaTypeStats) {
-                    if (search?.type === mediaTypeStat.mediaType || search?.type === "all") {
+                    if (searchType() === mediaTypeStat.mediaType || searchType() === "all") {
                         mediaCount += mediaTypeStat.mediaCount;
                         mediaSize += mediaTypeStat.fileSize;
                         duration += mediaTypeStat.duration;
@@ -111,7 +121,8 @@ const ViewYear: Component = () => {
         <Layout
             toolbar={
                 <Toolbar
-                    initialParams={{ type: "all", mode: "count" }}
+                    search={search()}
+                    onChange={changeSearch}
                     showSummarizeByCategoryCount={false}
                 />
             }
@@ -128,7 +139,7 @@ const ViewYear: Component = () => {
             >
                 <StatLayout>
                     <div class="my-2">
-                        <Header year={route.year} mode={searchMode()} type={searchType()} />
+                        <Header year={params().year} search={search()} />
                     </div>
                     <div class="my-2">
                         <StatBar
@@ -138,7 +149,7 @@ const ViewYear: Component = () => {
                     </div>
                     <div class="my-2">
                         <Treemap
-                            seriesName={route.year ?? ""}
+                            seriesName={params().year}
                             data={treeData()}
                             formatFunc={formatForMode(searchMode())}
                         />

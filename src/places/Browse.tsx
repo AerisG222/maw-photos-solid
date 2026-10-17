@@ -1,13 +1,13 @@
 import { Component, Show, createEffect, createSignal } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
-import { useNavigate, useParams, useSearchParams } from "../_router/compat";
+import { getRouteApi } from "@tanstack/solid-router";
 
-import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
-import { placeFeedBasePath } from "../_media/feed/_routes";
+import { PlacesSearch, placeLink } from "./_routes";
+import { feedLink } from "../_media/feed/_routes";
+import { useGoTo } from "../_media/services/_navigation";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
 import { useAuthContext } from "../_contexts/AuthContext";
 import { allPlaceKinds, isLeafPlace, Place, PlaceKind } from "../_models/Place";
-import { firstParam } from "../_models/utils/RouteUtils";
 import { isUuid, Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
@@ -41,24 +41,35 @@ import { usePlaceChain } from "./usePlaceChain";
    then refused again by the API and by the database, which is what actually
    enforces it.
 */
+const route = getRouteApi("/places/{-$placeId}");
+
 const Browse: Component = () => {
-    const navigate = useNavigate();
-    const params = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const goTo = useGoTo();
+    const params = route.useParams();
+    const searchParams = route.useSearch();
+    const navigate = route.useNavigate();
     const [authContext] = useAuthContext();
     const { placesQuery, placeQuery } = usePlacesContext();
 
     // a route parameter matches on shape alone, so a typed url can hand this page
     // a segment that was never an id - treated as the root rather than requested
     // and refused
-    const placeId = () => (isUuid(params.placeId) ? params.placeId : undefined);
-    const search = () => (firstParam(searchParams.q) ?? "").trim();
+    const placeId = (): Uuid | undefined => {
+        const id = params().placeId;
 
-    const kind = () => {
-        const value = firstParam(searchParams.kind);
-
-        return allPlaceKinds.find(k => k.id === value)?.id;
+        return isUuid(id) ? id : undefined;
     };
+    // already trimmed, and a kind that exists - the route validated both, see _routes.ts
+    const search = () => searchParams().q ?? "";
+    const kind = () => searchParams().kind;
+
+    // the query string, changed in place - the level of the tree stays where it is
+    const changeSearch = (change: Partial<PlacesSearch>) =>
+        void navigate({
+            to: "/places/{-$placeId}",
+            params: params(),
+            search: { ...searchParams(), ...change }
+        });
 
     const isAdmin = () => !!authContext.accountStatus?.isAdmin;
 
@@ -67,10 +78,9 @@ const Browse: Component = () => {
        gated on the account rather than on the parameter alone - a non-admin who
        types it gets the plain browse rather than buttons that would be refused.
     */
-    const editing = () => isAdmin() && firstParam(searchParams[PLACE_EDIT_PARAM]) === "1";
+    const editing = () => isAdmin() && searchParams().edit === true;
 
-    const toggleEditing = () =>
-        setSearchParams({ [PLACE_EDIT_PARAM]: editing() ? undefined : "1" });
+    const toggleEditing = () => changeSearch({ edit: editing() ? undefined : true });
 
     const filter = (): PlaceFilter => ({
         parentId: placeId(),
@@ -109,7 +119,7 @@ const Browse: Component = () => {
     */
     createEffect(() => {
         if (!editing() && !search() && !kind() && place.data && isLeafPlace(place.data)) {
-            navigate(placeFeedBasePath(place.data.id), { replace: true });
+            goTo(feedLink({ kind: "place", id: place.data.id }), { replace: true });
         }
     });
 
@@ -123,10 +133,10 @@ const Browse: Component = () => {
 
     // every link that moves around the tree keeps the mode, so drilling in while
     // editing does not quietly drop back to the plain browse
-    const treePath = (id?: Uuid) => getPlacePath(id, editing());
+    const treeLink = (id?: Uuid) => placeLink(id, editing());
 
-    const setSearch = (term: string) => setSearchParams({ q: term || undefined });
-    const setKind = (value: PlaceKind | undefined) => setSearchParams({ kind: value });
+    const setSearch = (term: string) => changeSearch({ q: term.trim() || undefined });
+    const setKind = (value: PlaceKind | undefined) => changeSearch({ kind: value });
 
     const kindLabel = () => allPlaceKinds.find(k => k.id === kind())?.name;
 
@@ -144,8 +154,10 @@ const Browse: Component = () => {
        be merged into, and the panel holding those is on its own page - so while
        editing, every tile drills in.
     */
-    const tileHref = (item: Place) =>
-        !editing() && isLeafPlace(item) ? placeFeedBasePath(item.id) : treePath(item.id);
+    const tileLink = (item: Place) =>
+        !editing() && isLeafPlace(item)
+            ? feedLink({ kind: "place", id: item.id })
+            : treeLink(item.id);
 
     /*
        The listing is left out entirely at a leaf rather than shown empty. Its
@@ -219,7 +231,7 @@ const Browse: Component = () => {
             </Show>
 
             <Show when={placeId()}>
-                <PlaceChain links={chain()} buildPath={treePath} />
+                <PlaceChain links={chain()} link={treeLink} />
             </Show>
 
             {/*
@@ -268,7 +280,7 @@ const Browse: Component = () => {
                         {(item, index) => (
                             <PlaceCard
                                 place={item}
-                                href={tileHref(item)}
+                                link={tileLink(item)}
                                 leadsToMedia={!editing() && isLeafPlace(item)}
                                 showAncestry={!!search()}
                                 eager={index <= EAGER_THRESHOLD}

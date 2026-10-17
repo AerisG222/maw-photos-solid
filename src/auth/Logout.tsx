@@ -1,8 +1,7 @@
 import { Component, Show } from "solid-js";
-import { A } from "../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { useAuthContext } from "../_contexts/AuthContext";
-import { loginPage } from "./_routes";
 
 import BrandHeader from "../_components/brand/BrandHeader";
 
@@ -24,9 +23,9 @@ const Logout: Component = () => {
 
                 <p>
                     If you would like to return photos.mikeandwan.us, please{" "}
-                    <A href={loginPage.absolutePath} class="link text-secondary">
+                    <Link to="/auth/login" class="link text-secondary">
                         login
-                    </A>
+                    </Link>
                     .
                 </p>
             </div>

@@ -1,13 +1,24 @@
 import { Component, For } from "solid-js";
 
-import { appRoutes } from "../routes";
+import { areas } from "../areas";
 
 const ViewReleaseNotes: Component = () => {
     return (
         <>
             <h1 class="head1">Help</h1>
 
-            <For each={appRoutes.filter(x => x.icon)}>
+            <For
+                each={[
+                    areas.categories,
+                    areas.people,
+                    areas.places,
+                    areas.random,
+                    areas.search,
+                    areas.stats,
+                    areas.about,
+                    areas.settings
+                ].map(area => area.display)}
+            >
                 {route => (
                     <div class="mb-4">
                         <p class="head3">

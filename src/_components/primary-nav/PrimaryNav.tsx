@@ -1,13 +1,6 @@
 import { Component, Show } from "solid-js";
 
-import { categories } from "../../categories/_routes";
-import { people } from "../../people/_routes";
-import { places } from "../../places/_routes";
-import { search } from "../../search/_routes";
-import { randomMediaRoutes } from "../../random/_routes";
-import { stats } from "../../stats/_routes";
-import { about } from "../../about/_routes";
-import { settings } from "../../settings/_routes";
+import { areas } from "../../areas";
 import { useAppSettingsContext } from "../../_contexts/settings/AppSettingsContext";
 import { useAuthContext } from "../../_contexts/AuthContext";
 
@@ -42,12 +35,36 @@ const PrimaryNav: Component = () => {
             aria-label="Primary"
             class="flex md:flex-col border-b md:border-r border-base-content/30 bg-linear-to-b from-base-300 to-base-200 shadow-md shadow-base-300/40 z-45"
         >
-            <PrimaryNavLink showTitle={state.navExpanded} route={categories} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={people} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={places} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={search} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={randomMediaRoutes} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={stats} />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.categories.display}
+                link={areas.categories.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.people.display}
+                link={areas.people.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.places.display}
+                link={areas.places.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.search.display}
+                link={areas.search.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.random.display}
+                link={areas.random.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.stats.display}
+                link={areas.stats.link}
+            />
 
             <span class="grow" />
 
@@ -58,8 +75,16 @@ const PrimaryNav: Component = () => {
             </Show>
 
             <ThemeSelector showTitle={state.navExpanded} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={about} />
-            <PrimaryNavLink showTitle={state.navExpanded} route={settings} />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.about.display}
+                link={areas.about.link}
+            />
+            <PrimaryNavLink
+                showTitle={state.navExpanded}
+                route={areas.settings.display}
+                link={areas.settings.link}
+            />
 
             <div class="divider my-0 h-auto" />
 

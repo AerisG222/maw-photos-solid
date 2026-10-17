@@ -1,14 +1,14 @@
-import { Navigator, Params } from "../../_router/compat";
+import { Accessor } from "solid-js";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
 
 import { BaseMediaService } from "../services/BaseMediaService";
+import { GoTo, MediaParams } from "../services/_navigation";
 import { IMediaService } from "../services/IMediaService";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
 import { MediaView, MediaViewGrid } from "../../_models/MediaView";
 import { SearchResults } from "../../_models/SearchResults";
-import { FeedRoutes, stripMediaParams } from "./_routes";
+import { FeedSearch, FeedSubject, feedGridLink, gridView } from "./_routes";
 
 type FeedMediaQuery = UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
 
@@ -25,29 +25,21 @@ type FeedMediaQuery = UseInfiniteQueryResult<InfiniteData<SearchResults<Media> |
 */
 export class FeedMediaService extends BaseMediaService implements IMediaService {
     constructor(
-        navigate: Navigator,
-        params: Params,
+        goTo: GoTo,
+        params: Accessor<MediaParams>,
         view: MediaView,
-        protected routes: () => FeedRoutes,
-        // the query string the feed is being browsed under, so every path this
-        // service hands out keeps the filter and shuffle the user chose
-        protected search: () => string,
+        protected subject: Accessor<FeedSubject>,
+        // the filter the feed is being browsed under, so every link this service
+        // hands out keeps the favorites and shuffle the user chose
+        protected search: Accessor<FeedSearch>,
         protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
         protected mediaListQuery: () => FeedMediaQuery
     ) {
-        super(navigate, params, view);
+        super(goTo, params, view);
     }
 
-    private entryPath = (view: MediaView) =>
-        `${this.getEntryPathWithoutFilter(view)}${this.search()}`;
-
-    // the same path with no query string, for a caller that is about to apply a
-    // filter of its own rather than carry the current one forward
-    getEntryPathWithoutFilter = (view: MediaView) =>
-        stripMediaParams(this.getRouteForView(view).absolutePath);
-
     override navigateToMedia = (view: MediaView, media: Media | undefined) => {
-        this.navigate(this.getMediaPathByView(view, media));
+        this.goTo(this.getMediaLinkByView(view, media));
     };
 
     navigateToViewIfMediaNotInList = () => {
@@ -90,30 +82,14 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         return list;
     };
 
-    getEntryPathByView = (view: MediaView) => this.entryPath(view);
+    // one view - the grid - so the view asked for only matters once there are more
+    getEntryLinkByView = (_view: MediaView) =>
+        feedGridLink(this.subject(), undefined, this.search());
 
-    getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media ? this.getMediaPath(this.getRouteForView(view), media) : this.entryPath(view);
+    getMediaLinkByView = (_view: MediaView, media: Media | undefined) =>
+        feedGridLink(this.subject(), media, this.search());
 
-    getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
-        route.buildPathForMedia(undefined, media);
-
-    getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
-        const routes = this.routes();
-
-        switch (view) {
-            case MediaViewGrid:
-                return routes.grid;
-            default:
-                return routes.grid;
-        }
-    };
-
-    getAvailableRoutes = () => {
-        const routes = this.routes();
-
-        return [routes.grid];
-    };
+    getAvailableViews = () => [gridView];
 
     /*
        Filtering can empty the feed outright - a person with no favorites is a
@@ -126,7 +102,7 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
             return false;
         }
 
-        this.navigate(this.entryPath(MediaViewGrid), { replace: true });
+        this.goTo(this.getEntryLinkByView(MediaViewGrid), { replace: true });
 
         return true;
     };

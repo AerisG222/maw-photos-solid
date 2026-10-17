@@ -1,5 +1,5 @@
 import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { Category } from "../../_models/Category";
 
@@ -12,22 +12,27 @@ const CategoryBreadcrumb: Component<Props> = props => {
     return (
         <Show when={props.category}>
             <div class="text-center">
-                <A
+                <Link
                     class="text-primary hover:underline"
-                    href={`/categories?year=${props.category!.effectiveDate.getFullYear()}`}
+                    to="/categories"
+                    search={{ year: props.category!.effectiveDate.getFullYear() }}
                 >
                     {props.category!.effectiveDate.getFullYear()}
-                </A>
+                </Link>
 
                 <span class="text-xl align-middle icon-[ic--round-arrow-right]" />
 
                 <Show when={props.showTitleAsLink}>
-                    <A
+                    <Link
                         class="text-primary hover:underline"
-                        href={`/categories/${props.category!.year}/${props.category!.slug}`}
+                        to="/categories/$categoryYear/$categorySlug"
+                        params={{
+                            categoryYear: String(props.category!.year),
+                            categorySlug: props.category!.slug
+                        }}
                     >
                         {props.category!.name}
-                    </A>
+                    </Link>
                 </Show>
                 <Show when={!props.showTitleAsLink}>
                     <span>{props.category!.name}</span>

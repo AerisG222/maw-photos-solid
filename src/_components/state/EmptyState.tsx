@@ -1,5 +1,5 @@
 import { Component, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link, LinkOptions } from "@tanstack/solid-router";
 
 interface Props {
     // an ic--round icon describing what is missing
@@ -11,7 +11,8 @@ interface Props {
     actionLabel?: string;
     // a way forward: either something to do, or somewhere to go
     onAction?: () => void;
-    actionHref?: string;
+    // where the action leads - built with `linkOptions`, so it is checked
+    actionLink?: LinkOptions;
 }
 
 /*
@@ -46,10 +47,10 @@ const EmptyState: Component<Props> = props => {
                 </button>
             </Show>
 
-            <Show when={props.actionLabel && props.actionHref}>
-                <A class="btn btn-sm btn-primary btn-outline" href={props.actionHref!}>
+            <Show when={props.actionLabel && props.actionLink}>
+                <Link {...props.actionLink!} class="btn btn-sm btn-primary btn-outline">
                     {props.actionLabel}
-                </A>
+                </Link>
             </Show>
         </div>
     );

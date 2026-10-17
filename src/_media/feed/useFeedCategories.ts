@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "../../_router/compat";
+import { useGoTo } from "../services/_navigation";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
@@ -17,8 +17,7 @@ import { useFeedSubject } from "./_subject";
    whatever photo is on screen.
 */
 export const useFeedCategories = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const goTo = useGoTo();
     const [, { setFeedFavoritesOnly: rememberFavoritesOnly }] = useAreaSettingsContext();
     const { personCategoriesQuery } = usePeopleContext();
     const { clanCategoriesQuery } = useClansContext();
@@ -56,7 +55,7 @@ export const useFeedCategories = () => {
     // url is rewritten so it still accounts for what is on screen
     const setFavoritesOnly = (on: boolean) => {
         rememberFavoritesOnly(on);
-        navigate(`${location.pathname}${on ? "?f=true" : ""}`);
+        goTo({ to: ".", search: on ? { f: true } : {} });
     };
 
     return {

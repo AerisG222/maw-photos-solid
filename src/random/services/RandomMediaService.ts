@@ -1,18 +1,18 @@
-import { Navigator, Params } from "../../_router/compat";
+import { Accessor } from "solid-js";
 
 import { BaseMediaService } from "../../_media/services/BaseMediaService";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { MediaView, MediaViewGrid } from "../../_models/MediaView";
+import { MediaView } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { gridRoute } from "../_routes";
-import { MediaAppRouteDefinition } from "../../_models/MediaAppRouteDefinition";
+import { gridView, randomGridLink } from "../_routes";
+import { GoTo, MediaParams } from "../../_media/services/_navigation";
 
 export class RandomMediaService extends BaseMediaService implements IMediaService {
     constructor(
-        navigate: Navigator,
-        params: Params,
+        goTo: GoTo,
+        params: Accessor<MediaParams>,
         view: MediaView,
         // accessors throughout - see the note in FeedMediaService
         protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
@@ -21,11 +21,11 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
             Error
         >
     ) {
-        super(navigate, params, view);
+        super(goTo, params, view);
     }
 
     override navigateToMedia = (view: MediaView, media: Media | undefined) => {
-        this.navigate(this.getMediaPathByView(view, media));
+        this.goTo(this.getMediaLinkByView(view, media));
     };
 
     navigateToViewIfMediaNotInList = () => {
@@ -68,33 +68,12 @@ export class RandomMediaService extends BaseMediaService implements IMediaServic
         return list;
     };
 
-    getEntryPathByView = (view: MediaView) =>
-        this.getRouteForView(view)
-            .absolutePath.replace("/:categoryYear?", "")
-            .replace("/:categorySlug?", "")
-            .replace("/:mediaSlug?", "");
+    // one view - the grid - so the view asked for only matters once there are more
+    getEntryLinkByView = (_view: MediaView) => randomGridLink();
 
-    getMediaPathByView = (view: MediaView, media: Media | undefined): string =>
-        media
-            ? this.getMediaPath(this.getRouteForView(view), media)
-            : this.getRouteForView(view)
-                  .absolutePath.replace("/:categoryYear?", "")
-                  .replace("/:categorySlug?", "")
-                  .replace("/:mediaSlug?", "");
+    getMediaLinkByView = (_view: MediaView, media: Media | undefined) => randomGridLink(media);
 
-    getMediaPath = (route: MediaAppRouteDefinition, media: Media): string =>
-        route.buildPathForMedia(undefined, media);
-
-    getRouteForView = (view: MediaView): MediaAppRouteDefinition => {
-        switch (view) {
-            case MediaViewGrid:
-                return gridRoute;
-            default:
-                return gridRoute;
-        }
-    };
-
-    getAvailableRoutes = () => [gridRoute];
+    getAvailableViews = () => [gridView];
 
     fetchNextPage = async () => {
         await this.mediaListQuery().fetchNextPage();

@@ -1,7 +1,7 @@
 import { Component, For, Show } from "solid-js";
 
 import { Category } from "../../_models/Category";
-import { getCategoryPath } from "../../categories/_routes";
+import { linkOptions } from "@tanstack/solid-router";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
 import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
@@ -29,7 +29,13 @@ const CategoryCard: Component<Props> = props => {
 
     return (
         <Tile
-            href={getCategoryPath(props.category.year, props.category.slug)}
+            link={linkOptions({
+                to: "/categories/$categoryYear/$categorySlug",
+                params: {
+                    categoryYear: String(props.category.year),
+                    categorySlug: props.category.slug
+                }
+            })}
             src={getMediaTeaserUrl(props.category.teaser)}
             surface
             // the whole name wherever the label cannot show it - hidden, or cut short

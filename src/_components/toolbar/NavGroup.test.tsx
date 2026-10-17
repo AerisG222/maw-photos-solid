@@ -2,7 +2,7 @@ import { WithRouter } from "../../_router/testing";
 import { cleanup, render } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test } from "vitest";
 
-import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
+import { RouteDisplay } from "../../_models/RouteDisplay";
 import { AppSettingsProvider } from "../../_contexts/settings/AppSettingsContext";
 import { ShortcutProvider } from "../../_contexts/ShortcutContext";
 
@@ -14,16 +14,14 @@ afterEach(() => {
     localStorage.clear();
 });
 
-const route = (name: string): AppRouteDefinition => ({
+const route = (name: string): RouteDisplay => ({
     name,
-    icon: "icon-[ic--round-apps]",
-    path: `/${name.toLowerCase()}`,
-    absolutePath: `/${name.toLowerCase()}`
+    icon: "icon-[ic--round-apps]"
 });
 
 const entry = (name: string, over: Partial<NavEntry> = {}): NavEntry => ({
     route: route(name),
-    href: `/${name.toLowerCase()}`,
+    link: { href: `/${name.toLowerCase()}` },
     ...over
 });
 

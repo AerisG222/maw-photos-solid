@@ -1,9 +1,9 @@
 import { Component, For, Show } from "solid-js";
-import { A } from "../../_router/compat";
+import { Link } from "@tanstack/solid-router";
 
 import { Clan } from "../../_models/Clan";
 import { Person } from "../../_models/Person";
-import { getClanPath } from "../_routes";
+import { feedLink } from "../../_media/feed/_routes";
 
 import Icon from "../../_components/icon/Icon";
 
@@ -56,8 +56,8 @@ const ClanCard: Component<Props> = props => {
                 the clan itself. Browsing is the common errand, so it gets the
                 large target.
             */}
-            <A
-                href={getClanPath(props.clan.id)}
+            <Link
+                {...feedLink({ kind: "clan", id: props.clan.id })}
                 class="flex flex-col gap-2 hover:text-primary transition-colors duration-200 ease-out"
                 title={`View media for ${props.clan.name}`}
             >
@@ -89,7 +89,7 @@ const ClanCard: Component<Props> = props => {
                         </Show>
                     </div>
                 </Show>
-            </A>
+            </Link>
 
             <div class="flex flex-row gap-1">
                 <button

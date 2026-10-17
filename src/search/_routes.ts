@@ -1,52 +1,21 @@
-import { lazy } from "solid-js";
-import { AppRouteDefinition } from "../_models/AppRouteDefinition";
-import { equalsIgnoreCase } from "../_models/utils/StringUtils";
+import { RouteDisplay } from "../_models/RouteDisplay";
 
-const basePath = "/search";
+// how the search area and its views show up in navigation - the routes are in _routeTree.tsx
 
-export const searchRedirect: AppRouteDefinition = {
-    path: "/",
-    absolutePath: basePath,
-    name: "Redirect",
-    component: lazy(() => import("./Redirect"))
-};
-
-export const searchGrid: AppRouteDefinition = {
+export const searchGrid: RouteDisplay = {
     icon: "icon-[ic--round-apps]",
     name: "Grid",
-    tooltip: "Grid View",
-    path: "/grid",
-    absolutePath: `${basePath}/grid`,
-    component: lazy(() => import("./Grid"))
+    tooltip: "Grid View"
 };
 
-export const searchList: AppRouteDefinition = {
+export const searchList: RouteDisplay = {
     icon: "icon-[ic--round-format-list-bulleted]",
     name: "List",
-    tooltip: "List View",
-    path: "/list",
-    absolutePath: `${basePath}/list`,
-    component: lazy(() => import("./List"))
+    tooltip: "List View"
 };
 
-export const search: AppRouteDefinition = {
+export const search: RouteDisplay = {
     icon: "icon-[ic--round-search]",
     name: "Search",
-    helpText: "Search photo and video categories.",
-    path: basePath,
-    absolutePath: basePath,
-    component: lazy(() => import("./Layout")),
-    children: [searchRedirect, searchGrid, searchList]
-};
-
-export const getPathForViewMode = (mode: string): string => {
-    if (equalsIgnoreCase("grid", mode)) {
-        return searchGrid.absolutePath;
-    }
-
-    if (equalsIgnoreCase("list", mode)) {
-        return searchList.absolutePath;
-    }
-
-    return searchGrid.absolutePath;
+    helpText: "Search photo and video categories."
 };

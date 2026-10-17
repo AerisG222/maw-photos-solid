@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import { linkOptions } from "@tanstack/solid-router";
 
 import { aboutAndroid, aboutHelp, aboutReleaseNotes } from "../_routes";
 
@@ -11,9 +12,12 @@ const Toolbar: Component = () => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: aboutHelp, href: aboutHelp.absolutePath },
-                        { route: aboutReleaseNotes, href: aboutReleaseNotes.absolutePath },
-                        { route: aboutAndroid, href: aboutAndroid.absolutePath }
+                        { route: aboutHelp, link: linkOptions({ to: "/about/help" }) },
+                        {
+                            route: aboutReleaseNotes,
+                            link: linkOptions({ to: "/about/release-notes" })
+                        },
+                        { route: aboutAndroid, link: linkOptions({ to: "/about/android" }) }
                     ]}
                 />
             }

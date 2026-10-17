@@ -1,38 +1,31 @@
-import { useLocation, useNavigate } from "../_router/compat";
-import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { Component } from "solid-js";
+import { getRouteApi, Navigate } from "@tanstack/solid-router";
 
-import { buildPath } from "../_models/utils/RouteUtils";
-import { buildSearch, getRouteForViewMode } from "./_routes";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
+import { equalsIgnoreCase } from "../_models/utils/StringUtils";
 
+const route = getRouteApi("/categories");
+
+/*
+   The view last used, and the year the address asked for - or, if it asked for
+   none, the one last chosen. Both views are settings, which only a component
+   can read.
+*/
 const CategoriesRedirect: Component = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
     const [area] = useAreaSettingsContext();
+    const search = route.useSearch();
 
-    const updateSearchFromUrl = (search: { year?: number | "all" }, querystring: string) => {
-        const searchParams = new URLSearchParams(querystring);
-        const yearParam = searchParams.get("year");
-
-        if (!yearParam) {
-            return;
-        }
-
-        search.year = parseInt(searchParams.get("year")!, 10);
-    };
-
-    if (location.pathname.endsWith("/categories")) {
-        const route = getRouteForViewMode(area.categoriesView);
-        const search = buildSearch(area.categoryYearFilter);
-
-        if (location.search) {
-            updateSearchFromUrl(search, location.search);
-        }
-
-        navigate(buildPath(route, undefined, search), { replace: true });
-    }
-
-    return <></>;
+    return (
+        <Navigate
+            to={
+                equalsIgnoreCase("list", area.categoriesView)
+                    ? "/categories/list"
+                    : "/categories/grid"
+            }
+            search={{ year: search().year ?? area.categoryYearFilter }}
+            replace
+        />
+    );
 };
 
 export default CategoriesRedirect;

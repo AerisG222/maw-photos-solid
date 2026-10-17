@@ -6,7 +6,7 @@ import { AppSettingsProvider } from "../_contexts/settings/AppSettingsContext";
 import { MediaBreakpointProvider } from "../_contexts/MediaBreakpointContext";
 import { MediaSettingsProvider } from "../_contexts/settings/MediaSettingsContext";
 import { ShortcutProvider } from "../_contexts/ShortcutContext";
-import { gridRoute, bulkEditRoute, mapRoute } from "../category/_routes";
+import { bulkEditView, gridView, mapView } from "../category/_routes";
 import { Category } from "../_models/Category";
 import { IMediaService } from "./services/IMediaService";
 import Toolbar from "./Toolbar";
@@ -48,9 +48,9 @@ const service = {
     getActiveMedia: () => undefined,
     navigateToMedia: () => undefined,
     navigateToFirstMediaIfNeeded: () => undefined,
-    getAvailableRoutes: () => [gridRoute, mapRoute, bulkEditRoute],
-    getEntryPathByView: () => "/",
-    getMediaPathByView: () => "/",
+    getAvailableViews: () => [gridView, mapView, bulkEditView],
+    getEntryLinkByView: () => ({ href: "/" }),
+    getMediaLinkByView: () => ({ href: "/" }),
     canRequestMore: () => false,
     requestMore: () => undefined,
     canDownloadCategory: () => false,

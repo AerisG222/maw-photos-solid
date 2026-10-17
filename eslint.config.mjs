@@ -50,6 +50,20 @@ export default defineConfig(
             // each queryKey (e.g. the media id / year) is enforced by convention and code review.
             "@tanstack/query/exhaustive-deps": "off",
             /*
+               TanStack Router redirects by throwing what `redirect()` returns -
+               a Response, not an Error - from a route's `beforeLoad` or loader.
+               That is the documented way, not a mistake, so it is allowed here
+               rather than excused at every one.
+            */
+            "@typescript-eslint/only-throw-error": [
+                "error",
+                {
+                    allow: [
+                        { from: "package", package: "@tanstack/router-core", name: "Redirect" }
+                    ]
+                }
+            ],
+            /*
                The typescript config rather than the plain recommended one. It
                differs in two rules, and both matter here: `jsx-no-undef` is
                told that TypeScript is resolving the names, so it stops
