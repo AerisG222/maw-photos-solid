@@ -1,5 +1,5 @@
 import { Component, For, Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../../_router/compat";
 
 import { getPlaceKindIcon, PlaceKind } from "../../_models/Place";
 import { Uuid } from "../../_models/Uuid";

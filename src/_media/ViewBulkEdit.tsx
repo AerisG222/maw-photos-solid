@@ -1,5 +1,5 @@
 import { Component, For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "../_router/compat";
 
 import { Media } from "../_models/Media";
 import { GpsCoordinate } from "../_models/GpsCoordinate";
@@ -27,7 +27,6 @@ import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import { BulkEditFilter } from "./bulk-edit/BulkEditFilterCard";
 import ConfirmDialog from "../_components/overlay/ConfirmDialog";
-import AdminGuard from "../_components/auth/AdminGuard";
 import Icon from "../_components/icon/Icon";
 import IconButton from "../_components/icon/IconButton";
 import BulkEditPreview from "./bulk-edit/BulkEditPreview";
@@ -82,8 +81,9 @@ const ViewBulkEdit: Component<Props> = props => {
 
        The toolbar stops offering it, and this catches the rest: a bookmarked
        URL, a link from elsewhere, or a window dragged narrower while it is
-       open. Same shape as the AdminGuard above it - leave, rather than render
-       something that cannot do its job.
+       open. Same shape as the admin check on the route itself - see
+       category/_routeTree.tsx - leave, rather than render something that cannot
+       do its job.
     */
     createEffect(() => {
         if (!docked()) {
@@ -504,214 +504,208 @@ const ViewBulkEdit: Component<Props> = props => {
     };
 
     return (
-        <AdminGuard redirectRoute={props.mediaService.getEntryPathByView(MediaViewGrid)}>
-            <Show when={props.mediaService.isReady() && docked()}>
-                <Layout
-                    toolbar={
-                        <Toolbar
-                            mediaService={props.mediaService}
-                            activeCategory={props.mediaService.getActiveCategory()}
-                            activeMedia={props.mediaService.getActiveMedia()}
-                        />
-                    }
-                    sidebar={
-                        <BulkEditSidebar
-                            onSave={onSave}
-                            onSelectAll={selectAllShown}
-                            onDeselectAll={() => setAll(false)}
-                            onClearOverride={() => setIsConfirmingClear(true)}
-                            selectedCount={selectedIds().length}
-                            filter={filter()}
-                            onFilterChange={onFilterChange}
-                            hiddenCount={hiddenCount()}
-                            roles={roles.data}
-                            onRestrict={onRestrict}
-                            onClearRestriction={() => setIsConfirmingUnrestrict(true)}
-                            isRestrictionPending={
-                                bulkSetMediaRolesMutation.isPending ||
-                                bulkClearMediaRolesMutation.isPending
-                            }
-                            restrictionMessages={[
-                                ...(restrictions.isError
-                                    ? [
-                                          `Could not tell which photos are restricted. ${describeError(restrictions.error)}`
-                                      ]
-                                    : []),
-                                ...restrictionMessages()
-                            ]}
-                            categoryRoles={categoryRoles.data}
-                            onSaveCategoryRoles={onSaveCategoryRoles}
-                            isCategoryRolesPending={setCategoryRolesMutation.isPending}
-                            categoryRolesMessages={[
-                                ...(categoryRoles.isError
-                                    ? [
-                                          `Could not load who this category is shared with. ${describeError(categoryRoles.error)}`
-                                      ]
-                                    : []),
-                                ...categoryRolesMessages()
-                            ]}
-                        />
-                    }
-                >
-                    <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+        // admins only - the route refuses anybody else before this exists, see category/_routeTree.tsx
+        <Show when={props.mediaService.isReady() && docked()}>
+            <Layout
+                toolbar={
+                    <Toolbar
+                        mediaService={props.mediaService}
+                        activeCategory={props.mediaService.getActiveCategory()}
+                        activeMedia={props.mediaService.getActiveMedia()}
+                    />
+                }
+                sidebar={
+                    <BulkEditSidebar
+                        onSave={onSave}
+                        onSelectAll={selectAllShown}
+                        onDeselectAll={() => setAll(false)}
+                        onClearOverride={() => setIsConfirmingClear(true)}
+                        selectedCount={selectedIds().length}
+                        filter={filter()}
+                        onFilterChange={onFilterChange}
+                        hiddenCount={hiddenCount()}
+                        roles={roles.data}
+                        onRestrict={onRestrict}
+                        onClearRestriction={() => setIsConfirmingUnrestrict(true)}
+                        isRestrictionPending={
+                            bulkSetMediaRolesMutation.isPending ||
+                            bulkClearMediaRolesMutation.isPending
+                        }
+                        restrictionMessages={[
+                            ...(restrictions.isError
+                                ? [
+                                      `Could not tell which photos are restricted. ${describeError(restrictions.error)}`
+                                  ]
+                                : []),
+                            ...restrictionMessages()
+                        ]}
+                        categoryRoles={categoryRoles.data}
+                        onSaveCategoryRoles={onSaveCategoryRoles}
+                        isCategoryRolesPending={setCategoryRolesMutation.isPending}
+                        categoryRolesMessages={[
+                            ...(categoryRoles.isError
+                                ? [
+                                      `Could not load who this category is shared with. ${describeError(categoryRoles.error)}`
+                                  ]
+                                : []),
+                            ...categoryRolesMessages()
+                        ]}
+                    />
+                }
+            >
+                <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
 
-                    <div class="listing-flow mb-4">
-                        <For each={mediaToShow()}>
-                            {m => (
-                                <div
-                                    class="border-1 cursor-pointer text-center rounded-sm"
-                                    classList={{
-                                        "border-primary/40 hover:border-primary":
-                                            !messagesByMedia().has(m.id),
-                                        "border-error outline-2 outline-error":
-                                            messagesByMedia().has(m.id)
-                                    }}
-                                    title={describeProblems(m.id) ?? describeRestriction(m.id)}
-                                    // keep a shift-click from also selecting text across the grid
-                                    onMouseDown={evt => evt.shiftKey && evt.preventDefault()}
-                                    onClick={evt => onItemClick(m.id, evt)}
-                                >
-                                    <div class="flex items-center justify-center gap-1">
-                                        <input
-                                            type="checkbox"
-                                            class="checkbox checkbox-sm my-1"
-                                            checked={m.isSelected}
-                                            // the click on the photo around it decides the state - left to
-                                            // itself the box would flip even when a shift-click range does not
-                                            onClick={evt => evt.preventDefault()}
-                                        />
-                                        <Show when={describeRestriction(m.id)}>
-                                            {description => (
-                                                <>
-                                                    <Icon classes="icon-[ic--round-lock] text-warning" />
-                                                    <span class="sr-only">{description()}</span>
-                                                </>
-                                            )}
-                                        </Show>
-                                    </div>
-                                    <Show
-                                        when={m.imageUrl && m.media}
-                                        fallback={
-                                            <div
-                                                class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
-                                                style={{
-                                                    width: `${getThumbnailSize(ThumbnailSizeDefault).width}px`,
-                                                    height: `${getThumbnailSize(ThumbnailSizeDefault).height}px`
-                                                }}
-                                            >
-                                                <Icon classes="icon-[ic--round-visibility-off] text-2xl" />
-                                                <span class="truncate max-w-full">{m.slug}</span>
-                                                <span>Hidden from you</span>
-                                            </div>
-                                        }
-                                    >
-                                        {/* preview shows on hover, or when tabbed to; copy always shows, marking a photo with a location */}
-                                        <div class="relative group">
-                                            <img
-                                                src={m.imageUrl}
-                                                /* the checkbox beside it carries the meaning */
-                                                alt=""
-                                                class="rounded-b-sm"
-                                                width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                                height={
-                                                    getThumbnailSize(ThumbnailSizeDefault).height
-                                                }
-                                            />
-                                            <Show when={gpsById().get(m.id)}>
-                                                {gps => (
-                                                    <IconButton
-                                                        label={copyLabel(m.id)}
-                                                        buttonClasses="btn-sm absolute bottom-1 left-1 bg-base-100/80"
-                                                        onClick={() =>
-                                                            void copyLocation(m.id, gps())
-                                                        }
-                                                    >
-                                                        <Icon
-                                                            classes={`${copyIcon(m.id)} text-base`}
-                                                        />
-                                                    </IconButton>
-                                                )}
-                                            </Show>
-                                            <IconButton
-                                                label="Preview"
-                                                buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-                                                onClick={() => setPreviewId(m.id)}
-                                            >
-                                                <Icon classes="icon-[ic--round-zoom-in] text-lg" />
-                                            </IconButton>
-                                        </div>
+                <div class="listing-flow mb-4">
+                    <For each={mediaToShow()}>
+                        {m => (
+                            <div
+                                class="border-1 cursor-pointer text-center rounded-sm"
+                                classList={{
+                                    "border-primary/40 hover:border-primary":
+                                        !messagesByMedia().has(m.id),
+                                    "border-error outline-2 outline-error": messagesByMedia().has(
+                                        m.id
+                                    )
+                                }}
+                                title={describeProblems(m.id) ?? describeRestriction(m.id)}
+                                // keep a shift-click from also selecting text across the grid
+                                onMouseDown={evt => evt.shiftKey && evt.preventDefault()}
+                                onClick={evt => onItemClick(m.id, evt)}
+                            >
+                                <div class="flex items-center justify-center gap-1">
+                                    <input
+                                        type="checkbox"
+                                        class="checkbox checkbox-sm my-1"
+                                        checked={m.isSelected}
+                                        // the click on the photo around it decides the state - left to
+                                        // itself the box would flip even when a shift-click range does not
+                                        onClick={evt => evt.preventDefault()}
+                                    />
+                                    <Show when={describeRestriction(m.id)}>
+                                        {description => (
+                                            <>
+                                                <Icon classes="icon-[ic--round-lock] text-warning" />
+                                                <span class="sr-only">{description()}</span>
+                                            </>
+                                        )}
                                     </Show>
                                 </div>
-                            )}
-                        </For>
-                    </div>
+                                <Show
+                                    when={m.imageUrl && m.media}
+                                    fallback={
+                                        <div
+                                            class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
+                                            style={{
+                                                width: `${getThumbnailSize(ThumbnailSizeDefault).width}px`,
+                                                height: `${getThumbnailSize(ThumbnailSizeDefault).height}px`
+                                            }}
+                                        >
+                                            <Icon classes="icon-[ic--round-visibility-off] text-2xl" />
+                                            <span class="truncate max-w-full">{m.slug}</span>
+                                            <span>Hidden from you</span>
+                                        </div>
+                                    }
+                                >
+                                    {/* preview shows on hover, or when tabbed to; copy always shows, marking a photo with a location */}
+                                    <div class="relative group">
+                                        <img
+                                            src={m.imageUrl}
+                                            /* the checkbox beside it carries the meaning */
+                                            alt=""
+                                            class="rounded-b-sm"
+                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                        />
+                                        <Show when={gpsById().get(m.id)}>
+                                            {gps => (
+                                                <IconButton
+                                                    label={copyLabel(m.id)}
+                                                    buttonClasses="btn-sm absolute bottom-1 left-1 bg-base-100/80"
+                                                    onClick={() => void copyLocation(m.id, gps())}
+                                                >
+                                                    <Icon classes={`${copyIcon(m.id)} text-base`} />
+                                                </IconButton>
+                                            )}
+                                        </Show>
+                                        <IconButton
+                                            label="Preview"
+                                            buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                                            onClick={() => setPreviewId(m.id)}
+                                        >
+                                            <Icon classes="icon-[ic--round-zoom-in] text-lg" />
+                                        </IconButton>
+                                    </div>
+                                </Show>
+                            </div>
+                        )}
+                    </For>
+                </div>
 
-                    <BulkEditPreview
-                        items={previewItems()}
-                        index={previewIndex()}
-                        onIndexChange={index => setPreviewId(previewItems()[index]?.media.id)}
-                        onToggle={media => toggle(media.id)}
-                        onClose={() => setPreviewId(undefined)}
-                        describeRestriction={media => describeRestriction(media.id)}
-                    />
+                <BulkEditPreview
+                    items={previewItems()}
+                    index={previewIndex()}
+                    onIndexChange={index => setPreviewId(previewItems()[index]?.media.id)}
+                    onToggle={media => toggle(media.id)}
+                    onClose={() => setPreviewId(undefined)}
+                    describeRestriction={media => describeRestriction(media.id)}
+                />
 
-                    <ConfirmDialog
-                        open={isConfirmingClear()}
-                        title="Clear GPS Override"
-                        confirmLabel="Clear"
-                        destructive
-                        onConfirm={() => void onConfirmClearOverride()}
-                        onCancel={() => setIsConfirmingClear(false)}
-                    >
-                        Remove the GPS override from {selectedIds().length} selected{" "}
-                        {selectedIds().length === 1 ? "photo" : "photos"}? Each will go back to the
-                        location its file recorded, if it has one.
-                    </ConfirmDialog>
+                <ConfirmDialog
+                    open={isConfirmingClear()}
+                    title="Clear GPS Override"
+                    confirmLabel="Clear"
+                    destructive
+                    onConfirm={() => void onConfirmClearOverride()}
+                    onCancel={() => setIsConfirmingClear(false)}
+                >
+                    Remove the GPS override from {selectedIds().length} selected{" "}
+                    {selectedIds().length === 1 ? "photo" : "photos"}? Each will go back to the
+                    location its file recorded, if it has one.
+                </ConfirmDialog>
 
-                    <ConfirmDialog
-                        open={!!pendingCategoryRoles()}
-                        title="Stop Sharing Category"
-                        confirmLabel="Save"
-                        destructive
-                        onConfirm={() => saveCategoryRoles(pendingCategoryRoles()!)}
-                        onCancel={() => setPendingCategoryRoles(undefined)}
-                    >
-                        Anyone who sees this category only as{" "}
-                        {removedRoles(pendingCategoryRoles() ?? []).join(" or ")} will lose it,
-                        along with every photo in it. Their browser may keep photos they already
-                        viewed for up to a week, and an app that already synced the category may
-                        keep listing it until it syncs from scratch.
-                    </ConfirmDialog>
+                <ConfirmDialog
+                    open={!!pendingCategoryRoles()}
+                    title="Stop Sharing Category"
+                    confirmLabel="Save"
+                    destructive
+                    onConfirm={() => saveCategoryRoles(pendingCategoryRoles()!)}
+                    onCancel={() => setPendingCategoryRoles(undefined)}
+                >
+                    Anyone who sees this category only as{" "}
+                    {removedRoles(pendingCategoryRoles() ?? []).join(" or ")} will lose it, along
+                    with every photo in it. Their browser may keep photos they already viewed for up
+                    to a week, and an app that already synced the category may keep listing it until
+                    it syncs from scratch.
+                </ConfirmDialog>
 
-                    <ConfirmDialog
-                        open={isConfirmingUnrestrict()}
-                        title="Unrestrict"
-                        confirmLabel="Unrestrict"
-                        destructive
-                        onConfirm={onConfirmUnrestrict}
-                        onCancel={() => setIsConfirmingUnrestrict(false)}
-                    >
-                        Remove the restriction from {selectedIds().length} selected{" "}
-                        {selectedIds().length === 1 ? "photo" : "photos"}? Each will be visible to
-                        everyone who can see its category.
-                    </ConfirmDialog>
+                <ConfirmDialog
+                    open={isConfirmingUnrestrict()}
+                    title="Unrestrict"
+                    confirmLabel="Unrestrict"
+                    destructive
+                    onConfirm={onConfirmUnrestrict}
+                    onCancel={() => setIsConfirmingUnrestrict(false)}
+                >
+                    Remove the restriction from {selectedIds().length} selected{" "}
+                    {selectedIds().length === 1 ? "photo" : "photos"}? Each will be visible to
+                    everyone who can see its category.
+                </ConfirmDialog>
 
-                    <ConfirmDialog
-                        open={!!pendingLockoutRoles()}
-                        title="Hide from Admins?"
-                        confirmLabel="Restrict"
-                        destructive
-                        onConfirm={() => restrict(pendingLockoutRoles()!)}
-                        onCancel={() => setPendingLockoutRoles(undefined)}
-                    >
-                        Without the {AdminRole} role, you will only see these photos if you hold one
-                        of the roles you chose. If you do not, they will drop out of this category
-                        for you too - though they stay listed here under Restricted Photos, where
-                        the restriction can be changed or removed.
-                    </ConfirmDialog>
-                </Layout>
-            </Show>
-        </AdminGuard>
+                <ConfirmDialog
+                    open={!!pendingLockoutRoles()}
+                    title="Hide from Admins?"
+                    confirmLabel="Restrict"
+                    destructive
+                    onConfirm={() => restrict(pendingLockoutRoles()!)}
+                    onCancel={() => setPendingLockoutRoles(undefined)}
+                >
+                    Without the {AdminRole} role, you will only see these photos if you hold one of
+                    the roles you chose. If you do not, they will drop out of this category for you
+                    too - though they stay listed here under Restricted Photos, where the
+                    restriction can be changed or removed.
+                </ConfirmDialog>
+            </Layout>
+        </Show>
     );
 };
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import { settleTransition, shouldAnimate } from "./useViewTransition";
+import { settleTransition, shouldAnimate, startRouteTransition } from "./viewTransition";
 
 const withSupport = (supported: boolean) => {
     if (supported) {
@@ -29,26 +29,14 @@ describe("whether a navigation is animated", () => {
         withSupport(true);
         withReducedMotion(false);
 
-        expect(shouldAnimate({ defaultPrevented: false })).toBe(true);
-    });
-
-    /*
-       Somebody else claimed this navigation - a guard redirecting to the login
-       page. Animating it would mean calling `retry(true)` on a decision that was
-       deliberately stopped.
-    */
-    test("no, when something has already claimed the navigation", () => {
-        withSupport(true);
-        withReducedMotion(false);
-
-        expect(shouldAnimate({ defaultPrevented: true })).toBe(false);
+        expect(shouldAnimate()).toBe(true);
     });
 
     test("no, when the reader has asked for reduced motion", () => {
         withSupport(true);
         withReducedMotion(true);
 
-        expect(shouldAnimate({ defaultPrevented: false })).toBe(false);
+        expect(shouldAnimate()).toBe(false);
     });
 
     // where the api is absent the navigation simply happens, as it always did
@@ -56,7 +44,7 @@ describe("whether a navigation is animated", () => {
         withSupport(false);
         withReducedMotion(false);
 
-        expect(shouldAnimate({ defaultPrevented: false })).toBe(false);
+        expect(shouldAnimate()).toBe(false);
     });
 });
 
@@ -132,5 +120,38 @@ describe("a superseded transition", () => {
 
         expect(logged).toHaveBeenCalled();
         logged.mockRestore();
+    });
+});
+
+describe("a route change", () => {
+    test("is wrapped in a transition when it should be animated", async () => {
+        withSupport(true);
+        withReducedMotion(false);
+
+        const update = vi.fn(() => Promise.resolve());
+        const done = Promise.resolve();
+
+        document.startViewTransition = vi.fn((callback: () => Promise<void>) => {
+            void callback();
+
+            return { ...transition(abort()), updateCallbackDone: done };
+        }) as never;
+
+        await startRouteTransition(update);
+
+        expect(document.startViewTransition).toHaveBeenCalledOnce();
+        expect(update).toHaveBeenCalledOnce();
+    });
+
+    test("simply happens when the reader has asked for reduced motion", async () => {
+        withSupport(true);
+        withReducedMotion(true);
+
+        const update = vi.fn(() => Promise.resolve());
+
+        await startRouteTransition(update);
+
+        expect(document.startViewTransition).not.toHaveBeenCalled();
+        expect(update).toHaveBeenCalledOnce();
     });
 });

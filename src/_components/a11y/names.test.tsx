@@ -1,4 +1,6 @@
-import { Router } from "@solidjs/router";
+import { JSX } from "solid-js";
+
+import { WithRouter } from "../../_router/testing";
 import { cleanup, fireEvent, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test } from "vitest";
 
@@ -32,17 +34,13 @@ import ToolbarLink from "../toolbar/ToolbarLink";
 */
 const frame = (body: () => unknown) =>
     render(() => (
-        <Router
-            root={props => (
-                <AppSettingsProvider>
-                    <ShortcutProvider>
-                        <MediaBreakpointProvider>{props.children}</MediaBreakpointProvider>
-                    </ShortcutProvider>
-                </AppSettingsProvider>
-            )}
-        >
-            {[{ path: "/", component: body as never }]}
-        </Router>
+        <WithRouter>
+            <AppSettingsProvider>
+                <ShortcutProvider>
+                    <MediaBreakpointProvider>{body() as JSX.Element}</MediaBreakpointProvider>
+                </ShortcutProvider>
+            </AppSettingsProvider>
+        </WithRouter>
     ));
 
 const route: AppRouteDefinition = {

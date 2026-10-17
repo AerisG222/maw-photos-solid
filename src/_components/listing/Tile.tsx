@@ -1,5 +1,5 @@
 import { JSXElement, ParentComponent, Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../../_router/compat";
 
 import { ThumbnailSizeDefault, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { createImageReveal } from "../loading/_imageReveal";

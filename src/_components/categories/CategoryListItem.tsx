@@ -1,5 +1,5 @@
 import { Component, Show, createSignal, onMount } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../../_router/compat";
 
 import { defaultListThumbnailSize, getThumbnailSize } from "../../_models/ThumbnailSize";
 import { Category } from "../../_models/Category";

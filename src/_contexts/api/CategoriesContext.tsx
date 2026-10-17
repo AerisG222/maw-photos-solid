@@ -25,6 +25,12 @@ import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
+import {
+    categoriesForYearQueryOptions,
+    categoryMediaGpsQueryOptions,
+    categoryMediaQueryOptions,
+    categoryQueryOptions
+} from "./_routeQueries";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -66,16 +72,6 @@ export const CategoriesProvider: ParentComponent = props => {
             queryApi<number[]>(accessToken, "categories/years")
         );
 
-    const fetchCategoriesForYear = async (year: number) =>
-        runWithAccessToken(getToken, async accessToken => {
-            const categories = await queryApi<CategoryDto[]>(
-                accessToken,
-                `categories/years/${year}`
-            );
-
-            return { year, categories: categories.map(mapCategory) };
-        });
-
     const fetchCategoriesWithoutGpsForYear = async (year: number) =>
         runWithAccessToken(getToken, async accessToken => {
             const categoryIds = await queryApi<Uuid[]>(
@@ -85,23 +81,6 @@ export const CategoriesProvider: ParentComponent = props => {
 
             return { year, categoryIds };
         });
-
-    const fetchCategory = async (id: Uuid) =>
-        runWithAccessToken(getToken, async accessToken => {
-            const category = await queryApi<CategoryDto>(accessToken, `categories/${id}`);
-
-            return mapCategory(category);
-        });
-
-    const fetchCategoryMedia = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Media[]>(accessToken, `categories/${id}/media`)
-        );
-
-    const fetchCategoryMediaGps = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<GpsDetail[]>(accessToken, `categories/${id}/gps`)
-        );
 
     const fetchCategorySearch = async (
         query: string,
@@ -170,19 +149,15 @@ export const CategoriesProvider: ParentComponent = props => {
     const categoriesForAllYearsQuery = (years: Accessor<number[]>) =>
         useQueries(() => ({
             queries: years().map(year => ({
-                queryKey: queryKeys.categories.forYear(year),
-                queryFn: () => fetchCategoriesForYear(year),
-                enabled: authContext.isLoggedIn,
-                staleTime: 1 * 60 * 1000
+                ...categoriesForYearQueryOptions(getToken, year),
+                enabled: authContext.isLoggedIn
             }))
         }));
 
     const categoriesForYearQuery = (year: Accessor<number>) =>
         useQuery(() => ({
-            queryKey: queryKeys.categories.forYear(year()),
-            queryFn: () => fetchCategoriesForYear(year()),
-            enabled: year() > 0 && authContext.isLoggedIn,
-            staleTime: 1 * 60 * 1000
+            ...categoriesForYearQueryOptions(getToken, year()),
+            enabled: year() > 0 && authContext.isLoggedIn
         }));
 
     // an empty accessor result means no queries at all, which is how callers
@@ -214,27 +189,21 @@ export const CategoriesProvider: ParentComponent = props => {
     */
     const categoryQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.categories.detail(id()),
-            queryFn: () => fetchCategory(id()!),
+            ...categoryQueryOptions(getToken, id()!),
             enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000,
             placeholderData: (previous: Category | undefined) => previous
         }));
 
     const categoryMediaQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.categories.media(id()),
-            queryFn: () => fetchCategoryMedia(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
+            ...categoryMediaQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     const categoryMediaGpsQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.categories.gps(id()),
-            queryFn: () => fetchCategoryMediaGps(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
+            ...categoryMediaGpsQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     // accessor, so a new term re-keys this one subscription instead of the

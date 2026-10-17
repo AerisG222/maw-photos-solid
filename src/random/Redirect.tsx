@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "../_router/compat";
 
 const Redirect: Component = () => {
     const navigate = useNavigate();

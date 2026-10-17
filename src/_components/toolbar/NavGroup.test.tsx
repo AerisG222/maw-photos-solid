@@ -1,4 +1,4 @@
-import { Router } from "@solidjs/router";
+import { WithRouter } from "../../_router/testing";
 import { cleanup, render } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test } from "vitest";
 
@@ -29,20 +29,13 @@ const entry = (name: string, over: Partial<NavEntry> = {}): NavEntry => ({
 
 const mount = (entries: NavEntry[], digitOffset?: number) =>
     render(() => (
-        <Router
-            root={props => (
-                <AppSettingsProvider>
-                    <ShortcutProvider>{props.children}</ShortcutProvider>
-                </AppSettingsProvider>
-            )}
-        >
-            {[
-                {
-                    path: "/",
-                    component: () => <NavGroup entries={entries} digitOffset={digitOffset} />
-                }
-            ]}
-        </Router>
+        <WithRouter>
+            <AppSettingsProvider>
+                <ShortcutProvider>
+                    <NavGroup entries={entries} digitOffset={digitOffset} />
+                </ShortcutProvider>
+            </AppSettingsProvider>
+        </WithRouter>
     ));
 
 // the digit is shown in the tooltip, which is how a reader discovers it

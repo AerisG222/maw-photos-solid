@@ -1,4 +1,4 @@
-import { Navigator, Params } from "@solidjs/router";
+import { Navigator, Params } from "../../_router/compat";
 import { UseQueryResult } from "@tanstack/solid-query";
 
 import { Category } from "../../_models/Category";

@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
-import { useLocation, useNavigate, useParams, useSearchParams } from "@solidjs/router";
+import { useLocation, useNavigate, useParams, useSearchParams } from "../../_router/compat";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";

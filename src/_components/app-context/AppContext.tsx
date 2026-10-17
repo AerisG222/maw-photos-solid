@@ -1,5 +1,4 @@
 import { lazy, ParentComponent, Show } from "solid-js";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 /*
    Loaded behind a statically-false branch in production so the devtools never
    reach the build output at all. A plain top-level import still emitted its
@@ -15,9 +14,7 @@ const SolidQueryDevtools = import.meta.env.DEV
       })
     : () => null;
 
-import { ApiError } from "../../_contexts/api/ApiError";
 import { AllSettingsProvider } from "../../_contexts/settings/AllSettingsProvider";
-import { AuthProvider } from "../../_contexts/AuthContext";
 import { CategoriesProvider } from "../../_contexts/api/CategoriesContext";
 import { ClansProvider } from "../../_contexts/api/ClansContext";
 import { ConfigProvider } from "../../_contexts/api/ConfigContext";
@@ -32,80 +29,46 @@ import { WindowSizeProvider } from "../../_contexts/WindowSizeContext";
 import ThemeWrapper from "../../_components/theme/ThemeWrapper";
 import AccountActivatedGuard from "../auth/AccountActivatedGuard";
 
+/*
+   The providers beneath the router. Auth and the query client sit above it - see
+   index.tsx - because the router's loaders and guards need both before any of
+   these exist.
+*/
 const AppContext: ParentComponent = props => {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                /*
-                   The default is three blind retries with backoff, so a 401 or
-                   404 made the user wait through several pointless round trips
-                   before anything could be shown. A 4xx reflects the request
-                   itself and will not resolve on its own - surface it at once,
-                   and keep retrying only the transient cases.
-                */
-                retry: (failureCount, error) =>
-                    error instanceof ApiError && error.isClientError ? false : failureCount < 2,
-
-                /*
-                   The default is zero, which means every query refetches the
-                   moment a component mounts - so stepping from a grid to the
-                   map and back fetched the whole category twice more, for data
-                   that had not moved.
-
-                   Safe because nothing here relies on that refetch to stay
-                   correct: every mutation invalidates or writes through on
-                   success, so a favorite, a rename or a new cover updates the
-                   cache directly. This only decides how long an untouched
-                   answer is trusted between visits.
-
-                   A minute is conservative. The listings behind it change when
-                   somebody uploads, which is out of band and rare; the figure
-                   could be raised a long way before anybody noticed, and the
-                   queries that want something different already say so.
-                */
-                staleTime: 60 * 1000
-            },
-            // a write should never be replayed automatically
-            mutations: { retry: false }
-        }
-    });
-
     return (
-        <AuthProvider>
-            <QueryClientProvider client={queryClient}>
-                <WindowSizeProvider>
-                    <MediaBreakpointProvider>
-                        <ShortcutProvider>
-                            <AllSettingsProvider>
-                                <ThemeWrapper>
-                                    <ConfigProvider>
-                                        <AccountActivatedGuard>
-                                            <CategoriesProvider>
-                                                <MediaProvider>
-                                                    <PeopleProvider>
-                                                        <ClansProvider>
-                                                            <PlacesProvider>
-                                                                <FullscreenProvider>
-                                                                    {props.children}
-                                                                </FullscreenProvider>
-                                                            </PlacesProvider>
-                                                        </ClansProvider>
-                                                    </PeopleProvider>
-                                                </MediaProvider>
-                                            </CategoriesProvider>
-                                        </AccountActivatedGuard>
-                                    </ConfigProvider>
-                                </ThemeWrapper>
-                            </AllSettingsProvider>
-                        </ShortcutProvider>
-                    </MediaBreakpointProvider>
-                </WindowSizeProvider>
+        <>
+            <WindowSizeProvider>
+                <MediaBreakpointProvider>
+                    <ShortcutProvider>
+                        <AllSettingsProvider>
+                            <ThemeWrapper>
+                                <ConfigProvider>
+                                    <AccountActivatedGuard>
+                                        <CategoriesProvider>
+                                            <MediaProvider>
+                                                <PeopleProvider>
+                                                    <ClansProvider>
+                                                        <PlacesProvider>
+                                                            <FullscreenProvider>
+                                                                {props.children}
+                                                            </FullscreenProvider>
+                                                        </PlacesProvider>
+                                                    </ClansProvider>
+                                                </PeopleProvider>
+                                            </MediaProvider>
+                                        </CategoriesProvider>
+                                    </AccountActivatedGuard>
+                                </ConfigProvider>
+                            </ThemeWrapper>
+                        </AllSettingsProvider>
+                    </ShortcutProvider>
+                </MediaBreakpointProvider>
+            </WindowSizeProvider>
 
-                <Show when={import.meta.env.DEV}>
-                    <SolidQueryDevtools initialIsOpen={false} />
-                </Show>
-            </QueryClientProvider>
-        </AuthProvider>
+            <Show when={import.meta.env.DEV}>
+                <SolidQueryDevtools initialIsOpen={false} />
+            </Show>
+        </>
     );
 };
 

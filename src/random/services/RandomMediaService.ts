@@ -1,4 +1,4 @@
-import { Navigator, Params } from "@solidjs/router";
+import { Navigator, Params } from "../../_router/compat";
 
 import { BaseMediaService } from "../../_media/services/BaseMediaService";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";

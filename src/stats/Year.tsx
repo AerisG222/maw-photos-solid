@@ -1,5 +1,5 @@
 import { Component, createMemo } from "solid-js";
-import { useParams, useSearchParams } from "@solidjs/router";
+import { useParams, useSearchParams } from "../_router/compat";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
 import { formatForMode, StatMode, statbarMediaCountTitle } from "./_funcs";

@@ -1,5 +1,5 @@
 import { Component, For, Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../../_router/compat";
 
 import { Clan } from "../../_models/Clan";
 import { Person } from "../../_models/Person";

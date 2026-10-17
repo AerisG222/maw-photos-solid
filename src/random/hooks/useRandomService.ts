@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "../../_router/compat";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaContext } from "../../_contexts/api/MediaContext";

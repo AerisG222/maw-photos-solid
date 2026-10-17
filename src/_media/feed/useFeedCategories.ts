@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "../../_router/compat";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";

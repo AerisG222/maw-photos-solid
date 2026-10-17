@@ -9,7 +9,6 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { createAuth0Client, User } from "@auth0/auth0-spa-js";
-import { useNavigate } from "@solidjs/router";
 
 import { loginPage, logout as logoutPage } from "../auth/_routes";
 import { AccountStatus } from "../_models/AccountStatus";
@@ -40,7 +39,6 @@ const AuthContext = createContext<AuthContextValue>();
 
 // inspiration: https://github.com/rturnq/solid-auth0/blob/master/src/components.tsx
 export const AuthProvider: ParentComponent = props => {
-    const navigate = useNavigate();
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
@@ -80,16 +78,19 @@ export const AuthProvider: ParentComponent = props => {
 
         if (isRedirect(url)) {
             const response = await client.handleRedirectCallback(url);
-
-            window.history.replaceState(undefined, "", redirectUrl);
-
             const returnTo = (response.appState as { returnTo?: string } | undefined)?.returnTo;
 
-            if (returnTo && returnTo !== loginPage.absolutePath) {
-                navigate(returnTo);
-            } else {
-                navigate("/");
-            }
+            /*
+               Written straight to the address bar rather than navigated to:
+               this provider sits above the router, which is only made once
+               sign-in has settled - see index.tsx - and starts from wherever
+               the address bar then says.
+            */
+            window.history.replaceState(
+                undefined,
+                "",
+                returnTo && returnTo !== loginPage.absolutePath ? returnTo : "/"
+            );
         }
 
         setState({ isLoggedIn: await client.isAuthenticated() });

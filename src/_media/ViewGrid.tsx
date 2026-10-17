@@ -7,7 +7,7 @@ import {
     onMount,
     Show
 } from "solid-js";
-import { A, useNavigate } from "@solidjs/router";
+import { A, useNavigate } from "../_router/compat";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
 import { SlideshowService } from "./services/SlideshowService";

@@ -1,5 +1,5 @@
 import { Component, For, Match, Show, Switch, createMemo } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../../_router/compat";
 
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Media } from "../../_models/Media";

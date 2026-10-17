@@ -1,5 +1,5 @@
 import { ParentComponent, children, createEffect } from "solid-js";
-import { useLocation, useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "../../_router/compat";
 
 import { useAuthContext } from "../../_contexts/AuthContext";
 import { inactive } from "../../auth/_routes";

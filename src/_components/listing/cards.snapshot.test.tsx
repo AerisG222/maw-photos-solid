@@ -1,4 +1,4 @@
-import { Router } from "@solidjs/router";
+import { WithRouter } from "../../_router/testing";
 import { cleanup, render } from "@solidjs/testing-library";
 import { afterEach, expect, test } from "vitest";
 
@@ -140,9 +140,9 @@ afterEach(() => {
 */
 test("the tiles each listing draws", () => {
     const { container } = render(() => (
-        <Router root={props => <AllSettingsProvider>{props.children}</AllSettingsProvider>}>
-            {[{ path: "/", component: cards as never }]}
-        </Router>
+        <WithRouter>
+            <AllSettingsProvider>{cards()}</AllSettingsProvider>
+        </WithRouter>
     ));
 
     for (const name of ["CategoryCard", "PersonCard", "PlaceCard", "MediaLink"]) {

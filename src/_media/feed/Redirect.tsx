@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
-import { useNavigate, useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "../../_router/compat";
 
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { isUuid } from "../../_models/Uuid";

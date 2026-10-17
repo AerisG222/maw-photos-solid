@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "../_router/compat";
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { Component } from "solid-js";
 

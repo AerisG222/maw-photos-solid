@@ -1,5 +1,5 @@
 import { Component, Show } from "solid-js";
-import { A } from "@solidjs/router";
+import { A } from "../_router/compat";
 
 import { useAuthContext } from "../_contexts/AuthContext";
 import { loginPage } from "./_routes";

@@ -1,5 +1,5 @@
 import { Component, onMount } from "solid-js";
-import { useLocation, useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "../_router/compat";
 
 /*
    The detail view is gone; its addresses are not.

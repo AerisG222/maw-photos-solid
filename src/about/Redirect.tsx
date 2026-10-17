@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "../_router/compat";
 import { Component } from "solid-js";
 
 import { aboutHelp } from "./_routes";

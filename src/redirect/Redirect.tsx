@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "../_router/compat";
 import { Component, onMount } from "solid-js";
 
 import { loginPage } from "../auth/_routes";

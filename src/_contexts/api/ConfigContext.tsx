@@ -7,7 +7,7 @@ import { queryKeys } from "./_queryKeys";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
 import { queryApi, runWithAccessToken } from "./_shared";
-import { AccountStatus } from "../../_models/AccountStatus";
+import { accountStatusQueryOptions } from "./_routeQueries";
 
 import Loading from "../../_components/loading/Loading";
 import ErrorMessage from "../../_components/error/ErrorMessage";
@@ -29,11 +29,6 @@ export const ConfigProvider: ParentComponent = props => {
             queryApi<Scale[]>(accessToken, "config/scales")
         );
 
-    const fetchAccountStatus = async () =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<AccountStatus>(accessToken, "auth/account-status")
-        );
-
     /*
        Created once, here in the provider body. These used to be factories that
        ran `useQuery` on every call, and `getScalesForMain` calls back into them
@@ -47,11 +42,10 @@ export const ConfigProvider: ParentComponent = props => {
         staleTime: 15 * 60 * 1000
     }));
 
+    // shared with the router, whose guards ask the same question before a screen exists
     const accountStatus = useQuery(() => ({
-        queryKey: queryKeys.auth.accountStatus(),
-        queryFn: fetchAccountStatus,
-        enabled: authContext.isLoggedIn,
-        staleTime: 5 * 60 * 1000
+        ...accountStatusQueryOptions(getToken),
+        enabled: authContext.isLoggedIn
     }));
 
     // keeps the existing ConfigService shape while handing back the one instance

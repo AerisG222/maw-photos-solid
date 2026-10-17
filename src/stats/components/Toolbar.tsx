@@ -1,5 +1,5 @@
 import { Component, Show } from "solid-js";
-import { useSearchParams } from "@solidjs/router";
+import { useSearchParams } from "../../_router/compat";
 
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";

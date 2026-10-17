@@ -1,5 +1,3 @@
-import { BeforeLeaveEventArgs, useBeforeLeave } from "@solidjs/router";
-
 /*
    Move between views by morphing rather than cutting.
 
@@ -22,15 +20,8 @@ const wantsMotion = () =>
     typeof window.matchMedia !== "function" ||
     !window.matchMedia(REDUCED_MOTION).matches;
 
-/*
-   Whether this particular navigation should be animated.
-
-   `defaultPrevented` means somebody else has already claimed it - a guard
-   sending an unauthenticated reader to the login page, say - and wrapping that
-   would be overriding a decision which is not ours to override.
-*/
-export const shouldAnimate = (event: Pick<BeforeLeaveEventArgs, "defaultPrevented">) =>
-    !event.defaultPrevented && supported() && wantsMotion();
+// whether a navigation should be animated: the browser can, and the reader has not asked otherwise
+export const shouldAnimate = () => supported() && wantsMotion();
 
 /*
    A transition that was superseded is not a failure.
@@ -60,18 +51,23 @@ export const settleTransition = (transition: ViewTransition) => {
     void transition.finished.catch(report);
 };
 
-export const useViewTransition = () => {
-    useBeforeLeave(event => {
-        if (!shouldAnimate(event)) {
-            return;
-        }
+/*
+   The router's own `startViewTransition`, replaced - see _router/router.tsx.
 
-        event.preventDefault();
+   TanStack Router can wrap navigations in a View Transition itself, and does
+   most of what this did. It leaves out the two things that took the longest to
+   get right here: it animates whatever the reader's motion preference, and it
+   attaches nothing to `ready` or `finished`, so every superseded transition is
+   back in the console as an unhandled AbortError.
+*/
+export const startRouteTransition = (update: () => Promise<void>) => {
+    if (!shouldAnimate()) {
+        return update();
+    }
 
-        settleTransition(
-            document.startViewTransition(() => {
-                event.retry(true);
-            })
-        );
-    });
+    const transition = document.startViewTransition(update);
+
+    settleTransition(transition);
+
+    return transition.updateCallbackDone;
 };

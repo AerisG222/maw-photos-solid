@@ -53,7 +53,7 @@ const buildBulkEditRoute = (basePath: string): MediaAppRouteDefinition => ({
         `${getCategoryPath(category!.year, category!.slug)}/bulk-edit`
 });
 
-const redirectRoute = buildRedirectRoute(basePath);
+export const redirectRoute = buildRedirectRoute(basePath);
 export const gridRoute = buildGridRoute(basePath);
 /*
    Kept only so old links resolve - see DetailRedirect. No `mediaView`, so it

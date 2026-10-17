@@ -1,4 +1,4 @@
-import { Router } from "@solidjs/router";
+import { WithRouter } from "../_router/testing";
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
@@ -68,19 +68,15 @@ const toolbar = (width: number) => {
     );
 
     render(() => (
-        <Router
-            root={props => (
-                <AppSettingsProvider>
-                    <ShortcutProvider>
-                        <MediaSettingsProvider>
-                            <MediaBreakpointProvider>{props.children}</MediaBreakpointProvider>
-                        </MediaSettingsProvider>
-                    </ShortcutProvider>
-                </AppSettingsProvider>
-            )}
-        >
-            {[{ path: "/", component: bar as never }]}
-        </Router>
+        <WithRouter>
+            <AppSettingsProvider>
+                <ShortcutProvider>
+                    <MediaSettingsProvider>
+                        <MediaBreakpointProvider>{bar()}</MediaBreakpointProvider>
+                    </MediaSettingsProvider>
+                </ShortcutProvider>
+            </AppSettingsProvider>
+        </WithRouter>
     ));
 };
 

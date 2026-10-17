@@ -1,4 +1,4 @@
-import { Router } from "@solidjs/router";
+import { TestRouter } from "../_router/testing";
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import { afterEach, describe, expect, test } from "vitest";
 
@@ -17,12 +17,12 @@ const land = () => {
     const Marker = () => <span>grid: {window.location.pathname}</span>;
 
     render(() => (
-        <Router>
-            {[
-                { path: "/c/:slug/fullscreen/:mediaSlug?", component: FullscreenRedirect as never },
-                { path: "/c/:slug/grid/:mediaSlug?", component: Marker as never }
+        <TestRouter
+            routes={[
+                { path: "/c/:slug/fullscreen/:mediaSlug?", component: FullscreenRedirect },
+                { path: "/c/:slug/grid/:mediaSlug?", component: Marker }
             ]}
-        </Router>
+        />
     ));
 };
 

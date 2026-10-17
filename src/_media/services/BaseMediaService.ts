@@ -1,4 +1,4 @@
-import { Navigator, Params } from "@solidjs/router";
+import { Navigator, Params } from "../../_router/compat";
 
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";

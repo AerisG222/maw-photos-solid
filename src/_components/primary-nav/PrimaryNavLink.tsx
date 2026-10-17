@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { A, useLocation } from "@solidjs/router";
+import { A, useLocation } from "../../_router/compat";
 import { AppRouteDefinition } from "../../_models/AppRouteDefinition";
 
 import Icon from "../icon/Icon";
@@ -26,13 +26,13 @@ const PrimaryNavLink: Component<Props> = props => {
        exactly like the other five.
     */
     const location = useLocation();
-    const isCurrent = () => location.pathname.startsWith(props.route.path!);
+    const isCurrent = () => location.pathname.startsWith(props.route.path);
 
     return (
         <Tooltip
             as={A}
             content={props.route.tooltip ?? props.route.name}
-            href={props.route.path!}
+            href={props.route.path}
             activeClass="text-primary-content bg-primary"
             class="flex primary-nav-link"
             aria-label={props.route.tooltip ?? props.route.name}

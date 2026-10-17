@@ -1,5 +1,5 @@
 import { Component, createMemo } from "solid-js";
-import { useNavigate, useSearchParams } from "@solidjs/router";
+import { useNavigate, useSearchParams } from "../_router/compat";
 
 import { useStatsContext } from "../_contexts/api/StatsContext";
 import { YearStat } from "../_models/YearStat";

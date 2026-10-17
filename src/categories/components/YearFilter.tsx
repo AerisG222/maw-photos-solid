@@ -1,6 +1,6 @@
 import { Component, Show } from "solid-js";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
-import { useSearchParams } from "@solidjs/router";
+import { useSearchParams } from "../../_router/compat";
 
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 

@@ -1,6 +1,6 @@
 import { Component, Show, createEffect, createSignal } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
-import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
+import { useNavigate, useParams, useSearchParams } from "../_router/compat";
 
 import { getPlacePath, PLACE_EDIT_PARAM } from "./_routes";
 import { placeFeedBasePath } from "../_media/feed/_routes";
