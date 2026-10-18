@@ -1,23 +1,33 @@
+import { queryOptions } from "@tanstack/solid-query";
+
 import { queryApi, runWithAccessToken } from "./_shared";
 import { queryKeys } from "./_queryKeys";
+import { GetToken } from "./_configQueries";
 import { CategoryDto, mapCategory } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { GpsDetail } from "../../_models/GpsDetail";
 import { Uuid } from "../../_models/Uuid";
-import { AccountStatus } from "../../_models/AccountStatus";
-
-export type GetToken = () => Promise<string | undefined>;
 
 /*
-   The queries a route asks for before its screen exists - in a loader, to start
-   fetching while the page's code is still arriving, or in a guard deciding
-   whether to let somebody in at all.
-
-   Shared with the contexts rather than copied, and whole: key, fetch and
-   staleTime together. A loader that warmed the cache under its own staleTime
-   would have the screen behind it refetch what it had only just fetched, and
-   one under its own key would warm nothing anybody reads.
+   The query definitions for categories: key, fetch and freshness together, shared
+   by the context that screens read through and by the route loaders that start
+   the same queries before a screen exists. One definition, so a loader warms
+   exactly the cache entry the screen then reads, and trusts it for exactly as
+   long.
 */
+
+export const fetchYears = async (getToken: GetToken) =>
+    runWithAccessToken(getToken, accessToken =>
+        queryApi<number[]>(accessToken, "categories/years")
+    );
+
+export const yearsQueryOptions = (getToken: GetToken) =>
+    queryOptions({
+        queryKey: queryKeys.categories.years(),
+        queryFn: () => fetchYears(getToken),
+        staleTime: 15 * 60 * 1000
+    });
+
 export const categoriesForYearQueryOptions = (getToken: GetToken, year: number) => ({
     queryKey: queryKeys.categories.forYear(year),
     queryFn: () =>
@@ -57,15 +67,6 @@ export const categoryMediaGpsQueryOptions = (getToken: GetToken, id: Uuid) => ({
     queryFn: () =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<GpsDetail[]>(accessToken, `categories/${id}/gps`)
-        ),
-    staleTime: 5 * 60 * 1000
-});
-
-export const accountStatusQueryOptions = (getToken: GetToken) => ({
-    queryKey: queryKeys.auth.accountStatus(),
-    queryFn: () =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<AccountStatus>(accessToken, "auth/account-status")
         ),
     staleTime: 5 * 60 * 1000
 });

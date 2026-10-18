@@ -13,11 +13,20 @@ import {
 
 import { useAuthContext } from "../AuthContext";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
+import {
+    PlaceFilter,
+    PlaceMediaFilter,
+    placeAncestorsQueryOptions,
+    placeCategoriesQueryOptions,
+    placeMediaQueryOptions,
+    placeQueryOptions,
+    placesQueryOptions
+} from "./_placesQueries";
 import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
 import { patchById } from "./_cacheUtils";
-import { Category, CategoryDto, mapCategory } from "../../_models/Category";
+import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { Place, PlaceAncestor, PlaceKind } from "../../_models/Place";
+import { Place, PlaceAncestor } from "../../_models/Place";
 import {
     MergePlacesRequest,
     SetPlaceCoverRequest,
@@ -25,6 +34,8 @@ import {
 } from "../../_models/PlaceRequest";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+
+export type { PlaceFilter, PlaceMediaFilter } from "./_placesQueries";
 
 /*
    Which slice of the place tree to list.
@@ -34,13 +45,6 @@ import { Uuid } from "../../_models/Uuid";
    because the duplicates worth finding sit in *different* branches. `kind`
    applies either way, so "every city called Zhuhai" is one request.
 */
-export interface PlaceFilter {
-    // undefined lists the countries - the root of the tree
-    parentId: Uuid | undefined;
-    kind: PlaceKind | undefined;
-    // already trimmed by the caller; blank means "not searching"
-    search: string;
-}
 
 /*
    How the cover picker narrows and orders what it is choosing from.
@@ -51,10 +55,6 @@ export interface PlaceFilter {
    the media id and the seed, so a shuffle stays consistent across pages instead
    of repeating and skipping rows. Undefined means the default, newest first.
 */
-export interface PlaceMediaFilter {
-    favoritesOnly: boolean;
-    seed: number | undefined;
-}
 
 /*
    Places, and the administration of them.
@@ -99,82 +99,6 @@ export const PlacesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
 
-    const fetchPlaces = async (filter: PlaceFilter) => {
-        // omitted rather than sent empty, so each url is the one the API
-        // documents for the listing being asked for
-        const params: Record<string, string> = {};
-
-        if (filter.search) {
-            params.q = filter.search;
-        } else if (filter.parentId) {
-            params.parent = filter.parentId;
-        }
-
-        if (filter.kind) {
-            params.kind = filter.kind;
-        }
-
-        return runWithAccessToken(getToken, accessToken =>
-            queryApi<Place[]>(accessToken, "places", params)
-        );
-    };
-
-    const fetchPlace = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken => queryApi<Place>(accessToken, `places/${id}`));
-
-    const fetchPlaceAncestors = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<PlaceAncestor[]>(accessToken, `places/${id}/ancestors`)
-        );
-
-    /*
-       Everything at a place *and beneath it*, which is what makes this the right
-       list to pick a cover from: a country's photographs are the ones eligible
-       to represent it, wherever in its states and cities they were taken.
-    */
-    const fetchPlaceMedia = async (id: Uuid, offset: number, filter: PlaceMediaFilter) => {
-        const params: Record<string, string> = { o: offset.toString() };
-
-        if (filter.favoritesOnly) {
-            params.f = "true";
-        }
-
-        if (filter.seed !== undefined) {
-            params.seed = filter.seed.toString();
-        }
-
-        return runWithAccessToken(getToken, accessToken =>
-            queryApi<SearchResults<Media>>(accessToken, `places/${id}/media`, params)
-        );
-    };
-
-    /*
-       The same media, rolled up to the categories holding it.
-
-       A cover is being chosen from tens of thousands of photographs, and the
-       fastest way to a good one is usually to remember which outing it was on -
-       so the picker offers the trips as well as the photographs. Paged and
-       filtered like the media, but with no seed: a shuffled list of categories
-       would mean nothing.
-    */
-    const fetchPlaceCategories = async (id: Uuid, offset: number, favoritesOnly: boolean) => {
-        const params: Record<string, string> = { o: offset.toString() };
-
-        if (favoritesOnly) {
-            params.f = "true";
-        }
-
-        return runWithAccessToken(getToken, async accessToken => {
-            const results = await queryApi<SearchResults<CategoryDto>>(
-                accessToken,
-                `places/${id}/categories`,
-                params
-            );
-
-            return { ...results, results: results.results.map(mapCategory) };
-        });
-    };
-
     const fetchMediaPlaces = async (mediaId: Uuid) =>
         runWithAccessToken(getToken, accessToken =>
             queryApi<Place[]>(accessToken, `media/${mediaId}/places`)
@@ -216,59 +140,34 @@ export const PlacesProvider: ParentComponent = props => {
 
     const placesQuery = (filter: Accessor<PlaceFilter>) =>
         useQuery(() => ({
-            queryKey: queryKeys.places.list({
-                parentId: filter().search ? undefined : filter().parentId,
-                kind: filter().kind,
-                search: filter().search || undefined
-            }),
-            queryFn: () => fetchPlaces(filter()),
-            enabled: authContext.isLoggedIn,
-            /*
-               Short, unlike the people list. The tree is a few hundred nodes and
-               the whole point of this screen is to change it - a merge that left
-               the listing it was launched from showing the place it just deleted
-               would read as a failure.
-            */
-            staleTime: 30 * 1000
+            ...placesQueryOptions(getToken, filter()),
+            enabled: authContext.isLoggedIn
         }));
 
     const placeQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.places.detail(id()),
-            queryFn: () => fetchPlace(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 30 * 1000
+            ...placeQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     const placesByIdQuery = (ids: Accessor<Uuid[]>) =>
         useQueries(() => ({
             queries: ids().map(id => ({
-                queryKey: queryKeys.places.detail(id),
-                queryFn: () => fetchPlace(id),
-                enabled: authContext.isLoggedIn,
-                staleTime: 30 * 1000
+                ...placeQueryOptions(getToken, id),
+                enabled: authContext.isLoggedIn
             }))
         }));
 
     const placeAncestorsQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.places.ancestors(id()),
-            queryFn: () => fetchPlaceAncestors(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            // the chain of names above a place moves only when the tree is
-            // reshaped, which invalidates this along with everything else
-            staleTime: 5 * 60 * 1000
+            ...placeAncestorsQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     const placeMediaQuery = (id: Accessor<Uuid | undefined>, filter: Accessor<PlaceMediaFilter>) =>
         useInfiniteQuery(() => ({
-            queryKey: [...queryKeys.places.media(id()), filter()],
-            queryFn: data => fetchPlaceMedia(id()!, data.pageParam, filter()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage, _pages) =>
-                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+            ...placeMediaQueryOptions(getToken, id()!, filter()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*
@@ -289,13 +188,8 @@ export const PlacesProvider: ParentComponent = props => {
         favoritesOnly: Accessor<boolean>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: queryKeys.places.categories(id(), { favoritesOnly: favoritesOnly() }),
-            queryFn: data => fetchPlaceCategories(id()!, data.pageParam, favoritesOnly()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage, _pages) =>
-                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+            ...placeCategoriesQueryOptions(getToken, id()!, favoritesOnly()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*

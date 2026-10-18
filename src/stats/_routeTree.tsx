@@ -3,6 +3,8 @@ import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-route
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { validateStatsSearch } from "./_search";
+import { prefetch } from "../_router/prefetch";
+import { statsByYearQueryOptions, statsForYearQueryOptions } from "../_contexts/api/_statsQueries";
 
 export const statsRoute = createRoute({
     getParentRoute: () => rootRoute,
@@ -23,6 +25,10 @@ export const statsSummaryRoute = createRoute({
     getParentRoute: () => statsRoute,
     path: "summary",
     validateSearch: validateStatsSearch("category-count"),
+    loader: ({ context }) =>
+        prefetch(context, (queryClient, getToken) =>
+            queryClient.prefetchQuery(statsByYearQueryOptions(getToken))
+        ),
     component: lazyRouteComponent(() => import("./Summary"))
 });
 
@@ -30,6 +36,10 @@ export const statsYearRoute = createRoute({
     getParentRoute: () => statsRoute,
     path: "summary/$year",
     validateSearch: validateStatsSearch("count"),
+    loader: ({ context, params }) =>
+        prefetch(context, (queryClient, getToken) =>
+            queryClient.prefetchQuery(statsForYearQueryOptions(getToken, parseInt(params.year, 10)))
+        ),
     component: lazyRouteComponent(() => import("./Year"))
 });
 

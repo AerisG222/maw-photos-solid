@@ -3,11 +3,9 @@ import { useQuery, UseQueryResult } from "@tanstack/solid-query";
 
 import { Scale } from "../../_models/Scale";
 import { useAuthContext } from "../AuthContext";
-import { queryKeys } from "./_queryKeys";
 import { ThumbnailSize } from "../../_models/ThumbnailSize";
 import { useWindowSizeContext } from "../WindowSizeContext";
-import { queryApi, runWithAccessToken } from "./_shared";
-import { accountStatusQueryOptions } from "./_routeQueries";
+import { accountStatusQueryOptions, scalesQueryOptions } from "./_configQueries";
 
 import Loading from "../../_components/loading/Loading";
 import ErrorMessage from "../../_components/error/ErrorMessage";
@@ -24,11 +22,6 @@ export const ConfigProvider: ParentComponent = props => {
     const [authContext, { getToken, setAccountStatus }] = useAuthContext();
     const [windowSizeContext] = useWindowSizeContext();
 
-    const fetchScales = async () =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Scale[]>(accessToken, "config/scales")
-        );
-
     /*
        Created once, here in the provider body. These used to be factories that
        ran `useQuery` on every call, and `getScalesForMain` calls back into them
@@ -36,10 +29,8 @@ export const ConfigProvider: ParentComponent = props => {
        caller could reliably read the shared loading/error state.
     */
     const scales = useQuery(() => ({
-        queryKey: queryKeys.config.scales(),
-        queryFn: fetchScales,
-        enabled: authContext.isLoggedIn,
-        staleTime: 15 * 60 * 1000
+        ...scalesQueryOptions(getToken),
+        enabled: authContext.isLoggedIn
     }));
 
     // shared with the router, whose guards ask the same question before a screen exists

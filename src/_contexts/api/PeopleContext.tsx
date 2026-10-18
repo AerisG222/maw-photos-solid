@@ -12,11 +12,17 @@ import {
 
 import { useAuthContext } from "../AuthContext";
 import { queryKeys } from "./_queryKeys";
-import { putApi, queryApi, runWithAccessToken } from "./_shared";
+import {
+    PersonMediaFilter,
+    peopleQueryOptions,
+    personCategoriesQueryOptions,
+    personMediaQueryOptions
+} from "./_peopleQueries";
+import { putApi, runWithAccessToken } from "./_shared";
 import { patchById } from "./_cacheUtils";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
-import { Category, CategoryDto, mapCategory } from "../../_models/Category";
+import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { SearchResults } from "../../_models/SearchResults";
@@ -25,15 +31,7 @@ import { Uuid } from "../../_models/Uuid";
 /*
    How a person's feed is narrowed and ordered.
 
-   `seed` is a seed rather than a "shuffle" flag because the feed is paged: the
-   API orders by a hash of the media id and this seed, so the same seed always
-   yields the same order. A fresh shuffle per request would make page two repeat
-   and skip rows from page one. Undefined means the default, newest first.
-*/
-export interface PersonMediaFilter {
-    favoritesOnly: boolean;
-    seed: number | undefined;
-}
+export type { PersonMediaFilter } from "./_peopleQueries";
 
 /*
    People, as detected by the face recognition pipeline.
@@ -62,50 +60,6 @@ export const PeopleProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
 
-    const fetchPeople = async () =>
-        runWithAccessToken(getToken, accessToken => queryApi<Person[]>(accessToken, "persons"));
-
-    const fetchPersonMedia = async (id: Uuid, offset: number, filter: PersonMediaFilter) => {
-        // omitted rather than sent as their defaults, so the url stays the one
-        // the API documents for an unfiltered feed
-        const params: Record<string, string> = { o: offset.toString() };
-
-        if (filter.favoritesOnly) {
-            params.f = "true";
-        }
-
-        if (filter.seed !== undefined) {
-            params.seed = filter.seed.toString();
-        }
-
-        return runWithAccessToken(getToken, accessToken =>
-            queryApi<SearchResults<Media>>(accessToken, `persons/${id}/media`, params)
-        );
-    };
-
-    /*
-       The categories a person turns up in, as an alternative to the media
-       itself. Paged like the media feed and filtered the same way, but with no
-       seed - a shuffled list of categories would mean nothing.
-    */
-    const fetchPersonCategories = async (id: Uuid, offset: number, favoritesOnly: boolean) => {
-        const params: Record<string, string> = { o: offset.toString() };
-
-        if (favoritesOnly) {
-            params.f = "true";
-        }
-
-        return runWithAccessToken(getToken, async accessToken => {
-            const results = await queryApi<SearchResults<CategoryDto>>(
-                accessToken,
-                `persons/${id}/categories`,
-                params
-            );
-
-            return { ...results, results: results.results.map(mapCategory) };
-        });
-    };
-
     const postIsFavorite = async (req: IsFavoriteRequest<Person>) =>
         runWithAccessToken(getToken, accessToken =>
             putApi(accessToken, `persons/${req.item.id}/favorite`, {
@@ -120,10 +74,8 @@ export const PeopleProvider: ParentComponent = props => {
     */
     const peopleQuery = (enabled?: Accessor<boolean>) =>
         useQuery(() => ({
-            queryKey: queryKeys.people.all(),
-            queryFn: fetchPeople,
-            enabled: (enabled?.() ?? true) && authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
+            ...peopleQueryOptions(getToken),
+            enabled: (enabled?.() ?? true) && authContext.isLoggedIn
         }));
 
     /*
@@ -138,13 +90,8 @@ export const PeopleProvider: ParentComponent = props => {
         filter: Accessor<PersonMediaFilter>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: queryKeys.people.media(id(), filter()),
-            queryFn: data => fetchPersonMedia(id()!, data.pageParam, filter()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage, _pages) =>
-                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+            ...personMediaQueryOptions(getToken, id()!, filter()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     const personCategoriesQuery = (
@@ -152,13 +99,8 @@ export const PeopleProvider: ParentComponent = props => {
         favoritesOnly: Accessor<boolean>
     ) =>
         useInfiniteQuery(() => ({
-            queryKey: queryKeys.people.categories(id(), { favoritesOnly: favoritesOnly() }),
-            queryFn: data => fetchPersonCategories(id()!, data.pageParam, favoritesOnly()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage, _pages) =>
-                lastPage?.hasMoreResults ? lastPage.nextOffset : undefined
+            ...personCategoriesQueryOptions(getToken, id()!, favoritesOnly()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*

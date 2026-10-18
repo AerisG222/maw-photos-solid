@@ -1,7 +1,11 @@
 import { QueryClient } from "@tanstack/solid-query";
 import { createRootRouteWithContext, redirect } from "@tanstack/solid-router";
 
-import { GetToken, accountStatusQueryOptions } from "../_contexts/api/_routeQueries";
+import {
+    GetToken,
+    accountStatusQueryOptions,
+    scalesQueryOptions
+} from "../_contexts/api/_configQueries";
 
 /*
    What a route's loader and guards are handed. Both live above the router -
@@ -31,16 +35,28 @@ const INACTIVE_PATH = "/auth/inactive";
 */
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
     /*
-       An account that exists but has been given nothing yet sees only the page
-       saying so. This was AccountActivatedGuard, which rendered whatever was
-       asked for and then moved away once the account status arrived - so the
-       screen showed, and its queries were refused, before the redirect.
+       What every screen needs before it can draw: the image sizes, and whether
+       the account has been given anything yet.
 
-       The status is the same cached query the rest of the application reads,
-       so after the first navigation this costs nothing.
+       A loader rather than a guard, so this runs alongside the screen's own
+       loader instead of ahead of it. As a `beforeLoad` it held every route
+       below it until the account status had come back - and the sizes were
+       only asked for once the shell had rendered, so a first load waited on
+       three round trips in a row before the page's own data was even
+       requested. Now all of them go out together.
+
+       An account that exists but has been given nothing yet sees only the page
+       saying so. The status is the same cached query the rest of the
+       application reads, so after the first navigation this costs nothing.
     */
-    beforeLoad: async ({ context, location }) => {
-        if (!context.isLoggedIn() || location.pathname === INACTIVE_PATH) {
+    loader: async ({ context, location }) => {
+        if (!context.isLoggedIn()) {
+            return;
+        }
+
+        void context.queryClient.prefetchQuery(scalesQueryOptions(context.getToken));
+
+        if (location.pathname === INACTIVE_PATH) {
             return;
         }
 

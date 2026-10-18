@@ -30,6 +30,7 @@ import { BulkClearMediaRolesRequest } from "../../_models/BulkClearMediaRolesReq
 import { RestrictedMedia } from "../../_models/RestrictedMedia";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
+import { randomMediaQueryOptions } from "./_mediaQueries";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
 
 export interface MediaService {
@@ -77,11 +78,6 @@ export const MediaProvider: ParentComponent = props => {
 
     const fetchMedia = async (id?: Uuid) =>
         runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
-
-    const fetchRandom = async (count: number) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Media[]>(accessToken, `media/random/${count}`)
-        );
 
     const fetchMetadata = async (id: Uuid) =>
         runWithAccessToken(getToken, accessToken =>
@@ -212,13 +208,8 @@ export const MediaProvider: ParentComponent = props => {
 
     const randomMediaQuery = (count: number) =>
         useInfiniteQuery(() => ({
-            queryKey: queryKeys.media.random(),
-            queryFn: () => fetchRandom(count),
-            enabled: count > 0 && authContext.isLoggedIn,
-            staleTime: Infinity,
-            initialPageParam: 0,
-            getNextPageParam: (lastPage, pages) => pages.length,
-            maxPages: 120
+            ...randomMediaQueryOptions(getToken, count),
+            enabled: count > 0 && authContext.isLoggedIn
         }));
 
     const mediaQuery = (id: Accessor<Uuid | undefined>) =>

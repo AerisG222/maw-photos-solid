@@ -1,14 +1,15 @@
 import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-router";
 
+import { accountStatusQueryOptions } from "../_contexts/api/_configQueries";
 import {
-    accountStatusQueryOptions,
     categoriesForYearQueryOptions,
     categoryMediaGpsQueryOptions,
     categoryMediaQueryOptions,
     categoryQueryOptions
-} from "../_contexts/api/_routeQueries";
+} from "../_contexts/api/_categoryQueries";
 import { RouterContext, rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
+import { prefetch } from "../_router/prefetch";
 import { redirectToGrid } from "../_media/_legacyViews";
 
 /*
@@ -27,24 +28,12 @@ import { redirectToGrid } from "../_media/_legacyViews";
    arrived and mounted. Two steps, because the address names a category by year
    and slug and the api by id: the year's list (almost always cached already)
    gives the id, and then the category, its media and their locations go out
-   together.
-
-   Not awaited. The page asks for the same queries and renders its own loading
-   state, exactly as before; this only means the answers are on their way
-   sooner. Holding navigation until they land would trade a skeleton for a
-   frozen click.
+   together. Not awaited - see _router/prefetch.ts.
 */
-const prefetchCategory = (context: RouterContext, categoryYear: string, categorySlug: string) => {
-    if (!context.isLoggedIn()) {
-        return;
-    }
-
-    const { queryClient, getToken } = context;
-    const year = parseInt(categoryYear, 10);
-
-    void (async () => {
+const prefetchCategory = (context: RouterContext, categoryYear: string, categorySlug: string) =>
+    prefetch(context, async (queryClient, getToken) => {
         const forYear = await queryClient.ensureQueryData(
-            categoriesForYearQueryOptions(getToken, year)
+            categoriesForYearQueryOptions(getToken, parseInt(categoryYear, 10))
         );
         const id = forYear.categories.find(c => c.slug === categorySlug)?.id;
 
@@ -55,10 +44,7 @@ const prefetchCategory = (context: RouterContext, categoryYear: string, category
                 queryClient.prefetchQuery(categoryMediaGpsQueryOptions(getToken, id))
             ]);
         }
-    })().catch(() => {
-        // the page asks again for itself, and shows the error if there is one
     });
-};
 
 export const categoryRoute = createRoute({
     getParentRoute: () => rootRoute,

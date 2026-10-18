@@ -4,7 +4,25 @@ import { rootRoute } from "../../_router/rootRoute";
 import { requireLogin } from "../../_router/guards";
 import { isUuid } from "../../_models/Uuid";
 import { redirectToGrid } from "../_legacyViews";
-import { validateFeedSearch } from "./_search";
+import { FeedSearch, validateFeedSearch } from "./_search";
+import { prefetch } from "../../_router/prefetch";
+import { Uuid } from "../../_models/Uuid";
+import {
+    peopleQueryOptions,
+    personCategoriesQueryOptions,
+    personMediaQueryOptions
+} from "../../_contexts/api/_peopleQueries";
+import {
+    clanCategoriesQueryOptions,
+    clanMediaQueryOptions,
+    clansQueryOptions
+} from "../../_contexts/api/_clansQueries";
+import {
+    placeCategoriesQueryOptions,
+    placeMediaQueryOptions,
+    placeQueryOptions,
+    prefetchPlaceChain
+} from "../../_contexts/api/_placesQueries";
 import { peopleRoute } from "../../people/_routeTree";
 import { placesRoute } from "../../places/_routeTree";
 
@@ -49,6 +67,22 @@ const backToPlaces = (): never => {
     throw redirect({ to: placesRoute.to, params: {}, replace: true });
 };
 
+/*
+   What each listing asks for, started from its route - see _router/prefetch.ts.
+   The filter is read from the address exactly as the feed reads it, so the
+   first page lands in the cache entry the feed then asks for. Each also starts
+   whatever names the subject: the people or clan list, or the place and the
+   chain above it.
+
+   A feed opened with no filter of its own may take on a remembered one as it
+   opens, which re-keys it; what this fetched is then simply not the page shown.
+*/
+const mediaFilter = (search: FeedSearch) => ({
+    favoritesOnly: search.f === true,
+    seed: search.seed
+});
+const categoriesFilter = (search: FeedSearch) => ({ favoritesOnly: search.f === true });
+
 // ---- a person -------------------------------------------------------------
 
 export const personFeedRoute = createRoute({
@@ -74,6 +108,16 @@ const personFeedIndexRoute = createRoute({
 export const personFeedGridRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+    loaderDeps: ({ search }) => mediaFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    personMediaQueryOptions(getToken, params.personId as Uuid, deps)
+                ),
+                queryClient.prefetchQuery(peopleQueryOptions(getToken))
+            ])
+        ),
     component: FeedGrid
 });
 
@@ -92,6 +136,20 @@ const personFeedFullscreenRoute = createRoute({
 export const personFeedCategoriesRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "categories",
+    loaderDeps: ({ search }) => categoriesFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    personCategoriesQueryOptions(
+                        getToken,
+                        params.personId as Uuid,
+                        deps.favoritesOnly
+                    )
+                ),
+                queryClient.prefetchQuery(peopleQueryOptions(getToken))
+            ])
+        ),
     component: FeedCategories
 });
 
@@ -128,6 +186,16 @@ const clanFeedIndexRoute = createRoute({
 export const clanFeedGridRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+    loaderDeps: ({ search }) => mediaFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    clanMediaQueryOptions(getToken, params.clanId as Uuid, deps)
+                ),
+                queryClient.prefetchQuery(clansQueryOptions(getToken))
+            ])
+        ),
     component: FeedGrid
 });
 
@@ -146,6 +214,16 @@ const clanFeedFullscreenRoute = createRoute({
 export const clanFeedCategoriesRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "categories",
+    loaderDeps: ({ search }) => categoriesFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    clanCategoriesQueryOptions(getToken, params.clanId as Uuid, deps.favoritesOnly)
+                ),
+                queryClient.prefetchQuery(clansQueryOptions(getToken))
+            ])
+        ),
     component: FeedCategories
 });
 
@@ -182,6 +260,17 @@ const placeFeedIndexRoute = createRoute({
 export const placeFeedGridRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+    loaderDeps: ({ search }) => mediaFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    placeMediaQueryOptions(getToken, params.placeId as Uuid, deps)
+                ),
+                queryClient.prefetchQuery(placeQueryOptions(getToken, params.placeId as Uuid)),
+                prefetchPlaceChain(queryClient, getToken, params.placeId as Uuid)
+            ])
+        ),
     component: FeedGrid
 });
 
@@ -200,6 +289,21 @@ const placeFeedFullscreenRoute = createRoute({
 export const placeFeedCategoriesRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "categories",
+    loaderDeps: ({ search }) => categoriesFilter(search),
+    loader: ({ context, params, deps }) =>
+        prefetch(context, (queryClient, getToken) =>
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    placeCategoriesQueryOptions(
+                        getToken,
+                        params.placeId as Uuid,
+                        deps.favoritesOnly
+                    )
+                ),
+                queryClient.prefetchQuery(placeQueryOptions(getToken, params.placeId as Uuid)),
+                prefetchPlaceChain(queryClient, getToken, params.placeId as Uuid)
+            ])
+        ),
     component: FeedCategories
 });
 

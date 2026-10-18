@@ -29,8 +29,9 @@ import {
     categoriesForYearQueryOptions,
     categoryMediaGpsQueryOptions,
     categoryMediaQueryOptions,
-    categoryQueryOptions
-} from "./_routeQueries";
+    categoryQueryOptions,
+    yearsQueryOptions
+} from "./_categoryQueries";
 
 export interface CategoriesService {
     yearsQuery: () => UseQueryResult<number[], Error>;
@@ -66,11 +67,6 @@ const CategoriesContext = createContext<CategoriesService>();
 export const CategoriesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
-
-    const fetchYears = async () =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<number[]>(accessToken, "categories/years")
-        );
 
     const fetchCategoriesWithoutGpsForYear = async (year: number) =>
         runWithAccessToken(getToken, async accessToken => {
@@ -134,10 +130,8 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const yearsQuery = () =>
         useQuery(() => ({
-            queryKey: queryKeys.categories.years(),
-            queryFn: fetchYears,
-            enabled: authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
+            ...yearsQueryOptions(getToken),
+            enabled: authContext.isLoggedIn
         }));
 
     /*
