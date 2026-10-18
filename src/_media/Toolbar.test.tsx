@@ -60,11 +60,13 @@ const service = {
     isActiveMediaLast: () => true
 } as unknown as IMediaService;
 
-const toolbar = (width: number) => {
+const toolbar = (width: number, mediaService = service) => {
     atWidth(width);
 
     const bar = () => (
-        <Toolbar mediaService={service} activeCategory={category} activeMedia={undefined} />
+        <Toolbar mediaService={mediaService} activeCategory={category} activeMedia={undefined}>
+            <button>a control</button>
+        </Toolbar>
     );
 
     render(() => (
@@ -133,5 +135,29 @@ describe("which views a feed offers", () => {
 
         expect(titles).toContain("grid");
         expect(titles).toContain("map");
+    });
+});
+
+/*
+   Random, and a feed without its media / categories switch, offer the grid
+   alone, so no view links are drawn. The divider that followed them was then
+   the first thing in the bar - a gap at the top with nothing to divide.
+*/
+describe("a bar with only one view", () => {
+    test("starts with its controls, not a divider", () => {
+        toolbar(1280, { ...service, getAvailableViews: () => [gridView] });
+
+        expect(offered()).toEqual([]);
+        expect(screen.getByText("a control").parentElement?.firstElementChild?.tagName).toBe(
+            "BUTTON"
+        );
+    });
+
+    test("still divides its controls from the views when there are views", () => {
+        toolbar(1280);
+
+        expect(
+            screen.getByText("a control").previousElementSibling?.classList.contains("divider")
+        ).toBe(true);
     });
 });

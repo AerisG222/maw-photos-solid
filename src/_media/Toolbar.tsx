@@ -83,6 +83,15 @@ const Toolbar: ParentComponent<Props> = props => {
             }));
     });
 
+    /*
+       Dividers only between two things - one with nothing above it is a gap at
+       the top of the bar. Random, and any feed without a leading switch, offers
+       the grid alone, so no view links are drawn; the line that followed them
+       was then the first thing in the bar.
+    */
+    const hasNav = () => !!leading() || entries().length > 1;
+    const hasActions = () => !!props.activeMedia || props.mediaService.canDownloadCategory();
+
     return (
         <ToolbarLayout
             nav={
@@ -115,8 +124,10 @@ const Toolbar: ParentComponent<Props> = props => {
                nothing picked can still be downloaded.
             */
             actions={
-                <Show when={!!props.activeMedia || props.mediaService.canDownloadCategory()}>
-                    <ToolbarDivider />
+                <Show when={hasActions()}>
+                    <Show when={hasNav()}>
+                        <ToolbarDivider />
+                    </Show>
 
                     <ItemActions
                         activeMedia={props.activeMedia}
@@ -127,7 +138,9 @@ const Toolbar: ParentComponent<Props> = props => {
             }
         >
             <Show when={!!c()}>
-                <ToolbarDivider />
+                <Show when={hasNav() || hasActions()}>
+                    <ToolbarDivider />
+                </Show>
                 {c()}
             </Show>
         </ToolbarLayout>
