@@ -21,9 +21,9 @@ describe("patchById", () => {
     it("applies the change to the matching entry", () => {
         const result = patchById(build(), id("b"), { isFavorite: true });
 
-        expect(result[1].isFavorite).toBe(true);
+        expect(result[1]?.isFavorite).toBe(true);
         // unrelated fields survive the merge
-        expect(result[1].name).toBe("second");
+        expect(result[1]?.name).toBe("second");
     });
 
     it("leaves every other entry reference-identical", () => {
@@ -42,7 +42,7 @@ describe("patchById", () => {
 
         patchById(items, id("b"), { isFavorite: true });
 
-        expect(items[1].isFavorite).toBe(false);
+        expect(items[1]?.isFavorite).toBe(false);
     });
 
     it("returns the identical array when nothing matches", () => {

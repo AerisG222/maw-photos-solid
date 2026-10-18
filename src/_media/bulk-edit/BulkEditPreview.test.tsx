@@ -102,7 +102,7 @@ describe("the bulk edit preview", () => {
 
         fireEvent.keyDown(dialog(), { key: " " });
 
-        expect(onToggle).toHaveBeenCalledWith(items[1].media);
+        expect(onToggle).toHaveBeenCalledWith(items[1]?.media);
     });
 
     /*

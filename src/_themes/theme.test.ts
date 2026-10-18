@@ -32,7 +32,11 @@ const readTheme = (name: string) => {
     const tokens = new Map<string, string>();
 
     for (const match of css.matchAll(/(--[a-z0-9-]+):\s*([^;]+);/g)) {
-        tokens.set(match[1], match[2].trim());
+        const [, name, value] = match;
+
+        if (name && value) {
+            tokens.set(name, value.trim());
+        }
     }
 
     return tokens;
@@ -72,7 +76,7 @@ const toLinearRgb = ({ l, c, h }: Oklch) => {
 
 // WCAG relative luminance, which wants linear-light channels - the same ones above
 const luminance = (color: Oklch) => {
-    const [r, g, b] = toLinearRgb(color);
+    const [r = 0, g = 0, b = 0] = toLinearRgb(color);
 
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };

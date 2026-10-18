@@ -41,7 +41,7 @@ const offenders = () =>
         const source = readFileSync(file, "utf-8");
 
         return [...source.matchAll(/class(?:Name)?="([^"]*)"/g)]
-            .map(match => match[1])
+            .map(match => match[1] ?? "")
             .filter(
                 value =>
                     TEXT_SIZES.test(value) &&

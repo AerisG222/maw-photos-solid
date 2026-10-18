@@ -7,14 +7,20 @@
    would vanish against satellite imagery. Several stops rather than blue
    straight to yellow, which would pass through a muddy gray on the way.
 */
-export const pathStops = ["#2f6fde", "#21a6a6", "#6cce59", "#fde725"];
+export const pathStartColor = "#2f6fde";
+export const pathEndColor = "#fde725";
 
-export const pathStartColor = pathStops[0];
-export const pathEndColor = pathStops[pathStops.length - 1];
+export const pathStops = [pathStartColor, "#21a6a6", "#6cce59", pathEndColor];
 
-const toRgb = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+type Rgb = [number, number, number];
 
-const toHex = (rgb: number[]) =>
+const toRgb = (hex: string): Rgb => [
+    parseInt(hex.slice(1, 3), 16),
+    parseInt(hex.slice(3, 5), 16),
+    parseInt(hex.slice(5, 7), 16)
+];
+
+const toHex = (rgb: Rgb) =>
     `#${rgb.map(c => Math.round(c).toString(16).padStart(2, "0")).join("")}`;
 
 // the color a fraction of the way along the path, 0 at the start and 1 at the end
@@ -23,10 +29,12 @@ export const pathColorAt = (fraction: number) => {
     const scaled = clamped * (pathStops.length - 1);
     const index = Math.min(Math.floor(scaled), pathStops.length - 2);
     const within = scaled - index;
-    const from = toRgb(pathStops[index]);
-    const to = toRgb(pathStops[index + 1]);
+    // the index is clamped to a pair of neighboring stops, so both are there
+    const [r1, g1, b1] = toRgb(pathStops[index] ?? pathStartColor);
+    const [r2, g2, b2] = toRgb(pathStops[index + 1] ?? pathEndColor);
+    const mix = (a: number, b: number) => a + (b - a) * within;
 
-    return toHex(from.map((c, i) => c + (to[i] - c) * within));
+    return toHex([mix(r1, r2), mix(g1, g2), mix(b1, b2)]);
 };
 
 /*

@@ -131,7 +131,8 @@ const ViewMap: Component<Props> = props => {
     */
     const styleCluster = (markers: google.maps.marker.AdvancedMarkerElement[], pin: Pin) => {
         const held = markers.find(marker => highlighted.has(marker));
-        const shown = mediaByMarker.get(held ?? markers[0]);
+        const first = held ?? markers[0];
+        const shown = first && mediaByMarker.get(first);
 
         pin.img.src = (shown && getMediaTeaserUrl(shown)) ?? "";
         stylePin(pin, !!held);
@@ -247,10 +248,13 @@ const ViewMap: Component<Props> = props => {
                 reopenWhenClustered = undefined;
                 highlight([]);
             });
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+            // Google's own list, one control at a time - it is there for every position
+            const topRight = map.controls[google.maps.ControlPosition.RIGHT_TOP];
+
+            topRight?.push(
                 buildControl("icon-[ic--round-zoom-out-map]", "Show all photos", fitAll)
             );
-            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(pathControl);
+            topRight?.push(pathControl);
 
             google.maps.event.addListenerOnce(map, "idle", async () => {
                 await addMarkers();
@@ -265,9 +269,10 @@ const ViewMap: Component<Props> = props => {
     */
     const fitAll = () => {
         const positions = photoPositions();
+        const [only] = positions;
 
-        if (positions.length === 1) {
-            map.panTo(positions[0]);
+        if (positions.length === 1 && only) {
+            map.panTo(only);
         } else if (positions.length > 1) {
             const bounds = new google.maps.LatLngBounds();
 
@@ -323,12 +328,15 @@ const ViewMap: Component<Props> = props => {
         | undefined;
 
     const buildPath = () => {
+        // the first photo has no previous one, so it is always kept
         const path = photoPositions().filter(
             (position, i, all) =>
-                i === 0 || position.lat !== all[i - 1].lat || position.lng !== all[i - 1].lng
+                position.lat !== all[i - 1]?.lat || position.lng !== all[i - 1]?.lng
         );
+        const start = path[0];
+        const end = path.at(-1);
 
-        if (path.length < 2) {
+        if (!start || !end || path.length < 2) {
             return { lines: [], ends: [] };
         }
 
@@ -351,17 +359,25 @@ const ViewMap: Component<Props> = props => {
             zIndex: 1
         });
 
-        const hops = pathSegmentColors(path.length - 1).map(
-            (color, i) =>
-                new google.maps.Polyline({
-                    path: [path[i], path[i + 1]],
-                    geodesic: true,
-                    strokeColor: color,
-                    strokeOpacity: 1,
-                    strokeWeight: 3.5,
-                    zIndex: 2
-                })
-        );
+        // one line per pair of neighboring photos, each a step further along the gradient
+        const hops = pathSegmentColors(path.length - 1)
+            .flatMap((color, i) => {
+                const from = path[i];
+                const to = path[i + 1];
+
+                return from && to ? [{ color, from, to }] : [];
+            })
+            .map(
+                ({ color, from, to }) =>
+                    new google.maps.Polyline({
+                        path: [from, to],
+                        geodesic: true,
+                        strokeColor: color,
+                        strokeOpacity: 1,
+                        strokeWeight: 3.5,
+                        zIndex: 2
+                    })
+            );
 
         const arrows = new google.maps.Polyline({
             path,
@@ -374,20 +390,8 @@ const ViewMap: Component<Props> = props => {
         return {
             lines: [edge, ...hops, arrows],
             ends: [
-                buildPathEnd(
-                    path[0],
-                    pathStartColor,
-                    "icon-[ic--round-play-arrow]",
-                    "Start",
-                    false
-                ),
-                buildPathEnd(
-                    path[path.length - 1],
-                    pathEndColor,
-                    "icon-[ic--round-flag]",
-                    "End",
-                    true
-                )
+                buildPathEnd(start, pathStartColor, "icon-[ic--round-play-arrow]", "Start", false),
+                buildPathEnd(end, pathEndColor, "icon-[ic--round-flag]", "End", true)
             ]
         };
     };

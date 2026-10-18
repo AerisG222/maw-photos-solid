@@ -26,7 +26,7 @@ const animationFor = (utility: string) => {
 
     expect(block, `no .${utility} rule found`).toBeTruthy();
 
-    return /animation:\s*([^;]+);/.exec(block![1])?.[1] ?? "";
+    return /animation:\s*([^;]+);/.exec(block?.[1] ?? "")?.[1] ?? "";
 };
 
 describe("entrance animations", () => {
@@ -85,7 +85,7 @@ describe("entrance animations", () => {
 
         expect(block, "no .elev-hover rule found").toBeTruthy();
 
-        const [base, hovered] = block![1].split("&:hover");
+        const [base, hovered] = (block?.[1] ?? "").split("&:hover");
 
         expect(base).toMatch(/transition-property:\s*none/);
         expect(hovered).toMatch(/transition-duration/);

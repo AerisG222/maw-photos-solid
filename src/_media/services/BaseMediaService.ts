@@ -87,7 +87,11 @@ export abstract class BaseMediaService {
         );
 
         if (!currMedia) {
-            this.navigateToMedia(this.view, list[0]);
+            const first = list[0];
+
+            if (first) {
+                this.navigateToMedia(this.view, first);
+            }
         } else {
             const nextMedia = this.getNextMedia(list, currMedia.id);
 
@@ -107,7 +111,11 @@ export abstract class BaseMediaService {
         );
 
         if (!currMedia) {
-            this.navigateToMedia(this.view, list[0]);
+            const first = list[0];
+
+            if (first) {
+                this.navigateToMedia(this.view, first);
+            }
         } else {
             const prevMedia = this.getPreviousMedia(list, currMedia.id);
 
@@ -117,24 +125,22 @@ export abstract class BaseMediaService {
         }
     };
 
+    /*
+       An empty list - not loaded yet, or a filter that leaves nothing - is at
+       both ends at once. Testing the list itself, as these used to, never
+       caught that: an empty array is truthy, so the first item was read from
+       nothing, and a slideshow running when its feed emptied threw.
+    */
     isActiveMediaFirst = () => {
-        const list = this.getMediaList();
+        const first = this.getMediaList()[0];
 
-        if (!list) {
-            return true;
-        }
-
-        return list[0].id === this.getActiveMedia()?.id;
+        return !first || first.id === this.getActiveMedia()?.id;
     };
 
     isActiveMediaLast = () => {
-        const list = this.getMediaList();
+        const last = this.getMediaList().at(-1);
 
-        if (!list) {
-            return true;
-        }
-
-        return list[list.length - 1].id === this.getActiveMedia()?.id;
+        return !last || last.id === this.getActiveMedia()?.id;
     };
 
     protected findMediaBySlug = (

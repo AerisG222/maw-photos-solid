@@ -344,15 +344,16 @@ const ViewBulkEdit: Component<Props> = props => {
     const onItemClick = (id: Uuid, evt: MouseEvent) => {
         const shown = mediaToShow();
         const anchorIndex = shown.findIndex(m => m.id === rangeAnchorId());
+        const anchor = shown[anchorIndex];
         const index = shown.findIndex(m => m.id === id);
 
-        if (!evt.shiftKey || anchorIndex === -1 || index === -1) {
+        if (!evt.shiftKey || !anchor || index === -1) {
             setRangeAnchorId(id);
             toggle(id);
             return;
         }
 
-        const doSelect = shown[anchorIndex].isSelected;
+        const doSelect = anchor.isSelected;
         const range = new Set(
             shown
                 .slice(Math.min(anchorIndex, index), Math.max(anchorIndex, index) + 1)

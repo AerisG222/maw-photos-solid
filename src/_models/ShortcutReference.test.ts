@@ -40,8 +40,10 @@ const boundLetters = () => {
         const source = readFileSync(file, "utf-8");
 
         for (const match of source.matchAll(/shortcutKeys=\{\["([^"]+)"\]\}/g)) {
-            if (isLetter(match[1])) {
-                found.add(match[1]);
+            const [, key] = match;
+
+            if (key && isLetter(key)) {
+                found.add(key);
             }
         }
     }

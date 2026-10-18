@@ -92,7 +92,7 @@ describe("the favorite key", () => {
         mount(media(true));
         press("h");
 
-        expect(mutated[0].isFavorite).toBe(false);
+        expect(mutated[0]?.isFavorite).toBe(false);
     });
 
     test("it draws nothing", () => {

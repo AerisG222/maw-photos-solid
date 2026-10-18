@@ -14,6 +14,18 @@
         "isolatedModules": true,
 
         /*
+           Beyond `strict`. An index into an array or a record may find nothing,
+           and these make the code say what it does when it does - the first
+           time it was switched on it found the media services reading the first
+           item of a list that had not loaded yet. The other two are free: a
+           `case` cannot fall into the next without saying so, and a method
+           that replaces its base class's must say `override`.
+        */
+        "noUncheckedIndexedAccess": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+
+        /*
            Kobalte's bundled declarations contain `declare const X: typeof X`
            for a handful of type-only exports - a rollup-dts artifact that
            TypeScript 6 rejects. This stops type-checking *inside* .d.ts files;

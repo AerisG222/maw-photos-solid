@@ -190,9 +190,11 @@ describe("sharing a photograph", () => {
 
         await vi.waitFor(() => expect(shared).toHaveLength(1));
 
-        expect(shared[0].url).toBeUndefined();
-        expect(shared[0].files?.[0]).toBeInstanceOf(File);
-        expect(shared[0].files?.[0].type).toBe("image/jpeg");
+        const [share] = shared;
+
+        expect(share?.url).toBeUndefined();
+        expect(share?.files?.[0]).toBeInstanceOf(File);
+        expect(share?.files?.[0]?.type).toBe("image/jpeg");
     });
 
     // through the authorized fetch, because the asset is behind a bearer token

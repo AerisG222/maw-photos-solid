@@ -26,10 +26,10 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     };
 
     navigateToFirstMediaIfNeeded = () => {
-        const list = this.getMediaList();
+        const first = this.getMediaList()[0];
 
-        if (!this.params().mediaSlug && list && list.length > 0) {
-            this.navigateToMedia(this.view, list[0]);
+        if (!this.params().mediaSlug && first) {
+            this.navigateToMedia(this.view, first);
         }
     };
 
@@ -63,6 +63,6 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     getAvailableViews = () => [gridView, mapView, bulkEditView];
 
     // this listing *is* a category
-    canDownloadCategory = () => true;
-    canChooseCategoryTeaser = () => true;
+    override canDownloadCategory = () => true;
+    override canChooseCategoryTeaser = () => true;
 }

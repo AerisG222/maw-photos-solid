@@ -1,5 +1,7 @@
 import { Accessor, onCleanup } from "solid-js";
 
+import { Position, touchPosition } from "./_position";
+
 export const SWIPE_LEFT = "swipe_left";
 export const SWIPE_RIGHT = "swipe_right";
 export const SWIPE_UP = "swipe_up";
@@ -16,11 +18,6 @@ declare module "solid-js" {
     }
 }
 
-interface Position {
-    x: number;
-    y: number;
-}
-
 // inspiration: https://stackoverflow.com/a/69617795
 export const swipe = (
     el: HTMLElement,
@@ -29,11 +26,7 @@ export const swipe = (
     const THRESHOLD = 50;
     let start: Position | undefined;
 
-    const onTouchStart = (evt: TouchEvent) =>
-        (start = {
-            x: evt.changedTouches[0].screenX,
-            y: evt.changedTouches[0].screenY
-        });
+    const onTouchStart = (evt: TouchEvent) => (start = touchPosition(evt));
 
     const onDragStart = (evt: DragEvent) =>
         (start = {
@@ -41,11 +34,7 @@ export const swipe = (
             y: evt.screenY
         });
 
-    const onTouchEnd = (evt: TouchEvent) =>
-        checkSwipe({
-            x: evt.changedTouches[0].screenX,
-            y: evt.changedTouches[0].screenY
-        });
+    const onTouchEnd = (evt: TouchEvent) => checkSwipe(touchPosition(evt));
 
     const onDragEnd = (evt: DragEvent) =>
         checkSwipe({
@@ -53,7 +42,7 @@ export const swipe = (
             y: evt.screenY
         });
 
-    const checkSwipe = (end: Position) => {
+    const checkSwipe = (end: Position | undefined) => {
         if (!start || !end) {
             return;
         }

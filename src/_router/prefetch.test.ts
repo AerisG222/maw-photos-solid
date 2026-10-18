@@ -44,7 +44,7 @@ const router = () => {
         fetched.push(url);
 
         const answer = answers.find(
-            ([pattern]) => pattern.test(url.split("?")[0]) || pattern.test(url)
+            ([pattern]) => pattern.test(url.split("?")[0] ?? url) || pattern.test(url)
         );
 
         return Promise.resolve(

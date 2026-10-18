@@ -18,13 +18,14 @@ export const patchById = <T extends { id: Uuid }>(
     changes: Partial<T>
 ): T[] => {
     const idx = items.findIndex(item => item.id === id);
+    const current = items[idx];
 
-    if (idx < 0) {
+    if (!current) {
         return items;
     }
 
     const next = items.slice();
-    next[idx] = { ...next[idx], ...changes };
+    next[idx] = { ...current, ...changes };
 
     return next;
 };

@@ -63,7 +63,7 @@ describe("dividing a listing into rows", () => {
     test("numbers items by where they sit in the listing", () => {
         const rows = chunkIntoRows(["a", "b", "c", "d", "e"], 2);
 
-        expect(rows[2][0]).toEqual({ item: "e", index: 4 });
+        expect(rows[2]?.[0]).toEqual({ item: "e", index: 4 });
     });
 
     test("an empty listing has no rows at all", () => {

@@ -39,7 +39,7 @@ const ShortcutDialog: Component = () => {
     });
 
     const sortShortcuts = (a: ShortcutInfo, b: ShortcutInfo) => {
-        return ("" + a.shortcut[0]).localeCompare(b.shortcut[0]);
+        return (a.shortcut[0] ?? "").localeCompare(b.shortcut[0] ?? "");
     };
 
     const getShortcuts = () => {

@@ -101,25 +101,30 @@ const HistogramCard: Component<Props> = props => {
         }
     };
 
+    // the tallest bar among the channels being drawn, so they share one scale
     const getMaxCount = (channel: string, histogram: Histogram): number => {
         let maxCount = 0;
 
-        for (let i = 0; i < 256; i++) {
-            if (includeR(channel) && histogram.r[i] > maxCount) {
-                maxCount = histogram.r[i];
+        const consider = (counts: number[]) => {
+            for (const count of counts) {
+                maxCount = Math.max(maxCount, count);
             }
+        };
 
-            if (includeG(channel) && histogram.g[i] > maxCount) {
-                maxCount = histogram.g[i];
-            }
+        if (includeR(channel)) {
+            consider(histogram.r);
+        }
 
-            if (includeB(channel) && histogram.b[i] > maxCount) {
-                maxCount = histogram.b[i];
-            }
+        if (includeG(channel)) {
+            consider(histogram.g);
+        }
 
-            if (channel === "lum" && histogram.lum[i] > maxCount) {
-                maxCount = histogram.lum[i];
-            }
+        if (includeB(channel)) {
+            consider(histogram.b);
+        }
+
+        if (channel === "lum") {
+            consider(histogram.lum);
         }
 
         return maxCount;
@@ -140,24 +145,25 @@ const HistogramCard: Component<Props> = props => {
     //   http://mihai.sucan.ro/coding/svg-or-canvas/histogram.html
     //   https://thmsdnnr.com/projects/2018/03/09/draw-photo-histograms-d3-canvas.html
     const calcHistogram = (data: Uint8ClampedArray): Histogram => {
-        const r = [];
-        const g = [];
-        const b = [];
-        const lum = [];
+        const r = new Array<number>(256).fill(0);
+        const g = new Array<number>(256).fill(0);
+        const b = new Array<number>(256).fill(0);
+        const lum = new Array<number>(256).fill(0);
 
-        for (let i = 0; i < 256; i++) {
-            r[i] = 0;
-            g[i] = 0;
-            b[i] = 0;
-            lum[i] = 0;
-        }
+        const count = (counts: number[], value: number) => {
+            counts[value] = (counts[value] ?? 0) + 1;
+        };
 
         // 4 because each pixel is stored as 4 consecutive elements: R G B A
-        for (let i = 0; i < data.length; i += 4) {
-            r[data[i + 0]]++;
-            g[data[i + 1]]++;
-            b[data[i + 2]]++;
-            lum[getLuma(data[i + 0], data[i + 1], data[i + 2])]++;
+        for (let i = 0; i + 2 < data.length; i += 4) {
+            const red = data[i] ?? 0;
+            const green = data[i + 1] ?? 0;
+            const blue = data[i + 2] ?? 0;
+
+            count(r, red);
+            count(g, green);
+            count(b, blue);
+            count(lum, getLuma(red, green, blue));
         }
 
         return { r, g, b, lum };
@@ -201,11 +207,13 @@ const HistogramCard: Component<Props> = props => {
         ctx.moveTo(0, histogramCanvas.height);
 
         for (let x, y, i = 0; i <= 255; i++) {
-            if (!(i in vals)) {
+            const value = vals[i];
+
+            if (value === undefined) {
                 continue;
             }
 
-            y = Math.round((vals[i] / maxCount) * histogramCanvas.height);
+            y = Math.round((value / maxCount) * histogramCanvas.height);
             x = Math.round((i / 255) * histogramCanvas.width);
 
             ctx.lineTo(x, histogramCanvas.height - y);
