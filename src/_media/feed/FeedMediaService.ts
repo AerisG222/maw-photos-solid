@@ -1,7 +1,7 @@
 import { Accessor } from "solid-js";
 import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/solid-query";
 
-import { BaseMediaService } from "../services/BaseMediaService";
+import { PagedMediaService } from "../services/PagedMediaService";
 import { GoTo, MediaParams } from "../services/_navigation";
 import { IMediaService } from "../services/IMediaService";
 import { Category } from "../../_models/Category";
@@ -13,17 +13,14 @@ import { FeedSearch, FeedSubject, feedGridLink, gridView } from "./_routes";
 type FeedMediaQuery = UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
 
 /*
-   Drives a face feed - one person's media, or a clan's - over the shared media
-   views.
-
-       Queries arrive as accessors, not as the results themselves. Both forms
-       happen to work - a query result is a reactive store, so reading it later
-       still tracks - but only one of them survives the query being *replaced*,
-       which is what happens when a feed is re-keyed by a new filter or subject.
-       Taking accessors throughout means every service reads the query that is
-       current at the moment it is asked, and there is one rule rather than two.
+   Drives a face or place feed - one person's media, a clan's, or a place's -
+   over the shared media views. See PagedMediaService for why the queries
+   arrive as accessors.
 */
-export class FeedMediaService extends BaseMediaService implements IMediaService {
+export class FeedMediaService
+    extends PagedMediaService<SearchResults<Media>>
+    implements IMediaService
+{
     constructor(
         goTo: GoTo,
         params: Accessor<MediaParams>,
@@ -32,55 +29,15 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
         // the filter the feed is being browsed under, so every link this service
         // hands out keeps the favorites and shuffle the user chose
         protected search: Accessor<FeedSearch>,
-        protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: () => FeedMediaQuery
+        categoryQuery: () => UseQueryResult<Category | undefined, Error>,
+        mediaListQuery: () => FeedMediaQuery
     ) {
-        super(goTo, params, view);
+        super(goTo, params, view, categoryQuery, mediaListQuery);
     }
 
-    override navigateToMedia = (view: MediaView, media: Media | undefined) => {
-        this.goTo(this.getMediaLinkByView(view, media));
-    };
-
-    navigateToViewIfMediaNotInList = () => {
-        const activeMedia = this.getActiveMedia();
-
-        if (!activeMedia) {
-            this.navigateToMedia(this.view, undefined);
-        }
-    };
-
-    navigateToFirstMediaIfNeeded = () => {
-        const activeMedia = this.getActiveMedia();
-
-        if (!activeMedia) {
-            const list = this.getMediaList();
-
-            if (list?.length > 0) {
-                this.navigateToMedia(this.view, list[0]);
-            }
-        }
-    };
-
-    getActiveCategory = () => this.categoryQuery().data;
-
-    getMediaList = () => {
-        const query = this.mediaListQuery();
-
-        if (!query.isSuccess) {
-            return [];
-        }
-
-        const list: Media[] = [];
-
-        for (const page of query.data?.pages ?? []) {
-            if (page) {
-                list.push(...page.results);
-            }
-        }
-
-        return list;
-    };
+    protected pageMedia(page: SearchResults<Media>) {
+        return page.results;
+    }
 
     // one view - the grid - so the view asked for only matters once there are more
     getEntryLinkByView = (_view: MediaView) =>
@@ -110,8 +67,4 @@ export class FeedMediaService extends BaseMediaService implements IMediaService 
     // the feed is paged, so "more" is only offered while the API says another
     // page exists - unlike the random feed, which never runs out
     override canRequestMore = () => this.mediaListQuery().hasNextPage;
-
-    override requestMore = () => {
-        void this.mediaListQuery().fetchNextPage();
-    };
 }
