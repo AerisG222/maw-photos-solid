@@ -6,6 +6,22 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.2.0</span> : <span class="date">2026-10-18</span>
+            </h3>
+            <p>Faster navigation:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Rework page navigation for quicker and more reliable page changes</li>
+                <li>Start loading a page's data as soon as it is opened, rather than one piece after another</li>
+                <li>Begin loading a page when hovering over a link to it</li>
+                <li>
+                    Load the next and previous photos ahead of time, so stepping through photos and
+                    slideshows are quicker
+                </li>
+                <li>Show the year and category links sooner for photos in Random and the people and place feeds</li>
+                <li>Remove an empty gap at the top of the toolbar in Random</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.1.0</span> : <span class="date">2026-10-09</span>
             </h3>
             <p>Improved map view:</p>
