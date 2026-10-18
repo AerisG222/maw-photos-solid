@@ -116,6 +116,11 @@ export const fetchPlaceCategories = async (
     });
 };
 
+export const fetchMediaPlaces = async (getToken: GetToken, mediaId: Uuid) =>
+    runWithAccessToken(getToken, accessToken =>
+        queryApi<Place[]>(accessToken, `media/${mediaId}/places`)
+    );
+
 /*
    Short, unlike the people list. The tree is a few hundred nodes and the whole
    point of its screen is to change it - a merge that left the listing it was
@@ -130,6 +135,14 @@ export const placesQueryOptions = (getToken: GetToken, filter: PlaceFilter) =>
         }),
         queryFn: () => fetchPlaces(getToken, filter),
         staleTime: 30 * 1000
+    });
+
+// the places one photo was taken in, from its city up
+export const mediaPlacesQueryOptions = (getToken: GetToken, mediaId: Uuid) =>
+    queryOptions({
+        queryKey: queryKeys.media.places(mediaId),
+        queryFn: () => fetchMediaPlaces(getToken, mediaId),
+        staleTime: 5 * 60 * 1000
     });
 
 export const placeQueryOptions = (getToken: GetToken, id: Uuid) =>

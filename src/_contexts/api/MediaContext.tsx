@@ -10,7 +10,7 @@ import {
     UseQueryResult
 } from "@tanstack/solid-query";
 
-import { Comment, CommentDto, mapComment } from "../../_models/Comment";
+import { Comment } from "../../_models/Comment";
 import { DetectedFace } from "../../_models/DetectedFace";
 import { useAuthContext } from "../AuthContext";
 import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
@@ -30,7 +30,14 @@ import { BulkClearMediaRolesRequest } from "../../_models/BulkClearMediaRolesReq
 import { RestrictedMedia } from "../../_models/RestrictedMedia";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
-import { randomMediaQueryOptions } from "./_mediaQueries";
+import {
+    commentsQueryOptions,
+    facesQueryOptions,
+    gpsQueryOptions,
+    mediaRolesQueryOptions,
+    metadataQueryOptions,
+    randomMediaQueryOptions
+} from "./_mediaQueries";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
 
 export interface MediaService {
@@ -79,45 +86,6 @@ export const MediaProvider: ParentComponent = props => {
     const fetchMedia = async (id?: Uuid) =>
         runWithAccessToken(getToken, accessToken => queryApi<Media>(accessToken, `media/${id}`));
 
-    const fetchMetadata = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<MediaMetadata>(accessToken, `media/${id}/metadata`)
-        );
-
-    const fetchComments = async (id: Uuid) =>
-        runWithAccessToken(getToken, async accessToken => {
-            const comments = await queryApi<CommentDto[]>(accessToken, `media/${id}/comments`);
-
-            return comments.map(mapComment);
-        });
-
-    const fetchGps = async (id: Uuid) =>
-        runWithAccessToken(getToken, async accessToken => {
-            try {
-                return await queryApi<GpsDetail>(accessToken, `media/${id}/gps`);
-            } catch {
-                return {
-                    mediaId: id,
-                    recorded: undefined,
-                    override: undefined
-                } satisfies GpsDetail;
-            }
-        });
-
-    /*
-       The faces detected in one media item, for the highlight overlay.
-
-       This is the one call in the app that has no counterpart in maw-media yet:
-       media.face holds the boxes, but nothing reads them back out. The shape
-       below mirrors that table, so exposing it should be a read route over the
-       existing rows rather than a new model - and if it lands under a different
-       name, this function is the only thing that has to change.
-    */
-    const fetchFaces = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<DetectedFace[]>(accessToken, `media/${id}/faces`)
-        );
-
     const postComment = async (req: AddCommentRequest) =>
         runWithAccessToken(getToken, accessToken =>
             postApi(accessToken, `media/${req.mediaId}/comments`, { body: req.comment })
@@ -159,11 +127,6 @@ export const MediaProvider: ParentComponent = props => {
 
     const fetchRoles = async () =>
         runWithAccessToken(getToken, accessToken => queryApi<string[]>(accessToken, `roles`));
-
-    const fetchMediaRoles = async (id: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<string[]>(accessToken, `media/${id}/roles`)
-        );
 
     const fetchRestrictedMedia = async () =>
         runWithAccessToken(getToken, accessToken =>
@@ -222,25 +185,20 @@ export const MediaProvider: ParentComponent = props => {
 
     const metadataQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.metadata(id()),
-            queryFn: () => fetchMetadata(id()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
+            ...metadataQueryOptions(getToken, id()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     const commentsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.comments(id()),
-            queryFn: () => fetchComments(id()),
+            ...commentsQueryOptions(getToken, id()),
             enabled: !!id() && authContext.isLoggedIn
         }));
 
     const gpsQuery = (id: Accessor<Uuid>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.gps(id()),
-            queryFn: () => fetchGps(id()),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
+            ...gpsQueryOptions(getToken, id()),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*
@@ -251,10 +209,8 @@ export const MediaProvider: ParentComponent = props => {
     */
     const facesQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.faces(id()),
-            queryFn: () => fetchFaces(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 30 * 60 * 1000
+            ...facesQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*
@@ -272,10 +228,8 @@ export const MediaProvider: ParentComponent = props => {
 
     const mediaRolesQuery = (id: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.roles(id()),
-            queryFn: () => fetchMediaRoles(id()!),
-            enabled: !!id() && authContext.isLoggedIn,
-            staleTime: 15 * 60 * 1000
+            ...mediaRolesQueryOptions(getToken, id()!),
+            enabled: !!id() && authContext.isLoggedIn
         }));
 
     /*

@@ -79,6 +79,9 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         }
     };
 
+    // the map steps between the photos it can show, so its neighbors are those
+    override getNeighbors = () => this.locatedNeighbors();
+
     override isActiveMediaFirst = () => !this.locatedNeighbors().previous;
 
     override isActiveMediaLast = () => !this.locatedNeighbors().next;

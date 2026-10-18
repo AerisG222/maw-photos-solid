@@ -29,6 +29,7 @@ import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
 import Icon from "../_components/icon/Icon";
 import MainItem from "./MainItem";
+import { usePrefetchNeighbors } from "./usePrefetchNeighbors";
 
 interface Props {
     mediaService: IMediaService;
@@ -62,6 +63,14 @@ interface Props {
 }
 
 const ViewGrid: Component<Props> = props => {
+    // the photos either side of the open one, ready before they are stepped to
+    usePrefetchNeighbors({
+        get mediaService() {
+            return props.mediaService;
+        },
+        view: MediaViewGrid
+    });
+
     const { setIsFavoriteMutation } = useMediaContext();
     /*
        The enlarged photograph reads its pixels for the histogram card, which can

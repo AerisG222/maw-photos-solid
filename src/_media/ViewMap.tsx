@@ -28,6 +28,7 @@ import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import EmptyState from "../_components/state/EmptyState";
 import MapMediaPreview from "./MapMediaPreview";
+import { usePrefetchNeighbors } from "./usePrefetchNeighbors";
 
 // a photo's marker: the print in its frame, and the tail pointing at where it was taken
 interface Pin {
@@ -49,6 +50,14 @@ interface Props {
 }
 
 const ViewMap: Component<Props> = props => {
+    // the photos either side of the open one, ready before they are stepped to
+    usePrefetchNeighbors({
+        get mediaService() {
+            return props.mediaService;
+        },
+        view: MediaViewMap
+    });
+
     const [isMounted, setIsMounted] = createSignal(false);
     const [markersAdded, setMarkersAdded] = createSignal(false);
     let el: HTMLDivElement | undefined;

@@ -16,6 +16,8 @@ export interface IMediaService extends INavigable {
     getAvailableViews(): MediaViewRoute[];
     getEntryLinkByView(view: MediaView): LinkOptions;
     getMediaLinkByView(view: MediaView, media: Media | undefined): LinkOptions;
+    // where next and previous would go from the open photo - none at either end
+    getNeighbors(): { previous?: Media; next?: Media };
     canRequestMore(): boolean;
     requestMore(): void;
     /*

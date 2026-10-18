@@ -53,6 +53,14 @@ export abstract class BaseMediaService {
 
     getCurrIndex = (list: Media[], currId: Uuid) => list?.findIndex(x => x.id === currId);
 
+    getNeighbors = (): { previous?: Media; next?: Media } => {
+        const list = this.getMediaList();
+        const active = this.getActiveMedia();
+        const index = active ? this.getCurrIndex(list, active.id) : -1;
+
+        return index === -1 ? {} : { previous: list[index - 1], next: list[index + 1] };
+    };
+
     getNextIndex = (list: Media[], currId: Uuid) => {
         const nextIndex = this.getCurrIndex(list, currId) + 1;
 

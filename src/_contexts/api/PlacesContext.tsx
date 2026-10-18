@@ -16,13 +16,14 @@ import { queryKeys, queryKeyMatches } from "./_queryKeys";
 import {
     PlaceFilter,
     PlaceMediaFilter,
+    mediaPlacesQueryOptions,
     placeAncestorsQueryOptions,
     placeCategoriesQueryOptions,
     placeMediaQueryOptions,
     placeQueryOptions,
     placesQueryOptions
 } from "./_placesQueries";
-import { deleteApi, postApi, putApi, queryApi, runWithAccessToken } from "./_shared";
+import { deleteApi, postApi, putApi, runWithAccessToken } from "./_shared";
 import { patchById } from "./_cacheUtils";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
@@ -99,11 +100,6 @@ export const PlacesProvider: ParentComponent = props => {
     const [authContext, { getToken }] = useAuthContext();
     const queryClient = useQueryClient();
 
-    const fetchMediaPlaces = async (mediaId: Uuid) =>
-        runWithAccessToken(getToken, accessToken =>
-            queryApi<Place[]>(accessToken, `media/${mediaId}/places`)
-        );
-
     // every write answers with the place as it now stands, so a screen shows the
     // result of what it just did rather than re-reading it
     const readPlace = async (response: Response) => (await response.json()) as Place;
@@ -177,10 +173,8 @@ export const PlacesProvider: ParentComponent = props => {
     */
     const mediaPlacesQuery = (mediaId: Accessor<Uuid | undefined>) =>
         useQuery(() => ({
-            queryKey: queryKeys.media.places(mediaId()),
-            queryFn: () => fetchMediaPlaces(mediaId()!),
-            enabled: !!mediaId() && authContext.isLoggedIn,
-            staleTime: 5 * 60 * 1000
+            ...mediaPlacesQueryOptions(getToken, mediaId()!),
+            enabled: !!mediaId() && authContext.isLoggedIn
         }));
 
     const placeCategoriesQuery = (

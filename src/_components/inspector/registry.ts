@@ -1,4 +1,16 @@
 import { Component, lazy } from "solid-js";
+import { QueryClient } from "@tanstack/solid-query";
+
+import { GetToken } from "../../_contexts/api/_configQueries";
+import {
+    commentsQueryOptions,
+    facesQueryOptions,
+    gpsQueryOptions,
+    mediaRolesQueryOptions,
+    metadataQueryOptions
+} from "../../_contexts/api/_mediaQueries";
+import { mediaPlacesQueryOptions } from "../../_contexts/api/_placesQueries";
+import { peopleQueryOptions } from "../../_contexts/api/_peopleQueries";
 
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
@@ -49,6 +61,15 @@ export interface InspectorCardDescriptor {
     */
     readonly appliesTo: (context: InspectorContext) => boolean;
     readonly component: Component<InspectorCardProps>;
+    /*
+       What the card reads about the photo it shows, started for a photo that
+       is not open yet - the ones either side of the open one, so stepping to
+       either finds the card's answer already there. The same definitions the
+       card's own queries use, so they land where it reads. Absent for a card
+       that reads nothing of its own: the histogram is worked out from the
+       picture, the effects are settings.
+    */
+    readonly prefetch?: (queryClient: QueryClient, getToken: GetToken, media: Media) => void;
 }
 
 const always = () => true;
@@ -66,14 +87,18 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         title: "Comments",
         icon: "icon-[ic--round-comment]",
         appliesTo: always,
-        component: lazy(() => import("../../_media/detail/CommentsCard"))
+        component: lazy(() => import("../../_media/detail/CommentsCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(commentsQueryOptions(getToken, media.id))
     },
     {
         id: InspectorCardExif,
         title: "EXIF Data",
         icon: "icon-[ic--round-tune]",
         appliesTo: always,
-        component: lazy(() => import("../../_media/detail/ExifCard"))
+        component: lazy(() => import("../../_media/detail/ExifCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(metadataQueryOptions(getToken, media.id))
     },
     {
         /*
@@ -84,7 +109,11 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         title: "Who",
         icon: "icon-[ic--round-people]",
         appliesTo: context => context.media?.type === "photo",
-        component: lazy(() => import("../../_media/detail/WhoCard"))
+        component: lazy(() => import("../../_media/detail/WhoCard")),
+        prefetch: (queryClient, getToken, media) => {
+            void queryClient.prefetchQuery(facesQueryOptions(getToken, media.id));
+            void queryClient.prefetchQuery(peopleQueryOptions(getToken));
+        }
     },
     {
         /*
@@ -95,7 +124,9 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         title: "Where",
         icon: "icon-[ic--round-place]",
         appliesTo: always,
-        component: lazy(() => import("../../_media/detail/WhereCard"))
+        component: lazy(() => import("../../_media/detail/WhereCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(mediaPlacesQueryOptions(getToken, media.id))
     },
     {
         id: InspectorCardEffects,
@@ -118,14 +149,18 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         icon: "icon-[ic--round-map]",
         // on the map itself it would say the same thing twice
         appliesTo: context => context.view !== MediaViewMap,
-        component: lazy(() => import("../../_media/detail/MinimapCard"))
+        component: lazy(() => import("../../_media/detail/MinimapCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(gpsQueryOptions(getToken, media.id))
     },
     {
         id: InspectorCardMetadata,
         title: "Metadata Editor",
         icon: "icon-[ic--round-edit]",
         appliesTo: context => context.isAdmin,
-        component: lazy(() => import("../../_media/detail/MetadataEditorCard"))
+        component: lazy(() => import("../../_media/detail/MetadataEditorCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(gpsQueryOptions(getToken, media.id))
     },
     {
         id: InspectorCardCategoryTeaser,
@@ -145,7 +180,9 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         title: "Place Covers",
         icon: "icon-[ic--round-place]",
         appliesTo: context => context.isAdmin,
-        component: lazy(() => import("../../_media/detail/PlaceCoversCard"))
+        component: lazy(() => import("../../_media/detail/PlaceCoversCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(mediaPlacesQueryOptions(getToken, media.id))
     },
     {
         // who may see it, when that is fewer than its category is shared with
@@ -153,7 +190,9 @@ export const inspectorCards: InspectorCardDescriptor[] = [
         title: "Access",
         icon: "icon-[ic--round-lock]",
         appliesTo: context => context.isAdmin,
-        component: lazy(() => import("../../_media/detail/AccessCard"))
+        component: lazy(() => import("../../_media/detail/AccessCard")),
+        prefetch: (queryClient, getToken, media) =>
+            void queryClient.prefetchQuery(mediaRolesQueryOptions(getToken, media.id))
     }
 ];
 
