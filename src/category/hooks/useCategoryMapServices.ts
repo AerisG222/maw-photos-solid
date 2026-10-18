@@ -1,4 +1,5 @@
 import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
+import { useAddressedCategory } from "../../_media/useAddressedCategory";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
@@ -10,17 +11,13 @@ export const useCategoryMapServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
-    const { categoryQuery, categoryMediaQuery, categoryMediaGpsQuery, categoriesForYearQuery } =
-        useCategoriesContext();
+    const { categoryMediaQuery, categoryMediaGpsQuery } = useCategoriesContext();
 
-    const categoriesQuery = categoriesForYearQuery(() => parseInt(params().categoryYear ?? "", 10));
-    const categoryId = () =>
-        categoriesQuery.data?.categories?.find(
-            x =>
-                x.year === parseInt(params().categoryYear ?? "", 10) &&
-                x.slug === params().categorySlug
-        )?.id;
-    const cq = categoryQuery(categoryId);
+    const {
+        categoriesForYear: categoriesQuery,
+        categoryId,
+        category: cq
+    } = useAddressedCategory(params);
     const mq = categoryMediaQuery(categoryId);
     const gpsList = categoryMediaGpsQuery(categoryId);
     const mediaService = new CategoryMapsMediaService(

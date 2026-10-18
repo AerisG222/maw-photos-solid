@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/solid-query";
+import { QueryClient, queryOptions } from "@tanstack/solid-query";
 
 import { queryApi, runWithAccessToken } from "./_shared";
 import { queryKeys } from "./_queryKeys";
@@ -70,3 +70,42 @@ export const categoryMediaGpsQueryOptions = (getToken: GetToken, id: Uuid) => ({
         ),
     staleTime: 5 * 60 * 1000
 });
+
+/*
+   A category's id from the year and slug an address names it by. The API knows
+   categories by id; the year's list - almost always cached already - joins the
+   two. Undefined for an address that names no category, or one that does not
+   exist.
+*/
+export const ensureCategoryId = async (
+    queryClient: QueryClient,
+    getToken: GetToken,
+    categoryYear: string | undefined,
+    categorySlug: string | undefined
+) => {
+    const year = parseInt(categoryYear ?? "", 10);
+
+    if (!Number.isInteger(year) || !categorySlug) {
+        return undefined;
+    }
+
+    const forYear = await queryClient.ensureQueryData(
+        categoriesForYearQueryOptions(getToken, year)
+    );
+
+    return forYear.categories.find(category => category.slug === categorySlug)?.id;
+};
+
+// the category an address names, for a route that shows one of its photos
+export const prefetchAddressedCategory = async (
+    queryClient: QueryClient,
+    getToken: GetToken,
+    categoryYear: string | undefined,
+    categorySlug: string | undefined
+) => {
+    const id = await ensureCategoryId(queryClient, getToken, categoryYear, categorySlug);
+
+    if (id) {
+        await queryClient.prefetchQuery(categoryQueryOptions(getToken, id));
+    }
+};

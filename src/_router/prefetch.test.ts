@@ -10,6 +10,7 @@ import { clansQueryOptions } from "../_contexts/api/_clansQueries";
 import { scalesQueryOptions } from "../_contexts/api/_configQueries";
 import { placeAncestorsQueryOptions, placeQueryOptions } from "../_contexts/api/_placesQueries";
 import { Uuid } from "../_models/Uuid";
+import { categoryQueryOptions } from "../_contexts/api/_categoryQueries";
 
 /*
    A loader is only worth anything if it warms the very cache entry its screen
@@ -22,9 +23,22 @@ import { Uuid } from "../_models/Uuid";
 const PERSON = "11111111-1111-4111-8111-111111111111" as Uuid;
 const PLACE = "22222222-2222-4222-8222-222222222222" as Uuid;
 const PARENT = "33333333-3333-4333-8333-333333333333" as Uuid;
+const CATEGORY = "44444444-4444-4444-8444-444444444444" as Uuid;
+
+// as the API sends it - its dates are parsed on the way in
+const category = {
+    id: CATEGORY,
+    year: 2019,
+    slug: "a-trip",
+    name: "A Trip",
+    effectiveDate: "2019-06-01T00:00:00Z",
+    modified: "2019-06-01T00:00:00Z"
+};
 
 const answers: [RegExp, unknown][] = [
     [/auth\/account-status$/, { status: "active", isAdmin: false }],
+    [/categories\/years\/2019$/, [category]],
+    [/categories\/[0-9a-f-]{36}$/, category],
     [/config\/scales$/, []],
     [/stats$/, []],
     [/persons$/, [{ id: PERSON, name: "A Person" }]],
@@ -151,5 +165,26 @@ describe("hovering a link starts its screen's queries", () => {
                 queryClient.getQueryData(placeQueryOptions(getToken, PARENT).queryKey)
             ).toBeDefined();
         });
+    });
+
+    // the breadcrumb's, found from the year and slug the address carries rather than after the photos load
+    test("a feed opened on a photo: that photo's category", async () => {
+        const { router: r, queryClient, getToken } = router();
+
+        await r.preloadRoute({
+            to: "/people/$personId/grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
+            params: {
+                personId: PERSON,
+                categoryYear: "2019",
+                categorySlug: "a-trip",
+                mediaSlug: "a-photo"
+            }
+        });
+
+        await vi.waitFor(() =>
+            expect(
+                queryClient.getQueryData(categoryQueryOptions(getToken, CATEGORY).queryKey)
+            ).toBeDefined()
+        );
     });
 });

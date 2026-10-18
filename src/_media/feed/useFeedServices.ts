@@ -1,21 +1,20 @@
-import { createEffect, createSignal, onMount } from "solid-js";
+import { onMount } from "solid-js";
 import { useSearch } from "@tanstack/solid-router";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
-import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { MediaView } from "../../_models/MediaView";
-import { Uuid } from "../../_models/Uuid";
 import { SlideshowService } from "../services/SlideshowService";
 import { feedGridLink, FeedSearch } from "./_routes";
 import { newMediaSeed } from "../../_models/utils/MediaUtils";
 import { useGoTo, useMediaParams } from "../services/_navigation";
 import { useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
+import { useAddressedCategory } from "../useAddressedCategory";
 
 export const useFeedServices = (view: MediaView) => {
     const goTo = useGoTo();
@@ -23,7 +22,6 @@ export const useFeedServices = (view: MediaView) => {
     const [mediaSettings] = useMediaSettingsContext();
     const [area, { setFeedFavoritesOnly: rememberFavoritesOnly, setFeedShuffle: rememberShuffle }] =
         useAreaSettingsContext();
-    const { categoryQuery } = useCategoriesContext();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
     const { placeMediaQuery } = usePlacesContext();
@@ -66,10 +64,9 @@ export const useFeedServices = (view: MediaView) => {
         return isPlace() ? placeMq : personMq;
     };
 
-    const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
-
-    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
-    const categoryResult = categoryQuery(catId);
+    // assigned just below - the service reads it only once there is something to show
+    // eslint-disable-next-line prefer-const -- assigned after the service it is handed to
+    let categoryResult!: ReturnType<typeof useAddressedCategory>["category"];
 
     const mediaService = new FeedMediaService(
         goTo,
@@ -80,6 +77,12 @@ export const useFeedServices = (view: MediaView) => {
         () => categoryResult,
         mq
     );
+
+    // the open photo's category, from the address until the photo itself has loaded - see useAddressedCategory
+    categoryResult = useAddressedCategory(
+        params,
+        () => mediaService.getActiveMedia()?.categoryId
+    ).category;
 
     const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
 
@@ -139,14 +142,6 @@ export const useFeedServices = (view: MediaView) => {
             },
             { replace: true }
         );
-    });
-
-    createEffect(() => {
-        const currMedia = mediaService.getActiveMedia();
-
-        if (currMedia) {
-            setCatId(currMedia.categoryId);
-        }
     });
 
     /*

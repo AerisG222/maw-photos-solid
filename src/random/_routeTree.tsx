@@ -4,6 +4,7 @@ import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { redirectToGrid } from "../_media/_legacyViews";
 import { prefetch } from "../_router/prefetch";
+import { prefetchAddressedCategory } from "../_contexts/api/_categoryQueries";
 import { randomMediaQueryOptions } from "../_contexts/api/_mediaQueries";
 import { MEDIA_PAGE_SIZE } from "../_models/utils/Constants";
 
@@ -20,7 +21,8 @@ const randomIndexRoute = createRoute({
     beforeLoad: () => {
         throw redirect({
             to: randomGridRoute.to,
-            params: {},
+            // named, so nothing is carried over - see photoParams
+            params: { categoryYear: undefined, categorySlug: undefined, mediaSlug: undefined },
             replace: true
         });
     }
@@ -29,10 +31,24 @@ const randomIndexRoute = createRoute({
 export const randomGridRoute = createRoute({
     getParentRoute: () => randomRoute,
     path: "grid/{-$categoryYear}/{-$categorySlug}/{-$mediaSlug}",
-    // the first page of the stack - never stale, so once drawn this does nothing
-    loader: ({ context }) =>
+    /*
+       The first page of the stack - never stale, so once drawn this does
+       nothing - and, when the address has a photo open, its category for the
+       breadcrumb.
+    */
+    loader: ({ context, params }) =>
         prefetch(context, (queryClient, getToken) =>
-            queryClient.prefetchInfiniteQuery(randomMediaQueryOptions(getToken, MEDIA_PAGE_SIZE))
+            Promise.all([
+                queryClient.prefetchInfiniteQuery(
+                    randomMediaQueryOptions(getToken, MEDIA_PAGE_SIZE)
+                ),
+                prefetchAddressedCategory(
+                    queryClient,
+                    getToken,
+                    params.categoryYear,
+                    params.categorySlug
+                )
+            ])
         ),
     component: lazyRouteComponent(() => import("./Grid"))
 });

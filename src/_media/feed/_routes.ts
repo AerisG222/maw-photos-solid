@@ -6,6 +6,7 @@ import { MediaViewRoute } from "../../_models/MediaViewRoute";
 import { RouteDisplay } from "../../_models/RouteDisplay";
 import { Uuid } from "../../_models/Uuid";
 import { FeedSearch } from "./_search";
+import { photoParams } from "../services/_navigation";
 import {
     clanFeedCategoriesRoute,
     clanFeedGridRoute,
@@ -67,15 +68,6 @@ export const feedCategoriesDisplay: RouteDisplay = {
 export const feedMediaListing = (_view: MediaView) => MediaViewGrid;
 
 // media in a feed spans categories, so a photo is addressed by its category as well as its slug
-// left out entirely, rather than present and undefined, when there is no photo
-const mediaParams = (media: Media | undefined): Record<string, string> =>
-    media
-        ? {
-              categoryYear: String(media.categoryYear),
-              categorySlug: media.categorySlug,
-              mediaSlug: media.slug
-          }
-        : {};
 
 /*
    A feed's grid, optionally open on one photo, under the filter it is being
@@ -88,19 +80,19 @@ export const feedGridLink = (subject: FeedSubject, media?: Media, search: FeedSe
         case "clan":
             return linkOptions({
                 to: clanFeedGridRoute.to,
-                params: { clanId: subject.id, ...mediaParams(media) },
+                params: { clanId: subject.id, ...photoParams(media) },
                 search
             });
         case "place":
             return linkOptions({
                 to: placeFeedGridRoute.to,
-                params: { placeId: subject.id, ...mediaParams(media) },
+                params: { placeId: subject.id, ...photoParams(media) },
                 search
             });
         default:
             return linkOptions({
                 to: personFeedGridRoute.to,
-                params: { personId: subject.id, ...mediaParams(media) },
+                params: { personId: subject.id, ...photoParams(media) },
                 search
             });
     }

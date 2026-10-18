@@ -6,6 +6,7 @@ import { isUuid } from "../../_models/Uuid";
 import { redirectToGrid } from "../_legacyViews";
 import { FeedSearch, validateFeedSearch } from "./_search";
 import { prefetch } from "../../_router/prefetch";
+import { prefetchAddressedCategory } from "../../_contexts/api/_categoryQueries";
 import { Uuid } from "../../_models/Uuid";
 import {
     peopleQueryOptions,
@@ -64,7 +65,7 @@ const backToPeople = (): never => {
 };
 
 const backToPlaces = (): never => {
-    throw redirect({ to: placesRoute.to, params: {}, replace: true });
+    throw redirect({ to: placesRoute.to, params: { placeId: undefined }, replace: true });
 };
 
 /*
@@ -72,7 +73,8 @@ const backToPlaces = (): never => {
    The filter is read from the address exactly as the feed reads it, so the
    first page lands in the cache entry the feed then asks for. Each also starts
    whatever names the subject: the people or clan list, or the place and the
-   chain above it.
+   chain above it - and, when the address has a photo open, that photo's
+   category, for the breadcrumb.
 
    A feed opened with no filter of its own may take on a remembered one as it
    opens, which re-keys it; what this fetched is then simply not the page shown.
@@ -112,6 +114,12 @@ export const personFeedGridRoute = createRoute({
     loader: ({ context, params, deps }) =>
         prefetch(context, (queryClient, getToken) =>
             Promise.all([
+                prefetchAddressedCategory(
+                    queryClient,
+                    getToken,
+                    params.categoryYear,
+                    params.categorySlug
+                ),
                 queryClient.prefetchInfiniteQuery(
                     personMediaQueryOptions(getToken, params.personId as Uuid, deps)
                 ),
@@ -190,6 +198,12 @@ export const clanFeedGridRoute = createRoute({
     loader: ({ context, params, deps }) =>
         prefetch(context, (queryClient, getToken) =>
             Promise.all([
+                prefetchAddressedCategory(
+                    queryClient,
+                    getToken,
+                    params.categoryYear,
+                    params.categorySlug
+                ),
                 queryClient.prefetchInfiniteQuery(
                     clanMediaQueryOptions(getToken, params.clanId as Uuid, deps)
                 ),
@@ -264,6 +278,12 @@ export const placeFeedGridRoute = createRoute({
     loader: ({ context, params, deps }) =>
         prefetch(context, (queryClient, getToken) =>
             Promise.all([
+                prefetchAddressedCategory(
+                    queryClient,
+                    getToken,
+                    params.categoryYear,
+                    params.categorySlug
+                ),
                 queryClient.prefetchInfiniteQuery(
                     placeMediaQueryOptions(getToken, params.placeId as Uuid, deps)
                 ),

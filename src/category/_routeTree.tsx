@@ -2,7 +2,7 @@ import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-route
 
 import { accountStatusQueryOptions } from "../_contexts/api/_configQueries";
 import {
-    categoriesForYearQueryOptions,
+    ensureCategoryId,
     categoryMediaGpsQueryOptions,
     categoryMediaQueryOptions,
     categoryQueryOptions
@@ -32,10 +32,7 @@ import { redirectToGrid } from "../_media/_legacyViews";
 */
 const prefetchCategory = (context: RouterContext, categoryYear: string, categorySlug: string) =>
     prefetch(context, async (queryClient, getToken) => {
-        const forYear = await queryClient.ensureQueryData(
-            categoriesForYearQueryOptions(getToken, parseInt(categoryYear, 10))
-        );
-        const id = forYear.categories.find(c => c.slug === categorySlug)?.id;
+        const id = await ensureCategoryId(queryClient, getToken, categoryYear, categorySlug);
 
         if (id) {
             await Promise.all([

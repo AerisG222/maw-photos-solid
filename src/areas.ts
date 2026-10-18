@@ -36,7 +36,10 @@ export const getAreas = () =>
     ({
         categories: { display: categories, link: linkOptions({ to: categoriesRoute.to }) },
         people: { display: people, link: linkOptions({ to: peopleRoute.to }) },
-        places: { display: places, link: linkOptions({ to: placesRoute.to, params: {} }) },
+        places: {
+            display: places,
+            link: linkOptions({ to: placesRoute.to, params: { placeId: undefined } })
+        },
         search: { display: search, link: linkOptions({ to: searchRoute.to }) },
         random: { display: random, link: linkOptions({ to: randomRoute.to }) },
         stats: { display: stats, link: linkOptions({ to: statsRoute.to }) },

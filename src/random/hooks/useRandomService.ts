@@ -1,29 +1,27 @@
 import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
 
-import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaContext } from "../../_contexts/api/MediaContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
 import { MediaView } from "../../_models/MediaView";
 import { RandomMediaService } from "../services/RandomMediaService";
-import { createEffect, createSignal } from "solid-js";
-import { Uuid } from "../../_models/Uuid";
+import { createEffect } from "solid-js";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { MEDIA_PAGE_SIZE } from "../../_models/utils/Constants";
 import { needsTopUp } from "../_slideshowTopUp";
+import { useAddressedCategory } from "../../_media/useAddressedCategory";
 
 export const useRandomServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
-    const { categoryQuery } = useCategoriesContext();
     const { randomMediaQuery } = useMediaContext();
-
-    const [catId, setCatId] = createSignal<Uuid | undefined>(undefined);
-
-    // eslint-disable-next-line solid/reactivity -- an accessor handed to a query factory, which reads it inside its own tracked options
-    const cq = categoryQuery(catId);
     const mq = randomMediaQuery(MEDIA_PAGE_SIZE);
+
+    // assigned just below - the service reads it only once there is something to show
+    // eslint-disable-next-line prefer-const -- assigned after the service it is handed to
+    let cq!: ReturnType<typeof useAddressedCategory>["category"];
+
     const mediaService = new RandomMediaService(
         goTo,
         params,
@@ -31,15 +29,10 @@ export const useRandomServices = (view: MediaView) => {
         () => cq,
         () => mq
     );
+
+    // the open photo's category, from the address until the photo itself has loaded - see useAddressedCategory
+    cq = useAddressedCategory(params, () => mediaService.getActiveMedia()?.categoryId).category;
     const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);
-
-    createEffect(() => {
-        const currMedia = mediaService.getActiveMedia();
-
-        if (currMedia) {
-            setCatId(currMedia.categoryId);
-        }
-    });
 
     /*
        More only when asked for - the toolbar's request more - or when a playing

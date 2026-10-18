@@ -1,6 +1,7 @@
 import { linkOptions } from "@tanstack/solid-router";
 
 import { Media } from "../_models/Media";
+import { photoParams } from "../_media/services/_navigation";
 import { MediaViewGrid } from "../_models/MediaView";
 import { MediaViewRoute } from "../_models/MediaViewRoute";
 import { RouteDisplay } from "../_models/RouteDisplay";
@@ -28,11 +29,5 @@ export const gridView: MediaViewRoute = {
 export const randomGridLink = (media?: Media) =>
     linkOptions({
         to: randomGridRoute.to,
-        params: media
-            ? {
-                  categoryYear: String(media.categoryYear),
-                  categorySlug: media.categorySlug,
-                  mediaSlug: media.slug
-              }
-            : {}
+        params: photoParams(media)
     });

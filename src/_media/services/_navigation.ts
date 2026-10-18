@@ -1,6 +1,8 @@
 import { Accessor } from "solid-js";
 import { LinkOptions, useNavigate, useParams, useRouter } from "@tanstack/solid-router";
 
+import { Media } from "../../_models/Media";
+
 // the parts of a media address every media route shares, each optional
 export interface MediaParams {
     categoryYear?: string;
@@ -42,3 +44,19 @@ export const useGoTo = (): GoTo => {
         void navigate({ ...link, replace: options?.replace } as Parameters<typeof navigate>[0]);
     };
 };
+
+/*
+   The params a photo is addressed by where media spans categories - a feed, or
+   the random stack - or none at all, for the listing itself.
+
+   Always all three, undefined when there is no photo, and never left out. A
+   link that leaves out one of its route's params does not mean "without it":
+   TanStack Router fills it in from the current address. So the link back to a
+   feed's grid, built with no params from a photo in that feed, led straight back
+   to the same photo, and it could not be closed.
+*/
+export const photoParams = (media: Media | undefined) => ({
+    categoryYear: media ? String(media.categoryYear) : undefined,
+    categorySlug: media?.categorySlug,
+    mediaSlug: media?.slug
+});
