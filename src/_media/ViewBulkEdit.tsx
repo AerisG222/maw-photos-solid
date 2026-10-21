@@ -30,6 +30,7 @@ import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import Icon from "../_components/icon/Icon";
 import IconButton from "../_components/icon/IconButton";
 import BulkEditPreview from "./bulk-edit/BulkEditPreview";
+import { findMissingGps } from "./bulk-edit/_missingGps";
 import { usePanelShape } from "../_components/overlay/SidePanel";
 
 /*
@@ -330,7 +331,52 @@ const ViewBulkEdit: Component<Props> = props => {
     const onFilterChange = (next: BulkEditFilter) => {
         setAll(false);
         setRangeAnchorId(undefined);
+        setCurrentId(undefined);
         setFilter(next);
+    };
+
+    /*
+       Where the reader is in the grid, for stepping between the photos with no
+       location: the photo last stepped to, or last clicked. Marked rather than
+       selected - the selection is what an edit applies to, and moving through
+       the grid should not change it.
+    */
+    const [currentId, setCurrentId] = createSignal<Uuid>();
+
+    let grid: HTMLDivElement | undefined;
+
+    const locatedIds = createMemo(
+        () => new Set(props.mediaService.mediaWithGps().map(x => x.media.id))
+    );
+
+    const missingGpsFrom = (step: -1 | 1) => {
+        const shown = mediaToShow();
+        const located = locatedIds();
+        // one hidden from you has no picture to place, so it is never a gap to step to
+        const skip = new Set(shown.filter(m => !m.media || located.has(m.id)).map(m => m.id));
+
+        return findMissingGps(
+            shown.map(m => m.id),
+            id => skip.has(id),
+            currentId(),
+            step
+        );
+    };
+
+    const stepToMissingGps = (step: -1 | 1) => {
+        const id = missingGpsFrom(step);
+
+        if (!id) {
+            return;
+        }
+
+        setCurrentId(id);
+
+        // optional: jsdom has no scrollIntoView
+        grid?.querySelector(`[data-media-id="${id}"]`)?.scrollIntoView?.({
+            block: "nearest",
+            behavior: "smooth"
+        });
     };
 
     /*
@@ -342,6 +388,8 @@ const ViewBulkEdit: Component<Props> = props => {
     const [rangeAnchorId, setRangeAnchorId] = createSignal<Uuid>();
 
     const onItemClick = (id: Uuid, evt: MouseEvent) => {
+        setCurrentId(id);
+
         const shown = mediaToShow();
         const anchorIndex = shown.findIndex(m => m.id === rangeAnchorId());
         const anchor = shown[anchorIndex];
@@ -519,7 +567,14 @@ const ViewBulkEdit: Component<Props> = props => {
                     <BulkEditSidebar
                         onSave={onSave}
                         onSelectAll={selectAllShown}
-                        onDeselectAll={() => setAll(false)}
+                        onDeselectAll={() => {
+                            setAll(false);
+                            setCurrentId(undefined);
+                        }}
+                        onPreviousMissingGps={() => stepToMissingGps(-1)}
+                        onNextMissingGps={() => stepToMissingGps(1)}
+                        hasPreviousMissingGps={missingGpsFrom(-1) !== undefined}
+                        hasNextMissingGps={missingGpsFrom(1) !== undefined}
                         onClearOverride={() => setIsConfirmingClear(true)}
                         selectedCount={selectedIds().length}
                         filter={filter()}
@@ -556,12 +611,17 @@ const ViewBulkEdit: Component<Props> = props => {
             >
                 <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
 
-                <div class="listing-flow mb-4">
+                <div ref={grid} class="listing-flow mb-4">
                     <For each={mediaToShow()}>
                         {m => (
                             <div
+                                data-media-id={m.id}
+                                aria-current={currentId() === m.id ? "true" : undefined}
                                 class="border-1 cursor-pointer text-center rounded-sm"
                                 classList={{
+                                    // where the Missing GPS buttons step from; a problem's outline wins
+                                    "outline-2 outline-offset-2 outline-info":
+                                        currentId() === m.id && !messagesByMedia().has(m.id),
                                     "border-primary/40 hover:border-primary":
                                         !messagesByMedia().has(m.id),
                                     "border-error outline-2 outline-error": messagesByMedia().has(

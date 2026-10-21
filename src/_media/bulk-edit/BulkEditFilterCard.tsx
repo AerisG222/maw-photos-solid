@@ -2,6 +2,7 @@ import { Component, Show } from "solid-js";
 
 import { KeyValuePair } from "../../_models/KeyValuePair";
 
+import Icon from "../../_components/icon/Icon";
 import RadioGroup from "../../_components/input/RadioGroup";
 
 /*
@@ -27,6 +28,11 @@ interface Props {
     hiddenCount: number;
     onSelectAll: () => void;
     onDeselectAll: () => void;
+    // step to the photo either side without a location - see _missingGps
+    onPreviousMissingGps: () => void;
+    onNextMissingGps: () => void;
+    hasPreviousMissingGps: boolean;
+    hasNextMissingGps: boolean;
 }
 
 const BulkEditFilterCard: Component<Props> = props => {
@@ -69,6 +75,26 @@ const BulkEditFilterCard: Component<Props> = props => {
                 </button>
                 <button class="btn btn-sm" onClick={onDeselectAll}>
                     Deselect All
+                </button>
+            </div>
+
+            <div class="mt-4 flex items-center gap-2">
+                <span class="text-sm">Missing GPS</span>
+                <button
+                    class="btn btn-sm"
+                    disabled={!props.hasPreviousMissingGps}
+                    onClick={() => props.onPreviousMissingGps()}
+                >
+                    <Icon classes="icon-[ic--round-chevron-left] text-lg" />
+                    Previous
+                </button>
+                <button
+                    class="btn btn-sm"
+                    disabled={!props.hasNextMissingGps}
+                    onClick={() => props.onNextMissingGps()}
+                >
+                    Next
+                    <Icon classes="icon-[ic--round-chevron-right] text-lg" />
                 </button>
             </div>
         </div>

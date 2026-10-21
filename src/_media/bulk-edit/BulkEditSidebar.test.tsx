@@ -58,6 +58,10 @@ const sidebar = ({
                 hiddenCount={hiddenCount}
                 onSelectAll={() => undefined}
                 onDeselectAll={() => undefined}
+                onPreviousMissingGps={() => undefined}
+                onNextMissingGps={() => undefined}
+                hasPreviousMissingGps={false}
+                hasNextMissingGps={false}
                 roles={["admin", "demo", "friend"]}
                 onRestrict={onRestrict}
                 onClearRestriction={onClearRestriction}

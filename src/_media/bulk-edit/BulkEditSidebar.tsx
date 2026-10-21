@@ -18,6 +18,10 @@ interface Props {
     hiddenCount: number;
     onSelectAll: () => void;
     onDeselectAll: () => void;
+    onPreviousMissingGps: () => void;
+    onNextMissingGps: () => void;
+    hasPreviousMissingGps: boolean;
+    hasNextMissingGps: boolean;
     roles: string[] | undefined;
     onRestrict: (roles: string[]) => void;
     onClearRestriction: () => void;
@@ -52,6 +56,10 @@ const BulkEditSidebar: Component<Props> = props => {
                 <BulkEditFilterCard
                     onSelectAll={props.onSelectAll}
                     onDeselectAll={props.onDeselectAll}
+                    onPreviousMissingGps={props.onPreviousMissingGps}
+                    onNextMissingGps={props.onNextMissingGps}
+                    hasPreviousMissingGps={props.hasPreviousMissingGps}
+                    hasNextMissingGps={props.hasNextMissingGps}
                     filter={props.filter}
                     onFilterChange={props.onFilterChange}
                     hiddenCount={props.hiddenCount}
