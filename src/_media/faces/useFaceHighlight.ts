@@ -54,13 +54,21 @@ export const useFaceHighlight = (
 
     const activePersonId = () => hovered() ?? pinned();
 
-    const highlighted = createMemo<HighlightedFace[]>(() => {
-        const detected = faces.data ?? [];
+    /*
+       Read only once they have arrived. Solid Query suspends a read of `data`
+       that is still on its way, and nothing between here and the route has a
+       Suspense boundary - so each new photo, while its faces loaded, swapped
+       the whole page for the router's fallback and back, and the grid under
+       the photo came back scrolled to the top.
+    */
+    const detectedFaces = () => (faces.isSuccess ? faces.data : []);
+    const knownPeople = () => (people.isSuccess ? people.data : []);
 
-        return detected.map(face => ({
+    const highlighted = createMemo<HighlightedFace[]>(() => {
+        return detectedFaces().map(face => ({
             face,
             person: face.personId
-                ? people.data?.find(person => person.id === face.personId)
+                ? knownPeople().find(person => person.id === face.personId)
                 : undefined
         }));
     });
@@ -70,9 +78,7 @@ export const useFaceHighlight = (
        does not repeat somebody photographed twice in the same frame. Shared with
        the Who card - see _peopleInFaces.
     */
-    const peopleInMedia = createMemo(
-        () => peopleInFaces(faces.data ?? [], people.data ?? []).people
-    );
+    const peopleInMedia = createMemo(() => peopleInFaces(detectedFaces(), knownPeople()).people);
 
     /*
        The source dimensions, which the normalized boxes are relative to. Read

@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, Show, Suspense } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 import { useAuthContext } from "../../_contexts/AuthContext";
@@ -127,13 +127,28 @@ const Inspector: Component<Props> = props => {
                         {card => (
                             <Show when={isOpen(card.id)}>
                                 <InspectorCard title={card.title} icon={card.icon}>
-                                    <Dynamic
-                                        component={card.component}
-                                        activeCategory={props.activeCategory}
-                                        activeMedia={props.activeMedia}
-                                        mediaElement={props.mediaElement}
-                                        requestMoveNext={props.requestMoveNext ?? (() => undefined)}
-                                    />
+                                    {/*
+                                        Each card's own boundary. The cards read
+                                        their queries' `data` as it stands, and
+                                        Solid Query suspends a read of data still
+                                        on its way - with no boundary nearer than
+                                        the route's, every photo opened with the
+                                        Inspector showing swapped the whole page
+                                        for the router's fallback and back, and
+                                        the grid beneath came back scrolled to the
+                                        top. Here it is one card, briefly empty.
+                                    */}
+                                    <Suspense>
+                                        <Dynamic
+                                            component={card.component}
+                                            activeCategory={props.activeCategory}
+                                            activeMedia={props.activeMedia}
+                                            mediaElement={props.mediaElement}
+                                            requestMoveNext={
+                                                props.requestMoveNext ?? (() => undefined)
+                                            }
+                                        />
+                                    </Suspense>
                                 </InspectorCard>
                             </Show>
                         )}
