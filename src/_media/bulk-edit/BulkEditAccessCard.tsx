@@ -3,6 +3,7 @@ import { Component, createSignal, For, Show } from "solid-js";
 import { AdminRole } from "../access/_restriction";
 
 import RolePicker from "../access/RolePicker";
+import SelectionScope from "./SelectionScope";
 
 interface Props {
     // every role there is, or undefined while they load
@@ -42,6 +43,8 @@ const BulkEditAccessCard: Component<Props> = props => {
 
     return (
         <div class="mx-4">
+            <SelectionScope count={props.selectedCount} />
+
             <Show when={props.roles} fallback={<p class="text-sm">Loading roles...</p>}>
                 <RolePicker roles={props.roles!} selected={selected()} onChange={setSelected} />
             </Show>

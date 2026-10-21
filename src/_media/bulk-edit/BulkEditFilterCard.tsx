@@ -4,6 +4,7 @@ import { KeyValuePair } from "../../_models/KeyValuePair";
 
 import Icon from "../../_components/icon/Icon";
 import RadioGroup from "../../_components/input/RadioGroup";
+import { photos } from "./SelectionScope";
 
 /*
    One choice rather than a checkbox per filter: "without gps" and "with an
@@ -28,6 +29,9 @@ interface Props {
     hiddenCount: number;
     onSelectAll: () => void;
     onDeselectAll: () => void;
+    // every selected photo, and how many of those the filter is hiding
+    selectedCount: number;
+    selectedNotShownCount: number;
     // step to the photo either side without a location - see _missingGps
     onPreviousMissingGps: () => void;
     onNextMissingGps: () => void;
@@ -69,7 +73,24 @@ const BulkEditFilterCard: Component<Props> = props => {
                 </p>
             </Show>
 
-            <div class="mt-4">
+            <p class="text-sm mt-4">
+                <span class="font-bold">{props.selectedCount}</span> {photos(props.selectedCount)}{" "}
+                selected
+            </p>
+
+            {/*
+                Still selected, and still changed by the next edit, but nowhere
+                on screen - a filter changed under them, or a refetch moved them
+                out of it, as setting a location does under "without GPS".
+            */}
+            <Show when={props.selectedNotShownCount > 0}>
+                <p class="text-sm text-warning">
+                    {props.selectedNotShownCount} of them{" "}
+                    {props.selectedNotShownCount === 1 ? "is" : "are"} not shown by this filter.
+                </p>
+            </Show>
+
+            <div class="mt-2">
                 <button class="btn btn-sm mr-2" onClick={onSelectAll}>
                     Select All
                 </button>

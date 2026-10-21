@@ -13,6 +13,7 @@ interface Props {
     onSave: (gps: GpsCoordinate) => void;
     onClearOverride: () => void;
     selectedCount: number;
+    selectedNotShownCount: number;
     filter: BulkEditFilter;
     onFilterChange: (filter: BulkEditFilter) => void;
     hiddenCount: number;
@@ -56,6 +57,8 @@ const BulkEditSidebar: Component<Props> = props => {
                 <BulkEditFilterCard
                     onSelectAll={props.onSelectAll}
                     onDeselectAll={props.onDeselectAll}
+                    selectedCount={props.selectedCount}
+                    selectedNotShownCount={props.selectedNotShownCount}
                     onPreviousMissingGps={props.onPreviousMissingGps}
                     onNextMissingGps={props.onNextMissingGps}
                     hasPreviousMissingGps={props.hasPreviousMissingGps}

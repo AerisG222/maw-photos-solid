@@ -22,6 +22,7 @@ import { atWidth } from "../../_testing/breakpoints";
 
 interface SidebarOptions {
     selectedCount?: number;
+    selectedNotShownCount?: number;
     onClearOverride?: () => void;
     onRestrict?: (roles: string[]) => void;
     onClearRestriction?: () => void;
@@ -35,6 +36,7 @@ interface SidebarOptions {
 
 const sidebar = ({
     selectedCount = 0,
+    selectedNotShownCount = 0,
     onClearOverride = () => undefined,
     onRestrict = () => undefined,
     onClearRestriction = () => undefined,
@@ -53,6 +55,7 @@ const sidebar = ({
                 onSave={() => undefined}
                 onClearOverride={onClearOverride}
                 selectedCount={selectedCount}
+                selectedNotShownCount={selectedNotShownCount}
                 filter={filter}
                 onFilterChange={() => undefined}
                 hiddenCount={hiddenCount}
@@ -262,5 +265,42 @@ describe("the category access card", () => {
         sidebar({ categoryRolesMessages: ["There is no role named nope."] });
 
         expect(categoryAccess().getByText("There is no role named nope.")).toBeInTheDocument();
+    });
+
+    describe("say how much an edit will change", () => {
+        test("count the selection", () => {
+            sidebar({ selectedCount: 3 });
+
+            expect(screen.getByText(/selected$/)).toHaveTextContent("3 photos selected");
+            expect(screen.getAllByText("Applies to 3 selected photos.")).toHaveLength(2);
+        });
+
+        test("in the singular for one", () => {
+            sidebar({ selectedCount: 1 });
+
+            expect(screen.getByText(/selected$/)).toHaveTextContent("1 photo selected");
+            expect(screen.getAllByText("Applies to 1 selected photo.")).toHaveLength(2);
+        });
+
+        test("ask for a selection when there is none", () => {
+            sidebar({ selectedCount: 0 });
+
+            expect(screen.getAllByText("Select photos to apply this to.")).toHaveLength(2);
+        });
+
+        // still changed by the next edit, though nothing on screen shows them
+        test("warn about selected photos the filter is hiding", () => {
+            sidebar({ selectedCount: 3, selectedNotShownCount: 2 });
+
+            expect(screen.getByText(/not shown by this filter/)).toHaveTextContent(
+                "2 of them are not shown by this filter."
+            );
+        });
+
+        test("and say nothing about them when there are none", () => {
+            sidebar({ selectedCount: 3 });
+
+            expect(screen.queryByText(/not shown by this filter/)).not.toBeInTheDocument();
+        });
     });
 });

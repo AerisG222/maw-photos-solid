@@ -148,6 +148,13 @@ const ViewBulkEdit: Component<Props> = props => {
             .filter(m => m.isSelected)
             .map(m => m.id);
 
+    // chosen, and so in scope for the next edit, but filtered off the screen
+    const selectedNotShownCount = () => {
+        const shown = new Set(mediaToShow().map(m => m.id));
+
+        return media().filter(m => m.isSelected && !shown.has(m.id)).length;
+    };
+
     const onConfirmClearOverride = async () => {
         const mediaToClear = selectedIds();
 
@@ -343,6 +350,15 @@ const ViewBulkEdit: Component<Props> = props => {
     */
     const [currentId, setCurrentId] = createSignal<Uuid>();
 
+    /*
+       The outline goes only on a photo a button stepped to - that is when it
+       has to be found on screen. A clicked photo is under the pointer already,
+       and outlining it too read as still selected after it was deselected.
+    */
+    const [isStepped, setIsStepped] = createSignal(false);
+
+    const isMarked = (id: Uuid) => isStepped() && currentId() === id;
+
     let grid: HTMLDivElement | undefined;
 
     const locatedIds = createMemo(
@@ -371,6 +387,7 @@ const ViewBulkEdit: Component<Props> = props => {
         }
 
         setCurrentId(id);
+        setIsStepped(true);
 
         // optional: jsdom has no scrollIntoView
         grid?.querySelector(`[data-media-id="${id}"]`)?.scrollIntoView?.({
@@ -389,6 +406,7 @@ const ViewBulkEdit: Component<Props> = props => {
 
     const onItemClick = (id: Uuid, evt: MouseEvent) => {
         setCurrentId(id);
+        setIsStepped(false);
 
         const shown = mediaToShow();
         const anchorIndex = shown.findIndex(m => m.id === rangeAnchorId());
@@ -577,6 +595,7 @@ const ViewBulkEdit: Component<Props> = props => {
                         hasNextMissingGps={missingGpsFrom(1) !== undefined}
                         onClearOverride={() => setIsConfirmingClear(true)}
                         selectedCount={selectedIds().length}
+                        selectedNotShownCount={selectedNotShownCount()}
                         filter={filter()}
                         onFilterChange={onFilterChange}
                         hiddenCount={hiddenCount()}
@@ -616,14 +635,24 @@ const ViewBulkEdit: Component<Props> = props => {
                         {m => (
                             <div
                                 data-media-id={m.id}
-                                aria-current={currentId() === m.id ? "true" : undefined}
+                                aria-current={isMarked(m.id) ? "true" : undefined}
                                 class="border-1 cursor-pointer text-center rounded-sm"
                                 classList={{
-                                    // where the Missing GPS buttons step from; a problem's outline wins
-                                    "outline-2 outline-offset-2 outline-info":
-                                        currentId() === m.id && !messagesByMedia().has(m.id),
-                                    "border-primary/40 hover:border-primary":
-                                        !messagesByMedia().has(m.id),
+                                    // where a Missing GPS button stepped to - dashed, unlike a selection; a problem's outline wins
+                                    "outline-2 outline-dashed outline-offset-2 outline-info":
+                                        isMarked(m.id) && !messagesByMedia().has(m.id),
+                                    /*
+                                       Short of the selected border on hover. Full
+                                       strength was the same color, so a photo just
+                                       deselected - still under the pointer - looked
+                                       as chosen as before until the pointer left.
+                                    */
+                                    "border-primary/40 hover:border-primary/70":
+                                        !m.isSelected && !messagesByMedia().has(m.id),
+                                    // chosen: what the next edit will change
+                                    "border-primary ring-1 ring-primary":
+                                        m.isSelected && !messagesByMedia().has(m.id),
+                                    "bg-primary/15": m.isSelected,
                                     "border-error outline-2 outline-error": messagesByMedia().has(
                                         m.id
                                     )

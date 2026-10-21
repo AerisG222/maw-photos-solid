@@ -3,10 +3,12 @@ import { Component, createSignal } from "solid-js";
 import { GpsOverride, isValidLatLng, parseGps } from "../../_models/utils/GpsUtils";
 import { GpsCoordinate } from "../../_models/GpsCoordinate";
 
+import SelectionScope from "./SelectionScope";
+
 interface Props {
     onSave: (gps: GpsCoordinate) => void;
     onClearOverride: () => void;
-    // how many photos the clear would touch - nothing selected, nothing to clear
+    // how many photos a save or a clear would touch - nothing selected, nothing to clear
     selectedCount: number;
 }
 
@@ -72,6 +74,8 @@ const BulkEditGpsCard: Component<Props> = props => {
 
     return (
         <div class="mx-4">
+            <SelectionScope count={props.selectedCount} />
+
             <div>
                 <input
                     type="text"
