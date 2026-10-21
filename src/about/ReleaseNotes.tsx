@@ -6,6 +6,19 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.2.1</span> : <span class="date">2026-10-21</span>
+            </h3>
+            <p>A few fixes and admin enhancements:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Keep your place in a category when closing a photo with the Inspector open</li>
+                <li>Easily find next/prev media in bulk edit that is missing GPS information</li>
+                <li>
+                    Highlight selected photos in bulk edit and show how many are actively selected
+                </li>
+                <li>Update dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.2.0</span> : <span class="date">2026-10-18</span>
             </h3>
             <p>Faster navigation:</p>
