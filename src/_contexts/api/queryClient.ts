@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/solid-query";
 
 import { ApiError } from "./ApiError";
+import { shareUnchanged } from "./_shareUnchanged";
 
 /*
    Made once, above the router rather than inside the screens it serves, so that
@@ -37,7 +38,16 @@ export const createAppQueryClient = () =>
                    could be raised a long way before anybody noticed, and the
                    queries that want something different already say so.
                 */
-                staleTime: 60 * 1000
+                staleTime: 60 * 1000,
+
+                /*
+                   A refetch keeps every object it did not change, so the tiles
+                   drawn from them stay put - see _shareUnchanged. Without it a
+                   refetch of identical data rebuilt every tile of a grid, which
+                   is what made a whole category flash when hovering a photo
+                   preloaded its route and refreshed the list behind it.
+                */
+                reconcile: shareUnchanged
             },
             // a write should never be replayed automatically
             mutations: { retry: false }
