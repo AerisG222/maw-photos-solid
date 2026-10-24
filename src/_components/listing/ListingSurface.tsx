@@ -68,7 +68,8 @@ const ListingSurface = <T,>(props: Props<T>) => {
     */
     const [scrollMargin, setScrollMargin] = createSignal(0);
 
-    const rows = createMemo(() => chunkIntoRows(props.items, columnsFor(width(), props.itemWidth)));
+    const columns = createMemo(() => columnsFor(width(), props.itemWidth));
+    const rows = createMemo(() => chunkIntoRows(props.items, columns()));
 
     const virtualizer = createVirtualizer({
         get count() {
@@ -172,8 +173,17 @@ const ListingSurface = <T,>(props: Props<T>) => {
                                     transform: `translateY(${virtualRow.start - scrollMargin()}px)`
                                 }}
                             >
+                                {/*
+                                    Keyed by the items, so a change to one -
+                                    favoriting it - rebuilds that tile alone.
+                                    The index is its place in the whole
+                                    listing, read once: see Props.
+                                */}
                                 <For each={rows()[virtualRow.index]}>
-                                    {entry => props.children(entry.item, entry.index)}
+                                    {(item, i) =>
+                                        // eslint-disable-next-line solid/reactivity -- the index is a number by design, see Props
+                                        props.children(item, virtualRow.index * columns() + i())
+                                    }
                                 </For>
                             </div>
                         )}

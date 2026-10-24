@@ -48,22 +48,22 @@ describe("dividing a listing into rows", () => {
     test("fills each row before starting the next", () => {
         const rows = chunkIntoRows(["a", "b", "c", "d", "e"], 2);
 
-        expect(rows.map(row => row.map(entry => entry.item))).toEqual([
-            ["a", "b"],
-            ["c", "d"],
-            ["e"]
-        ]);
+        expect(rows).toEqual([["a", "b"], ["c", "d"], ["e"]]);
     });
 
     /*
-       The index is the position in the whole listing, not in the row. Callers
-       decide what to load eagerly by it, and "the first fifty" has to mean the
-       first fifty of the listing.
+       The rows are drawn with a reference-keyed <For>, so a row has to hold
+       the items themselves. Wrapped in fresh objects, patching one item - a
+       favorite - rebuilt every tile on screen, and the whole grid flashed.
     */
-    test("numbers items by where they sit in the listing", () => {
-        const rows = chunkIntoRows(["a", "b", "c", "d", "e"], 2);
+    test("holds the items themselves, so an unchanged item keeps its tile", () => {
+        const a = { id: "a" };
+        const b = { id: "b" };
+        const before = chunkIntoRows([a, b], 2);
+        const after = chunkIntoRows([a, { ...b, isFavorite: true }], 2);
 
-        expect(rows[2]?.[0]).toEqual({ item: "e", index: 4 });
+        expect(after[0]?.[0]).toBe(before[0]?.[0]);
+        expect(after[0]?.[1]).not.toBe(before[0]?.[1]);
     });
 
     test("an empty listing has no rows at all", () => {

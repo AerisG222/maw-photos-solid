@@ -24,17 +24,14 @@ export const DEFAULT_ITEM_WIDTH = 160;
 export const columnsFor = (width: number, itemWidth = DEFAULT_ITEM_WIDTH) =>
     Math.max(1, Math.floor((width + GAP) / (itemWidth + GAP)));
 
-export interface RowEntry<T> {
-    readonly item: T;
-    // the position in the whole listing, not in the row - callers decide what to
-    // load eagerly by it
-    readonly index: number;
-}
-
-export const chunkIntoRows = <T>(items: readonly T[], columns: number): RowEntry<T>[][] =>
+/*
+   The items themselves, not wrapped. A row is drawn with a reference-keyed
+   <For>, so whatever a row holds is what decides which tiles survive a change
+   to the list. Wrapping each item with its position made a fresh object for
+   every item each time the list changed - favoriting one photo patches one
+   item, and every tile on screen was torn down and rebuilt, images and all.
+*/
+export const chunkIntoRows = <T>(items: readonly T[], columns: number): T[][] =>
     Array.from({ length: Math.ceil(items.length / columns) }, (_, row) =>
-        items.slice(row * columns, row * columns + columns).map((item, offset) => ({
-            item,
-            index: row * columns + offset
-        }))
+        items.slice(row * columns, row * columns + columns)
     );
