@@ -1,4 +1,12 @@
-import { createContext, createEffect, JSX, on, ParentComponent, useContext } from "solid-js";
+import {
+    createContext,
+    createEffect,
+    createMemo,
+    JSX,
+    on,
+    ParentComponent,
+    useContext
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 export interface VisualEffectsState {
@@ -199,5 +207,13 @@ export const useVisualEffectsContext = () => {
 export const useResetEffectsOnMediaChange = (subject: () => unknown) => {
     const [, { reset }] = useVisualEffectsContext();
 
-    createEffect(on(subject, () => reset(), { defer: true }));
+    /*
+       A memo, so this follows the subject's value. `on` alone runs whenever
+       the accessor's own reads change - and callers pass the media's id read
+       off the media object, which favoriting replaces with a patched copy of
+       the same photo, undoing a rotation nobody asked to undo.
+    */
+    const current = createMemo(subject);
+
+    createEffect(on(current, () => reset(), { defer: true }));
 };

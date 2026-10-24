@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import { createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 import Panzoom, { PanzoomObject } from "@panzoom/panzoom";
 
 /*
@@ -150,8 +150,11 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
        arriving at the next photograph already halfway into its corner is a
        state nobody asked for.
     */
+    // by value - see the note in useResetEffectsOnMediaChange; a favorite is not a new photo
+    const current = createMemo(subject);
+
     createEffect(() => {
-        subject();
+        current();
         instance?.reset({ animate: false });
         setScale(RESTING_SCALE);
     });

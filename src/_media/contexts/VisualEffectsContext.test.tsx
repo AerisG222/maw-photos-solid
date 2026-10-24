@@ -82,4 +82,38 @@ describe("visual effects", () => {
 
         expect(state().flipHorizontal).toBe(true);
     });
+
+    /*
+       The subject the way MainItem passes it: the id, read off a media object.
+       Favoriting replaces that object with a patched copy of the same photo,
+       and a reset that followed the object rather than the id undid the
+       rotation the moment the heart was clicked.
+    */
+    test("and favoriting the photograph is not a change of subject", () => {
+        const [media, setMedia] = createSignal({ id: "photo-1", isFavorite: false });
+
+        let api!: ReturnType<typeof useVisualEffectsContext>;
+
+        const Probe = () => {
+            api = useVisualEffectsContext();
+            useResetEffectsOnMediaChange(() => media().id);
+
+            return <></>;
+        };
+
+        render(() => (
+            <VisualEffectsProvider>
+                <Probe />
+            </VisualEffectsProvider>
+        ));
+
+        api[1].rotateClockwise();
+        setMedia({ id: "photo-1", isFavorite: true });
+
+        expect(api[0].rotation).toBe(90);
+
+        setMedia({ id: "photo-2", isFavorite: true });
+
+        expect(api[0].rotation).toBe(0);
+    });
 });

@@ -114,12 +114,20 @@ export const useFaceHighlight = (
         });
     });
 
-    // a new photo invalidates the previous one's dimensions and any highlight.
-    // `on` states the dependency outright, which a bare read of the id - the only
-    // thing this needs from the media - would not
+    /*
+       A new photo invalidates the previous one's dimensions and any highlight.
+
+       By a memo of the id, not a read of it. `on` runs whenever anything its
+       accessor read has changed, and that accessor read the whole media object -
+       so favoriting the photo, which swaps in a patched copy of the same one,
+       cleared the dimensions. The image was the same element, already loaded,
+       so nothing measured it again and every box disappeared.
+    */
+    const currentId = createMemo(() => media()?.id);
+
     createEffect(
         on(
-            () => media()?.id,
+            currentId,
             () => {
                 setNatural(undefined);
                 setHovered(undefined);
