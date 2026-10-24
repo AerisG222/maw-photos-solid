@@ -1,14 +1,13 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 import {
     InfiniteData,
-    useInfiniteQuery,
     UseInfiniteQueryResult,
     useMutation,
     UseMutationResult,
-    useQuery,
     useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
+import { useInfiniteQuery, useQuery } from "./_queries";
 
 import { Comment } from "../../_models/Comment";
 import { DetectedFace } from "../../_models/DetectedFace";

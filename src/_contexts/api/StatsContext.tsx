@@ -1,5 +1,6 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
-import { useQuery, UseQueryResult } from "@tanstack/solid-query";
+import { UseQueryResult } from "@tanstack/solid-query";
+import { useQuery } from "./_queries";
 
 import { useAuthContext } from "../AuthContext";
 import { statsByYearQueryOptions, statsForYearQueryOptions } from "./_statsQueries";

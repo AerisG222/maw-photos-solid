@@ -1,15 +1,14 @@
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 import {
     InfiniteData,
-    useInfiniteQuery,
     UseInfiniteQueryResult,
     useMutation,
     UseMutationResult,
     useQueries,
-    useQuery,
     useQueryClient,
     UseQueryResult
 } from "@tanstack/solid-query";
+import { useInfiniteQuery, useQuery } from "./_queries";
 import { useAuthContext } from "../AuthContext";
 import { putApi, queryApi, runWithAccessToken } from "./_shared";
 import { Category, CategoryDto, mapCategory } from "../../_models/Category";

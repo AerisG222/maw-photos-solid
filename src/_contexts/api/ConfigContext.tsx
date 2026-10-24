@@ -1,5 +1,6 @@
 import { createContext, createEffect, Match, ParentComponent, Switch, useContext } from "solid-js";
-import { useQuery, UseQueryResult } from "@tanstack/solid-query";
+import { UseQueryResult } from "@tanstack/solid-query";
+import { useQuery } from "./_queries";
 
 import { Scale } from "../../_models/Scale";
 import { useAuthContext } from "../AuthContext";
