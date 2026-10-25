@@ -1,0 +1,106 @@
+import { Component, For, Show, createSignal } from "solid-js";
+import { LinkOptions } from "@tanstack/solid-router";
+import { createVirtualizer } from "@tanstack/solid-virtual";
+
+import { Category } from "../../_models/Category";
+import { Media } from "../../_models/Media";
+import {
+    useScrollContainer,
+    useScrollElement
+} from "../../_components/layout/ScrollContainerContext";
+import { createScrollMargin } from "../../_components/listing/_scrollMargin";
+
+import BrowseSection from "./BrowseSection";
+
+// a header and a row or two, before a category's photos have been counted
+const ESTIMATED_SECTION_HEIGHT = 320;
+const OVERSCAN_SECTIONS = 2;
+
+interface Props {
+    // in the order the grid lists them: newest year first, each year as listed
+    categories: Category[];
+    mediaLink: (media: Media) => LinkOptions;
+    setIsFavorite: (media: Media, isFavorite: boolean) => void;
+}
+
+/*
+   Every category's photos, one category after another.
+
+   Windowed by category rather than by row. A category is one box - its
+   sticky header and its photos - and the header can only stick for as long as
+   the box holding it is on screen, so splitting a category across rows would
+   lose that. It also makes the loading fall out of the windowing: a category's
+   photos are asked for when its section mounts, which is when it nears the
+   screen, so a few hundred categories cost a few requests at a time.
+
+   How tall a category is cannot be known until its photos arrive - a category
+   does not say how many it holds - so each starts as an estimate and is
+   measured once drawn. One growing above the screen does not move what you are
+   looking at: the virtualiser adjusts the scroll by the difference.
+*/
+const BrowseListing: Component<Props> = props => {
+    const scrollContainer = useScrollContainer();
+    const scrollElement = useScrollElement();
+    const [element, setElement] = createSignal<HTMLDivElement>();
+    const scrollMargin = createScrollMargin(element, () => scrollContainer?.());
+
+    const virtualizer = createVirtualizer({
+        get count() {
+            return props.categories.length;
+        },
+        get scrollMargin() {
+            return scrollMargin();
+        },
+        // measurements belong to a category, not a position, so a filter change keeps them
+        getItemKey: index => props.categories[index]?.id ?? index,
+        getScrollElement: scrollElement,
+        estimateSize: () => ESTIMATED_SECTION_HEIGHT,
+        overscan: OVERSCAN_SECTIONS
+    });
+
+    const isFirstOfYear = (index: number) =>
+        index === 0 || props.categories[index - 1]?.year !== props.categories[index]?.year;
+
+    return (
+        <div
+            ref={setElement}
+            class="relative w-full"
+            style={{ height: `${virtualizer.getTotalSize()}px` }}
+        >
+            <For each={virtualizer.getVirtualItems()}>
+                {virtualRow => (
+                    <div
+                        // measured rather than trusted: no two categories hold the same number of photos
+                        ref={element => queueMicrotask(() => virtualizer.measureElement(element))}
+                        data-index={virtualRow.index}
+                        /*
+                           Placed with `top`, not a transform as the grid's rows
+                           are. A sticky header works from where its box is laid
+                           out, and a transform moves the box without moving
+                           that - every category was laid out at the top of the
+                           listing, so each header pinned itself against the
+                           wrong place and slid off out of sight.
+                        */
+                        class="absolute left-0 w-full"
+                        style={{ top: `${virtualRow.start - scrollMargin()}px` }}
+                    >
+                        {/* keyed: a filter change can put a different category at this position */}
+                        <Show when={props.categories[virtualRow.index]} keyed>
+                            {category => (
+                                <BrowseSection
+                                    category={category}
+                                    showYear={isFirstOfYear(virtualRow.index)}
+                                    eager={virtualRow.index < 2}
+                                    mediaLink={props.mediaLink}
+                                    setIsFavorite={props.setIsFavorite}
+                                />
+                            )}
+                        </Show>
+                    </div>
+                )}
+            </For>
+        </div>
+    );
+};
+
+export default BrowseListing;

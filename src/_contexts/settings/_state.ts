@@ -78,6 +78,8 @@ export interface AreaSettingsState {
     readonly categoryMissingGpsFilter: boolean;
     // admin only, like the gps filter: categories holding a restricted media
     readonly categoryRestrictedFilter: boolean;
+    // the category grid lists each category's photos under it, rather than a card
+    readonly categoryBrowseMedia: boolean;
     readonly feedFavoritesOnly: boolean;
     readonly feedShuffle: boolean;
     // how many recent search terms to keep
@@ -91,6 +93,7 @@ export const defaultAreaSettings: AreaSettingsState = {
     categoryYearFilter: "all",
     categoryMissingGpsFilter: false,
     categoryRestrictedFilter: false,
+    categoryBrowseMedia: false,
     feedFavoritesOnly: false,
     feedShuffle: false,
     searchHistoryCount: defaultSearchHistoryCount

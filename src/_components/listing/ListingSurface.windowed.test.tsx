@@ -1,0 +1,88 @@
+import { cleanup, render, screen } from "@solidjs/testing-library";
+import { afterEach, beforeAll, describe, expect, test } from "vitest";
+
+import { FullscreenProvider } from "../../_contexts/FullscreenContext";
+import Layout from "../layout/Layout";
+import ListingSurface from "./ListingSurface";
+
+/*
+   A listing inside a page draws only the rows near the screen.
+
+   Its own file because jsdom lays nothing out: the sizes a virtualiser measures
+   are faked below, for every element, which no other test should inherit.
+
+   Two separate faults kept every listing in the application drawing all of its
+   items. Layout made its content before providing the scroller, so no listing
+   could find one; and once they could, the scroller was handed over before it
+   was in the page - while it still belonged to a template's document, with no
+   window to measure in - and the virtualiser gave up for good, drawing nothing.
+*/
+class FakeResizeObserver {
+    constructor(private callback: ResizeObserverCallback) {}
+
+    observe(target: Element) {
+        queueMicrotask(() =>
+            this.callback(
+                [
+                    {
+                        target,
+                        contentRect: { width: 700, height: 600 },
+                        borderBoxSize: [{ inlineSize: 700, blockSize: 130 }]
+                    } as unknown as ResizeObserverEntry
+                ],
+                this
+            )
+        );
+    }
+
+    unobserve() {
+        /* nothing to stop */
+    }
+
+    disconnect() {
+        /* nothing to stop */
+    }
+}
+
+beforeAll(() => {
+    globalThis.ResizeObserver = FakeResizeObserver;
+
+    for (const [property, value] of [
+        ["clientWidth", 700],
+        ["clientHeight", 600],
+        ["offsetWidth", 700],
+        ["offsetHeight", 600]
+    ] as const) {
+        Object.defineProperty(HTMLElement.prototype, property, {
+            get: () => value,
+            configurable: true
+        });
+    }
+});
+
+afterEach(cleanup);
+
+const settle = () => new Promise(resolve => setTimeout(resolve, 50));
+
+describe("a listing on a page", () => {
+    test("draws the rows near the screen, and not the rest", async () => {
+        const items = Array.from({ length: 200 }, (_, i) => `item-${i}`);
+
+        render(() => (
+            <FullscreenProvider>
+                <Layout>
+                    <ListingSurface items={items}>
+                        {item => <div data-testid="tile">{item}</div>}
+                    </ListingSurface>
+                </Layout>
+            </FullscreenProvider>
+        ));
+
+        await settle();
+
+        const drawn = screen.queryAllByTestId("tile").length;
+
+        expect(drawn).toBeGreaterThan(0);
+        expect(drawn).toBeLessThan(items.length);
+    });
+});

@@ -33,3 +33,23 @@ export const ScrollContainerProvider: ParentComponent<{
 };
 
 export const useScrollContainer = () => useContext(ScrollContainerContext);
+
+/*
+   The scroller as a virtualiser should be given it: only once it is in the page.
+
+   Solid builds elements by cloning a template, and until one is inserted it
+   belongs to the template's document - which has no window. A virtualiser
+   handed it then looks for the window to measure with, finds none, and gives
+   up; and since every later check sees the same element, it never looks again.
+   Nothing drew at all. Held back until it is connected, it is taken up on the
+   virtualiser's next look, when the listing mounts.
+*/
+export const useScrollElement = () => {
+    const scroller = useScrollContainer();
+
+    return () => {
+        const element = scroller?.();
+
+        return element?.isConnected ? element : null;
+    };
+};

@@ -60,6 +60,13 @@ interface Props {
     */
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
+    /*
+       Drawn in place of the media service's own grid, for a page that lists
+       its photos some other way - the categories grid, browsing every
+       category's photos at once. Everything else is the same: the photo opens
+       over it, and the toolbar and the Inspector come with it.
+    */
+    listing?: JSXElement;
 }
 
 const ViewGrid: Component<Props> = props => {
@@ -84,6 +91,13 @@ const ViewGrid: Component<Props> = props => {
     const goTo = useGoTo();
 
     const activeMedia = () => props.mediaService.getActiveMedia();
+
+    /*
+       Whether a listing was handed in, asked without building it. Reading the
+       prop builds it, and it has to be built where it is drawn - inside the
+       Layout, whose scroller it needs to window itself against.
+    */
+    const hasListing = () => "listing" in props;
 
     /*
        Fullscreen is a state of this view, not a place of its own.
@@ -278,21 +292,35 @@ const ViewGrid: Component<Props> = props => {
                 </Show>
 
                 <div ref={sizeDiv}>
-                    <Show when={props.showBreadcrumbsOnGrid}>
-                        <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
-                    </Show>
-
                     <Show
-                        when={props.mediaService.getMediaList().length > 0}
-                        fallback={props.emptyState}
+                        when={hasListing()}
+                        fallback={
+                            <>
+                                <Show when={props.showBreadcrumbsOnGrid}>
+                                    <CategoryBreadcrumb
+                                        category={props.mediaService.getActiveCategory()}
+                                    />
+                                </Show>
+
+                                <Show
+                                    when={props.mediaService.getMediaList().length > 0}
+                                    fallback={props.emptyState}
+                                >
+                                    <MediaGrid
+                                        mediaLinkBuilder={(media: Media) =>
+                                            props.mediaService.getMediaLinkByView(
+                                                MediaViewGrid,
+                                                media
+                                            )
+                                        }
+                                        items={props.mediaService.getMediaList()}
+                                        setIsFavorite={setIsFavorite}
+                                    />
+                                </Show>
+                            </>
+                        }
                     >
-                        <MediaGrid
-                            mediaLinkBuilder={(media: Media) =>
-                                props.mediaService.getMediaLinkByView(MediaViewGrid, media)
-                            }
-                            items={props.mediaService.getMediaList()}
-                            setIsFavorite={setIsFavorite}
-                        />
+                        {props.listing}
                     </Show>
                 </div>
             </Layout>

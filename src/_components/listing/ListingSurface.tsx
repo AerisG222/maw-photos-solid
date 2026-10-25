@@ -1,8 +1,9 @@
 import { For, JSX, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 
-import { useScrollContainer } from "../layout/ScrollContainerContext";
+import { useScrollContainer, useScrollElement } from "../layout/ScrollContainerContext";
 import { chunkIntoRows, columnsFor } from "./_rows";
+import { createScrollMargin } from "./_scrollMargin";
 
 /*
    Enough rows to cover a tall screen before anything is measured, and enough
@@ -52,21 +53,11 @@ interface Props<T> {
    done for this, and paid for it anyway.
 */
 const ListingSurface = <T,>(props: Props<T>) => {
-    let container!: HTMLDivElement;
-
     const scrollContainer = useScrollContainer();
+    const scrollElement = useScrollElement();
     const [width, setWidth] = createSignal(0);
-    /*
-       How far down the scrolling content this listing starts.
-
-       The virtualiser measures the scroll offset from the top of the scroller,
-       and without being told otherwise takes the listing to start there too.
-       Nothing does: there is a filter bar and a heading above every one, and
-       with every year shown each year's grid sits below all the years before
-       it - so the later grids were drawing rows for a stretch of the page they
-       were nowhere near, and scrolling down to one found it mostly blank.
-    */
-    const [scrollMargin, setScrollMargin] = createSignal(0);
+    const [element, setElement] = createSignal<HTMLDivElement>();
+    const scrollMargin = createScrollMargin(element, () => scrollContainer?.());
 
     const columns = createMemo(() => columnsFor(width(), props.itemWidth));
     const rows = createMemo(() => chunkIntoRows(props.items, columns()));
@@ -78,7 +69,7 @@ const ListingSurface = <T,>(props: Props<T>) => {
         get scrollMargin() {
             return scrollMargin();
         },
-        getScrollElement: () => scrollContainer?.() ?? null,
+        getScrollElement: scrollElement,
         estimateSize: () => ESTIMATED_ROW_HEIGHT,
         overscan: OVERSCAN_ROWS
     });
@@ -93,57 +84,28 @@ const ListingSurface = <T,>(props: Props<T>) => {
     */
     const isVirtual = () => !!scrollContainer?.() && width() > 0;
 
-    const measureScrollMargin = (scroller: HTMLElement) => {
-        const offset =
-            container.getBoundingClientRect().top -
-            scroller.getBoundingClientRect().top +
-            scroller.scrollTop;
-
-        setScrollMargin(Math.max(0, Math.round(offset)));
-    };
-
     createEffect(() => {
         /*
            Absent in jsdom, and the listing has to survive that rather than
            throw: an unmeasured surface reports no width, which falls through to
            drawing everything - the same answer it gives inside a dialog.
         */
-        if (typeof ResizeObserver === "undefined") {
+        const container = element();
+
+        if (!container || typeof ResizeObserver === "undefined") {
             return;
         }
 
-        const scroller = scrollContainer?.();
-
         const observer = new ResizeObserver(entries => {
-            const resized = entries.find(entry => entry.target === container);
-
-            if (scroller) {
-                measureScrollMargin(scroller);
-            }
-
-            if (resized) {
-                setWidth(resized.contentRect.width);
-            }
+            setWidth(entries[0]?.contentRect.width ?? 0);
         });
 
         observer.observe(container);
-
-        /*
-           The scroller's content as well, which changes height whenever
-           anything above this listing does - an earlier year's grid arriving,
-           a filter bar wrapping - and moves where this one starts.
-        */
-        const content = scroller?.firstElementChild;
-
-        if (content) {
-            observer.observe(content);
-        }
-
         onCleanup(() => observer.disconnect());
     });
 
     return (
-        <div ref={container} class={props.class} classList={{ "rise-in": !!props.animate }}>
+        <div ref={setElement} class={props.class} classList={{ "rise-in": !!props.animate }}>
             <Show
                 when={isVirtual()}
                 fallback={
@@ -167,7 +129,15 @@ const ListingSurface = <T,>(props: Props<T>) => {
                                     queueMicrotask(() => virtualizer.measureElement(element))
                                 }
                                 data-index={virtualRow.index}
-                                class="listing-flow absolute top-0 left-0 w-full"
+                                /*
+                                   The space below each row is padding of its
+                                   own. Wrapped in one box, the flow's gap set
+                                   the rows apart; drawn as separate rows, one
+                                   placed directly under the last, nothing did.
+                                   Padding is measured with the row, so the
+                                   virtualiser places the next one after it.
+                                */
+                                class="listing-flow absolute top-0 left-0 w-full pb-2"
                                 // `start` counts from the top of the scroller; the row is placed within this listing
                                 style={{
                                     transform: `translateY(${virtualRow.start - scrollMargin()}px)`

@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 
@@ -10,8 +10,11 @@ import Layout from "../_components/layout/Layout";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
+import Browse from "./Browse";
 
-const GridView: Component = () => {
+// a card for each category
+const CardsView: Component = () => {
     const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
@@ -61,6 +64,17 @@ const GridView: Component = () => {
                 </For>
             </AsyncBoundary>
         </Layout>
+    );
+};
+
+// or, with the browse option on, each category's photos - see Browse
+const GridView: Component = () => {
+    const [area] = useAreaSettingsContext();
+
+    return (
+        <Show when={area.categoryBrowseMedia} fallback={<CardsView />}>
+            <Browse />
+        </Show>
     );
 };
 
