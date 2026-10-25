@@ -1,4 +1,4 @@
-import { Component, createMemo, onCleanup } from "solid-js";
+import { Component, createMemo, createSignal, onCleanup } from "solid-js";
 import { getRouteApi } from "@tanstack/solid-router";
 
 import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
@@ -13,9 +13,10 @@ import { Category } from "../_models/Category";
 import { MediaViewGrid } from "../_models/MediaView";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
-import BrowseListing from "./components/BrowseListing";
+import BrowseListing, { CategoryStepper } from "./components/BrowseListing";
 import BrowseToggle from "./components/BrowseToggle";
 import CategoriesNav, { CATEGORIES_NAV_COUNT } from "./components/CategoriesNav";
+import CategoryStepButtons from "./components/CategoryStepButtons";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
@@ -51,6 +52,9 @@ const Browse: Component = () => {
 
     onCleanup(() => slideshowService.stop());
 
+    // the listing's way of moving a category at a time, once it has drawn
+    const [stepper, setStepper] = createSignal<CategoryStepper>();
+
     // newest year first, each year's categories as the grid lists them
     const categories = createMemo<Category[]>(() => {
         const byYear = categoriesToDisplay();
@@ -71,7 +75,12 @@ const Browse: Component = () => {
             slideshowService={slideshowService}
             toolbarLeading={<CategoriesNav />}
             toolbarLeadingNavCount={CATEGORIES_NAV_COUNT}
-            toolbarExtras={<BrowseToggle />}
+            toolbarExtras={
+                <>
+                    <BrowseToggle />
+                    <CategoryStepButtons stepper={stepper()} />
+                </>
+            }
             showBreadcrumbsOnGrid={false}
             showBreadcrumbsOnMedia={true}
             listing={
@@ -88,6 +97,7 @@ const Browse: Component = () => {
                         categories={categories()}
                         mediaLink={media => mediaService.getMediaLinkByView(MediaViewGrid, media)}
                         setIsFavorite={favoriteSetter(setIsFavoriteMutation)}
+                        onStepper={setStepper}
                     />
                 </AsyncBoundary>
             }

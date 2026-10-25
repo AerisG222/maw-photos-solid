@@ -71,6 +71,16 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
                 action: "Show every category's photos",
                 scope: "Categories grid"
             },
+            {
+                keys: ["["],
+                action: "Previous category",
+                scope: "Browsing every category's photos"
+            },
+            {
+                keys: ["]"],
+                action: "Next category",
+                scope: "Browsing every category's photos"
+            },
             { keys: ["r"], action: "Load more", scope: "Any paged listing" }
         ]
     },

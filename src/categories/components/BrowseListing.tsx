@@ -1,4 +1,4 @@
-import { Component, For, Show, createSignal } from "solid-js";
+import { Component, For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 import { LinkOptions } from "@tanstack/solid-router";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 
@@ -9,6 +9,8 @@ import {
     useScrollElement
 } from "../../_components/layout/ScrollContainerContext";
 import { createScrollMargin } from "../../_components/listing/_scrollMargin";
+
+import { ScreenTop, nextCategory, previousCategory } from "../_categoryStep";
 
 import BrowseSection from "./BrowseSection";
 
@@ -21,6 +23,16 @@ interface Props {
     categories: Category[];
     mediaLink: (media: Media) => LinkOptions;
     setIsFavorite: (media: Media, isFavorite: boolean) => void;
+    // handed the way to step between categories, for the toolbar - see CategoryStepper
+    onStepper?: (stepper: CategoryStepper) => void;
+}
+
+// moving a whole category at a time, from wherever the reader is - see _categoryStep
+export interface CategoryStepper {
+    previous: () => void;
+    next: () => void;
+    hasPrevious: () => boolean;
+    hasNext: () => boolean;
 }
 
 /*
@@ -56,6 +68,52 @@ const BrowseListing: Component<Props> = props => {
         getScrollElement: scrollElement,
         estimateSize: () => ESTIMATED_SECTION_HEIGHT,
         overscan: OVERSCAN_SECTIONS
+    });
+
+    // how far the page is scrolled, as a signal - the virtualiser's own is not one
+    const [offset, setOffset] = createSignal(0);
+
+    createEffect(() => {
+        const scroller = scrollElement();
+
+        if (!scroller) {
+            return;
+        }
+
+        const read = () => setOffset(scroller.scrollTop);
+
+        read();
+        scroller.addEventListener("scroll", read, { passive: true });
+        onCleanup(() => scroller.removeEventListener("scroll", read));
+    });
+
+    // the category whose header is pinned - read again as sizes settle, as well as on scroll
+    const screenTop = createMemo<ScreenTop | undefined>(() => {
+        const at = offset();
+
+        void virtualizer.getTotalSize();
+
+        const item =
+            props.categories.length > 0 ? virtualizer.getVirtualItemForOffset(at) : undefined;
+
+        return item
+            ? { index: item.index, start: item.start, offset: at, count: props.categories.length }
+            : undefined;
+    });
+
+    const goTo = (index: number | undefined) => {
+        if (index !== undefined) {
+            virtualizer.scrollToIndex(index, { align: "start" });
+        }
+    };
+
+    // handed over once: the stepper reads everything it needs as it is called
+    // eslint-disable-next-line solid/reactivity
+    props.onStepper?.({
+        previous: () => goTo(previousCategory(screenTop())),
+        next: () => goTo(nextCategory(screenTop())),
+        hasPrevious: () => previousCategory(screenTop()) !== undefined,
+        hasNext: () => nextCategory(screenTop()) !== undefined
     });
 
     const isFirstOfYear = (index: number) =>
