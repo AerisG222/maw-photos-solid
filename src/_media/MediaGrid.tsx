@@ -5,6 +5,10 @@ import { Media } from "../_models/Media";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
 import ListingSurface from "../_components/listing/ListingSurface";
+import { mediaRowHeight } from "../_components/listing/_rows";
+import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
+
+const MEDIA_ROW_HEIGHT = mediaRowHeight(getThumbnailSize(ThumbnailSizeDefault).height);
 import MediaLink from "./MediaLink";
 
 interface Props {
@@ -17,7 +21,12 @@ interface Props {
 const MediaGrid: Component<Props> = props => {
     // entrance on the group, not each tile - see the note in YearGrid
     return (
-        <ListingSurface animate class="mb-4" items={props.items}>
+        <ListingSurface
+            animate
+            class="mb-4"
+            estimatedRowHeight={MEDIA_ROW_HEIGHT}
+            items={props.items}
+        >
             {(media, index) => (
                 <MediaLink
                     link={props.mediaLinkBuilder(media)}

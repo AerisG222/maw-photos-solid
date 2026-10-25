@@ -14,6 +14,13 @@ export const GAP = 8;
 export const DEFAULT_ITEM_WIDTH = 160;
 
 /*
+   How tall a row of photographs is: the thumbnail, its one-pixel border top and
+   bottom, and the gap under the row. Exact rather than estimated, so a grid of
+   photos is the right height before a row of it has been drawn.
+*/
+export const mediaRowHeight = (thumbnailHeight: number) => thumbnailHeight + 2 + GAP;
+
+/*
    How many fit across.
 
    Measured rather than assumed, because a panel can open beside a listing and
@@ -31,6 +38,7 @@ export const columnsFor = (width: number, itemWidth = DEFAULT_ITEM_WIDTH) =>
    every item each time the list changed - favoriting one photo patches one
    item, and every tile on screen was torn down and rebuilt, images and all.
 */
+// none until it is known how many fit across - see ListingSurface
 export const chunkIntoRows = <T>(items: readonly T[], columns: number): T[][] =>
     Array.from({ length: Math.ceil(items.length / columns) }, (_, row) =>
         items.slice(row * columns, row * columns + columns)

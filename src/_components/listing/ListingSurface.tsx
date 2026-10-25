@@ -27,6 +27,13 @@ interface Props<T> {
     children: (item: T, index: number) => JSX.Element;
     // the drawn width of one item - places use a wider card than everything else
     itemWidth?: number;
+    /*
+       How tall a row is expected to be before it is measured. A category card
+       carries a year and a name; a photo is the thumbnail alone - see
+       `mediaRowHeight`. The closer this is, the less a listing changes height
+       as it is drawn, and the less anything below it moves.
+    */
+    estimatedRowHeight?: number;
     // the entrance animation, which a skeleton or a nested picker does not want
     animate?: boolean;
     /*
@@ -72,7 +79,13 @@ const ListingSurface = <T,>(props: Props<T>) => {
     const scrollMargin = createScrollMargin(element, () => scrollContainer?.());
 
     const columns = createMemo(() => columnsFor(width(), props.itemWidth));
-    const rows = createMemo(() => chunkIntoRows(props.items, columns()));
+    /*
+       No rows until the width is in. Before it, how many fit across is unknown,
+       and counting one to a row made a category of a hundred photographs a
+       hundred rows tall for a moment - a spike everything around it reacted to,
+       shifting the page while a jump to it was still landing.
+    */
+    const rows = createMemo(() => (width() > 0 ? chunkIntoRows(props.items, columns()) : []));
 
     const virtualizer = createVirtualizer({
         get count() {
@@ -87,7 +100,7 @@ const ListingSurface = <T,>(props: Props<T>) => {
         // virtualiser keeps its own rule rather than one written here to match it
         // eslint-disable-next-line solid/reactivity
         ...(props.nested ? { shouldAdjustScrollPositionOnItemSizeChange: () => false } : {}),
-        estimateSize: () => ESTIMATED_ROW_HEIGHT,
+        estimateSize: () => props.estimatedRowHeight ?? ESTIMATED_ROW_HEIGHT,
         overscan: OVERSCAN_ROWS
     });
 
@@ -117,6 +130,17 @@ const ListingSurface = <T,>(props: Props<T>) => {
 
         if (!container || typeof ResizeObserver === "undefined") {
             return;
+        }
+
+        /*
+           Read now, where it can be: a listing mounting on a page already drawn
+           - a category scrolled back into view - knows its width at once, and
+           its rows go down with it rather than a frame later.
+        */
+        const known = container.getBoundingClientRect().width;
+
+        if (known > 0) {
+            setWidth(known);
         }
 
         const observer = new ResizeObserver(entries => {

@@ -9,6 +9,10 @@ import { useBrowsedMedia } from "../hooks/useBrowsedMedia";
 import CategoryBreadcrumb from "../../_components/categories/CategoryBreadcrumb";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import ListingSurface from "../../_components/listing/ListingSurface";
+import { mediaRowHeight } from "../../_components/listing/_rows";
+import { ThumbnailSizeDefault, getThumbnailSize } from "../../_models/ThumbnailSize";
+
+const MEDIA_ROW_HEIGHT = mediaRowHeight(getThumbnailSize(ThumbnailSizeDefault).height);
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import MediaLink from "../../_media/MediaLink";
 import YearHeading from "./YearHeading";
@@ -72,7 +76,12 @@ const BrowseSection: Component<Props> = props => {
                                 category itself is one box in the listing, and
                                 its photos are windowed inside it.
                             */}
-                            <ListingSurface class="mt-2" nested items={media()}>
+                            <ListingSurface
+                                class="mt-2"
+                                nested
+                                estimatedRowHeight={MEDIA_ROW_HEIGHT}
+                                items={media()}
+                            >
                                 {(item, index) => (
                                     <MediaLink
                                         link={props.mediaLink(item)}
