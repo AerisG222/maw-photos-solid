@@ -44,6 +44,18 @@ export const useScrollContainer = () => useContext(ScrollContainerContext);
    Nothing drew at all. Held back until it is connected, it is taken up on the
    virtualiser's next look, when the listing mounts.
 */
+/*
+   Where the page is scrolled to, for a virtualiser to start from.
+
+   A virtualiser writes its idea of the scroll position to the page as it takes
+   up the scroller - and it only learns the real one from scroll events, so a
+   listing mounting part-way down a page wrote its default, the top. Browsing
+   every category's photos mounts a grid for each category as it scrolls into
+   view, and each one sent the page back to the top.
+*/
+export const currentScrollOffset = (scroller: () => HTMLElement | null) => () =>
+    scroller()?.scrollTop ?? 0;
+
 export const useScrollElement = () => {
     const scroller = useScrollContainer();
 

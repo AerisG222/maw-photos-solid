@@ -21,6 +21,7 @@ import CategoryFilterBar from "./components/CategoryFilterBar";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import ViewGrid from "../_media/ViewGrid";
+import { VisualEffectsProvider } from "../_media/contexts/VisualEffectsContext";
 
 const route = getRouteApi("/categories");
 
@@ -69,39 +70,49 @@ const Browse: Component = () => {
             .flatMap(year => byYear[year] ?? []);
     });
 
+    /*
+       The adjustments a photo can be given - rotation, flips, filters - live
+       in a context every media area gets from MediaRoot, its route's frame.
+       This listing is not a media route, so the photo opened over it brings
+       its own.
+    */
     return (
-        <ViewGrid
-            mediaService={mediaService}
-            slideshowService={slideshowService}
-            toolbarLeading={<CategoriesNav />}
-            toolbarLeadingNavCount={CATEGORIES_NAV_COUNT}
-            toolbarExtras={
-                <>
-                    <BrowseToggle />
-                    <CategoryStepButtons stepper={stepper()} />
-                </>
-            }
-            showBreadcrumbsOnGrid={false}
-            showBreadcrumbsOnMedia={true}
-            listing={
-                <AsyncBoundary
-                    error={loadError()}
-                    onRetry={retryLoad}
-                    errorTitle="Could not load categories"
-                    when={categoriesToDisplay()}
-                    skeleton={<SkeletonGrid />}
-                >
-                    <CategoryFilterBar />
+        <VisualEffectsProvider>
+            <ViewGrid
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                toolbarLeading={<CategoriesNav />}
+                toolbarLeadingNavCount={CATEGORIES_NAV_COUNT}
+                toolbarExtras={
+                    <>
+                        <BrowseToggle />
+                        <CategoryStepButtons stepper={stepper()} />
+                    </>
+                }
+                showBreadcrumbsOnGrid={false}
+                showBreadcrumbsOnMedia={true}
+                listing={
+                    <AsyncBoundary
+                        error={loadError()}
+                        onRetry={retryLoad}
+                        errorTitle="Could not load categories"
+                        when={categoriesToDisplay()}
+                        skeleton={<SkeletonGrid />}
+                    >
+                        <CategoryFilterBar />
 
-                    <BrowseListing
-                        categories={categories()}
-                        mediaLink={media => mediaService.getMediaLinkByView(MediaViewGrid, media)}
-                        setIsFavorite={favoriteSetter(setIsFavoriteMutation)}
-                        onStepper={setStepper}
-                    />
-                </AsyncBoundary>
-            }
-        />
+                        <BrowseListing
+                            categories={categories()}
+                            mediaLink={media =>
+                                mediaService.getMediaLinkByView(MediaViewGrid, media)
+                            }
+                            setIsFavorite={favoriteSetter(setIsFavoriteMutation)}
+                            onStepper={setStepper}
+                        />
+                    </AsyncBoundary>
+                }
+            />
+        </VisualEffectsProvider>
     );
 };
 

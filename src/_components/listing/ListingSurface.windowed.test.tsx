@@ -85,4 +85,27 @@ describe("a listing on a page", () => {
         expect(drawn).toBeGreaterThan(0);
         expect(drawn).toBeLessThan(items.length);
     });
+
+    /*
+       Before its width is measured a listing cannot know how many fit across.
+       It used to draw everything for that first frame and window it after -
+       every photo of a large category made, and its image requested, only to
+       be thrown away.
+    */
+    test("draws nothing until it knows its width, rather than everything", () => {
+        const items = Array.from({ length: 200 }, (_, i) => `item-${i}`);
+
+        render(() => (
+            <FullscreenProvider>
+                <Layout>
+                    <ListingSurface items={items}>
+                        {item => <div data-testid="tile">{item}</div>}
+                    </ListingSurface>
+                </Layout>
+            </FullscreenProvider>
+        ));
+
+        // the fake observer reports sizes a microtask from now
+        expect(screen.queryAllByTestId("tile")).toHaveLength(0);
+    });
 });

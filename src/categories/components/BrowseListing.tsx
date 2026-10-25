@@ -5,6 +5,7 @@ import { createVirtualizer } from "@tanstack/solid-virtual";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import {
+    currentScrollOffset,
     useScrollContainer,
     useScrollElement
 } from "../../_components/layout/ScrollContainerContext";
@@ -16,7 +17,12 @@ import BrowseSection from "./BrowseSection";
 
 // a header and a row or two, before a category's photos have been counted
 const ESTIMATED_SECTION_HEIGHT = 320;
-const OVERSCAN_SECTIONS = 2;
+/*
+   One either side. A category drawn off screen still asks for its photos, so
+   the overscan is how far ahead of the reader the requests run - and with each
+   category's photos windowed, one is enough to scroll into without a gap.
+*/
+const OVERSCAN_SECTIONS = 1;
 
 interface Props {
     // in the order the grid lists them: newest year first, each year as listed
@@ -66,6 +72,7 @@ const BrowseListing: Component<Props> = props => {
         // measurements belong to a category, not a position, so a filter change keeps them
         getItemKey: index => props.categories[index]?.id ?? index,
         getScrollElement: scrollElement,
+        initialOffset: currentScrollOffset(scrollElement),
         estimateSize: () => ESTIMATED_SECTION_HEIGHT,
         overscan: OVERSCAN_SECTIONS
     });
@@ -73,8 +80,17 @@ const BrowseListing: Component<Props> = props => {
     // how far the page is scrolled, as a signal - the virtualiser's own is not one
     const [offset, setOffset] = createSignal(0);
 
+    /*
+       The scroller itself, not as the virtualiser is handed it. That one is
+       held back until the element is in the page, and whether it is in the
+       page is not something this effect can be told about - so asked here, it
+       answered "none" once and was never asked again. The listener was never
+       added, the offset stayed at the top, and the category steppers thought
+       the reader never moved: next went to the second category every time,
+       and previous had nowhere to go. Listening needs no window.
+    */
     createEffect(() => {
-        const scroller = scrollElement();
+        const scroller = scrollContainer?.();
 
         if (!scroller) {
             return;
@@ -148,7 +164,7 @@ const BrowseListing: Component<Props> = props => {
                                 <BrowseSection
                                     category={category}
                                     showYear={isFirstOfYear(virtualRow.index)}
-                                    eager={virtualRow.index < 2}
+                                    eager={virtualRow.index === 0}
                                     mediaLink={props.mediaLink}
                                     setIsFavorite={props.setIsFavorite}
                                 />

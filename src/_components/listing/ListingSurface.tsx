@@ -1,7 +1,11 @@
 import { For, JSX, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 
-import { useScrollContainer, useScrollElement } from "../layout/ScrollContainerContext";
+import {
+    currentScrollOffset,
+    useScrollContainer,
+    useScrollElement
+} from "../layout/ScrollContainerContext";
 import { chunkIntoRows, columnsFor } from "./_rows";
 import { createScrollMargin } from "./_scrollMargin";
 
@@ -25,6 +29,14 @@ interface Props<T> {
     itemWidth?: number;
     // the entrance animation, which a skeleton or a nested picker does not want
     animate?: boolean;
+    /*
+       Inside another windowed listing - each category's photos while browsing
+       them all. A virtualiser shifts the page when something above the screen
+       turns out a different size than it guessed; the outer listing already
+       does that for the whole category, so this one doing it as well moved the
+       page twice for the one change.
+    */
+    nested?: boolean;
     class?: string;
 }
 
@@ -70,19 +82,30 @@ const ListingSurface = <T,>(props: Props<T>) => {
             return scrollMargin();
         },
         getScrollElement: scrollElement,
+        initialOffset: currentScrollOffset(scrollElement),
+        // read once: a listing does not move in or out of another, and left unset the
+        // virtualiser keeps its own rule rather than one written here to match it
+        // eslint-disable-next-line solid/reactivity
+        ...(props.nested ? { shouldAdjustScrollPositionOnItemSizeChange: () => false } : {}),
         estimateSize: () => ESTIMATED_ROW_HEIGHT,
         overscan: OVERSCAN_ROWS
     });
 
     /*
-       Everything, when there is nothing to scroll inside.
+       Everything, when there is nothing to scroll inside, or no way to measure.
 
        No `Layout` above means no scroll container to measure against - which is
-       every test that renders a listing on its own, and the pickers inside
-       dialogs. Drawing the lot is what this did before and is right for a
-       handful of items.
+       every test that renders a listing on its own. And jsdom has no
+       ResizeObserver, so a page rendered in a test would never learn its width.
+       Drawing the lot is what this did before and is right for a handful of
+       items.
+
+       Not while the width is still on its way, though. That used to draw
+       everything for the first frame and only then window it - every photo of
+       a large category, every image fetching, before most were thrown away.
+       The rows wait for the width instead.
     */
-    const isVirtual = () => !!scrollContainer?.() && width() > 0;
+    const isVirtual = () => !!scrollContainer?.() && typeof ResizeObserver !== "undefined";
 
     createEffect(() => {
         /*
@@ -116,7 +139,8 @@ const ListingSurface = <T,>(props: Props<T>) => {
                 }
             >
                 <div class="relative w-full" style={{ height: `${virtualizer.getTotalSize()}px` }}>
-                    <For each={virtualizer.getVirtualItems()}>
+                    {/* until the width is in, how many fit across is unknown - see isVirtual */}
+                    <For each={width() > 0 ? virtualizer.getVirtualItems() : []}>
                         {virtualRow => (
                             <div
                                 /*
