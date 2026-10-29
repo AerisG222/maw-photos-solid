@@ -47,8 +47,26 @@ export abstract class BaseMediaService {
         );
     };
 
-    navigateToMedia = (view: MediaView, media: Media) => {
-        this.goTo(this.getMediaLinkByView(view, media));
+    /*
+       Stepping from one photo to another replaces the entry instead of adding
+       one, so Back leaves the photos rather than walking back through each of
+       them - a slideshow used to leave one entry per slide. Opening a photo, or
+       closing it, is still a step of its own.
+
+       `replace` is for the views that pick a photo by themselves - the map
+       selecting its first - which is not somewhere the user went.
+    */
+    navigateToMedia = (
+        view: MediaView,
+        media: Media | undefined,
+        options?: { replace?: boolean }
+    ) => {
+        const stepping = !!media && !!this.params().mediaSlug;
+
+        this.goTo(
+            this.getMediaLinkByView(view, media),
+            stepping || options?.replace ? { replace: true, state: true } : undefined
+        );
     };
 
     getCurrIndex = (list: Media[], currId: Uuid) => list?.findIndex(x => x.id === currId);

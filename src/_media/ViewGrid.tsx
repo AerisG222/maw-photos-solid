@@ -7,7 +7,7 @@ import {
     onMount,
     Show
 } from "solid-js";
-import { Link } from "@tanstack/solid-router";
+import { Link, useRouter } from "@tanstack/solid-router";
 import { useGoTo } from "./services/_navigation";
 import { createElementSize, createWindowSize } from "@solid-primitives/resize-observer";
 
@@ -24,6 +24,7 @@ import { escapeAction } from "./_escape";
 import MediaToolbar from "./MediaToolbar";
 import Toolbar from "./Toolbar";
 import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
+import StickyCategoryHeader from "../_components/categories/StickyCategoryHeader";
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
@@ -82,6 +83,7 @@ const ViewGrid: Component<Props> = props => {
     const [absoluteDivStyle, setAbsoluteDivStyle] = createSignal({});
     const [fullscreen, { setFullscreen }] = useFullscreenContext();
     const goTo = useGoTo();
+    const router = useRouter();
 
     const activeMedia = () => props.mediaService.getActiveMedia();
 
@@ -110,9 +112,21 @@ const ViewGrid: Component<Props> = props => {
 
     // Escape backs out one layer at a time - the order lives in `_escape`
 
+    /*
+       Back to the listing the photo was opened from, when it was - the photo and
+       every neighbor stepped to since share that one entry, so going back is
+       closing it, and leaves nothing behind for Back to unwind. A photo arrived
+       at any other way - a link, a reload - has no listing behind it, and is
+       replaced by the grid instead.
+    */
     const closeActiveMedia = () => {
         props.slideshowService.stop();
-        goTo(props.mediaService.getEntryLinkByView(MediaViewGrid));
+
+        if (router.state.location.state.openedFromListing) {
+            router.history.back();
+        } else {
+            goTo(props.mediaService.getEntryLinkByView(MediaViewGrid), { replace: true });
+        }
     };
 
     onMount(() => {
@@ -244,7 +258,22 @@ const ViewGrid: Component<Props> = props => {
                         <Link
                             {...props.mediaService.getEntryLinkByView(MediaViewGrid)}
                             class="flex flex-1 min-h-0"
-                            onClick={() => props.slideshowService.stop()}
+                            // still a link, for the address it shows and a
+                            // middle click; a plain click closes as Escape does
+                            onClick={evt => {
+                                if (
+                                    evt.button !== 0 ||
+                                    evt.metaKey ||
+                                    evt.ctrlKey ||
+                                    evt.shiftKey ||
+                                    evt.altKey
+                                ) {
+                                    return;
+                                }
+
+                                evt.preventDefault();
+                                closeActiveMedia();
+                            }}
                         >
                             <MainItem
                                 media={props.mediaService.getActiveMedia()!}
@@ -279,7 +308,7 @@ const ViewGrid: Component<Props> = props => {
 
                 <div ref={sizeDiv}>
                     <Show when={props.showBreadcrumbsOnGrid}>
-                        <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+                        <StickyCategoryHeader category={props.mediaService.getActiveCategory()} />
                     </Show>
 
                     <Show

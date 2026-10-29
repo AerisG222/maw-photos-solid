@@ -17,7 +17,24 @@ export interface MediaParams {
 */
 export const useMediaParams = (): Accessor<MediaParams> => useParams({ strict: false });
 
-export type GoTo = (link: LinkOptions, options?: { replace?: boolean }) => void;
+/*
+   Set on the history entry a photo is opened into from a listing, and carried
+   along as it steps to its neighbors - each step replaces the entry rather than
+   adding one. Closing the photo can then go back to the listing it came from
+   instead of piling another entry on top, so Back leaves the listing rather
+   than unwinding every photo that was looked at.
+*/
+declare module "@tanstack/history" {
+    interface HistoryState {
+        openedFromListing?: boolean;
+    }
+}
+
+export type GoTo = (
+    link: LinkOptions,
+    // `state: true` keeps the current entry's state - see HistoryState above
+    options?: { replace?: boolean; state?: true }
+) => void;
 
 /*
    Navigate by typed link, where going where you already are does nothing.
@@ -41,7 +58,11 @@ export const useGoTo = (): GoTo => {
             return;
         }
 
-        void navigate({ ...link, replace: options?.replace } as Parameters<typeof navigate>[0]);
+        void navigate({
+            ...link,
+            replace: options?.replace,
+            ...(options?.state ? { state: options.state } : {})
+        } as Parameters<typeof navigate>[0]);
     };
 };
 

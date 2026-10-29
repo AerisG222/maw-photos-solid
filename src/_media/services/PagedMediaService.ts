@@ -36,13 +36,9 @@ export abstract class PagedMediaService<TPage> extends BaseMediaService {
     // the media one page carries
     protected abstract pageMedia(page: TPage): Media[];
 
-    override navigateToMedia = (view: MediaView, media: Media | undefined) => {
-        this.goTo(this.getMediaLinkByView(view, media));
-    };
-
     navigateToViewIfMediaNotInList = () => {
         if (!this.getActiveMedia()) {
-            this.navigateToMedia(this.view, undefined);
+            this.navigateToMedia(this.view, undefined, { replace: true });
         }
     };
 
@@ -51,7 +47,7 @@ export abstract class PagedMediaService<TPage> extends BaseMediaService {
             const first = this.getMediaList()[0];
 
             if (first) {
-                this.navigateToMedia(this.view, first);
+                this.navigateToMedia(this.view, first, { replace: true });
             }
         }
     };

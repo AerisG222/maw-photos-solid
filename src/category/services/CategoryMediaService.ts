@@ -29,7 +29,7 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         const first = this.getMediaList()[0];
 
         if (!this.params().mediaSlug && first) {
-            this.navigateToMedia(this.view, first);
+            this.navigateToMedia(this.view, first, { replace: true });
         }
     };
 

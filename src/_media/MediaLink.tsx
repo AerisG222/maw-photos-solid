@@ -26,7 +26,8 @@ const MediaLink: Component<Props> = props => {
 
     return (
         <Tile
-            link={props.link}
+            // marked, so closing the photo can go back here - see HistoryState
+            link={{ ...props.link, state: { openedFromListing: true } }}
             src={getMediaTeaserUrl(props.media)}
             eager={props.eager}
             badges={{

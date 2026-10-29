@@ -46,3 +46,43 @@ describe("an empty list of media", () => {
         expect(goTo).not.toHaveBeenCalled();
     });
 });
+
+/*
+   Stepping between photos replaces the history entry, keeping its state, so
+   Back leaves the photos instead of walking back through each one. Opening the
+   first photo from the listing is still a step of its own.
+*/
+describe("moving between media", () => {
+    const media = ["one", "two"].map(
+        slug => ({ id: slug, slug, categoryYear: 2007, categorySlug: "a-category" }) as Media
+    );
+
+    const build = (mediaSlug?: string) => {
+        const goTo = vi.fn();
+        const service = new CategoryMediaService(
+            goTo,
+            () => ({ categoryYear: "2007", categorySlug: "a-category", mediaSlug }),
+            MediaViewGrid,
+            succeeded<Category | undefined>(undefined),
+            succeeded<Media[]>(media)
+        );
+
+        return { service, goTo };
+    };
+
+    test("replaces the entry when a photo is already open", () => {
+        const { service, goTo } = build("one");
+
+        service.moveNext();
+
+        expect(goTo).toHaveBeenCalledWith(expect.anything(), { replace: true, state: true });
+    });
+
+    test("adds an entry when opening the first photo from the listing", () => {
+        const { service, goTo } = build();
+
+        service.moveNext();
+
+        expect(goTo).toHaveBeenCalledWith(expect.anything(), undefined);
+    });
+});

@@ -23,7 +23,7 @@ import { AdminRole, excludesAdmin } from "./access/_restriction";
 
 import Toolbar from "./Toolbar";
 import Layout from "../_components/layout/Layout";
-import CategoryBreadcrumb from "../_components/categories/CategoryBreadcrumb";
+import StickyCategoryHeader from "../_components/categories/StickyCategoryHeader";
 import BulkEditSidebar from "./bulk-edit/BulkEditSidebar";
 import { BulkEditFilter } from "./bulk-edit/BulkEditFilterCard";
 import ConfirmDialog from "../_components/overlay/ConfirmDialog";
@@ -628,7 +628,7 @@ const ViewBulkEdit: Component<Props> = props => {
                     />
                 }
             >
-                <CategoryBreadcrumb category={props.mediaService.getActiveCategory()} />
+                <StickyCategoryHeader category={props.mediaService.getActiveCategory()} />
 
                 <div ref={grid} class="listing-flow mb-4">
                     <For each={mediaToShow()}>
@@ -636,7 +636,8 @@ const ViewBulkEdit: Component<Props> = props => {
                             <div
                                 data-media-id={m.id}
                                 aria-current={isMarked(m.id) ? "true" : undefined}
-                                class="border-1 cursor-pointer text-center rounded-sm"
+                                // clear of the sticky header when a Missing GPS step scrolls up to it
+                                class="border-1 cursor-pointer text-center rounded-sm scroll-mt-10"
                                 classList={{
                                     // where a Missing GPS button stepped to - dashed, unlike a selection; a problem's outline wins
                                     "outline-2 outline-dashed outline-offset-2 outline-info":

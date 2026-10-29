@@ -30,7 +30,7 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
             const first = this.mediaWithGps()[0];
 
             if (first) {
-                this.navigateToMedia(this.view, first.media);
+                this.navigateToMedia(this.view, first.media, { replace: true });
             }
         }
     };
