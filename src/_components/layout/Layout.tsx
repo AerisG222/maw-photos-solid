@@ -3,6 +3,7 @@ import { JSXElement, ParentComponent, Show, children, createSignal, mergeProps }
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { ScrollContainerProvider } from "./ScrollContainerContext";
 import { createScrollRestoration } from "./_scrollRestore";
+import StickyHeader from "./StickyHeader";
 
 interface Props {
     xPad?: boolean;
@@ -93,10 +94,15 @@ const Layout: ParentComponent<Props> = props => {
             >
                 <div classList={{ stage: !!props.margin, "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
-                        <h1 class="head1">{props.title}</h1>
+                        <StickyHeader>
+                            <h1 class="head1">{props.title}</h1>
+                        </StickyHeader>
                     </Show>
 
-                    {header()}
+                    {/* the place chain, which is the way back up and can wrap */}
+                    <Show when={header()}>
+                        <StickyHeader fromMd>{header()}</StickyHeader>
+                    </Show>
 
                     {/*
                         The content is read here, not resolved up front like the

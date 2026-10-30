@@ -1,16 +1,16 @@
 import { Component } from "solid-js";
 
+import StickyHeader from "../../_components/layout/StickyHeader";
+
 interface Props {
     year: number;
 }
 
-const YearHeading: Component<Props> = props => {
-    return (
-        <>
-            <h2 class="head3 mb-0 mt-3">{props.year}</h2>
-            <div class="divider mt-[-.5rem] mb-1" />
-        </>
-    );
-};
+// needs a box of its own, shared with that year's categories - see StickyHeader
+const YearHeading: Component<Props> = props => (
+    <StickyHeader>
+        <h2 class="head3 m-0">{props.year}</h2>
+    </StickyHeader>
+);
 
 export default YearHeading;

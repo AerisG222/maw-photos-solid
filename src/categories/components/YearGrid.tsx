@@ -19,7 +19,7 @@ const YearGrid: Component<Props> = props => {
     const rowHeight = useCategoryRowHeight();
 
     return (
-        <>
+        <section class="pt-2">
             <YearHeading year={props.year} />
 
             {/*
@@ -44,7 +44,7 @@ const YearGrid: Component<Props> = props => {
                     />
                 )}
             </ListingSurface>
-        </>
+        </section>
     );
 };
 

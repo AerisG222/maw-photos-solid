@@ -12,7 +12,7 @@ interface Props {
 */
 const PersonFilterBar: Component<Props> = props => {
     return (
-        <div class="flex flex-row justify-center my-4">
+        <div class="flex flex-row justify-center my-1">
             <input
                 type="text"
                 placeholder="Filter by Name"

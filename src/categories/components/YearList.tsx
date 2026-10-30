@@ -15,7 +15,7 @@ interface Props {
 
 const YearList: Component<Props> = props => {
     return (
-        <>
+        <section class="pt-2">
             <YearHeading year={props.year} />
 
             {/* entrance on the group, not each row - see the note in YearGrid */}
@@ -30,7 +30,7 @@ const YearList: Component<Props> = props => {
                     )}
                 </For>
             </div>
-        </>
+        </section>
     );
 };
 

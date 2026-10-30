@@ -16,6 +16,7 @@ import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import ClanSection from "./components/ClanSection";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Layout from "../_components/layout/Layout";
+import StickyHeader from "../_components/layout/StickyHeader";
 import PersonCard from "./components/PersonCard";
 import PersonFilterBar from "./components/PersonFilterBar";
 import SelectionBar from "./components/SelectionBar";
@@ -218,31 +219,37 @@ const GridView: Component = () => {
                 isEmpty={people.data?.length === 0}
                 empty={<EmptyLibrary />}
             >
-                <Show
-                    when={isPicking()}
-                    fallback={
-                        <ClanSection
-                            clans={clans}
-                            onCreate={startCreate}
-                            onEditMembers={startEditMembers}
-                            onRename={startRename}
-                            onDelete={setDeleting}
-                        />
-                    }
-                >
-                    <SelectionBar
-                        title={pickingTitle()}
-                        selectedCount={selected().size}
-                        submitLabel={picking().kind === "create" ? "Name Clan" : "Save People"}
-                        canSubmit={picking().kind !== "create" || selected().size > 0}
-                        pending={setClanPersonsMutation.isPending}
-                        onSubmit={submitPicking}
-                        onClear={() => setSelected(new Set<Uuid>())}
-                        onCancel={stopPicking}
+                <Show when={!isPicking()}>
+                    <ClanSection
+                        clans={clans}
+                        onCreate={startCreate}
+                        onEditMembers={startEditMembers}
+                        onRename={startRename}
+                        onDelete={setDeleting}
                     />
                 </Show>
 
-                <PersonFilterBar filter={filter()} setFilter={setFilter} />
+                {/*
+                    Together, so the two do not land on the same spot: finding
+                    somebody by name matters most while picking people for a clan,
+                    which is when the count and the way out have to stay too.
+                */}
+                <StickyHeader>
+                    <Show when={isPicking()}>
+                        <SelectionBar
+                            title={pickingTitle()}
+                            selectedCount={selected().size}
+                            submitLabel={picking().kind === "create" ? "Name Clan" : "Save People"}
+                            canSubmit={picking().kind !== "create" || selected().size > 0}
+                            pending={setClanPersonsMutation.isPending}
+                            onSubmit={submitPicking}
+                            onClear={() => setSelected(new Set<Uuid>())}
+                            onCancel={stopPicking}
+                        />
+                    </Show>
+
+                    <PersonFilterBar filter={filter()} setFilter={setFilter} />
+                </StickyHeader>
 
                 <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
                     <ListingSurface

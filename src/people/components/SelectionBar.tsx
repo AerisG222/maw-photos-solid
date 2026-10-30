@@ -19,14 +19,14 @@ interface Props {
 }
 
 /*
-   Pinned while people are being picked, so the count and the way out stay in
-   reach however far down the face grid the user has scrolled.
+   The count and the way out while people are being picked - pinned by the page,
+   along with the name filter, however far down the face grid the user has gone.
 */
 const SelectionBar: Component<Props> = props => {
     const overLimit = () => props.selectedCount > ClanRules.maxMembers;
 
     return (
-        <div class="sticky top-0 z-20 chrome-glass border-b border-base-content/20 py-2 px-3 mb-2">
+        <div class="chrome-glass border-b border-base-content/20 py-2 px-3 mb-2">
             <div class="flex flex-row flex-wrap items-center justify-center gap-3">
                 <span class="font-bold">{props.title}</span>
 

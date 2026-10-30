@@ -56,9 +56,7 @@ const SearchPage: Component<Props> = props => {
                 </Toolbar>
             }
         >
-            <div class="mt-4">
-                <SearchBar />
-            </div>
+            <SearchBar />
 
             {/*
                 the toolbar and search bar stay put so the term can be retried or

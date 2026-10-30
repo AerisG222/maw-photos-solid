@@ -17,6 +17,7 @@ import ErrorMessage from "../_components/error/ErrorMessage";
 import EmptyState from "../_components/state/EmptyState";
 import Layout from "../_components/layout/Layout";
 import PlaceCard from "./components/PlaceCard";
+import StickyHeader from "../_components/layout/StickyHeader";
 import PlaceChain from "./components/PlaceChain";
 import PlaceCoverDialog from "./components/PlaceCoverDialog";
 import PlaceMergeDialog from "./components/PlaceMergeDialog";
@@ -232,8 +233,11 @@ const Browse: Component = () => {
                 <h1 class="head1">Places</h1>
             </Show>
 
+            {/* the way back up the tree, wherever the listing has got to - and it can wrap */}
             <Show when={placeId()}>
-                <PlaceChain links={chain()} link={treeLink} />
+                <StickyHeader fromMd>
+                    <PlaceChain links={chain()} link={treeLink} />
+                </StickyHeader>
             </Show>
 
             {/*
