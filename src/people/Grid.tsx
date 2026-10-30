@@ -1,5 +1,6 @@
 import { Component, createMemo, createSignal, Show } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
+import { personRowHeight } from "../_components/listing/_rows";
 
 import { useClansContext } from "../_contexts/api/ClansContext";
 import { usePeopleContext } from "../_contexts/api/PeopleContext";
@@ -22,6 +23,10 @@ import EmptyState from "../_components/state/EmptyState";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Toolbar from "./components/Toolbar";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
+import { ThumbnailSizeDefault, getThumbnailSize } from "../_models/ThumbnailSize";
+
+// a face crop is square, as wide as a thumbnail - see personRowHeight
+const THUMBNAIL_WIDTH = getThumbnailSize(ThumbnailSizeDefault).width;
 
 /*
    What the face grid is currently being used for. Picking people is a mode
@@ -240,7 +245,12 @@ const GridView: Component = () => {
                 <PersonFilterBar filter={filter()} setFilter={setFilter} />
 
                 <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
-                    <ListingSurface animate class="mb-4" items={peopleToDisplay()}>
+                    <ListingSurface
+                        animate
+                        class="mb-4"
+                        estimatedRowHeight={personRowHeight(THUMBNAIL_WIDTH, listing.showLabels)}
+                        items={peopleToDisplay()}
+                    >
                         {(person, index) => (
                             <PersonCard
                                 person={person}

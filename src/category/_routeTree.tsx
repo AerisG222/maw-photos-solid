@@ -1,4 +1,4 @@
-import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-router";
+import { createRoute, lazyRouteComponent, linkOptions, redirect } from "@tanstack/solid-router";
 
 import { accountStatusQueryOptions } from "../_contexts/api/_configQueries";
 import {
@@ -11,6 +11,8 @@ import { RouterContext, rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { prefetch } from "../_router/prefetch";
 import { redirectToGrid } from "../_media/_legacyViews";
+import { loadMediaSettings } from "../_contexts/settings/_migrate";
+import { MediaView, MediaViewBulkEdit, MediaViewMap } from "../_models/MediaView";
 
 /*
    The category area, on TanStack Router's own typed routes rather than through
@@ -52,10 +54,24 @@ export const categoryRoute = createRoute({
     component: lazyRouteComponent(() => import("../_media/MediaRoot"))
 });
 
+/*
+   A category opens in whichever view was used last. A `beforeLoad`, so nothing
+   renders on the way through. This was a component that mounted and then
+   navigated, which put a blank page between the listing and the category - and
+   the View Transition into the category then started from that blank page, so
+   the toolbar faded in from nothing on every visit.
+
+   Hovering a card preloads through this too, so it warms the view itself.
+*/
 const categoryIndexRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "/",
-    component: lazyRouteComponent(() => import("./Redirect"))
+    beforeLoad: ({ params }) => {
+        throw redirect({
+            ...categoryViewLink(loadMediaSettings().view, params.categoryYear, params.categorySlug),
+            replace: true
+        });
+    }
 });
 
 export const categoryGridRoute = createRoute({
@@ -115,6 +131,38 @@ export const categoryBulkEditRoute = createRoute({
     },
     component: lazyRouteComponent(() => import("./BulkEdit"))
 });
+
+/*
+   A view of a category, optionally open on one of its photos - typed, so a
+   view that does not exist, or a category address missing its year, fails to
+   compile. Bulk edit works on the whole category, so it takes no photo.
+*/
+export const categoryViewLink = (
+    view: MediaView,
+    categoryYear: string,
+    categorySlug: string,
+    mediaSlug?: string
+) => {
+    const params = { categoryYear, categorySlug, mediaSlug };
+
+    switch (view) {
+        case MediaViewMap:
+            return linkOptions({
+                to: categoryMapRoute.to,
+                params
+            });
+        case MediaViewBulkEdit:
+            return linkOptions({
+                to: categoryBulkEditRoute.to,
+                params: { categoryYear, categorySlug }
+            });
+        default:
+            return linkOptions({
+                to: categoryGridRoute.to,
+                params
+            });
+    }
+};
 
 export const categoryRouteTree = categoryRoute.addChildren([
     categoryIndexRoute,

@@ -7,6 +7,7 @@ import { placeLink } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedCategories } from "./useFeedCategories";
 
+import { useCategoryRowHeight } from "../../_components/categories/useCategoryRowHeight";
 import CategoryCard from "../../_components/categories/CategoryCard";
 import EmptyClanMessage from "./EmptyClanMessage";
 import AsyncBoundary from "../../_components/state/AsyncBoundary";
@@ -28,6 +29,7 @@ const Categories: Component = () => {
     const feed = useFeedCategories();
     const { setIsFavoriteMutation } = useCategoriesContext();
     const chain = usePlaceChain(feed.placeId);
+    const rowHeight = useCategoryRowHeight();
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
@@ -79,7 +81,12 @@ const Categories: Component = () => {
                         />
                     }
                 >
-                    <ListingSurface animate class="mb-4" items={feed.categories()}>
+                    <ListingSurface
+                        animate
+                        class="mb-4"
+                        estimatedRowHeight={rowHeight()}
+                        items={feed.categories()}
+                    >
                         {(category, index) => (
                             <CategoryCard
                                 category={category}

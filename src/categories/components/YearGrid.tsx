@@ -5,6 +5,7 @@ import { Category } from "../../_models/Category";
 import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 
 import CategoryCard from "../../_components/categories/CategoryCard";
+import { useCategoryRowHeight } from "../../_components/categories/useCategoryRowHeight";
 import YearHeading from "./YearHeading";
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const YearGrid: Component<Props> = props => {
+    const rowHeight = useCategoryRowHeight();
+
     return (
         <>
             <YearHeading year={props.year} />
@@ -27,7 +30,12 @@ const YearGrid: Component<Props> = props => {
                 container instance is keyed by year, so it survives the refetch
                 and animates only when the year first appears.
             */}
-            <ListingSurface animate class="mb-4" items={props.categories}>
+            <ListingSurface
+                animate
+                class="mb-4"
+                estimatedRowHeight={rowHeight()}
+                items={props.categories}
+            >
                 {(category, index) => (
                     <CategoryCard
                         category={category}

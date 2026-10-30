@@ -7,7 +7,8 @@ import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaView } from "../../_models/MediaView";
 import { IMediaService } from "../../_media/services/IMediaService";
-import { bulkEditView, categoryViewLink, gridView, mapView } from "../_routes";
+import { bulkEditView, gridView, mapView } from "../_routes";
+import { categoryViewLink } from "../_routeTree";
 
 export class CategoryMediaService extends BaseMediaService implements IMediaService {
     constructor(

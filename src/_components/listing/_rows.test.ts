@@ -1,6 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFAULT_ITEM_WIDTH, chunkIntoRows, columnsFor } from "./_rows";
+import {
+    DEFAULT_ITEM_WIDTH,
+    categoryRowHeight,
+    chunkIntoRows,
+    columnsFor,
+    mediaRowHeight,
+    personRowHeight
+} from "./_rows";
 
 /*
    The arithmetic behind the virtualised listing.
@@ -13,15 +20,25 @@ import { DEFAULT_ITEM_WIDTH, chunkIntoRows, columnsFor } from "./_rows";
 */
 describe("how many items fit across", () => {
     /*
-       Six items of 160 with five gaps of 8 is exactly 1000 - which is the whole
+       Six tiles of 162 with five gaps of 8 is exactly 1012 - which is the whole
        point of counting the gaps *between* items rather than after each one. A
        naive `width / (item + gap)` gives five and wastes a column.
     */
     test("counts the gaps between items, not after them", () => {
-        expect(columnsFor(1000)).toBe(6);
-        expect(columnsFor(999)).toBe(5);
+        expect(columnsFor(1012)).toBe(6);
+        expect(columnsFor(1011)).toBe(5);
         expect(columnsFor(DEFAULT_ITEM_WIDTH)).toBe(1);
         expect(columnsFor(DEFAULT_ITEM_WIDTH * 2 + 8)).toBe(2);
+    });
+
+    /*
+       A tile is its 160px picture and a 1px border either side. Counted as 160,
+       nine fit in 1504px on paper and needed 1522 - the ninth wrapped onto a
+       line of its own under every row.
+    */
+    test("counts each tile's border as part of its width", () => {
+        expect(columnsFor(1504)).toBe(8);
+        expect(columnsFor(9 * 162 + 8 * 8)).toBe(9);
     });
 
     // a container narrower than one tile still has to show it
@@ -68,5 +85,26 @@ describe("dividing a listing into rows", () => {
 
     test("an empty listing has no rows at all", () => {
         expect(chunkIntoRows([], 4)).toEqual([]);
+    });
+});
+
+/*
+   Exact, so a page restored to where it was scrolled lands on the same tiles:
+   the picture, a one-pixel border top and bottom, 24px per line of text, and
+   the 8px gap under the row.
+*/
+describe("how tall a row of tiles is", () => {
+    test("a photograph is the thumbnail alone", () => {
+        expect(mediaRowHeight(120)).toBe(130);
+    });
+
+    test("a category adds its year and its name, when labels are shown", () => {
+        expect(categoryRowHeight(120, true)).toBe(178);
+        expect(categoryRowHeight(120, false)).toBe(130);
+    });
+
+    test("a person is a square face and a name", () => {
+        expect(personRowHeight(160, true)).toBe(194);
+        expect(personRowHeight(160, false)).toBe(170);
     });
 });

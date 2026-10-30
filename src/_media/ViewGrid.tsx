@@ -28,6 +28,8 @@ import StickyCategoryHeader from "../_components/categories/StickyCategoryHeader
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
+import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Icon from "../_components/icon/Icon";
 import MainItem from "./MainItem";
 import { usePrefetchNeighbors } from "./usePrefetchNeighbors";
@@ -61,6 +63,16 @@ interface Props {
     */
     showBreadcrumbsOnGrid: boolean;
     showBreadcrumbsOnMedia: boolean;
+    /*
+       For a grid still on its way, or that never arrived. Answered in the
+       content area, so the toolbar and the Inspector are up from the first
+       frame - gating the whole Layout on loading meant the chrome vanished on
+       the way into every category and was drawn again when the photos landed.
+    */
+    isLoading?: boolean;
+    loadError?: unknown;
+    onRetry?: () => void;
+    errorTitle?: string;
 }
 
 const ViewGrid: Component<Props> = props => {
@@ -119,10 +131,25 @@ const ViewGrid: Component<Props> = props => {
        at any other way - a link, a reload - has no listing behind it, and is
        replaced by the grid instead.
     */
+    /*
+       Once per entry. A tap on a touch screen closes twice - the tap handler
+       clicks the photo for a video that swallows taps, and the browser clicks
+       it too - and going back twice left the listing as well as the photo.
+       Back has not landed by the second, so the entry says it is the same one.
+    */
+    let closedFrom: string | undefined;
+
     const closeActiveMedia = () => {
         props.slideshowService.stop();
 
-        if (router.state.location.state.openedFromListing) {
+        const location = router.state.location;
+
+        if (location.state.openedFromListing) {
+            if (closedFrom === location.state.__TSR_key) {
+                return;
+            }
+
+            closedFrom = location.state.__TSR_key;
             router.history.back();
         } else {
             goTo(props.mediaService.getEntryLinkByView(MediaViewGrid), { replace: true });
@@ -307,22 +334,32 @@ const ViewGrid: Component<Props> = props => {
                 </Show>
 
                 <div ref={sizeDiv}>
-                    <Show when={props.showBreadcrumbsOnGrid}>
-                        <StickyCategoryHeader category={props.mediaService.getActiveCategory()} />
-                    </Show>
-
-                    <Show
-                        when={props.mediaService.getMediaList().length > 0}
-                        fallback={props.emptyState}
+                    <AsyncBoundary
+                        error={props.loadError}
+                        onRetry={props.onRetry}
+                        errorTitle={props.errorTitle ?? "Could not load these photos"}
+                        when={!props.isLoading}
+                        skeleton={<SkeletonGrid />}
                     >
-                        <MediaGrid
-                            mediaLinkBuilder={(media: Media) =>
-                                props.mediaService.getMediaLinkByView(MediaViewGrid, media)
-                            }
-                            items={props.mediaService.getMediaList()}
-                            setIsFavorite={setIsFavorite}
-                        />
-                    </Show>
+                        <Show when={props.showBreadcrumbsOnGrid}>
+                            <StickyCategoryHeader
+                                category={props.mediaService.getActiveCategory()}
+                            />
+                        </Show>
+
+                        <Show
+                            when={props.mediaService.getMediaList().length > 0}
+                            fallback={props.emptyState}
+                        >
+                            <MediaGrid
+                                mediaLinkBuilder={(media: Media) =>
+                                    props.mediaService.getMediaLinkByView(MediaViewGrid, media)
+                                }
+                                items={props.mediaService.getMediaList()}
+                                setIsFavorite={setIsFavorite}
+                            />
+                        </Show>
+                    </AsyncBoundary>
                 </div>
             </Layout>
         </Show>

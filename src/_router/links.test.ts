@@ -6,7 +6,7 @@ import { routeTree } from "./routeTree";
 import { parseSearch, stringifySearch } from "./search";
 import { randomGridLink } from "../random/_routes";
 import { feedGridLink } from "../_media/feed/_routes";
-import { categoryViewLink } from "../category/_routes";
+import { categoryViewLink } from "../category/_routeTree";
 import { getAreas } from "../areas";
 import { Uuid } from "../_models/Uuid";
 

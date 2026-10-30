@@ -2,6 +2,7 @@ import { JSXElement, ParentComponent, Show, children, createSignal, mergeProps }
 
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { ScrollContainerProvider } from "./ScrollContainerContext";
+import { createScrollRestoration } from "./_scrollRestore";
 
 interface Props {
     xPad?: boolean;
@@ -34,7 +35,6 @@ interface Props {
 const Layout: ParentComponent<Props> = props => {
     const merged = mergeProps({ xPad: true }, props);
 
-    const content = children(() => props.children);
     const toolbar = children(() => props.toolbar);
     const sidebar = children(() => props.sidebar);
     const header = children(() => props.header);
@@ -51,6 +51,9 @@ const Layout: ParentComponent<Props> = props => {
 
     // handed to the listings inside, which need to know what is on screen
     const [scroller, setScroller] = createSignal<HTMLElement>();
+
+    // and remembers where it was scrolled to, for Back to come back to - see _scrollRestore
+    createScrollRestoration(scroller);
 
     return (
         <div
@@ -95,8 +98,15 @@ const Layout: ParentComponent<Props> = props => {
 
                     {header()}
 
+                    {/*
+                        The content is read here, not resolved up front like the
+                        other slots: a component finds a context by where it is
+                        made, and made above this provider, nothing inside could
+                        see the scroller. Every listing then fell back to drawing
+                        all of its items - none had ever been windowed.
+                    */}
                     <ScrollContainerProvider element={scroller}>
-                        {content()}
+                        {props.children}
                     </ScrollContainerProvider>
                 </div>
             </div>

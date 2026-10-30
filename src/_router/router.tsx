@@ -1,9 +1,9 @@
 import { createRouter, Outlet } from "@tanstack/solid-router";
 
-import { startRouteTransition } from "../_components/transitions/viewTransition";
 import { RouterContext, rootRoute } from "./rootRoute";
 import { routeTree } from "./routeTree";
 import { parseSearch, stringifySearch } from "./search";
+import { installNavigationLoopBreaker } from "./loopBreaker";
 
 import AppContext from "../_components/app-context/AppContext";
 import App from "../App";
@@ -37,11 +37,13 @@ export const createAppRouter = (context: RouterContext) => {
            how long each answer stays good - a second opinion held by the router
            would only skip preloads the cache would have answered for free.
         */
-        defaultPreloadStaleTime: 0,
-        defaultViewTransition: true
+        defaultPreloadStaleTime: 0
     });
 
-    router.startViewTransition = startRouteTransition;
+    // a loop reported rather than a frozen tab - see loopBreaker.ts
+    if (import.meta.env.DEV) {
+        installNavigationLoopBreaker(router);
+    }
 
     return router;
 };

@@ -98,9 +98,15 @@ const Tile: ParentComponent<Props> = props => {
         >
             {props.header}
 
-            {/* two by two, so a badge can be pinned to any corner of the picture */}
+            {/*
+                Two by two, so a badge can be pinned to any corner of the picture.
+                Filled like a skeleton tile, so a photo not here yet is a tile
+                waiting for it: with nothing behind it, the page showed through
+                every one, which on the way into a category read as the whole
+                screen flashing to the background color before the photos landed.
+            */}
             <div
-                class="inline-grid grid-cols-2 grid-rows-2 overflow-hidden"
+                class="inline-grid grid-cols-2 grid-rows-2 overflow-hidden bg-base-200"
                 style={{ width: `${width()}px`, height: `${height()}px` }}
             >
                 <Show when={props.src} fallback={props.placeholder}>
@@ -152,7 +158,11 @@ const Tile: ParentComponent<Props> = props => {
             </div>
 
             <Show when={props.label}>
-                <div class="truncate px-1 text-center" style={{ "max-width": `${width()}px` }}>
+                {/* one line, of a fixed height - see TILE_TEXT_LINE */}
+                <div
+                    class="truncate px-1 text-center leading-6"
+                    style={{ "max-width": `${width()}px` }}
+                >
                     {props.label}
                 </div>
             </Show>

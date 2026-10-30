@@ -122,15 +122,9 @@ const MainItem: Component<Props> = props => {
                         // an object rather than a string: solid then diffs the two
                         // properties individually instead of rewriting cssText on
                         // every effect change.
-                        //
-                        // `view-transition-name` is what lets the browser recognize
-                        // the photograph in the grid and the photograph in fullscreen
-                        // as one thing and tween between them. Only ever one of these
-                        // is on screen at a time, which the name requires.
                         style={{
                             ...getTransformStyles(),
-                            ...getFilterStyles(),
-                            "view-transition-name": "active-media"
+                            ...getFilterStyles()
                         }}
                     >
                         <Switch>

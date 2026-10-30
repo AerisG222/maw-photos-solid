@@ -44,7 +44,9 @@ const CategoryCard: Component<Props> = props => {
             eager={props.eager}
             header={
                 <Show when={listing.showLabels}>
-                    <div class="text-center">{props.category.effectiveDate.getFullYear()}</div>
+                    <div class="text-center leading-6">
+                        {props.category.effectiveDate.getFullYear()}
+                    </div>
                 </Show>
             }
             label={<Show when={listing.showLabels}>{props.category.name}</Show>}

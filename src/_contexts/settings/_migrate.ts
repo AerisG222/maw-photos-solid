@@ -9,7 +9,7 @@ import {
     InspectorCardMinimap,
     InspectorCardPlaceCovers
 } from "../../_models/InspectorCard";
-import { MediaViewAll } from "../../_models/MediaView";
+import { MediaViewAll, defaultMediaView } from "../../_models/MediaView";
 import { ThemeDark, ThemeIdType, ThemeLight, ThemeSystem } from "../../_models/Theme";
 import {
     AppSettingsState,
@@ -232,4 +232,22 @@ export const loadMigrated = <T extends object>(key: string, def: T): T => {
     migrateSettings();
 
     return { ...def, ...loadJson<Partial<T>>(key, {}) };
+};
+
+/*
+   The media store as it stands, for the provider starting up and for a route
+   deciding where a category opens - which happens before any component exists.
+
+   A view that no longer exists falls back to the grid. The detail view was
+   deleted, and a reader whose saved view was "detail" would otherwise be sent to
+   a route that is now only a redirect - on every visit. Checked on load rather
+   than in the migration alone, because the migration runs once and somebody may
+   already have carried "detail" into the new store.
+*/
+export const loadMediaSettings = (): MediaSettingsState => {
+    const settings = loadMigrated(KEY_SETTINGS_V2_MEDIA, defaultMediaSettings);
+
+    return MediaViewAll.includes(settings.view)
+        ? settings
+        : { ...settings, view: defaultMediaView };
 };

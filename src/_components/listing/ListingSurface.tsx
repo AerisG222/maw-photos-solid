@@ -1,8 +1,13 @@
-import { For, JSX, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
+import { For, JSX, Show, createEffect, createMemo, createSignal, on, onCleanup } from "solid-js";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 
-import { useScrollContainer } from "../layout/ScrollContainerContext";
+import {
+    currentScrollOffset,
+    useScrollContainer,
+    useScrollElement
+} from "../layout/ScrollContainerContext";
 import { chunkIntoRows, columnsFor } from "./_rows";
+import { createScrollMargin } from "./_scrollMargin";
 
 /*
    Enough rows to cover a tall screen before anything is measured, and enough
@@ -22,6 +27,13 @@ interface Props<T> {
     children: (item: T, index: number) => JSX.Element;
     // the drawn width of one item - places use a wider card than everything else
     itemWidth?: number;
+    /*
+       How tall a row is expected to be before it is measured. A category card
+       carries a year and a name; a photo is the thumbnail alone - see
+       `mediaRowHeight`. The closer this is, the less a listing changes height
+       as it is drawn, and the less anything below it moves.
+    */
+    estimatedRowHeight?: number;
     // the entrance animation, which a skeleton or a nested picker does not want
     animate?: boolean;
     class?: string;
@@ -52,55 +64,75 @@ interface Props<T> {
    done for this, and paid for it anyway.
 */
 const ListingSurface = <T,>(props: Props<T>) => {
-    let container!: HTMLDivElement;
-
     const scrollContainer = useScrollContainer();
+    const scrollElement = useScrollElement();
     const [width, setWidth] = createSignal(0);
-    /*
-       How far down the scrolling content this listing starts.
-
-       The virtualiser measures the scroll offset from the top of the scroller,
-       and without being told otherwise takes the listing to start there too.
-       Nothing does: there is a filter bar and a heading above every one, and
-       with every year shown each year's grid sits below all the years before
-       it - so the later grids were drawing rows for a stretch of the page they
-       were nowhere near, and scrolling down to one found it mostly blank.
-    */
-    const [scrollMargin, setScrollMargin] = createSignal(0);
+    const [element, setElement] = createSignal<HTMLDivElement>();
+    const scrollMargin = createScrollMargin(element, () => scrollContainer?.());
 
     const columns = createMemo(() => columnsFor(width(), props.itemWidth));
-    const rows = createMemo(() => chunkIntoRows(props.items, columns()));
+    /*
+       No rows until the width is in. Before it, how many fit across is unknown,
+       and counting one to a row made a category of a hundred photographs a
+       hundred rows tall for a moment - a spike everything around it reacted to,
+       shifting the page while a jump to it was still landing.
+    */
+    const rows = createMemo(() => (width() > 0 ? chunkIntoRows(props.items, columns()) : []));
 
     const virtualizer = createVirtualizer({
         get count() {
             return rows().length;
         },
         get scrollMargin() {
-            return scrollMargin();
+            return scrollMargin() ?? 0;
         },
-        getScrollElement: () => scrollContainer?.() ?? null,
-        estimateSize: () => ESTIMATED_ROW_HEIGHT,
+        getScrollElement: scrollElement,
+        initialOffset: currentScrollOffset(scrollElement),
+        estimateSize: () => props.estimatedRowHeight ?? ESTIMATED_ROW_HEIGHT,
         overscan: OVERSCAN_ROWS
     });
 
     /*
-       Everything, when there is nothing to scroll inside.
+       Never moves the page. Left to itself, a virtualiser shifts the scroll
+       position when a row above the screen measures differently than it
+       guessed - and with a listing per year on one page, each correcting
+       for rows it had placed by a margin it did not know yet, while a
+       return to a position far down the page was putting it back, they
+       could fight each other over it - the likeliest cause of a tab that
+       froze on going Back to the categories listing. Rows are exact
+       now (see `tileRowHeight`), so there is nothing to correct; places,
+       still estimated, are one short listing to a page.
+    */
+    virtualizer.shouldAdjustScrollPositionOnItemSizeChange = () => false;
+
+    /*
+       A row the virtualiser has not drawn keeps the estimate it was first given,
+       so a new one - labels turned on or off - has to be handed over. Drawn rows
+       are measured again as they are drawn.
+    */
+    createEffect(
+        on(
+            () => props.estimatedRowHeight,
+            () => virtualizer.measure(),
+            { defer: true }
+        )
+    );
+
+    /*
+       Everything, when there is nothing to scroll inside, or no way to measure.
 
        No `Layout` above means no scroll container to measure against - which is
-       every test that renders a listing on its own, and the pickers inside
-       dialogs. Drawing the lot is what this did before and is right for a
-       handful of items.
+       every test that renders a listing on its own. And jsdom has no
+       ResizeObserver, so a page rendered in a test would never learn its width.
+       Drawing the lot is what this did before and is right for a handful of
+       items.
+
+       Not while the width is still on its way, though. That used to draw
+       everything for the first frame and only then window it - every photo of
+       a large category, every image fetching, before most were thrown away.
+       The rows wait for the width instead.
     */
-    const isVirtual = () => !!scrollContainer?.() && width() > 0;
-
-    const measureScrollMargin = (scroller: HTMLElement) => {
-        const offset =
-            container.getBoundingClientRect().top -
-            scroller.getBoundingClientRect().top +
-            scroller.scrollTop;
-
-        setScrollMargin(Math.max(0, Math.round(offset)));
-    };
+    const isVirtual = () => !!scrollContainer?.() && typeof ResizeObserver !== "undefined";
 
     createEffect(() => {
         /*
@@ -108,42 +140,33 @@ const ListingSurface = <T,>(props: Props<T>) => {
            throw: an unmeasured surface reports no width, which falls through to
            drawing everything - the same answer it gives inside a dialog.
         */
-        if (typeof ResizeObserver === "undefined") {
+        const container = element();
+
+        if (!container || typeof ResizeObserver === "undefined") {
             return;
         }
 
-        const scroller = scrollContainer?.();
+        /*
+           Read now, where it can be: a listing mounting on a page already drawn
+           - a category scrolled back into view - knows its width at once, and
+           its rows go down with it rather than a frame later.
+        */
+        const known = container.getBoundingClientRect().width;
+
+        if (known > 0) {
+            setWidth(known);
+        }
 
         const observer = new ResizeObserver(entries => {
-            const resized = entries.find(entry => entry.target === container);
-
-            if (scroller) {
-                measureScrollMargin(scroller);
-            }
-
-            if (resized) {
-                setWidth(resized.contentRect.width);
-            }
+            setWidth(entries[0]?.contentRect.width ?? 0);
         });
 
         observer.observe(container);
-
-        /*
-           The scroller's content as well, which changes height whenever
-           anything above this listing does - an earlier year's grid arriving,
-           a filter bar wrapping - and moves where this one starts.
-        */
-        const content = scroller?.firstElementChild;
-
-        if (content) {
-            observer.observe(content);
-        }
-
         onCleanup(() => observer.disconnect());
     });
 
     return (
-        <div ref={container} class={props.class} classList={{ "rise-in": !!props.animate }}>
+        <div ref={setElement} class={props.class} classList={{ "rise-in": !!props.animate }}>
             <Show
                 when={isVirtual()}
                 fallback={
@@ -154,7 +177,20 @@ const ListingSurface = <T,>(props: Props<T>) => {
                 }
             >
                 <div class="relative w-full" style={{ height: `${virtualizer.getTotalSize()}px` }}>
-                    <For each={virtualizer.getVirtualItems()}>
+                    {/*
+                        Until the width is in, how many fit across is unknown -
+                        see isVirtual - and until the margin is, where the rows
+                        belong: see createScrollMargin. The height above does
+                        not wait, being the rows counted at their exact height,
+                        so the page is laid out right before a row is drawn.
+                    */}
+                    <For
+                        each={
+                            width() > 0 && scrollMargin() !== undefined
+                                ? virtualizer.getVirtualItems()
+                                : []
+                        }
+                    >
                         {virtualRow => (
                             <div
                                 /*
@@ -167,10 +203,18 @@ const ListingSurface = <T,>(props: Props<T>) => {
                                     queueMicrotask(() => virtualizer.measureElement(element))
                                 }
                                 data-index={virtualRow.index}
-                                class="listing-flow absolute top-0 left-0 w-full"
+                                /*
+                                   The space below each row is padding of its
+                                   own. Wrapped in one box, the flow's gap set
+                                   the rows apart; drawn as separate rows, one
+                                   placed directly under the last, nothing did.
+                                   Padding is measured with the row, so the
+                                   virtualiser places the next one after it.
+                                */
+                                class="listing-flow absolute top-0 left-0 w-full pb-2"
                                 // `start` counts from the top of the scroller; the row is placed within this listing
                                 style={{
-                                    transform: `translateY(${virtualRow.start - scrollMargin()}px)`
+                                    transform: `translateY(${virtualRow.start - (scrollMargin() ?? 0)}px)`
                                 }}
                             >
                                 {/*
