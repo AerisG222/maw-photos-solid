@@ -3,6 +3,7 @@ import { JSXElement, ParentComponent, Show, children, createSignal, mergeProps }
 import { useFullscreenContext } from "../../_contexts/FullscreenContext";
 import { ScrollContainerProvider } from "./ScrollContainerContext";
 import { createScrollRestoration } from "./_scrollRestore";
+import PageHeader from "./PageHeader";
 import StickyHeader from "./StickyHeader";
 
 interface Props {
@@ -94,9 +95,7 @@ const Layout: ParentComponent<Props> = props => {
             >
                 <div classList={{ stage: !!props.margin, "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
-                        <StickyHeader>
-                            <h1 class="head1">{props.title}</h1>
-                        </StickyHeader>
+                        <PageHeader title={props.title} />
                     </Show>
 
                     {/* the place chain, which is the way back up and can wrap */}

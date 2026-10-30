@@ -9,7 +9,7 @@ interface Props {
 // needs a box of its own, shared with that year's categories - see StickyHeader
 const YearHeading: Component<Props> = props => (
     <StickyHeader>
-        <h2 class="head3 m-0">{props.year}</h2>
+        <h2 class="head2 m-0">{props.year}</h2>
     </StickyHeader>
 );
 

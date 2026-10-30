@@ -2,7 +2,7 @@ import { Component, For, Show } from "solid-js";
 
 import { useSearchContext } from "../contexts/SearchContext";
 
-import StickyHeader from "../../_components/layout/StickyHeader";
+import PageHeader from "../../_components/layout/PageHeader";
 
 const SearchBar: Component = () => {
     const [
@@ -28,37 +28,40 @@ const SearchBar: Component = () => {
     return (
         <>
             {/* to change the term from however far down the results have gone */}
-            <StickyHeader>
-                <div class="flex flex-row justify-center">
-                    <input
-                        type="text"
-                        placeholder="Search Terms"
-                        class="input input-bordered input-md w-[400px]"
-                        value={searchContext.term}
-                        onKeyDown={keyDown}
-                        onInput={evt => setSearchTerm(evt.currentTarget.value)}
-                    />
+            <PageHeader
+                title="Search"
+                actions={
+                    <div class="flex flex-row max-w-full">
+                        <input
+                            type="text"
+                            placeholder="Search Terms"
+                            class="input input-bordered input-md w-80 max-w-full"
+                            value={searchContext.term}
+                            onKeyDown={keyDown}
+                            onInput={evt => setSearchTerm(evt.currentTarget.value)}
+                        />
 
-                    <button
-                        class="ml-3 btn btn-primary btn-outline hover:bg-primary hover:text-primary-content"
-                        title="Search"
-                        onClick={executeSearch}
-                    >
-                        <span class="icon-md icon-[ic--round-search]" />
-                    </button>
+                        <button
+                            class="ml-3 btn btn-primary btn-outline hover:bg-primary hover:text-primary-content"
+                            title="Search"
+                            onClick={executeSearch}
+                        >
+                            <span class="icon-md icon-[ic--round-search]" />
+                        </button>
 
-                    <button
-                        class="ml-3 btn btn-error btn-outline hover:bg-error hover:text-error-content"
-                        title="Cancel"
-                        onClick={() => {
-                            setSearchTerm("");
-                            setActiveTerm("");
-                        }}
-                    >
-                        <span class="icon-md icon-[ic--round-close]" />
-                    </button>
-                </div>
-            </StickyHeader>
+                        <button
+                            class="ml-3 btn btn-error btn-outline hover:bg-error hover:text-error-content"
+                            title="Cancel"
+                            onClick={() => {
+                                setSearchTerm("");
+                                setActiveTerm("");
+                            }}
+                        >
+                            <span class="icon-md icon-[ic--round-close]" />
+                        </button>
+                    </div>
+                }
+            />
 
             {/* only before a search: once results are showing, they are the answer */}
             <Show when={!searchContext.activeTerm && recentSearches().length > 0}>

@@ -28,6 +28,7 @@ const Grid: Component = () => {
             skeleton={<SkeletonGrid />}
         >
             <ViewGrid
+                title="Random"
                 mediaService={mediaService}
                 slideshowService={slideshowService}
                 showBreadcrumbsOnGrid={false}

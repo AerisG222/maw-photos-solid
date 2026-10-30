@@ -8,7 +8,7 @@ const RestrictedFilter: Component = () => {
     const [area, { setCategoryRestrictedFilter }] = useAreaSettingsContext();
 
     return (
-        <div class="mt-auto">
+        <div>
             <Checkbox
                 title="Restricted"
                 name="restricted"

@@ -6,6 +6,7 @@ import Toolbar from "./components/Toolbar";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
+import PageHeader from "../_components/layout/PageHeader";
 import SkeletonList from "../_components/loading/SkeletonList";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
@@ -20,6 +21,9 @@ const ListView: Component = () => {
         // Layout wraps every state so the backdrop and toolbar are constant -
         // see the note in Grid.tsx
         <Layout margin toolbar={<Toolbar />}>
+            {/* outside the boundary: the name and the filters do not wait for the data */}
+            <PageHeader title="Categories" pinned={false} actions={<CategoryFilterBar />} />
+
             {/*
                 error is checked first: a failed year query also leaves
                 categoriesToDisplay undefined, which would otherwise skeleton forever
@@ -31,8 +35,6 @@ const ListView: Component = () => {
                 when={categoriesToDisplay()}
                 skeleton={<SkeletonList />}
             >
-                <CategoryFilterBar />
-
                 <For
                     each={Object.keys(categoriesToDisplay()!)
                         .map(x => parseInt(x, 10))

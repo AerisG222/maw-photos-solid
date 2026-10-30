@@ -11,7 +11,7 @@ const MissingGpsFilter: Component = () => {
     };
 
     return (
-        <div class="mt-auto">
+        <div>
             <Checkbox
                 title="Missing GPS"
                 name="missing_gps"

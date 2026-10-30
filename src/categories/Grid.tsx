@@ -7,6 +7,7 @@ import GridToolbar from "./components/ToolbarGrid";
 import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
 import Layout from "../_components/layout/Layout";
+import PageHeader from "../_components/layout/PageHeader";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
@@ -35,6 +36,9 @@ const GridView: Component = () => {
                 </Toolbar>
             }
         >
+            {/* outside the boundary: the name and the filters do not wait for the data */}
+            <PageHeader title="Categories" pinned={false} actions={<CategoryFilterBar />} />
+
             <AsyncBoundary
                 error={loadError()}
                 onRetry={retryLoad}
@@ -42,8 +46,6 @@ const GridView: Component = () => {
                 when={categoriesToDisplay()}
                 skeleton={<SkeletonGrid />}
             >
-                <CategoryFilterBar />
-
                 <For
                     each={Object.keys(categoriesToDisplay()!)
                         .map(x => parseInt(x, 10))

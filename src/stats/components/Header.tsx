@@ -3,7 +3,7 @@ import { Link } from "@tanstack/solid-router";
 
 import { StatsSearch } from "../_search";
 
-import Icon from "../../_components/icon/Icon";
+import PageHeader from "../../_components/layout/PageHeader";
 import { statsSummaryRoute } from "../_routeTree";
 
 interface Props {
@@ -12,24 +12,24 @@ interface Props {
     search?: StatsSearch;
 }
 
-const Header: Component<Props> = props => {
-    return (
-        <>
-            <div class="flex text-secondary font-bold">
-                <Show when={props.year} fallback={<h3>Stats</h3>}>
-                    <Link
-                        class="text-primary"
-                        to={statsSummaryRoute.to}
-                        search={props.search ?? {}}
-                    >
-                        Stats
-                    </Link>
-                    <Icon classes="text-lg icon-[ic--round-keyboard-arrow-right]" />
-                    <h3>{props.year}</h3>
-                </Show>
-            </div>
-        </>
-    );
-};
+// in a page that fills the screen and does not scroll, so there is nothing to stick to
+const Header: Component<Props> = props => (
+    <PageHeader
+        pinned={false}
+        title={
+            <Show when={props.year} fallback="Stats">
+                <Link
+                    class="text-secondary hover:underline"
+                    to={statsSummaryRoute.to}
+                    search={props.search ?? {}}
+                >
+                    Stats
+                </Link>
+                <span class="mx-1 align-middle opacity-60 icon-[ic--round-chevron-right]" />
+                {props.year}
+            </Show>
+        }
+    />
+);
 
 export default Header;

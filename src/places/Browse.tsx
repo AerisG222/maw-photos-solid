@@ -17,6 +17,7 @@ import ErrorMessage from "../_components/error/ErrorMessage";
 import EmptyState from "../_components/state/EmptyState";
 import Layout from "../_components/layout/Layout";
 import PlaceCard from "./components/PlaceCard";
+import PageHeader from "../_components/layout/PageHeader";
 import StickyHeader from "../_components/layout/StickyHeader";
 import PlaceChain from "./components/PlaceChain";
 import PlaceCoverDialog from "./components/PlaceCoverDialog";
@@ -212,6 +213,7 @@ const Browse: Component = () => {
 
     return (
         <Layout
+            margin
             toolbar={
                 <Toolbar
                     placeId={placeId()}
@@ -230,7 +232,17 @@ const Browse: Component = () => {
                 above it would be a second answer to a question already answered.
             */}
             <Show when={!placeId()}>
-                <h1 class="head1">Places</h1>
+                <PageHeader
+                    title="Places"
+                    actions={
+                        <PlaceSearchBar
+                            search={search()}
+                            kind={kind()}
+                            onSearch={setSearch}
+                            onKind={setKind}
+                        />
+                    }
+                />
             </Show>
 
             {/* the way back up the tree, wherever the listing has got to - and it can wrap */}
@@ -254,7 +266,17 @@ const Browse: Component = () => {
                 />
             </Show>
 
-            <PlaceSearchBar search={search()} kind={kind()} onSearch={setSearch} onKind={setKind} />
+            {/* below the chain, which can run the width of the page on its own */}
+            <Show when={placeId()}>
+                <div class="my-2 flex justify-end">
+                    <PlaceSearchBar
+                        search={search()}
+                        kind={kind()}
+                        onSearch={setSearch}
+                        onKind={setKind}
+                    />
+                </div>
+            </Show>
 
             <Show when={showsChildren()}>
                 {/*

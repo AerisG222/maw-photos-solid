@@ -55,6 +55,7 @@ const YearFilter: Component = () => {
     return (
         <Show when={years.isSuccess}>
             <Select
+                inline
                 title="Year"
                 itemArray={toKvp(years.data!)}
                 selectedValue={area.categoryYearFilter ?? "all"}

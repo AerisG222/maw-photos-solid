@@ -37,11 +37,11 @@ const PlaceSearchBar: Component<Props> = props => {
     };
 
     return (
-        <div class="flex flex-wrap items-center justify-center gap-2 my-4">
+        <div class="flex flex-wrap items-center gap-2">
             <input
                 type="text"
                 placeholder="Find a Place"
-                class="input input-bordered input-md w-80"
+                class="input input-bordered input-md w-80 max-w-full"
                 value={term()}
                 onInput={evt => setTerm(evt.currentTarget.value)}
                 onKeyDown={evt => {
@@ -64,7 +64,7 @@ const PlaceSearchBar: Component<Props> = props => {
             </button>
 
             <select
-                class="select select-bordered"
+                class="select select-bordered w-auto"
                 value={props.kind ?? ""}
                 onChange={evt =>
                     props.onKind((evt.currentTarget.value || undefined) as PlaceKind | undefined)

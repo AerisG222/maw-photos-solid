@@ -60,7 +60,7 @@ const ClanSection: Component<Props> = props => {
 
     return (
         <div class="mb-4">
-            <div class="flex flex-row items-center justify-center gap-3 my-2">
+            <div class="flex flex-row items-center gap-3 my-2">
                 <h2 class="head2 m-0">Clans</h2>
 
                 <button class="btn btn-sm btn-primary btn-outline" onClick={() => props.onCreate()}>
@@ -104,7 +104,7 @@ const ClanSection: Component<Props> = props => {
 };
 
 const EmptyClans: Component = () => (
-    <p class="text-center text-sm text-muted">
+    <p class="text-sm text-muted">
         Group the people you look for together - say "the kids" - and they are one click away.
     </p>
 );
