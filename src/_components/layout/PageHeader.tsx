@@ -30,7 +30,9 @@ const PageHeader: ParentComponent<Props> = props => {
                 <h1 class="head1 m-0">{props.title}</h1>
 
                 <Show when={actions()}>
-                    <div class="flex flex-wrap items-center gap-x-6 gap-y-1">{actions()}</div>
+                    <div class="flex max-w-full flex-wrap items-center gap-x-6 gap-y-1">
+                        {actions()}
+                    </div>
                 </Show>
             </div>
 

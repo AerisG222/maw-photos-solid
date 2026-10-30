@@ -20,16 +20,6 @@ interface Props {
        never both: they answer the same question.
     */
     header?: JSXElement;
-    /*
-       Cap how wide the content runs.
-
-       A flag rather than a value. It was a value once - seven listing screens
-       each read a margin from their own settings store and handed it down, all
-       seven deriving it from the same density - and then a density step, and
-       now simply one width. What was never uniform is *which* screens want it:
-       a listing breathes, a settings form does not.
-    */
-    margin?: boolean;
     toolbar?: JSXElement;
     sidebar?: JSXElement;
 }
@@ -93,7 +83,7 @@ const Layout: ParentComponent<Props> = props => {
                     "h-full min-h-0 overflow-hidden": !!merged.fill
                 }}
             >
-                <div classList={{ stage: !!props.margin, "h-full": !!merged.fill }}>
+                <div classList={{ "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
                         <PageHeader title={props.title} />
                     </Show>

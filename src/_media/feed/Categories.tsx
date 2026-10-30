@@ -35,7 +35,6 @@ const Categories: Component = () => {
 
     return (
         <Layout
-            margin
             // see the note in the media listing: a place names itself in its chain
             title={feed.isPlace() ? undefined : feed.subjectName()}
             header={

@@ -213,7 +213,6 @@ const Browse: Component = () => {
 
     return (
         <Layout
-            margin
             toolbar={
                 <Toolbar
                     placeId={placeId()}

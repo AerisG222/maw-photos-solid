@@ -29,7 +29,6 @@ const GridView: Component = () => {
            show while the categories are still on their way.
         */
         <Layout
-            margin
             toolbar={
                 <Toolbar>
                     <GridToolbar />

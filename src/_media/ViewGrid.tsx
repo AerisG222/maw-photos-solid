@@ -228,7 +228,6 @@ const ViewGrid: Component<Props> = props => {
     return (
         <Show when={props.mediaService.getMediaList()}>
             <Layout
-                margin
                 title={props.title}
                 header={props.header}
                 toolbar={

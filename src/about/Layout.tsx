@@ -10,9 +10,7 @@ const AboutLayout: Component = () => {
         <Layout toolbar={<Toolbar />}>
             <BrandHeader showVersion />
 
-            <div class="mx-4 md:mx-10%">
-                <Outlet />
-            </div>
+            <Outlet />
         </Layout>
     );
 };

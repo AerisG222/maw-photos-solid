@@ -46,7 +46,6 @@ const SearchPage: Component<Props> = props => {
 
     return (
         <Layout
-            margin
             toolbar={
                 <Toolbar
                     canRequestMore={searchQuery.hasNextPage}

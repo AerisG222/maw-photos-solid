@@ -35,7 +35,7 @@ const SearchBar: Component = () => {
                         <input
                             type="text"
                             placeholder="Search Terms"
-                            class="input input-bordered input-md w-80 max-w-full"
+                            class="input input-bordered input-md w-80 min-w-0 max-w-full"
                             value={searchContext.term}
                             onKeyDown={keyDown}
                             onInput={evt => setSearchTerm(evt.currentTarget.value)}

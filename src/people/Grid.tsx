@@ -210,7 +210,7 @@ const GridView: Component = () => {
            categories grid: it owns the backdrop and toolbar, and both are driven
            by settings alone, so they are safe to show while the list is in flight.
         */
-        <Layout margin toolbar={<Toolbar />}>
+        <Layout toolbar={<Toolbar />}>
             <PageHeader
                 title="People"
                 actions={<PersonFilterBar filter={filter()} setFilter={setFilter} />}

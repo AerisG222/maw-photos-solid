@@ -20,7 +20,7 @@ const ListView: Component = () => {
     return (
         // Layout wraps every state so the backdrop and toolbar are constant -
         // see the note in Grid.tsx
-        <Layout margin toolbar={<Toolbar />}>
+        <Layout toolbar={<Toolbar />}>
             {/* outside the boundary: the name and the filters do not wait for the data */}
             <PageHeader title="Categories" pinned={false} actions={<CategoryFilterBar />} />
 
