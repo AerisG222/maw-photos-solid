@@ -2,6 +2,7 @@ import { Component, For, Show } from "solid-js";
 
 import { useSearchContext } from "../contexts/SearchContext";
 
+import SearchField from "../../_components/input/SearchField";
 import PageHeader from "../../_components/layout/PageHeader";
 
 const SearchBar: Component = () => {
@@ -19,47 +20,23 @@ const SearchBar: Component = () => {
         setActiveTerm(term);
     };
 
-    const keyDown = (evt: KeyboardEvent) => {
-        if (evt.key === "Enter") {
-            executeSearch();
-        }
-    };
-
     return (
         <>
             {/* to change the term from however far down the results have gone */}
             <PageHeader
                 title="Search"
                 actions={
-                    <div class="flex flex-row max-w-full">
-                        <input
-                            type="text"
-                            placeholder="Search Terms"
-                            class="input input-bordered input-md w-80 min-w-0 max-w-full"
-                            value={searchContext.term}
-                            onKeyDown={keyDown}
-                            onInput={evt => setSearchTerm(evt.currentTarget.value)}
-                        />
-
-                        <button
-                            class="ml-3 btn btn-primary btn-outline hover:bg-primary hover:text-primary-content"
-                            title="Search"
-                            onClick={executeSearch}
-                        >
-                            <span class="icon-md icon-[ic--round-search]" />
-                        </button>
-
-                        <button
-                            class="ml-3 btn btn-error btn-outline hover:bg-error hover:text-error-content"
-                            title="Cancel"
-                            onClick={() => {
-                                setSearchTerm("");
-                                setActiveTerm("");
-                            }}
-                        >
-                            <span class="icon-md icon-[ic--round-close]" />
-                        </button>
-                    </div>
+                    <SearchField
+                        placeholder="Search Categories"
+                        value={searchContext.term}
+                        canClear={!!searchContext.term || !!searchContext.activeTerm}
+                        onInput={setSearchTerm}
+                        onClear={() => {
+                            setSearchTerm("");
+                            setActiveTerm("");
+                        }}
+                        onSubmit={executeSearch}
+                    />
                 }
             />
 

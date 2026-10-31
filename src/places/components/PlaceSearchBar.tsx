@@ -1,6 +1,9 @@
-import { Component, For, createEffect, createSignal } from "solid-js";
+import { Component, createEffect, createSignal } from "solid-js";
 
 import { allPlaceKinds, PlaceKind } from "../../_models/Place";
+
+import SearchField from "../../_components/input/SearchField";
+import Select from "../../_components/input/Select";
 
 interface Props {
     search: string;
@@ -37,44 +40,23 @@ const PlaceSearchBar: Component<Props> = props => {
     };
 
     return (
-        <div class="flex flex-wrap items-center gap-2">
-            <input
-                type="text"
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 max-w-full">
+            <SearchField
                 placeholder="Find a Place"
-                class="input input-bordered input-md w-80 max-w-full"
                 value={term()}
-                onInput={evt => setTerm(evt.currentTarget.value)}
-                onKeyDown={evt => {
-                    if (evt.key === "Enter") {
-                        submit();
-                    }
-                }}
+                canClear={!!term() || !!props.search}
+                onInput={setTerm}
+                onClear={clear}
+                onSubmit={submit}
             />
 
-            <button class="btn btn-primary btn-outline" title="Search" onClick={submit}>
-                <span class="icon-md icon-[ic--round-search]" />
-            </button>
-
-            <button
-                class="btn btn-error btn-outline hover:bg-error hover:text-error-content"
-                title="Clear"
-                onClick={clear}
-            >
-                <span class="icon-md icon-[ic--round-close]" />
-            </button>
-
-            <select
-                class="select select-bordered w-auto"
-                value={props.kind ?? ""}
-                onChange={evt =>
-                    props.onKind((evt.currentTarget.value || undefined) as PlaceKind | undefined)
-                }
-            >
-                <option value="">All Kinds</option>
-                <For each={allPlaceKinds}>
-                    {kind => <option value={kind.id}>{kind.name}</option>}
-                </For>
-            </select>
+            <Select
+                inline
+                title="Kind"
+                itemArray={[{ id: "", name: "All Kinds" }, ...allPlaceKinds]}
+                selectedValue={props.kind ?? ""}
+                onChange={value => props.onKind((value || undefined) as PlaceKind | undefined)}
+            />
         </div>
     );
 };

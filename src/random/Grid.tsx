@@ -4,8 +4,6 @@ import { MediaViewGrid } from "../_models/MediaView";
 import { useRandomServices } from "./hooks/useRandomService";
 
 import ViewGrid from "../_media/ViewGrid";
-import AsyncBoundary from "../_components/state/AsyncBoundary";
-import SkeletonGrid from "../_components/loading/SkeletonGrid";
 
 const Grid: Component = () => {
     const { mediaService, slideshowService, isLoading, loadError, retryLoad } =
@@ -20,21 +18,17 @@ const Grid: Component = () => {
     });
 
     return (
-        <AsyncBoundary
-            error={loadError()}
+        <ViewGrid
+            title="Random"
+            mediaService={mediaService}
+            slideshowService={slideshowService}
+            showBreadcrumbsOnGrid={false}
+            showBreadcrumbsOnMedia={true}
+            isLoading={isLoading()}
+            loadError={loadError()}
             onRetry={retryLoad}
             errorTitle="Could not load random media"
-            when={!isLoading()}
-            skeleton={<SkeletonGrid />}
-        >
-            <ViewGrid
-                title="Random"
-                mediaService={mediaService}
-                slideshowService={slideshowService}
-                showBreadcrumbsOnGrid={false}
-                showBreadcrumbsOnMedia={true}
-            />
-        </AsyncBoundary>
+        />
     );
 };
 

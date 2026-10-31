@@ -301,6 +301,29 @@ html {
     }
 
     /*
+       Checkboxes and radios, told apart and readable.
+
+       `--radius-selector` rounds both, and the toggle that wants it, so a
+       checkbox was a circle beside the radio it was meant to differ from. And
+       daisyUI draws their borders and labels faint, which read as disabled: the
+       "Missing GPS" filter looked unavailable right up until it was clicked.
+       Set through the variables daisyUI reads them from: its own rules win over
+       anything stated directly here.
+    */
+    .checkbox {
+        --radius-selector: var(--radius-field);
+    }
+
+    .checkbox,
+    .radio {
+        --input-color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+    }
+
+    .label-text {
+        color: var(--color-base-content);
+    }
+
+    /*
        Secondary text: a caption, an ancestry line, a media count.
 
        A color rather than `opacity-70` over the body color, which is what

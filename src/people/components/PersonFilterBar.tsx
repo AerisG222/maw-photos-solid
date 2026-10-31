@@ -1,5 +1,7 @@
 import { Component } from "solid-js";
 
+import SearchField from "../../_components/input/SearchField";
+
 interface Props {
     filter: string;
     setFilter: (filter: string) => void;
@@ -10,26 +12,14 @@ interface Props {
    arrives in one request precisely so a name can be narrowed down without a
    round trip per keystroke.
 */
-const PersonFilterBar: Component<Props> = props => {
-    return (
-        <div class="flex flex-row max-w-full">
-            <input
-                type="text"
-                placeholder="Filter by Name"
-                class="input input-bordered input-md w-80 max-w-full"
-                value={props.filter}
-                onInput={evt => props.setFilter(evt.currentTarget.value)}
-            />
-
-            <button
-                class="ml-3 btn btn-error btn-outline hover:bg-error hover:text-error-content"
-                title="Clear"
-                onClick={() => props.setFilter("")}
-            >
-                <span class="icon-md icon-[ic--round-close]" />
-            </button>
-        </div>
-    );
-};
+const PersonFilterBar: Component<Props> = props => (
+    <SearchField
+        placeholder="Filter by Name"
+        value={props.filter}
+        canClear={!!props.filter}
+        onInput={props.setFilter}
+        onClear={() => props.setFilter("")}
+    />
+);
 
 export default PersonFilterBar;

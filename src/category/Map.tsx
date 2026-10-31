@@ -6,8 +6,6 @@ import { MediaViewMap } from "../_models/MediaView";
 import { useCategoryMapServices } from "./hooks/useCategoryMapServices";
 
 import ViewMap from "../_media/ViewMap";
-import AsyncBoundary from "../_components/state/AsyncBoundary";
-import Loading from "../_components/loading/Loading";
 
 const Map: Component = () => {
     const [media, { setMapType, setMapZoom, setMapShowPath }] = useMediaSettingsContext();
@@ -18,28 +16,23 @@ const Map: Component = () => {
     createEffect(() => mediaService.navigateToFirstMediaIfNeeded());
 
     return (
-        <AsyncBoundary
-            error={loadError()}
-            onRetry={retryLoad}
-            errorTitle="Could not load this category"
-            when={!isLoading()}
-            skeleton={<Loading />}
-        >
-            {/* a map takes its color scheme only when made, so a new theme means a new map */}
-            <Show when={resolvedTheme()} keyed>
-                {theme => (
-                    <ViewMap
-                        mediaService={mediaService}
-                        slideshowService={slideshowService}
-                        mapState={media}
-                        theme={theme}
-                        setMapType={setMapType}
-                        setZoom={setMapZoom}
-                        setShowPath={setMapShowPath}
-                    />
-                )}
-            </Show>
-        </AsyncBoundary>
+        // a map takes its color scheme only when made, so a new theme means a new map
+        <Show when={resolvedTheme()} keyed>
+            {theme => (
+                <ViewMap
+                    mediaService={mediaService}
+                    slideshowService={slideshowService}
+                    mapState={media}
+                    theme={theme}
+                    setMapType={setMapType}
+                    setZoom={setMapZoom}
+                    setShowPath={setMapShowPath}
+                    isLoading={isLoading()}
+                    loadError={loadError()}
+                    onRetry={retryLoad}
+                />
+            )}
+        </Show>
     );
 };
 

@@ -29,6 +29,8 @@ import { BulkEditFilter } from "./bulk-edit/BulkEditFilterCard";
 import ConfirmDialog from "../_components/overlay/ConfirmDialog";
 import Icon from "../_components/icon/Icon";
 import IconButton from "../_components/icon/IconButton";
+import AsyncBoundary from "../_components/state/AsyncBoundary";
+import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import BulkEditPreview from "./bulk-edit/BulkEditPreview";
 import { findMissingGps } from "./bulk-edit/_missingGps";
 import { usePanelShape } from "../_components/overlay/SidePanel";
@@ -51,6 +53,10 @@ interface SelectableMedia {
 
 interface Props {
     mediaService: IMapsMediaService;
+    // answered in the content area, so the toolbar and sidebar stay - see ViewGrid
+    isLoading?: boolean;
+    loadError?: unknown;
+    onRetry?: () => void;
 }
 
 const ViewBulkEdit: Component<Props> = props => {
@@ -572,7 +578,7 @@ const ViewBulkEdit: Component<Props> = props => {
 
     return (
         // admins only - the route refuses anybody else before this exists, see category/_routeTree.tsx
-        <Show when={props.mediaService.isReady() && docked()}>
+        <Show when={docked()}>
             <Layout
                 toolbar={
                     <Toolbar
@@ -628,109 +634,122 @@ const ViewBulkEdit: Component<Props> = props => {
                     />
                 }
             >
-                <StickyCategoryHeader category={props.mediaService.getActiveCategory()} />
+                <AsyncBoundary
+                    error={props.loadError}
+                    onRetry={props.onRetry}
+                    errorTitle="Could not load this category"
+                    when={!props.isLoading}
+                    skeleton={<SkeletonGrid />}
+                >
+                    <StickyCategoryHeader category={props.mediaService.getActiveCategory()} />
 
-                <div ref={grid} class="listing-flow mb-4">
-                    <For each={mediaToShow()}>
-                        {m => (
-                            <div
-                                data-media-id={m.id}
-                                aria-current={isMarked(m.id) ? "true" : undefined}
-                                // clear of the sticky header when a Missing GPS step scrolls up to it
-                                class="border-1 cursor-pointer text-center rounded-sm scroll-mt-10"
-                                classList={{
-                                    // where a Missing GPS button stepped to - dashed, unlike a selection; a problem's outline wins
-                                    "outline-2 outline-dashed outline-offset-2 outline-info":
-                                        isMarked(m.id) && !messagesByMedia().has(m.id),
-                                    /*
-                                       Short of the selected border on hover. Full
-                                       strength was the same color, so a photo just
-                                       deselected - still under the pointer - looked
-                                       as chosen as before until the pointer left.
-                                    */
-                                    "border-primary/40 hover:border-primary/70":
-                                        !m.isSelected && !messagesByMedia().has(m.id),
-                                    // chosen: what the next edit will change
-                                    "border-primary ring-1 ring-primary":
-                                        m.isSelected && !messagesByMedia().has(m.id),
-                                    "bg-primary/15": m.isSelected,
-                                    "border-error outline-2 outline-error": messagesByMedia().has(
-                                        m.id
-                                    )
-                                }}
-                                title={describeProblems(m.id) ?? describeRestriction(m.id)}
-                                // keep a shift-click from also selecting text across the grid
-                                onMouseDown={evt => evt.shiftKey && evt.preventDefault()}
-                                onClick={evt => onItemClick(m.id, evt)}
-                            >
-                                <div class="flex items-center justify-center gap-1">
-                                    <input
-                                        type="checkbox"
-                                        class="checkbox checkbox-sm my-1"
-                                        checked={m.isSelected}
-                                        // the click on the photo around it decides the state - left to
-                                        // itself the box would flip even when a shift-click range does not
-                                        onClick={evt => evt.preventDefault()}
-                                    />
-                                    <Show when={describeRestriction(m.id)}>
-                                        {description => (
-                                            <>
-                                                <Icon classes="icon-[ic--round-lock] text-warning" />
-                                                <span class="sr-only">{description()}</span>
-                                            </>
-                                        )}
-                                    </Show>
-                                </div>
-                                <Show
-                                    when={m.imageUrl && m.media}
-                                    fallback={
-                                        <div
-                                            class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
-                                            style={{
-                                                width: `${getThumbnailSize(ThumbnailSizeDefault).width}px`,
-                                                height: `${getThumbnailSize(ThumbnailSizeDefault).height}px`
-                                            }}
-                                        >
-                                            <Icon classes="icon-[ic--round-visibility-off] text-2xl" />
-                                            <span class="truncate max-w-full">{m.slug}</span>
-                                            <span>Hidden from you</span>
-                                        </div>
-                                    }
+                    <div ref={grid} class="listing-flow mb-4">
+                        <For each={mediaToShow()}>
+                            {m => (
+                                <div
+                                    data-media-id={m.id}
+                                    aria-current={isMarked(m.id) ? "true" : undefined}
+                                    // clear of the sticky header when a Missing GPS step scrolls up to it
+                                    class="border-1 cursor-pointer text-center rounded-sm scroll-mt-10"
+                                    classList={{
+                                        // where a Missing GPS button stepped to - dashed, unlike a selection; a problem's outline wins
+                                        "outline-2 outline-dashed outline-offset-2 outline-info":
+                                            isMarked(m.id) && !messagesByMedia().has(m.id),
+                                        /*
+                                           Short of the selected border on hover. Full
+                                           strength was the same color, so a photo just
+                                           deselected - still under the pointer - looked
+                                           as chosen as before until the pointer left.
+                                        */
+                                        "border-primary/40 hover:border-primary/70":
+                                            !m.isSelected && !messagesByMedia().has(m.id),
+                                        // chosen: what the next edit will change
+                                        "border-primary ring-1 ring-primary":
+                                            m.isSelected && !messagesByMedia().has(m.id),
+                                        "bg-primary/15": m.isSelected,
+                                        "border-error outline-2 outline-error":
+                                            messagesByMedia().has(m.id)
+                                    }}
+                                    title={describeProblems(m.id) ?? describeRestriction(m.id)}
+                                    // keep a shift-click from also selecting text across the grid
+                                    onMouseDown={evt => evt.shiftKey && evt.preventDefault()}
+                                    onClick={evt => onItemClick(m.id, evt)}
                                 >
-                                    {/* preview shows on hover, or when tabbed to; copy always shows, marking a photo with a location */}
-                                    <div class="relative group">
-                                        <img
-                                            src={m.imageUrl}
-                                            /* the checkbox beside it carries the meaning */
-                                            alt=""
-                                            class="rounded-b-sm"
-                                            width={getThumbnailSize(ThumbnailSizeDefault).width}
-                                            height={getThumbnailSize(ThumbnailSizeDefault).height}
+                                    <div class="flex items-center justify-center gap-1">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox checkbox-sm my-1"
+                                            checked={m.isSelected}
+                                            // the click on the photo around it decides the state - left to
+                                            // itself the box would flip even when a shift-click range does not
+                                            onClick={evt => evt.preventDefault()}
                                         />
-                                        <Show when={gpsById().get(m.id)}>
-                                            {gps => (
-                                                <IconButton
-                                                    label={copyLabel(m.id)}
-                                                    buttonClasses="btn-sm absolute bottom-1 left-1 bg-base-100/80"
-                                                    onClick={() => void copyLocation(m.id, gps())}
-                                                >
-                                                    <Icon classes={`${copyIcon(m.id)} text-base`} />
-                                                </IconButton>
+                                        <Show when={describeRestriction(m.id)}>
+                                            {description => (
+                                                <>
+                                                    <Icon classes="icon-[ic--round-lock] text-warning" />
+                                                    <span class="sr-only">{description()}</span>
+                                                </>
                                             )}
                                         </Show>
-                                        <IconButton
-                                            label="Preview"
-                                            buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-                                            onClick={() => setPreviewId(m.id)}
-                                        >
-                                            <Icon classes="icon-[ic--round-zoom-in] text-lg" />
-                                        </IconButton>
                                     </div>
-                                </Show>
-                            </div>
-                        )}
-                    </For>
-                </div>
+                                    <Show
+                                        when={m.imageUrl && m.media}
+                                        fallback={
+                                            <div
+                                                class="flex flex-col items-center justify-center gap-1 rounded-b-sm bg-base-200 text-base-content/60 text-xs px-1"
+                                                style={{
+                                                    width: `${getThumbnailSize(ThumbnailSizeDefault).width}px`,
+                                                    height: `${getThumbnailSize(ThumbnailSizeDefault).height}px`
+                                                }}
+                                            >
+                                                <Icon classes="icon-[ic--round-visibility-off] text-2xl" />
+                                                <span class="truncate max-w-full">{m.slug}</span>
+                                                <span>Hidden from you</span>
+                                            </div>
+                                        }
+                                    >
+                                        {/* preview shows on hover, or when tabbed to; copy always shows, marking a photo with a location */}
+                                        <div class="relative group">
+                                            <img
+                                                src={m.imageUrl}
+                                                /* the checkbox beside it carries the meaning */
+                                                alt=""
+                                                class="rounded-b-sm"
+                                                width={getThumbnailSize(ThumbnailSizeDefault).width}
+                                                height={
+                                                    getThumbnailSize(ThumbnailSizeDefault).height
+                                                }
+                                            />
+                                            <Show when={gpsById().get(m.id)}>
+                                                {gps => (
+                                                    <IconButton
+                                                        label={copyLabel(m.id)}
+                                                        buttonClasses="btn-sm absolute bottom-1 left-1 bg-base-100/80"
+                                                        onClick={() =>
+                                                            void copyLocation(m.id, gps())
+                                                        }
+                                                    >
+                                                        <Icon
+                                                            classes={`${copyIcon(m.id)} text-base`}
+                                                        />
+                                                    </IconButton>
+                                                )}
+                                            </Show>
+                                            <IconButton
+                                                label="Preview"
+                                                buttonClasses="btn-sm absolute bottom-1 right-1 bg-base-100/80 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                                                onClick={() => setPreviewId(m.id)}
+                                            >
+                                                <Icon classes="icon-[ic--round-zoom-in] text-lg" />
+                                            </IconButton>
+                                        </div>
+                                    </Show>
+                                </div>
+                            )}
+                        </For>
+                    </div>
+                </AsyncBoundary>
 
                 <BulkEditPreview
                     items={previewItems()}

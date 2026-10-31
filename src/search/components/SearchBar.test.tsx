@@ -46,13 +46,13 @@ const renderBar = () =>
     ));
 
 const search = (term: string) => {
-    const input = screen.getByPlaceholderText("Search Terms");
+    const input = screen.getByPlaceholderText("Search Categories");
 
     fireEvent.input(input, { target: { value: term } });
     fireEvent.keyDown(input, { key: "Enter" });
 };
 
-const cancel = () => fireEvent.click(screen.getByTitle("Cancel"));
+const cancel = () => fireEvent.click(screen.getByTitle("Clear"));
 
 const recentTerms = () => {
     const section = screen.queryByRole("region", { name: "Recent searches" });
@@ -100,7 +100,7 @@ test("choosing a recent term runs it again", () => {
     fireEvent.click(screen.getByRole("button", { name: "beach" }));
 
     expect(activeTerm()).toBe("beach");
-    expect(screen.getByPlaceholderText("Search Terms")).toHaveValue("beach");
+    expect(screen.getByPlaceholderText("Search Categories")).toHaveValue("beach");
     cancel();
     expect(recentTerms()).toEqual(["beach", "paris"]);
 });

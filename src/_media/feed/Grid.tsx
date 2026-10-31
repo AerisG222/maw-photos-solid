@@ -6,10 +6,8 @@ import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedServices } from "./useFeedServices";
 
 import EmptyClanMessage from "./EmptyClanMessage";
-import AsyncBoundary from "../../_components/state/AsyncBoundary";
 import EmptyState from "../../_components/state/EmptyState";
 import PlaceChain from "../../places/components/PlaceChain";
-import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarFilters from "./ToolbarFilters";
 import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewGrid from "../ViewGrid";
@@ -52,62 +50,58 @@ const Grid: Component = () => {
     // the empty check comes ahead of everything else: an empty clan answers 404 too
     return (
         <Show when={!subjectIsEmpty()} fallback={<EmptyClanMessage name={subjectName()} />}>
-            <AsyncBoundary
-                error={loadError()}
-                onRetry={retryLoad}
-                errorTitle={`Could not load media for this ${subjectKindName()}`}
-                when={!isLoading()}
-                skeleton={<SkeletonGrid />}
-            >
-                <ViewGrid
-                    mediaService={mediaService}
-                    slideshowService={slideshowService}
-                    /*
+            <ViewGrid
+                mediaService={mediaService}
+                slideshowService={slideshowService}
+                /*
                        A place names itself in its chain, so a title above it
                        would say the same thing twice. A person or a clan has no
                        chain and keeps the title.
                     */
-                    title={isPlace() ? undefined : subjectName()}
-                    header={
-                        <Show when={isPlace()}>
-                            <PlaceChain links={chain()} link={id => placeLink(id)} />
-                        </Show>
-                    }
-                    toolbarLeadingNavCount={LISTING_NAV_COUNT}
-                    toolbarLeading={
-                        <ToolbarListing
-                            subject={subject()}
-                            showingCategories={false}
-                            favoritesOnly={favoritesOnly()}
-                        />
-                    }
-                    toolbarExtras={
-                        <ToolbarFilters
-                            favoritesOnly={favoritesOnly()}
-                            isShuffled={isShuffled()}
-                            setFavoritesOnly={setFavoritesOnly}
-                            setShuffled={setShuffled}
-                        />
-                    }
-                    emptyState={
-                        <EmptyState
-                            icon="icon-[ic--round-photo-library]"
-                            title={
-                                favoritesOnly()
-                                    ? "No favorites here yet"
-                                    : "There is nothing to show here"
-                            }
-                            detail={
-                                favoritesOnly()
-                                    ? `None of the media ${mediaScope()} has been marked as a favorite.`
-                                    : undefined
-                            }
-                        />
-                    }
-                    showBreadcrumbsOnGrid={false}
-                    showBreadcrumbsOnMedia={true}
-                />
-            </AsyncBoundary>
+                title={isPlace() ? undefined : subjectName()}
+                header={
+                    <Show when={isPlace()}>
+                        <PlaceChain links={chain()} link={id => placeLink(id)} />
+                    </Show>
+                }
+                toolbarLeadingNavCount={LISTING_NAV_COUNT}
+                toolbarLeading={
+                    <ToolbarListing
+                        subject={subject()}
+                        showingCategories={false}
+                        favoritesOnly={favoritesOnly()}
+                    />
+                }
+                toolbarExtras={
+                    <ToolbarFilters
+                        favoritesOnly={favoritesOnly()}
+                        isShuffled={isShuffled()}
+                        setFavoritesOnly={setFavoritesOnly}
+                        setShuffled={setShuffled}
+                    />
+                }
+                emptyState={
+                    <EmptyState
+                        icon="icon-[ic--round-photo-library]"
+                        title={
+                            favoritesOnly()
+                                ? "No favorites here yet"
+                                : "There is nothing to show here"
+                        }
+                        detail={
+                            favoritesOnly()
+                                ? `None of the media ${mediaScope()} has been marked as a favorite.`
+                                : undefined
+                        }
+                    />
+                }
+                showBreadcrumbsOnGrid={false}
+                showBreadcrumbsOnMedia={true}
+                isLoading={isLoading()}
+                loadError={loadError()}
+                onRetry={retryLoad}
+                errorTitle={`Could not load media for this ${subjectKindName()}`}
+            />
         </Show>
     );
 };

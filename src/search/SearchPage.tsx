@@ -8,6 +8,7 @@ import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import EmptyState from "../_components/state/EmptyState";
 
 export type SetIsFavorite = (category: Category, isFavorite: boolean) => void;
 
@@ -68,6 +69,13 @@ const SearchPage: Component<Props> = props => {
                 errorTitle="Search could not be completed"
                 when={!state.activeTerm || searchQuery.isSuccess}
                 skeleton={props.skeleton}
+                isEmpty={!!state.activeTerm && allSearchResults(searchQuery).length === 0}
+                empty={
+                    <EmptyState
+                        icon="icon-[ic--round-search-off]"
+                        title="No categories match that search"
+                    />
+                }
             >
                 {props.results(() => allSearchResults(searchQuery), setIsFavorite)}
             </AsyncBoundary>

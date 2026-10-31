@@ -27,6 +27,8 @@ import Toolbar from "./Toolbar";
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import EmptyState from "../_components/state/EmptyState";
+import ErrorMessage from "../_components/error/ErrorMessage";
+import Loading from "../_components/loading/Loading";
 import MapMediaPreview from "./MapMediaPreview";
 import { usePrefetchNeighbors } from "./usePrefetchNeighbors";
 
@@ -47,6 +49,10 @@ interface Props {
     setMapType: (mapType: string) => void;
     setZoom: (zoom: number) => void;
     setShowPath: (showPath: boolean) => void;
+    // answered in the content area, so the toolbar and Inspector stay - see ViewGrid
+    isLoading?: boolean;
+    loadError?: unknown;
+    onRetry?: () => void;
 }
 
 const ViewMap: Component<Props> = props => {
@@ -708,47 +714,63 @@ const ViewMap: Component<Props> = props => {
     });
 
     return (
-        <Show when={props.mediaService.isReady()}>
-            <Layout
-                xPad={false}
-                toolbar={
-                    <Toolbar
-                        mediaService={props.mediaService}
-                        activeCategory={props.mediaService.getActiveCategory()}
-                        activeMedia={props.mediaService.getActiveMedia()}
-                    >
-                        <MediaToolbar
-                            view={MediaViewMap}
-                            mediaService={props.mediaService}
-                            slideshowService={props.slideshowService}
-                        />
-                    </Toolbar>
-                }
-                sidebar={
-                    <Inspector
+        <Layout
+            xPad={false}
+            toolbar={
+                <Toolbar
+                    mediaService={props.mediaService}
+                    activeCategory={props.mediaService.getActiveCategory()}
+                    activeMedia={props.mediaService.getActiveMedia()}
+                >
+                    <MediaToolbar
                         view={MediaViewMap}
-                        activeCategory={props.mediaService.getActiveCategory()}
-                        activeMedia={props.mediaService.getActiveMedia()}
-                        enableCategoryTeaser={props.mediaService.canChooseCategoryTeaser()}
-                        requestMoveNext={() => props.mediaService.moveNext()}
+                        mediaService={props.mediaService}
+                        slideshowService={props.slideshowService}
                     />
+                </Toolbar>
+            }
+            sidebar={
+                <Inspector
+                    view={MediaViewMap}
+                    activeCategory={props.mediaService.getActiveCategory()}
+                    activeMedia={props.mediaService.getActiveMedia()}
+                    enableCategoryTeaser={props.mediaService.canChooseCategoryTeaser()}
+                    requestMoveNext={() => props.mediaService.moveNext()}
+                />
+            }
+        >
+            <Show when={props.loadError}>
+                <ErrorMessage
+                    title="Could not load this category"
+                    error={props.loadError}
+                    onRetry={props.onRetry}
+                />
+            </Show>
+
+            <Show when={props.isLoading && !props.loadError}>
+                <Loading />
+            </Show>
+
+            <Show
+                when={
+                    props.mediaService.isReady() && props.mediaService.mediaWithGps().length === 0
                 }
             >
-                <Show when={props.mediaService.mediaWithGps().length === 0}>
-                    <EmptyState
-                        icon="icon-[ic--round-location-off]"
-                        title="Nothing here has a location"
-                        detail="None of this media carries the GPS data a map needs."
-                    />
-                </Show>
-                <div class="h-dvh w-full" ref={el} />
-
-                <MapMediaPreview
-                    media={previewMedia()}
-                    onClose={() => setPreviewMedia(undefined)}
+                <EmptyState
+                    icon="icon-[ic--round-location-off]"
+                    title="Nothing here has a location"
+                    detail="None of this media carries the GPS data a map needs."
                 />
-            </Layout>
-        </Show>
+            </Show>
+
+            {/*
+                    Always here, for the map to be made in once the photos are:
+                    that waits on `isReady`, not on this being drawn.
+                */}
+            <div class="h-dvh w-full" classList={{ hidden: !!props.loadError }} ref={el} />
+
+            <MapMediaPreview media={previewMedia()} onClose={() => setPreviewMedia(undefined)} />
+        </Layout>
     );
 };
 
