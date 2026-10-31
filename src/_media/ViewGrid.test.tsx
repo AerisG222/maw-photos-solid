@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import { createSignal } from "solid-js";
-import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 
 import { FullscreenProvider } from "../_contexts/FullscreenContext";
 import { WithRouter } from "../_router/testing";
@@ -38,6 +38,13 @@ beforeAll(() => {
             /* nothing to stop */
         }
     };
+});
+
+// put back: test files share these globals, and a listing behaves differently with one
+const realResizeObserver = globalThis.ResizeObserver;
+
+afterAll(() => {
+    globalThis.ResizeObserver = realResizeObserver;
 });
 
 afterEach(cleanup);

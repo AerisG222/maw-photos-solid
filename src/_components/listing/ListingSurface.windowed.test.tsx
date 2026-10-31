@@ -1,5 +1,5 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
-import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 
 import { FullscreenProvider } from "../../_contexts/FullscreenContext";
 import Layout from "../layout/Layout";
@@ -44,19 +44,32 @@ class FakeResizeObserver {
     }
 }
 
+const fakedSizes = [
+    ["clientWidth", 700],
+    ["clientHeight", 600],
+    ["offsetWidth", 700],
+    ["offsetHeight", 600]
+] as const;
+
+const realResizeObserver = globalThis.ResizeObserver;
+
 beforeAll(() => {
     globalThis.ResizeObserver = FakeResizeObserver;
 
-    for (const [property, value] of [
-        ["clientWidth", 700],
-        ["clientHeight", 600],
-        ["offsetWidth", 700],
-        ["offsetHeight", 600]
-    ] as const) {
+    for (const [property, value] of fakedSizes) {
         Object.defineProperty(HTMLElement.prototype, property, {
             get: () => value,
             configurable: true
         });
+    }
+});
+
+// put back: test files share these globals, and no other test should inherit them
+afterAll(() => {
+    globalThis.ResizeObserver = realResizeObserver;
+
+    for (const [property] of fakedSizes) {
+        delete (HTMLElement.prototype as unknown as Record<string, unknown>)[property];
     }
 });
 

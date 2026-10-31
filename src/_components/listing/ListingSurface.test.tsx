@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { cleanup, render, within } from "@solidjs/testing-library";
 import { createSignal } from "solid-js";
 import { afterEach, describe, expect, test } from "vitest";
 
@@ -20,7 +20,13 @@ import ListingSurface from "./ListingSurface";
 */
 const items = (count: number) => Array.from({ length: count }, (_, i) => `item-${i}`);
 
-const tiles = () => screen.queryAllByTestId("tile");
+/*
+   Within this test's own render. Test files share one document here, and another
+   file's leftovers carrying the same id made this count two too many, now and then.
+*/
+let rendered: HTMLElement;
+
+const tiles = () => within(rendered).queryAllByTestId("tile");
 
 const mount = (count: number, scrolled: boolean) => {
     const [scroller, setScroller] = createSignal<HTMLElement>();
@@ -38,6 +44,8 @@ const mount = (count: number, scrolled: boolean) => {
             </ScrollContainerProvider>
         </div>
     ));
+
+    rendered = result.container;
 
     return result;
 };
