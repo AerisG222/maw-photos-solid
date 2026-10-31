@@ -1,6 +1,7 @@
 import { Component, Show } from "solid-js";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 interface Props {
     value: string;
@@ -54,28 +55,30 @@ const SearchField: Component<Props> = props => {
                 />
 
                 <Show when={props.canClear}>
-                    <button
+                    <Tooltip
+                        as="button"
                         type="button"
+                        content="Clear"
                         class="btn btn-ghost btn-xs btn-circle text-muted hover:text-base-content"
-                        title="Clear"
                         aria-label="Clear"
                         onClick={clear}
                     >
                         <Icon classes="icon-[ic--round-close] text-base" />
-                    </button>
+                    </Tooltip>
                 </Show>
             </label>
 
             <Show when={props.onSubmit}>
-                <button
+                <Tooltip
+                    as="button"
                     type="button"
+                    content="Search"
                     class="btn btn-primary btn-outline shrink-0"
-                    title="Search"
                     aria-label="Search"
                     onClick={() => props.onSubmit?.()}
                 >
                     <Icon classes="icon-md icon-[ic--round-search]" />
-                </button>
+                </Tooltip>
             </Show>
         </div>
     );

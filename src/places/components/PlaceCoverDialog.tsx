@@ -260,7 +260,7 @@ const PlaceCoverDialog: Component<Props> = props => {
                                             icon="icon-[ic--round-photo-library]"
                                             title={
                                                 favoritesOnly()
-                                                    ? "No favorites here"
+                                                    ? "No favorites here yet"
                                                     : "There is nothing here to choose from"
                                             }
                                             detail={

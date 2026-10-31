@@ -33,6 +33,7 @@ import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Icon from "../_components/icon/Icon";
 import MainItem from "./MainItem";
 import { usePrefetchNeighbors } from "./usePrefetchNeighbors";
+import Tooltip from "../_components/tooltip/Tooltip";
 
 interface Props {
     mediaService: IMediaService;
@@ -320,14 +321,17 @@ const ViewGrid: Component<Props> = props => {
                             one is exactly what fullscreen has taken away.
                         */}
                         <Show when={isFullscreen()}>
-                            <button
+                            <Tooltip
+                                as="button"
+                                content="Leave fullscreen"
+                                shortcutKeys={["esc"]}
+                                placement="right"
                                 class="fixed bottom-4 left-4 z-50 flex items-center gap-1 rounded-field bg-base-300/70 px-3 py-2 text-base-content opacity-60 transition-opacity duration-150 ease-out hover:opacity-100 focus-visible:opacity-100"
                                 onClick={() => setFullscreen(false)}
                                 aria-label="Leave fullscreen"
-                                title="Leave fullscreen (Esc)"
                             >
                                 <Icon classes="icon-[ic--round-fullscreen-exit] text-lg" />
-                            </button>
+                            </Tooltip>
                         </Show>
                     </div>
                 </Show>

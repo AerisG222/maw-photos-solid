@@ -4,6 +4,7 @@ import { useSearchContext } from "../contexts/SearchContext";
 
 import SearchField from "../../_components/input/SearchField";
 import PageHeader from "../../_components/layout/PageHeader";
+import Tooltip from "../../_components/tooltip/Tooltip";
 
 const SearchBar: Component = () => {
     const [
@@ -59,14 +60,15 @@ const SearchBar: Component = () => {
                                     </button>
                                     {/* its own button rather than a key: a phone has no
                                         Delete, and one stray tap should not lose the lot */}
-                                    <button
+                                    <Tooltip
+                                        as="button"
+                                        content="Remove"
                                         class="btn join-item btn-sm btn-outline btn-secondary px-1.5"
                                         aria-label={`Remove ${term} from recent searches`}
-                                        title="Remove"
                                         onClick={() => removeRecentSearch(term)}
                                     >
                                         <span class="icon-sm icon-[ic--round-close]" />
-                                    </button>
+                                    </Tooltip>
                                 </li>
                             )}
                         </For>

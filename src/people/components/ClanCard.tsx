@@ -6,6 +6,7 @@ import { Person } from "../../_models/Person";
 import { feedLink } from "../../_media/feed/_routes";
 
 import Icon from "../../_components/icon/Icon";
+import Tooltip from "../../_components/tooltip/Tooltip";
 
 // enough faces to recognize the clan at a glance; the rest are counted
 const FACES_SHOWN = 5;
@@ -108,13 +109,15 @@ const ClanCard: Component<Props> = props => {
                     <Icon classes="icon-[ic--round-edit]" />
                     Rename
                 </button>
-                <button
+                <Tooltip
+                    as="button"
+                    content="Delete this clan"
                     class="btn btn-xs btn-outline btn-error"
-                    title="Delete this clan"
+                    aria-label="Delete this clan"
                     onClick={() => props.onDelete(props.clan)}
                 >
                     <Icon classes="icon-[ic--round-delete]" />
-                </button>
+                </Tooltip>
             </div>
         </div>
     );

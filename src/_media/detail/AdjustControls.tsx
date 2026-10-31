@@ -3,6 +3,7 @@ import { Component } from "solid-js";
 import { useVisualEffectsContext } from "../contexts/VisualEffectsContext";
 
 import Icon from "../../_components/icon/Icon";
+import Tooltip from "../../_components/tooltip/Tooltip";
 
 /*
    Turning the photograph over: two rotations and two flips.
@@ -21,16 +22,16 @@ const AdjustControls: Component = () => {
         useVisualEffectsContext();
 
     const button = (icon: string, label: string, active: boolean, onClick: () => void) => (
-        <button
-            class="btn btn-sm flex-1"
-            classList={{ "btn-primary": active }}
+        <Tooltip
+            as="button"
+            content={label}
+            class={`btn btn-sm flex-1 ${active ? "btn-primary" : ""}`}
             onClick={onClick}
             aria-label={label}
             aria-pressed={active}
-            title={label}
         >
             <Icon classes={icon} />
-        </button>
+        </Tooltip>
     );
 
     return (

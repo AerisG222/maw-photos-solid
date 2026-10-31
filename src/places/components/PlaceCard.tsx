@@ -96,7 +96,7 @@ const PlaceCard: Component<Props> = props => {
             </div>
 
             <div class="flex items-center gap-1 px-2 py-1">
-                <div class="min-w-0 grow">
+                <div class="min-w-0 grow text-center">
                     <div class="truncate">{props.place.name}</div>
 
                     <Show when={props.showAncestry && props.place.ancestorNames.length > 0}>

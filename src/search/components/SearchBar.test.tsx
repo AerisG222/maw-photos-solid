@@ -52,7 +52,7 @@ const search = (term: string) => {
     fireEvent.keyDown(input, { key: "Enter" });
 };
 
-const cancel = () => fireEvent.click(screen.getByTitle("Clear"));
+const cancel = () => fireEvent.click(screen.getByRole("button", { name: "Clear" }));
 
 const recentTerms = () => {
     const section = screen.queryByRole("region", { name: "Recent searches" });

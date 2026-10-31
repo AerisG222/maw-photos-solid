@@ -7,6 +7,7 @@ import { Uuid } from "../../_models/Uuid";
 import ErrorMessage from "../../_components/error/ErrorMessage";
 import Loading from "../../_components/loading/Loading";
 import EmptyState from "../../_components/state/EmptyState";
+import Tooltip from "../../_components/tooltip/Tooltip";
 
 interface Props {
     // which kinds may be picked. Applied here rather than by the API, which
@@ -64,13 +65,15 @@ const PlacePicker: Component<Props> = props => {
                     }}
                 />
 
-                <button
+                <Tooltip
+                    as="button"
+                    content="Search"
                     class="btn btn-sm btn-primary btn-outline"
-                    title="Search"
+                    aria-label="Search"
                     onClick={() => setSearch(term().trim())}
                 >
                     <span class="icon-[ic--round-search]" />
-                </button>
+                </Tooltip>
             </div>
 
             <div class="h-64 overflow-y-auto border border-base-content/20 rounded-sm">

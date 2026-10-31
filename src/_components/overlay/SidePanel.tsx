@@ -3,6 +3,7 @@ import { JSXElement, ParentComponent, Show, createEffect, onCleanup } from "soli
 import { useMediaBreakpointContext } from "../../_contexts/MediaBreakpointContext";
 
 import Icon from "../icon/Icon";
+import Tooltip from "../tooltip/Tooltip";
 
 /*
    Which of the three shapes a panel is wearing.
@@ -111,14 +112,15 @@ const SidePanel: ParentComponent<Props> = props => {
                         <div class="flex shrink-0 items-center justify-between border-b-1 border-b-base-content/20 px-4 py-2">
                             <span class="text-label">{props.title}</span>
 
-                            <button
+                            <Tooltip
+                                as="button"
+                                content={`Close ${props.title}`}
                                 class="cursor-pointer p-1 hover:text-primary"
                                 onClick={() => props.onClose()}
                                 aria-label={`Close ${props.title}`}
-                                title={`Close ${props.title}`}
                             >
                                 <Icon classes="icon-[ic--round-close] text-lg" />
-                            </button>
+                            </Tooltip>
                         </div>
                     </Show>
 

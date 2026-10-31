@@ -65,6 +65,9 @@ const ViewMedia: Component = () => {
                         onChange={setInspectorOpen}
                     />
 
+                    {/* a list of its own, not more of the switch above it */}
+                    <h3 class="head3 mt-3">Open Cards</h3>
+
                     <For each={inspectorCards}>
                         {card => (
                             <Checkbox

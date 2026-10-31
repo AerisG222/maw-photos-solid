@@ -65,7 +65,7 @@ const PlaceCoverCategories: Component<Props> = props => {
                             icon="icon-[ic--round-collections]"
                             title={
                                 props.favoritesOnly
-                                    ? "No favorites here"
+                                    ? "No favorites here yet"
                                     : "Nothing here belongs to a category you can see"
                             }
                             detail={

@@ -192,11 +192,11 @@ const Browse: Component = () => {
     const listTitle = () =>
         search() ? `Places matching "${search()}"` : `${kindLabel() ?? "Places"} Here`;
 
-    const emptyMessage = () => {
+    const emptyMessage = (): { title: string; detail?: string } => {
         const kindPhrase = kindLabel()?.toLocaleLowerCase() ?? "places";
 
         if (search()) {
-            return `No ${kindPhrase} match that search.`;
+            return { title: `No ${kindPhrase} match that search` };
         }
 
         /*
@@ -205,10 +205,16 @@ const Browse: Component = () => {
            answer.
         */
         if (kind()) {
-            return `There are no ${kindPhrase} at this level. The kind filter narrows the level you are on - search to look across the whole tree.`;
+            return {
+                title: `There are no ${kindPhrase} at this level`,
+                detail: "The kind filter narrows the level you are on - search to look across the whole tree."
+            };
         }
 
-        return "None of the media you can see has a location we recognized yet.";
+        return {
+            title: "No places here yet",
+            detail: "None of the media you can see has a location we recognized yet."
+        };
     };
 
     return (
@@ -300,7 +306,13 @@ const Browse: Component = () => {
                     when={places.isSuccess}
                     skeleton={<SkeletonGrid />}
                     isEmpty={places.data?.length === 0}
-                    empty={<EmptyState icon="icon-[ic--round-place]" title={emptyMessage()} />}
+                    empty={
+                        <EmptyState
+                            icon="icon-[ic--round-place]"
+                            title={emptyMessage().title}
+                            detail={emptyMessage().detail}
+                        />
+                    }
                 >
                     {/* a place card is wider than a tile - see ListingSurface */}
                     <ListingSurface animate class="mb-4" itemWidth={240} items={places.data ?? []}>
