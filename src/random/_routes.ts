@@ -12,7 +12,7 @@ import { randomGridRoute } from "./_routeTree";
 export const random: RouteDisplay = {
     icon: "icon-[ic--round-shuffle]",
     name: "Random",
-    helpText: "Play though an unending list of random photos."
+    helpText: "Play through an unending list of random photos."
 };
 
 export const gridView: MediaViewRoute = {
