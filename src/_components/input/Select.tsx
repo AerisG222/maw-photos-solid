@@ -14,7 +14,7 @@ const Select: Component<Props<string | number>> = props => {
     const control = () => (
         <select
             class="select min-w-[10rem]"
-            classList={{ "w-auto": !!props.inline }}
+            classList={{ "select-sm w-auto": !!props.inline }}
             value={props.selectedValue}
             onChange={evt => props.onChange(evt.currentTarget.value)}
         >

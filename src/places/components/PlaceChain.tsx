@@ -47,7 +47,7 @@ const PlaceChain: Component<Props> = props => {
     const isCurrent = (index: number) => index === props.links.length - 1;
 
     return (
-        <div class="flex flex-wrap items-center gap-1 my-3">
+        <div class="flex min-h-8 flex-wrap items-center gap-1">
             <Link
                 {...props.link()}
                 class="flex items-center gap-1 px-2 py-1 rounded-sm border border-secondary/20

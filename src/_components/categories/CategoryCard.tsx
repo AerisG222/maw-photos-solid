@@ -12,6 +12,8 @@ import { categoryRoute } from "../../category/_routeTree";
 
 interface Props {
     category: Category;
+    // left out where a heading above already says it - the year's own listing
+    hideYear?: boolean;
     eager: boolean;
     setIsFavorite: (category: Category, isFavorite: boolean) => void;
 }
@@ -43,7 +45,7 @@ const CategoryCard: Component<Props> = props => {
             title={props.category.name}
             eager={props.eager}
             header={
-                <Show when={listing.showLabels}>
+                <Show when={listing.showLabels && !props.hideYear}>
                     <div class="text-center leading-6">
                         {props.category.effectiveDate.getFullYear()}
                     </div>

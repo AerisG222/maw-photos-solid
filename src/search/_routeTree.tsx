@@ -1,7 +1,9 @@
-import { createRoute, lazyRouteComponent } from "@tanstack/solid-router";
+import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
+import { loadAreaSettings } from "../_contexts/settings/_migrate";
+import { equalsIgnoreCase } from "../_models/utils/StringUtils";
 
 export const searchRoute = createRoute({
     getParentRoute: () => rootRoute,
@@ -10,11 +12,18 @@ export const searchRoute = createRoute({
     component: lazyRouteComponent(() => import("./Layout"))
 });
 
-// opens on whichever view was used last - a setting, so decided by a component that can read it
+// opens on whichever view was used last, before anything renders
 const searchIndexRoute = createRoute({
     getParentRoute: () => searchRoute,
     path: "/",
-    component: lazyRouteComponent(() => import("./Redirect"))
+    beforeLoad: () => {
+        throw redirect({
+            to: equalsIgnoreCase("list", loadAreaSettings().searchView)
+                ? searchListRoute.to
+                : searchGridRoute.to,
+            replace: true
+        });
+    }
 });
 
 export const searchGridRoute = createRoute({

@@ -26,7 +26,8 @@ const PageHeader: ParentComponent<Props> = props => {
 
     return (
         <StickyHeader pinned={merged.pinned}>
-            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+            {/* as tall as its controls with or without them, so every page's content starts level */}
+            <div class="flex min-h-8 flex-wrap items-center justify-between gap-x-6 gap-y-1">
                 <h1 class="head1 m-0">{props.title}</h1>
 
                 <Show when={actions()}>

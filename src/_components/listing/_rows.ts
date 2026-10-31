@@ -41,9 +41,10 @@ export const tileRowHeight = (pictureHeight: number, textLines = 0) =>
 // a photograph is the thumbnail alone
 export const mediaRowHeight = (thumbnailHeight: number) => tileRowHeight(thumbnailHeight);
 
-// a category carries its year above and its name below, when labels are shown
-export const categoryRowHeight = (thumbnailHeight: number, showLabels: boolean) =>
-    tileRowHeight(thumbnailHeight, showLabels ? 2 : 0);
+// a category carries its name below, when labels are shown, and its year above
+// unless a heading over the listing already says it
+export const categoryRowHeight = (thumbnailHeight: number, showLabels: boolean, showYear = true) =>
+    tileRowHeight(thumbnailHeight, showLabels ? (showYear ? 2 : 1) : 0);
 
 // a person is a square face crop, as wide as a thumbnail, and their name below
 export const personRowHeight = (thumbnailWidth: number, showLabels: boolean) =>

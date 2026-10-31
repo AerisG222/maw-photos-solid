@@ -101,6 +101,7 @@ describe("how tall a row of tiles is", () => {
     test("a category adds its year and its name, when labels are shown", () => {
         expect(categoryRowHeight(120, true)).toBe(178);
         expect(categoryRowHeight(120, false)).toBe(130);
+        expect(categoryRowHeight(120, true, false)).toBe(154);
     });
 
     test("a person is a square face and a name", () => {

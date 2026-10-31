@@ -10,7 +10,10 @@ const AboutLayout: Component = () => {
         <Layout toolbar={<Toolbar />}>
             <BrandHeader showVersion />
 
-            <Outlet />
+            {/* prose: the page runs the full width, but a line of text should not */}
+            <div class="max-w-3xl">
+                <Outlet />
+            </div>
         </Layout>
     );
 };

@@ -38,7 +38,7 @@ const SearchField: Component<Props> = props => {
 
     return (
         <div class="flex items-center gap-2 max-w-full">
-            <label class="input input-md w-80 min-w-0 max-w-full">
+            <label class="input input-sm w-80 min-w-0 max-w-full">
                 <input
                     ref={input}
                     type="text"
@@ -73,11 +73,11 @@ const SearchField: Component<Props> = props => {
                     as="button"
                     type="button"
                     content="Search"
-                    class="btn btn-primary btn-outline shrink-0"
+                    class="btn btn-sm btn-primary btn-outline shrink-0"
                     aria-label="Search"
                     onClick={() => props.onSubmit?.()}
                 >
-                    <Icon classes="icon-md icon-[ic--round-search]" />
+                    <Icon classes="icon-[ic--round-search] text-lg" />
                 </Tooltip>
             </Show>
         </div>

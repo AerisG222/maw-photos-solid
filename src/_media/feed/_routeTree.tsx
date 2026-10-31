@@ -5,6 +5,8 @@ import { requireLogin } from "../../_router/guards";
 import { isUuid } from "../../_models/Uuid";
 import { redirectToGrid } from "../_legacyViews";
 import { FeedSearch, validateFeedSearch } from "./_search";
+import { FeedSubject, feedCategoriesLink, feedGridLink } from "./_routes";
+import { loadAreaSettings } from "../../_contexts/settings/_migrate";
 import { prefetch } from "../../_router/prefetch";
 import { prefetchAddressedCategory } from "../../_contexts/api/_categoryQueries";
 import { Uuid } from "../../_models/Uuid";
@@ -40,7 +42,6 @@ import { placesRoute } from "../../places/_routeTree";
 */
 
 const MediaRoot = lazyRouteComponent(() => import("../MediaRoot"));
-const FeedRedirect = lazyRouteComponent(() => import("./Redirect"));
 const FeedGrid = lazyRouteComponent(() => import("./Grid"));
 const FeedCategories = lazyRouteComponent(() => import("./Categories"));
 
@@ -101,10 +102,31 @@ export const personFeedRoute = createRoute({
     component: MediaRoot
 });
 
+/*
+   A feed opens on the listing last chosen, before anything renders - this was a
+   component that mounted and then navigated, with a blank page between. The route
+   above has already made sure the subject is an id.
+
+   The favorites filter is applied here only for the categories listing. The media
+   pages settle their own filter as they open, where the shuffle seed is decided
+   too, and arriving with one already set would make them skip it.
+*/
+const redirectToFeedListing = (subject: FeedSubject): never => {
+    const area = loadAreaSettings();
+
+    throw redirect({
+        ...(area.feedListing === "categories"
+            ? feedCategoriesLink(subject, area.feedFavoritesOnly)
+            : feedGridLink(subject)),
+        replace: true
+    } as unknown as Parameters<typeof redirect>[0]);
+};
+
 const personFeedIndexRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "/",
-    component: FeedRedirect
+    beforeLoad: ({ params }) =>
+        redirectToFeedListing({ kind: "person", id: params.personId as Uuid })
 });
 
 export const personFeedGridRoute = createRoute({
@@ -188,7 +210,7 @@ export const clanFeedRoute = createRoute({
 const clanFeedIndexRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "/",
-    component: FeedRedirect
+    beforeLoad: ({ params }) => redirectToFeedListing({ kind: "clan", id: params.clanId as Uuid })
 });
 
 export const clanFeedGridRoute = createRoute({
@@ -268,7 +290,7 @@ export const placeFeedRoute = createRoute({
 const placeFeedIndexRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "/",
-    component: FeedRedirect
+    beforeLoad: ({ params }) => redirectToFeedListing({ kind: "place", id: params.placeId as Uuid })
 });
 
 export const placeFeedGridRoute = createRoute({

@@ -229,6 +229,9 @@ export const loadMigrated = <T extends object>(key: string, def: T): T => {
     return { ...def, ...loadJson<Partial<T>>(key, {}) };
 };
 
+// the area store as it stands, for a route deciding where a section opens
+export const loadAreaSettings = () => loadMigrated(KEY_SETTINGS_V2_AREA, defaultAreaSettings);
+
 /*
    The media store as it stands, for the provider starting up and for a route
    deciding where a category opens - which happens before any component exists.
