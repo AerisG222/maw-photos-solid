@@ -19,13 +19,16 @@ interface Props {
 
    Above the tiles and below anything opened over the page: an open photo and
    the Inspector's overlay are both at 30.
+
+   The space under it is here, the same on every page and the same as the gap
+   between tiles, so what follows a header brings no top margin of its own.
 */
 const StickyHeader: ParentComponent<Props> = props => {
     const merged = mergeProps({ pinned: true }, props);
 
     return (
         <div
-            class="top-0 z-20 bg-base-100/90 backdrop-blur-sm py-1 border-b border-base-content/10"
+            class="top-0 z-20 mb-2 bg-base-100/90 backdrop-blur-sm py-1 border-b border-base-content/10"
             classList={{
                 sticky: merged.pinned && !props.fromMd,
                 "md:sticky": merged.pinned && !!props.fromMd

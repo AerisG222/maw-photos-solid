@@ -139,10 +139,8 @@ const ViewYear: Component = () => {
                 skeleton={<SkeletonChart />}
             >
                 <StatLayout>
-                    <div class="my-2">
-                        <Header year={params().year} search={search()} />
-                    </div>
-                    <div class="my-2">
+                    <Header year={params().year} search={search()} />
+                    <div class="mb-2">
                         <StatBar
                             statbarData={statbarData()}
                             mediaCountTitle={statbarMediaCountTitle(searchType())}

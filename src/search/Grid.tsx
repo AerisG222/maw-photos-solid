@@ -17,7 +17,7 @@ const ViewGrid: Component = () => {
             toolbar={<GridToolbar />}
             skeleton={<SkeletonGrid />}
             results={(categories, setIsFavorite) => (
-                <ListingSurface class="my-4" estimatedRowHeight={rowHeight()} items={categories()}>
+                <ListingSurface class="mb-4" estimatedRowHeight={rowHeight()} items={categories()}>
                     {(category, index) => (
                         <CategoryCard
                             category={category}

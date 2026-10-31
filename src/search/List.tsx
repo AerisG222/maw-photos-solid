@@ -10,7 +10,7 @@ const ViewList: Component = () => (
     <SearchPage
         skeleton={<SkeletonList />}
         results={(categories, setIsFavorite) => (
-            <div class="my-4">
+            <div class="mb-4">
                 <For each={categories()}>
                     {(category, idx) => (
                         <CategoryListItem

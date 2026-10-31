@@ -152,10 +152,8 @@ const ViewCombined: Component = () => {
                 skeleton={<SkeletonChart />}
             >
                 <StatLayout>
-                    <div class="my-2">
-                        <Header year={undefined} />
-                    </div>
-                    <div class="my-2">
+                    <Header year={undefined} />
+                    <div class="mb-2">
                         <StatBar
                             statbarData={statbarData()}
                             mediaCountTitle={statbarMediaCountTitle(searchType())}
