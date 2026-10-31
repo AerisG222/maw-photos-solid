@@ -140,6 +140,33 @@ const Treemap: Component<Props> = props => {
         }
     });
 
+    /*
+       Fills the row the page gives it, which is only known once it is laid out.
+       Read once as the chart was made, the parent had no height yet, so the chart
+       kept the library's default of 400px with the screen's worth of room below.
+       The row's height comes from the page's grid rather than from this, so
+       setting it cannot change what is being watched.
+    */
+    createEffect(() => {
+        const parent = el?.parentElement;
+
+        // absent in jsdom, where nothing is laid out to fill anyway
+        if (!parent || typeof ResizeObserver === "undefined") {
+            return;
+        }
+
+        const observer = new ResizeObserver(() => {
+            const height = parent.clientHeight;
+
+            if (chart && height > 0 && height !== chart.chartHeight) {
+                chart.setSize(undefined, height, false);
+            }
+        });
+
+        observer.observe(parent);
+        onCleanup(() => observer.disconnect());
+    });
+
     onCleanup(() => {
         chart?.destroy();
         chart = undefined;
