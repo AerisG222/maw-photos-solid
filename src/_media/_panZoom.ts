@@ -32,10 +32,29 @@ export const createPanZoom = (element: () => HTMLElement | undefined, subject: (
 
     let instance: PanzoomObject | undefined;
 
+    // how many frames have been spent waiting for the element to reach the page
+    const [waited, setWaited] = createSignal(0);
+
     createEffect(() => {
         const target = element();
 
+        void waited();
+
         if (!target) {
+            return;
+        }
+
+        /*
+           Panzoom throws on an element not yet in the page, and that took the whole
+           screen down. Following a link straight to a photo builds it while the
+           route's code is still on its way, so the ref can arrive first. Opening one
+           from a tile never hit this, which is why it went unseen.
+        */
+        if (!target.isConnected) {
+            const frame = requestAnimationFrame(() => setWaited(count => count + 1));
+
+            onCleanup(() => cancelAnimationFrame(frame));
+
             return;
         }
 

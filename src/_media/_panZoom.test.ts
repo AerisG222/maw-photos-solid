@@ -37,6 +37,7 @@ const element = () => {
     listeners.clear();
 
     return {
+        isConnected: true,
         addEventListener: (type: string, handler: EventListener) =>
             listeners.set(type, [...(listeners.get(type) ?? []), handler]),
         removeEventListener: () => undefined
@@ -197,6 +198,39 @@ describe("the zoom", () => {
         options.handleStartEvent?.(event as unknown as Event);
 
         expect(event.preventDefault).toHaveBeenCalled();
+        dispose();
+    });
+});
+
+/*
+   Panzoom throws on an element not in the page, and following a link straight to
+   a photo builds it before it gets there - which took the whole screen down.
+*/
+describe("an element not yet in the page", () => {
+    test("is left alone until it arrives, rather than throwing", async () => {
+        const target = { ...element(), isConnected: false } as HTMLElement & {
+            isConnected: boolean;
+        };
+        let dispose!: () => void;
+
+        options = {};
+
+        createRoot(d => {
+            dispose = d;
+            createPanZoom(
+                () => target,
+                () => "photo-1"
+            );
+        });
+
+        expect(options.handleStartEvent).toBeUndefined();
+
+        target.isConnected = true;
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        expect(options.handleStartEvent).toBeDefined();
+
         dispose();
     });
 });
