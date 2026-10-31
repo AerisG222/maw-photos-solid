@@ -3,6 +3,7 @@ import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-route
 import { rootRoute } from "../../_router/rootRoute";
 import { requireLogin } from "../../_router/guards";
 import { isUuid } from "../../_models/Uuid";
+import { validateMediaFilters } from "../../_models/MediaFilters";
 import { redirectToGrid } from "../_legacyViews";
 import { FeedSearch, validateFeedSearch } from "./_search";
 import { FeedSubject, feedCategoriesLink, feedGridLink } from "./_routes";
@@ -76,15 +77,18 @@ const backToPlaces = (): never => {
    whatever names the subject: the people or clan list, or the place and the
    chain above it - and, when the address has a photo open, that photo's
    category, for the breadcrumb.
-
-   A feed opened with no filter of its own may take on a remembered one as it
-   opens, which re-keys it; what this fetched is then simply not the page shown.
 */
+const mediaType = (search: FeedSearch) =>
+    validateMediaFilters(search as unknown as Record<string, unknown>).t;
 const mediaFilter = (search: FeedSearch) => ({
     favoritesOnly: search.f === true,
-    seed: search.seed
+    seed: search.seed,
+    mediaType: mediaType(search)
 });
-const categoriesFilter = (search: FeedSearch) => ({ favoritesOnly: search.f === true });
+const categoriesFilter = (search: FeedSearch) => ({
+    favoritesOnly: search.f === true,
+    mediaType: mediaType(search)
+});
 
 // ---- a person -------------------------------------------------------------
 
@@ -106,17 +110,11 @@ export const personFeedRoute = createRoute({
    A feed opens on the listing last chosen, before anything renders - this was a
    component that mounted and then navigated, with a blank page between. The route
    above has already made sure the subject is an id.
-
-   The favorites filter is applied here only for the categories listing. The media
-   pages settle their own filter as they open, where the shuffle seed is decided
-   too, and arriving with one already set would make them skip it.
 */
 const redirectToFeedListing = (subject: FeedSubject): never => {
-    const area = loadAreaSettings();
-
     throw redirect({
-        ...(area.feedListing === "categories"
-            ? feedCategoriesLink(subject, area.feedFavoritesOnly)
+        ...(loadAreaSettings().feedListing === "categories"
+            ? feedCategoriesLink(subject, false)
             : feedGridLink(subject)),
         replace: true
     } as unknown as Parameters<typeof redirect>[0]);
@@ -174,7 +172,8 @@ export const personFeedCategoriesRoute = createRoute({
                     personCategoriesQueryOptions(
                         getToken,
                         params.personId as Uuid,
-                        deps.favoritesOnly
+                        deps.favoritesOnly,
+                        deps.mediaType
                     )
                 ),
                 queryClient.prefetchQuery(peopleQueryOptions(getToken))
@@ -255,7 +254,12 @@ export const clanFeedCategoriesRoute = createRoute({
         prefetch(context, (queryClient, getToken) =>
             Promise.all([
                 queryClient.prefetchInfiniteQuery(
-                    clanCategoriesQueryOptions(getToken, params.clanId as Uuid, deps.favoritesOnly)
+                    clanCategoriesQueryOptions(
+                        getToken,
+                        params.clanId as Uuid,
+                        deps.favoritesOnly,
+                        deps.mediaType
+                    )
                 ),
                 queryClient.prefetchQuery(clansQueryOptions(getToken))
             ])
@@ -339,7 +343,8 @@ export const placeFeedCategoriesRoute = createRoute({
                     placeCategoriesQueryOptions(
                         getToken,
                         params.placeId as Uuid,
-                        deps.favoritesOnly
+                        deps.favoritesOnly,
+                        deps.mediaType
                     )
                 ),
                 queryClient.prefetchQuery(placeQueryOptions(getToken, params.placeId as Uuid)),

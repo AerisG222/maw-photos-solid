@@ -7,6 +7,8 @@ import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 import SearchBar from "./components/SearchBar";
+import SearchFilterMenu from "./components/SearchFilterMenu";
+import { useSearchFilters } from "./useSearchFilters";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import EmptyState from "../_components/state/EmptyState";
 
@@ -36,12 +38,13 @@ interface Props {
 const SearchPage: Component<Props> = props => {
     const [state, { categorySearchQuery, allSearchResults, setIsFavoriteMutation }] =
         useSearchContext();
+    const { filters, activeCount, clear } = useSearchFilters();
     /*
        One subscription, re-keyed by the term. Rebuilding the query inside an
        effect created a new observer per search and disposed of none of them,
        and every leaked observer kept its query active for later invalidations.
     */
-    const searchQuery = categorySearchQuery(() => state.activeTerm);
+    const searchQuery = categorySearchQuery(() => state.activeTerm, filters);
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
@@ -56,7 +59,7 @@ const SearchPage: Component<Props> = props => {
                 </Toolbar>
             }
         >
-            <SearchBar />
+            <SearchBar filterMenu={<SearchFilterMenu />} />
 
             {/*
                 the toolbar and search bar stay put so the term can be retried or
@@ -73,7 +76,13 @@ const SearchPage: Component<Props> = props => {
                 empty={
                     <EmptyState
                         icon="icon-[ic--round-search-off]"
-                        title="No categories match that search"
+                        title={
+                            activeCount() > 0
+                                ? "No categories match these filters"
+                                : "No categories match that search"
+                        }
+                        actionLabel={activeCount() > 0 ? "Clear filters" : undefined}
+                        onAction={clear}
                     />
                 }
             >

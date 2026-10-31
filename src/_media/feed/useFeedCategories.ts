@@ -1,11 +1,11 @@
 import { useGoTo } from "../services/_navigation";
-import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { useFeedSubject } from "./_subject";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 /*
    The categories listing of a feed - the categories a person or clan turns up in,
@@ -18,7 +18,6 @@ import { useFeedSubject } from "./_subject";
 */
 export const useFeedCategories = () => {
     const goTo = useGoTo();
-    const [, { setFeedFavoritesOnly: rememberFavoritesOnly }] = useAreaSettingsContext();
     const { personCategoriesQuery } = usePeopleContext();
     const { clanCategoriesQuery } = useClansContext();
     const { placeCategoriesQuery } = usePlacesContext();
@@ -31,9 +30,9 @@ export const useFeedCategories = () => {
     const clanId = () => (subject.isClan() ? subject.clanId() : undefined);
     const placeId = () => (subject.isPlace() ? subject.placeId() : undefined);
 
-    const personQuery = personCategoriesQuery(personId, subject.favoritesOnly);
-    const clanQuery = clanCategoriesQuery(clanId, subject.favoritesOnly);
-    const placeQuery = placeCategoriesQuery(placeId, subject.favoritesOnly);
+    const personQuery = personCategoriesQuery(personId, subject.favoritesOnly, subject.mediaType);
+    const clanQuery = clanCategoriesQuery(clanId, subject.favoritesOnly, subject.mediaType);
+    const placeQuery = placeCategoriesQuery(placeId, subject.favoritesOnly, subject.mediaType);
 
     const query = () => {
         if (subject.isClan()) {
@@ -51,18 +50,27 @@ export const useFeedCategories = () => {
             : [];
     };
 
-    // the choice is remembered so the next subject opens the same way, and the
-    // url is rewritten so it still accounts for what is on screen
-    const setFavoritesOnly = (on: boolean) => {
-        rememberFavoritesOnly(on);
-        goTo({ to: ".", search: on ? { f: true } : {} }, { replace: true });
-    };
+    // the url still accounts for what is on screen
+    const search = (favorites: boolean, type: MediaTypeFilter | undefined) => ({
+        ...(favorites ? { f: true } : {}),
+        ...(type ? { t: type } : {})
+    });
+
+    const setFavoritesOnly = (on: boolean) =>
+        goTo({ to: ".", search: search(on, subject.mediaType()) }, { replace: true });
+
+    const setMediaType = (type: MediaTypeFilter | undefined) =>
+        goTo({ to: ".", search: search(subject.favoritesOnly(), type) }, { replace: true });
+
+    const clearFilters = () => goTo({ to: ".", search: {} }, { replace: true });
 
     return {
         ...subject,
         categories,
         query,
         setFavoritesOnly,
+        setMediaType,
+        clearFilters,
         isLoading: () => query().isLoading,
         loadError: () => findQueryError([query()]),
         retryLoad: () => refetchQueries([query()])

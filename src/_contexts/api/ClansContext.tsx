@@ -28,6 +28,7 @@ import {
     SetClanPersonsRequest
 } from "../../_models/ClanRequest";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 export interface ClansService {
     clansQuery: () => UseQueryResult<Clan[], Error>;
@@ -37,7 +38,8 @@ export interface ClansService {
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
     clanCategoriesQuery: (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType?: Accessor<MediaTypeFilter | undefined>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     createClanMutation: UseMutationResult<Clan, Error, CreateClanRequest, unknown>;
     renameClanMutation: UseMutationResult<Clan, Error, RenameClanRequest, unknown>;
@@ -99,10 +101,11 @@ export const ClansProvider: ParentComponent = props => {
 
     const clanCategoriesQuery = (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType: Accessor<MediaTypeFilter | undefined> = () => undefined
     ) =>
         useInfiniteQuery(() => ({
-            ...clanCategoriesQueryOptions(getToken, id()!, favoritesOnly()),
+            ...clanCategoriesQueryOptions(getToken, id()!, favoritesOnly(), mediaType()),
             enabled: !!id() && authContext.isLoggedIn
         }));
 

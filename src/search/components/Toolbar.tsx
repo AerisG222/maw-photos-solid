@@ -22,8 +22,14 @@ const Toolbar: ParentComponent<Props> = props => {
             nav={
                 <NavGroup
                     entries={[
-                        { route: searchGrid, link: linkOptions({ to: searchGridRoute.to }) },
-                        { route: searchList, link: linkOptions({ to: searchListRoute.to }) }
+                        {
+                            route: searchGrid,
+                            link: linkOptions({ to: searchGridRoute.to, search: true })
+                        },
+                        {
+                            route: searchList,
+                            link: linkOptions({ to: searchListRoute.to, search: true })
+                        }
                     ]}
                 />
             }

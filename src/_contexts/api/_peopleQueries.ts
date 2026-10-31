@@ -8,6 +8,7 @@ import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 /*
    The query definitions for people: key, fetch and freshness together, shared
@@ -20,6 +21,7 @@ import { Uuid } from "../../_models/Uuid";
 export interface PersonMediaFilter {
     favoritesOnly: boolean;
     seed: number | undefined;
+    mediaType?: MediaTypeFilter | undefined;
 }
 
 export const fetchPeople = async (getToken: GetToken) =>
@@ -43,6 +45,10 @@ export const fetchPersonMedia = async (
         params.seed = filter.seed.toString();
     }
 
+    if (filter.mediaType) {
+        params.t = filter.mediaType;
+    }
+
     return runWithAccessToken(getToken, accessToken =>
         queryApi<SearchResults<Media>>(accessToken, `persons/${id}/media`, params)
     );
@@ -57,12 +63,17 @@ export const fetchPersonCategories = async (
     getToken: GetToken,
     id: Uuid,
     offset: number,
-    favoritesOnly: boolean
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
 ) => {
     const params: Record<string, string> = { o: offset.toString() };
 
     if (favoritesOnly) {
         params.f = "true";
+    }
+
+    if (mediaType) {
+        params.t = mediaType;
     }
 
     return runWithAccessToken(getToken, async accessToken => {
@@ -97,11 +108,13 @@ export const personMediaQueryOptions = (getToken: GetToken, id: Uuid, filter: Pe
 export const personCategoriesQueryOptions = (
     getToken: GetToken,
     id: Uuid,
-    favoritesOnly: boolean
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
 ) =>
     infiniteQueryOptions({
-        queryKey: queryKeys.people.categories(id, { favoritesOnly }),
-        queryFn: ({ pageParam }) => fetchPersonCategories(getToken, id, pageParam, favoritesOnly),
+        queryKey: queryKeys.people.categories(id, { favoritesOnly, mediaType }),
+        queryFn: ({ pageParam }) =>
+            fetchPersonCategories(getToken, id, pageParam, favoritesOnly, mediaType),
         staleTime: 5 * 60 * 1000,
         initialPageParam: 0,
         getNextPageParam: (

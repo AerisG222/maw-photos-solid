@@ -24,6 +24,7 @@ import { CategoryIdsForYearResult } from "./models/CategoryIdsForYearResult";
 import { pulseFavorite } from "../../_components/icon/_favoritePulse";
 import { patchById } from "./_cacheUtils";
 import { queryKeys, queryKeyMatches } from "./_queryKeys";
+import { MediaFilters } from "../../_models/MediaFilters";
 import {
     categoriesForYearQueryOptions,
     categoryMediaGpsQueryOptions,
@@ -50,7 +51,8 @@ export interface CategoriesService {
     categoryMediaQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<Media[], Error>;
     categoryMediaGpsQuery: (id: Accessor<Uuid | undefined>) => UseQueryResult<GpsDetail[], Error>;
     categorySearchQuery: (
-        query: Accessor<string>
+        query: Accessor<string>,
+        filters?: Accessor<MediaFilters>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Category>, unknown>;
     setCategoryTeaserMutation: UseMutationResult<Response, Error, CategoryTeaserRequest, unknown>;
@@ -79,7 +81,8 @@ export const CategoriesProvider: ParentComponent = props => {
 
     const fetchCategorySearch = async (
         query: string,
-        startOffset: number
+        startOffset: number,
+        filters: MediaFilters
     ): Promise<SearchResults<Category> | undefined> => {
         if (!query) {
             return undefined;
@@ -88,7 +91,7 @@ export const CategoriesProvider: ParentComponent = props => {
         return runWithAccessToken(getToken, async accessToken => {
             const searchResults = await queryApi<SearchResults<CategoryDto>>(
                 accessToken,
-                `categories/search?s=${encodeURI(query)}&o=${startOffset}`
+                `categories/search?s=${encodeURI(query)}&o=${startOffset}${filters.f ? "&f=true" : ""}${filters.t ? `&t=${filters.t}` : ""}`
             );
 
             return {
@@ -201,10 +204,13 @@ export const CategoriesProvider: ParentComponent = props => {
 
     // accessor, so a new term re-keys this one subscription instead of the
     // caller having to build a replacement query for every search
-    const categorySearchQuery = (query: Accessor<string>) =>
+    const categorySearchQuery = (
+        query: Accessor<string>,
+        filters: Accessor<MediaFilters> = () => ({})
+    ) =>
         useInfiniteQuery(() => ({
-            queryKey: queryKeys.categories.search(query()),
-            queryFn: data => fetchCategorySearch(query(), data.pageParam),
+            queryKey: queryKeys.categories.search(query(), filters()),
+            queryFn: data => fetchCategorySearch(query(), data.pageParam, filters()),
             enabled: authContext.isLoggedIn,
             staleTime: 5 * 60 * 1000,
             initialPageParam: 0,

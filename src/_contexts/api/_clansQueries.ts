@@ -9,6 +9,7 @@ import { ClanDto, mapClan } from "../../_models/Clan";
 import { Media } from "../../_models/Media";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 /*
    The query definitions for clans: key, fetch and freshness together, shared
@@ -46,6 +47,10 @@ export const fetchClanMedia = async (
         params.seed = filter.seed.toString();
     }
 
+    if (filter.mediaType) {
+        params.t = filter.mediaType;
+    }
+
     return runWithAccessToken(getToken, accessToken =>
         queryApi<SearchResults<Media>>(accessToken, `clans/${id}/media`, params)
     );
@@ -57,12 +62,17 @@ export const fetchClanCategories = async (
     getToken: GetToken,
     id: Uuid,
     offset: number,
-    favoritesOnly: boolean
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
 ) => {
     const params: Record<string, string> = { o: offset.toString() };
 
     if (favoritesOnly) {
         params.f = "true";
+    }
+
+    if (mediaType) {
+        params.t = mediaType;
     }
 
     return runWithAccessToken(getToken, async accessToken => {
@@ -94,10 +104,16 @@ export const clanMediaQueryOptions = (getToken: GetToken, id: Uuid, filter: Pers
         ) => (lastPage?.hasMoreResults ? lastPage.nextOffset : undefined)
     });
 
-export const clanCategoriesQueryOptions = (getToken: GetToken, id: Uuid, favoritesOnly: boolean) =>
+export const clanCategoriesQueryOptions = (
+    getToken: GetToken,
+    id: Uuid,
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
+) =>
     infiniteQueryOptions({
-        queryKey: queryKeys.clans.categories(id, { favoritesOnly }),
-        queryFn: ({ pageParam }) => fetchClanCategories(getToken, id, pageParam, favoritesOnly),
+        queryKey: queryKeys.clans.categories(id, { favoritesOnly, mediaType }),
+        queryFn: ({ pageParam }) =>
+            fetchClanCategories(getToken, id, pageParam, favoritesOnly, mediaType),
         staleTime: 5 * 60 * 1000,
         initialPageParam: 0,
         getNextPageParam: (

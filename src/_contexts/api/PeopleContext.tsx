@@ -26,6 +26,7 @@ import { Media } from "../../_models/Media";
 import { Person } from "../../_models/Person";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 /*
    How a person's feed is narrowed and ordered.
@@ -48,7 +49,8 @@ export interface PeopleService {
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Media> | undefined>, Error>;
     personCategoriesQuery: (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType?: Accessor<MediaTypeFilter | undefined>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setIsFavoriteMutation: UseMutationResult<Response, Error, IsFavoriteRequest<Person>, unknown>;
 }
@@ -95,10 +97,11 @@ export const PeopleProvider: ParentComponent = props => {
 
     const personCategoriesQuery = (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType: Accessor<MediaTypeFilter | undefined> = () => undefined
     ) =>
         useInfiniteQuery(() => ({
-            ...personCategoriesQueryOptions(getToken, id()!, favoritesOnly()),
+            ...personCategoriesQueryOptions(getToken, id()!, favoritesOnly(), mediaType()),
             enabled: !!id() && authContext.isLoggedIn
         }));
 

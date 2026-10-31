@@ -5,6 +5,7 @@ import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
 import { Uuid } from "../../_models/Uuid";
 import { FeedSubject } from "./_routes";
+import { validateMediaFilters } from "../../_models/MediaFilters";
 
 /*
    What a feed is about, and the one filter both of its listings share.
@@ -57,6 +58,10 @@ export const useFeedSubject = () => {
        reload or a shared link reproduce the same feed.
     */
     const favoritesOnly = () => search().f === true;
+
+    // validated again: the router lays the validator's answer over the raw query
+    // string, so a value it dropped comes straight back - see useCategoryMediaFilters
+    const mediaType = () => validateMediaFilters(search()).t;
 
     // the people and clan lists are already cached for the picker, so naming
     // either subject on its own page costs nothing beyond a lookup. a place is
@@ -123,6 +128,7 @@ export const useFeedSubject = () => {
         subjectKindName,
         subject,
         favoritesOnly,
+        mediaType,
         subjectName,
         mediaScope,
         categoryScope,

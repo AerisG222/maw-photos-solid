@@ -6,10 +6,12 @@ import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import ToolbarListing from "./ToolbarListing";
 import { FeedSubject } from "./_routes";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 interface Props {
     subject: FeedSubject;
     favoritesOnly: boolean;
+    mediaType: MediaTypeFilter | undefined;
     canRequestMore: boolean;
     requestMore: () => void;
 }
@@ -40,6 +42,7 @@ const ToolbarCategories: Component<Props> = props => {
                     subject={props.subject}
                     showingCategories={true}
                     favoritesOnly={props.favoritesOnly}
+                    mediaType={props.mediaType}
                 />
             }
         >

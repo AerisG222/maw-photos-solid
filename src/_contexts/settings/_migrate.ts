@@ -187,9 +187,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 (categoryFilter.yearFilter === "all"
                     ? "all"
                     : defaultAreaSettings.categoryYearFilter),
-            feedFavoritesOnly:
-                bool(faceFeed.favoritesOnly) ?? defaultAreaSettings.feedFavoritesOnly,
-            feedShuffle: bool(faceFeed.shuffle) ?? defaultAreaSettings.feedShuffle,
             // new since the legacy keys, so there is nothing to carry over
             searchHistoryCount: defaultAreaSettings.searchHistoryCount
         }

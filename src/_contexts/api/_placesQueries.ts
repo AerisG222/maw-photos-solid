@@ -8,6 +8,7 @@ import { Media } from "../../_models/Media";
 import { Place, PlaceAncestor } from "../../_models/Place";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 /*
    The query definitions for places: key, fetch and freshness together, shared
@@ -27,6 +28,7 @@ export interface PlaceFilter {
 export interface PlaceMediaFilter {
     favoritesOnly: boolean;
     seed: number | undefined;
+    mediaType?: MediaTypeFilter | undefined;
 }
 
 export const fetchPlaces = async (getToken: GetToken, filter: PlaceFilter) => {
@@ -74,6 +76,10 @@ export const fetchPlaceMedia = async (
         params.seed = filter.seed.toString();
     }
 
+    if (filter.mediaType) {
+        params.t = filter.mediaType;
+    }
+
     return runWithAccessToken(getToken, accessToken =>
         queryApi<SearchResults<Media>>(accessToken, `places/${id}/media`, params)
     );
@@ -92,12 +98,17 @@ export const fetchPlaceCategories = async (
     getToken: GetToken,
     id: Uuid,
     offset: number,
-    favoritesOnly: boolean
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
 ) => {
     const params: Record<string, string> = { o: offset.toString() };
 
     if (favoritesOnly) {
         params.f = "true";
+    }
+
+    if (mediaType) {
+        params.t = mediaType;
     }
 
     return runWithAccessToken(getToken, async accessToken => {
@@ -166,10 +177,16 @@ export const placeMediaQueryOptions = (getToken: GetToken, id: Uuid, filter: Pla
         ) => (lastPage?.hasMoreResults ? lastPage.nextOffset : undefined)
     });
 
-export const placeCategoriesQueryOptions = (getToken: GetToken, id: Uuid, favoritesOnly: boolean) =>
+export const placeCategoriesQueryOptions = (
+    getToken: GetToken,
+    id: Uuid,
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
+) =>
     infiniteQueryOptions({
-        queryKey: queryKeys.places.categories(id, { favoritesOnly }),
-        queryFn: ({ pageParam }) => fetchPlaceCategories(getToken, id, pageParam, favoritesOnly),
+        queryKey: queryKeys.places.categories(id, { favoritesOnly, mediaType }),
+        queryFn: ({ pageParam }) =>
+            fetchPlaceCategories(getToken, id, pageParam, favoritesOnly, mediaType),
         staleTime: 5 * 60 * 1000,
         initialPageParam: 0,
         getNextPageParam: (

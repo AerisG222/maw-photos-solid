@@ -10,11 +10,13 @@ import {
 } from "./_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 interface Props {
     subject: FeedSubject;
     showingCategories: boolean;
     favoritesOnly: boolean;
+    mediaType: MediaTypeFilter | undefined;
 }
 
 /*
@@ -48,9 +50,13 @@ const ToolbarListing: Component<Props> = props => {
        the same answer its redirect gives a fresh subject, so the two agree.
     */
     const mediaLink = () =>
-        feedGridLink(props.subject, undefined, props.favoritesOnly ? { f: true } : {});
+        feedGridLink(props.subject, undefined, {
+            ...(props.favoritesOnly ? { f: true } : {}),
+            ...(props.mediaType ? { t: props.mediaType } : {})
+        });
 
-    const categoriesLink = () => feedCategoriesLink(props.subject, props.favoritesOnly);
+    const categoriesLink = () =>
+        feedCategoriesLink(props.subject, props.favoritesOnly, props.mediaType);
 
     return (
         /*

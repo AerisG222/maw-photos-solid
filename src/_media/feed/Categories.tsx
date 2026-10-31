@@ -37,7 +37,10 @@ const Categories: Component = () => {
     const filterMenu = () => (
         <FeedFilterMenu
             favoritesOnly={feed.favoritesOnly()}
+            mediaType={feed.mediaType()}
             setFavoritesOnly={feed.setFavoritesOnly}
+            setMediaType={feed.setMediaType}
+            clearFilters={feed.clearFilters}
         />
     );
 
@@ -58,6 +61,7 @@ const Categories: Component = () => {
                 <ToolbarCategories
                     subject={feed.subject()}
                     favoritesOnly={feed.favoritesOnly()}
+                    mediaType={feed.mediaType()}
                     canRequestMore={feed.query().hasNextPage}
                     requestMore={() => void feed.query().fetchNextPage()}
                 />
@@ -79,17 +83,23 @@ const Categories: Component = () => {
                         <EmptyState
                             icon="icon-[ic--round-collections]"
                             title={
-                                feed.favoritesOnly()
-                                    ? "No favorites here yet"
-                                    : "There is nothing to show here"
+                                feed.mediaType()
+                                    ? "No categories match these filters"
+                                    : feed.favoritesOnly()
+                                      ? "No favorites here yet"
+                                      : "There is nothing to show here"
                             }
                             detail={
-                                feed.favoritesOnly()
+                                feed.favoritesOnly() && !feed.mediaType()
                                     ? `None of the categories ${feed.categoryScope()} have been marked as a favorite.`
                                     : undefined
                             }
-                            actionLabel={feed.favoritesOnly() ? "Clear filters" : undefined}
-                            onAction={() => feed.setFavoritesOnly(false)}
+                            actionLabel={
+                                feed.favoritesOnly() || feed.mediaType()
+                                    ? "Clear filters"
+                                    : undefined
+                            }
+                            onAction={feed.clearFilters}
                         />
                     }
                 >

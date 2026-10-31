@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, JSXElement, Show } from "solid-js";
 
 import { useSearchContext } from "../contexts/SearchContext";
 
@@ -6,7 +6,12 @@ import SearchField from "../../_components/input/SearchField";
 import PageHeader from "../../_components/layout/PageHeader";
 import Tooltip from "../../_components/tooltip/Tooltip";
 
-const SearchBar: Component = () => {
+interface Props {
+    // the page's filters, beside the box - see SearchPage
+    filterMenu?: JSXElement;
+}
+
+const SearchBar: Component<Props> = props => {
     const [
         searchContext,
         { setSearchTerm, setActiveTerm, recentSearches, removeRecentSearch, clearRecentSearches }
@@ -27,17 +32,21 @@ const SearchBar: Component = () => {
             <PageHeader
                 title="Search"
                 actions={
-                    <SearchField
-                        placeholder="Search Categories"
-                        value={searchContext.term}
-                        canClear={!!searchContext.term || !!searchContext.activeTerm}
-                        onInput={setSearchTerm}
-                        onClear={() => {
-                            setSearchTerm("");
-                            setActiveTerm("");
-                        }}
-                        onSubmit={executeSearch}
-                    />
+                    <>
+                        <SearchField
+                            placeholder="Search Categories"
+                            value={searchContext.term}
+                            canClear={!!searchContext.term || !!searchContext.activeTerm}
+                            onInput={setSearchTerm}
+                            onClear={() => {
+                                setSearchTerm("");
+                                setActiveTerm("");
+                            }}
+                            onSubmit={executeSearch}
+                        />
+
+                        {props.filterMenu}
+                    </>
                 }
             />
 

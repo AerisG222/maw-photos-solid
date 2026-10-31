@@ -25,8 +25,11 @@ const Grid: Component = () => {
         isPlace,
         placeId,
         favoritesOnly,
+        mediaType,
         isShuffled,
         setFavoritesOnly,
+        setMediaType,
+        clearFilters,
         setShuffled,
         isLoading,
         loadError,
@@ -49,7 +52,13 @@ const Grid: Component = () => {
     });
 
     const filterMenu = () => (
-        <FeedFilterMenu favoritesOnly={favoritesOnly()} setFavoritesOnly={setFavoritesOnly} />
+        <FeedFilterMenu
+            favoritesOnly={favoritesOnly()}
+            mediaType={mediaType()}
+            setFavoritesOnly={setFavoritesOnly}
+            setMediaType={setMediaType}
+            clearFilters={clearFilters}
+        />
     );
 
     // the empty check comes ahead of everything else: an empty clan answers 404 too
@@ -79,6 +88,7 @@ const Grid: Component = () => {
                         subject={subject()}
                         showingCategories={false}
                         favoritesOnly={favoritesOnly()}
+                        mediaType={mediaType()}
                     />
                 }
                 toolbarExtras={
@@ -88,17 +98,19 @@ const Grid: Component = () => {
                     <EmptyState
                         icon="icon-[ic--round-photo-library]"
                         title={
-                            favoritesOnly()
-                                ? "No favorites here yet"
-                                : "There is nothing to show here"
+                            mediaType()
+                                ? "No media matches these filters"
+                                : favoritesOnly()
+                                  ? "No favorites here yet"
+                                  : "There is nothing to show here"
                         }
                         detail={
-                            favoritesOnly()
+                            favoritesOnly() && !mediaType()
                                 ? `None of the media ${mediaScope()} has been marked as a favorite.`
                                 : undefined
                         }
-                        actionLabel={favoritesOnly() ? "Clear filters" : undefined}
-                        onAction={() => setFavoritesOnly(false)}
+                        actionLabel={favoritesOnly() || mediaType() ? "Clear filters" : undefined}
+                        onAction={clearFilters}
                     />
                 }
                 showBreadcrumbsOnGrid={false}

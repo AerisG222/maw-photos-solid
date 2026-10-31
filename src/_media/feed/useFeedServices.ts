@@ -1,6 +1,4 @@
-import { onMount } from "solid-js";
 import { useSearch } from "@tanstack/solid-router";
-import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 import { useClansContext } from "../../_contexts/api/ClansContext";
@@ -15,19 +13,18 @@ import { useGoTo, useMediaParams } from "../services/_navigation";
 import { useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
 import { useAddressedCategory } from "../useAddressedCategory";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 export const useFeedServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
-    const [area, { setFeedFavoritesOnly: rememberFavoritesOnly, setFeedShuffle: rememberShuffle }] =
-        useAreaSettingsContext();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
     const { placeMediaQuery } = usePlacesContext();
 
     const subject = useFeedSubject();
-    const { personId, clanId, placeId, isClan, isPlace, favoritesOnly } = subject;
+    const { personId, clanId, placeId, isClan, isPlace, favoritesOnly, mediaType } = subject;
     const search = useSearch({ strict: false });
 
     // already a whole number or absent - the route validated it, see _routes.ts
@@ -35,12 +32,21 @@ export const useFeedServices = (view: MediaView) => {
 
     const isShuffled = () => seed() !== undefined;
 
-    const filter = () => ({ favoritesOnly: favoritesOnly(), seed: seed() });
+    const filter = () => ({
+        favoritesOnly: favoritesOnly(),
+        seed: seed(),
+        mediaType: mediaType()
+    });
 
     // the filter as the address says it, carried by every link the feed hands out
-    const feedSearch = (favorites: boolean, currentSeed: number | undefined): FeedSearch => ({
+    const feedSearch = (
+        favorites: boolean,
+        currentSeed: number | undefined,
+        type: MediaTypeFilter | undefined
+    ): FeedSearch => ({
         ...(favorites ? { f: true } : {}),
-        ...(currentSeed !== undefined ? { seed: currentSeed } : {})
+        ...(currentSeed !== undefined ? { seed: currentSeed } : {}),
+        ...(type ? { t: type } : {})
     });
 
     /*
@@ -73,7 +79,7 @@ export const useFeedServices = (view: MediaView) => {
         params,
         view,
         subject.subject,
-        () => feedSearch(favoritesOnly(), seed()),
+        () => feedSearch(favoritesOnly(), seed(), mediaType()),
         () => categoryResult,
         mq
     );
@@ -94,57 +100,27 @@ export const useFeedServices = (view: MediaView) => {
        in the feed the new filter produces, and the entry point is a better answer
        than a photo that no longer belongs there.
     */
-    const applyFilter = (favorites: boolean, nextSeed: number | undefined) => {
-        goTo(feedGridLink(subject.subject(), undefined, feedSearch(favorites, nextSeed)), {
+    const applyFilter = (
+        favorites: boolean,
+        nextSeed: number | undefined,
+        type: MediaTypeFilter | undefined
+    ) => {
+        goTo(feedGridLink(subject.subject(), undefined, feedSearch(favorites, nextSeed, type)), {
             replace: true
         });
     };
 
-    /*
-       Each toggle also records the choice, so the next person or clan opens the
-       way this one was left. Only an explicit toggle writes it - arriving on a
-       link someone else shared says nothing about how this user likes to browse.
-    */
-    const setFavoritesOnly = (on: boolean) => {
-        rememberFavoritesOnly(on);
-        applyFilter(on, seed());
-    };
+    const setFavoritesOnly = (on: boolean) => applyFilter(on, seed(), mediaType());
+
+    const setMediaType = (type: MediaTypeFilter | undefined) =>
+        applyFilter(favoritesOnly(), seed(), type);
+
+    const clearFilters = () => applyFilter(false, seed(), undefined);
 
     // a fresh seed each time it is switched on, so turning shuffle off and back
     // on reshuffles rather than replaying the same order
-    const setShuffled = (on: boolean) => {
-        rememberShuffle(on);
-        applyFilter(favoritesOnly(), on ? newMediaSeed() : undefined);
-    };
-
-    /*
-       A feed opened without a filter of its own takes the remembered one, and
-       says so in the address - the url stays the single account of what is being
-       shown, rather than the screen quietly disagreeing with it.
-
-       Replaces rather than pushes: this is the same destination expressed fully,
-       not somewhere the back button should have to walk through.
-    */
-    onMount(() => {
-        if (search().f !== undefined || search().seed !== undefined) {
-            return;
-        }
-
-        if (!area.feedFavoritesOnly && !area.feedShuffle) {
-            return;
-        }
-
-        goTo(
-            {
-                to: ".",
-                search: feedSearch(
-                    area.feedFavoritesOnly,
-                    area.feedShuffle ? newMediaSeed() : undefined
-                )
-            },
-            { replace: true }
-        );
-    });
+    const setShuffled = (on: boolean) =>
+        applyFilter(favoritesOnly(), on ? newMediaSeed() : undefined, mediaType());
 
     /*
        Only the media feed can block the screen. The category follows whichever
@@ -163,6 +139,8 @@ export const useFeedServices = (view: MediaView) => {
         slideshowService,
         isShuffled,
         setFavoritesOnly,
+        setMediaType,
+        clearFilters,
         setShuffled,
         isLoading,
         loadError,

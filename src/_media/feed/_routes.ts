@@ -1,6 +1,7 @@
 import { linkOptions } from "@tanstack/solid-router";
 
 import { Media } from "../../_models/Media";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 import { MediaView, MediaViewGrid } from "../../_models/MediaView";
 import { MediaViewRoute } from "../../_models/MediaViewRoute";
 import { RouteDisplay } from "../../_models/RouteDisplay";
@@ -99,12 +100,19 @@ export const feedGridLink = (subject: FeedSubject, media?: Media, search: FeedSe
 };
 
 /*
-   A feed's categories. Only the favorites filter carries across: a seeded
+   A feed's categories. Only the filters carry across: a seeded
    shuffle has no meaning for a list of categories, and the API takes no seed
    for them.
 */
-export const feedCategoriesLink = (subject: FeedSubject, favoritesOnly: boolean) => {
-    const search = favoritesOnly ? { f: true } : {};
+export const feedCategoriesLink = (
+    subject: FeedSubject,
+    favoritesOnly: boolean,
+    mediaType?: MediaTypeFilter
+) => {
+    const search = {
+        ...(favoritesOnly ? { f: true } : {}),
+        ...(mediaType ? { t: mediaType } : {})
+    };
 
     switch (subject.kind) {
         case "clan":

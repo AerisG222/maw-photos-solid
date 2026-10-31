@@ -76,7 +76,7 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
             {
                 keys: ["u"],
                 action: "Favorites only",
-                scope: "Categories, People, a category's photos, and feeds"
+                scope: "Categories, People, Search, a category's photos, and feeds"
             },
             { keys: ["j"], action: "Shuffle", scope: "Media feeds" }
         ]

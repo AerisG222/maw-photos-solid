@@ -14,8 +14,7 @@ import Layout from "../_components/layout/Layout";
    the order people are listed in.
 */
 const ViewPeople: Component = () => {
-    const [area, { setFeedFavoritesOnly, setFeedShuffle, setFeedListing }] =
-        useAreaSettingsContext();
+    const [area, { setFeedListing }] = useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="People">
@@ -25,18 +24,6 @@ const ViewPeople: Component = () => {
                     without one of its own.
                 */}
                 <Panel title="Person & Clan Media">
-                    <Toggle
-                        title="Show Favorites Only"
-                        name="feedFavoritesOnly"
-                        isSelected={area.feedFavoritesOnly}
-                        onChange={setFeedFavoritesOnly}
-                    />
-                    <Toggle
-                        title="Shuffle Media"
-                        name="feedShuffle"
-                        isSelected={area.feedShuffle}
-                        onChange={setFeedShuffle}
-                    />
                     <Toggle
                         title="Open on Categories"
                         name="feedShowCategories"

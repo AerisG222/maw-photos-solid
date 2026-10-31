@@ -1,8 +1,12 @@
 import { SearchSchemaInput } from "@tanstack/solid-router";
 
+import { MediaTypeFilter, validateMediaFilters } from "../../_models/MediaFilters";
+
 export interface FeedSearch {
     // favorites only
     f?: boolean;
+    // one type of media
+    t?: MediaTypeFilter;
     // a shuffled order, reproducible from the seed
     seed?: number;
 }
@@ -20,6 +24,12 @@ export const validateFeedSearch = (search: FeedSearch & SearchSchemaInput): Feed
 
     if (raw.f === true || raw.f === "true") {
         result.f = true;
+    }
+
+    const { t } = validateMediaFilters(raw);
+
+    if (t) {
+        result.t = t;
     }
 
     const seed = typeof raw.seed === "number" ? raw.seed : Number(raw.seed);

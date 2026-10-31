@@ -60,12 +60,20 @@ describe("a feed", () => {
         expect(await landingFrom(`/people/${PERSON}`)).toBe(`/people/${PERSON}/grid`);
     });
 
-    test("opens on its categories if they were last chosen, with favorites if remembered", async () => {
+    test("opens on its categories if they were last chosen", async () => {
+        expect(await landingFrom(`/people/${PERSON}`, { feedListing: "categories" })).toBe(
+            `/people/${PERSON}/categories`
+        );
+    });
+
+    // these were settings once, and can still be sitting in somebody's browser
+    test("ignores a favorites or shuffle setting left in storage", async () => {
         expect(
             await landingFrom(`/people/${PERSON}`, {
                 feedListing: "categories",
-                feedFavoritesOnly: true
+                feedFavoritesOnly: true,
+                feedShuffle: true
             })
-        ).toBe(`/people/${PERSON}/categories?f=true`);
+        ).toBe(`/people/${PERSON}/categories`);
     });
 });

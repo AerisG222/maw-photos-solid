@@ -34,6 +34,7 @@ import {
 } from "../../_models/PlaceRequest";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
+import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 export type { PlaceFilter, PlaceMediaFilter } from "./_placesQueries";
 
@@ -84,7 +85,8 @@ export interface PlacesService {
     mediaPlacesQuery: (mediaId: Accessor<Uuid | undefined>) => UseQueryResult<Place[], Error>;
     placeCategoriesQuery: (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType?: Accessor<MediaTypeFilter | undefined>
     ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
     setCoverMutation: UseMutationResult<Place, Error, SetPlaceCoverRequest, unknown>;
     clearCoverMutation: UseMutationResult<Place, Error, Uuid, unknown>;
@@ -177,10 +179,11 @@ export const PlacesProvider: ParentComponent = props => {
 
     const placeCategoriesQuery = (
         id: Accessor<Uuid | undefined>,
-        favoritesOnly: Accessor<boolean>
+        favoritesOnly: Accessor<boolean>,
+        mediaType: Accessor<MediaTypeFilter | undefined> = () => undefined
     ) =>
         useInfiniteQuery(() => ({
-            ...placeCategoriesQueryOptions(getToken, id()!, favoritesOnly()),
+            ...placeCategoriesQueryOptions(getToken, id()!, favoritesOnly(), mediaType()),
             enabled: !!id() && authContext.isLoggedIn
         }));
 

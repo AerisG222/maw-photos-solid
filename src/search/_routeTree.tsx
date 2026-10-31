@@ -1,14 +1,22 @@
-import { createRoute, lazyRouteComponent, redirect } from "@tanstack/solid-router";
+import {
+    SearchSchemaInput,
+    createRoute,
+    lazyRouteComponent,
+    redirect
+} from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { loadAreaSettings } from "../_contexts/settings/_migrate";
+import { MediaFilters, validateMediaFilters } from "../_models/MediaFilters";
 import { equalsIgnoreCase } from "../_models/utils/StringUtils";
 
 export const searchRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "search",
     beforeLoad: requireLogin,
+    validateSearch: (search: MediaFilters & SearchSchemaInput) =>
+        validateMediaFilters(search as unknown as Record<string, unknown>),
     component: lazyRouteComponent(() => import("./Layout"))
 });
 
@@ -16,11 +24,12 @@ export const searchRoute = createRoute({
 const searchIndexRoute = createRoute({
     getParentRoute: () => searchRoute,
     path: "/",
-    beforeLoad: () => {
+    beforeLoad: ({ search }) => {
         throw redirect({
             to: equalsIgnoreCase("list", loadAreaSettings().searchView)
                 ? searchListRoute.to
                 : searchGridRoute.to,
+            search,
             replace: true
         });
     }

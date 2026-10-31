@@ -160,7 +160,6 @@ describe("migrating from the per-view settings", () => {
         );
 
         expect(migrated.area.feedListing).toBe("categories");
-        expect(migrated.area.feedFavoritesOnly).toBe(true);
     });
 
     test("a whole v1 storage migrates in one piece", () => {

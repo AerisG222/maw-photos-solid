@@ -9,6 +9,7 @@ import { IsFavoriteRequest } from "../../_models/IsFavoriteRequest";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { KEY_UI_RECENT_SEARCHES, loadJson } from "../../_contexts/settings/_storage";
 import { rememberSearch } from "../_recentSearches";
+import { MediaFilters } from "../../_models/MediaFilters";
 
 export interface SearchState {
     readonly term: string;
@@ -31,7 +32,8 @@ export type SearchContextValue = [
         removeRecentSearch: (term: string) => void;
         clearRecentSearches: () => void;
         categorySearchQuery: (
-            query: Accessor<string>
+            query: Accessor<string>,
+            filters?: Accessor<MediaFilters>
         ) => UseInfiniteQueryResult<InfiniteData<SearchResults<Category> | undefined>, Error>;
         allSearchResults: (
             searchQuery: UseInfiniteQueryResult<

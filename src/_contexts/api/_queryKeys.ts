@@ -17,6 +17,7 @@ import { Uuid } from "../../_models/Uuid";
 // module free of dependencies on the contexts that use it.
 interface FeedFilter {
     readonly favoritesOnly: boolean;
+    readonly mediaType?: string | undefined;
     readonly seed?: number | undefined;
 }
 
@@ -49,7 +50,8 @@ export const queryKeys = {
         // who the category is granted to - an admin's question only
         roles: (id: Uuid | undefined) => ["categories", id, "roles"] as const,
         searchRoot: () => ["categories", "search"] as const,
-        search: (term: string) => ["categories", "search", term] as const
+        search: (term: string, filters: { f?: boolean; t?: string } = {}) =>
+            ["categories", "search", term, filters] as const
     },
     media: {
         all: () => ["media"] as const,

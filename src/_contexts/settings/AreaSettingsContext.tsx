@@ -16,8 +16,6 @@ export type AreaSettingsContextValue = [
         setSearchView: (searchView: CategoryViewModeIdType) => void;
         setFeedListing: (feedListing: "media" | "categories") => void;
         setCategoryYearFilter: (categoryYearFilter: number | "all") => void;
-        setFeedFavoritesOnly: (feedFavoritesOnly: boolean) => void;
-        setFeedShuffle: (feedShuffle: boolean) => void;
         setSearchHistoryCount: (searchHistoryCount: number) => void;
     }
 ];
@@ -42,10 +40,6 @@ export const AreaSettingsProvider: ParentComponent = props => {
     const setCategoryYearFilter = (categoryYearFilter: number | "all") =>
         updateState({ categoryYearFilter });
 
-    const setFeedFavoritesOnly = (feedFavoritesOnly: boolean) => updateState({ feedFavoritesOnly });
-
-    const setFeedShuffle = (feedShuffle: boolean) => updateState({ feedShuffle });
-
     const setSearchHistoryCount = (searchHistoryCount: number) =>
         updateState({ searchHistoryCount });
 
@@ -58,8 +52,6 @@ export const AreaSettingsProvider: ParentComponent = props => {
                     setSearchView,
                     setFeedListing,
                     setCategoryYearFilter,
-                    setFeedFavoritesOnly,
-                    setFeedShuffle,
                     setSearchHistoryCount
                 }
             ]}
