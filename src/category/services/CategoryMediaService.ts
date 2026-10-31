@@ -17,7 +17,13 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
         view: MediaView,
         // accessors throughout - see the note in FeedMediaService
         protected categoryQuery: () => UseQueryResult<Category | undefined, Error>,
-        protected mediaListQuery: () => UseQueryResult<Media[], Error>
+        protected mediaListQuery: () => UseQueryResult<Media[], Error>,
+        /*
+           The media with the filters applied, for every view that follows them.
+           Held here so next, previous and the slideshow walk what is on screen.
+           Bulk edit works on the whole category, and leaves this out.
+        */
+        private filteredMedia?: Accessor<Media[]>
     ) {
         super(goTo, params, view);
     }
@@ -44,9 +50,20 @@ export class CategoryMediaService extends BaseMediaService implements IMediaServ
     };
 
     getMediaList = () => {
+        if (this.filteredMedia) {
+            return this.filteredMedia();
+        }
+
         const query = this.mediaListQuery();
 
         return query.isSuccess ? query.data : [];
+    };
+
+    // a photo a filter has since hidden, or an address naming one that was never here
+    navigateToViewIfMediaNotInList = () => {
+        if (this.mediaListQuery().isSuccess && this.params().mediaSlug && !this.getActiveMedia()) {
+            this.navigateToView(this.view);
+        }
     };
 
     // the category is the one the address names, which every category route has

@@ -13,6 +13,8 @@ interface Props {
     // available space with flex/grid instead of computing pixel offsets.
     fill?: boolean;
     title?: string;
+    // the page's controls, on the row with the title - see PageHeader
+    titleActions?: JSXElement;
     /*
        Rendered where the title would be, for a screen whose heading is a
        component rather than a string - the place chain, which names where you
@@ -85,7 +87,7 @@ const Layout: ParentComponent<Props> = props => {
             >
                 <div classList={{ "h-full": !!merged.fill }}>
                     <Show when={!!props.title}>
-                        <PageHeader title={props.title} />
+                        <PageHeader title={props.title} actions={props.titleActions} />
                     </Show>
 
                     {/* the place chain, which is the way back up and can wrap */}

@@ -1,24 +1,14 @@
-import { Component, Show } from "solid-js";
+import { Component } from "solid-js";
 
-import { useAuthContext } from "../../_contexts/AuthContext";
-
+import CategoriesFilterMenu from "./CategoriesFilterMenu";
 import YearFilter from "./YearFilter";
-import MissingGpsFilter from "./MissingGpsFilter";
-import RestrictedFilter from "./RestrictedFilter";
 
-const CategoryFilterBar: Component = () => {
-    const [state] = useAuthContext();
-
-    return (
-        <>
-            <YearFilter />
-
-            <Show when={state.accountStatus?.isAdmin}>
-                <MissingGpsFilter />
-                <RestrictedFilter />
-            </Show>
-        </>
-    );
-};
+// the year is which part of the library this is, so it stays out of the menu
+const CategoryFilterBar: Component = () => (
+    <>
+        <YearFilter />
+        <CategoriesFilterMenu />
+    </>
+);
 
 export default CategoryFilterBar;

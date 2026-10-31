@@ -11,6 +11,7 @@ import PlaceChain from "../../places/components/PlaceChain";
 import ToolbarFilters from "./ToolbarFilters";
 import ToolbarListing, { LISTING_NAV_COUNT } from "./ToolbarListing";
 import ViewGrid from "../ViewGrid";
+import FeedFilterMenu from "./FeedFilterMenu";
 
 const Grid: Component = () => {
     const {
@@ -47,6 +48,10 @@ const Grid: Component = () => {
         slideshowService.stop();
     });
 
+    const filterMenu = () => (
+        <FeedFilterMenu favoritesOnly={favoritesOnly()} setFavoritesOnly={setFavoritesOnly} />
+    );
+
     // the empty check comes ahead of everything else: an empty clan answers 404 too
     return (
         <Show when={!subjectIsEmpty()} fallback={<EmptyClanMessage name={subjectName()} />}>
@@ -59,9 +64,13 @@ const Grid: Component = () => {
                        chain and keeps the title.
                     */
                 title={isPlace() ? undefined : subjectName()}
+                titleActions={filterMenu()}
                 header={
                     <Show when={isPlace()}>
-                        <PlaceChain links={chain()} link={id => placeLink(id)} />
+                        <div class="flex flex-wrap items-center justify-between gap-x-6">
+                            <PlaceChain links={chain()} link={id => placeLink(id)} />
+                            {filterMenu()}
+                        </div>
                     </Show>
                 }
                 toolbarLeadingNavCount={LISTING_NAV_COUNT}
@@ -73,12 +82,7 @@ const Grid: Component = () => {
                     />
                 }
                 toolbarExtras={
-                    <ToolbarFilters
-                        favoritesOnly={favoritesOnly()}
-                        isShuffled={isShuffled()}
-                        setFavoritesOnly={setFavoritesOnly}
-                        setShuffled={setShuffled}
-                    />
+                    <ToolbarFilters isShuffled={isShuffled()} setShuffled={setShuffled} />
                 }
                 emptyState={
                     <EmptyState
@@ -93,6 +97,8 @@ const Grid: Component = () => {
                                 ? `None of the media ${mediaScope()} has been marked as a favorite.`
                                 : undefined
                         }
+                        actionLabel={favoritesOnly() ? "Clear filters" : undefined}
+                        onAction={() => setFavoritesOnly(false)}
                     />
                 }
                 showBreadcrumbsOnGrid={false}

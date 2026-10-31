@@ -4,6 +4,7 @@ import { useCategoriesByYear } from "./hooks/useCategoriesByYear";
 
 import Toolbar from "./components/Toolbar";
 import CategoryFilterBar from "./components/CategoryFilterBar";
+import NoCategoriesMatch from "./components/NoCategoriesMatch";
 import YearList from "./components/YearList";
 import Layout from "../_components/layout/Layout";
 import PageHeader from "../_components/layout/PageHeader";
@@ -12,7 +13,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const ListView: Component = () => {
-    const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
+    const { categoriesToDisplay, noMatches, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
@@ -34,6 +35,8 @@ const ListView: Component = () => {
                 errorTitle="Could not load categories"
                 when={categoriesToDisplay()}
                 skeleton={<SkeletonList />}
+                isEmpty={noMatches()}
+                empty={<NoCategoriesMatch />}
             >
                 <For
                     each={Object.keys(categoriesToDisplay()!)

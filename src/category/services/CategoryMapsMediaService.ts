@@ -18,9 +18,10 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
         view: MediaView,
         categoryQuery: () => UseQueryResult<Category | undefined, Error>,
         mediaListQuery: () => UseQueryResult<Media[], Error>,
-        protected gpsListQuery: () => UseQueryResult<GpsDetail[], Error>
+        protected gpsListQuery: () => UseQueryResult<GpsDetail[], Error>,
+        filteredMedia?: Accessor<Media[]>
     ) {
-        super(goTo, params, view, categoryQuery, mediaListQuery);
+        super(goTo, params, view, categoryQuery, mediaListQuery, filteredMedia);
     }
 
     override navigateToFirstMediaIfNeeded = () => {
@@ -31,6 +32,9 @@ export class CategoryMapsMediaService extends CategoryMediaService implements IM
 
             if (first) {
                 this.navigateToMedia(this.view, first.media, { replace: true });
+            } else if (this.gpsListQuery().isSuccess) {
+                // nothing left to open, so the photo a filter hid has to go from the address
+                this.navigateToViewIfMediaNotInList();
             }
         }
     };

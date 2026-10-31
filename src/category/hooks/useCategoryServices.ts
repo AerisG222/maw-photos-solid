@@ -1,4 +1,8 @@
+import { createMemo } from "solid-js";
+
 import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
+import { filterMedia } from "../../_models/MediaFilters";
+import { useCategoryMediaFilters } from "./useCategoryMediaFilters";
 import { useAddressedCategory } from "../../_media/useAddressedCategory";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
@@ -19,12 +23,15 @@ export const useCategoryServices = (view: MediaView) => {
         category: cq
     } = useAddressedCategory(params);
     const mq = categoryMediaQuery(categoryId);
+    const { filters } = useCategoryMediaFilters();
+    const filteredMedia = createMemo(() => (mq.isSuccess ? filterMedia(mq.data, filters()) : []));
     const mediaService = new CategoryMediaService(
         goTo,
         params,
         view,
         () => cq,
-        () => mq
+        () => mq,
+        filteredMedia
     );
 
     const slideshowService = new SlideshowService(mediaService, mediaSettings.slideshowSeconds);

@@ -1,4 +1,10 @@
-import { createRoute, lazyRouteComponent, linkOptions, redirect } from "@tanstack/solid-router";
+import {
+    SearchSchemaInput,
+    createRoute,
+    lazyRouteComponent,
+    linkOptions,
+    redirect
+} from "@tanstack/solid-router";
 
 import { accountStatusQueryOptions } from "../_contexts/api/_configQueries";
 import {
@@ -12,6 +18,7 @@ import { requireLogin } from "../_router/guards";
 import { prefetch } from "../_router/prefetch";
 import { redirectToGrid } from "../_media/_legacyViews";
 import { loadMediaSettings } from "../_contexts/settings/_migrate";
+import { MediaFilters, validateMediaFilters } from "../_models/MediaFilters";
 import { MediaView, MediaViewBulkEdit, MediaViewMap } from "../_models/MediaView";
 
 /*
@@ -49,6 +56,8 @@ export const categoryRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "categories/$categoryYear/$categorySlug",
     beforeLoad: requireLogin,
+    validateSearch: (search: MediaFilters & SearchSchemaInput) =>
+        validateMediaFilters(search as unknown as Record<string, unknown>),
     loader: ({ context, params }) =>
         prefetchCategory(context, params.categoryYear, params.categorySlug),
     component: lazyRouteComponent(() => import("../_media/MediaRoot"))
@@ -136,6 +145,9 @@ export const categoryBulkEditRoute = createRoute({
    A view of a category, optionally open on one of its photos - typed, so a
    view that does not exist, or a category address missing its year, fails to
    compile. Bulk edit works on the whole category, so it takes no photo.
+
+   Every one carries the filters along, so they follow you between photos and
+   views. A link that left them out would drop them: `search` is not inherited.
 */
 export const categoryViewLink = (
     view: MediaView,
@@ -149,17 +161,20 @@ export const categoryViewLink = (
         case MediaViewMap:
             return linkOptions({
                 to: categoryMapRoute.to,
-                params
+                params,
+                search: true
             });
         case MediaViewBulkEdit:
             return linkOptions({
                 to: categoryBulkEditRoute.to,
-                params: { categoryYear, categorySlug }
+                params: { categoryYear, categorySlug },
+                search: true
             });
         default:
             return linkOptions({
                 to: categoryGridRoute.to,
-                params
+                params,
+                search: true
             });
     }
 };

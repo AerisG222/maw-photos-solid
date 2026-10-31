@@ -34,7 +34,7 @@ const YearFilter: Component = () => {
         const year = val === "all" || isNaN(parsed) ? "all" : parsed;
 
         setCategoryYearFilter(year);
-        void navigate({ to: ".", search: { ...search(), year } });
+        void navigate({ to: ".", search: { ...search(), year }, replace: true });
     };
 
     const toKvp = (allYears: number[]) =>

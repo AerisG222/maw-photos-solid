@@ -23,7 +23,7 @@ const Toolbar: ParentComponent = props => {
                             route: categoriesGrid,
                             link: linkOptions({
                                 to: categoriesGridRoute.to,
-                                search: { year: area.categoryYearFilter }
+                                search: previous => ({ ...previous, year: area.categoryYearFilter })
                             }),
                             clickHandler: () => setCategoriesView("grid")
                         },
@@ -31,7 +31,7 @@ const Toolbar: ParentComponent = props => {
                             route: categoriesList,
                             link: linkOptions({
                                 to: categoriesListRoute.to,
-                                search: { year: area.categoryYearFilter }
+                                search: previous => ({ ...previous, year: area.categoryYearFilter })
                             }),
                             clickHandler: () => setCategoriesView("list")
                         }

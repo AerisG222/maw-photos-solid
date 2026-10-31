@@ -6,6 +6,7 @@ import Toolbar from "./components/Toolbar";
 import GridToolbar from "./components/ToolbarGrid";
 import YearGrid from "./components/YearGrid";
 import CategoryFilterBar from "./components/CategoryFilterBar";
+import NoCategoriesMatch from "./components/NoCategoriesMatch";
 import Layout from "../_components/layout/Layout";
 import PageHeader from "../_components/layout/PageHeader";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
@@ -13,7 +14,7 @@ import AsyncBoundary from "../_components/state/AsyncBoundary";
 import { favoriteSetter } from "../_models/utils/FavoriteUtils";
 
 const GridView: Component = () => {
-    const { categoriesToDisplay, loadError, retryLoad, setIsFavoriteMutation } =
+    const { categoriesToDisplay, noMatches, loadError, retryLoad, setIsFavoriteMutation } =
         useCategoriesByYear();
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
@@ -44,6 +45,8 @@ const GridView: Component = () => {
                 errorTitle="Could not load categories"
                 when={categoriesToDisplay()}
                 skeleton={<SkeletonGrid />}
+                isEmpty={noMatches()}
+                empty={<NoCategoriesMatch />}
             >
                 <For
                     each={Object.keys(categoriesToDisplay()!)

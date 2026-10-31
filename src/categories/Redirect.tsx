@@ -23,7 +23,7 @@ const CategoriesRedirect: Component = () => {
                     ? categoriesListRoute.to
                     : categoriesGridRoute.to
             }
-            search={{ year: search().year ?? area.categoryYearFilter }}
+            search={{ ...search(), year: search().year ?? area.categoryYearFilter }}
             replace
         />
     );

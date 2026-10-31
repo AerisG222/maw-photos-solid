@@ -187,11 +187,6 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 (categoryFilter.yearFilter === "all"
                     ? "all"
                     : defaultAreaSettings.categoryYearFilter),
-            categoryMissingGpsFilter:
-                bool(categoryFilter.missingGpsFilter) ??
-                defaultAreaSettings.categoryMissingGpsFilter,
-            // newer than the v1 settings, so there is nothing to carry over
-            categoryRestrictedFilter: defaultAreaSettings.categoryRestrictedFilter,
             feedFavoritesOnly:
                 bool(faceFeed.favoritesOnly) ?? defaultAreaSettings.feedFavoritesOnly,
             feedShuffle: bool(faceFeed.shuffle) ?? defaultAreaSettings.feedShuffle,

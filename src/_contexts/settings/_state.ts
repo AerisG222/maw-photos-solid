@@ -75,9 +75,6 @@ export interface AreaSettingsState {
     readonly feedListing: "media" | "categories";
     // kept rather than left to the url alone; `?year=` still wins when present
     readonly categoryYearFilter: number | "all";
-    readonly categoryMissingGpsFilter: boolean;
-    // admin only, like the gps filter: categories holding a restricted media
-    readonly categoryRestrictedFilter: boolean;
     readonly feedFavoritesOnly: boolean;
     readonly feedShuffle: boolean;
     // how many recent search terms to keep
@@ -89,8 +86,6 @@ export const defaultAreaSettings: AreaSettingsState = {
     searchView: defaultCategoryViewMode,
     feedListing: "media",
     categoryYearFilter: "all",
-    categoryMissingGpsFilter: false,
-    categoryRestrictedFilter: false,
     feedFavoritesOnly: false,
     feedShuffle: false,
     searchHistoryCount: defaultSearchHistoryCount

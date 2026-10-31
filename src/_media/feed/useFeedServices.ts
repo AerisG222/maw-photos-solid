@@ -95,7 +95,9 @@ export const useFeedServices = (view: MediaView) => {
        than a photo that no longer belongs there.
     */
     const applyFilter = (favorites: boolean, nextSeed: number | undefined) => {
-        goTo(feedGridLink(subject.subject(), undefined, feedSearch(favorites, nextSeed)));
+        goTo(feedGridLink(subject.subject(), undefined, feedSearch(favorites, nextSeed)), {
+            replace: true
+        });
     };
 
     /*

@@ -41,6 +41,8 @@ interface Props {
     // names the feed when it is not self-evident from the media - a person's
     // photos span categories, so the breadcrumbs alone do not say whose they are
     title?: string;
+    // the feed's controls, at the far end of the row its name is on
+    titleActions?: JSXElement;
     // a heading that is a component rather than a string - see Layout. The place
     // feeds pass their chain, which names the place and walks back up the tree
     header?: JSXElement;
@@ -230,6 +232,7 @@ const ViewGrid: Component<Props> = props => {
         <Show when={props.mediaService.getMediaList()}>
             <Layout
                 title={props.title}
+                titleActions={props.titleActions}
                 header={props.header}
                 toolbar={
                     <Toolbar
@@ -347,6 +350,7 @@ const ViewGrid: Component<Props> = props => {
                         <Show when={props.showBreadcrumbsOnGrid}>
                             <StickyCategoryHeader
                                 category={props.mediaService.getActiveCategory()}
+                                actions={props.titleActions}
                             />
                         </Show>
 

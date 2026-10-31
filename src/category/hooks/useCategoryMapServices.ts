@@ -1,9 +1,13 @@
+import { createMemo } from "solid-js";
+
 import { useGoTo, useMediaParams } from "../../_media/services/_navigation";
+import { filterMedia } from "../../_models/MediaFilters";
+import { useCategoryMediaFilters } from "./useCategoryMediaFilters";
 import { useAddressedCategory } from "../../_media/useAddressedCategory";
 import { useCategoriesContext } from "../../_contexts/api/CategoriesContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { SlideshowService } from "../../_media/services/SlideshowService";
-import { MediaView } from "../../_models/MediaView";
+import { MediaView, MediaViewBulkEdit } from "../../_models/MediaView";
 import { CategoryMapsMediaService } from "../services/CategoryMapsMediaService";
 import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
 
@@ -20,13 +24,17 @@ export const useCategoryMapServices = (view: MediaView) => {
     } = useAddressedCategory(params);
     const mq = categoryMediaQuery(categoryId);
     const gpsList = categoryMediaGpsQuery(categoryId);
+    const { filters } = useCategoryMediaFilters();
+    const filteredMedia = createMemo(() => (mq.isSuccess ? filterMedia(mq.data, filters()) : []));
     const mediaService = new CategoryMapsMediaService(
         goTo,
         params,
         view,
         () => cq,
         () => mq,
-        () => gpsList
+        () => gpsList,
+        // bulk edit works on the whole category, whatever the listing is narrowed to
+        view === MediaViewBulkEdit ? undefined : filteredMedia
     );
 
     /*

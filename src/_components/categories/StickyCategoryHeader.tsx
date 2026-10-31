@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, JSXElement, Show } from "solid-js";
 import { Link } from "@tanstack/solid-router";
 
 import { Category } from "../../_models/Category";
@@ -8,6 +8,8 @@ import PageHeader from "../layout/PageHeader";
 
 interface Props {
     category?: Category;
+    // the page's controls, at the far end of the row
+    actions?: JSXElement;
 }
 
 // the category's name, with its year ahead of it as the link back out
@@ -15,6 +17,7 @@ const StickyCategoryHeader: Component<Props> = props => (
     <Show when={props.category}>
         {category => (
             <PageHeader
+                actions={props.actions}
                 title={
                     <>
                         <Link

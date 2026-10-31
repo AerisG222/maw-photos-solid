@@ -55,7 +55,7 @@ export const useFeedCategories = () => {
     // url is rewritten so it still accounts for what is on screen
     const setFavoritesOnly = (on: boolean) => {
         rememberFavoritesOnly(on);
-        goTo({ to: ".", search: on ? { f: true } : {} });
+        goTo({ to: ".", search: on ? { f: true } : {} }, { replace: true });
     };
 
     return {

@@ -1,4 +1,5 @@
 import { Component, createMemo, createSignal, Show } from "solid-js";
+import { getRouteApi } from "@tanstack/solid-router";
 import ListingSurface from "../_components/listing/ListingSurface";
 import { personRowHeight } from "../_components/listing/_rows";
 
@@ -17,6 +18,9 @@ import ClanSection from "./components/ClanSection";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Layout from "../_components/layout/Layout";
 import PageHeader from "../_components/layout/PageHeader";
+import FilterMenu from "../_components/filters/FilterMenu";
+import Checkbox from "../_components/input/Checkbox";
+import { useGoTo } from "../_media/services/_navigation";
 import PersonCard from "./components/PersonCard";
 import PersonFilterBar from "./components/PersonFilterBar";
 import SelectionBar from "./components/SelectionBar";
@@ -41,6 +45,8 @@ type Picking =
     // where to go
     | { kind: "members"; clan: Clan };
 
+const route = getRouteApi("/people");
+
 const GridView: Component = () => {
     const [listing] = useListingSettingsContext();
     const { peopleQuery, setIsFavoriteMutation } = usePeopleContext();
@@ -52,6 +58,8 @@ const GridView: Component = () => {
         deleteClanMutation
     } = useClansContext();
 
+    const search = route.useSearch();
+    const goTo = useGoTo();
     const [filter, setFilter] = createSignal("");
     const [picking, setPicking] = createSignal<Picking>({ kind: "off" });
     const [selected, setSelected] = createSignal<Set<Uuid>>(new Set());
@@ -78,9 +86,15 @@ const GridView: Component = () => {
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
+    // compared, not just read: the router hands back whatever the address says - see useCategoryMediaFilters
+    const favoritesOnly = () => search().f === true;
+    const setFavoritesOnly = (on: boolean) =>
+        goTo({ to: ".", search: on ? { f: true } : {} }, { replace: true });
+
     const peopleToDisplay = createMemo(() => {
         const term = filter().trim().toLocaleLowerCase();
-        const all = people.data ?? [];
+        const candidates = people.data ?? [];
+        const all = favoritesOnly() ? candidates.filter(p => p.isFavorite) : candidates;
         const matches = term
             ? all.filter(person => person.name.toLocaleLowerCase().includes(term))
             : all;
@@ -213,7 +227,24 @@ const GridView: Component = () => {
         <Layout toolbar={<Toolbar />}>
             <PageHeader
                 title="People"
-                actions={<PersonFilterBar filter={filter()} setFilter={setFilter} />}
+                actions={
+                    <>
+                        <PersonFilterBar filter={filter()} setFilter={setFilter} />
+
+                        <FilterMenu
+                            activeCount={favoritesOnly() ? 1 : 0}
+                            onClear={() => setFavoritesOnly(false)}
+                            toggleFavorites={() => setFavoritesOnly(!favoritesOnly())}
+                        >
+                            <Checkbox
+                                title="Favorites"
+                                name="filter-favorites"
+                                isSelected={favoritesOnly()}
+                                onChange={setFavoritesOnly}
+                            />
+                        </FilterMenu>
+                    </>
+                }
             >
                 {/*
                     With the filter, so the two stay together: finding somebody
@@ -252,7 +283,15 @@ const GridView: Component = () => {
                     />
                 </Show>
 
-                <Show when={peopleToDisplay().length > 0} fallback={<NoMatches />}>
+                <Show
+                    when={peopleToDisplay().length > 0}
+                    fallback={
+                        <NoMatches
+                            favoritesOnly={favoritesOnly()}
+                            clear={() => setFavoritesOnly(false)}
+                        />
+                    }
+                >
                     <ListingSurface
                         animate
                         class="mb-4"
@@ -314,8 +353,20 @@ const EmptyLibrary: Component = () => (
     />
 );
 
-const NoMatches: Component = () => (
-    <EmptyState icon="icon-[ic--round-search-off]" title="No people match that name" />
+const NoMatches: Component<{ favoritesOnly: boolean; clear: () => void }> = props => (
+    <Show
+        when={props.favoritesOnly}
+        fallback={
+            <EmptyState icon="icon-[ic--round-search-off]" title="No people match that name" />
+        }
+    >
+        <EmptyState
+            icon="icon-[ic--round-search-off]"
+            title="No people match these filters"
+            actionLabel="Clear filters"
+            onAction={props.clear}
+        />
+    </Show>
 );
 
 export default GridView;

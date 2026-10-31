@@ -17,6 +17,7 @@ import PlaceChain from "../../places/components/PlaceChain";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarCategories from "./ToolbarCategories";
 import { favoriteSetter } from "../../_models/utils/FavoriteUtils";
+import FeedFilterMenu from "./FeedFilterMenu";
 
 /*
    The categories a person or clan turns up in, or the ones holding media taken at
@@ -33,13 +34,24 @@ const Categories: Component = () => {
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
+    const filterMenu = () => (
+        <FeedFilterMenu
+            favoritesOnly={feed.favoritesOnly()}
+            setFavoritesOnly={feed.setFavoritesOnly}
+        />
+    );
+
     return (
         <Layout
             // see the note in the media listing: a place names itself in its chain
             title={feed.isPlace() ? undefined : feed.subjectName()}
+            titleActions={filterMenu()}
             header={
                 <Show when={feed.isPlace()}>
-                    <PlaceChain links={chain()} link={id => placeLink(id)} />
+                    <div class="flex flex-wrap items-center justify-between gap-x-6">
+                        <PlaceChain links={chain()} link={id => placeLink(id)} />
+                        {filterMenu()}
+                    </div>
                 </Show>
             }
             toolbar={
@@ -47,7 +59,6 @@ const Categories: Component = () => {
                     subject={feed.subject()}
                     favoritesOnly={feed.favoritesOnly()}
                     canRequestMore={feed.query().hasNextPage}
-                    setFavoritesOnly={feed.setFavoritesOnly}
                     requestMore={() => void feed.query().fetchNextPage()}
                 />
             }
@@ -77,6 +88,8 @@ const Categories: Component = () => {
                                     ? `None of the categories ${feed.categoryScope()} have been marked as a favorite.`
                                     : undefined
                             }
+                            actionLabel={feed.favoritesOnly() ? "Clear filters" : undefined}
+                            onAction={() => feed.setFavoritesOnly(false)}
                         />
                     }
                 >

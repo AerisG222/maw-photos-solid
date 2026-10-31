@@ -1,10 +1,11 @@
-import { createRoute, lazyRouteComponent } from "@tanstack/solid-router";
+import { createRoute, lazyRouteComponent, SearchSchemaInput } from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { prefetch } from "../_router/prefetch";
 import { peopleQueryOptions } from "../_contexts/api/_peopleQueries";
 import { clansQueryOptions } from "../_contexts/api/_clansQueries";
+import { MediaFilters, isFlagSet } from "../_models/MediaFilters";
 
 /*
    The people and clans picker. A person's and a clan's media hang under
@@ -15,6 +16,8 @@ export const peopleRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "people",
     beforeLoad: requireLogin,
+    validateSearch: (search: MediaFilters & SearchSchemaInput): Pick<MediaFilters, "f"> =>
+        isFlagSet((search as unknown as Record<string, unknown>).f) ? { f: true } : {},
     loader: ({ context }) =>
         prefetch(context, (queryClient, getToken) =>
             Promise.all([
