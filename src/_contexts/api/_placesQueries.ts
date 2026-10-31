@@ -5,7 +5,7 @@ import { queryKeys } from "./_queryKeys";
 import { GetToken } from "./_configQueries";
 import { CategoryDto, mapCategory } from "../../_models/Category";
 import { Media } from "../../_models/Media";
-import { Place, PlaceAncestor, PlaceKind } from "../../_models/Place";
+import { Place, PlaceAncestor } from "../../_models/Place";
 import { SearchResults } from "../../_models/SearchResults";
 import { Uuid } from "../../_models/Uuid";
 
@@ -20,7 +20,6 @@ import { Uuid } from "../../_models/Uuid";
 export interface PlaceFilter {
     // undefined lists the countries - the root of the tree
     parentId: Uuid | undefined;
-    kind: PlaceKind | undefined;
     // already trimmed by the caller; blank means "not searching"
     search: string;
 }
@@ -39,10 +38,6 @@ export const fetchPlaces = async (getToken: GetToken, filter: PlaceFilter) => {
         params.q = filter.search;
     } else if (filter.parentId) {
         params.parent = filter.parentId;
-    }
-
-    if (filter.kind) {
-        params.kind = filter.kind;
     }
 
     return runWithAccessToken(getToken, accessToken =>
@@ -130,7 +125,6 @@ export const placesQueryOptions = (getToken: GetToken, filter: PlaceFilter) =>
     queryOptions({
         queryKey: queryKeys.places.list({
             parentId: filter.search ? undefined : filter.parentId,
-            kind: filter.kind,
             search: filter.search || undefined
         }),
         queryFn: () => fetchPlaces(getToken, filter),

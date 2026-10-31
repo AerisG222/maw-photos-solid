@@ -8,7 +8,7 @@ import { feedLink } from "../_media/feed/_routes";
 import { useGoTo } from "../_media/services/_navigation";
 import { PlaceFilter, usePlacesContext } from "../_contexts/api/PlacesContext";
 import { useAuthContext } from "../_contexts/AuthContext";
-import { allPlaceKinds, isLeafPlace, Place, PlaceKind } from "../_models/Place";
+import { isLeafPlace, Place } from "../_models/Place";
 import { isUuid, Uuid } from "../_models/Uuid";
 import { EAGER_THRESHOLD } from "../_models/utils/Constants";
 
@@ -63,9 +63,8 @@ const Browse: Component = () => {
 
         return isUuid(id) ? id : undefined;
     };
-    // already trimmed, and a kind that exists - the route validated both, see _routes.ts
+    // already trimmed - the route validated it, see _routes.ts
     const search = () => searchParams().q ?? "";
-    const kind = () => searchParams().kind;
 
     // the query string, changed in place - the level of the tree stays where it is
     const changeSearch = (change: Partial<PlacesSearch>) =>
@@ -88,7 +87,6 @@ const Browse: Component = () => {
 
     const filter = (): PlaceFilter => ({
         parentId: placeId(),
-        kind: kind(),
         search: search()
     });
 
@@ -118,11 +116,11 @@ const Browse: Component = () => {
 
        Not while editing - administering a leaf is done on this page, and it is
        the only way to reach its cover, its move and its merge. Not while a search
-       or a filter is on either: those answer about the whole tree, and a redirect
-       would throw the answer away.
+       is on either: that answers about the whole tree, and a redirect would throw
+       the answer away.
     */
     createEffect(() => {
-        if (!editing() && !search() && !kind() && place.data && isLeafPlace(place.data)) {
+        if (!editing() && !search() && place.data && isLeafPlace(place.data)) {
             goTo(feedLink({ kind: "place", id: place.data.id }), { replace: true });
         }
     });
@@ -140,9 +138,6 @@ const Browse: Component = () => {
     const treeLink = (id?: Uuid) => placeLink(id, editing());
 
     const setSearch = (term: string) => changeSearch({ q: term.trim() || undefined });
-    const setKind = (value: PlaceKind | undefined) => changeSearch({ kind: value });
-
-    const kindLabel = () => allPlaceKinds.find(k => k.id === kind())?.name;
 
     /*
        A tile leads to whatever is actually inside it. At the bottom of the tree
@@ -168,11 +163,11 @@ const Browse: Component = () => {
        heading and its tiles are the way further down, and there is no further
        down - the photographs are offered above, by the summary.
 
-       A search or a kind filter keeps it, because there an empty answer is about
-       what was asked for rather than about the place, and saying so is the point.
+       A search keeps it, because there an empty answer is about what was asked for
+       rather than about the place, and saying so is the point.
     */
     const showsChildren = () => {
-        if (search() || kind() || !placeId()) {
+        if (search() || !placeId()) {
             return true;
         }
 
@@ -188,27 +183,9 @@ const Browse: Component = () => {
         return !place.data || !isLeafPlace(place.data);
     };
 
-    // only ever read for a narrowed listing - see where it is rendered
-    const listTitle = () =>
-        search() ? `Places matching "${search()}"` : `${kindLabel() ?? "Places"} Here`;
-
     const emptyMessage = (): { title: string; detail?: string } => {
-        const kindPhrase = kindLabel()?.toLocaleLowerCase() ?? "places";
-
         if (search()) {
-            return { title: `No ${kindPhrase} match that search` };
-        }
-
-        /*
-           A kind narrows the level being looked at rather than the tree, so
-           asking for cities among the countries is a real question with an empty
-           answer.
-        */
-        if (kind()) {
-            return {
-                title: `There are no ${kindPhrase} at this level`,
-                detail: "The kind filter narrows the level you are on - search to look across the whole tree."
-            };
+            return { title: "No places match that search" };
         }
 
         return {
@@ -239,14 +216,7 @@ const Browse: Component = () => {
             <Show when={!placeId()}>
                 <PageHeader
                     title="Places"
-                    actions={
-                        <PlaceSearchBar
-                            search={search()}
-                            kind={kind()}
-                            onSearch={setSearch}
-                            onKind={setKind}
-                        />
-                    }
+                    actions={<PlaceSearchBar search={search()} onSearch={setSearch} />}
                 />
             </Show>
 
@@ -274,27 +244,20 @@ const Browse: Component = () => {
             {/* below the chain, which can run the width of the page on its own */}
             <Show when={placeId()}>
                 <div class="my-2 flex justify-end">
-                    <PlaceSearchBar
-                        search={search()}
-                        kind={kind()}
-                        onSearch={setSearch}
-                        onKind={setKind}
-                    />
+                    <PlaceSearchBar search={search()} onSearch={setSearch} />
                 </div>
             </Show>
 
             <Show when={showsChildren()}>
                 {/*
-                    Only when something narrowed the listing. Unfiltered, the grid
+                    Only when a search narrowed the listing. Otherwise the grid
                     under the chain is self-evidently what is inside the place the
                     chain ends on, and "Within This Place" was a label for a thing
                     that had just been said.
                 */}
-                <Show when={search() || kind()}>
-                    <h2 class="text-lg font-bold">{listTitle()}</h2>
-                </Show>
-
                 <Show when={search()}>
+                    <h2 class="text-lg font-bold">{`Places matching "${search()}"`}</h2>
+
                     <p class="text-sm text-muted mb-2">
                         Searching every level of the tree, not just this one.
                     </p>

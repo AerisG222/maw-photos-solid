@@ -36,7 +36,6 @@ const PlacePicker: Component<Props> = props => {
 
     const filter = () => ({
         parentId: undefined,
-        kind: undefined,
         search: search()
     });
 

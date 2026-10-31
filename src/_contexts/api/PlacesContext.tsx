@@ -40,10 +40,9 @@ export type { PlaceFilter, PlaceMediaFilter } from "./_placesQueries";
 /*
    Which slice of the place tree to list.
 
-   The three fields are not independent, and the API is what decides that: a
+   The two fields are not independent, and the API is what decides that: a
    `search` matches names anywhere in the tree and makes `parentId` irrelevant,
-   because the duplicates worth finding sit in *different* branches. `kind`
-   applies either way, so "every city called Zhuhai" is one request.
+   because the duplicates worth finding sit in *different* branches.
 */
 
 /*

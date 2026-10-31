@@ -27,11 +27,11 @@ export const placesRoute = createRoute({
     beforeLoad: requireLogin,
     validateSearch: validatePlacesSearch,
     /*
-       The level's listing, under whatever search or kind is on, and - below the
+       The level's listing, under whatever search is on, and - below the
        root - the place itself and the chain above it. The edit mode changes
        nothing that is read, so it is not a reason to read again.
     */
-    loaderDeps: ({ search }) => ({ q: search.q, kind: search.kind }),
+    loaderDeps: ({ search }) => ({ q: search.q }),
     loader: ({ context, params, deps }) =>
         prefetch(context, async (queryClient, getToken) => {
             const id = isUuid(params.placeId) ? params.placeId : undefined;
@@ -40,7 +40,6 @@ export const placesRoute = createRoute({
                 queryClient.prefetchQuery(
                     placesQueryOptions(getToken, {
                         parentId: id,
-                        kind: deps.kind,
                         search: deps.q ?? ""
                     })
                 ),

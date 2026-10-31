@@ -1,7 +1,5 @@
 import { SearchSchemaInput } from "@tanstack/solid-router";
 
-import { allPlaceKinds, PlaceKind } from "../_models/Place";
-
 /*
    One screen for the place tree, whoever is looking at it.
 
@@ -21,8 +19,6 @@ import { allPlaceKinds, PlaceKind } from "../_models/Place";
 export interface PlacesSearch {
     // a search across the whole tree
     q?: string;
-    // only countries, states or cities
-    kind?: PlaceKind;
     edit?: boolean;
 }
 
@@ -32,14 +28,9 @@ export const validatePlacesSearch = (search: PlacesSearch & SearchSchemaInput): 
     const raw = search as unknown as Record<string, unknown>;
     const result: PlacesSearch = {};
     const q = typeof raw.q === "string" ? raw.q.trim() : "";
-    const kind = allPlaceKinds.find(k => k.id === raw.kind)?.id;
 
     if (q) {
         result.q = q;
-    }
-
-    if (kind) {
-        result.kind = kind;
     }
 
     if (raw.edit === true || raw.edit === "true" || raw.edit === "1" || raw.edit === 1) {

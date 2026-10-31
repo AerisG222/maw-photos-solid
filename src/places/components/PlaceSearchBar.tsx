@@ -1,15 +1,10 @@
 import { Component, createEffect, createSignal } from "solid-js";
 
-import { allPlaceKinds, PlaceKind } from "../../_models/Place";
-
 import SearchField from "../../_components/input/SearchField";
-import Select from "../../_components/input/Select";
 
 interface Props {
     search: string;
-    kind: PlaceKind | undefined;
     onSearch: (term: string) => void;
-    onKind: (kind: PlaceKind | undefined) => void;
 }
 
 /*
@@ -19,7 +14,7 @@ interface Props {
    finding the second one, and drilling to it requires already knowing where it
    is - which is exactly what is unknown when hunting duplicates. The API matches
    names across the whole tree and ignores the level being browsed, so "every
-   city called Zhuhai" is one request.
+   place called Zhuhai" is one request.
 
    Submitted rather than sent per keystroke: a search is a whole-tree query, and
    the term is put in the address so a hunt survives a reload.
@@ -40,24 +35,14 @@ const PlaceSearchBar: Component<Props> = props => {
     };
 
     return (
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 max-w-full">
-            <SearchField
-                placeholder="Find a Place"
-                value={term()}
-                canClear={!!term() || !!props.search}
-                onInput={setTerm}
-                onClear={clear}
-                onSubmit={submit}
-            />
-
-            <Select
-                inline
-                title="Kind"
-                itemArray={[{ id: "", name: "All Kinds" }, ...allPlaceKinds]}
-                selectedValue={props.kind ?? ""}
-                onChange={value => props.onKind((value || undefined) as PlaceKind | undefined)}
-            />
-        </div>
+        <SearchField
+            placeholder="Find a Place"
+            value={term()}
+            canClear={!!term() || !!props.search}
+            onInput={setTerm}
+            onClear={clear}
+            onSubmit={submit}
+        />
     );
 };
 

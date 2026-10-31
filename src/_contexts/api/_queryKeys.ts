@@ -24,7 +24,6 @@ interface FeedFilter {
 // reason as FeedFilter above
 interface PlaceListFilter {
     readonly parentId?: string | undefined;
-    readonly kind?: string | undefined;
     readonly search?: string | undefined;
 }
 
