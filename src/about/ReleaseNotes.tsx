@@ -6,6 +6,24 @@ const ViewApplication: Component = () => {
             <h1 class="head1">Release Notes</h1>
 
             <h3 class="head3">
+                <span class="version">v5.3.0</span> : <span class="date">2026-10-31</span>
+            </h3>
+            <p>Easier browsing, filtering, and a more consistent look:</p>
+            <ul class="list-inside list-disc mb-4">
+                <li>Automatically load more media as you scroll</li>
+                <li>Add a Filters menu to page headers and add new filter options</li>
+                <li>Keep page headings in view while scrolling</li>
+                <li>Return to where you were on a page when going back</li>
+                <li>Go back from a category in one step, even after viewing many photos</li>
+                <li>Remove page transitions, which could cause a white flash</li>
+                <li>Make headers, content widths, spacing, and font sizes consistent</li>
+                <li>Show a message when a search finds nothing</li>
+                <li>Improve Stats on phones and size the treemap to fit the screen</li>
+                <li>A number of other fixes and improvements</li>
+                <li>Update dependencies</li>
+            </ul>
+
+            <h3 class="head3">
                 <span class="version">v5.2.1</span> : <span class="date">2026-10-21</span>
             </h3>
             <p>A few fixes and admin enhancements:</p>
