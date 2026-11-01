@@ -43,6 +43,9 @@ export default defineConfig({
         globals: true,
         isolate: false,
         setupFiles: ["src/_testing/setup.ts"],
+        // left external these load in node, get solid's server build, and answer
+        // every media query with its fallback - so every screen looks like a phone
+        server: { deps: { inline: [/@solid-primitives/] } },
         // transforming the tree is the largest share of a run, and it is the
         // same work every time - vitest 5 will keep it between runs if asked
         fsModuleCache: true
