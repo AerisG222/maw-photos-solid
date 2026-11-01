@@ -10,6 +10,8 @@ import SearchBar from "./components/SearchBar";
 import SearchFilterMenu from "./components/SearchFilterMenu";
 import { useSearchFilters } from "./useSearchFilters";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
+import LoadMore from "../_components/listing/LoadMore";
+import { hasPages } from "../_components/error/_queryError";
 import EmptyState from "../_components/state/EmptyState";
 
 export type SetIsFavorite = (category: Category, isFavorite: boolean) => void;
@@ -49,16 +51,7 @@ const SearchPage: Component<Props> = props => {
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
     return (
-        <Layout
-            toolbar={
-                <Toolbar
-                    canRequestMore={searchQuery.hasNextPage}
-                    requestMore={() => void searchQuery.fetchNextPage()}
-                >
-                    {props.toolbar}
-                </Toolbar>
-            }
-        >
+        <Layout toolbar={<Toolbar>{props.toolbar}</Toolbar>}>
             <SearchBar filterMenu={<SearchFilterMenu />} />
 
             {/*
@@ -70,7 +63,7 @@ const SearchPage: Component<Props> = props => {
             <AsyncBoundary
                 queries={[searchQuery]}
                 errorTitle="Search could not be completed"
-                when={!state.activeTerm || searchQuery.isSuccess}
+                when={!state.activeTerm || hasPages(searchQuery)}
                 skeleton={props.skeleton}
                 isEmpty={!!state.activeTerm && allSearchResults(searchQuery).length === 0}
                 empty={
@@ -87,6 +80,13 @@ const SearchPage: Component<Props> = props => {
                 }
             >
                 {props.results(() => allSearchResults(searchQuery), setIsFavorite)}
+
+                <LoadMore
+                    hasMore={searchQuery.hasNextPage}
+                    isLoading={searchQuery.isFetchingNextPage}
+                    failed={searchQuery.isFetchNextPageError}
+                    onLoad={() => void searchQuery.fetchNextPage()}
+                />
             </AsyncBoundary>
         </Layout>
     );

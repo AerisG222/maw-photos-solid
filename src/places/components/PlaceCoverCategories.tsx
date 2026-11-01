@@ -7,9 +7,10 @@ import { Category } from "../../_models/Category";
 import { Uuid } from "../../_models/Uuid";
 
 import ErrorMessage from "../../_components/error/ErrorMessage";
-import Icon from "../../_components/icon/Icon";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import EmptyState from "../../_components/state/EmptyState";
+import LoadMore from "../../_components/listing/LoadMore";
+import { hasPages } from "../../_components/error/_queryError";
 
 interface Props {
     placeId: Uuid | undefined;
@@ -49,7 +50,7 @@ const PlaceCoverCategories: Component<Props> = props => {
 
     return (
         <Switch fallback={<SkeletonGrid count={12} />}>
-            <Match when={categories.isError}>
+            <Match when={categories.isError && !categories.isFetchNextPageError}>
                 <ErrorMessage
                     title="Could not load the categories at this place"
                     error={categories.error}
@@ -57,7 +58,7 @@ const PlaceCoverCategories: Component<Props> = props => {
                 />
             </Match>
 
-            <Match when={categories.isSuccess}>
+            <Match when={hasPages(categories)}>
                 <Show
                     when={items().length > 0}
                     fallback={
@@ -106,18 +107,12 @@ const PlaceCoverCategories: Component<Props> = props => {
                         </For>
                     </div>
 
-                    <Show when={categories.hasNextPage}>
-                        <div class="flex justify-center my-3">
-                            <button
-                                class="btn btn-sm btn-primary btn-outline"
-                                disabled={categories.isFetchingNextPage}
-                                onClick={() => void categories.fetchNextPage()}
-                            >
-                                <Icon classes="icon-[ic--round-fast-forward]" />
-                                Request More
-                            </button>
-                        </div>
-                    </Show>
+                    <LoadMore
+                        hasMore={categories.hasNextPage}
+                        isLoading={categories.isFetchingNextPage}
+                        failed={categories.isFetchNextPageError}
+                        onLoad={() => void categories.fetchNextPage()}
+                    />
                 </Show>
             </Match>
         </Switch>

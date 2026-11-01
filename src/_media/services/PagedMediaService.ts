@@ -3,6 +3,7 @@ import { InfiniteData, UseInfiniteQueryResult, UseQueryResult } from "@tanstack/
 
 import { BaseMediaService } from "./BaseMediaService";
 import { GoTo, MediaParams } from "./_navigation";
+import { hasPages } from "../../_components/error/_queryError";
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
 import { MediaView } from "../../_models/MediaView";
@@ -57,7 +58,7 @@ export abstract class PagedMediaService<TPage> extends BaseMediaService {
     getMediaList = () => {
         const query = this.mediaListQuery();
 
-        if (!query.isSuccess) {
+        if (!hasPages(query)) {
             return [];
         }
 
@@ -71,6 +72,10 @@ export abstract class PagedMediaService<TPage> extends BaseMediaService {
 
         return list;
     };
+
+    override isRequestingMore = () => this.mediaListQuery().isFetchingNextPage;
+
+    override requestMoreFailed = () => this.mediaListQuery().isFetchNextPageError;
 
     override requestMore = () => {
         void this.mediaListQuery().fetchNextPage();

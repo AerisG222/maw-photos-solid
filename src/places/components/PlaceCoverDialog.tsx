@@ -15,6 +15,9 @@ import PlaceCoverCategories from "./PlaceCoverCategories";
 import PlaceCoverCategoryMedia from "./PlaceCoverCategoryMedia";
 import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import EmptyState from "../../_components/state/EmptyState";
+import LoadMore from "../../_components/listing/LoadMore";
+import { ScrollContainerProvider } from "../../_components/layout/ScrollContainerContext";
+import { hasPages } from "../../_components/error/_queryError";
 
 interface Props {
     // the place being given a cover, or undefined when the dialog is closed.
@@ -54,6 +57,8 @@ const PlaceCoverDialog: Component<Props> = props => {
     // is the right answer for a city, and no answer at all for a country
     const [seed, setSeed] = createSignal<number>();
 
+    // the box this scrolls in, for the listing to tell when it is nearing the end
+    const [scroller, setScroller] = createSignal<HTMLElement>();
     const placeId = () => props.place?.id;
     const mediaFilter = () => ({ favoritesOnly: favoritesOnly(), seed: seed() });
     // eslint-disable-next-line solid/reactivity -- both are accessors, and the query re-keys itself when either changes
@@ -222,79 +227,75 @@ const PlaceCoverDialog: Component<Props> = props => {
                 <p class="text-sm text-error mb-2">{errorMessage()}</p>
             </Show>
 
-            <div class="max-h-[50vh] overflow-y-auto">
-                <Switch>
-                    <Match when={browsing() === "categories" && category()}>
-                        <PlaceCoverCategoryMedia
-                            category={category()!}
-                            coverMediaId={props.place?.coverMediaId}
-                            disabled={pending()}
-                            onChoose={choose}
-                            onBack={() => setCategory(undefined)}
-                        />
-                    </Match>
+            <div ref={setScroller} class="max-h-[50vh] overflow-y-auto">
+                <ScrollContainerProvider element={scroller}>
+                    <Switch>
+                        <Match when={browsing() === "categories" && category()}>
+                            <PlaceCoverCategoryMedia
+                                category={category()!}
+                                coverMediaId={props.place?.coverMediaId}
+                                disabled={pending()}
+                                onChoose={choose}
+                                onBack={() => setCategory(undefined)}
+                            />
+                        </Match>
 
-                    <Match when={browsing() === "categories"}>
-                        <PlaceCoverCategories
-                            placeId={placeId()}
-                            favoritesOnly={favoritesOnly()}
-                            onSelect={setCategory}
-                        />
-                    </Match>
+                        <Match when={browsing() === "categories"}>
+                            <PlaceCoverCategories
+                                placeId={placeId()}
+                                favoritesOnly={favoritesOnly()}
+                                onSelect={setCategory}
+                            />
+                        </Match>
 
-                    <Match when={browsing() === "media"}>
-                        <Switch fallback={<SkeletonGrid count={12} />}>
-                            <Match when={media.isError}>
-                                <ErrorMessage
-                                    title="Could not load the media at this place"
-                                    error={media.error}
-                                    onRetry={() => void media.refetch()}
-                                />
-                            </Match>
-
-                            <Match when={media.isSuccess}>
-                                <Show
-                                    when={candidates().length > 0}
-                                    fallback={
-                                        <EmptyState
-                                            icon="icon-[ic--round-photo-library]"
-                                            title={
-                                                favoritesOnly()
-                                                    ? "No favorites here yet"
-                                                    : "There is nothing here to choose from"
-                                            }
-                                            detail={
-                                                favoritesOnly()
-                                                    ? "None of the media here has been marked as a favorite."
-                                                    : undefined
-                                            }
-                                        />
-                                    }
-                                >
-                                    <CoverCandidateGrid
-                                        items={candidates()}
-                                        coverMediaId={props.place?.coverMediaId}
-                                        disabled={pending()}
-                                        onChoose={choose}
+                        <Match when={browsing() === "media"}>
+                            <Switch fallback={<SkeletonGrid count={12} />}>
+                                <Match when={media.isError && !media.isFetchNextPageError}>
+                                    <ErrorMessage
+                                        title="Could not load the media at this place"
+                                        error={media.error}
+                                        onRetry={() => void media.refetch()}
                                     />
+                                </Match>
 
-                                    <Show when={media.hasNextPage}>
-                                        <div class="flex justify-center my-3">
-                                            <button
-                                                class="btn btn-sm btn-primary btn-outline"
-                                                disabled={media.isFetchingNextPage}
-                                                onClick={() => void media.fetchNextPage()}
-                                            >
-                                                <Icon classes="icon-[ic--round-fast-forward]" />
-                                                Request More
-                                            </button>
-                                        </div>
+                                <Match when={hasPages(media)}>
+                                    <Show
+                                        when={candidates().length > 0}
+                                        fallback={
+                                            <EmptyState
+                                                icon="icon-[ic--round-photo-library]"
+                                                title={
+                                                    favoritesOnly()
+                                                        ? "No favorites here yet"
+                                                        : "There is nothing here to choose from"
+                                                }
+                                                detail={
+                                                    favoritesOnly()
+                                                        ? "None of the media here has been marked as a favorite."
+                                                        : undefined
+                                                }
+                                            />
+                                        }
+                                    >
+                                        <CoverCandidateGrid
+                                            items={candidates()}
+                                            coverMediaId={props.place?.coverMediaId}
+                                            disabled={pending()}
+                                            onChoose={choose}
+                                        />
+
+                                        <LoadMore
+                                            hasMore={media.hasNextPage}
+                                            isLoading={media.isFetchingNextPage}
+                                            failed={media.isFetchNextPageError}
+                                            onLoad={() => void media.fetchNextPage()}
+                                        />
                                     </Show>
-                                </Show>
-                            </Match>
-                        </Switch>
-                    </Match>
-                </Switch>
+                                </Match>
+                            </Switch>
+                        </Match>
+                    </Switch>
+                </ScrollContainerProvider>
             </div>
         </Dialog>
     );

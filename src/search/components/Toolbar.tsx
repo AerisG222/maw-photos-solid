@@ -4,17 +4,11 @@ import { linkOptions } from "@tanstack/solid-router";
 import { searchGrid, searchList } from "../_routes";
 
 import NavGroup from "../../_components/toolbar/NavGroup";
-import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import { searchGridRoute, searchListRoute } from "../_routeTree";
 
-interface Props {
-    canRequestMore: boolean;
-    requestMore: () => void;
-}
-
-const Toolbar: ParentComponent<Props> = props => {
+const Toolbar: ParentComponent = props => {
     const c = children(() => props.children);
 
     return (
@@ -34,12 +28,6 @@ const Toolbar: ParentComponent<Props> = props => {
                 />
             }
         >
-            <ToolbarDivider />
-
-            {/* the same control the media screens page with, rather than a
-                button below the results that moves as they grow */}
-            <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
-
             <Show when={!!c()}>
                 <ToolbarDivider />
 

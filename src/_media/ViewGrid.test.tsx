@@ -53,6 +53,9 @@ const service = {
     getMediaList: () => [],
     getActiveMedia: () => undefined,
     getActiveCategory: () => undefined,
+    canRequestMore: () => false,
+    isRequestingMore: () => false,
+    requestMoreFailed: () => false,
     getEntryLinkByView: () => ({ href: "/" }),
     getMediaLinkByView: () => ({ href: "/" })
 } as unknown as IMediaService;

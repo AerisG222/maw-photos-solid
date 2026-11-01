@@ -6,7 +6,6 @@ import { IMediaService } from "./services/IMediaService";
 import { SlideshowService } from "./services/SlideshowService";
 
 import ListingToolbar from "../_components/listing/ListingToolbar";
-import RequestMoreButton from "../_components/toolbar/RequestMoreButton";
 import ToolbarDivider from "../_components/toolbar/ToolbarDivider";
 import AdjustShortcuts from "./toolbar/AdjustShortcuts";
 import FavoriteShortcut from "./toolbar/FavoriteShortcut";
@@ -68,11 +67,6 @@ const MediaToolbar: Component<Props> = props => {
             <Show when={extras()}>
                 <ToolbarDivider />
             </Show>
-
-            <RequestMoreButton
-                disabled={!props.mediaService.canRequestMore()}
-                requestMore={() => props.mediaService.requestMore()}
-            />
 
             {/*
                 On the map too, which had no slideshow at all. Watching it step

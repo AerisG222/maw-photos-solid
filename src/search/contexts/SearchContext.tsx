@@ -10,6 +10,7 @@ import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsCon
 import { KEY_UI_RECENT_SEARCHES, loadJson } from "../../_contexts/settings/_storage";
 import { rememberSearch } from "../_recentSearches";
 import { MediaFilters } from "../../_models/MediaFilters";
+import { hasPages } from "../../_components/error/_queryError";
 
 export interface SearchState {
     readonly term: string;
@@ -108,7 +109,7 @@ export const SearchProvider: ParentComponent = props => {
     ) => {
         const cats: Category[] = [];
 
-        if (searchQuery.isSuccess) {
+        if (hasPages(searchQuery)) {
             for (const page of searchQuery.data?.pages ?? []) {
                 if (page) {
                     cats.push(...page.results);

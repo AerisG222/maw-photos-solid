@@ -64,7 +64,7 @@ export class FeedMediaService
         return true;
     };
 
-    // the feed is paged, so "more" is only offered while the API says another
-    // page exists - unlike the random feed, which never runs out
+    // only while the API says another page exists - unlike the random feed, which
+    // never runs out
     override canRequestMore = () => this.mediaListQuery().hasNextPage;
 }

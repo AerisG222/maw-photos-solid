@@ -1,5 +1,6 @@
 import { Category } from "../../_models/Category";
 import { Media } from "../../_models/Media";
+import { Uuid } from "../../_models/Uuid";
 import { LinkOptions } from "@tanstack/solid-router";
 
 import { MediaViewRoute } from "../../_models/MediaViewRoute";
@@ -18,7 +19,11 @@ export interface IMediaService extends INavigable {
     getMediaLinkByView(view: MediaView, media: Media | undefined): LinkOptions;
     // where next and previous would go from the open photo - none at either end
     getNeighbors(): { previous?: Media; next?: Media };
+    getCurrIndex(list: Media[], currId: Uuid): number;
+    // whether there is more to load, and how the last attempt is going - see LoadMore
     canRequestMore(): boolean;
+    isRequestingMore(): boolean;
+    requestMoreFailed(): boolean;
     requestMore(): void;
     /*
        Whether "download this whole category" means anything here.

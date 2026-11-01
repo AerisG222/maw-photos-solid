@@ -18,6 +18,7 @@ import SkeletonGrid from "../../_components/loading/SkeletonGrid";
 import ToolbarCategories from "./ToolbarCategories";
 import { favoriteSetter } from "../../_models/utils/FavoriteUtils";
 import FeedFilterMenu from "./FeedFilterMenu";
+import LoadMore from "../../_components/listing/LoadMore";
 
 /*
    The categories a person or clan turns up in, or the ones holding media taken at
@@ -62,8 +63,6 @@ const Categories: Component = () => {
                     subject={feed.subject()}
                     favoritesOnly={feed.favoritesOnly()}
                     mediaType={feed.mediaType()}
-                    canRequestMore={feed.query().hasNextPage}
-                    requestMore={() => void feed.query().fetchNextPage()}
                 />
             }
         >
@@ -117,6 +116,13 @@ const Categories: Component = () => {
                             />
                         )}
                     </ListingSurface>
+
+                    <LoadMore
+                        hasMore={feed.query().hasNextPage}
+                        isLoading={feed.query().isFetchingNextPage}
+                        failed={feed.query().isFetchNextPageError}
+                        onLoad={() => void feed.query().fetchNextPage()}
+                    />
                 </AsyncBoundary>
             </Show>
         </Layout>

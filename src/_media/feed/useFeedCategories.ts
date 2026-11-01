@@ -1,6 +1,6 @@
 import { useGoTo } from "../services/_navigation";
 
-import { findQueryError, refetchQueries } from "../../_components/error/_queryError";
+import { findQueryError, hasPages, refetchQueries } from "../../_components/error/_queryError";
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
@@ -45,7 +45,7 @@ export const useFeedCategories = () => {
     const categories = () => {
         const result = query();
 
-        return result.isSuccess
+        return hasPages(result)
             ? (result.data?.pages ?? []).flatMap(page => page?.results ?? [])
             : [];
     };

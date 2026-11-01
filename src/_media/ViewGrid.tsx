@@ -28,6 +28,8 @@ import StickyCategoryHeader from "../_components/categories/StickyCategoryHeader
 import Inspector from "../_components/inspector/Inspector";
 import Layout from "../_components/layout/Layout";
 import MediaGrid from "../_media/MediaGrid";
+import LoadMore from "../_components/listing/LoadMore";
+import { needsMoreMedia } from "./_needsMoreMedia";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 import Icon from "../_components/icon/Icon";
@@ -101,6 +103,29 @@ const ViewGrid: Component<Props> = props => {
     const router = useRouter();
 
     const activeMedia = () => props.mediaService.getActiveMedia();
+
+    /*
+       The list is out of reach behind an open photo, so nothing is scrolling toward
+       its end - but next and the slideshow are, and would stop at the last photo
+       loaded as if it were the last one there is.
+    */
+    createEffect(() => {
+        const service = props.mediaService;
+        const active = activeMedia();
+
+        if (
+            active &&
+            service.canRequestMore() &&
+            !service.isRequestingMore() &&
+            !service.requestMoreFailed()
+        ) {
+            const list = service.getMediaList();
+
+            if (needsMoreMedia(service.getCurrIndex(list, active.id), list.length)) {
+                service.requestMore();
+            }
+        }
+    });
 
     /*
        Fullscreen is a state of this view, not a place of its own.
@@ -366,6 +391,13 @@ const ViewGrid: Component<Props> = props => {
                                 setIsFavorite={setIsFavorite}
                             />
                         </Show>
+
+                        <LoadMore
+                            hasMore={props.mediaService.canRequestMore()}
+                            isLoading={props.mediaService.isRequestingMore()}
+                            failed={props.mediaService.requestMoreFailed()}
+                            onLoad={() => props.mediaService.requestMore()}
+                        />
                     </AsyncBoundary>
                 </div>
             </Layout>

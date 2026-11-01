@@ -21,6 +21,8 @@ export abstract class BaseMediaService {
     abstract getMediaLinkByView(view: MediaView, media: Media | undefined): LinkOptions;
 
     canRequestMore = () => false;
+    isRequestingMore = () => false;
+    requestMoreFailed = () => false;
     // only a category listing can answer for a whole category - see IMediaService
     canDownloadCategory = () => false;
     canChooseCategoryTeaser = () => false;

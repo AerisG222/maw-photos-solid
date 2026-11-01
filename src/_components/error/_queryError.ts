@@ -13,10 +13,20 @@ export interface RetryableQuery {
     isError: boolean;
     error: Error | null;
     refetch: () => unknown;
+    // a later page failing, with the earlier ones still in hand - see below
+    isFetchNextPageError?: boolean;
 }
 
+/*
+   Whether a paged query has pages to show. A later page failing puts the whole
+   query in an error state, so `isSuccess` alone read that as nothing to show, and
+   everything already on screen was replaced by the error.
+*/
+export const hasPages = (query: { isSuccess: boolean; isFetchNextPageError: boolean }) =>
+    query.isSuccess || query.isFetchNextPageError;
+
 export const findQueryError = (queries: (RetryableQuery | undefined)[]): Error | undefined =>
-    queries.find(query => query?.isError)?.error ?? undefined;
+    queries.find(query => query?.isError && !query.isFetchNextPageError)?.error ?? undefined;
 
 export const refetchQueries = (queries: (RetryableQuery | undefined)[]) => {
     for (const query of queries) {

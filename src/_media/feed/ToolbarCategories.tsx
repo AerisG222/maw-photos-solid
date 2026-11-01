@@ -1,6 +1,5 @@
 import { Component } from "solid-js";
 
-import RequestMoreButton from "../../_components/toolbar/RequestMoreButton";
 import ListingToolbar from "../../_components/listing/ListingToolbar";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
@@ -12,8 +11,6 @@ interface Props {
     subject: FeedSubject;
     favoritesOnly: boolean;
     mediaType: MediaTypeFilter | undefined;
-    canRequestMore: boolean;
-    requestMore: () => void;
 }
 
 /*
@@ -49,10 +46,6 @@ const ToolbarCategories: Component<Props> = props => {
             {/* separating the children from the nav slot, as every other
                 toolbar does - the divider that used to follow the listing
                 switch went into the slot with it */}
-            <ToolbarDivider />
-
-            <RequestMoreButton disabled={!props.canRequestMore} requestMore={props.requestMore} />
-
             <ToolbarDivider />
 
             <ListingToolbar labels />
