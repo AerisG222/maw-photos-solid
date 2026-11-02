@@ -1,10 +1,16 @@
-import { createRoute, lazyRouteComponent, SearchSchemaInput } from "@tanstack/solid-router";
+import {
+    createRoute,
+    lazyRouteComponent,
+    redirect,
+    SearchSchemaInput
+} from "@tanstack/solid-router";
 
 import { rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { prefetch } from "../_router/prefetch";
 import { peopleQueryOptions } from "../_contexts/api/_peopleQueries";
 import { clansQueryOptions } from "../_contexts/api/_clansQueries";
+import { loadAreaSettings } from "../_contexts/settings/_migrate";
 import { MediaFilters, isFlagSet } from "../_models/MediaFilters";
 
 /*
@@ -30,6 +36,12 @@ export const peopleRoute = createRoute({
 const peopleGridRoute = createRoute({
     getParentRoute: () => peopleRoute,
     path: "/",
+    // this is the page itself rather than a stop on the way to one, so it only moves when it must
+    beforeLoad: ({ search }) => {
+        if (!search.f && loadAreaSettings().peopleFavoritesOnly) {
+            throw redirect({ to: peopleRoute.to, search: { f: true }, replace: true });
+        }
+    },
     component: lazyRouteComponent(() => import("./Grid"))
 });
 

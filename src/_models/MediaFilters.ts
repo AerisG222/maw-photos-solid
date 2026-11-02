@@ -4,8 +4,9 @@ export type MediaTypeFilter = "photo" | "video";
 
 /*
    What a listing of photos and videos can be narrowed to, as the address says
-   it. In the address rather than a store, like a feed's: a filter hidden in a
-   menu and remembered between visits is a shorter list with no explanation.
+   it, so a reload or a shared link shows the same list. The last ones chosen are
+   also kept in the area settings, and put back when a section is opened without
+   any - see `AreaSettingsState`.
 */
 export interface MediaFilters {
     // favorites only

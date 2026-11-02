@@ -41,8 +41,8 @@ export const categoriesRoute = createRoute({
 });
 
 /*
-   Opens on the view used last, and the year the address asked for - or, if it
-   asked for none, the one last chosen. A `beforeLoad`, so nothing renders on the
+   Opens on the view used last, and the year and filters the address asked for -
+   or, for any it left out, the ones last chosen. A `beforeLoad`, so nothing renders on the
    way through: this was a component that mounted and then navigated, with a blank
    page between.
 */
@@ -56,7 +56,11 @@ const categoriesIndexRoute = createRoute({
             to: equalsIgnoreCase("list", area.categoriesView)
                 ? categoriesListRoute.to
                 : categoriesGridRoute.to,
-            search: { ...search, year: search.year ?? area.categoryYearFilter },
+            search: {
+                ...area.categoriesFilters,
+                ...search,
+                year: search.year ?? area.categoryYearFilter
+            },
             replace: true
         });
     }

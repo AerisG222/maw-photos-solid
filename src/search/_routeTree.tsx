@@ -20,16 +20,16 @@ export const searchRoute = createRoute({
     component: lazyRouteComponent(() => import("./Layout"))
 });
 
-// opens on whichever view was used last, before anything renders
+// opens on whichever view and filters were used last, before anything renders
 const searchIndexRoute = createRoute({
     getParentRoute: () => searchRoute,
     path: "/",
     beforeLoad: ({ search }) => {
+        const area = loadAreaSettings();
+
         throw redirect({
-            to: equalsIgnoreCase("list", loadAreaSettings().searchView)
-                ? searchListRoute.to
-                : searchGridRoute.to,
-            search,
+            to: equalsIgnoreCase("list", area.searchView) ? searchListRoute.to : searchGridRoute.to,
+            search: { ...area.searchFilters, ...search },
             replace: true
         });
     }

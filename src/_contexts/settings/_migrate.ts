@@ -188,6 +188,11 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                     ? "all"
                     : defaultAreaSettings.categoryYearFilter),
             // new since the legacy keys, so there is nothing to carry over
+            categoriesFilters: defaultAreaSettings.categoriesFilters,
+            categoryMediaFilters: defaultAreaSettings.categoryMediaFilters,
+            peopleFavoritesOnly: defaultAreaSettings.peopleFavoritesOnly,
+            feedFilters: defaultAreaSettings.feedFilters,
+            searchFilters: defaultAreaSettings.searchFilters,
             searchHistoryCount: defaultAreaSettings.searchHistoryCount
         }
     };

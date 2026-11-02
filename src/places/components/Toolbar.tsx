@@ -1,5 +1,6 @@
 import { Component, Show } from "solid-js";
 
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { feedCategoriesLink, feedGridLink } from "../../_media/feed/_routes";
 import { RouteDisplay } from "../../_models/RouteDisplay";
 import { Uuid } from "../../_models/Uuid";
@@ -62,12 +63,20 @@ const Toolbar: Component<Props> = props => {
        place to list, so they are shown disabled; a disabled entry never
        navigates, so it points at the tree itself.
     */
+    const [area] = useAreaSettingsContext();
+
     const mediaLink = () =>
-        props.placeId ? feedGridLink({ kind: "place", id: props.placeId }) : placeLink();
+        props.placeId
+            ? feedGridLink({ kind: "place", id: props.placeId }, undefined, area.feedFilters)
+            : placeLink();
 
     const categoriesLink = () =>
         props.placeId
-            ? feedCategoriesLink({ kind: "place", id: props.placeId }, false)
+            ? feedCategoriesLink(
+                  { kind: "place", id: props.placeId },
+                  !!area.feedFilters.f,
+                  area.feedFilters.t
+              )
             : placeLink();
 
     return (

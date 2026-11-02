@@ -18,6 +18,7 @@ import ClanSection from "./components/ClanSection";
 import AsyncBoundary from "../_components/state/AsyncBoundary";
 import Layout from "../_components/layout/Layout";
 import PageHeader from "../_components/layout/PageHeader";
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import FilterMenu from "../_components/filters/FilterMenu";
 import Checkbox from "../_components/input/Checkbox";
 import { useGoTo } from "../_media/services/_navigation";
@@ -60,6 +61,7 @@ const GridView: Component = () => {
 
     const search = route.useSearch();
     const goTo = useGoTo();
+    const [, { setPeopleFavoritesOnly }] = useAreaSettingsContext();
     const [filter, setFilter] = createSignal("");
     const [picking, setPicking] = createSignal<Picking>({ kind: "off" });
     const [selected, setSelected] = createSignal<Set<Uuid>>(new Set());
@@ -88,8 +90,10 @@ const GridView: Component = () => {
 
     // compared, not just read: the router hands back whatever the address says - see useCategoryMediaFilters
     const favoritesOnly = () => search().f === true;
-    const setFavoritesOnly = (on: boolean) =>
+    const setFavoritesOnly = (on: boolean) => {
+        setPeopleFavoritesOnly(on);
         goTo({ to: ".", search: on ? { f: true } : {} }, { replace: true });
+    };
 
     const peopleToDisplay = createMemo(() => {
         const term = filter().trim().toLocaleLowerCase();

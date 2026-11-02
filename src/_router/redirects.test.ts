@@ -55,6 +55,65 @@ test("search opens on the view last used", async () => {
     expect(await landingFrom("/search", { searchView: "list" })).toBe("/search/list");
 });
 
+describe("the filters last chosen", () => {
+    const area = {
+        categoryYearFilter: 2019,
+        categoriesFilters: { f: true, noGps: true },
+        categoryMediaFilters: { t: "video" },
+        peopleFavoritesOnly: true,
+        feedFilters: { f: true, t: "photo" },
+        searchFilters: { t: "video" }
+    };
+
+    test("come back when opening categories", async () => {
+        expect(await landingFrom("/categories", area)).toBe(
+            "/categories/grid?f=true&noGps=true&year=2019"
+        );
+    });
+
+    test("add to a year the address asked for", async () => {
+        expect(await landingFrom("/categories?year=2007", area)).toBe(
+            "/categories/grid?f=true&noGps=true&year=2007"
+        );
+    });
+
+    test("come back when opening a category", async () => {
+        expect(await landingFrom("/categories/2019/a-trip", area)).toBe(
+            "/categories/2019/a-trip/grid?t=video"
+        );
+    });
+
+    test("come back when opening search", async () => {
+        expect(await landingFrom("/search", area)).toBe("/search/grid?t=video");
+    });
+
+    test("come back when opening people, and settle there", async () => {
+        expect(await landingFrom("/people", area)).toBe("/people?f=true");
+    });
+
+    test("come back when opening a feed", async () => {
+        expect(await landingFrom(`/people/${PERSON}`, area)).toBe(
+            `/people/${PERSON}/grid?f=true&t=photo`
+        );
+        expect(await landingFrom(`/people/${PERSON}`, { ...area, feedListing: "categories" })).toBe(
+            `/people/${PERSON}/categories?f=true&t=photo`
+        );
+    });
+
+    test("give way to what the address says", async () => {
+        expect(await landingFrom("/categories/2019/a-trip?t=photo", area)).toBe(
+            "/categories/2019/a-trip/grid?t=photo"
+        );
+    });
+
+    // a shared link has to open on the photo, not on a list that has filtered it away
+    test("stay out of a link straight to a photo", async () => {
+        expect(await landingFrom("/categories/2019/a-trip/grid/a-photo.jpg", area)).toBe(
+            "/categories/2019/a-trip/grid/a-photo.jpg"
+        );
+    });
+});
+
 describe("a feed", () => {
     test("opens on its media by default", async () => {
         expect(await landingFrom(`/people/${PERSON}`)).toBe(`/people/${PERSON}/grid`);

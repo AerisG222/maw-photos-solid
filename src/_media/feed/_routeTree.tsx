@@ -107,15 +107,19 @@ export const personFeedRoute = createRoute({
 });
 
 /*
-   A feed opens on the listing last chosen, before anything renders - this was a
-   component that mounted and then navigated, with a blank page between. The route
-   above has already made sure the subject is an id.
+   A feed opens on the listing and filters last chosen, unless the address has its
+   own, before anything renders - this was a component that mounted and then
+   navigated, with a blank page between. The route above has already made sure the
+   subject is an id.
 */
-const redirectToFeedListing = (subject: FeedSubject): never => {
+const redirectToFeedListing = (subject: FeedSubject, search: FeedSearch): never => {
+    const area = loadAreaSettings();
+    const wanted: FeedSearch = { ...area.feedFilters, ...search };
+
     throw redirect({
-        ...(loadAreaSettings().feedListing === "categories"
-            ? feedCategoriesLink(subject, false)
-            : feedGridLink(subject)),
+        ...(area.feedListing === "categories"
+            ? feedCategoriesLink(subject, wanted.f === true, wanted.t)
+            : feedGridLink(subject, undefined, wanted)),
         replace: true
     } as unknown as Parameters<typeof redirect>[0]);
 };
@@ -123,8 +127,8 @@ const redirectToFeedListing = (subject: FeedSubject): never => {
 const personFeedIndexRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "/",
-    beforeLoad: ({ params }) =>
-        redirectToFeedListing({ kind: "person", id: params.personId as Uuid })
+    beforeLoad: ({ params, search }) =>
+        redirectToFeedListing({ kind: "person", id: params.personId as Uuid }, search)
 });
 
 export const personFeedGridRoute = createRoute({
@@ -209,7 +213,8 @@ export const clanFeedRoute = createRoute({
 const clanFeedIndexRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "/",
-    beforeLoad: ({ params }) => redirectToFeedListing({ kind: "clan", id: params.clanId as Uuid })
+    beforeLoad: ({ params, search }) =>
+        redirectToFeedListing({ kind: "clan", id: params.clanId as Uuid }, search)
 });
 
 export const clanFeedGridRoute = createRoute({
@@ -294,7 +299,8 @@ export const placeFeedRoute = createRoute({
 const placeFeedIndexRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "/",
-    beforeLoad: ({ params }) => redirectToFeedListing({ kind: "place", id: params.placeId as Uuid })
+    beforeLoad: ({ params, search }) =>
+        redirectToFeedListing({ kind: "place", id: params.placeId as Uuid }, search)
 });
 
 export const placeFeedGridRoute = createRoute({

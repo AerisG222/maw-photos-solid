@@ -14,6 +14,18 @@ export interface CategoriesSearch extends MediaFilters {
 // everything but the year, which is on the page rather than in the filter menu
 export type CategoryFilters = Omit<CategoriesSearch, "year">;
 
+export const categoryFiltersOf = ({
+    f,
+    t,
+    noGps,
+    restricted
+}: CategoryFilters): CategoryFilters => ({
+    f,
+    t,
+    noGps,
+    restricted
+});
+
 /*
    What the listing is narrowed to, as the address says it. A year arrives as
    text - "2026" - and leaves as a number; anything that is neither a year nor

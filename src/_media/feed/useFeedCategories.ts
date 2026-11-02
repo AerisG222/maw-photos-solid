@@ -4,6 +4,7 @@ import { findQueryError, hasPages, refetchQueries } from "../../_components/erro
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useFeedSubject } from "./_subject";
 import { MediaTypeFilter } from "../../_models/MediaFilters";
 
@@ -18,6 +19,7 @@ import { MediaTypeFilter } from "../../_models/MediaFilters";
 */
 export const useFeedCategories = () => {
     const goTo = useGoTo();
+    const [, { setFeedFilters }] = useAreaSettingsContext();
     const { personCategoriesQuery } = usePeopleContext();
     const { clanCategoriesQuery } = useClansContext();
     const { placeCategoriesQuery } = usePlacesContext();
@@ -56,13 +58,17 @@ export const useFeedCategories = () => {
         ...(type ? { t: type } : {})
     });
 
-    const setFavoritesOnly = (on: boolean) =>
-        goTo({ to: ".", search: search(on, subject.mediaType()) }, { replace: true });
+    const apply = (next: ReturnType<typeof search>) => {
+        setFeedFilters(next);
+        goTo({ to: ".", search: next }, { replace: true });
+    };
+
+    const setFavoritesOnly = (on: boolean) => apply(search(on, subject.mediaType()));
 
     const setMediaType = (type: MediaTypeFilter | undefined) =>
-        goTo({ to: ".", search: search(subject.favoritesOnly(), type) }, { replace: true });
+        apply(search(subject.favoritesOnly(), type));
 
-    const clearFilters = () => goTo({ to: ".", search: {} }, { replace: true });
+    const clearFilters = () => apply({});
 
     return {
         ...subject,

@@ -1,5 +1,6 @@
 import { Component, For } from "solid-js";
 
+import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
 import { inspectorCards } from "../_components/inspector/registry";
 import { allMapTypes } from "../_models/MapType";
@@ -7,6 +8,7 @@ import { allMapZoomLevels } from "../_models/MapZoomLevel";
 import { allMediaViews } from "../_models/MediaView";
 import { allSlideshowDurations } from "../_models/SlideshowDuration";
 
+import MediaFilterOptions from "../_components/filters/MediaFilterOptions";
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import Select from "../_components/input/Select";
@@ -37,6 +39,7 @@ const ViewMedia: Component = () => {
             setMapZoom
         }
     ] = useMediaSettingsContext();
+    const [area, { setCategoryMediaFilters }] = useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
@@ -78,6 +81,16 @@ const ViewMedia: Component = () => {
                             />
                         )}
                     </For>
+                </Panel>
+
+                {/* what a category's photos open filtered to */}
+                <Panel title="Category Filters">
+                    <MediaFilterOptions
+                        filters={area.categoryMediaFilters}
+                        onChange={changes =>
+                            setCategoryMediaFilters({ ...area.categoryMediaFilters, ...changes })
+                        }
+                    />
                 </Panel>
 
                 {/* one map preference, read by the map view and by the minimap card */}

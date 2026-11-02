@@ -1,7 +1,9 @@
+import type { CategoryFilters } from "../../categories/_search";
 import { CategoryViewModeIdType, defaultCategoryViewMode } from "../../_models/CategoryViewMode";
 import { InspectorCardIdType, defaultInspectorCards } from "../../_models/InspectorCard";
 import { MapTypeIdType, defaultMapType } from "../../_models/MapType";
 import { MapZoomLevelIdType, defaultMapZoomLevel } from "../../_models/MapZoomLevel";
+import type { MediaFilters } from "../../_models/MediaFilters";
 import { MediaView, defaultMediaView } from "../../_models/MediaView";
 import { PersonSortIdType, defaultPersonSort } from "../../_models/PersonSort";
 import { ThemeIdType, defaultTheme } from "../../_models/Theme";
@@ -75,6 +77,13 @@ export interface AreaSettingsState {
     readonly feedListing: "media" | "categories";
     // kept rather than left to the url alone; `?year=` still wins when present
     readonly categoryYearFilter: number | "all";
+    // the same goes for these: each section opens with them, unless the address
+    // goes straight to a page, which shows just what the address says
+    readonly categoriesFilters: CategoryFilters;
+    readonly categoryMediaFilters: MediaFilters;
+    readonly peopleFavoritesOnly: boolean;
+    readonly feedFilters: MediaFilters;
+    readonly searchFilters: MediaFilters;
     // how many recent search terms to keep
     readonly searchHistoryCount: number;
 }
@@ -84,5 +93,10 @@ export const defaultAreaSettings: AreaSettingsState = {
     searchView: defaultCategoryViewMode,
     feedListing: "media",
     categoryYearFilter: "all",
+    categoriesFilters: {},
+    categoryMediaFilters: {},
+    peopleFavoritesOnly: false,
+    feedFilters: {},
+    searchFilters: {},
     searchHistoryCount: defaultSearchHistoryCount
 };

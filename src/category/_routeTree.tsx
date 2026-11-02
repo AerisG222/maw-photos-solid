@@ -17,7 +17,7 @@ import { RouterContext, rootRoute } from "../_router/rootRoute";
 import { requireLogin } from "../_router/guards";
 import { prefetch } from "../_router/prefetch";
 import { redirectToGrid } from "../_media/_legacyViews";
-import { loadMediaSettings } from "../_contexts/settings/_migrate";
+import { loadAreaSettings, loadMediaSettings } from "../_contexts/settings/_migrate";
 import { MediaFilters, validateMediaFilters } from "../_models/MediaFilters";
 import { MediaView, MediaViewBulkEdit, MediaViewMap } from "../_models/MediaView";
 
@@ -64,7 +64,8 @@ export const categoryRoute = createRoute({
 });
 
 /*
-   A category opens in whichever view was used last. A `beforeLoad`, so nothing
+   A category opens in whichever view was used last, with the filters last chosen
+   unless the address has its own. A `beforeLoad`, so nothing
    renders on the way through. This was a component that mounted and then
    navigated, which put a blank page between the listing and the category - and
    the View Transition into the category then started from that blank page, so
@@ -75,9 +76,10 @@ export const categoryRoute = createRoute({
 const categoryIndexRoute = createRoute({
     getParentRoute: () => categoryRoute,
     path: "/",
-    beforeLoad: ({ params }) => {
+    beforeLoad: ({ params, search }) => {
         throw redirect({
             ...categoryViewLink(loadMediaSettings().view, params.categoryYear, params.categorySlug),
+            search: { ...loadAreaSettings().categoryMediaFilters, ...search },
             replace: true
         });
     }

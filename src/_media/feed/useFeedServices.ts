@@ -4,6 +4,7 @@ import { findQueryError, refetchQueries } from "../../_components/error/_queryEr
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
+import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { MediaView } from "../../_models/MediaView";
 import { SlideshowService } from "../services/SlideshowService";
@@ -19,6 +20,7 @@ export const useFeedServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
+    const [, { setFeedFilters }] = useAreaSettingsContext();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
     const { placeMediaQuery } = usePlacesContext();
@@ -110,12 +112,23 @@ export const useFeedServices = (view: MediaView) => {
         });
     };
 
-    const setFavoritesOnly = (on: boolean) => applyFilter(on, seed(), mediaType());
+    const remember = (favorites: boolean, type: MediaTypeFilter | undefined) =>
+        setFeedFilters(feedSearch(favorites, undefined, type));
 
-    const setMediaType = (type: MediaTypeFilter | undefined) =>
+    const setFavoritesOnly = (on: boolean) => {
+        remember(on, mediaType());
+        applyFilter(on, seed(), mediaType());
+    };
+
+    const setMediaType = (type: MediaTypeFilter | undefined) => {
+        remember(favoritesOnly(), type);
         applyFilter(favoritesOnly(), seed(), type);
+    };
 
-    const clearFilters = () => applyFilter(false, seed(), undefined);
+    const clearFilters = () => {
+        remember(false, undefined);
+        applyFilter(false, seed(), undefined);
+    };
 
     // a fresh seed each time it is switched on, so turning shuffle off and back
     // on reshuffles rather than replaying the same order

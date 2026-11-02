@@ -2,6 +2,8 @@ import { Component } from "solid-js";
 
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
 
+import Checkbox from "../_components/input/Checkbox";
+import MediaFilterOptions from "../_components/filters/MediaFilterOptions";
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import Toggle from "../_components/input/Toggle";
@@ -14,7 +16,8 @@ import Layout from "../_components/layout/Layout";
    the order people are listed in.
 */
 const ViewPeople: Component = () => {
-    const [area, { setFeedListing }] = useAreaSettingsContext();
+    const [area, { setFeedListing, setPeopleFavoritesOnly, setFeedFilters }] =
+        useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="People">
@@ -29,6 +32,22 @@ const ViewPeople: Component = () => {
                         name="feedShowCategories"
                         isSelected={area.feedListing === "categories"}
                         onChange={show => setFeedListing(show ? "categories" : "media")}
+                    />
+                </Panel>
+
+                <Panel title="People Filters">
+                    <Checkbox
+                        title="Favorites"
+                        name="people-favorites"
+                        isSelected={area.peopleFavoritesOnly}
+                        onChange={setPeopleFavoritesOnly}
+                    />
+                </Panel>
+
+                <Panel title="Person, Clan & Place Filters">
+                    <MediaFilterOptions
+                        filters={area.feedFilters}
+                        onChange={changes => setFeedFilters({ ...area.feedFilters, ...changes })}
                     />
                 </Panel>
             </PanelContainer>

@@ -4,6 +4,7 @@ import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContex
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 import { allSearchHistoryCounts } from "../_models/SearchHistoryCount";
 
+import MediaFilterOptions from "../_components/filters/MediaFilterOptions";
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import RadioGroup from "../_components/input/RadioGroup";
@@ -12,7 +13,8 @@ import Layout from "../_components/layout/Layout";
 
 // see the note in Categories - search results are categories
 const ViewSearch: Component = () => {
-    const [area, { setSearchView, setSearchHistoryCount }] = useAreaSettingsContext();
+    const [area, { setSearchView, setSearchHistoryCount, setSearchFilters }] =
+        useAreaSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Search">
@@ -32,6 +34,15 @@ const ViewSearch: Component = () => {
                         groupName="searchHistoryCount"
                         selectedValue={area.searchHistoryCount}
                         onChange={setSearchHistoryCount}
+                    />
+                </Panel>
+
+                <Panel title="Filters">
+                    <MediaFilterOptions
+                        filters={area.searchFilters}
+                        onChange={changes =>
+                            setSearchFilters({ ...area.searchFilters, ...changes })
+                        }
                     />
                 </Panel>
             </PanelContainer>

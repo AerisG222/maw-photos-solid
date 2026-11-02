@@ -1,7 +1,9 @@
 import { createContext, ParentComponent, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 
+import type { CategoryFilters } from "../../categories/_search";
 import { CategoryViewModeIdType } from "../../_models/CategoryViewMode";
+import { MediaFilters } from "../../_models/MediaFilters";
 import { AreaSettingsState, defaultAreaSettings } from "./_state";
 import { loadMigrated } from "./_migrate";
 import { KEY_SETTINGS_V2_AREA, saveJson } from "./_storage";
@@ -16,6 +18,11 @@ export type AreaSettingsContextValue = [
         setSearchView: (searchView: CategoryViewModeIdType) => void;
         setFeedListing: (feedListing: "media" | "categories") => void;
         setCategoryYearFilter: (categoryYearFilter: number | "all") => void;
+        setCategoriesFilters: (categoriesFilters: CategoryFilters) => void;
+        setCategoryMediaFilters: (categoryMediaFilters: MediaFilters) => void;
+        setPeopleFavoritesOnly: (peopleFavoritesOnly: boolean) => void;
+        setFeedFilters: (feedFilters: MediaFilters) => void;
+        setSearchFilters: (searchFilters: MediaFilters) => void;
         setSearchHistoryCount: (searchHistoryCount: number) => void;
     }
 ];
@@ -40,6 +47,19 @@ export const AreaSettingsProvider: ParentComponent = props => {
     const setCategoryYearFilter = (categoryYearFilter: number | "all") =>
         updateState({ categoryYearFilter });
 
+    const setCategoriesFilters = (categoriesFilters: CategoryFilters) =>
+        updateState({ categoriesFilters });
+
+    const setCategoryMediaFilters = (categoryMediaFilters: MediaFilters) =>
+        updateState({ categoryMediaFilters });
+
+    const setPeopleFavoritesOnly = (peopleFavoritesOnly: boolean) =>
+        updateState({ peopleFavoritesOnly });
+
+    const setFeedFilters = (feedFilters: MediaFilters) => updateState({ feedFilters });
+
+    const setSearchFilters = (searchFilters: MediaFilters) => updateState({ searchFilters });
+
     const setSearchHistoryCount = (searchHistoryCount: number) =>
         updateState({ searchHistoryCount });
 
@@ -52,6 +72,11 @@ export const AreaSettingsProvider: ParentComponent = props => {
                     setSearchView,
                     setFeedListing,
                     setCategoryYearFilter,
+                    setCategoriesFilters,
+                    setCategoryMediaFilters,
+                    setPeopleFavoritesOnly,
+                    setFeedFilters,
+                    setSearchFilters,
                     setSearchHistoryCount
                 }
             ]}
