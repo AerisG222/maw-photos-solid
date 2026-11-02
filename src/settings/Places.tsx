@@ -11,7 +11,8 @@ import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 
 const ViewPlaces: Component = () => {
-    const [area, { setPlaceFeedListing, setPlaceFeedFilters }] = useAreaSettingsContext();
+    const [area, { setPlaceFeedListing, setPlaceFeedShuffle, setPlaceFeedFilters }] =
+        useAreaSettingsContext();
     const [listing, { setShowLabels }] = useListingSettingsContext();
 
     return (
@@ -36,6 +37,12 @@ const ViewPlaces: Component = () => {
                         name="placeFeedShowCategories"
                         isSelected={area.placeFeedListing === "categories"}
                         onChange={show => setPlaceFeedListing(show ? "categories" : "media")}
+                    />
+                    <Toggle
+                        title="Shuffle Media"
+                        name="placeFeedShuffle"
+                        isSelected={area.placeFeedShuffle}
+                        onChange={setPlaceFeedShuffle}
                     />
                     <Toggle
                         title="Show Labels on Categories"

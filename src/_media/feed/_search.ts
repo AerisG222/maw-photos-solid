@@ -1,6 +1,7 @@
 import { SearchSchemaInput } from "@tanstack/solid-router";
 
 import { MediaTypeFilter, validateMediaFilters } from "../../_models/MediaFilters";
+import { newMediaSeed } from "../../_models/utils/MediaUtils";
 
 export interface FeedSearch {
     // favorites only
@@ -17,6 +18,21 @@ export interface FeedSearch {
    reload or a shared link should reproduce the same feed. Anything that is not
    a favorites flag or a whole number of a seed is dropped.
 */
+/*
+   The order for a feed being opened shuffled, new each time. Hovering a link opens
+   it too, to load it ahead, so that seed is kept for the click that follows -
+   otherwise what was loaded ahead would be a different order, and go unused.
+*/
+let preloadedSeed: number | undefined;
+
+export const openingSeed = (preload: boolean) => {
+    const seed = preloadedSeed ?? newMediaSeed();
+
+    preloadedSeed = preload ? seed : undefined;
+
+    return seed;
+};
+
 export const validateFeedSearch = (search: FeedSearch & SearchSchemaInput): FeedSearch => {
     // typed as what a link may pass; the address bar can hold anything
     const raw = search as unknown as Record<string, unknown>;

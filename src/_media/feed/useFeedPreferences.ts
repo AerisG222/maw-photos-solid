@@ -13,13 +13,24 @@ export const feedLabelArea = (subject: FeedSubject): LabelArea =>
 
 export const useFeedPreferences = () => {
     const [
-        ,
-        { setPersonFeedListing, setPlaceFeedListing, setPersonFeedFilters, setPlaceFeedFilters }
+        area,
+        {
+            setPersonFeedListing,
+            setPlaceFeedListing,
+            setPersonFeedShuffle,
+            setPlaceFeedShuffle,
+            setPersonFeedFilters,
+            setPlaceFeedFilters
+        }
     ] = useAreaSettingsContext();
 
     return {
         rememberListing: (subject: FeedSubject, listing: FeedListing) =>
             (subject.kind === "place" ? setPlaceFeedListing : setPersonFeedListing)(listing),
+        rememberShuffle: (subject: FeedSubject, shuffled: boolean) =>
+            (subject.kind === "place" ? setPlaceFeedShuffle : setPersonFeedShuffle)(shuffled),
+        opensShuffled: (subject: FeedSubject) =>
+            subject.kind === "place" ? area.placeFeedShuffle : area.personFeedShuffle,
         rememberFilters: (subject: FeedSubject, filters: MediaFilters) =>
             (subject.kind === "place" ? setPlaceFeedFilters : setPersonFeedFilters)(filters)
     };

@@ -1,6 +1,6 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 
-import { validateFeedSearch } from "./_search";
+import { openingSeed, validateFeedSearch } from "./_search";
 
 const validate = (search: Record<string, unknown>) => validateFeedSearch(search as never);
 
@@ -14,4 +14,20 @@ test("takes the filters and the seed as the address says them", () => {
 
 test("drops anything else", () => {
     expect(validate({ f: "maybe", t: "audio", seed: "soon", other: "x" })).toEqual({});
+});
+
+test("opening a shuffled feed uses the order that was loaded ahead, then a new one", () => {
+    const random = vi.spyOn(Math, "random");
+
+    random.mockReturnValue(0.1);
+    openingSeed(false);
+
+    const hovered = openingSeed(true);
+
+    expect(openingSeed(true)).toBe(hovered);
+    random.mockReturnValue(0.9);
+    expect(openingSeed(false)).toBe(hovered);
+    expect(openingSeed(false)).not.toBe(hovered);
+
+    random.mockRestore();
 });

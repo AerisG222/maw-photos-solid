@@ -199,6 +199,8 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
             searchView: str(searchPage.viewMode) ?? defaultAreaSettings.searchView,
             personFeedListing: faceFeed.showCategories === true ? "categories" : "media",
             placeFeedListing: defaultAreaSettings.placeFeedListing,
+            personFeedShuffle: defaultAreaSettings.personFeedShuffle,
+            placeFeedShuffle: defaultAreaSettings.placeFeedShuffle,
             categoryYearFilter:
                 num(categoryFilter.yearFilter) ??
                 (categoryFilter.yearFilter === "all"

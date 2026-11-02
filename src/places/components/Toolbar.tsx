@@ -3,6 +3,7 @@ import { Component, Show } from "solid-js";
 import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { feedCategoriesLink, feedGridLink } from "../../_media/feed/_routes";
 import { RouteDisplay } from "../../_models/RouteDisplay";
+import { newMediaSeed } from "../../_models/utils/MediaUtils";
 import { Uuid } from "../../_models/Uuid";
 import { placeLink } from "../_routes";
 
@@ -66,9 +67,15 @@ const Toolbar: Component<Props> = props => {
     */
     const [area] = useAreaSettingsContext();
 
+    // one for as long as this is here, so hovering the link loads what a click opens
+    const seed = newMediaSeed();
+
     const mediaLink = () =>
         props.placeId
-            ? feedGridLink({ kind: "place", id: props.placeId }, undefined, area.placeFeedFilters)
+            ? feedGridLink({ kind: "place", id: props.placeId }, undefined, {
+                  ...area.placeFeedFilters,
+                  ...(area.placeFeedShuffle ? { seed } : {})
+              })
             : placeLink();
 
     const categoriesLink = () =>

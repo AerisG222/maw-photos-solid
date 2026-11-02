@@ -122,6 +122,37 @@ describe("the filters last chosen", () => {
         );
     });
 
+    test("shuffle a feed opened in an area that was left shuffled, and not the other", async () => {
+        const shuffled = { personFeedShuffle: true };
+
+        expect(await landingFrom(`/people/${PERSON}`, shuffled)).toMatch(
+            new RegExp(`^/people/${PERSON}/grid\\?seed=\\d+$`)
+        );
+        expect(await landingFrom(`/people/clans/${PERSON}`, shuffled)).toMatch(/\/grid\?seed=\d+$/);
+        expect(await landingFrom(`/places/${PERSON}/media`, shuffled)).toBe(
+            `/places/${PERSON}/media/grid`
+        );
+        expect(await landingFrom(`/places/${PERSON}/media`, { placeFeedShuffle: true })).toMatch(
+            /\/media\/grid\?seed=\d+$/
+        );
+    });
+
+    // the API takes no seed for a list of categories
+    test("shuffle nothing when a feed opens on its categories", async () => {
+        expect(
+            await landingFrom(`/people/${PERSON}`, {
+                personFeedShuffle: true,
+                personFeedListing: "categories"
+            })
+        ).toBe(`/people/${PERSON}/categories`);
+    });
+
+    test("keep the order the address already has", async () => {
+        expect(await landingFrom(`/people/${PERSON}?seed=7`, { personFeedShuffle: true })).toBe(
+            `/people/${PERSON}/grid?seed=7`
+        );
+    });
+
     test("give way to what the address says", async () => {
         expect(await landingFrom("/categories/2019/a-trip?t=photo", area)).toBe(
             "/categories/2019/a-trip/grid?t=photo"

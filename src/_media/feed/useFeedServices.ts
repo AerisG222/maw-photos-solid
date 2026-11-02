@@ -20,7 +20,7 @@ export const useFeedServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
-    const { rememberFilters } = useFeedPreferences();
+    const { rememberFilters, rememberShuffle } = useFeedPreferences();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
     const { placeMediaQuery } = usePlacesContext();
@@ -132,8 +132,10 @@ export const useFeedServices = (view: MediaView) => {
 
     // a fresh seed each time it is switched on, so turning shuffle off and back
     // on reshuffles rather than replaying the same order
-    const setShuffled = (on: boolean) =>
+    const setShuffled = (on: boolean) => {
+        rememberShuffle(subject.subject(), on);
         applyFilter(favoritesOnly(), on ? newMediaSeed() : undefined, mediaType());
+    };
 
     /*
        Only the media feed can block the screen. The category follows whichever

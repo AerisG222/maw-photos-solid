@@ -1,5 +1,8 @@
 import { Component } from "solid-js";
+import { useSearch } from "@tanstack/solid-router";
+
 import { useFeedPreferences } from "./useFeedPreferences";
+import { newMediaSeed } from "../../_models/utils/MediaUtils";
 
 import {
     FeedSubject,
@@ -43,7 +46,10 @@ interface Props {
 // where to start numbering
 export const LISTING_NAV_COUNT = 2;
 const ToolbarListing: Component<Props> = props => {
-    const { rememberListing } = useFeedPreferences();
+    const { rememberListing, opensShuffled } = useFeedPreferences();
+    const search = useSearch({ strict: false });
+    // one for as long as this is here, so hovering the link loads what a click opens
+    const seed = newMediaSeed();
 
     /*
        Going back to the media returns to the media listing a feed opens on -
@@ -52,7 +58,10 @@ const ToolbarListing: Component<Props> = props => {
     const mediaLink = () =>
         feedGridLink(props.subject, undefined, {
             ...(props.favoritesOnly ? { f: true } : {}),
-            ...(props.mediaType ? { t: props.mediaType } : {})
+            ...(props.mediaType ? { t: props.mediaType } : {}),
+            ...(search().seed !== undefined || opensShuffled(props.subject)
+                ? { seed: search().seed ?? seed }
+                : {})
         });
 
     const categoriesLink = () =>

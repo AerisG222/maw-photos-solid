@@ -85,6 +85,9 @@ export interface AreaSettingsState {
     // a clan is browsed like a person, so they share; a place is its own area
     readonly personFeedListing: FeedListing;
     readonly placeFeedListing: FeedListing;
+    // whether a feed opens shuffled - the order itself is new each time
+    readonly personFeedShuffle: boolean;
+    readonly placeFeedShuffle: boolean;
     // kept rather than left to the url alone; `?year=` still wins when present
     readonly categoryYearFilter: number | "all";
     // the same goes for these: each section opens with them, unless the address
@@ -104,6 +107,8 @@ export const defaultAreaSettings: AreaSettingsState = {
     searchView: defaultCategoryViewMode,
     personFeedListing: "media",
     placeFeedListing: "media",
+    personFeedShuffle: false,
+    placeFeedShuffle: false,
     categoryYearFilter: "all",
     categoriesFilters: {},
     categoryMediaFilters: {},

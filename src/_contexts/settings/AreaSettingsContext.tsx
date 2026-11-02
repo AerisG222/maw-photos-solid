@@ -18,6 +18,8 @@ export type AreaSettingsContextValue = [
         setSearchView: (searchView: CategoryViewModeIdType) => void;
         setPersonFeedListing: (personFeedListing: FeedListing) => void;
         setPlaceFeedListing: (placeFeedListing: FeedListing) => void;
+        setPersonFeedShuffle: (personFeedShuffle: boolean) => void;
+        setPlaceFeedShuffle: (placeFeedShuffle: boolean) => void;
         setCategoryYearFilter: (categoryYearFilter: number | "all") => void;
         setCategoriesFilters: (categoriesFilters: CategoryFilters) => void;
         setCategoryMediaFilters: (categoryMediaFilters: MediaFilters) => void;
@@ -49,6 +51,10 @@ export const AreaSettingsProvider: ParentComponent = props => {
 
     const setPlaceFeedListing = (placeFeedListing: FeedListing) =>
         updateState({ placeFeedListing });
+
+    const setPersonFeedShuffle = (personFeedShuffle: boolean) => updateState({ personFeedShuffle });
+
+    const setPlaceFeedShuffle = (placeFeedShuffle: boolean) => updateState({ placeFeedShuffle });
 
     const setCategoryYearFilter = (categoryYearFilter: number | "all") =>
         updateState({ categoryYearFilter });
@@ -82,6 +88,8 @@ export const AreaSettingsProvider: ParentComponent = props => {
                     setSearchView,
                     setPersonFeedListing,
                     setPlaceFeedListing,
+                    setPersonFeedShuffle,
+                    setPlaceFeedShuffle,
                     setCategoryYearFilter,
                     setCategoriesFilters,
                     setCategoryMediaFilters,

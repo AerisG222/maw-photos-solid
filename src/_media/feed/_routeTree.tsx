@@ -5,7 +5,7 @@ import { requireLogin } from "../../_router/guards";
 import { isUuid } from "../../_models/Uuid";
 import { validateMediaFilters } from "../../_models/MediaFilters";
 import { redirectToGrid } from "../_legacyViews";
-import { FeedSearch, validateFeedSearch } from "./_search";
+import { FeedSearch, openingSeed, validateFeedSearch } from "./_search";
 import { FeedSubject, feedCategoriesLink, feedGridLink } from "./_routes";
 import { loadAreaSettings } from "../../_contexts/settings/_migrate";
 import { prefetch } from "../../_router/prefetch";
@@ -107,17 +107,23 @@ export const personFeedRoute = createRoute({
 });
 
 /*
-   A feed opens on the listing and filters last chosen, unless the address has its
-   own, before anything renders - this was a component that mounted and then
+   A feed opens on the listing, filters and shuffle last chosen, unless the address
+   has its own, before anything renders - this was a component that mounted and then
    navigated, with a blank page between. The route above has already made sure the
    subject is an id.
 */
-const redirectToFeedListing = (subject: FeedSubject, search: FeedSearch): never => {
+const redirectToFeedListing = (
+    subject: FeedSubject,
+    search: FeedSearch,
+    preload: boolean
+): never => {
     const area = loadAreaSettings();
     const isPlace = subject.kind === "place";
     const listing = isPlace ? area.placeFeedListing : area.personFeedListing;
+    const shuffled = isPlace ? area.placeFeedShuffle : area.personFeedShuffle;
     const wanted: FeedSearch = {
         ...(isPlace ? area.placeFeedFilters : area.personFeedFilters),
+        ...(shuffled && listing === "media" ? { seed: openingSeed(preload) } : {}),
         ...search
     };
 
@@ -132,8 +138,8 @@ const redirectToFeedListing = (subject: FeedSubject, search: FeedSearch): never 
 const personFeedIndexRoute = createRoute({
     getParentRoute: () => personFeedRoute,
     path: "/",
-    beforeLoad: ({ params, search }) =>
-        redirectToFeedListing({ kind: "person", id: params.personId as Uuid }, search)
+    beforeLoad: ({ params, search, preload }) =>
+        redirectToFeedListing({ kind: "person", id: params.personId as Uuid }, search, preload)
 });
 
 export const personFeedGridRoute = createRoute({
@@ -218,8 +224,8 @@ export const clanFeedRoute = createRoute({
 const clanFeedIndexRoute = createRoute({
     getParentRoute: () => clanFeedRoute,
     path: "/",
-    beforeLoad: ({ params, search }) =>
-        redirectToFeedListing({ kind: "clan", id: params.clanId as Uuid }, search)
+    beforeLoad: ({ params, search, preload }) =>
+        redirectToFeedListing({ kind: "clan", id: params.clanId as Uuid }, search, preload)
 });
 
 export const clanFeedGridRoute = createRoute({
@@ -304,8 +310,8 @@ export const placeFeedRoute = createRoute({
 const placeFeedIndexRoute = createRoute({
     getParentRoute: () => placeFeedRoute,
     path: "/",
-    beforeLoad: ({ params, search }) =>
-        redirectToFeedListing({ kind: "place", id: params.placeId as Uuid }, search)
+    beforeLoad: ({ params, search, preload }) =>
+        redirectToFeedListing({ kind: "place", id: params.placeId as Uuid }, search, preload)
 });
 
 export const placeFeedGridRoute = createRoute({

@@ -14,8 +14,10 @@ import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 
 const ViewPeople: Component = () => {
-    const [area, { setPersonFeedListing, setPeopleFavoritesOnly, setPersonFeedFilters }] =
-        useAreaSettingsContext();
+    const [
+        area,
+        { setPersonFeedListing, setPersonFeedShuffle, setPeopleFavoritesOnly, setPersonFeedFilters }
+    ] = useAreaSettingsContext();
     const [listing, { setShowLabels, setPeopleSort }] = useListingSettingsContext();
 
     return (
@@ -47,6 +49,12 @@ const ViewPeople: Component = () => {
                         name="feedShowCategories"
                         isSelected={area.personFeedListing === "categories"}
                         onChange={show => setPersonFeedListing(show ? "categories" : "media")}
+                    />
+                    <Toggle
+                        title="Shuffle Media"
+                        name="feedShuffle"
+                        isSelected={area.personFeedShuffle}
+                        onChange={setPersonFeedShuffle}
                     />
                     <Toggle
                         title="Show Labels on Categories"
