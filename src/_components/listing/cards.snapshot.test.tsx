@@ -98,7 +98,12 @@ const place: Place = {
 const cards = () => (
     <>
         <div data-card="CategoryCard">
-            <CategoryCard category={category} eager={false} setIsFavorite={() => undefined} />
+            <CategoryCard
+                area="categories"
+                category={category}
+                eager={false}
+                setIsFavorite={() => undefined}
+            />
         </div>
 
         <div data-card="PersonCard">

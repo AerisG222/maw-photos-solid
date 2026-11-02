@@ -8,16 +8,16 @@ export const settingsAppearance: RouteDisplay = {
     tooltip: "Appearance Settings"
 };
 
-export const settingsBrowsing: RouteDisplay = {
-    icon: "icon-[ic--round-density-medium]",
-    name: "Browsing",
-    tooltip: "Browsing Settings"
-};
-
 export const settingsCategories: RouteDisplay = {
     icon: "icon-[ic--round-collections]",
     name: "Categories",
     tooltip: "Category Settings"
+};
+
+export const settingsPlaces: RouteDisplay = {
+    icon: "icon-[ic--round-place]",
+    name: "Places",
+    tooltip: "Places Settings"
 };
 
 export const settingsMedia: RouteDisplay = {

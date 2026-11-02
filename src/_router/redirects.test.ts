@@ -61,7 +61,8 @@ describe("the filters last chosen", () => {
         categoriesFilters: { f: true, noGps: true },
         categoryMediaFilters: { t: "video" },
         peopleFavoritesOnly: true,
-        feedFilters: { f: true, t: "photo" },
+        personFeedFilters: { f: true, t: "photo" },
+        placeFeedFilters: { t: "video" },
         searchFilters: { t: "video" }
     };
 
@@ -95,8 +96,29 @@ describe("the filters last chosen", () => {
         expect(await landingFrom(`/people/${PERSON}`, area)).toBe(
             `/people/${PERSON}/grid?f=true&t=photo`
         );
-        expect(await landingFrom(`/people/${PERSON}`, { ...area, feedListing: "categories" })).toBe(
-            `/people/${PERSON}/categories?f=true&t=photo`
+        expect(
+            await landingFrom(`/people/${PERSON}`, { ...area, personFeedListing: "categories" })
+        ).toBe(`/people/${PERSON}/categories?f=true&t=photo`);
+    });
+
+    test("are a place's own, apart from a person's", async () => {
+        expect(await landingFrom(`/places/${PERSON}/media`, area)).toBe(
+            `/places/${PERSON}/media/grid?t=video`
+        );
+        expect(
+            await landingFrom(`/places/${PERSON}/media`, { placeFeedListing: "categories" })
+        ).toBe(`/places/${PERSON}/media/categories`);
+        expect(await landingFrom(`/people/${PERSON}`, { placeFeedListing: "categories" })).toBe(
+            `/people/${PERSON}/grid`
+        );
+    });
+
+    test("start from one listing choice saved before people and places were separate", async () => {
+        const old = { feedListing: "categories" };
+
+        expect(await landingFrom(`/people/${PERSON}`, old)).toBe(`/people/${PERSON}/categories`);
+        expect(await landingFrom(`/places/${PERSON}/media`, old)).toBe(
+            `/places/${PERSON}/media/categories`
         );
     });
 
@@ -120,7 +142,7 @@ describe("a feed", () => {
     });
 
     test("opens on its categories if they were last chosen", async () => {
-        expect(await landingFrom(`/people/${PERSON}`, { feedListing: "categories" })).toBe(
+        expect(await landingFrom(`/people/${PERSON}`, { personFeedListing: "categories" })).toBe(
             `/people/${PERSON}/categories`
         );
     });
@@ -129,7 +151,7 @@ describe("a feed", () => {
     test("ignores a favorites or shuffle setting left in storage", async () => {
         expect(
             await landingFrom(`/people/${PERSON}`, {
-                feedListing: "categories",
+                personFeedListing: "categories",
                 feedFavoritesOnly: true,
                 feedShuffle: true
             })

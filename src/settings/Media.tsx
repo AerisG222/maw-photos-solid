@@ -1,6 +1,7 @@
 import { Component, For } from "solid-js";
 
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
+import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { useMediaSettingsContext } from "../_contexts/settings/MediaSettingsContext";
 import { inspectorCards } from "../_components/inspector/registry";
 import { allMapTypes } from "../_models/MapType";
@@ -19,9 +20,7 @@ import Toggle from "../_components/input/Toggle";
 import Layout from "../_components/layout/Layout";
 
 /*
-   Looking at one photograph, rather than at a listing of them. Labels,
-   badges and face highlighting are the same question everywhere and are answered
-   once, under Browsing.
+   Looking at one photograph, rather than at a listing of them.
 
    The inspector's cards come from the registry rather than being listed again
    here. There were eight checkboxes naming eight cards, which is eight chances
@@ -40,6 +39,7 @@ const ViewMedia: Component = () => {
         }
     ] = useMediaSettingsContext();
     const [area, { setCategoryMediaFilters }] = useAreaSettingsContext();
+    const [listing, { setHighlightFaces }] = useListingSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Media">
@@ -57,6 +57,12 @@ const ViewMedia: Component = () => {
                         itemArray={allSlideshowDurations}
                         selectedValue={settings.slideshowSeconds}
                         onChange={val => setSlideshowSeconds(parseInt(val))}
+                    />
+                    <Toggle
+                        title="Highlight Faces"
+                        name="highlightFaces"
+                        isSelected={listing.highlightFaces}
+                        onChange={setHighlightFaces}
                     />
                 </Panel>
 

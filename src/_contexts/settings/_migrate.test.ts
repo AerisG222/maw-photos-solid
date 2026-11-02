@@ -32,7 +32,7 @@ describe("migrating from the per-view settings", () => {
         const migrated = buildMigratedSettings(reader({}));
 
         expect(migrated.app.theme).toBe(ThemeSystem);
-        expect(migrated.listing.showLabels).toBe(true);
+        expect(migrated.listing.labels.categories).toBe(true);
         expect(migrated.media.inspectorCards).toEqual(defaultMediaSettings.inspectorCards);
     });
 
@@ -72,7 +72,10 @@ describe("migrating from the per-view settings", () => {
             reader({ [KEY_SETTINGS_CATEGORY_VIEW_GRID]: { showTitles: false } })
         );
 
-        expect(migrated.listing.showLabels).toBe(false);
+        expect(migrated.listing.labels.categories).toBe(false);
+        expect(migrated.listing.labels.people).toBe(false);
+        // never had the choice, so they keep their names
+        expect(migrated.listing.labels.places).toBe(true);
     });
 
     test("face highlighting is the same, across its three old homes", () => {
@@ -159,7 +162,7 @@ describe("migrating from the per-view settings", () => {
             reader({ [KEY_SETTINGS_FACE_FEED]: { showCategories: true, favoritesOnly: true } })
         );
 
-        expect(migrated.area.feedListing).toBe("categories");
+        expect(migrated.area.personFeedListing).toBe("categories");
     });
 
     test("a whole v1 storage migrates in one piece", () => {
@@ -187,7 +190,7 @@ describe("migrating from the per-view settings", () => {
             navExpanded: false,
             showToolbarLabels: true
         });
-        expect(migrated.listing.showLabels).toBe(true);
+        expect(migrated.listing.labels.categories).toBe(true);
         expect(migrated.listing.peopleSort).toBe("mediaCount");
         expect(migrated.media.slideshowSeconds).toBe(5);
         expect(migrated.area.categoriesView).toBe("list");

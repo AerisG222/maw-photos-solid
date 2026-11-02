@@ -114,10 +114,15 @@ export const personFeedRoute = createRoute({
 */
 const redirectToFeedListing = (subject: FeedSubject, search: FeedSearch): never => {
     const area = loadAreaSettings();
-    const wanted: FeedSearch = { ...area.feedFilters, ...search };
+    const isPlace = subject.kind === "place";
+    const listing = isPlace ? area.placeFeedListing : area.personFeedListing;
+    const wanted: FeedSearch = {
+        ...(isPlace ? area.placeFeedFilters : area.personFeedFilters),
+        ...search
+    };
 
     throw redirect({
-        ...(area.feedListing === "categories"
+        ...(listing === "categories"
             ? feedCategoriesLink(subject, wanted.f === true, wanted.t)
             : feedGridLink(subject, undefined, wanted)),
         replace: true

@@ -1,6 +1,9 @@
 import { Component, Show } from "solid-js";
 
-import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
+import {
+    LabelArea,
+    useListingSettingsContext
+} from "../../_contexts/settings/ListingSettingsContext";
 import { getNextPersonSort, getPersonSortIcon, PersonSortName } from "../../_models/PersonSort";
 
 import ToolbarButton from "../toolbar/ToolbarButton";
@@ -9,7 +12,7 @@ interface Props {
     // ordering, which only the people grid offers
     sort?: boolean;
     // the text under an item - a title, a year, a name, a count
-    labels?: boolean;
+    labels?: LabelArea;
     // media listings only
     faces?: boolean;
 }
@@ -30,8 +33,7 @@ interface Props {
    listings no longer means re-learning the same row.
 
    The settings come straight from the one store rather than through a screen's
-   own context, which is what makes a change here follow you into the next
-   listing.
+   own context. Labels are the listing's own, so it says which area it is.
 */
 const ListingToolbar: Component<Props> = props => {
     const [settings, { setShowLabels, setHighlightFaces, setPeopleSort }] =
@@ -54,14 +56,16 @@ const ListingToolbar: Component<Props> = props => {
             </Show>
 
             <Show when={props.labels}>
-                <ToolbarButton
-                    icon="icon-[ic--round-title]"
-                    name="Labels"
-                    tooltip="Toggle Labels"
-                    shortcutKeys={["t"]}
-                    clickHandler={() => setShowLabels(!settings.showLabels)}
-                    active={settings.showLabels}
-                />
+                {area => (
+                    <ToolbarButton
+                        icon="icon-[ic--round-title]"
+                        name="Labels"
+                        tooltip="Toggle Labels"
+                        shortcutKeys={["t"]}
+                        clickHandler={() => setShowLabels(area(), !settings.labels[area()])}
+                        active={settings.labels[area()]}
+                    />
+                )}
             </Show>
 
             <Show when={props.faces}>

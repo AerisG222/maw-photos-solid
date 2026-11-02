@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 
 import { useAreaSettingsContext } from "../_contexts/settings/AreaSettingsContext";
+import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { allCategoryViewModes } from "../_models/CategoryViewMode";
 import { allSearchHistoryCounts } from "../_models/SearchHistoryCount";
 
@@ -8,13 +9,14 @@ import MediaFilterOptions from "../_components/filters/MediaFilterOptions";
 import Panel from "./components/Panel";
 import PanelContainer from "./components/PanelContainer";
 import RadioGroup from "../_components/input/RadioGroup";
+import Toggle from "../_components/input/Toggle";
 import Toolbar from "./components/Toolbar";
 import Layout from "../_components/layout/Layout";
 
-// see the note in Categories - search results are categories
 const ViewSearch: Component = () => {
     const [area, { setSearchView, setSearchHistoryCount, setSearchFilters }] =
         useAreaSettingsContext();
+    const [listing, { setShowLabels }] = useListingSettingsContext();
 
     return (
         <Layout toolbar={<Toolbar />} title="Search">
@@ -26,6 +28,13 @@ const ViewSearch: Component = () => {
                         groupName="pageView"
                         selectedValue={area.searchView}
                         onChange={setSearchView}
+                    />
+
+                    <Toggle
+                        title="Show Labels"
+                        name="searchLabels"
+                        isSelected={listing.labels.search}
+                        onChange={show => setShowLabels("search", show)}
                     />
 
                     <RadioGroup

@@ -5,6 +5,7 @@ import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
 import ToolbarListing from "./ToolbarListing";
 import { FeedSubject } from "./_routes";
+import { feedLabelArea } from "./useFeedPreferences";
 import { MediaTypeFilter } from "../../_models/MediaFilters";
 
 interface Props {
@@ -48,7 +49,7 @@ const ToolbarCategories: Component<Props> = props => {
                 switch went into the slot with it */}
             <ToolbarDivider />
 
-            <ListingToolbar labels />
+            <ListingToolbar labels={feedLabelArea(props.subject)} />
         </ToolbarLayout>
     );
 };

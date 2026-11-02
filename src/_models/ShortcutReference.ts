@@ -60,9 +60,9 @@ export const shortcutReference: ShortcutReferenceGroup[] = [
     {
         title: "How a listing looks",
         detail:
-            "One setting behind each, shared by every listing. Density and thumbnail " +
-            "dimming used to be here and are not settings any more - there is one " +
-            "size, and photographs show in full color.",
+            "Labels are kept for each area on its own. Density and thumbnail dimming " +
+            "used to be here and are not settings any more - there is one size, and " +
+            "photographs show in full color.",
         entries: [
             { keys: ["t"], action: "Show / hide labels", scope: "Any listing" },
             { keys: ["o"], action: "Cycle the sort order", scope: "People" }

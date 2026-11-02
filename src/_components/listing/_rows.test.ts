@@ -6,7 +6,8 @@ import {
     chunkIntoRows,
     columnsFor,
     mediaRowHeight,
-    personRowHeight
+    personRowHeight,
+    placeRowHeight
 } from "./_rows";
 
 /*
@@ -107,5 +108,10 @@ describe("how tall a row of tiles is", () => {
     test("a person is a square face and a name", () => {
         expect(personRowHeight(160, true)).toBe(194);
         expect(personRowHeight(160, false)).toBe(170);
+    });
+
+    test("a place is its cover, and its name with padding", () => {
+        expect(placeRowHeight(true)).toBe(220.5);
+        expect(placeRowHeight(false)).toBe(188.5);
     });
 });

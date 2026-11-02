@@ -6,6 +6,7 @@ import { RouteDisplay } from "../../_models/RouteDisplay";
 import { Uuid } from "../../_models/Uuid";
 import { placeLink } from "../_routes";
 
+import ListingToolbar from "../../_components/listing/ListingToolbar";
 import ToolbarButton from "../../_components/toolbar/ToolbarButton";
 import ToolbarDivider from "../../_components/toolbar/ToolbarDivider";
 import ToolbarLayout from "../../_components/toolbar/ToolbarLayout";
@@ -67,15 +68,15 @@ const Toolbar: Component<Props> = props => {
 
     const mediaLink = () =>
         props.placeId
-            ? feedGridLink({ kind: "place", id: props.placeId }, undefined, area.feedFilters)
+            ? feedGridLink({ kind: "place", id: props.placeId }, undefined, area.placeFeedFilters)
             : placeLink();
 
     const categoriesLink = () =>
         props.placeId
             ? feedCategoriesLink(
                   { kind: "place", id: props.placeId },
-                  !!area.feedFilters.f,
-                  area.feedFilters.t
+                  !!area.placeFeedFilters.f,
+                  area.placeFeedFilters.t
               )
             : placeLink();
 
@@ -100,6 +101,10 @@ const Toolbar: Component<Props> = props => {
                 />
             }
         >
+            <ToolbarDivider />
+
+            <ListingToolbar labels="places" />
+
             <Show when={props.canEdit}>
                 <ToolbarDivider />
 

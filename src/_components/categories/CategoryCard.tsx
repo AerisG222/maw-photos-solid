@@ -3,7 +3,10 @@ import { Component, For, Show } from "solid-js";
 import { Category } from "../../_models/Category";
 import { linkOptions } from "@tanstack/solid-router";
 import { getMediaTeaserUrl } from "../../_models/utils/MediaUtils";
-import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
+import {
+    LabelArea,
+    useListingSettingsContext
+} from "../../_contexts/settings/ListingSettingsContext";
 
 import FavoriteBadge from "../listing/FavoriteBadge";
 import MediaTypeIcon from "../icon/MediaTypeIcon";
@@ -12,6 +15,8 @@ import { categoryRoute } from "../../category/_routeTree";
 
 interface Props {
     category: Category;
+    // the listing it is in, which decides whether its labels show
+    area: LabelArea;
     // left out where a heading above already says it - the year's own listing
     hideYear?: boolean;
     eager: boolean;
@@ -45,13 +50,13 @@ const CategoryCard: Component<Props> = props => {
             title={props.category.name}
             eager={props.eager}
             header={
-                <Show when={listing.showLabels && !props.hideYear}>
+                <Show when={listing.labels[props.area] && !props.hideYear}>
                     <div class="text-center leading-6">
                         {props.category.effectiveDate.getFullYear()}
                     </div>
                 </Show>
             }
-            label={<Show when={listing.showLabels}>{props.category.name}</Show>}
+            label={<Show when={listing.labels[props.area]}>{props.category.name}</Show>}
             badges={{
                 topLeft: (
                     <div class="badge m-[1px] gap-0.5 px-0.5 opacity-50">

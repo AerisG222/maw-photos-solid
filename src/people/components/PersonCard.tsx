@@ -54,7 +54,7 @@ const PersonCard: Component<Props> = props => {
                     <Icon classes="icon-[ic--round-person] text-4xl" />
                 </div>
             }
-            label={<Show when={listing.showLabels}>{props.person.name}</Show>}
+            label={<Show when={listing.labels.people}>{props.person.name}</Show>}
             badges={{
                 topLeft: (
                     <Show when={props.selectable}>
@@ -85,7 +85,7 @@ const PersonCard: Component<Props> = props => {
                     />
                 ),
                 bottomRight: (
-                    <Show when={listing.showLabels}>
+                    <Show when={listing.labels.people}>
                         <div class="badge badge-sm m-0.5 opacity-70">{props.person.mediaCount}</div>
                     </Show>
                 )

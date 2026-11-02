@@ -1,5 +1,7 @@
 import { Component, Show, createEffect, createSignal } from "solid-js";
 import ListingSurface from "../_components/listing/ListingSurface";
+import { placeRowHeight } from "../_components/listing/_rows";
+import { useListingSettingsContext } from "../_contexts/settings/ListingSettingsContext";
 import { getRouteApi } from "@tanstack/solid-router";
 
 import { placeLink } from "./_routes";
@@ -53,6 +55,7 @@ const Browse: Component = () => {
     const searchParams = route.useSearch();
     const navigate = route.useNavigate();
     const [authContext] = useAuthContext();
+    const [listing] = useListingSettingsContext();
     const { placesQuery, placeQuery } = usePlacesContext();
 
     // a route parameter matches on shape alone, so a typed url can hand this page
@@ -278,7 +281,13 @@ const Browse: Component = () => {
                     }
                 >
                     {/* a place card is wider than a tile - see ListingSurface */}
-                    <ListingSurface animate class="mb-4" itemWidth={240} items={places.data ?? []}>
+                    <ListingSurface
+                        animate
+                        class="mb-4"
+                        itemWidth={240}
+                        estimatedRowHeight={placeRowHeight(listing.labels.places)}
+                        items={places.data ?? []}
+                    >
                         {(item, index) => (
                             <PlaceCard
                                 place={item}

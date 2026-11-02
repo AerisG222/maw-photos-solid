@@ -16,7 +16,7 @@ interface Props {
 }
 
 const YearGrid: Component<Props> = props => {
-    const rowHeight = useCategoryRowHeight({ hideYear: true });
+    const rowHeight = useCategoryRowHeight("categories", { hideYear: true });
 
     return (
         <section>
@@ -38,6 +38,7 @@ const YearGrid: Component<Props> = props => {
             >
                 {(category, index) => (
                     <CategoryCard
+                        area="categories"
                         hideYear
                         category={category}
                         eager={props.enableEagerLoading && index <= EAGER_THRESHOLD}

@@ -14,6 +14,7 @@ import { ThemeDark, ThemeIdType, ThemeLight, ThemeSystem } from "../../_models/T
 import {
     AppSettingsState,
     AreaSettingsState,
+    FeedListing,
     ListingSettingsState,
     MediaSettingsState,
     defaultAppSettings,
@@ -112,6 +113,19 @@ const migrateInspectorCards = (panel: LegacyRecord): InspectorCardIdType[] => {
         : defaultMediaSettings.inspectorCards;
 };
 
+/*
+   One choice becoming one per area. Places never had one - their names always
+   showed - so they stay on rather than losing them on an upgrade.
+*/
+const labelsFrom = (showLabels: boolean): ListingSettingsState["labels"] => ({
+    categories: showLabels,
+    search: showLabels,
+    people: showLabels,
+    personFeeds: showLabels,
+    places: defaultListingSettings.labels.places,
+    placeFeeds: showLabels
+});
+
 export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
     const app = read(KEY_SETTINGS_APP);
     const categoryFilter = read(KEY_SETTINGS_CATEGORY_FILTER);
@@ -147,15 +161,17 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
                 defaultAppSettings.showToolbarLabels
         },
         listing: {
-            showLabels: anyFalse([
-                bool(categoryGrid.showTitles),
-                bool(searchGrid.showTitles),
-                bool(feedCategory.showTitles),
-                bool(searchGrid.showYears),
-                bool(feedCategory.showYears),
-                bool(peopleGrid.showNames),
-                bool(peopleGrid.showMediaCounts)
-            ]),
+            labels: labelsFrom(
+                anyFalse([
+                    bool(categoryGrid.showTitles),
+                    bool(searchGrid.showTitles),
+                    bool(feedCategory.showTitles),
+                    bool(searchGrid.showYears),
+                    bool(feedCategory.showYears),
+                    bool(peopleGrid.showNames),
+                    bool(peopleGrid.showMediaCounts)
+                ])
+            ),
             highlightFaces: anyTrue([
                 bool(mediaGrid.highlightFaces),
                 bool(mediaDetail.highlightFaces),
@@ -181,7 +197,8 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
         area: {
             categoriesView: str(categoryPage.viewMode) ?? defaultAreaSettings.categoriesView,
             searchView: str(searchPage.viewMode) ?? defaultAreaSettings.searchView,
-            feedListing: faceFeed.showCategories === true ? "categories" : "media",
+            personFeedListing: faceFeed.showCategories === true ? "categories" : "media",
+            placeFeedListing: defaultAreaSettings.placeFeedListing,
             categoryYearFilter:
                 num(categoryFilter.yearFilter) ??
                 (categoryFilter.yearFilter === "all"
@@ -191,7 +208,8 @@ export const buildMigratedSettings = (read: LegacyReader): MigratedSettings => {
             categoriesFilters: defaultAreaSettings.categoriesFilters,
             categoryMediaFilters: defaultAreaSettings.categoryMediaFilters,
             peopleFavoritesOnly: defaultAreaSettings.peopleFavoritesOnly,
-            feedFilters: defaultAreaSettings.feedFilters,
+            personFeedFilters: defaultAreaSettings.personFeedFilters,
+            placeFeedFilters: defaultAreaSettings.placeFeedFilters,
             searchFilters: defaultAreaSettings.searchFilters,
             searchHistoryCount: defaultAreaSettings.searchHistoryCount
         }
@@ -231,8 +249,38 @@ export const loadMigrated = <T extends object>(key: string, def: T): T => {
     return { ...def, ...loadJson<Partial<T>>(key, {}) };
 };
 
-// the area store as it stands, for a route deciding where a section opens
-export const loadAreaSettings = () => loadMigrated(KEY_SETTINGS_V2_AREA, defaultAreaSettings);
+// the listing store as it stands, with a single `showLabels` from before labels were per area
+export const loadListingSettings = (): ListingSettingsState => {
+    const { showLabels, labels, ...stored } = loadMigrated<
+        Partial<ListingSettingsState> & { showLabels?: boolean }
+    >(KEY_SETTINGS_V2_LISTING, {});
+
+    return {
+        ...defaultListingSettings,
+        ...stored,
+        labels: {
+            ...labelsFrom(showLabels ?? true),
+            ...labels
+        }
+    };
+};
+
+/*
+   The area store as it stands, for the provider starting up and for a route
+   deciding where a section opens. A single `feedListing` is from before people and
+   places were separate, and they both start from it.
+*/
+export const loadAreaSettings = (): AreaSettingsState => {
+    const { feedListing, ...stored } = loadMigrated<
+        Partial<AreaSettingsState> & { feedListing?: FeedListing }
+    >(KEY_SETTINGS_V2_AREA, {});
+
+    return {
+        ...defaultAreaSettings,
+        ...(feedListing ? { personFeedListing: feedListing, placeFeedListing: feedListing } : {}),
+        ...stored
+    };
+};
 
 /*
    The media store as it stands, for the provider starting up and for a route

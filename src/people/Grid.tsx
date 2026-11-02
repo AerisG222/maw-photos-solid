@@ -299,7 +299,7 @@ const GridView: Component = () => {
                     <ListingSurface
                         animate
                         class="mb-4"
-                        estimatedRowHeight={personRowHeight(THUMBNAIL_WIDTH, listing.showLabels)}
+                        estimatedRowHeight={personRowHeight(THUMBNAIL_WIDTH, listing.labels.people)}
                         items={peopleToDisplay()}
                     >
                         {(person, index) => (

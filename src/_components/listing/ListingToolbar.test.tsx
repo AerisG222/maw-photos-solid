@@ -30,13 +30,13 @@ const press = (name: string) =>
 
 describe("ListingToolbar", () => {
     test("offers only what the listing asked for", () => {
-        mount(() => <ListingToolbar labels faces />);
+        mount(() => <ListingToolbar labels="categories" faces />);
 
         expect(controls()).toEqual(["Toggle Labels (T)", "Toggle Face Highlighting (Q)"]);
     });
 
     test("always in the same order, whichever subset it is", () => {
-        mount(() => <ListingToolbar labels sort faces />);
+        mount(() => <ListingToolbar labels="categories" sort faces />);
 
         expect(controls().map(t => t.split(" (")[0])).toEqual([
             "Sorted by Name",
@@ -47,7 +47,7 @@ describe("ListingToolbar", () => {
 
     // the row is the same everywhere, so the keys have to be too
     test("no two of its controls claim the same key", () => {
-        mount(() => <ListingToolbar sort labels faces />);
+        mount(() => <ListingToolbar sort labels="categories" faces />);
 
         const keys = controls().map(title => /\(([^)]+)\)$/.exec(title)?.[1]);
 
@@ -58,18 +58,17 @@ describe("ListingToolbar", () => {
     });
 
     /*
-       The point of the whole step: a preference set while browsing one listing
-       is the same preference in the next one. Two toolbars, one store - pressing
-       a control in either is visible in both.
+       A toolbar's control is the setting itself, wherever it is drawn: two
+       toolbars for one area, one value - pressing either is visible in both.
     */
-    test("a change in one listing is a change in every listing", () => {
+    test("a change in one toolbar shows in another for the same area", () => {
         mount(() => (
             <>
                 <div id="first">
-                    <ListingToolbar labels />
+                    <ListingToolbar labels="categories" />
                 </div>
                 <div id="second">
-                    <ListingToolbar labels />
+                    <ListingToolbar labels="categories" />
                 </div>
             </>
         ));

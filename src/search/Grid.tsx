@@ -10,7 +10,7 @@ import { useCategoryRowHeight } from "../_components/categories/useCategoryRowHe
 import SkeletonGrid from "../_components/loading/SkeletonGrid";
 
 const ViewGrid: Component = () => {
-    const rowHeight = useCategoryRowHeight();
+    const rowHeight = useCategoryRowHeight("search");
 
     return (
         <SearchPage
@@ -20,6 +20,7 @@ const ViewGrid: Component = () => {
                 <ListingSurface class="mb-4" estimatedRowHeight={rowHeight()} items={categories()}>
                     {(category, index) => (
                         <CategoryCard
+                            area="search"
                             category={category}
                             eager={index <= EAGER_THRESHOLD}
                             setIsFavorite={setIsFavorite}

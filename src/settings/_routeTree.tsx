@@ -23,10 +23,13 @@ export const settingsAppearanceRoute = createRoute({
     component: lazyRouteComponent(() => import("./Appearance"))
 });
 
-export const settingsBrowsingRoute = createRoute({
+// these settings moved to the areas they affect; an old bookmark still lands somewhere
+const settingsBrowsingRedirectRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "browsing",
-    component: lazyRouteComponent(() => import("./Browsing"))
+    beforeLoad: () => {
+        throw redirect({ to: settingsCategoriesRoute.to, replace: true });
+    }
 });
 
 export const settingsCategoriesRoute = createRoute({
@@ -47,6 +50,12 @@ export const settingsPeopleRoute = createRoute({
     component: lazyRouteComponent(() => import("./People"))
 });
 
+export const settingsPlacesRoute = createRoute({
+    getParentRoute: () => settingsRoute,
+    path: "places",
+    component: lazyRouteComponent(() => import("./Places"))
+});
+
 export const settingsSearchRoute = createRoute({
     getParentRoute: () => settingsRoute,
     path: "search",
@@ -62,10 +71,11 @@ export const settingsShortcutsRoute = createRoute({
 export const settingsRouteTree = settingsRoute.addChildren([
     settingsIndexRoute,
     settingsAppearanceRoute,
-    settingsBrowsingRoute,
+    settingsBrowsingRedirectRoute,
     settingsCategoriesRoute,
     settingsMediaRoute,
     settingsPeopleRoute,
+    settingsPlacesRoute,
     settingsSearchRoute,
     settingsShortcutsRoute
 ]);

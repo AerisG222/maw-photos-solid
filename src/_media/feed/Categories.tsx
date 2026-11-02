@@ -6,6 +6,7 @@ import { EAGER_THRESHOLD } from "../../_models/utils/Constants";
 import { placeLink } from "../../places/_routes";
 import { usePlaceChain } from "../../places/usePlaceChain";
 import { useFeedCategories } from "./useFeedCategories";
+import { feedLabelArea } from "./useFeedPreferences";
 
 import { useCategoryRowHeight } from "../../_components/categories/useCategoryRowHeight";
 import CategoryCard from "../../_components/categories/CategoryCard";
@@ -31,7 +32,7 @@ const Categories: Component = () => {
     const feed = useFeedCategories();
     const { setIsFavoriteMutation } = useCategoriesContext();
     const chain = usePlaceChain(feed.placeId);
-    const rowHeight = useCategoryRowHeight();
+    const rowHeight = useCategoryRowHeight(feedLabelArea(feed.subject()));
 
     const setIsFavorite = favoriteSetter(setIsFavoriteMutation);
 
@@ -110,6 +111,7 @@ const Categories: Component = () => {
                     >
                         {(category, index) => (
                             <CategoryCard
+                                area={feedLabelArea(feed.subject())}
                                 category={category}
                                 eager={index <= EAGER_THRESHOLD}
                                 setIsFavorite={setIsFavorite}

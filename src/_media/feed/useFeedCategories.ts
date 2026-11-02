@@ -4,7 +4,7 @@ import { findQueryError, hasPages, refetchQueries } from "../../_components/erro
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
-import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
+import { useFeedPreferences } from "./useFeedPreferences";
 import { useFeedSubject } from "./_subject";
 import { MediaTypeFilter } from "../../_models/MediaFilters";
 
@@ -19,7 +19,7 @@ import { MediaTypeFilter } from "../../_models/MediaFilters";
 */
 export const useFeedCategories = () => {
     const goTo = useGoTo();
-    const [, { setFeedFilters }] = useAreaSettingsContext();
+    const { rememberFilters } = useFeedPreferences();
     const { personCategoriesQuery } = usePeopleContext();
     const { clanCategoriesQuery } = useClansContext();
     const { placeCategoriesQuery } = usePlacesContext();
@@ -59,7 +59,7 @@ export const useFeedCategories = () => {
     });
 
     const apply = (next: ReturnType<typeof search>) => {
-        setFeedFilters(next);
+        rememberFilters(subject.subject(), next);
         goTo({ to: ".", search: next }, { replace: true });
     };
 

@@ -4,13 +4,13 @@ import { findQueryError, refetchQueries } from "../../_components/error/_queryEr
 import { useClansContext } from "../../_contexts/api/ClansContext";
 import { usePeopleContext } from "../../_contexts/api/PeopleContext";
 import { usePlacesContext } from "../../_contexts/api/PlacesContext";
-import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
 import { useMediaSettingsContext } from "../../_contexts/settings/MediaSettingsContext";
 import { MediaView } from "../../_models/MediaView";
 import { SlideshowService } from "../services/SlideshowService";
 import { feedGridLink, FeedSearch } from "./_routes";
 import { newMediaSeed } from "../../_models/utils/MediaUtils";
 import { useGoTo, useMediaParams } from "../services/_navigation";
+import { useFeedPreferences } from "./useFeedPreferences";
 import { useFeedSubject } from "./_subject";
 import { FeedMediaService } from "./FeedMediaService";
 import { useAddressedCategory } from "../useAddressedCategory";
@@ -20,7 +20,7 @@ export const useFeedServices = (view: MediaView) => {
     const goTo = useGoTo();
     const params = useMediaParams();
     const [mediaSettings] = useMediaSettingsContext();
-    const [, { setFeedFilters }] = useAreaSettingsContext();
+    const { rememberFilters } = useFeedPreferences();
     const { personMediaQuery } = usePeopleContext();
     const { clanMediaQuery } = useClansContext();
     const { placeMediaQuery } = usePlacesContext();
@@ -113,7 +113,7 @@ export const useFeedServices = (view: MediaView) => {
     };
 
     const remember = (favorites: boolean, type: MediaTypeFilter | undefined) =>
-        setFeedFilters(feedSearch(favorites, undefined, type));
+        rememberFilters(subject.subject(), feedSearch(favorites, undefined, type));
 
     const setFavoritesOnly = (on: boolean) => {
         remember(on, mediaType());

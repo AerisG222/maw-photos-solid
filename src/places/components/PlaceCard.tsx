@@ -3,6 +3,7 @@ import { Link, LinkOptions } from "@tanstack/solid-router";
 
 import { describePlaceAncestry, getPlaceKindName, Place } from "../../_models/Place";
 import { createImageReveal } from "../../_components/loading/_imageReveal";
+import { useListingSettingsContext } from "../../_contexts/settings/ListingSettingsContext";
 
 import Icon from "../../_components/icon/Icon";
 
@@ -31,6 +32,7 @@ interface Props {
    it that does something else.
 */
 const PlaceCard: Component<Props> = props => {
+    const [listing] = useListingSettingsContext();
     const coverUrl = () => props.place.coverUrl ?? undefined;
     const { loaded: coverLoaded, reveal, ref: imgRef } = createImageReveal(coverUrl);
 
@@ -80,13 +82,15 @@ const PlaceCard: Component<Props> = props => {
                     />
                 </Show>
 
-                <div class="absolute top-0 left-0 m-0.5 badge badge-sm opacity-70">
-                    {getPlaceKindName(props.place.kind)}
-                </div>
+                <Show when={listing.labels.places}>
+                    <div class="absolute top-0 left-0 m-0.5 badge badge-sm opacity-70">
+                        {getPlaceKindName(props.place.kind)}
+                    </div>
 
-                <div class="absolute bottom-0 right-0 m-0.5 badge badge-sm opacity-70">
-                    {props.place.mediaCount}
-                </div>
+                    <div class="absolute bottom-0 right-0 m-0.5 badge badge-sm opacity-70">
+                        {props.place.mediaCount}
+                    </div>
+                </Show>
 
                 <Show when={props.leadsToMedia}>
                     <div class="absolute bottom-0 left-0 m-0.5 badge badge-sm opacity-70">
@@ -95,27 +99,32 @@ const PlaceCard: Component<Props> = props => {
                 </Show>
             </div>
 
-            <div class="flex items-center gap-1 px-2 py-1">
-                <div class="min-w-0 grow text-center">
-                    <div class="truncate">{props.place.name}</div>
+            {/* the cover button lives on this line, so editing keeps it without labels */}
+            <Show when={listing.labels.places || props.onChooseCover}>
+                <div class="flex items-center gap-1 px-2 py-1">
+                    <div class="min-w-0 grow text-center">
+                        <Show when={listing.labels.places}>
+                            <div class="truncate">{props.place.name}</div>
 
-                    <Show when={props.showAncestry && props.place.ancestorNames.length > 0}>
-                        <div class="truncate text-xs text-muted">
-                            {describePlaceAncestry(props.place)}
-                        </div>
+                            <Show when={props.showAncestry && props.place.ancestorNames.length > 0}>
+                                <div class="truncate text-xs text-muted">
+                                    {describePlaceAncestry(props.place)}
+                                </div>
+                            </Show>
+                        </Show>
+                    </div>
+
+                    <Show when={props.onChooseCover}>
+                        <button
+                            class="btn btn-xs btn-ghost text-primary"
+                            title={props.place.coverUrl ? "Replace Cover" : "Choose Cover"}
+                            onClick={chooseCover}
+                        >
+                            <Icon classes="icon-[ic--round-photo-camera] text-lg" />
+                        </button>
                     </Show>
                 </div>
-
-                <Show when={props.onChooseCover}>
-                    <button
-                        class="btn btn-xs btn-ghost text-primary"
-                        title={props.place.coverUrl ? "Replace Cover" : "Choose Cover"}
-                        onClick={chooseCover}
-                    >
-                        <Icon classes="icon-[ic--round-photo-camera] text-lg" />
-                    </button>
-                </Show>
-            </div>
+            </Show>
         </Link>
     );
 };

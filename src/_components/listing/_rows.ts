@@ -47,6 +47,9 @@ export const categoryRowHeight = (thumbnailHeight: number, showLabels: boolean, 
     tileRowHeight(thumbnailHeight, showLabels ? (showYear ? 2 : 1) : 0);
 
 // a person is a square face crop, as wide as a thumbnail, and their name below
+// a place's cover is 4:3 inside a 240px card's border, and its name has padding of its own
+export const placeRowHeight = (showLabels: boolean) => tileRowHeight(178.5) + (showLabels ? 32 : 0);
+
 export const personRowHeight = (thumbnailWidth: number, showLabels: boolean) =>
     tileRowHeight(thumbnailWidth, showLabels ? 1 : 0);
 

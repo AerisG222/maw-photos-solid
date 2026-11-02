@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { useAreaSettingsContext } from "../../_contexts/settings/AreaSettingsContext";
+import { useFeedPreferences } from "./useFeedPreferences";
 
 import {
     FeedSubject,
@@ -43,7 +43,7 @@ interface Props {
 // where to start numbering
 export const LISTING_NAV_COUNT = 2;
 const ToolbarListing: Component<Props> = props => {
-    const [, { setFeedListing }] = useAreaSettingsContext();
+    const { rememberListing } = useFeedPreferences();
 
     /*
        Going back to the media returns to the media listing a feed opens on -
@@ -64,8 +64,8 @@ const ToolbarListing: Component<Props> = props => {
             names whichever view was last used, so on any other view the url and
             the link would disagree and neither would light up.
 
-            The choice is remembered on the way through, so the next subject opens
-            on the listing this one was left on - the view links do the same for
+            The choice is remembered on the way through, so the next subject of its
+            kind opens on the listing this one was left on - the view links do the same for
             grid against fullscreen.
         */
         <NavGroup
@@ -74,13 +74,13 @@ const ToolbarListing: Component<Props> = props => {
                     route: feedMediaDisplay,
                     link: mediaLink(),
                     active: !props.showingCategories,
-                    clickHandler: () => setFeedListing("media")
+                    clickHandler: () => rememberListing(props.subject, "media")
                 },
                 {
                     route: feedCategoriesDisplay,
                     link: categoriesLink(),
                     active: props.showingCategories,
-                    clickHandler: () => setFeedListing("categories")
+                    clickHandler: () => rememberListing(props.subject, "categories")
                 }
             ]}
         />

@@ -27,21 +27,27 @@ export const defaultAppSettings: AppSettingsState = {
     showToolbarLabels: false
 };
 
-/*
-   How every listing presents its items - categories, search results, people,
-   places and media alike. One store, so a preference set while browsing one
-   follows you into the next.
-*/
+// each listing of cards decides for itself; a feed's is its list of categories
+export type LabelArea =
+    "categories" | "search" | "people" | "personFeeds" | "places" | "placeFeeds";
+
+// how listings present their items
 export interface ListingSettingsState {
-    // titles, years, names and media counts - all of them answer "do I want
-    // text under the picture", so there is one control rather than four
-    readonly showLabels: boolean;
+    // titles, years, names and media counts, a choice for each area
+    readonly labels: Readonly<Record<LabelArea, boolean>>;
     readonly highlightFaces: boolean;
     readonly peopleSort: PersonSortIdType;
 }
 
 export const defaultListingSettings: ListingSettingsState = {
-    showLabels: true,
+    labels: {
+        categories: true,
+        search: true,
+        people: true,
+        personFeeds: true,
+        places: true,
+        placeFeeds: true
+    },
     highlightFaces: false,
     peopleSort: defaultPersonSort
 };
@@ -70,11 +76,15 @@ export const defaultMediaSettings: MediaSettingsState = {
     inspectorCards: defaultInspectorCards
 };
 
+export type FeedListing = "media" | "categories";
+
 // where you were in an area, and what you had it filtered to
 export interface AreaSettingsState {
     readonly categoriesView: CategoryViewModeIdType;
     readonly searchView: CategoryViewModeIdType;
-    readonly feedListing: "media" | "categories";
+    // a clan is browsed like a person, so they share; a place is its own area
+    readonly personFeedListing: FeedListing;
+    readonly placeFeedListing: FeedListing;
     // kept rather than left to the url alone; `?year=` still wins when present
     readonly categoryYearFilter: number | "all";
     // the same goes for these: each section opens with them, unless the address
@@ -82,7 +92,8 @@ export interface AreaSettingsState {
     readonly categoriesFilters: CategoryFilters;
     readonly categoryMediaFilters: MediaFilters;
     readonly peopleFavoritesOnly: boolean;
-    readonly feedFilters: MediaFilters;
+    readonly personFeedFilters: MediaFilters;
+    readonly placeFeedFilters: MediaFilters;
     readonly searchFilters: MediaFilters;
     // how many recent search terms to keep
     readonly searchHistoryCount: number;
@@ -91,12 +102,14 @@ export interface AreaSettingsState {
 export const defaultAreaSettings: AreaSettingsState = {
     categoriesView: defaultCategoryViewMode,
     searchView: defaultCategoryViewMode,
-    feedListing: "media",
+    personFeedListing: "media",
+    placeFeedListing: "media",
     categoryYearFilter: "all",
     categoriesFilters: {},
     categoryMediaFilters: {},
     peopleFavoritesOnly: false,
-    feedFilters: {},
+    personFeedFilters: {},
+    placeFeedFilters: {},
     searchFilters: {},
     searchHistoryCount: defaultSearchHistoryCount
 };
