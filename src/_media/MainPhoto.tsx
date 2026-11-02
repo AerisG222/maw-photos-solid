@@ -10,7 +10,7 @@ interface Props {
 const MainPhoto: Component<Props> = props => {
     return (
         <img
-            crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
+            crossorigin="use-credentials" // cors for the histogram, credentials for the asset cookie
             alt={props.alt ?? ""}
             class="w-full h-full max-h-dvh max-w-full object-contain"
             sizes="100vw"

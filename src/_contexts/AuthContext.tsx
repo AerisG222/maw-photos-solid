@@ -2,7 +2,6 @@ import {
     createContext,
     createResource,
     onCleanup,
-    onMount,
     ParentComponent,
     Show,
     useContext
@@ -12,6 +11,8 @@ import { createAuth0Client, User } from "@auth0/auth0-spa-js";
 
 import { LOGIN_PATH, LOGOUT_PATH } from "../auth/_routeTree";
 import { AccountStatus } from "../_models/AccountStatus";
+import { createAssetSession as createAssetSessionCookie, deleteAssetSession } from "./api/_shared";
+import { AssetSession, createAssetSession } from "./assetSession";
 
 export interface AuthState {
     readonly isLoggedIn: boolean;
@@ -42,7 +43,7 @@ export const AuthProvider: ParentComponent = props => {
     const redirectUrl = `${window.location.origin}`;
     const [state, setState] = createStore(defaultAuth);
 
-    let swMessageHandler: (ev: MessageEvent) => void;
+    let assetSession: AssetSession | undefined;
 
     const scopes = [
         "openid",
@@ -93,7 +94,25 @@ export const AuthProvider: ParentComponent = props => {
             );
         }
 
-        setState({ isLoggedIn: await client.isAuthenticated() });
+        const isLoggedIn = await client.isAuthenticated();
+
+        /*
+           Before the client is handed over, because this provider renders nothing
+           until then: the first images the app asks for need the cookie to be there.
+        */
+        if (isLoggedIn) {
+            assetSession = createAssetSession({
+                getToken: fresh =>
+                    client.getTokenSilently(fresh ? { cacheMode: "off" } : undefined),
+                createSession: createAssetSessionCookie,
+                onSessionEnded: () =>
+                    void login(`${window.location.pathname}${window.location.search}`)
+            });
+
+            await assetSession.start();
+        }
+
+        setState({ isLoggedIn });
         setState({ user: await client.getUser() });
 
         return client;
@@ -115,6 +134,11 @@ export const AuthProvider: ParentComponent = props => {
     const logout = async (returnUrl?: string) => {
         const destAfterLogout = returnUrl ?? `${window.location.origin}${LOGOUT_PATH}`;
 
+        await assetSession?.stop();
+
+        // best effort: signing out must not depend on the api, and the cookie expires
+        await deleteAssetSession().catch((err: unknown) => console.error(err));
+
         await auth0Client()?.logout({
             clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
             logoutParams: { returnTo: destAfterLogout }
@@ -125,47 +149,7 @@ export const AuthProvider: ParentComponent = props => {
 
     const getToken = async () => await auth0Client()?.getTokenSilently();
 
-    onMount(() => {
-        // https://steven-giesel.com/blogPost/caa09b13-83e4-452e-899f-598c66181e63
-        // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event
-        // https://www.clurgo.com/en/blog/service-worker-and-static-content-authorization
-        if (navigator.serviceWorker) {
-            swMessageHandler = (ev: MessageEvent) => {
-                const data: unknown = ev.data;
-
-                if (data === "REQUEST_TOKEN" && ev.ports?.[0]) {
-                    const port = ev.ports[0];
-
-                    void (async () => {
-                        try {
-                            const token = await getToken();
-                            port.postMessage(token);
-                        } catch (err) {
-                            console.error("AuthContext: failed to get token for SW", err);
-                            port.postMessage(undefined);
-                        }
-                    })();
-                }
-            };
-
-            navigator.serviceWorker.addEventListener("message", swMessageHandler);
-
-            if (!navigator.serviceWorker.controller) {
-                setTimeout(() => {
-                    if (!navigator.serviceWorker.controller) {
-                        console.warn("serviceworker not detected - forcing reload");
-                        window.location.reload();
-                    }
-                }, 300);
-            }
-        }
-    });
-
-    onCleanup(() => {
-        if (navigator.serviceWorker && swMessageHandler) {
-            navigator.serviceWorker.removeEventListener("message", swMessageHandler);
-        }
-    });
+    onCleanup(() => void assetSession?.stop());
 
     return (
         <Show when={auth0Client()}>

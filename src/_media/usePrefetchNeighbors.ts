@@ -36,7 +36,12 @@ export const usePrefetchNeighbors = (props: { mediaService: IMediaService; view:
 
     const prepare = (media: Media) => {
         if (media.type === "photo") {
-            new Image().src = getMainMediaUrl(media, getScalesForMain());
+            const image = new Image();
+
+            // the way MainPhoto asks for it.  anything else is a separate entry in
+            // the browser's cache, and the photo would be fetched a second time
+            image.crossOrigin = "use-credentials";
+            image.src = getMainMediaUrl(media, getScalesForMain());
         }
 
         if (listing.highlightFaces) {

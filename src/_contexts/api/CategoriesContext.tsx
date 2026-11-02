@@ -358,8 +358,8 @@ export const CategoriesProvider: ParentComponent = props => {
        Split out of `downloadFile` because sharing wants the same thing and does
        something else with it: a download hands the blob to an anchor, a share
        hands it to the operating system. The authorization is the part worth
-       having in one place - every file is behind a bearer token, which is why
-       neither can be done with a plain link.
+       having in one place - a category download only takes a bearer token, which
+       is why neither can be done with a plain link.
     */
     const fetchFile = async (url: string) =>
         runWithAccessToken(getToken, async accessToken => {

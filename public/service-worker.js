@@ -1,130 +1,28 @@
-self.addEventListener("install", event => {
-    // Skip the 'waiting' lifecycle phase, to go directly from 'installed' to 'activated', even if
-    // there are still previous incarnations of this service worker registration active.
-    console.info("sw: install");
-    event.waitUntil(self.skipWaiting());
-});
+/*
+   Removes the service worker that used to live here.
 
-self.addEventListener("activate", async event => {
-    console.info("sw: activate");
-    // Claim any clients immediately, so that the page will be under SW control without reloading.
-    event.waitUntil(self.clients.claim());
-});
+   It attached the access token to media requests. Those now carry a cookie (see
+   _contexts/assetSession.ts), so nothing registers a worker any more - but a browser
+   that has one keeps running it until it is told otherwise, and a worker left behind
+   holds up images asking a page for a token that no page will answer.
 
-// The access token is a short-lived JWT shared by every media request, so cache it in the worker
-// and coalesce concurrent lookups instead of round-tripping to the main thread for each image.
-let cachedToken = null;
-let cachedTokenExp = 0; // epoch ms
-let inFlightTokenRequest = null;
+   A browser only finds this file when somebody visits again, so it has to stay long
+   after the last release that registered the old worker. Delete it and the path falls
+   through to index.html, the update fails, and the old worker stays for good. nginx's
+   worker-src 'self' has to stay with it.
+*/
+self.addEventListener("install", () => self.skipWaiting());
 
-const TOKEN_SKEW_MS = 30000; // refresh slightly before the token actually expires
-const TOKEN_TIMEOUT_MS = 5000; // give up if no client answers, so requests don't hang forever
+self.addEventListener("activate", event => {
+    event.waitUntil(
+        (async () => {
+            await self.registration.unregister();
 
-self.addEventListener("fetch", function (event) {
-    const url = event.request.url.toLowerCase();
+            // reloaded because a tab still running the old bundle never asks for the
+            // cookie, so without its worker every image it had not loaded would fail
+            const clients = await self.clients.matchAll({ type: "window" });
 
-    // make sure request is for media assets on *our* site
-    if (
-        !url.includes("/assets/") ||
-        !url.includes("media.mikeandwan.us") ||
-        event.request.headers.has("Authorization")
-    ) {
-        return;
-    }
-
-    event.respondWith(
-        (async function () {
-            let request = event.request;
-
-            try {
-                const token = await getToken();
-                const headers = new Headers(event.request.headers);
-
-                headers.set("Authorization", "Bearer " + token);
-
-                request = new Request(event.request, {
-                    headers: headers,
-                    mode: "cors",
-                    credentials: "omit"
-                });
-            } catch (error) {
-                // Couldn't obtain a token (no client / timeout / auth failure). Fall back to the
-                // original request rather than hanging or sending "Bearer undefined".
-                console.error("sw: Error obtaining token for", event.request.url, error);
-            }
-
-            try {
-                return await fetch(request);
-            } catch (error) {
-                // the url, because "failed to fetch" alone says nothing about which of a
-                // grid's worth of requests it was - and a response the server sent without
-                // its cors headers fails here exactly like a network error does
-                console.error("sw: Error fetching", event.request.url, error);
-                return new Response("Error fetching resource", { status: 500 });
-            }
+            await Promise.all(clients.map(client => client.navigate(client.url)));
         })()
     );
 });
-
-function getToken() {
-    const now = Date.now();
-
-    if (cachedToken && now < cachedTokenExp - TOKEN_SKEW_MS) {
-        return Promise.resolve(cachedToken);
-    }
-
-    if (!inFlightTokenRequest) {
-        inFlightTokenRequest = requestTokenFromMainThread()
-            .then(token => {
-                if (!token) {
-                    throw new Error("sw: received empty token");
-                }
-
-                cachedToken = token;
-                cachedTokenExp = decodeTokenExpiry(token) || Date.now() + 60000;
-
-                return token;
-            })
-            .finally(() => {
-                inFlightTokenRequest = null;
-            });
-    }
-
-    return inFlightTokenRequest;
-}
-
-function decodeTokenExpiry(token) {
-    try {
-        const payload = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-        const exp = JSON.parse(atob(payload)).exp;
-
-        return typeof exp === "number" ? exp * 1000 : 0;
-    } catch {
-        return 0;
-    }
-}
-
-function requestTokenFromMainThread() {
-    return new Promise((resolve, reject) => {
-        const channel = new MessageChannel();
-        const timer = setTimeout(
-            () => reject(new Error("sw: token request timed out")),
-            TOKEN_TIMEOUT_MS
-        );
-
-        channel.port1.onmessage = event => {
-            clearTimeout(timer);
-            resolve(event.data);
-        };
-
-        self.clients.matchAll({ type: "window" }).then(clients => {
-            if (!clients.length) {
-                clearTimeout(timer);
-                reject(new Error("sw: no client available to provide token"));
-                return;
-            }
-
-            clients[0].postMessage("REQUEST_TOKEN", [channel.port2]);
-        });
-    });
-}

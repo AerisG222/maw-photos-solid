@@ -8,7 +8,7 @@ interface Props {
 const MainVideo: Component<Props> = props => {
     return (
         <video
-            crossorigin="anonymous" // this is required for the histogram (maybe only in dev?)
+            crossorigin="use-credentials" // cors for the histogram, credentials for the asset cookie
             class="h-full w-full center-block m-auto"
             autoplay={false}
             controls
