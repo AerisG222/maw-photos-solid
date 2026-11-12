@@ -2,6 +2,7 @@ import { Component, Show } from "solid-js";
 
 import Icon from "../icon/Icon";
 import Tooltip from "../tooltip/Tooltip";
+import { isEnterToSubmit } from "./_enterToSubmit";
 
 interface Props {
     value: string;
@@ -48,7 +49,7 @@ const SearchField: Component<Props> = props => {
                     value={props.value}
                     onInput={evt => props.onInput(evt.currentTarget.value)}
                     onKeyDown={evt => {
-                        if (evt.key === "Enter") {
+                        if (isEnterToSubmit(evt)) {
                             props.onSubmit?.();
                         }
                     }}

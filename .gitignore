@@ -4,3 +4,7 @@ dist
 # python env for deployment
 .ansible
 .venv
+
+# agent skills, installed from skills-lock.json - see README
+.agents/skills
+.claude/skills

@@ -29,6 +29,14 @@ It correctly bundles Solid in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
+## Agent Skills
+
+The agent skills this project uses are listed in `skills-lock.json`, and are not committed. To install them on a new machine:
+
+```bash
+npx skills experimental_install
+```
+
 ## Deployment
 
 You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)

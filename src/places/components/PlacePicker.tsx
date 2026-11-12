@@ -8,6 +8,7 @@ import ErrorMessage from "../../_components/error/ErrorMessage";
 import Loading from "../../_components/loading/Loading";
 import EmptyState from "../../_components/state/EmptyState";
 import Tooltip from "../../_components/tooltip/Tooltip";
+import { isEnterToSubmit } from "../../_components/input/_enterToSubmit";
 
 interface Props {
     // which kinds may be picked. Applied here rather than by the API, which
@@ -58,7 +59,7 @@ const PlacePicker: Component<Props> = props => {
                     value={term()}
                     onInput={evt => setTerm(evt.currentTarget.value)}
                     onKeyDown={evt => {
-                        if (evt.key === "Enter") {
+                        if (isEnterToSubmit(evt)) {
                             setSearch(term().trim());
                         }
                     }}

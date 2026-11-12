@@ -1,2 +1,6 @@
 *.yml
 *.yaml
+
+# agent skills, installed from upstream
+.agents
+skills-lock.json

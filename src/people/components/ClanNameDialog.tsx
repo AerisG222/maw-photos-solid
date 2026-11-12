@@ -4,6 +4,7 @@ import { ApiError } from "../../_contexts/api/ApiError";
 import { ClanRules } from "../_clanRules";
 
 import Dialog from "../../_components/overlay/Dialog";
+import { isEnterToSubmit } from "../../_components/input/_enterToSubmit";
 
 interface Props {
     open: boolean;
@@ -93,7 +94,7 @@ const ClanNameDialog: Component<Props> = props => {
                 value={name()}
                 onInput={evt => setName(evt.currentTarget.value)}
                 onKeyDown={evt => {
-                    if (evt.key === "Enter") {
+                    if (isEnterToSubmit(evt)) {
                         submit();
                     }
                 }}
